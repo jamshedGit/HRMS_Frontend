@@ -1,0 +1,488 @@
+import React, { useMemo, useState, useEffect } from "react"
+import { Formik } from "formik"
+import { isEqual } from "lodash"
+import { useUsersUIContext } from "../UsersUIContext"
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+import axios from "axios";
+import { toAbsoluteUrl } from "../../../../../../_metronic/_helpers";
+import { useDispatch, useSelector } from "react-redux";
+import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
+import * as actions from "../../../../Dashboard/_redux/dashboardActions";
+import {
+  fetchAllCity,
+  fetchAllCityCenters,
+  fetchAllSubCenter,
+} from "../../../../../../_metronic/redux/dashboardActions";
+
+
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+const API_URL = process.env.REACT_APP_API_URL;
+
+
+const prepareFilter = (queryParams, values) => {
+  const { donorName, receiptNo, searchText } = values
+  const newQueryParams = { ...queryParams }
+  const filter = {}
+  // Filter by status
+  filter.donorName = donorName !== "" ? +donorName : undefined
+  // Filter by type
+  filter.receiptNo = receiptNo !== "" ? +receiptNo : undefined
+  // Filter by all fields
+  filter.donorName = searchText
+  if (searchText) {
+    filter.searchQuery = searchText
+    // filter.email = searchText
+  }
+  newQueryParams.filter = filter
+  return newQueryParams
+}
+
+export function UsersFilter({ listLoading, user, setCity,
+  seletCity,
+  setCenter,
+  center,
+  setSubcenter,
+  isUserForRead,
+  subCenter,
+  alarmTime,
+  setAlarmTime,
+  setVehicle, }) {
+
+  const [defCity, setDefaultCity] = useState({});
+  const dispatch = useDispatch();
+  const usersUIContext = useUsersUIContext()
+  const [Loading, setLoading] = useState(false)
+
+  const { countryId, cityId } = useSelector((state) => state.auth.user);
+  const dashboard = useSelector((state) => state.dashboard);
+  const [defCenter, setDefaultCenter] = useState({});
+  const [defSubcenter, setDefaultSubCenter] = useState({});
+
+  useEffect(() => {
+    if (countryId) {
+      console.log("countryId id drop", countryId);
+      dispatch(fetchAllCity(1));
+    }
+  }, [countryId, dispatch]);
+
+  useEffect(() => {
+    if (cityId) {
+
+      console.log("city id drop", cityId);
+      dispatch(fetchAllCityCenters(cityId));
+    }
+  }, [cityId, dispatch]);
+
+  const usersUIProps = useMemo(() => {
+    return {
+      queryParams: usersUIContext.queryParams,
+      setQueryParams: usersUIContext.setQueryParams,
+    }
+  }, [usersUIContext])
+
+
+
+  async function fetchDonationReport(filterVal) {
+    try {
+      console.log(`${API_URL}/edrs/donation-report`);
+      console.log("filter value", filterVal)
+      const response = await axios.post(`${API_URL}/edrs/donation-report`, {
+        bookNo: filterVal.txtBookNo,
+        cityId: filterVal.cityId || "0",
+        centerId: filterVal.centerId || "0",
+        subCenterId: filterVal.subCenterId || "0"
+      });
+      console.log("donation report", response);
+      return response?.data?.data;
+    } catch (error) {
+      console.log("Error fetching data:", error);
+      console.error("Error fetching data:", error);
+    }
+  }
+
+  function getBase64ImageFromURL(url) {
+    return new Promise((resolve, reject) => {
+      var img = new Image();
+      img.setAttribute("crossOrigin", "anonymous");
+
+      img.onload = () => {
+        var canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+
+        var dataURL = canvas.toDataURL("image/png");
+
+        resolve(dataURL);
+      };
+
+      img.onerror = (error) => {
+        reject(error);
+      };
+
+      img.src = url;
+    });
+  }
+
+  async function createPdf(filterVal) {
+    // console.log("e",e)
+    // setStartDate(e);
+    // const getYear = moment(e).format("yyyy");
+    //pbookNo = e;
+    const pbookNo = filterVal.txtBookNo;
+    console.log("creaet PDF", filterVal)
+    if (filterVal != null) {
+      setLoading(true);
+      const data = await fetchDonationReport(filterVal);
+      console.log("donation report 1", data);
+
+      const table = {
+        headerRow: [
+          "Receipt#",
+          "Donor Name",
+          "Amount",
+          "Donation Type",
+          "City",
+          "Center",
+          "Area",
+          // "Clerk",
+          "Created On",
+        ],
+        body: [],
+        footer: {
+          columns: [
+            'test123',
+            {
+              alignment: 'right',
+              text: 'Footer text'
+            }
+          ],
+          margin: [10, 0]
+        },
+      };
+      let total = 0;
+      let t = 0;
+      data &&
+        data.forEach((item, index) => {
+          console.log("index", data.length);
+
+          if (data.length - 1 == index) {
+            data.forEach((item) => { total += parseFloat(item.amount) })
+
+          }
+          const row = [
+            item.receiptNo,
+            item.donorName,
+            item.amount,
+            item.type,
+            item.city,
+            item.center,
+            item.subcenter,
+            // item.clerkName,
+            item.createdon
+
+          ];
+          table.body.push(row);
+        });
+
+      const totall = [
+        "",
+        "Total",
+        "RS." + addCommas(total),
+        "",
+        "",
+        "",
+        "",
+        "",
+
+      ]
+
+      table.body.push(totall); // For Adding Total Amount in ROW
+
+      const documentDefinition = {
+        content: [
+          {
+            alignment: "justify",
+            columns: [
+              {
+                width: 80,
+                image: await getBase64ImageFromURL(
+                  `${toAbsoluteUrl("/media/logos/abdul-start-edhi (1).png")}`
+                  //`${toAbsoluteUrl("/media/logos/edhi1.png")}`
+                ),
+              },
+              {
+                width: "*",
+                alignment: "center",
+                text: [
+                  `DONATION REPORT\n
+                  BookNo# ${pbookNo} KARACHI`,
+
+                ],
+                style: "header",
+              },
+              {
+                width: 200,
+                image: await getBase64ImageFromURL(
+                  `${toAbsoluteUrl("/media/logos/edhi1.png")}`
+                ),
+              },
+            ],
+          },
+
+          {
+            table: {
+              headerRows: 1,
+              body: [table.headerRow, ...table.body],
+              style: {
+                body: {
+                  fontSize: 5
+                },
+              }
+            },
+          },
+        ],
+        styles: {
+          header: {
+            fontSize: 12,
+            bold: false,
+            margin: [50, 0, 0, 10],
+            alignment: "center",
+          },
+          body: {
+            fontSize: 8,
+            bold: false,
+          }
+        },
+
+        defaultStyle: {
+          columnGap: 20,
+        },
+      };
+
+      setLoading(false);
+
+      try {
+        pdfMake.createPdf(documentDefinition).download();
+      } catch (error) {
+        // Handle the error
+        console.error(error);
+      }
+    }
+  }
+
+  function addCommas(nStr) {
+    nStr += '';
+    var x = nStr.split('.');
+    var x1 = x[0];
+    var x2 = x.length > 1 ? '.' + x[1] : '';
+    var rgx = /(\d+)(\d{3})/;
+    while (rgx.test(x1)) {
+      x1 = x1.replace(rgx, '$1' + ',' + '$2');
+    }
+    return x1 + x2;
+  }
+
+  // queryParams, setQueryParams,
+  const applyFilter = (values) => {
+
+    const newQueryParams = prepareFilter(usersUIProps.queryParams, values)
+    if (!isEqual(newQueryParams, usersUIProps.queryParams)) {
+      newQueryParams.pageNumber = 1
+      // update list by queryParams
+      console.log("update list by queryParams");
+      console.log(newQueryParams);
+      usersUIProps.setQueryParams(newQueryParams)
+    }
+  }
+
+  return (
+    <>
+      <Formik
+        enableReinitialize={true}
+        initialValues={{
+          donorName: "", // values => All=""/Susspended=0/Active=1/Pending=2
+          receiptNo: "", // values => All=""/Business=0/Individual=1
+          searchText: "",
+          cityId: [],
+          centerId: [],
+          subCenterId: [],
+          alarmTimeId: [],
+        }}
+        onSubmit={(values) => {
+          console.log(1);
+          // createPdf(values);
+          applyFilter(values)
+        }}
+      >
+        {({
+          values,
+          handleSubmit,
+          handleBlur,
+          handleChange,
+          setFieldValue,
+          errors,
+          touched,
+
+        }) => (
+          <form onSubmit={handleSubmit} className="form form-label-right">
+            <div className="row">
+
+              <div className="col-12 col-md-12">
+                <input
+                  type="text"
+                  className="form-control"
+                  name="searchText"
+                  placeholder="Search"
+                  onBlur={handleBlur}
+                  value={values.searchText}
+                  onChange={(e) => {
+                    setFieldValue("searchText", e.target.value.trim())
+                    handleSubmit()
+                  }}
+                />
+                <small className="form-text text-muted">
+                  <b>Search</b> in all fields
+                </small>
+              </div>
+            </div>
+          </form>
+        )}
+      </Formik>
+
+      <Formik
+        enableReinitialize={true}
+        initialValues={{
+          donorName: "", // values => All=""/Susspended=0/Active=1/Pending=2
+          receiptNo: "", // values => All=""/Business=0/Individual=1
+          searchText: "",
+          cityId: '0',
+          centerId: '0',
+          subCenterId: '0',
+          alarmTimeId: [],
+        }}
+        onSubmit={(values) => {
+          // console.log("values", values);
+          createPdf(values);
+          //applyFilter(values)
+        }}
+      >
+        {({
+          values,
+          handleSubmit,
+          handleBlur,
+          handleChange,
+          setFieldValue,
+          errors,
+          touched,
+
+        }) => (
+          <form onSubmit={handleSubmit} className="form form-label-right">
+            <div className="row">
+              <div className="col-12 col-md-12">
+                <input
+
+                  className="form-control"
+                  //onBlur={(e) => createPdf(e.target.value)}
+                  values={values.txtBookNo}
+                  onChange={(e) => {
+                    setFieldValue("txtBookNo", e.target.value.trim())
+                    // handleSubmit()
+                  }}
+                  name="txtBookNo"
+                  placeholder="Enter Book No"
+                // onBlur={handleBlur}
+
+                />
+
+                <small className="form-text text-muted">
+                  {Loading ? <>Creating PDF...</> : <>Enter Book No</>}
+                </small>
+              </div>
+              <div className="col-12 col-md-4">
+                <SearchSelect
+                  name="cityId"
+                  label="Select City*"
+                  isDisabled={false}
+                  onBlur={() => {
+                    //   handleBlur({ target: { name: "cityId" } });
+                  }}
+                  onChange={(e) => {
+                    setFieldValue("cityId", e.value || null);
+                    setDefaultCity(e);
+                    dispatch(fetchAllCityCenters(e.value));
+                  }}
+                  value={defCity}
+                  error={errors.cityId}
+                  touched={touched.cityId}
+                  options={dashboard.allCity}
+                />
+              </div>
+              <div className="col-12 col-md-4">
+                <SearchSelect
+                  name="centerId"
+                  label="Select Circle*"
+                  isDisabled={isUserForRead && true}
+                  onBlur={() => {
+                    handleBlur({ target: { name: "centerId" } });
+                  }}
+                  onChange={(e) => {
+                    setFieldValue("centerId", e.value || '0');
+                    setDefaultCenter(e);
+                    dispatch(fetchAllSubCenter(e.value));
+                  }}
+                  value={defCenter}
+                  // error={user.centerId}
+                  // touched={touched.centerId}
+                  options={dashboard.cityCenters}
+                />
+              </div>
+              <div className="col-12 col-md-4">
+                <SearchSelect
+                  name="subCenterId"
+                  label="Center*"
+                  isDisabled={isUserForRead && true}
+                  onBlur={() => {
+                    handleBlur({ target: { name: "subCenterId" } });
+                  }}
+                  onChange={(e) => {
+                    setFieldValue("subCenterId", e.value || null);
+                    setDefaultSubCenter(e);
+                    console.log("sub center id", e.value);
+                    // setDefaultDriver([]);
+                    // dispatch(fetchDrivers(e.value));
+                  }}
+                  value={defSubcenter}
+                  error={errors.subCenterId}
+                  touched={touched.subCenterId}
+                  options={dashboard.allSubCenter}
+                />
+              </div>
+              <div className="col-12 col-md-4 mt-3">
+                <button
+                  type="submit"
+                  onClick={() => handleSubmit()}
+                  className="btn btn-primary btn-elevate"
+                >
+                  Apply Filter
+                  {(
+                    <span className="ml-3 mr-3"></span>
+                  )}
+                </button>
+              </div>
+            </div>
+          </form>
+        )}
+      </Formik>
+    </>
+  )
+
+  return (
+    <>
+
+    </>
+  )
+}
