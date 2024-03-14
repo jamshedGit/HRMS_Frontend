@@ -188,6 +188,7 @@ export function UsersFilter({ listLoading, user, setCity,
           table.body.push(row);
         });
 
+    // Add Row For Total Amount
       const totall = [
         "",
         "Total",
@@ -207,13 +208,13 @@ export function UsersFilter({ listLoading, user, setCity,
           {
             alignment: "justify",
             columns: [
-              {
-                width: 80,
-                image: await getBase64ImageFromURL(
-                  `${toAbsoluteUrl("/media/logos/abdul-start-edhi (1).png")}`
-                  //`${toAbsoluteUrl("/media/logos/edhi1.png")}`
-                ),
-              },
+              // {
+              //   width: 80,
+              //   image: await getBase64ImageFromURL(
+              //     `${toAbsoluteUrl("/media/logos/abdul-start-edhi (1).png")}`
+              //     //`${toAbsoluteUrl("/media/logos/edhi1.png")}`
+              //   ),
+              // },
               {
                 width: "*",
                 alignment: "center",
@@ -467,7 +468,7 @@ export function UsersFilter({ listLoading, user, setCity,
                   onClick={() => handleSubmit()}
                   className="btn btn-primary btn-elevate"
                 >
-                  Apply Filter
+                  Search & Download Report
                   {(
                     <span className="ml-3 mr-3"></span>
                   )}

@@ -33,10 +33,11 @@ export default function AsideparentList(props) {
           <span className="menu-text">{props.element}</span>
           <i className="menu-arrow" />
         </NavLink>
-        <div className="menu-submenu ">
+        <div className="menu-submenu">
           <ul className="menu-subnav">
             <ul className="menu-subnav">
               {UserAccess[props.element].map((ce) => {
+                
                 return <AsideMenuItem element={ce} key={ce.resourceId} />;
               })}
             </ul>
