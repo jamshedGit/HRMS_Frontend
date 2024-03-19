@@ -145,11 +145,12 @@ export function UsersFilter({ listLoading, user, setCity,
           "Donor Name",
           "Amount",
           "Donation Type",
-          "City",
+          // "City",
+          "Clerk",
           "Center",
-          "Area",
-          // "Clerk",
-          "Created On",
+          "Circle",
+
+          "Date",
         ],
         body: [],
         footer: {
@@ -178,17 +179,18 @@ export function UsersFilter({ listLoading, user, setCity,
             item.donorName,
             item.amount,
             item.type,
-            item.city,
+            // item.city,
+
+            item.clerkName,
             item.center,
             item.subcenter,
-            // item.clerkName,
             item.createdon
 
           ];
           table.body.push(row);
         });
 
-    // Add Row For Total Amount
+      // Add Row For Total Amount
       const totall = [
         "",
         "Total",
@@ -197,16 +199,31 @@ export function UsersFilter({ listLoading, user, setCity,
         "",
         "",
         "",
-        "",
-
+        ""
       ]
 
       table.body.push(totall); // For Adding Total Amount in ROW
+
+      function GetDate() {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        let mm = today.getMonth() + 1; // Months start at 0!
+        let dd = today.getDate();
+
+        if (dd < 10) dd = '0' + dd;
+        if (mm < 10) mm = '0' + mm;
+
+        const formattedToday = dd + '/' + mm + '/' + yyyy;
+        return formattedToday;
+        // document.getElementById('DATE').value = formattedToday;
+      }
 
       const documentDefinition = {
         content: [
           {
             alignment: "justify",
+            pageSize: 'A5',
+            pageOrientation: 'landscape',
             columns: [
               // {
               //   width: 80,
@@ -219,7 +236,7 @@ export function UsersFilter({ listLoading, user, setCity,
                 width: "*",
                 alignment: "center",
                 text: [
-                  `DONATION REPORT\n
+                  `DONATION REPORT\n 20-Receipt(s)
                   BookNo# ${pbookNo} KARACHI`,
 
                 ],
@@ -246,6 +263,16 @@ export function UsersFilter({ listLoading, user, setCity,
             },
           },
         ],
+        footer: {
+          columns: [
+            'Date: ' + GetDate() ,
+            {
+              alignment: 'right',
+              text: 'Signature________________________ \n Zonal Office                \xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\ '
+            }
+          ],
+          margin: [10, 0]
+        },
         styles: {
           header: {
             fontSize: 12,
@@ -256,11 +283,15 @@ export function UsersFilter({ listLoading, user, setCity,
           body: {
             fontSize: 8,
             bold: false,
+            pageSize: 'A5',
+            pageOrientation: 'landscape'
           }
         },
 
         defaultStyle: {
           columnGap: 20,
+          pageSize: 'A5',
+          pageOrientation: 'landscape'
         },
       };
 
