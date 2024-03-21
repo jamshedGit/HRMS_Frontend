@@ -9,6 +9,7 @@ import { toAbsoluteUrl } from "../../../../../../_metronic/_helpers";
 import { useDispatch, useSelector } from "react-redux";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import * as actions from "../../../../Dashboard/_redux/dashboardActions";
+import DatePicker from "react-datepicker";
 import {
   fetchAllCity,
   fetchAllCityCenters,
@@ -58,7 +59,8 @@ export function UsersFilter({ listLoading, user, setCity,
   const dashboard = useSelector((state) => state.dashboard);
   const [defCenter, setDefaultCenter] = useState({});
   const [defSubcenter, setDefaultSubCenter] = useState({});
-
+  const [receiptDateFrom, setReceiptDateFrom] = useState(null);
+  const [receiptDateTo, setReceiptDateTo] = useState(null);
   useEffect(() => {
     if (countryId) {
       console.log("countryId id drop", countryId);
@@ -85,13 +87,18 @@ export function UsersFilter({ listLoading, user, setCity,
 
   async function fetchDonationReport(filterVal) {
     try {
-      console.log(`${API_URL}/edrs/donation-report`);
-      console.log("filter value", filterVal)
+        console.log("filter",filterVal.receiptDateFrom);
+     // console.log(`${API_URL}/edrs/donation-report`);
+     // console.log("filter value", filterVal)
       const response = await axios.post(`${API_URL}/edrs/donation-report`, {
         bookNo: filterVal.txtBookNo,
         cityId: filterVal.cityId || "0",
         centerId: filterVal.centerId || "0",
-        subCenterId: filterVal.subCenterId || "0"
+        subCenterId: filterVal.subCenterId || "0",
+        dateFrom: filterVal.receiptDateFrom || "",
+        dateTo: filterVal.receiptDateTo,
+        
+        
       });
       console.log("donation report", response);
       return response?.data?.data;
@@ -265,7 +272,7 @@ export function UsersFilter({ listLoading, user, setCity,
         ],
         footer: {
           columns: [
-            'Date: ' + GetDate() ,
+            'Date: ' + GetDate(),
             {
               alignment: 'right',
               text: 'Signature________________________ \n Zonal Office                \xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\ '
@@ -414,7 +421,45 @@ export function UsersFilter({ listLoading, user, setCity,
         }) => (
           <form onSubmit={handleSubmit} className="form form-label-right">
             <div className="row">
-              <div className="col-12 col-md-12">
+              <div className="col-12 col-md-4">
+                <label>Date From</label>
+                <DatePicker
+                  className="form-control"
+                  placeholder="Enter Date From"
+                  selected={receiptDateFrom}
+                  onChange={(date) => {
+                    setFieldValue("receiptDateFrom", date);
+                    setReceiptDateFrom(date);
+                  }}
+                  timeInputLabel="Time:"
+                  dateFormat="dd/MM/yyyy"
+                  showTimeInput
+                  name="incidentlocationReachdateTime"
+                  disabled={isUserForRead}
+                />
+              </div>
+              <div className="col-12 col-md-4">
+                <label>Date To</label>
+                <DatePicker
+                  className="form-control"
+                  placeholder="Enter Date To"
+                  selected={receiptDateTo}
+                  onChange={(date) => {
+                    setFieldValue("receiptDateTo", date);
+                    setReceiptDateTo(date);
+                  }}
+                  timeInputLabel="Time:"
+                  dateFormat="dd/MM/yyyy"
+                  showTimeInput
+                  name="incidentlocationReachdateTime"
+                  disabled={isUserForRead}
+                />
+              </div>
+              <div className="col-12 col-md-4">
+                {/* <small className="form-text text-muted">
+                  {Loading ? <>Creating PDF...</> : <>Enter Book No</>}
+                </small> */}
+                <label>Book No</label>
                 <input
 
                   className="form-control"
@@ -430,11 +475,13 @@ export function UsersFilter({ listLoading, user, setCity,
 
                 />
 
-                <small className="form-text text-muted">
-                  {Loading ? <>Creating PDF...</> : <>Enter Book No</>}
-                </small>
+
               </div>
-              <div className="col-12 col-md-4">
+
+             
+            </div>
+            <div className="row">
+            <div className="col-12 col-md-4">
                 <SearchSelect
                   name="cityId"
                   label="Select City*"
@@ -493,6 +540,8 @@ export function UsersFilter({ listLoading, user, setCity,
                   options={dashboard.allSubCenter}
                 />
               </div>
+            </div>
+            <div className="row">
               <div className="col-12 col-md-4 mt-3">
                 <button
                   type="submit"
@@ -505,6 +554,7 @@ export function UsersFilter({ listLoading, user, setCity,
                   )}
                 </button>
               </div>
+
             </div>
           </form>
         )}
