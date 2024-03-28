@@ -83,8 +83,6 @@ export function UsersFilter({ listLoading, user, setCity,
     }
   }, [usersUIContext])
 
-
-
   async function fetchDonationReport(filterVal) {
     try {
         console.log("filter",filterVal.receiptDateFrom);
@@ -97,8 +95,7 @@ export function UsersFilter({ listLoading, user, setCity,
         subCenterId: filterVal.subCenterId || "0",
         dateFrom: filterVal.receiptDateFrom || "",
         dateTo: filterVal.receiptDateTo,
-        
-        
+               
       });
       console.log("donation report", response);
       return response?.data?.data;
@@ -145,7 +142,7 @@ export function UsersFilter({ listLoading, user, setCity,
       setLoading(true);
       const data = await fetchDonationReport(filterVal);
       console.log("donation report 1", data);
-
+      
       const table = {
         headerRow: [
           "Receipt#",
@@ -156,7 +153,6 @@ export function UsersFilter({ listLoading, user, setCity,
           "Clerk",
           "Center",
           "Circle",
-
           "Date",
         ],
         body: [],
@@ -171,6 +167,7 @@ export function UsersFilter({ listLoading, user, setCity,
           margin: [10, 0]
         },
       };
+
       let total = 0;
       let t = 0;
       data &&
@@ -226,11 +223,13 @@ export function UsersFilter({ listLoading, user, setCity,
       }
 
       const documentDefinition = {
+        pageSize: 'A4',
+        pageOrientation: 'landscape',
+        fontSize: 6,
+        margin: [5, 0, 0, 30],
         content: [
           {
             alignment: "justify",
-            pageSize: 'A5',
-            pageOrientation: 'landscape',
             columns: [
               // {
               //   width: 80,
@@ -242,10 +241,11 @@ export function UsersFilter({ listLoading, user, setCity,
               {
                 width: "*",
                 alignment: "center",
+                margin:[5,0,0,30],
+                top:[50],
                 text: [
                   `DONATION REPORT\n 20-Receipt(s)
                   BookNo# ${pbookNo} KARACHI`,
-
                 ],
                 style: "header",
               },
@@ -257,14 +257,16 @@ export function UsersFilter({ listLoading, user, setCity,
               },
             ],
           },
-
           {
             table: {
-              headerRows: 1,
+              headerRows:1,
               body: [table.headerRow, ...table.body],
+              fontSize: 2,
               style: {
                 body: {
-                  fontSize: 5
+                  fontSize: 1,
+                  margin: [10, 0]
+                  
                 },
               }
             },
@@ -284,20 +286,20 @@ export function UsersFilter({ listLoading, user, setCity,
           header: {
             fontSize: 12,
             bold: false,
-            margin: [50, 0, 0, 10],
+            margin: [50, 0, 0, 60],
             alignment: "center",
           },
           body: {
-            fontSize: 8,
+            fontSize: 2,
             bold: false,
-            pageSize: 'A5',
+            pageSize: 'A4',
             pageOrientation: 'landscape'
           }
         },
 
         defaultStyle: {
           columnGap: 20,
-          pageSize: 'A5',
+          pageSize: 'A4',
           pageOrientation: 'landscape'
         },
       };
