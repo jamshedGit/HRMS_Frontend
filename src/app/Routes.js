@@ -23,11 +23,9 @@ export function Routes() {
 
   const auth = useSelector(({ auth }) => auth, shallowEqual)
 
-  // console.log("Routes, Auth: ", auth)
+   console.log("Routes, Auth: ", auth)
   // // const isAuthorized = false
-
-  // console.log("Login, IsAuthorized: ", { isAuthorized })
-
+   console.log("Login, IsAuthorized: ", { isAuthorized })
   return (
     <Switch>
       {!isAuthorized ? (

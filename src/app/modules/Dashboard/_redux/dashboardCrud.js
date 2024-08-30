@@ -18,6 +18,19 @@ export const getAllCountry = async () => {
   );
 };
 
+export const getAllBanks = async () => {
+  return await axios.get(
+    `${USERS_URL}/settings/read-all-banks`
+  );
+};
+
+export const getAllDepartments = async () => {
+  return await axios.get(
+    `${USERS_URL}/settings/read-all-dept`
+  );
+};
+
+
 export const getCityByCountryId = async (countryId) => {
   return await axios.post(`${USERS_URL}/settings/read-all-cities-master-data`, {
     countryId: countryId,

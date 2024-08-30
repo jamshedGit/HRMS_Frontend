@@ -21,7 +21,7 @@ export function AuthPage() {
           <div
             className="login-aside d-flex flex-row-auto bgi-size-cover bgi-no-repeat p-10 p-lg-10"
             style={{
-              backgroundImage: `url(${toAbsoluteUrl("/media/bg/bg-4.jpg")})`,
+              backgroundImage: `url(${toAbsoluteUrl("/media/bg/bg-4.png")})`,
             }}
           >
             {/*begin: Aside Container*/}
@@ -30,10 +30,10 @@ export function AuthPage() {
              
                <Link to="/" className="flex-column-auto mt-5 pb-lg-0 pb-10">
                 <img
-                 style={{marginTop: "-50px", width:"300px"}}
+                 style={{marginTop: "-15px", width:"265px"}}
                   alt="Logo"
                   className="max-h-250px"
-                  src={toAbsoluteUrl("/media/logos/edhi2.png")}
+                  src={toAbsoluteUrl("/media/logos/dsc_logo.png")}
                 />
               </Link>
               {/* end:: Aside header */}
@@ -41,7 +41,7 @@ export function AuthPage() {
               {/* start:: Aside content */}
               <div className="flex-column-fluid d-flex flex-column justify-content-center">
                 <h3 className="font-size-h1 mb-5 text-white">
-                  Welcome to Edhi Foundation!
+                  Welcome to Dynasoft Cloud!
                 </h3>
                 <p className="font-weight-lighter text-white opacity-80">
                 Edhi strongly believes in protecting basic human rights without any discrimination of color,

@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import * as action from "../../../_redux/dashboardActions";
 import { Route, Switch } from "react-router-dom";
-import { TilesWidget10 } from "../../../../../../_metronic/_partials/widgets";
-import { TilesWidget } from "../tiles-widget/TilesWidget";
-import { IncidentCreateDialog } from "../incident-create-dialog/IncidentCreateDialog";
-import { TripLogEditDialog } from "../../../../IncidentDetails/pages/triplogs/triplog-edit-dialog/TripLogEditDialog";
+// import { TilesWidget10 } from "../../../../../../_metronic/_partials/widgets";
+// import { TilesWidget } from "../tiles-widget/TilesWidget";
+// import { IncidentCreateDialog } from "../incident-create-dialog/IncidentCreateDialog";
+// import { TripLogEditDialog } from "../../../../IncidentDetails/pages/triplogs/triplog-edit-dialog/TripLogEditDialog";
 import LastTripsDialog from "../LastTrips/LastTripsDialog";
 import { fetchTripLog } from "../../../../IncidentDetails/_redux/incidents/incidentActions";
 import { ToastContainer, toast } from "react-toastify";
@@ -154,7 +154,7 @@ export function DashboardTiles({ history }) {
     <>
       <div className="row">
         <div className="col-xl-12">
-          <TilesWidget10
+          {/* <TilesWidget10
             className="gutter-b"
             widgetHeight="125px"
             seletCity={city}
@@ -166,9 +166,9 @@ export function DashboardTiles({ history }) {
             alarmTime={alarmTime}
             setAlarmTime={setAlarmTime}
             setVehicle={setVehicle}
-          />
+          /> */}
         </div>
-        <div className="col-xl-4">
+        {/* <div className="col-xl-4">
           <TilesWidget
             className="gutter-b card-stretch"
             chartColor="danger"
@@ -201,9 +201,9 @@ export function DashboardTiles({ history }) {
             regNo={regNo}
             setRegNo={setRegNo}
           />
-        </div>
+        </div> */}
         <div className="col-xl-4">
-          <TilesWidget
+          {/* <TilesWidget
             className="gutter-b card-stretch"
             chartColor="danger"
             heading="On Duty"
@@ -229,10 +229,10 @@ export function DashboardTiles({ history }) {
             subCenter={subCenter && subCenter.value}
             setVehicle={setVehicle}
             setSeletecOnDuty={setSeletecOnDuty}
-          />
+          /> */}
         </div>
         <div className="col-xl-4">
-          <TilesWidget
+          {/* <TilesWidget
             className="gutter-b card-stretch"
             chartColor="danger"
             heading="Off Duty"
@@ -245,7 +245,7 @@ export function DashboardTiles({ history }) {
             seletedCity={city}
             selectedCenter={center}
             selectedSubCenter={subCenter}
-          />
+          /> */}
         </div>
       </div>
     </>

@@ -29,7 +29,7 @@ export function Brand() {
       >
         {/* begin::Logo */}
         <Link to="" className="brand-logo">
-          <img alt="logo" src={layoutProps.headerLogo} />
+          <img alt="logo" width={100} height={80} src={layoutProps.headerLogo} />
         </Link>
         {/* end::Logo */}
 

@@ -145,11 +145,11 @@ export function UsersFilter({ listLoading, user, setCity,
       
       const table = {
         headerRow: [
+          "SNo",
           "Receipt#",
           "Donor Name",
           "Amount",
           "Donation Type",
-          // "City",
           "Clerk",
           "Center",
           "Circle",
@@ -179,6 +179,7 @@ export function UsersFilter({ listLoading, user, setCity,
 
           }
           const row = [
+            index+1,
             item.receiptNo,
             item.donorName,
             item.amount,
@@ -196,6 +197,7 @@ export function UsersFilter({ listLoading, user, setCity,
 
       // Add Row For Total Amount
       const totall = [
+        "",
         "",
         "Total",
         "RS." + addCommas(total),
@@ -227,6 +229,7 @@ export function UsersFilter({ listLoading, user, setCity,
         pageOrientation: 'landscape',
         fontSize: 6,
         margin: [5, 0, 0, 30],
+        width:250,
         content: [
           {
             alignment: "justify",
@@ -463,7 +466,6 @@ export function UsersFilter({ listLoading, user, setCity,
                 </small> */}
                 <label>Book No</label>
                 <input
-
                   className="form-control"
                   //onBlur={(e) => createPdf(e.target.value)}
                   values={values.txtBookNo}
@@ -474,10 +476,7 @@ export function UsersFilter({ listLoading, user, setCity,
                   name="txtBookNo"
                   placeholder="Enter Book No"
                 // onBlur={handleBlur}
-
                 />
-
-
               </div>
 
              

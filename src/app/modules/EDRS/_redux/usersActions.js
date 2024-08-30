@@ -147,7 +147,7 @@ export const updateUser = (user, disbaleLoading, onHide) => (dispatch) => {
   return requestFromServer
     .updateUser(user)
     .then((response) => {
-  
+    
       const updatedUser = response.data?.data;
       // console.log("userAction Res", response)
       dispatch(actions.userUpdated({ updatedUser }));

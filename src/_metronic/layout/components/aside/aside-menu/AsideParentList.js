@@ -16,34 +16,40 @@ export default function AsideparentList(props) {
           "menu-item-active"} menu-item-open menu-item-not-hightlighted`
       : "";
   };
+
+  console.log("props",UserAccess)
   return (
     <>
-      <li
-        className={`menu-item menu-item-submenu ${getMenuItemActive(
-          "/props.element",
-          true
-        )}`}
-        aria-haspopup="true"
-        data-menu-toggle="hover"
-      >
-        <NavLink className="menu-link menu-toggle" to={`/${props.element}`}>
-          <span className="svg-icon menu-icon">
-            <SVG src={toAbsoluteUrl("/media/svg/icons/Shopping/Box2.svg")} />
-          </span>
-          <span className="menu-text">{props.element}</span>
-          <i className="menu-arrow" />
-        </NavLink>
-        <div className="menu-submenu">
-          <ul className="menu-subnav">
-            <ul className="menu-subnav">
-              {UserAccess[props.element].map((ce) => {
-                
-                return <AsideMenuItem element={ce} key={ce.resourceId} />;
-              })}
-            </ul>
-          </ul>
-        </div>
-      </li>
+        {
+          UserAccess[props.element].some(item=> item.isResourceShow) && ( <li
+            className={`menu-item menu-item-submenu ${getMenuItemActive(
+              "/props.element",
+              true
+            )}`}
+            aria-haspopup="true"
+            data-menu-toggle="hover"
+          >
+            <NavLink className="menu-link menu-toggle" to={`/${props.element.replace("_"," ")}`}>
+              <span className="svg-icon menu-icon">
+                <SVG src={toAbsoluteUrl("/media/svg/icons/Shopping/Box2.svg")} />
+              </span>
+              <span className="menu-text"> {props.element.replaceAll("_"," ")}</span>
+              <i className="menu-arrow" />
+            </NavLink>
+            <div className="menu-submenu">
+              <ul className="menu-subnav">
+                <ul className="menu-subnav">
+                  
+                  {UserAccess[props.element].map((ce) => {
+                   
+                    return <AsideMenuItem element={ce} key={ce.resourceId} />;
+                  })}
+                </ul>
+              </ul>
+            </div>
+          </li>)
+        }
+     
     </>
   );
 }

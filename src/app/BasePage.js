@@ -21,6 +21,37 @@ const UserManagment = lazy(() => import("./modules/UserMangement/pages"));
 const Centers = lazy(() => import("./modules/Centers/pages"));
 const IBSModule = lazy(() => import("./modules/IBS/pages/index"));
 const EDRSModule = lazy(() => import("./modules/EDRS/pages/index"));
+const BankModule = lazy(() => import("./modules/Banks/pages/index"));
+const BranchModule = lazy(() => import("./modules/BankBranch/pages/index"));
+const DepartmenModule = lazy(() => import("./modules/Department/pages/index"));
+const EmployeeTypeModule = lazy(() => import("./modules/EmployeeType/pages/index"));
+const ReligionModule = lazy(() => import("./modules/Religion/pages/index"));
+const RegionModule = lazy(() => import("./modules/Region/pages/index"));
+const DesignationModule = lazy(() => import("./modules/Designation/pages/index"));
+const FormModule = lazy(() => import("./modules/Forms/pages/index"));
+const FormDetailsModule = lazy(() => import("./modules/FormDetails/pages/index"));
+const EmpPolicyModule = lazy(() => import("./modules/EmployeePolicy/pages/index"));
+const PolicyModule = lazy(() => import("./modules/Policy/pages/index"));
+const EmplpyeeProfileModule = lazy(() => import("./modules/EmployeeProfile/pages/index"));
+const ContactModule = lazy(() => import("./modules/Contact/pages/index"));
+const AcademicModule = lazy(() => import("./modules/Academic/pages/index"));
+const ExperienceModule = lazy(() => import("./modules/Experience/pages/index"));
+const SkillsModule = lazy(() => import("./modules/Skills/pages/index"));
+const IncidentModule = lazy(() => import("./modules/incident/pages/index"));
+const EarningModule = lazy(() => import("./modules/Eearning/pages/index"));
+const DeductionModule = lazy(() => import("./modules/Deduction/pages/index"));
+const StoppageAllowanceModule = lazy(() => import("./modules/StoppageAllowance/pages/index"));
+const ExchangeRateModule = lazy(() => import("./modules/ExchangeRate/pages/index"));
+const CompensationBenefitsModule = lazy(() => import("./modules/compensation_benefits/pages/index"));
+const EarningDeductionTranModule = lazy(() => import("./modules/Compensation_Earning_Transaction/pages/index"));
+const DeductionTranModule = lazy(() => import("./modules/Compensation_Deduction_Transaction/pages/index"));
+const EmployeeSalaryEarningModule = lazy(() => import("./modules/Employee_Salary_Earning/pages/index"));
+const EmployeeSalaryDeductionModule = lazy(() => import("./modules/Employee_Salary_Deduction/pages/index"));
+const EmployeeSalaryModule = lazy(() => import("./modules/Employee_Salary_Setup/pages/index"));
+const EmployeeSalaryExpModule = lazy(() => import("./modules/Employee_Salary_Expatriate/pages/index"));
+const CompensationExpModule = lazy(() => import("./modules/Compensation_Expatriate/pages/index"));
+const EmployeeTransferModule = lazy(() => import("./modules/Employee_Transfer/pages/index"));
+
 const ROUTES = {
   settings: SettingsPage,
   users: UserManagment,
@@ -28,7 +59,37 @@ const ROUTES = {
   vehicles: VehicleManagment,
   incidentdetails: IncidentDetailsManagment,
   ibs: IBSModule,
-  edrs: EDRSModule
+  edrs: EDRSModule,
+  bank: BankModule,
+  branch:BranchModule,
+  department:DepartmenModule,
+  emptype: EmployeeTypeModule,
+  religion: ReligionModule,
+  region: RegionModule,
+  designation: DesignationModule,
+  form: FormModule,
+  formdetails: FormDetailsModule,
+  emppolicy: EmpPolicyModule,
+  policy: PolicyModule,
+  profile: EmplpyeeProfileModule,
+  contact: ContactModule,
+  academic: AcademicModule,
+  experience: ExperienceModule ,
+  skills: SkillsModule,
+  incident: IncidentModule,
+  earning: EarningModule,
+  deduction: DeductionModule,
+  stoppage: StoppageAllowanceModule,
+  exchange: ExchangeRateModule,
+  compensation: CompensationBenefitsModule,
+  earning_transaction:EarningDeductionTranModule,
+  deduction_transaction: DeductionTranModule,
+  employee_salary_earning : EmployeeSalaryEarningModule,
+  employee_salary_deduction: EmployeeSalaryDeductionModule,
+  employee_salary : EmployeeSalaryModule,
+  salary_expatriate: EmployeeSalaryExpModule,
+  compensation_expatriate: CompensationExpModule,
+  employee_transfer: EmployeeTransferModule
 };
 
 export default function BasePage() {
@@ -52,9 +113,9 @@ export default function BasePage() {
             .split(" ")
             .join("-")
             .toLowerCase();
-          console.log("path", path);
-
-          if (ROUTES[accessName])
+            if (ROUTES[accessName])
+              console.log("path", UserAccess);
+            {
             return (
               <Route
                 key={key}
@@ -62,6 +123,7 @@ export default function BasePage() {
                 component={ROUTES[accessName]}
               />
             );
+          }
         })}
 
         {isDashboardAccess ? (

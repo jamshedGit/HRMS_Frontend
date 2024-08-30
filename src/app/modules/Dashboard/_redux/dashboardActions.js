@@ -42,6 +42,22 @@ export const fetchAllCountry = () => async (dispatch) => {
     });
 };
 
+
+// export const fetchAllDept = (id) => async (dispatch) => {
+//   console.log("DashboardAction", id);
+//   return await requestFromServer
+//     .getAllDepartments(id)
+//     .then((response) => {
+       
+//       const entities = response.data?.data;
+//       console.log("Get All dept", entities);
+//        dispatch(actions.AllDeptFetch(entities));
+//     })
+//     .catch((error) => {
+//       toast.error("Something went wrong");
+//     });
+// };
+
 export const fetchAllCity = (cityId) => async (dispatch) => {
   // console.log("DashboardAction", cityId);
   return await requestFromServer

@@ -76,6 +76,10 @@ export const usersSlice = createSlice({
       // console.log("user update payload", action.payload);
       state.entities = state.entities.map((entity) => {
         if (entity.id === action.payload.updatedUser.id) {
+          
+                
+                console.log('slice 1', JSON.stringify(state.entities),JSON.stringify(action.payload));
+
           return action.payload.updatedUser;
         }
 

@@ -9,7 +9,7 @@ $root-font-size-md:                             	12px; // Root font size for mob
 
 // Layout Theme Colors
 $layout-themes: (
-	dark:  #009241, // Dark theme color
+	dark:  rgb(96, 119, 153), // Dark theme color
 	light: #ffffff // Light theme color
 ) !default;
 
@@ -483,9 +483,9 @@ $header-menu-config: (
 											// open: #1b1b28,
 											// active: #1b1b28,
 											// hover: #1b1b28,
-											open: #C72017,
-											active: #C72017,
-											hover: #C72017
+											open: #c56200,
+											active: #c56200,
+											hover: #c56200
 										)
 									),
 
@@ -804,10 +804,10 @@ $header-menu-config: (
 										// here: #1b1b28,
 										// active: #1b1b28,
 										// hover: #1b1b28,
-										open: #C72017,
-										here: #C72017,
-										active: #C72017,
-										hover: #C72017
+										open: #c56200,
+										here: #c56200,
+										active: #c56200,
+										hover: #c56200
 									)
 								),
 								// Icon
@@ -897,10 +897,10 @@ $header-menu-config: (
 												// here: #1b1b28,
 												// active: #1b1b28,
 												// hover: #1b1b28,
-												open: #C72017,
-												here: #C72017,
-												active: #C72017,
-												hover: #C72017
+												open: #c56200,
+												here: #c56200,
+												active: #c56200,
+												hover: #c56200
 											)
 										),
 
@@ -1672,10 +1672,10 @@ $aside-menu-config: (
 									// here: #1b1b28,
 									// active: #1b1b28,
 									// hover: #1b1b28,
-										open: #C72017,
-										here: #C72017,
-										active: #C72017,
-										hover: #C72017
+										open: #c56200,
+										here: #c56200,
+										active: #c56200,
+										hover: #c56200
 
 								)
 							),
@@ -1772,10 +1772,10 @@ $aside-menu-config: (
 											// here: #1b1b28,
 											// active: #1b1b28,
 											// hover: #1b1b28,
-												open: #C72017,
-												here: #C72017,
-												active: #C72017,
-												hover: #C72017
+												open: #c56200,
+												here: #c56200,
+												active: #c56200,
+												hover: #c56200
 										)
 									),
 									// Icon

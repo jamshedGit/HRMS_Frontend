@@ -310,7 +310,7 @@ export function UserEditForm({
                         value={defCity}
                         error={errors.cityId}
                         touched={touched.cityId}
-                        options={dashboard.allCity}
+                         options={dashboard.allCity}
                       />
                     </div>
 

@@ -18,11 +18,79 @@ export const getAllCountry = async () => {
   );
 };
 
+
+export const getAllEarningDeductionList = async (Id) => {
+  console.log('pakistan', Id)
+  return await axios.post(
+    `${USERS_URL}/stoppage/read-earning-deduction-list`, { flag: Id }
+  );
+};
+
+export const getAllEmp_Compensation_Benefits_DDL = async () => {
+  console.log('getAllEmp_Compensation_Benefits')
+  return await axios.post(`${USERS_URL}/compensation/read-all-compensation-benefits-ddl`);
+};
+
+export const getAllActiveEmployees = async () => {
+  return await axios.post(
+    `${USERS_URL}/settings/read-all-profile`
+  );
+};
+
+
+export const getAllActiveEmployeesSalaryForDDL = async (employeeId) => {
+  console.log("getAllActiveEmployeesSalaryForDDL", employeeId)
+  return await axios.post(
+    `${USERS_URL}/employee_salary_earning/read-all-employee-salary-ddl`,{
+      employeeId : employeeId
+    }
+  );
+};
+
 export const getCityByCountryId = async (countryId) => {
   return await axios.post(`${USERS_URL}/settings/read-all-cities-master-data`, {
     countryId: countryId,
   });
 };
+
+export const getAllBanks = async (Id) => {
+  return await axios.get(`${USERS_URL}/settings/read-all-banks`, {
+    Id: Id,
+  });
+};
+
+export const getAllBankBranch = async (Id) => {
+  return await axios.get(`${USERS_URL}/settings/read-all-branch`, {
+    Id: Id,
+  });
+};
+
+export const getAllEarningHeads = async (Id) => {
+  return await axios.get(`${USERS_URL}/earning/read-all-earning`, {
+    Id: Id,
+  });
+};
+
+
+export const getAllDepartments = async (Id) => {
+  return await axios.get(`${USERS_URL}/settings/read-all-dept`, {
+    Id: Id,
+  });
+};
+
+export const getAllFormMenus = async (Id) => {
+  console.log("eee:", Id);
+  return await axios.post(`${USERS_URL}/settings/read-all-form`, {
+    Id: Id,
+  });
+};
+
+export const getAllParentDepartments = async (Id) => {
+  return await axios.get(`${USERS_URL}/settings/read-all-parentDept`, {
+    Id: Id,
+  });
+};
+
 
 export const getCentersByCityId = async (cityId) => {
   return await axios.post(
@@ -58,7 +126,7 @@ export const getLastTrips = async (body) => {
 };
 
 export const updateTripLog = async (payload) => {
-  console.log("payload in crud", payload);
+
   return await axios.put(
     `${USERS_URL}/drivertriplog/update-driver-trip-log`,
     payload
@@ -74,6 +142,21 @@ export const getAlaramTime = async () => {
 
 export const getLastBookingNo = async (bookingNo) => {
   return await axios.post(
-    `${USERS_URL}/settings/get-max-booking-no`,{bookingNo : bookingNo}
+    `${USERS_URL}/settings/get-max-booking-no`, { bookingNo: bookingNo }
   );
 };
+
+export const getLastTableId = async (tableName, prefix) => {
+  return await axios.post(
+    `${USERS_URL}/settings/get-max-tableId`, { tableName: tableName, prefix: prefix }
+  );
+};
+
+
+export const getLastDeductionNo = async (bookingNo) => {
+  return await axios.post(
+    `${USERS_URL}/settings/get-max-booking-no`, { bookingNo: bookingNo }
+  );
+};
+
+

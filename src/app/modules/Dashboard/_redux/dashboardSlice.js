@@ -5,7 +5,32 @@ const initialDashboardState = {
   allCenters: [],
   allSubCenter: [],
   allCountry: [],
+  allEmployees: [],
+  allSubidiaryList: [],
+  allEmployeesSalaryDDL: [],
+  allBankBranch: [],
+  allEearningDeductList: [],
   allCity: [],
+  allCompanyBanks:[],
+  allDept: [],  
+  allEarnings:[],
+  allDeductions:[],
+  allChildMenus:[],
+  allDegreeTitle: [],
+  allStatus: [],
+  allInstitution: [],
+  allTeamsChildMenus:[],
+  allRegionChildMenus:[],
+  allReligionChildMenus:[],
+  allEmpTypeChildMenus:[],
+  allNationalities:[],
+  allLocationChildMenus:[],
+  allCurrencyCodeList:[],
+  allDesignations:[],
+  allPaymentModeList:[],
+  allEmployeeGradeList:[],
+  allRelationCodeList: [],
+  allParentMenus:[],
   cityCenters: [],
   allVehicles: [],
   standBy: [],
@@ -14,6 +39,7 @@ const initialDashboardState = {
   lastTrips: [],
   alarmTime: [],
   incidentTypes: [],
+  allCompensationBenefitsList:[]
 };
 
 export const callTypes = {
@@ -25,6 +51,13 @@ export const dashboardSlice = createSlice({
   name: "dashboard",
   initialState: initialDashboardState,
   reducers: {
+
+    AllBankBranchFetch: (state, action) => {
+      state.allBankBranch = action.payload;
+    },
+    AllSubsidiaryFetch: (state, action) => {
+      state.allSubidiaryList = action.payload;
+    },
     AllCentersFetch: (state, action) => {
       state.allCenters = action.payload;
     },
@@ -37,11 +70,76 @@ export const dashboardSlice = createSlice({
     AllCityFetch: (state, action) => {
       state.allCity = action.payload;
     },
+    AllDeptFetch: (state, action) => {
+      state.allDept = action.payload;
+    },
+
+    AllActiveEmployeeFetch: (state, action) => {
+      state.allEmployees = action.payload;
+    },
+    
+    AllActiveEmployeeSalaryDDL: (state, action) => {
+      state.allEmployeesSalaryDDL = action.payload;
+    },
+
+
+    AllActiveNationalityFetch: (state, action) => {
+      state.allNationalities = action.payload;
+    },
+          
+    AllEarningDeductionListFetch: (state, action) => {
+      state.allEearningDeductList = action.payload;
+    },
+    
+    AllCurrencyCodesListFetch: (state, action) => {
+      state.allCurrencyCodeList = action.payload;
+    },
+
+    AllPaymentModeListFetch: (state, action) => {
+      state.allPaymentModeList = action.payload;
+    },
+
+    AllEarningHeadsFetch: (state, action) => {
+      state.allEarnings = action.payload;
+    },
+
+    AllCompensationBenefitsListFetch: (state, action) => {
+      state.allCompensationBenefitsList = action.payload;
+    },
+
+    AllDeductionHeadsFetch: (state, action) => {
+      state.allDeductions = action.payload;
+    },
+
+    AllChildMenusFetch: (state, action) => {
+      console.log('::action:modules:',action.payload)
+      state[action.payload.key] = action.payload.entities;
+    },
+
+    AllChildMenusForTeams: (state, action) => {
+      state.allTeamsChildMenus = action.payload;
+    },
+     
+     
+    AllParentMenusFetch: (state, action) => {
+      state.allParentMenus = action.payload;
+    },
+    
     AllCentersByCityIdFetch: (state, action) => {
       state.cityCenters = action.payload;
     },
     AllVehiclesByCenterAndSubCenterId: (state, action) => {
       state.allVehicles = action.payload;
+    },
+    AllBanksFetch: (state, action) => {
+      state.allBanks = action.payload;
+    },
+    AllDesignationsFetch: (state, action) => {
+      state.allDesignations = action.payload;
+    },
+    
+    AllCompanyBanksFetch: (state, action) => {
+      state.allCompanyBanks = action.payload;
     },
     dashboardVehicles: (state, action) => {
       state.standBy = action.payload.standBy;

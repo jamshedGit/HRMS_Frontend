@@ -12,7 +12,7 @@ export function AsideMenuList({ layoutProps }) {
   const auth = useSelector(({ auth }) => auth, shallowEqual);
   const UserAccess = auth?.userAccess;
   const Settings = auth?.userAccess?.Settings;
-
+  console.log("UserAccess",UserAccess);
   const isDashboardAccess = Settings?.some((obj) =>
     Object.values(obj).includes("read-all-vehicles-dashboard")
   );
@@ -89,7 +89,7 @@ export function AsideMenuList({ layoutProps }) {
               </ul>
             </ul>
           </div>
-        </li> */}
+        </li> }
 
 
         {/* Bootstrap */}

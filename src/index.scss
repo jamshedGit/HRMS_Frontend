@@ -76,6 +76,11 @@
 }
 
 .react-bootstrap-table {
+  border-left: 1px solid #000 !important;
+  border-right: 1px solid #000 !important;
+  border-bottom: 1px solid #000 !important;
+  border-radius: 12px;
+  color: #000 ;
   th {
     outline: none;
    
@@ -97,7 +102,9 @@
   .table.table-head-custom thead tr {
     .sortable-active {
         color: $primary !important;
-    }
+    } 
+    background-color: #607799;
+    color: #fff !important; 
   }
 }
 
@@ -111,4 +118,8 @@
 
 .react-bootstrap-table table {
   table-layout: auto;
+  border-left: 1px solid #dbdbdb;
+    border-right: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
+    border-radius: 12px;
 }
