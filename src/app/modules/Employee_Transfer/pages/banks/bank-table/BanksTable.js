@@ -120,26 +120,26 @@ export function BanksTable() {
         minWidth: "160px",
       },
     },
-    {
-      dataField: "grade_from",
-      text: "From_Grade",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
-    {
-      dataField: "grade_to",
-      text: "To_Grade",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
+    // {
+    //   dataField: "grade_from",
+    //   text: "From_Grade",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "160px",
+    //   },
+    // },
+    // {
+    //   dataField: "grade_to",
+    //   text: "To_Grade",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "160px",
+    //   },
+    // },
     {
       dataField: "employeeType",
       text: "Employee Type",
