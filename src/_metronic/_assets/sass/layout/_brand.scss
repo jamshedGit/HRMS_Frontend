@@ -38,7 +38,7 @@
 	.brand {
 		// Fixed Header & Static Aside Mode
 		.header-fixed.aside-static & {
-			position: fixed;
+			position: absolute;
 			top: 0;
 			left: 0;
 			width: get($aside-config, base, width);

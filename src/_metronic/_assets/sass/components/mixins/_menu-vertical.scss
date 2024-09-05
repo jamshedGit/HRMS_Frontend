@@ -430,10 +430,13 @@
 	.#{get($base-config, class)} {
 		// menu nav
 		.menu-nav {
-			margin: 0;
-			list-style: none;
-			padding: get($layout, default, self, padding);
-
+			// margin: 0;
+			// list-style: none;
+			// padding: get($layout, default, self, padding);
+			list-style-type: none; /* Remove default list bullets */
+			padding: 0;            /* Remove default padding */
+			margin: 0;             /* Remove default margin */
+			display: flex;   
 			// Base markup
 			.menu-scroll {
 				position: relative;
@@ -450,6 +453,7 @@
 				padding: 0;
 				margin: 0;
 				list-style: none !important;
+				position: fixed;
 			}
 
 			// general submenu
@@ -494,6 +498,7 @@
 				flex-grow: 1;
 				float: none;
 				padding: 0;
+				width: 100%;
 
 				// item link and heading
 				> .menu-heading,
@@ -506,7 +511,7 @@
 					text-decoration: none;
 					position: relative;
 					outline: none;
-
+					background-color: #607799;
 					&:hover {
 						text-decoration: none;
 						cursor: pointer;

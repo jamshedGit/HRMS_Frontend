@@ -29,7 +29,7 @@ var KTLayoutAsideMenu = function() {
 
 					height = height - (parseInt(KTUtil.css(_element, 'marginBottom')) + parseInt(KTUtil.css(_element, 'marginTop')));
 
-					return height;
+					return "auto";
 				}
 			};
 		}

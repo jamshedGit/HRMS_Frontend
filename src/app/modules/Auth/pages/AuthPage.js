@@ -43,12 +43,12 @@ export function AuthPage() {
                 <h3 className="font-size-h1 mb-5 text-white">
                   Welcome to Dynasoft Cloud!
                 </h3>
-                <p className="font-weight-lighter text-white opacity-80">
+                {/* <p className="font-weight-lighter text-white opacity-80">
                 Edhi strongly believes in protecting basic human rights without any discrimination of color,
                  caste, and creed. My religion is “service for humanity” that is spanned over 56 years, 
                  thus our efforts and services are greatly liked and commended by all schools of thought, 
                  across Pakistan and many parts of the world.
-                </p>
+                </p> */}
               </div>
               {/* end:: Aside content */}
 

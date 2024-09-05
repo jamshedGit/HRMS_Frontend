@@ -22,6 +22,20 @@ export function ActionsColumnFormatter(
   const isUserRead = false;
   return (
     <>
+    <OverlayTrigger
+        overlay={<Tooltip id="products-edit-tooltip">History</Tooltip>}>
+        <a
+          title=""
+          className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
+          onClick={() => openReadBankDialog(row.Id, isUserRead)}
+        >
+          <span className="svg-icon svg-icon-md svg-icon-primary">
+            <SVG
+              src={toAbsoluteUrl("/media/svg/icons/Communication/history.svg")}
+            />
+          </span>
+        </a>
+      </OverlayTrigger>
       <OverlayTrigger
         overlay={<Tooltip id="products-edit-tooltip">View info</Tooltip>}>
         <a

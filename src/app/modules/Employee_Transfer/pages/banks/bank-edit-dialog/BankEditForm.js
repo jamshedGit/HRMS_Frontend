@@ -98,6 +98,7 @@ export function BankEditForm({
   const [defDateOfTransfer, setDateOfTransferDate] = useState(null);
   const [defDesignation = null, setDefaultDesignation] = useState(null);
   const [defEmpProfileList = null, SetDefaultEmpProfileList] = useState(null);
+  const [defCompanyList = null, SetDefaulCompanyList] = useState(null);
 
   useEffect(() => {
     if (!user.Id) {
@@ -111,6 +112,8 @@ export function BankEditForm({
       dispatch(fetchAllFormsMenu(89, "allLocationChildMenus")); // For Location
       dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsisidaries
       dispatch(fetchAllFormsMenu(158, "allDesignations")); // For All Designations
+      dispatch(fetchAllFormsMenu(165, "allCompanyList")); // For All Companies
+      
       dispatch(fetchAllCountry());
       dispatch(fetchAllActiveEmployees());
     }
@@ -120,7 +123,7 @@ export function BankEditForm({
   //======================= Employee Type
 
   useEffect(() => {
-    const emptypeId = defchildEmptypeMenus?.value ? defchildEmptypeMenus.value : user.employeeTypeId_To ;
+    const emptypeId = defchildEmptypeMenus?.value ? defchildEmptypeMenus.value : user.employeeTypeId_To;
     setDefaultChildEmpTypeMenus(
       dashboard.allEmpTypeChildMenus &&
       dashboard.allEmpTypeChildMenus.filter((item) => {
@@ -133,7 +136,7 @@ export function BankEditForm({
 
   useEffect(() => {
 
-    const subsidiaryId = defSubsidiary?.value ? defSubsidiary.value : user.subsidiaryId_To ;
+    const subsidiaryId = defSubsidiary?.value ? defSubsidiary.value : user.subsidiaryId_To;
     console.log("subsidiaryId123", user);
 
     setDefualtSubsidiaryList(
@@ -146,7 +149,20 @@ export function BankEditForm({
   }, [user?.subsidiaryId_To, dashboard.subsidiaryId_To]);
 
   useEffect(() => {
-    const gradeId = defEmployeeGrade?.value ? defEmployeeGrade.value : user.gradeId_To ;
+
+    const companyId = defCompanyList?.value ? defCompanyList.value : user.companyId_To;
+    
+    SetDefaulCompanyList(
+      dashboard.allCompanyList &&
+      dashboard.allCompanyList.filter((item) => {
+        return item.value === companyId;
+      })
+    );
+
+  }, [user?.companyId_To, dashboard.companyId_To]);
+
+  useEffect(() => {
+    const gradeId = defEmployeeGrade?.value ? defEmployeeGrade.value : user.gradeId_To;
     setDefualtEmployeeGrade(
       dashboard.allEmployeeGradeList &&
       dashboard.allEmployeeGradeList.filter((item) => {
@@ -426,10 +442,11 @@ export function BankEditForm({
                             <td>Grade</td>
                             <td>Payroll Group</td>
                             <td>Team</td>
+                            <td>Subsidiary</td>
                           </tr>
                           {defEmpProfileList?.map((obj, rightindex) => (
                             <><tr style={{ fontSize: "10px" }}>
-                              <td><input onChange={handleChange} name={'empChecked-'+ rightindex} type="checkbox" id={rightindex}></input> </td>
+                              <td><input onChange={handleChange} name={'empChecked-' + rightindex} type="checkbox" id={rightindex}></input> </td>
                               <td>
                                 {obj.employee}
                               </td>
@@ -443,6 +460,7 @@ export function BankEditForm({
                               <td>{obj.grade}</td>
                               <td>{obj.payrollGroup}</td>
                               <td>{obj.team}</td>
+                              <td>{obj.subsidiary}</td>
                             </tr>
                             </>
                           ))}
@@ -482,24 +500,26 @@ export function BankEditForm({
                           </div>
                         } */}
                         <div className="col-12 col-md-4 mt-3">
-                          <Select
-                            label="Company"
+                         
+                          <SearchSelect
                             name="companyId"
-                            value={values.companyId_To}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            style={{ display: "block" }}
-                            autoComplete="off"
-                          >
-                            <option value="-1" label="Select..." />
-                            <option value="1" label="Dynasoft-Karachi" />
-                            <option value="2" label="Dynasoft-Lahore" />
-                            <option value="3" label="Dynasoft-Dubai" />
+                            label={<span> Company<span style={{ color: 'red' }}>*</span></span>}
+                            isDisabled={isUserForRead && true}
+                            onBlur={() => {
+                              // handleBlur({ target: { name: "countryId" } });
+                            }}
+                            onChange={(e) => {
+                              setFieldValue("companyId", e.value || null);
+                              SetDefaulCompanyList(e);
+                              //handlePaymenModeChanged(e)
+                            }}
 
-                          </Select>
-                          {errors.companyId && touched.companyId && (
-                            <div className="invalid-text">{errors.companyId}</div>
-                          )}
+                            value={(defCompanyList || null)}
+                            error={errors.companyId}
+                            touched={touched.companyId}
+                            options={dashboard.allCompanyList}
+                          />
+                         
                         </div>
                         <div className="col-12 col-md-4 mt-3">
                           <SearchSelect

@@ -38,9 +38,11 @@ export function Layout({ children }) {
     <>
       {/*begin::Main*/}
       <HeaderMobile />
+
       <div className="d-flex flex-column flex-root">
         {/*begin::Page*/}
         <div className="d-flex flex-row flex-column-fluid page">
+
           {layoutProps.asideDisplay && <Aside />}
           {/*begin::Wrapper*/}
           <div
@@ -53,10 +55,11 @@ export function Layout({ children }) {
               id="kt_content"
               className={`content ${layoutProps.contentCssClasses} d-flex flex-column flex-column-fluid`}
             >
+             
               {layoutProps.subheaderDisplay && <SubHeader />}
               {/*begin::Entry*/}
               {!layoutProps.contentExtended && (
-                <div className="d-flex flex-column-fluid">
+                <div className="d-flex flex-column-fluid" style={{padding:"90px"}}>
                   {/*begin::Container*/}
                   <div className={layoutProps.contentContainerClasses}>
                     {children}

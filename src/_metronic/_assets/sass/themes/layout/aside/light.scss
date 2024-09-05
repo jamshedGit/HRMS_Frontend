@@ -15,6 +15,7 @@
 	.aside-menu {
 		// Scrollbar
 		@include perfect-scrollbar-theme(#e0e2f0);
+		z-index: 100;
 	}
 }
 

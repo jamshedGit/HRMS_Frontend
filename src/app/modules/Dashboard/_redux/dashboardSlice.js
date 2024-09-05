@@ -29,6 +29,7 @@ const initialDashboardState = {
   allDesignations:[],
   allPaymentModeList:[],
   allEmployeeGradeList:[],
+  allCompanyList:[],
   allRelationCodeList: [],
   allParentMenus:[],
   cityCenters: [],

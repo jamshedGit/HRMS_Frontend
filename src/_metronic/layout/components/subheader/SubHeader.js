@@ -51,8 +51,8 @@ export function SubHeader() {
   useEffect(() => {}, [subheader]);
 
   return (
-      <div
-          id="kt_subheader"
+      <div 
+          id="kt_subheader" style={{display:"none"}}
           className={`subheader py-2 py-lg-4   ${layoutProps.subheaderCssClasses}`}
       >
         <div

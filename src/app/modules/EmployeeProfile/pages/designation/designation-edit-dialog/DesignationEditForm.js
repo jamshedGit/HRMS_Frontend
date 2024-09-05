@@ -107,6 +107,7 @@ export function DesignationEditForm({
   const [academicList, setAcademicList] = useState([]);
   const [skillsList, setSkillList] = useState([]);
   const [incidentList, setIncidentList] = useState([]);
+  const [defSubsidiary = null, setDefualtSubsidiaryList] = useState(null);
   //==================== END
 
   const [mylist, setMyList] = useState('');
@@ -130,11 +131,25 @@ export function DesignationEditForm({
       dispatch(fetchAllFormsMenu(89, "allLocationChildMenus")); // For Location
       dispatch(fetchAllCountry());
       dispatch(fetchAllActiveEmployees());
+
+      dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsisidaries
       // dispatch(fetchAllFormsMenu(87));
     }
   }, [dispatch]);
 
 
+  useEffect(() => {
+
+    const subsidiaryId = defSubsidiary?.value ? defSubsidiary.value : user.subsidiaryId;
+   
+    setDefualtSubsidiaryList(
+      dashboard.allSubidiaryList &&
+      dashboard.allSubidiaryList.filter((item) => {
+        return item.value === subsidiaryId;
+      })
+    );
+
+  }, [user?.subsidiaryId, dashboard.subsidiaryId]);
 
   //===== Date Of Joining
   useEffect(() => {
@@ -497,6 +512,30 @@ export function DesignationEditForm({
                           </div>
                         </div>
                       </div>
+                    </div>
+
+                    <div className="from-group row">
+                    <div className="col-12 col-md-4 mt-3">
+                          <SearchSelect
+                            name="subsidiaryId"
+                            label={<span> Subsidiary<span style={{ color: 'red' }}>*</span></span>}
+                            isDisabled={isUserForRead && true}
+                            onBlur={() => {
+                              // handleBlur({ target: { name: "countryId" } });
+                            }}
+                            onChange={(e) => {
+                              setFieldValue("subsidiaryId", e.value || null);
+                              setDefualtSubsidiaryList(e);
+                              //handlePaymenModeChanged(e)
+                            }}
+
+                            value={(defSubsidiary || null)}
+                            error={errors.subsidiaryId}
+                            touched={touched.subsidiaryId}
+                            options={dashboard.allSubidiaryList}
+                          />
+
+                        </div>
                     </div>
                     <div className="from-group row">
                       {

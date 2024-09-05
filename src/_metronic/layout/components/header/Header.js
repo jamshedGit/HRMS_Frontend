@@ -23,7 +23,7 @@ export function Header() {
   return (
     <>
       {/*begin::Header*/}
-      <div
+      <div style={{position:"absolute"}}
         className={`header ${layoutProps.headerClasses}`}
         id="kt_header"
         {...layoutProps.headerAttributes}

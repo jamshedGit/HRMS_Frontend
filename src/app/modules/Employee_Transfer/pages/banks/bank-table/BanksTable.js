@@ -90,7 +90,16 @@ export function BanksTable() {
         minWidth: "160px",
       },
     },
-
+    {
+      dataField: "transferDate",
+      text: "Effective Date",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
     {
       dataField: "subsidiary_from",
       text: "Subsidiary",

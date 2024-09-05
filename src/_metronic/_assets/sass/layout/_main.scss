@@ -23,7 +23,7 @@ body {
 
 		// Fixed Aside
 		.aside-fixed & {
-			padding-left: get($aside-config, base, width);
+			padding-left: 0px;// get($aside-config, base, width);
 		}
 
 		// Minimize Aside

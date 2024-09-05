@@ -23,16 +23,14 @@ export function Aside() {
   return (
       <>
         {/* begin::Aside */}
-        <div id="kt_aside"
-             className={`aside aside-left  ${layoutProps.asideClassesFromConfig} d-flex flex-column flex-row-auto`}>
-          <Brand/>
 
-          {/* begin::Aside Menu */}
-          <div id="kt_aside_menu_wrapper" className="aside-menu-wrapper flex-column-fluid">
+        <div id="kt_aside_menu_wrapper" style={{position:"absolute",width:"100%"}} className="aside-menu-wrapper flex-column-fluid">
+    <Brand/>
             {layoutProps.disableAsideSelfDisplay && (
               <>
                 {/* begin::Header Logo */}
                 <div className="header-logo">
+             
                   <Link to="">
                     <img alt="logo" src={layoutProps.headerLogo}/>
                   </Link>
@@ -42,8 +40,7 @@ export function Aside() {
             )}
             <AsideMenu disableScroll={layoutProps.disableScroll}/>
           </div>
-          {/* end::Aside Menu */}
-        </div>
+       
         {/* end::Aside */}
       </>
   );

@@ -15,6 +15,7 @@ const initialDashboardState = {
   allDesignations:[],
   allCompanyBanks:[],
   allEarnings:[],
+  allCompanyList:[],
   allNationalities:[],
   allDeductions:[],
   allDept:[],

@@ -16,7 +16,7 @@ export function AsideMenu({disableScroll}) {
   return (
     <>
       {/* begin::Menu Container */}
-      <div
+      <div style={{height:"150px !important", zIndex:"100" }}
         id="kt_aside_menu"
         data-menu-vertical="1"
         className={`aside-menu my-4 ${layoutProps.asideClassesFromConfig}`}
