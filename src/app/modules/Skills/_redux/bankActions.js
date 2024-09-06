@@ -59,7 +59,7 @@ export const deleteSkills = (id) => (dispatch) => {
     .then((response) => {
       //console.log("response from delete user ", response.data.message)
       dispatch(actions.skillsDeleted({ Id: id }));
-      toast.success("Successfully Deactivated", {
+      toast.success("Successfully Deleted", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

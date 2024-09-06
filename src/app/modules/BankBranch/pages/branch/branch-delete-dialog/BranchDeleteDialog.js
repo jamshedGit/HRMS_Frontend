@@ -67,11 +67,11 @@ export function BranchDeleteDialog({ id, status, show, onHide }) {
       {/*end::Loading*/}
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-lg">
-          Deactivate User
+          Delete Record
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {!isLoading && <span>Are you sure to deactivate this user?</span>}
+        {!isLoading && <span>Are you sure want to delete this record?</span>}
         {isLoading && <span>user is deactivating...</span>}
       </Modal.Body>
       <Modal.Footer>
@@ -89,7 +89,7 @@ export function BranchDeleteDialog({ id, status, show, onHide }) {
             onClick={deleteBranch}
             className="btn btn-primary btn-elevate"
           >
-            Deactivate
+            Delete Record
             {loading && (
               <span className="ml-3 mr-3 spinner spinner-white"></span>
             )}

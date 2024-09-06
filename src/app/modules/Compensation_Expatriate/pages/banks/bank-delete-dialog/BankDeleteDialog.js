@@ -67,12 +67,12 @@ export function BankDeleteDialog({ id, status, show, onHide }) {
       {/*end::Loading*/}
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-lg">
-          Deactivate User
+          Delete Record
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {!isLoading && <span>Are you sure to deactivate this user?</span>}
-        {isLoading && <span>user is deactivating...</span>}
+        {!isLoading && <span>Are you sure want to delete this record?</span>}
+        {isLoading && <span>record is deleting...</span>}
       </Modal.Body>
       <Modal.Footer>
         <div>
@@ -89,7 +89,7 @@ export function BankDeleteDialog({ id, status, show, onHide }) {
             onClick={deleteCompensation_Expatriate}
             className="btn btn-primary btn-elevate"
           >
-            Deactivate
+            Delete Record
             {loading && (
               <span className="ml-3 mr-3 spinner spinner-white"></span>
             )}

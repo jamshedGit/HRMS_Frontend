@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/role-supports-aria-props */
 /* eslint-disable no-script-url,jsx-a11y/anchor-is-valid */
-import React from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import { useLocation } from "react-router";
 import { NavLink } from "react-router-dom";
 import { shallowEqual, useSelector } from "react-redux";
@@ -12,7 +12,29 @@ export function AsideMenuList({ layoutProps }) {
   const auth = useSelector(({ auth }) => auth, shallowEqual);
   const UserAccess = auth?.userAccess;
   const Settings = auth?.userAccess?.Settings;
-  console.log("UserAccess",UserAccess);
+  console.log("UserAccess", UserAccess);
+
+  const [isVisible, setIsVisible] = useState(true);
+  const menuRef = useRef(null);
+  // Hide menu when clicked outside
+
+
+  // Hide menu when it loses focus
+  const handleBlur = () => {
+    setIsVisible(false);
+  };
+
+  // Show menu on focus
+  const handleFocus = () => {
+    setIsVisible(true);
+  };
+  // Toggle visibility of the menu
+  const toggleMenuVisibility = () => {
+    setIsVisible((prevState) => !prevState);
+  };
+
+
+  console.log("div visible", isVisible);
   const isDashboardAccess = Settings?.some((obj) =>
     Object.values(obj).includes("read-all-vehicles-dashboard")
   );
@@ -31,6 +53,15 @@ export function AsideMenuList({ layoutProps }) {
       "menu-item-active"} menu-item-open menu-item-not-hightlighted`
       : "";
   };
+
+  function fnHideMenu() {
+    alert('0')
+    const menu_css = document.getElementById("dv_submenu").style = "display:none"
+
+
+    //menu_css.insertRule(stl, 0); 
+
+  }
 
   return (
     <>
@@ -423,7 +454,7 @@ export function AsideMenuList({ layoutProps }) {
                   <span className="menu-text">Navigation</span>
                   <i className="menu-arrow" />
                 </NavLink>
-                <div className="menu-submenu">
+                <div className="menu-submenu" id="dv_submenu">
                   <i className="menu-arrow" />
                   <ul className="menu-subnav">
                     {/*begin::3 Level*/}

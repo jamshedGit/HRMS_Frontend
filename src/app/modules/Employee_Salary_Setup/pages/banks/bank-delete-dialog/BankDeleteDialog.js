@@ -72,7 +72,7 @@ export function BankDeleteDialog({ id, status, show, onHide }) {
       </Modal.Header>
       <Modal.Body>
         {!isLoading && <span>Are you sure to delete this record?</span>}
-        {isLoading && <span>user is deactivating...</span>}
+        {isLoading && <span>record is deleting...</span>}
       </Modal.Body>
       <Modal.Footer>
         <div>

@@ -46,7 +46,7 @@ export const deleteVehicle = (id) => (dispatch) => {
     .then((response) => {
       dispatch(actions.vehicleDeleted({ id: id }));
       // toast.success(response.data.message + " Deleted", {
-      toast.success("Successfully Deactivated", {
+      toast.success("Successfully Deleted", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

@@ -366,7 +366,7 @@ function AccountInformation(props) {
                 type="button"
                 className="btn btn-light-danger font-weight-bold btn-sm"
               >
-                Deactivate your account ?
+                Delete Record your account ?
               </button>
             </div>
           </div>

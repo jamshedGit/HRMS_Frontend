@@ -59,7 +59,7 @@ export const deleteincident = (id) => (dispatch) => {
     .then((response) => {
       //console.log("response from delete user ", response.data.message)
       dispatch(actions.incidentDeleted({ Id: id }));
-      toast.success("Successfully Deactivated", {
+      toast.success("Successfully Deleted", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

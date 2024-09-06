@@ -5,7 +5,7 @@ export const makeTablePaginationRenderer = ({
   totalCount,
   pageSize
 }) => props => {
-  console.log(props, isLoading, totalCount);
+
   const { pages, onPageChange } = props;
   return (
     <div className="custom-pagination">

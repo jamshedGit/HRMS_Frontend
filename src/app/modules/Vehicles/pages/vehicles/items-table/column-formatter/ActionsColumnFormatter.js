@@ -57,7 +57,7 @@ export function ActionsColumnFormatter(
         (row?.isActive ? (
           <OverlayTrigger
             overlay={
-              <Tooltip id="products-edit-tooltip">Mark Deactivate</Tooltip>
+              <Tooltip id="products-edit-tooltip">Delete</Tooltip>
             }
           >
             <a

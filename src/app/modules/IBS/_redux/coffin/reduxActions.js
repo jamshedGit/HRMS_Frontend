@@ -57,7 +57,7 @@ export const deleteRecord = (id) => (dispatch) => {
     .deleteRequest({ id: id })
     .then((response) => {
       dispatch(actions.recordDeleted(response?.data?.data));
-      toast.success("Successfully Deactivated", {
+      toast.success("Successfully Deleted", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

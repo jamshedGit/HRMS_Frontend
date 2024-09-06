@@ -52,7 +52,7 @@ export const deleteEmployee_Salary = (id) => (dispatch) => {
     .then((response) => {
       
       dispatch(actions.employee_salary_Deleted({ Id: id }));
-      toast.success("Successfully Deactivated", {
+      toast.success("Successfully Deleted", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

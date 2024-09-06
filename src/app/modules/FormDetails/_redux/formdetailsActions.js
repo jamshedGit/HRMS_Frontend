@@ -87,7 +87,7 @@ export const deleteForm = (id) => (dispatch) => {
       dispatch(actions.formDeleted({ Id: id }));
       console.log("delete form response",response)
      
-      toast.success("Successfully Deactivated", {
+      toast.success("Successfully Deleted", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

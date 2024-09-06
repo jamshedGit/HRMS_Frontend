@@ -50,7 +50,7 @@ export function ItemDeleteDialog({ id, show, onHide }) {
       {/*end::Loading*/}
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-lg">
-          Deactivate Vehicle
+          Delete Record Vehicle
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
