@@ -60,8 +60,8 @@ export default function AsideparentList(props) {
           <div id="dvSubMenu" className="menu-submenu"
             tabIndex="0" // Makes the div focusable
             style={{ display: isVisible ? 'block' : 'none' }} // Toggle visibility
-            onClick={handleBlur}
-            // onClick={toggleVisibility}
+            onBlur={handleBlur}
+            onClick={toggleVisibility}
           >
             <ul className="menu-subnav">
               <ul className="menu-subnav">
