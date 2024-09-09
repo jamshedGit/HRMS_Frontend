@@ -37,7 +37,7 @@ export function ActionsColumnFormatter(
         </a>
       </OverlayTrigger>
       <OverlayTrigger
-        overlay={<Tooltip id="products-edit-tooltip">View info</Tooltip>}>
+        overlay={<Tooltip id="products-edit-tooltip">View</Tooltip>}>
         <a
           title=""
           className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"

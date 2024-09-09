@@ -19,7 +19,7 @@ export function BankEditDialogHeader({ id, isUserForRead }) {
   useEffect(() => {
     let _title = id ? "" : "New Academic Info";
     if (id) {
-      _title = `Edit Academic Info`;
+      _title = `Edit`;
     } //else if (isUserForRead) {
     //   _title = `Read user '}'`
     // }

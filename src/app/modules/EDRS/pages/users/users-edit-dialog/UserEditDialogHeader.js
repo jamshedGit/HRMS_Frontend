@@ -19,7 +19,7 @@ export function UserEditDialogHeader({ id, isUserForRead }) {
   useEffect(() => {
     let _title = id ? "" : "New Receipt";
     if (id) {
-      _title = `Edit Receipt`;
+      _title = `Edit`;
     } //else if (isUserForRead) {
     //   _title = `Read user '}'`
     // }

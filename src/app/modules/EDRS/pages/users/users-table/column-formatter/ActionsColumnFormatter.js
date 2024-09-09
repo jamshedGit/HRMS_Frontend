@@ -38,7 +38,7 @@ export function ActionsColumnFormatter(
       </OverlayTrigger>
       {isAccessForEdit && row.isActive && (
         <OverlayTrigger
-          overlay={<Tooltip id="products-edit-tooltip">Edit Receipt</Tooltip>}
+          overlay={<Tooltip id="products-edit-tooltip">Edit</Tooltip>}
         >
           <a
             title=""
