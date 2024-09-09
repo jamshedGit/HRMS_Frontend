@@ -369,6 +369,12 @@
 		);
 	}
 
+	.btn.btn-light {
+		color: #000000 !important;
+		background-color: #F3F6F9 !important;
+		border-color: #F3F6F9 !important;
+	}
+
 	// Light Style
 	.btn.btn-light-#{$name} {
 		$btn-background: theme-light-color($name);

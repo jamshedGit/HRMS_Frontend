@@ -32,10 +32,16 @@ $bootstrap-select-title-padding: 10px 15px;
             width: auto;
         }
 
+        .btn.btn-light {
+            color: #000000 !important;
+            background-color: #F3F6F9 !important;
+            border-color: #F3F6F9 !important;
+        }
+
         &.btn-light,
         &.btn-secondary {
             background: $white !important;
-            color: $input-plaintext-color;
+            color: #000 !important; // $input-plaintext-color;
             border-color: $input-border-color !important;
             box-shadow: none;
 
@@ -213,6 +219,7 @@ $bootstrap-select-title-padding: 10px 15px;
             &.btn-light,
             &.btn-secondary {
                 border-color: $input-focus-border-color !important;
+                color:#000 !important;
             }
         }
     }
