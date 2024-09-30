@@ -51,6 +51,11 @@ const EmployeeSalaryModule = lazy(() => import("./modules/Employee_Salary_Setup/
 const EmployeeSalaryExpModule = lazy(() => import("./modules/Employee_Salary_Expatriate/pages/index"));
 const CompensationExpModule = lazy(() => import("./modules/Compensation_Expatriate/pages/index"));
 const EmployeeTransferModule = lazy(() => import("./modules/Employee_Transfer/pages/index"));
+const EmployeeSalaryRevisionModule = lazy(() => import("./modules/Employee_Salary_Revision/pages/index"));
+const TaxSetupModule = lazy(() => import("./modules/Tax_Setup/pages/index"));
+const FiscalSetupModule = lazy(() => import("./modules/Fiscal_Setup/pages/index"));
+const PayrollMonthSetupModule = lazy(() => import("./modules/Payroll_Month_Setup/pages/index"));
+
 
 const ROUTES = {
   settings: SettingsPage,
@@ -89,7 +94,11 @@ const ROUTES = {
   employee_salary : EmployeeSalaryModule,
   salary_expatriate: EmployeeSalaryExpModule,
   compensation_expatriate: CompensationExpModule,
-  employee_transfer: EmployeeTransferModule
+  employee_transfer: EmployeeTransferModule,
+  salary_revision: EmployeeSalaryRevisionModule,
+  tax_setup: TaxSetupModule,
+  fiscal_setup: FiscalSetupModule,
+  payroll_month: PayrollMonthSetupModule
 };
 
 export default function BasePage() {

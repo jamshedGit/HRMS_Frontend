@@ -30,6 +30,8 @@ export function DashboardPage({ history }) {
     },
   };
   return (
+    <>
+    <div><h1>Dashboard 3</h1></div>
     <DashboardUIProvider centersUIEvents={centersUIEvents}>
       <Route path="/dashboard/vehicle/:id/read">
         {({ history, match }) => (
@@ -55,6 +57,6 @@ export function DashboardPage({ history }) {
         draggable
         pauseOnHover
       />
-    </DashboardUIProvider>
+    </DashboardUIProvider></>
   );
 }

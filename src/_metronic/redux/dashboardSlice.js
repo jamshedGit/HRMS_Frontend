@@ -6,6 +6,7 @@ const initialDashboardState = {
   allSubCenter: [],
   allCountry: [],
   allEmployees: [],
+  allSalaryReviewDateByEmpIdForDDL: [],
   allEmployeesSalaryDDL: [],
   allEarningDeductionList: [],
   allSubidiaryList: [],
@@ -88,6 +89,10 @@ export const dashboardSlice = createSlice({
 
     AllActiveEmployeeFetch: (state, action) => {
       state.allEmployees = action.payload;
+    },
+
+    AllEmpSalaryReviewDate: (state, action) => {
+      state.allSalaryReviewDateByEmpIdForDDL = action.payload;
     },
 
     AllActiveEmployeeSalaryDDL: (state, action) => {

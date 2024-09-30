@@ -100,12 +100,13 @@ export function BankEditForm({
   const [defEmpProfileList = null, SetDefaultEmpProfileList] = useState(null);
   const [defCompanyList = null, SetDefaulCompanyList] = useState(null);
 
+
   useEffect(() => {
     if (!user.Id) {
       dispatch(fetchAllDept(1));
       dispatch(fetchAllFormsMenu(143, "allEmployeeGradeList")); // For All Grade Codes
       dispatch(fetchAllFormsMenu(84, "allChildMenus")); // For Payroll Group
-      dispatch(fetchAllFormsMenu(85, "allTeamsChildMenus")); // For Teams
+      dispatch(fetchAllFormsMenu(174, "allTeamsChildMenus")); // For Teams
       dispatch(fetchAllFormsMenu(86, "allRegionChildMenus")); // For Region
       dispatch(fetchAllFormsMenu(87, "allReligionChildMenus")); // For Religion
       dispatch(fetchAllFormsMenu(88, "allEmpTypeChildMenus")); // For EmployeeType
@@ -113,7 +114,7 @@ export function BankEditForm({
       dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsisidaries
       dispatch(fetchAllFormsMenu(158, "allDesignations")); // For All Designations
       dispatch(fetchAllFormsMenu(165, "allCompanyList")); // For All Companies
-      
+
       dispatch(fetchAllCountry());
       dispatch(fetchAllActiveEmployees());
     }
@@ -151,7 +152,7 @@ export function BankEditForm({
   useEffect(() => {
 
     const companyId = defCompanyList?.value ? defCompanyList.value : user.companyId_To;
-    
+
     SetDefaulCompanyList(
       dashboard.allCompanyList &&
       dashboard.allCompanyList.filter((item) => {
@@ -369,6 +370,7 @@ export function BankEditForm({
 
   return (
     <>
+
       <Formik
         enableReinitialize={true}
         initialValues={user}
@@ -415,71 +417,71 @@ export function BankEditForm({
               <Form className="form form-label-right">
 
                 <fieldset disabled={isUserForRead}>
+                  <div className="from-group row">
+                    <div className="col-12 col-md-12 mt-3">
+                      <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
+                        <h6>Transfer From:</h6>
 
-                  <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-                    <h6>Transfer From:</h6>
-
-                    <div className="from-group row">
-                      <div className="col-12 col-md-4 mt-3">
-                        Employee Code: <input type="text" placeholder="Enter Employee Code" className="form-control" id="txtemployeeCode" name="txtemployeeCode"></input>
-                      </div>
-                      <div className="col-12 col-md-4 mt-9">
-                        <input type="button" className="btn btn-success" onClick={fetchEmployeeProfileByEmpCode} value="Search"></input>
-                      </div>
-                    </div>
-                    <br></br>
-                    <div className="from-group row">
-                      <div style={{ overflow: "scroll", overflowX: "hidden", height: "200px" }}>
-                        <table width="100%" class="table table table-head-custom table-vertical-center overflow-hidden table-hover">
-                          <tr style={{ backgroundColor: '#4d5f7a', color: '#fff', fontSize: "10px", width: "100%" }}>
-                            <td>&nbsp;</td>
-                            <td>Employee</td>
-                            <td>Code</td>
-                            <td>Country</td>
-                            <td>City</td>
-                            <td>Department</td>
-                            <td>Employee Type</td>
-                            <td>Grade</td>
-                            <td>Payroll Group</td>
-                            <td>Team</td>
-                            <td>Subsidiary</td>
-                          </tr>
-                          {defEmpProfileList?.map((obj, rightindex) => (
-                            <><tr style={{ fontSize: "10px" }}>
-                              <td><input onChange={handleChange} name={'empChecked-' + rightindex} type="checkbox" id={rightindex}></input> </td>
-                              <td>
-                                {obj.employee}
-                              </td>
-                              <td>
-                                {obj.employeeCode}
-                              </td>
-                              <td>{obj.country}</td>
-                              <td>{obj.city}</td>
-                              <td>{obj.department}</td>
-                              <td>{obj.employeeType}</td>
+                        <div className="from-group row">
+                          <div className="col-12 col-md-4 mt-3">
+                            Employee Code: <input type="text" placeholder="Enter Employee Code" className="form-control" id="txtemployeeCode" name="txtemployeeCode"></input>
+                          </div>
+                          <div className="col-12 col-md-4 mt-9">
+                            <input type="button" className="btn btn-success" onClick={fetchEmployeeProfileByEmpCode} value="Search"></input>
+                          </div>
+                        </div>
+                        <br></br>
+                        <div className="from-group row">
+                          <div style={{ overflow: "scroll", overflowX: "hidden", height: "200px" }}>
+                            <table width="100%" class="table table table-head-custom table-vertical-center overflow-hidden table-hover">
+                              <tr style={{ backgroundColor: '#4d5f7a', color: '#fff', fontSize: "10px", width: "100%" }}>
+                                <td>&nbsp;</td>
+                                <td>Employee</td>
+                                <td>Code</td>
+                                <td>Country</td>
+                                <td>City</td>
+                                <td>Department</td>
+                                {/* <td>Employee Type</td>
+                            <td>Grade</td> */}
+                                {/* <td>Payroll Group</td> */}
+                                <td>Team</td>
+                                <td>Subsidiary</td>
+                              </tr>
+                              {defEmpProfileList?.map((obj, rightindex) => (
+                                <><tr style={{ fontSize: "10px" }}>
+                                  <td><input onChange={handleChange} name={'empChecked-' + rightindex} type="checkbox" id={rightindex}></input> </td>
+                                  <td>
+                                    {obj.employee}
+                                  </td>
+                                  <td>
+                                    {obj.employeeCode}
+                                  </td>
+                                  <td>{obj.country}</td>
+                                  <td>{obj.city}</td>
+                                  <td>{obj.department}</td>
+                                  {/* <td>{obj.employeeType}</td>
                               <td>{obj.grade}</td>
-                              <td>{obj.payrollGroup}</td>
-                              <td>{obj.team}</td>
-                              <td>{obj.subsidiary}</td>
-                            </tr>
-                            </>
-                          ))}
+                              <td>{obj.payrollGroup}</td> */}
+                                  <td>{obj.team}</td>
+                                  <td>{obj.subsidiary}</td>
+                                </tr>
+                                </>
+                              ))}
 
-                        </table></div>
+                            </table></div>
+                        </div>
+                      </div>
                     </div>
                   </div>
+
                   <div className="from-group row">
+                    <div className="col-12 col-md-12 mt-3">
 
-
-                  </div>
-                  <div className="from-group row">
-
-
-                    <br></br><br></br>
-                    <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-                      <h6>Transfer To:</h6>
-                      <div className="from-group row">
-                        {/* {
+                      <br></br><br></br>
+                      <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
+                        <h6>Transfer To:</h6>
+                        <div className="from-group row">
+                          {/* {
                           <div className="col-12 col-md-4 mt-3">
                             <SearchSelect
                               label={<span> Employee<span style={{ color: 'red' }}>*</span></span>}
@@ -499,50 +501,50 @@ export function BankEditForm({
                             />
                           </div>
                         } */}
-                        <div className="col-12 col-md-4 mt-3">
-                         
-                          <SearchSelect
-                            name="companyId"
-                            label={<span> Company<span style={{ color: 'red' }}>*</span></span>}
-                            isDisabled={isUserForRead && true}
-                            onBlur={() => {
-                              // handleBlur({ target: { name: "countryId" } });
-                            }}
-                            onChange={(e) => {
-                              setFieldValue("companyId", e.value || null);
-                              SetDefaulCompanyList(e);
-                              //handlePaymenModeChanged(e)
-                            }}
+                          <div className="col-12 col-md-4 mt-3">
 
-                            value={(defCompanyList || null)}
-                            error={errors.companyId}
-                            touched={touched.companyId}
-                            options={dashboard.allCompanyList}
-                          />
-                         
-                        </div>
-                        <div className="col-12 col-md-4 mt-3">
-                          <SearchSelect
-                            name="subsidiaryId"
-                            label={<span> Subsidiary<span style={{ color: 'red' }}>*</span></span>}
-                            isDisabled={isUserForRead && true}
-                            onBlur={() => {
-                              // handleBlur({ target: { name: "countryId" } });
-                            }}
-                            onChange={(e) => {
-                              setFieldValue("subsidiaryId", e.value || null);
-                              setDefualtSubsidiaryList(e);
-                              //handlePaymenModeChanged(e)
-                            }}
+                            <SearchSelect
+                              name="companyId"
+                              label={<span> Company<span style={{ color: 'red' }}>*</span></span>}
+                              isDisabled={isUserForRead && true}
+                              onBlur={() => {
+                                // handleBlur({ target: { name: "countryId" } });
+                              }}
+                              onChange={(e) => {
+                                setFieldValue("companyId", e.value || null);
+                                SetDefaulCompanyList(e);
+                                //handlePaymenModeChanged(e)
+                              }}
 
-                            value={(defSubsidiary || null)}
-                            error={errors.subsidiaryId}
-                            touched={touched.subsidiaryId}
-                            options={dashboard.allSubidiaryList}
-                          />
+                              value={(defCompanyList || null)}
+                              error={errors.companyId}
+                              touched={touched.companyId}
+                              options={dashboard.allCompanyList}
+                            />
 
-                        </div>
-                        {/* <div className="col-12 col-md-4 mt-3">
+                          </div>
+                          <div className="col-12 col-md-4 mt-3">
+                            <SearchSelect
+                              name="subsidiaryId"
+                              label={<span> Subsidiary<span style={{ color: 'red' }}>*</span></span>}
+                              isDisabled={isUserForRead && true}
+                              onBlur={() => {
+                                // handleBlur({ target: { name: "countryId" } });
+                              }}
+                              onChange={(e) => {
+                                setFieldValue("subsidiaryId", e.value || null);
+                                setDefualtSubsidiaryList(e);
+                                //handlePaymenModeChanged(e)
+                              }}
+
+                              value={(defSubsidiary || null)}
+                              error={errors.subsidiaryId}
+                              touched={touched.subsidiaryId}
+                              options={dashboard.allSubidiaryList}
+                            />
+
+                          </div>
+                          {/* <div className="col-12 col-md-4 mt-3">
                           <Select
                             label={<span> Transfer Category<span style={{ color: 'red' }}>*</span></span>}
                             name="transferCategory"
@@ -561,112 +563,112 @@ export function BankEditForm({
                             <div className="invalid-text">{errors.transferCategory}</div>
                           )}
                         </div> */}
-                      </div>
-                      <div className="from-group row">
-                        {
-                          <>
+                        </div>
+                        <div className="from-group row">
+                          {
+                            <>
 
-                            <div className="col-12 col-md-4 mt-3">
-                              <Select
+                              <div className="col-12 col-md-4 mt-3">
+                                <Select
 
-                                label={<span> Transfer Status<span style={{ color: 'red' }}>*</span></span>}
-                                name="transferType"
-                                value={values.transferType}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                style={{ display: "block" }}
-                                autoComplete="off"
-                              >
-                                <option value="-1" label="Select..." />
-                                <option value="Temporary" label="Temporary" />
-                                <option value="Permanent" label="Permanent" />
-
-
-                              </Select>
-                              {errors.transferType && touched.transferType && (
-                                <div className="invalid-text">{errors.transferType}</div>
-                              )}
-
-                            </div>
-                            <div className="col-12 col-md-4 mt-3">
-
-                              <label> Effective Date<span style={{ color: 'red' }}>*</span></label>
-                              <DatePicker
-                                className="form-control"
-                                placeholder="Enter Date Of Transfer"
-                                selected={defDateOfTransfer}
-                                onChange={(date) => {
-                                  setFieldValue("transferDate", date);
-                                  setDateOfTransferDate(date);
-                                }}
-                                timeInputLabel="Time:"
-                                dateFormat="dd/MM/yyyy"
-                                showTimeInput
-                                name="transferDate"
-                                disabled={isUserForRead}
-                                autoComplete="off"
-                              />
-                            </div>
-                            <div className="col-12 col-md-4 mt-3">
-                              <label>Till Date</label>
-                              <DatePicker
-                                className="form-control"
-                                placeholder="Enter Date Of Transfer"
-                                selected={defTillEffectiveDate}
-                                onChange={(date) => {
-                                  setFieldValue("tillTransferDate", date);
-                                  setTillEffectiveDate(date);
-                                }}
-                                disabled={values.transferType == "Permanent"}
-                                timeInputLabel="Time:"
-                                dateFormat="dd/MM/yyyy"
-                                showTimeInput
-                                name="tillTransferDate"
-
-                                autoComplete="off"
-                              />
-                            </div>
+                                  label={<span> Transfer Status<span style={{ color: 'red' }}>*</span></span>}
+                                  name="transferType"
+                                  value={values.transferType}
+                                  onChange={handleChange}
+                                  onBlur={handleBlur}
+                                  style={{ display: "block" }}
+                                  autoComplete="off"
+                                >
+                                  <option value="-1" label="Select..." />
+                                  <option value="Temporary" label="Temporary" />
+                                  <option value="Permanent" label="Permanent" />
 
 
-                            <div className="col-12 col-md-4 mt-3">
-                              <SearchSelect
-                                name="departmentId"
-                                label={<span> Department<span style={{ color: 'red' }}>*</span></span>}
-                                isDisabled={isUserForRead && true}
-                                onBlur={() => {
-                                  // handleBlur({ target: { name: "countryId" } });
-                                }}
-                                onChange={(e) => {
-                                  setFieldValue("departmentId", e.value || null);
-                                  setDefaultDept(e);
-                                  dispatch(fetchAllDept(e.value));
-                                }}
-                                value={(defDept || null)}
-                                error={errors.departmentId}
-                                touched={touched.departmentId}
-                                options={dashboard.allDept}
-                              />
-                            </div>
-                            <div className="col-12 col-md-4 mt-3">
-                              <SearchSelect
-                                name="reportTo"
-                                label={<span> ReportTo<span style={{ color: 'red' }}>*</span></span>}
-                                isDisabled={isUserForRead && true}
-                                onBlur={() => {
-                                  // handleBlur({ target: { name: "countryId" } });
-                                }}
-                                onChange={(e) => {
-                                  setFieldValue("reportTo", e.value || null);
-                                  setDefaultReportTo(e);
-                                  //  dispatch(fetchAllActiveEmployees(e.value));
-                                }}
-                                value={(defReportTo || null)}
-                                error={errors.reportTo}
-                                touched={touched.reportTo}
-                                options={dashboard.allEmployees}
-                              />
-                            </div>
-                            <div className="col-12 col-md-4 mt-3">
+                                </Select>
+                                {errors.transferType && touched.transferType && (
+                                  <div className="invalid-text">{errors.transferType}</div>
+                                )}
+
+                              </div>
+                              <div className="col-12 col-md-4 mt-3">
+
+                                <label> Effective Date<span style={{ color: 'red' }}>*</span></label>
+                                <DatePicker
+                                  className="form-control"
+                                  placeholder="Enter Date Of Transfer"
+                                  selected={defDateOfTransfer}
+                                  onChange={(date) => {
+                                    setFieldValue("transferDate", date);
+                                    setDateOfTransferDate(date);
+                                  }}
+                                  timeInputLabel="Time:"
+                                  dateFormat="dd/MM/yyyy"
+                                  showTimeInput
+                                  name="transferDate"
+                                  disabled={isUserForRead}
+                                  autoComplete="off"
+                                />
+                              </div>
+                              <div className="col-12 col-md-4 mt-3">
+                                <label>Till Date</label>
+                                <DatePicker
+                                  className="form-control"
+                                  placeholder="Enter Date Of Transfer"
+                                  selected={defTillEffectiveDate}
+                                  onChange={(date) => {
+                                    setFieldValue("tillTransferDate", date);
+                                    setTillEffectiveDate(date);
+                                  }}
+                                  disabled={values.transferType == "Permanent"}
+                                  timeInputLabel="Time:"
+                                  dateFormat="dd/MM/yyyy"
+                                  showTimeInput
+                                  name="tillTransferDate"
+
+                                  autoComplete="off"
+                                />
+                              </div>
+
+
+                              <div className="col-12 col-md-4 mt-3">
+                                <SearchSelect
+                                  name="departmentId"
+                                  label={<span> Department<span style={{ color: 'red' }}>*</span></span>}
+                                  isDisabled={isUserForRead && true}
+                                  onBlur={() => {
+                                    // handleBlur({ target: { name: "countryId" } });
+                                  }}
+                                  onChange={(e) => {
+                                    setFieldValue("departmentId", e.value || null);
+                                    setDefaultDept(e);
+                                    dispatch(fetchAllDept(e.value));
+                                  }}
+                                  value={(defDept || null)}
+                                  error={errors.departmentId}
+                                  touched={touched.departmentId}
+                                  options={dashboard.allDept}
+                                />
+                              </div>
+                              <div className="col-12 col-md-4 mt-3">
+                                <SearchSelect
+                                  name="reportTo"
+                                  label={<span> ReportTo<span style={{ color: 'red' }}>*</span></span>}
+                                  isDisabled={isUserForRead && true}
+                                  onBlur={() => {
+                                    // handleBlur({ target: { name: "countryId" } });
+                                  }}
+                                  onChange={(e) => {
+                                    setFieldValue("reportTo", e.value || null);
+                                    setDefaultReportTo(e);
+                                    //  dispatch(fetchAllActiveEmployees(e.value));
+                                  }}
+                                  value={(defReportTo || null)}
+                                  error={errors.reportTo}
+                                  touched={touched.reportTo}
+                                  options={dashboard.allEmployees}
+                                />
+                              </div>
+                              {/* <div className="col-12 col-md-4 mt-3">
                               <SearchSelect
                                 name="designationId"
                                 label={<span> Designation<span style={{ color: 'red' }}>*</span></span>}
@@ -684,8 +686,8 @@ export function BankEditForm({
                                 touched={touched.designationId}
                                 options={dashboard.allDesignations}
                               />
-                            </div>
-                            <div className="col-12 col-md-4 mt-3">
+                            </div> */}
+                              {/* <div className="col-12 col-md-4 mt-3">
                               <SearchSelect
                                 name="gradeId"
                                 label={<span> Grade<span style={{ color: 'red' }}>*</span></span>}
@@ -704,27 +706,27 @@ export function BankEditForm({
                                 options={dashboard.allEmployeeGradeList}
                               />
 
-                            </div>
-                            <div className="col-12 col-md-4 mt-3">
-                              <SearchSelect
-                                name="teamId"
-                                label={<span> Team<span style={{ color: 'red' }}>*</span></span>}
-                                isDisabled={isUserForRead && true}
-                                onBlur={() => {
-                                  // handleBlur({ target: { name: "countryId" } });
-                                }}
-                                onChange={(e) => {
-                                  setFieldValue("teamId", e.value || null);
-                                  setDefaultChildTeamsMenus(e);
-                                  // dispatch(fetchAllFormsMenu(e.value));
-                                }}
-                                value={(defchildTeamMenus || null)}
-                                error={errors.Id}
-                                touched={touched.Id}
-                                options={dashboard.allTeamsChildMenus}
-                              />
-                            </div>
-                            <div className="col-12 col-md-4 mt-3">
+                            </div> */}
+                              <div className="col-12 col-md-4 mt-3">
+                                <SearchSelect
+                                  name="teamId"
+                                  label={<span> Team<span style={{ color: 'red' }}>*</span></span>}
+                                  isDisabled={isUserForRead && true}
+                                  onBlur={() => {
+                                    // handleBlur({ target: { name: "countryId" } });
+                                  }}
+                                  onChange={(e) => {
+                                    setFieldValue("teamId", e.value || null);
+                                    setDefaultChildTeamsMenus(e);
+                                    // dispatch(fetchAllFormsMenu(e.value));
+                                  }}
+                                  value={(defchildTeamMenus || null)}
+                                  error={errors.Id}
+                                  touched={touched.Id}
+                                  options={dashboard.allTeamsChildMenus}
+                                />
+                              </div>
+                              {/* <div className="col-12 col-md-4 mt-3">
                               <SearchSelect
                                 name="payrollGroupId"
                                 label={<span> Payroll Group<span style={{ color: 'red' }}>*</span></span>}
@@ -742,28 +744,28 @@ export function BankEditForm({
                                 touched={touched.payrollGroupId}
                                 options={dashboard.allChildMenus}
                               />
-                            </div>
-                            <div className="col-12 col-md-4 mt-3">
+                            </div> */}
+                              <div className="col-12 col-md-4 mt-3">
 
-                              <SearchSelect
-                                name="regionId"
-                                label={<span> Region<span style={{ color: 'red' }}>*</span></span>}
-                                isDisabled={isUserForRead && true}
-                                onBlur={() => {
-                                  // handleBlur({ target: { name: "countryId" } });
-                                }}
-                                onChange={(e) => {
-                                  setFieldValue("regionId", e.value || null);
-                                  setDefaultChildRegionMenus(e);
-                                  // dispatch(fetchAllFormsMenu(e.value));
-                                }}
-                                value={(defchildRegionMenus || null)}
-                                error={errors.Id}
-                                touched={touched.Id}
-                                options={dashboard.allRegionChildMenus}
-                              />
-                            </div>
-                            <div className="col-12 col-md-4 mt-3">
+                                <SearchSelect
+                                  name="regionId"
+                                  label={<span> Region<span style={{ color: 'red' }}>*</span></span>}
+                                  isDisabled={isUserForRead && true}
+                                  onBlur={() => {
+                                    // handleBlur({ target: { name: "countryId" } });
+                                  }}
+                                  onChange={(e) => {
+                                    setFieldValue("regionId", e.value || null);
+                                    setDefaultChildRegionMenus(e);
+                                    // dispatch(fetchAllFormsMenu(e.value));
+                                  }}
+                                  value={(defchildRegionMenus || null)}
+                                  error={errors.Id}
+                                  touched={touched.Id}
+                                  options={dashboard.allRegionChildMenus}
+                                />
+                              </div>
+                              {/* <div className="col-12 col-md-4 mt-3">
                               <SearchSelect
                                 name="employeeTypeId"
                                 label={<span> Employee Type<span style={{ color: 'red' }}>*</span></span>}
@@ -781,104 +783,104 @@ export function BankEditForm({
                                 touched={touched.Id}
                                 options={dashboard.allEmpTypeChildMenus}
                               />
-                            </div>
-                            <div className="col-12 col-md-4 mt-3">
-                              <Select
-                                label="Default Shift"
-                                name="defaultShiftId"
-                                value={values.defaultShiftId_To}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                style={{ display: "block" }}
-                                autoComplete="off"
-                              >
-                                <option value="-1" label="Select Shift" />
-                                <option value="1" label="Morning Shift-A" />
-                                <option value="2" label="Evening Shift-B" />
-                                <option value="3" label="Night Shift-C" />
+                            </div> */}
+                              <div className="col-12 col-md-4 mt-3">
+                                <Select
+                                  label="Default Shift"
+                                  name="defaultShiftId"
+                                  value={values.defaultShiftId_To}
+                                  onChange={handleChange}
+                                  onBlur={handleBlur}
+                                  style={{ display: "block" }}
+                                  autoComplete="off"
+                                >
+                                  <option value="-1" label="Select Shift" />
+                                  <option value="1" label="Morning Shift-A" />
+                                  <option value="2" label="Evening Shift-B" />
+                                  <option value="3" label="Night Shift-C" />
 
-                              </Select>
-                              {errors.defaultShiftId && touched.defaultShiftId && (
-                                <div className="invalid-text">{errors.defaultShiftId}</div>
-                              )}
-                            </div>
-                          </>
-                        }
-                      </div>
-                      <div className="from-group row">
-                        <div className="col-12 col-md-4 mt-3">
-                          <SearchSelect
-                            name="locationId"
-                            label={<span> Location<span style={{ color: 'red' }}>*</span></span>}
-                            isDisabled={isUserForRead && true}
-                            onBlur={() => {
-                              // handleBlur({ target: { name: "countryId" } });
-                            }}
-                            onChange={(e) => {
-                              setFieldValue("locationId", e.value || null);
-                              setDefaultChildLocationMenus(e);
-                              // dispatch(fetchAllFormsMenu(e.value));
-                            }}
-                            value={(defchildLocationMenus || null)}
-                            error={errors.locationId}
-                            touched={touched.locationId}
-                            options={dashboard.allLocationChildMenus}
-                          />
+                                </Select>
+                                {errors.defaultShiftId && touched.defaultShiftId && (
+                                  <div className="invalid-text">{errors.defaultShiftId}</div>
+                                )}
+                              </div>
+                            </>
+                          }
                         </div>
-                        <div className="col-12 col-md-4 mt-3">
-                          <SearchSelect
-                            name="countryId"
-                            label={<span> Country<span style={{ color: 'red' }}>*</span></span>}
-                            isDisabled={isUserForRead && true}
-                            onBlur={() => {
-                              // handleBlur({ target: { name: "countryId" } });
-                            }}
-                            onChange={(e) => {
-                              setFieldValue("countryId", e.value);
-                              setDefaultCountry(e);
-                              dispatch(fetchAllCity(e.value));
-                            }}
-                            value={defCountry}
-                            error={errors.countryId}
-                            touched={touched.countryId}
-                            options={dashboard.allCountry}
-                          />
+                        <div className="from-group row">
+                          <div className="col-12 col-md-4 mt-3">
+                            <SearchSelect
+                              name="locationId"
+                              label={<span> Location<span style={{ color: 'red' }}>*</span></span>}
+                              isDisabled={isUserForRead && true}
+                              onBlur={() => {
+                                // handleBlur({ target: { name: "countryId" } });
+                              }}
+                              onChange={(e) => {
+                                setFieldValue("locationId", e.value || null);
+                                setDefaultChildLocationMenus(e);
+                                // dispatch(fetchAllFormsMenu(e.value));
+                              }}
+                              value={(defchildLocationMenus || null)}
+                              error={errors.locationId}
+                              touched={touched.locationId}
+                              options={dashboard.allLocationChildMenus}
+                            />
+                          </div>
+                          <div className="col-12 col-md-4 mt-3">
+                            <SearchSelect
+                              name="countryId"
+                              label={<span> Country<span style={{ color: 'red' }}>*</span></span>}
+                              isDisabled={isUserForRead && true}
+                              onBlur={() => {
+                                // handleBlur({ target: { name: "countryId" } });
+                              }}
+                              onChange={(e) => {
+                                setFieldValue("countryId", e.value);
+                                setDefaultCountry(e);
+                                dispatch(fetchAllCity(e.value));
+                              }}
+                              value={defCountry}
+                              error={errors.countryId}
+                              touched={touched.countryId}
+                              options={dashboard.allCountry}
+                            />
+                          </div>
+                          <div className="col-12 col-md-4 mt-3">
+                            <SearchSelect
+                              name="cityId"
+                              label={<span> City<span style={{ color: 'red' }}>*</span></span>}
+                              isDisabled={isUserForRead && true}
+                              onBlur={() => {
+                                //   handleBlur({ target: { name: "cityId" } });
+                              }}
+                              onChange={(e) => {
+                                setFieldValue("cityId", e.value);
+                                setDefaultCity(e);
+                                dispatch(fetchAllCityCenters(e.value));
+                              }}
+                              value={defCity}
+                              error={errors.cityId}
+                              touched={touched.cityId}
+                              options={dashboard.allCity}
+                            />
+                          </div>
+
                         </div>
-                        <div className="col-12 col-md-4 mt-3">
-                          <SearchSelect
-                            name="cityId"
-                            label={<span> City<span style={{ color: 'red' }}>*</span></span>}
-                            isDisabled={isUserForRead && true}
-                            onBlur={() => {
-                              //   handleBlur({ target: { name: "cityId" } });
-                            }}
-                            onChange={(e) => {
-                              setFieldValue("cityId", e.value);
-                              setDefaultCity(e);
-                              dispatch(fetchAllCityCenters(e.value));
-                            }}
-                            value={defCity}
-                            error={errors.cityId}
-                            touched={touched.cityId}
-                            options={dashboard.allCity}
-                          />
+                        <div className="from-group row">
+                          <div className="col-12 col-md-4 mt-3">
+                            <Field
+                              name="transferRemarks"
+                              component={TextArea}
+                              placeholder="Enter Remarks"
+                              label="Enter Remarks"
+                              autoComplete="off"
+                            />
+                          </div>
                         </div>
 
                       </div>
-                      <div className="from-group row">
-                        <div className="col-12 col-md-4 mt-3">
-                          <Field
-                            name="transferRemarks"
-                            component={TextArea}
-                            placeholder="Enter Remarks"
-                            label="Enter Remarks"
-                            autoComplete="off"
-                          />
-                        </div>
-                      </div>
-
                     </div>
-
 
                   </div>
 

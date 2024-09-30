@@ -98,6 +98,7 @@ export function DesignationEditDialog({ id, show, onHide, userForRead }) {
       const EmpProfileUpdatedFields = {
         Id: user.Id,
         subsidiaryId: user.subsidiaryId,
+        designationId: user.designationId,
         gradeId: user.gradeId,
         title: user.title,
         firstName: user.firstName,

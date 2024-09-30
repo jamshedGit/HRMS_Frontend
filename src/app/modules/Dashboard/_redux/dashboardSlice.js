@@ -6,6 +6,7 @@ const initialDashboardState = {
   allSubCenter: [],
   allCountry: [],
   allEmployees: [],
+  allSalaryReviewDateByEmpIdForDDL: [],
   allSubidiaryList: [],
   allEmployeesSalaryDDL: [],
   allBankBranch: [],
@@ -79,6 +80,11 @@ export const dashboardSlice = createSlice({
       state.allEmployees = action.payload;
     },
     
+    AllEmpSalaryReviewDate: (state, action) => {
+      state.allSalaryReviewDateByEmpIdForDDL = action.payload;
+    },
+
+
     AllActiveEmployeeSalaryDDL: (state, action) => {
       state.allEmployeesSalaryDDL = action.payload;
     },

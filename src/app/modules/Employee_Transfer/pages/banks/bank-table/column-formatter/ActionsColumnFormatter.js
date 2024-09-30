@@ -2,7 +2,7 @@ import React from "react";
 import SVG from "react-inlinesvg";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { toAbsoluteUrl } from "../../../../../../../_metronic/_helpers";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Modal, OverlayTrigger, Tooltip } from "react-bootstrap";
 
 export function ActionsColumnFormatter(
   cellContent,
@@ -16,22 +16,26 @@ export function ActionsColumnFormatter(
     openReadUserDialog,
     isAccessForEdit,
     isAccessForDelete,
-    openReadBankDialog
+    openReadBankDialog,
+    openEmpHistDialog
   }
 ) {
+
+
+
   const isUserRead = false;
   return (
     <>
-    <OverlayTrigger
+      <OverlayTrigger
         overlay={<Tooltip id="products-edit-tooltip">History</Tooltip>}>
         <a
           title=""
           className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
-          onClick={() => openReadBankDialog(row.Id, isUserRead)}
+          onClick={() => openEmpHistDialog(row.Id, isUserRead)}
         >
           <span className="svg-icon svg-icon-md svg-icon-primary">
             <SVG
-              src={toAbsoluteUrl("/media/svg/icons/Communication/history.svg")}
+              src={toAbsoluteUrl("/media/svg/icons/Text/Menu.svg")}
             />
           </span>
         </a>

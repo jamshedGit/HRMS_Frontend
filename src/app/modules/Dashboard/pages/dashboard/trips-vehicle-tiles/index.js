@@ -152,6 +152,7 @@ export function DashboardTiles({ history }) {
   //console.log("vehicle", vehicle);
   return (
     <>
+    <div><h1>Dashboard 2</h1></div>
       <div className="row">
         <div className="col-xl-12">
           {/* <TilesWidget10

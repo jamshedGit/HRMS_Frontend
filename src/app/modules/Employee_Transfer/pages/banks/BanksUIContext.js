@@ -68,12 +68,13 @@ export function BanksUIProvider({ BanksUIEvents, children }) {
     initUser,
     newButtonEarningTran: BanksUIEvents.newButtonEarningTran,
     newButtonDeductionTran: BanksUIEvents.newButtonDeductionTran,
-    
+    openEmpHistDialog : BanksUIEvents.openEmpHistDialog,
     newBankButtonClick: BanksUIEvents.newBankButtonClick,
     openEditBankDialog: BanksUIEvents.openEditBankDialog,
     openDeleteBankDialog: BanksUIEvents.openDeleteBankDialog,
     openActiveBankDialog: BanksUIEvents.openActiveBankDialog,
     openReadBankDialog: BanksUIEvents.openReadBankDialog,
+    openHistDialog: BanksUIEvents.openHistDialog,
   };
   return (
     <BanksUIContext.Provider value={value}>{children}</BanksUIContext.Provider>

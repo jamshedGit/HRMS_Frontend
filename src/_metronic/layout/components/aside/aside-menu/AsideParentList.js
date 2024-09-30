@@ -31,12 +31,11 @@ export default function AsideparentList(props) {
   const toggleVisibility = () => {
     setIsVisible((prev) => !prev);
   };
-
-
+  
   return (
     <>
       {
-        UserAccess[props.element].some(item => item.isResourceShow) && (<li
+        UserAccess[props.element].sort((a, b) => a.sortOrder - b.sortOrder).some(item => item.isResourceShow) && (<li
           className={`menu-item menu-item-submenu ${getMenuItemActive(
             "/props.element",
             true
@@ -47,9 +46,9 @@ export default function AsideparentList(props) {
           <NavLink className="menu-link menu-toggle"
 
             to={`/${props.element.replace("_", " ")}`}>
-            <span className="svg-icon menu-icon">
+            {/* <span className="svg-icon menu-icon">
               <SVG src={toAbsoluteUrl("/media/svg/icons/Shopping/Box2.svg")} />
-            </span>
+            </span> */}
             <span className="menu-text"
 
             > {props.element.replaceAll("_", " ")}</span>
@@ -63,14 +62,13 @@ export default function AsideparentList(props) {
             onBlur={handleBlur}
             onClick={toggleVisibility}
           >
-            <ul className="menu-subnav">
-              <ul className="menu-subnav">
+            <ul className="menu-subnav" style={{width:"280px"}}>
+              {/* <ul className="menu-subnav"> */}
 
                 {UserAccess[props.element].map((ce) => {
-
                   return <AsideMenuItem element={ce} key={ce.resourceId} />;
                 })}
-              </ul>
+              {/* </ul> */}
             </ul>
           </div>
         </li>)

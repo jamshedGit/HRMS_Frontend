@@ -13,10 +13,12 @@ import { QuickPanel } from "./extras/offcanvas/QuickPanel";
 import { QuickUser } from "./extras/offcanvas/QuickUser";
 import { ScrollTop } from "./extras/ScrollTop";
 import { StickyToolbar } from "./extras/StickyToolbar";
+import { shallowEqual, useSelector } from "react-redux";
 
 export function Layout({ children }) {
   const uiService = useHtmlClassService();
-
+  const auth = useSelector(({ auth }) => auth, shallowEqual);
+  const UserAccess = auth?.userAccess;
   // Layout settings (cssClasses/cssAttributes)
   const layoutProps = useMemo(() => {
     return {
@@ -33,7 +35,9 @@ export function Layout({ children }) {
       contentExtended: objectPath.get(uiService.config, "content.extended"),
     };
   }, [uiService]);
-
+  
+  const url = window.location.href;
+  console.log("url",url);
   return layoutProps.selfLayout !== "blank" ? (
     <>
       {/*begin::Main*/}
@@ -51,6 +55,8 @@ export function Layout({ children }) {
           >
             <Header />
             {/*begin::Content*/}
+            
+            {/* <div><h2>test</h2></div> */}
             <div
               id="kt_content"
               className={`content ${layoutProps.contentCssClasses} d-flex flex-column flex-column-fluid`}
@@ -58,14 +64,19 @@ export function Layout({ children }) {
              
               {layoutProps.subheaderDisplay && <SubHeader />}
               {/*begin::Entry*/}
+              
               {!layoutProps.contentExtended && (
+                
                 <div className="d-flex flex-column-fluid" style={{padding:"90px"}}>
+                 
                   {/*begin::Container*/}
                   <div className={layoutProps.contentContainerClasses}>
-                    {children}
+                  <h1>{url.split(":")[2].split("/")[1]?.replaceAll("_"," ").toUpperCase()}</h1> 
+                   {children}
                   </div>
                   {/*end::Container*/}
                 </div>
+                
               )}
 
               {layoutProps.contentExtended && { children }}

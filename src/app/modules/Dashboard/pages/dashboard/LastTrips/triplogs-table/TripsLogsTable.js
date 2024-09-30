@@ -123,6 +123,7 @@ export function LastTripLogsTable(lastTrips) {
 
   return (
     <>
+    <div><h1>Dashboard</h1></div>
       <PaginationProvider pagination={paginationFactory(paginationOptions)}>
         {({ paginationProps, paginationTableProps }) => {
           return (

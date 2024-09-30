@@ -14,6 +14,7 @@ import {
   fetchRoles,
   fetchCenters,
 } from "../../_redux/bankActions";
+import { EmpHistDialog } from "./bank-edit-dialog/EmpHistDialog";
 
 
 // dispatch(actions.fetchRoles());
@@ -34,6 +35,9 @@ export function EmployeeTransferPage({ history }) {
       // dispatch(fetchCenters());
       // dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
       history.push(`/employee_transfer/read-all-employee-transfer/${id}/edit`);
+    },
+    openEmpHistDialog: (id, status) => {
+      history.push(`/employee_transfer/read-all-employee-transfer/${id}/history`);
     },
     openDeleteBankDialog: (id, status) => {
       history.push(`/employee_transfer/read-all-employee-transfer/${id}/${status}/delete`);
@@ -110,6 +114,30 @@ export function EmployeeTransferPage({ history }) {
           />
         )}
       </Route>
+
+      <Route path="/employee_transfer/read-all-employee-transfer/:id/history">
+        {({ history, match }) => (
+          <EmpHistDialog
+            show={match != null}
+            id={match && match.params.id}
+            onHide={() => {
+              history.push("/employee_transfer/read-all-employee-transfer");
+            }}
+          />
+        )}
+      </Route>
+      {/* <Route path="/employee_transfer/create-employee-transfer">
+        {({ history, match }) => (
+          <EmployeeHistoryDialog
+            show={match != null}
+            id={match && match.params.id}
+            //status={match && match.params.status}
+            onHide={() => {
+              history.push("/employee_transfer/create-employee-transfer");
+            }}
+          />
+        )}
+      </Route> */}
       <BanksCard />
       <ToastContainer
         position="top-right"

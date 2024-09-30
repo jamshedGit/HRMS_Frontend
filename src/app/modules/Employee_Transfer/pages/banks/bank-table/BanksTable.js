@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, {
   PaginationProvider,
@@ -14,10 +14,11 @@ import {
 } from "../../../../../../_metronic/_helpers";
 import * as uiHelpers from "../BanksUIHelpers";
 import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatter";
-import { Pagination } from "../../../../../../_metronic/_partials/controls";
+import { ModalProgressBar, Pagination } from "../../../../../../_metronic/_partials/controls";
 import { useBanksUIContext } from "../BanksUIContext";
 import { DatetimeColumnFormatter } from "../../../../Dashboard/pages/dashboard/last-trips-vehicles-table/column-formatter/CreatedColumnFormatter";
-
+// import { modal1 } from "../bank-table/modalFormatter.css"
+import { Modal } from "react-bootstrap";
 export function BanksTable() {
   //Users UI Context
   const bankUIContext = useBanksUIContext();
@@ -29,6 +30,7 @@ export function BanksTable() {
       queryParams: bankUIContext.queryParams,
       setQueryParams: bankUIContext.setQueryParams,
       openEditBankDialog: bankUIContext.openEditBankDialog,
+      openEmpHistDialog: bankUIContext.openEmpHistDialog,
       openDeleteBankDialog: bankUIContext.openDeleteBankDialog,
       openActiveBankDialog: bankUIContext.openActiveBankDialog,
       openReadBankDialog: bankUIContext.openReadBankDialog,
@@ -70,16 +72,16 @@ export function BanksTable() {
   );
   // Table columns
   const columns = [
-    // {
-    //   dataField: "Id",
-    //   text: "ID",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    //   headerSortingClasses,
-    //   style: {
-    //     minWidth: "160px",
-    //   },
-    // },
+    {
+      dataField: "employeeCode",
+      text: "Code",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
     {
       dataField: "employee",
       text: "Employee",
@@ -91,8 +93,8 @@ export function BanksTable() {
       },
     },
     {
-      dataField: "transferDate",
-      text: "Effective Date",
+      dataField: "nic_no",
+      text: "NIC",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -101,8 +103,8 @@ export function BanksTable() {
       },
     },
     {
-      dataField: "subsidiary_from",
-      text: "Subsidiary",
+      dataField: "email_official",
+      text: "Email(Official)",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -111,8 +113,8 @@ export function BanksTable() {
       },
     },
     {
-      dataField: "subsidiary_to",
-      text: "Subsidiary",
+      dataField: "dateOfBirth",
+      text: "DOB",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -140,16 +142,16 @@ export function BanksTable() {
     //     minWidth: "160px",
     //   },
     // },
-    {
-      dataField: "employeeType",
-      text: "Employee Type",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
+    // {
+    //   dataField: "employeeType",
+    //   text: "Employee Type",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "160px",
+    //   },
+    // },
     {
       dataField: "action",
       text: "Actions",
@@ -157,6 +159,7 @@ export function BanksTable() {
       formatter: ActionsColumnFormatter,
       formatExtraData: {
         openEditBankDialog: bankUIProps.openEditBankDialog,
+        openEmpHistDialog: bankUIProps.openEmpHistDialog,
         openDeleteBankDialog: bankUIProps.openDeleteBankDialog,
         openActiveBankDialog: bankUIProps.openActiveBankDialog,
         openReadBankDialog: bankUIProps.openReadBankDialog,
@@ -181,9 +184,30 @@ export function BanksTable() {
     sizePerPage: bankUIProps.queryParams.pageSize,
     page: bankUIProps.queryParams.pageNumber,
   };
-  
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
   return (
     <>
+     
+      {/* <div>
+        <h1>Simple Modal Example</h1>
+        <button onClick={openModal}>Open Modal</button>
+
+        {isModalOpen && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <button className="close-button" onClick={closeModal}>
+                &times;
+              </button>
+              <h2>Modal Title</h2>
+              <p>This is the content of the modal!</p>
+            </div>
+          </div>
+        )}
+      </div> */}
       <PaginationProvider pagination={paginationFactory(paginationOptions)}>
         {({ paginationProps, paginationTableProps }) => {
           return (

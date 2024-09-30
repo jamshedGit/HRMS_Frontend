@@ -97,6 +97,7 @@ export function ContactEditDialog({ id, show, onHide, userForRead }) {
 
       const EmpProfileUpdatedFields = {
         Id: user.Id,
+        designationId: user.designationId,
         subsidiaryId: user.subsidiaryId,
         title: user.title,
         firstName: user.firstName,

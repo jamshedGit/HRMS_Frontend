@@ -54,7 +54,7 @@ export function AcademicEditDialog({ id, show, onHide, userForRead }) {
     centers: state.users.centers,
     userStatusTypes: state.users.userStatusTypes,
     isuserForRead: state.profile.userForRead,
-  
+
   }));
 
   // useEffect(() => {
@@ -84,18 +84,19 @@ export function AcademicEditDialog({ id, show, onHide, userForRead }) {
 
     if (!id) {
 
-      console.log("emp profile save", user,image);
+      console.log("emp profile save", user, image);
       const finalObject = { user }
-      dispatch(actions.createEmpProfile({...user, profile_image: image}, disbaleLoading, onHide));
+      dispatch(actions.createEmpProfile({ ...user, profile_image: image }, disbaleLoading, onHide));
 
     } else {
       // const getUserStatus = userStatusTypes.find((item) => {
       //   return item.value === +user.status;
       // });
 
-      console.log("getUserStatus", user,image);
-
+      console.log("getUserStatus 1", user, image);
+      console.log("userId des", user.designationId);
       const EmpProfileUpdatedFields = {
+        designationId: user.designationId || 0,
         Id: user.Id,
         subsidiaryId: user.subsidiaryId,
         title: user.title,
@@ -119,6 +120,7 @@ export function AcademicEditDialog({ id, show, onHide, userForRead }) {
         status: user.status,
         departmentId: user.departmentId,
         teamId: user.teamId,
+        designationId: user.designationId,
         payrollGroupId: user.payrollGroupId,
         regionId: user.regionId,
         religionId: user.religionId,

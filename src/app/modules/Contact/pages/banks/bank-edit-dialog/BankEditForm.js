@@ -124,6 +124,25 @@ export function ContactEditForm({
               <Form className="form form-label-right">
                 <fieldset disabled={isUserForRead}>
                   <div className="from-group row">
+                  <div className="col-12 col-md-4 mt-3">
+                      <SearchSelect
+                        name="employeeId"
+                        label="Employee*"
+                        isDisabled={isUserForRead && true}
+                        onBlur={() => {
+                          // handleBlur({ target: { name: "countryId" } });
+                        }}
+                        onChange={(e) => {
+                          setFieldValue("employeeId", e.value || null);
+                          setEmployeeDefault(e);
+                          dispatch(fetchAllActiveEmployees(e.value));
+                        }}
+                        value={(defEmployee || null)}
+                        error={errors.Id}
+                        touched={touched.Id}
+                        options={dashboard.allEmployees}
+                      />
+                    </div>
                     <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="relation_name"
@@ -172,25 +191,7 @@ export function ContactEditForm({
                       />
                     </div>
 
-                    <div className="col-12 col-md-4 mt-3">
-                      <SearchSelect
-                        name="employeeId"
-                        label="Employee*"
-                        isDisabled={isUserForRead && true}
-                        onBlur={() => {
-                          // handleBlur({ target: { name: "countryId" } });
-                        }}
-                        onChange={(e) => {
-                          setFieldValue("employeeId", e.value || null);
-                          setEmployeeDefault(e);
-                          dispatch(fetchAllActiveEmployees(e.value));
-                        }}
-                        value={(defEmployee || null)}
-                        error={errors.Id}
-                        touched={touched.Id}
-                        options={dashboard.allEmployees}
-                      />
-                    </div>
+                
                   </div>
                   <div className="form-group row"></div>
                 </fieldset>

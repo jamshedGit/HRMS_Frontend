@@ -18,6 +18,7 @@ export function BanksCard() {
     return {
       newBankButtonClick: banksUIContext.newBankButtonClick,
       openEditBankDialog: banksUIContext.openEditBankDialog,
+      openEmpHistDialog: banksUIContext.openEmpHistDialog
     }
   }, [banksUIContext])
 

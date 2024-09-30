@@ -374,9 +374,7 @@ export function BankEditForm({
     return curr.transactionType == 'Deduction' ? prev + curr.amount : prev
   }, 0) || 0;
 
-
-  console.log("defCurrencyCodeList", defCurrencyCodeList);
-
+  console.log("my user",user)
   return (
     <>
       <Formik
@@ -421,7 +419,6 @@ export function BankEditForm({
                         onChange={(e) => {
                           setFieldValue("employeeId", e.value || null);
                           setEmployeeDefault(e);
-
                           handleChanged(e, setFieldValue)
                           //  dispatch(fetchAllActiveEmployees(e.value));
                         }}
@@ -462,6 +459,7 @@ export function BankEditForm({
                       <Field
                         name="grossSalary"
                         onChange={(e) => {
+                        
                           setGrossSalaryDB(e.target.value);
                           setFieldValue("grossSalary", e.target.value);
                         }}

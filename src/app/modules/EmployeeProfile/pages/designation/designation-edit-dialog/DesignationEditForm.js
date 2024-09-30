@@ -109,7 +109,8 @@ export function DesignationEditForm({
   const [incidentList, setIncidentList] = useState([]);
   const [defSubsidiary = null, setDefualtSubsidiaryList] = useState(null);
   //==================== END
-
+  const [defEmpDesingaton = null, setDefualtEmpDesignation] = useState(null);
+  
   const [mylist, setMyList] = useState('');
 
   const [showChildModal, setShowChildModal] = useState(false);
@@ -123,15 +124,15 @@ export function DesignationEditForm({
     if (!user.deptId) {
       dispatch(fetchAllDept(1));
       dispatch(fetchAllFormsMenu(143, "allEmployeeGradeList")); // For All Grade Codes
-      dispatch(fetchAllFormsMenu(84, "allChildMenus")); // For Payroll Group
-      dispatch(fetchAllFormsMenu(85, "allTeamsChildMenus")); // For Teams
+      dispatch(fetchAllFormsMenu(127, "allChildMenus")); // For Payroll Group
+      dispatch(fetchAllFormsMenu(174, "allTeamsChildMenus")); // For Teams
       dispatch(fetchAllFormsMenu(86, "allRegionChildMenus")); // For Region
       dispatch(fetchAllFormsMenu(87, "allReligionChildMenus")); // For Religion
       dispatch(fetchAllFormsMenu(88, "allEmpTypeChildMenus")); // For EmployeeType
       dispatch(fetchAllFormsMenu(89, "allLocationChildMenus")); // For Location
       dispatch(fetchAllCountry());
       dispatch(fetchAllActiveEmployees());
-
+      dispatch(fetchAllFormsMenu(158, "allDesignations")); // For All Designations
       dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsisidaries
       // dispatch(fetchAllFormsMenu(87));
     }
@@ -178,6 +179,17 @@ export function DesignationEditForm({
   }, [user.dateOfConfirmation]);
 
   //=========== END
+
+useEffect(() => {
+    const designationId = defEmpDesingaton?.value ? defEmpDesingaton.value : user.designationId;
+    setDefualtEmpDesignation(
+      dashboard.allDesignations &&
+      dashboard.allDesignations.filter((item) => {
+        return item.value === designationId;
+      })
+    );
+
+  }, [user?.designationId, dashboard.designationId]);
 
   //===== Date Of Confirmation Due
   useEffect(() => {
@@ -468,12 +480,12 @@ export function DesignationEditForm({
               .then((res) => {
                 console.log(res.data, "looos")
                 setImage(res.data.imageUrl)
-
+                
                 saveEmployeeProfile(values, res.data.imageUrl);
               });
           }
           else {
-
+            console.log("values emp",values)
             saveEmployeeProfile(values, profile_image);
           }
 
@@ -629,6 +641,26 @@ export function DesignationEditForm({
 
 
                     <div className="form-group row">
+                    <div className="col-12 col-md-4 mt-3">
+                    <SearchSelect
+                      name="designationId"
+                      label={<span> Designation<span style={{ color: 'red' }}>*</span></span>}
+                      isDisabled={isUserForRead && true}
+                      onBlur={() => {
+                        // handleBlur({ target: { name: "countryId" } });
+                      }}
+                      onChange={(e) => {
+                        setFieldValue("designationId", e.value || null);
+                        setDefualtEmpDesignation(e);
+                        // dispatch(fetchAllFormsMenu(e.value));
+                      }}
+                      value={(defEmpDesingaton || null)}
+                      error={errors.designationId}
+                      touched={touched.designationId}
+                      options={dashboard.allDesignations}
+                    />
+
+                  </div>
                       <div className="col-12 col-md-4 mt-3">
                         <SearchSelect
                           name="departmentId"
@@ -797,6 +829,7 @@ export function DesignationEditForm({
                           timeInputLabel="Time:"
                           dateFormat="dd/MM/yyyy"
                           showTimeInput
+                          autoComplete="off"
                           name="dateOfJoining"
                           disabled={isUserForRead}
                         // value = {values.dateOfJoining}

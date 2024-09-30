@@ -9,7 +9,7 @@ export default function AsideMenuItem(props) {
   const {
     element: { isResourceShow },
   } = props;
-
+  
   //console.log("isResourceShow", isResourceShow)
   const location = useLocation();
   const getMenuItemActive = (url, hasSubmenu = false) => {

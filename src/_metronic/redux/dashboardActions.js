@@ -1,6 +1,6 @@
 import { async } from "q";
 import * as requestFromServer from "./dashboardCrud";
-
+import { format } from 'date-fns';
 import { dashboardSlice, callTypes } from "./dashboardSlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -50,7 +50,7 @@ export const fetchAllActiveEmployees = () => async (dispatch) => {
     .getAllActiveEmployees()
     .then((response) => {
       const entities = response.data?.data;
-      
+
       dispatch(actions.AllActiveEmployeeFetch(entities));
     })
     .catch((error) => {
@@ -58,12 +58,38 @@ export const fetchAllActiveEmployees = () => async (dispatch) => {
     });
 };
 
+export const fetchEmpSalaryRevisionByEmployeeId = (employeeId) => async (dispatch) => {
+  return await requestFromServer
+    .getAllEmployeeSalaryReviewForDDL(employeeId)
+    .then((response) => {
+      console.log("review", response);
+      //const entities = response.data?.data;
+
+      const formatDates = (dataArray) => {
+
+        return dataArray.map(item => ({
+          ...item,
+          label: format(new Date(item.label), 'dd/MM/yyyy') // Format to 'Month Year'
+        }));
+      };
+
+      const entities = formatDates(response.data.data);
+
+      dispatch(actions.AllEmpSalaryReviewDate(entities));
+      return response?.data?.data.length || 0;
+    })
+    .catch((error) => {
+      toast.error("Something went wrong");
+    });
+};
+
+
 export const fetchAllActiveEmployeesSalaryForDDL = (employeeId) => async (dispatch) => {
   return await requestFromServer
     .getAllActiveEmployeesSalaryForDDL(employeeId)
     .then((response) => {
       const entities = response.data?.data;
-      console.log("mega",entities)
+      console.log("mega", entities)
       dispatch(actions.AllActiveEmployeeSalaryDDL(entities));
     })
     .catch((error) => {
@@ -76,12 +102,12 @@ export const fetchAllActiveEmployeesSalaryForDDL = (employeeId) => async (dispat
 
 
 export const fetchAllEarningDeductionList = (Id) => async (dispatch) => {
- console.log("max",Id);
+  console.log("max", Id);
   return await requestFromServer
     .getAllEarningDeductionList(Id)
     .then((response) => {
       const entities = response.data?.data;
-      console.log("fan",entities);
+      console.log("fan", entities);
       dispatch(actions.AllEarningDeductionListFetch(entities));
     })
     .catch((error) => {
@@ -90,48 +116,48 @@ export const fetchAllEarningDeductionList = (Id) => async (dispatch) => {
 };
 
 export const fetchAllEarningList = (Id) => async (dispatch) => {
-  console.log("max",Id);
-   return await requestFromServer
-     .getAllEarningDeductionList(Id)
-     .then((response) => {
-       const entities = response.data?.data;
-       console.log("fan",entities);
-       dispatch(actions.AllEarningHeadsFetch(entities));
-     })
-     .catch((error) => {
-       toast.error("Something went wrong");
-     });
- };
+  console.log("max", Id);
+  return await requestFromServer
+    .getAllEarningDeductionList(Id)
+    .then((response) => {
+      const entities = response.data?.data;
+      console.log("fan", entities);
+      dispatch(actions.AllEarningHeadsFetch(entities));
+    })
+    .catch((error) => {
+      toast.error("Something went wrong");
+    });
+};
 
- 
+
 export const fetchAllDeductionList = (Id) => async (dispatch) => {
-  console.log("max",Id);
-   return await requestFromServer
-     .getAllEarningDeductionList(Id)
-     .then((response) => {
-       const entities = response.data?.data;
-       console.log("123 heads",entities);
-       dispatch(actions.AllDeductionHeadsFetch(entities));
-     })
-     .catch((error) => {
-       toast.error("Something went wrong");
-     });
- };
+  console.log("max", Id);
+  return await requestFromServer
+    .getAllEarningDeductionList(Id)
+    .then((response) => {
+      const entities = response.data?.data;
+      console.log("123 heads", entities);
+      dispatch(actions.AllDeductionHeadsFetch(entities));
+    })
+    .catch((error) => {
+      toast.error("Something went wrong");
+    });
+};
 
 
- export const fetchAllEmpCompensationBenefitsForDDL = (Id) => async (dispatch) => {
-  console.log("max",Id);
-   return await requestFromServer
-     .getAllEmp_Compensation_Benefits_DDL()
-     .then((response) => {
-       const entities = response.data?.data;
-       console.log("com ddl heads",entities);
-       dispatch(actions.AllCompensationBenefitsListFetch(entities));
-     })
-     .catch((error) => {
-       toast.error("Something went wrong");
-     });
- };
+export const fetchAllEmpCompensationBenefitsForDDL = (Id) => async (dispatch) => {
+  console.log("max", Id);
+  return await requestFromServer
+    .getAllEmp_Compensation_Benefits_DDL()
+    .then((response) => {
+      const entities = response.data?.data;
+      console.log("com ddl heads", entities);
+      dispatch(actions.AllCompensationBenefitsListFetch(entities));
+    })
+    .catch((error) => {
+      toast.error("Something went wrong");
+    });
+};
 
 
 export const fetchAllDept = (id) => async (dispatch) => {
@@ -153,7 +179,7 @@ export const fetchAllFormsMenu = (id, key) => async (dispatch) => {
     .getAllFormMenus(id)
     .then((response) => {
       const entities = [...response.data?.data];
-      dispatch(actions.AllChildMenusFetch({entities, key}));
+      dispatch(actions.AllChildMenusFetch({ entities, key }));
     })
     .catch((error) => {
       toast.error("Something went wrong");
@@ -330,11 +356,11 @@ export const getLatestBookingNo = (bookingNo) => async (dispatch) => {
     });
 };
 
-export const getLatestTableId = (tableName,prefix) => async (dispatch) => {
+export const getLatestTableId = (tableName, prefix) => async (dispatch) => {
   return await requestFromServer
-    .getLastTableId(tableName,prefix)
+    .getLastTableId(tableName, prefix)
     .then((response) => {
-      console.log("table",response);
+      console.log("table", response);
       return response?.data?.data;
       // dispatch(receiptSlice.MaxIdFetchForReceipt(response?.data?.data));
     })

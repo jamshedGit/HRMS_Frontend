@@ -37,6 +37,13 @@ export const getAllActiveEmployees = async () => {
   );
 };
 
+export const getAllEmployeeSalaryReviewForDDL = async (employeeId) => {
+  return await axios.post(
+    `${USERS_URL}/settings/read-salary-revision-by-employeeId`,{employeeId: employeeId}
+  );
+};
+
+
 
 export const getAllActiveEmployeesSalaryForDDL = async (employeeId) => {
   console.log("getAllActiveEmployeesSalaryForDDL", employeeId)
