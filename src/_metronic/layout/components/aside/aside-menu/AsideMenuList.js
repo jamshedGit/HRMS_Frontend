@@ -103,13 +103,17 @@ export function AsideMenuList({ layoutProps }) {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
+              <NavDropdown className="colorText" title="Dashboard" id="basic-nav-dropdown">
 
+                <NavDropdown.Item href='/dashboard'>Dashboard</NavDropdown.Item>
+
+              </NavDropdown>
               {
                 UserAccess && Object.keys(UserAccess)?.map((res) => {
                   console.log('::res::', UserAccess, res, UserAccess[res])
                   return UserAccess[res].sort((a, b) => a.sortOrder - b.sortOrder).some(item => item.isResourceShow) &&
                     <>
-                      <NavDropdown className="colorText"  title={res.replace('_', '')} id="basic-nav-dropdown">
+                      <NavDropdown className="colorText" title={res.replace('_', '')} id="basic-nav-dropdown">
                         {UserAccess[res].map((ce) => {
                           console.log('::ce 123::', ce)
                           return ce.isResourceShow &&

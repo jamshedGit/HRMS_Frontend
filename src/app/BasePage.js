@@ -135,17 +135,10 @@ export default function BasePage() {
           }
         })}
 
-        {isDashboardAccess ? (
-          <>
+<>
             {<Redirect exact from="/" to="/dashboard" />}
             <ContentRoute path="/dashboard" component={Dashboard} />
           </>
-        ) : (
-          <>
-            {<Redirect exact from="/" to="/ibs" />}
-            <ContentRoute path="/ibs" component={IBSModule} />
-          </>
-        )}
 
         <Redirect to="error/error-v1" />
       </Switch>

@@ -10,14 +10,14 @@ export default function IBSModule() {
   return (
     <Suspense fallback={<LayoutSplashScreen />}>
       <Switch>
-        {/* <ContentRoute path="/" component={UsersPage} /> */}
+        <ContentRoute path="/" component={CoffinPage} />
         {<Redirect exact={true} from="/ibs" to="/ibs/read-all-ibforms" />}
         <ContentRoute path="/ibs/read-all-ibforms" component={PersonalPage} />
         <ContentRoute
           path="/ibs/read-all-mortuaryforms"
           component={MortuaryPage}
-        />
-        <ContentRoute path="/ibs/read-all-coffinforms" component={CoffinPage} />
+        /> 
+         <ContentRoute path="/ibs/read-all-coffinforms" component={CoffinPage} />
       </Switch>
     </Suspense>
   );

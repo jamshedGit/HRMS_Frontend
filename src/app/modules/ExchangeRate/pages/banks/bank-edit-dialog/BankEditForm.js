@@ -14,6 +14,7 @@ import {
 
 } from "../../../../../../_metronic/redux/dashboardActions";
 import DatePicker from "react-datepicker";
+import 'react-datepicker/dist/react-datepicker.css';
 
 
 // Phone Number Regex
@@ -28,15 +29,15 @@ const formValidation = Yup.object().shape(
 
     subsidiaryId: Yup.string()
       .required("Required*"),
-      base_currency_id: Yup.string()
+    base_currency_id: Yup.string()
       .required("Required*"),
-      currency_to_convert_id: Yup.string()
+    currency_to_convert_id: Yup.string()
       .required("Required*"),
-      exchange_rate: Yup.string()
+    exchange_rate: Yup.string()
       .required("Required*"),
-      effective_date: Yup.string()
-      .required("Required*"),
-
+    effective_date: Yup.date()
+      .required('Date is required')
+      .min(new Date(), 'Date cannot be in the past')
   },
 
 );
@@ -67,7 +68,7 @@ export function BankEditForm({
     }
   }, [dispatch]);
 
-  
+
   useEffect(() => {
     const base_currency_id = defCurrecnyChildMenus?.value ? defCurrecnyChildMenus.value : user.base_currency_id;
     setDefaultCurrencyChildMenus(
@@ -139,7 +140,8 @@ export function BankEditForm({
                     {
                       <><div className="col-12 col-md-4 mt-3">
                         <Select
-                          label="Subsidiary"
+
+                          label={<span> Subsidiary<span style={{ color: 'red' }}>*</span></span>}
                           name="subsidiaryId"
                           value={values.subsidiaryId}
                           onChange={handleChange}
@@ -236,8 +238,12 @@ export function BankEditForm({
                           name="effective_date"
                           autoComplete="off"
                           disabled={isUserForRead}
+                          error={errors.effective_date}
+                          touched={touched.effective_date}
+
                         // value = {values.dateOfJoining}
                         />
+                       
                       </div>
                     }
 

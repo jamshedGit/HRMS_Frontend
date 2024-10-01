@@ -14,9 +14,9 @@ import { vehiclesSlice } from "../app/modules/Vehicles/_redux/vehiclesSlice";
 //import { incidentSlice } from "../app/modules/IncidentDetails/_redux/incidents/incidentSlice";
 import { TriplogSlice } from "../app/modules/IncidentDetails/_redux/triplogs/triplogSlice";
 import { dashboardSlice } from "../app/modules/Dashboard/_redux/dashboardSlice";
-import { infoSlice } from "../app/modules/IBS/_redux/info-personal/infoSlice";
-import { mortuarySlice } from "../app/modules/IBS/_redux/mortuary/reduxSlice";
-import { coffinSlice } from "../app/modules/IBS/_redux/coffin/reduxSlice";
+// import { infoSlice } from "../app/modules/IBS/_redux/info-personal/infoSlice";
+// import { mortuarySlice } from "../app/modules/IBS/_redux/mortuary/reduxSlice";
+// import { coffinSlice } from "../app/modules/IBS/_redux/coffin/reduxSlice";
 import { receiptSlice } from "../app/modules/EDRS/_redux/receiptSlice"
 import { bankSlice } from "../app/modules/Banks/_redux/bankSlice";
 import { branchSlice } from "../app/modules/BankBranch/_redux/branchSlice";
@@ -67,9 +67,9 @@ export const rootReducer = combineReducers({
   vehicles: vehiclesSlice.reducer,
   //incidentDetails: incidentSlice.reducer,
   triplogs: TriplogSlice.reducer,
-  personalInformation: infoSlice.reducer,
-  mortuary: mortuarySlice.reducer,
-  coffin: coffinSlice.reducer,
+  // personalInformation: infoSlice.reducer,
+  // mortuary: mortuarySlice.reducer,
+  // coffin: coffinSlice.reducer,
   receipt: receiptSlice.reducer,
   bank: bankSlice.reducer,
   branch: branchSlice.reducer,
