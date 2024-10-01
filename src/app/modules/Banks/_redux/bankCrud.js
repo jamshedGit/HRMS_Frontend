@@ -16,7 +16,7 @@ export function createBank(body) {
 
 // Read
 export function getAllBanks(body) {
-  console.log("body",body);
+  
   return axios.post(`${USERS_URL}/bank/read-all-banks`, body);
 }
 
@@ -40,8 +40,7 @@ export function updateBank(bank) {
 
 //Delete
 export function deleteBank(body) {
-  console.log("body")
-  console.log(body);
+  
   return axios.patch(`${USERS_URL}/bank/delete-bank`, body);
 }
 

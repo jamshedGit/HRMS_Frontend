@@ -16,7 +16,7 @@ export function createContact(body) {
 
 // Read
 export function getAllContacts(body) {
-  console.log("body",body);
+  
   return axios.post(`${USERS_URL}/contact/read-all-contact`, body);
 }
 
@@ -35,8 +35,7 @@ export function updateContact(Contact) {
 
 //Delete
 export function deleteContact(body) {
-  console.log("body")
-  console.log(body);
+  
   return axios.patch(`${USERS_URL}/contact/delete-contact`, body);
 }
 

@@ -14,7 +14,7 @@ export function createDesignation(body) {
 }
 // Read
 export function getAllDesignation(body) {
-  console.log("body",body);
+  
   return axios.post(`${USERS_URL}/designation/read-all-designation`, body);
 }
 
@@ -38,8 +38,7 @@ export function updateDesignation(religion) {
 
 //Delete
 export function deleteDesignation(body) {
-  console.log("body")
-  console.log(body);
+  
   return axios.patch(`${USERS_URL}/designation/delete-designation`, body);
 }
 

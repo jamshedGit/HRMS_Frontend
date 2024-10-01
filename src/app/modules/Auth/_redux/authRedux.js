@@ -28,7 +28,6 @@ export const reducer = persistReducer(
   (state = initialAuthState, action) => {
     switch (action.type) {
       case actionTypes.Login: {
-        //console.log("AuthRedux login action")
         // const { authToken } = action.payload
         const { data } = action.payload;
 

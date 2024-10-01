@@ -39,8 +39,8 @@ export const empTypeSlice = createSlice({
             }
         },
         empTypeFetched: (state, action) => {
-            // console.log(action)
-            console.log("user slice",action.payload)
+            // 
+            
             const entities = action.payload.data?.data.rows;
             console.log("ent religion",entities)
             const totalResult = action.payload.data?.data.totalResults;
@@ -54,7 +54,7 @@ export const empTypeSlice = createSlice({
          //get User By ID
          empTypeFetchedForEdit: (state, action) => {
             console.log("get user detail from religion slice")
-            console.log(action);
+            ;
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
@@ -63,7 +63,7 @@ export const empTypeSlice = createSlice({
         //get User By ID
         userFetched: (state, action) => {
             console.log("get user detail from religion slice")
-            console.log(action);
+            ;
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;

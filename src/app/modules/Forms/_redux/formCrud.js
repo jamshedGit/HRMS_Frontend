@@ -14,7 +14,7 @@ export function createform(body) {
 }
 // Read
 export function getAllForm(body) {
-  console.log("body",body);
+  
   return axios.post(`${USERS_URL}/form/read-all-form`, body);
 }
 
@@ -33,8 +33,7 @@ export function updateForm(form) {
 
 //Delete
 export function deleteForm(body) {
-  console.log("body")
-  console.log(body);
+  
   return axios.patch(`${USERS_URL}/form/delete-form`, body);
 }
 

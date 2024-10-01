@@ -13,7 +13,6 @@ import { useSelector, shallowEqual } from "react-redux"
 
 export function ReligionCard() {
   const designationUIContext = useDesignationUIContext()
-  //console.log("designationUIContext", designationUIContext)
   const DesignationUIProps = useMemo(() => {
     return {
       newDesignationButtonClick: designationUIContext.newDesignationButtonClick,
@@ -27,7 +26,6 @@ export function ReligionCard() {
     }),
     shallowEqual
   )
-  console.log("userAccess Temp",userAccess)
   const accessUser = userAccess.find(
     (item) => item.componentName === "CreatePolicy"
   )

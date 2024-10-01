@@ -34,8 +34,7 @@ export function updateEarningDeductionTran(earning) {
 
 //Delete
 export function deleteEarningDeductionTran(body) {
-  console.log("body")
-  console.log(body);
+  
   return axios.patch(`${USERS_URL}/earning_transaction/delete-earning-transaction`, body);
 }
 

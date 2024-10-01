@@ -49,14 +49,12 @@ export const vehiclesSlice = createSlice({
     },
     //get User By ID
     vehicleFetched: (state, action) => {
-      // console.log("Action Payload vehicleFetched", action.payload.itemForEdit)
       const readVehicle = action.payload.itemForEdit;
       state.actionsLoading = false;
       state.itemForEdit = readVehicle;
       state.error = null;
     },
     vehicleDeleted: (state, action) => {
-      //console.log("slicepayload", action.payload)
       state.error = null;
       state.actionsLoading = false;
       state.entities = state.entities.filter(
@@ -64,14 +62,12 @@ export const vehiclesSlice = createSlice({
       );
     },
     vehicleCreated: (state, action) => {
-      //console.log("action.payload", action.payload)
       state.actionsLoading = false;
       state.error = null;
       state.entities.unshift(action.payload.vehicle);
     },
     vehicleUpdated: (state, action) => {
       //debugger
-      //console.log("updatedVehicle slice", action.payload.updatedVehicle.id)
       state.error = null;
       state.actionsLoading = false;
       state.entities = state.entities.map((entity) => {

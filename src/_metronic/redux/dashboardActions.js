@@ -265,7 +265,6 @@ export const fetchAllCityCenters = (cityId) => async (dispatch) => {
     .getCentersByCityId(cityId)
     .then((response) => {
       const entities = response.data?.data;
-      console.log("City Centers", entities);
       dispatch(actions.AllCentersByCityIdFetch(entities));
     })
     .catch((error) => {

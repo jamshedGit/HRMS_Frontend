@@ -13,7 +13,6 @@ import { useSelector, shallowEqual } from "react-redux"
 import { EmpPolicyTable } from "../region-table/RegionTable"
 
 export function EmpPolicyCard() {
-  console.log("userAccess Temp EmployeePoliocy",userAccess)
   const banksUIContext = useBanksUIContext()
   //console.log("banksUIContext", banksUIContext)
   const BanksUIProps = useMemo(() => {

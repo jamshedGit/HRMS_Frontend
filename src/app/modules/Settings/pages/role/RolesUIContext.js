@@ -12,7 +12,6 @@ export const RolesUIConsumer = RolesUIContext.Consumer
 
 export function RolesUIProvider({ rolesUIEvents, children }) {
   const [queryParams, setQueryParamsBase] = useState(initialFilter)
-  // console.log("rolesUIEvents", rolesUIEvents)
   const [ids, setIds] = useState([])
   const setQueryParams = useCallback((nextQueryParams) => {
     setQueryParamsBase((prevQueryParams) => {

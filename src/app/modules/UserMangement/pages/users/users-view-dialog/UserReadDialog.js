@@ -27,7 +27,6 @@ export function UsersEditDialog({ id, show, onHide }) {
     shallowEqual
   )
 
-  //console.log(title, roles)
 
   useEffect(() => {
     dispatch(actions.fetchUser(id))
@@ -35,9 +34,7 @@ export function UsersEditDialog({ id, show, onHide }) {
     dispatch(actions.fetchCenters())
     // dispatch(actions.fetchUser(usersUIProps.queryParams))
   }, [id, dispatch])
-  //console.log("userForEdit", userForEdit)
   const saveUser = (user) => {
-    // console.log("CreateUserResponse", user)
     if (!id) {
       dispatch(actions.createUser(user)).then((res) => {
         onHide()

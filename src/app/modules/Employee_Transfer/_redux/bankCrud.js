@@ -24,7 +24,7 @@ export function createEmployeeTransferBulk(list) {
 
 // Read
 export function getAllEmployeeTransfer(body) {
-  console.log("body",body);
+  
   return axios.post(`${USERS_URL}/employee_transfer/read-all-employee-transfer`, body);
 }
 
@@ -43,8 +43,7 @@ export function updateEmployeeTransfer(EmployeeTransfer) {
 
 //Delete
 export function deleteEmployeeTransfer(body) {
-  console.log("body")
-  console.log(body);
+  
   return axios.patch(`${USERS_URL}/employee_transfer/delete-employee-transfer`, body);
 }
 

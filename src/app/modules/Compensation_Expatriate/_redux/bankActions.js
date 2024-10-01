@@ -8,7 +8,7 @@ const { actions } = compensationExpSlice;
 export const fetchUsers = (queryparm) => async (dispatch) => {
   // console.log("Receive QPsss", queryparm)
   dispatch(actions.startCall({ callType: callTypes.list }));
-  console.log("test query param", queryparm)
+  
   return requestFromServer.getAllCompensation_Expatriate({...queryparm,id:'null',transactionType:'Earning'})
     
     .then((response) => {

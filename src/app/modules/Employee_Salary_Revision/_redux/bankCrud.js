@@ -15,7 +15,7 @@ export function createEmployee_Salary(body) {
 
 // Read
 export function getAllEmployee_Salary(body) {
-  console.log("body",body);
+  
   return axios.post(`${USERS_URL}/salary_revision/read-all-salary-revision`, body);
 }
 
@@ -34,8 +34,7 @@ export function updateEmployee_Salary(earning) {
 
 //Delete
 export function deleteEmployee_Salary(body) {
-  console.log("body")
-  console.log(body);
+  
   return axios.patch(`${USERS_URL}/salary_revision/delete-salary-revision`, body);
 }
 

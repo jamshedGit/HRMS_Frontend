@@ -39,12 +39,8 @@ export const policySlice = createSlice({
             }
         },
        policyFetched: (state, action) => {
-            // console.log(action)
-            console.log("user slice",action.payload)
             const entities = action.payload.data?.data.rows;
-            console.log("ent policy",entities)
             const totalResult = action.payload.data?.data.totalResults;
-            console.log(entities);
             state.listLoading = false;
             state.error = null;
             state.entities = entities;
@@ -53,8 +49,6 @@ export const policySlice = createSlice({
 
          //get User By ID
          policyFetchedForEdit: (state, action) => {
-            console.log("get user detail from policy slice")
-            console.log(action);
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
@@ -62,8 +56,6 @@ export const policySlice = createSlice({
 
         //get User By ID
         userFetched: (state, action) => {
-            console.log("get user detail from policy slice")
-            console.log(action);
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
@@ -72,8 +64,6 @@ export const policySlice = createSlice({
 
             state.error = null;
             state.actionsLoading = false;
-            console.log("policy deleted ")
-            console.log(state.entities);
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );
@@ -88,12 +78,10 @@ export const policySlice = createSlice({
             state.error = null;
             state.actionsLoading = false;
             // state.entities.push(action.payload)
-          console.log("policyUpdated");
             state.entities = state.entities.map((entity) => {
                
                 //const payload = { ...action.payload };
                 let payload = JSON.stringify(action.payload)
-                console.log("::payload",payload)
                 let payloadObj = JSON.parse(payload);
                 let finalObj = JSON.parse(payloadObj.updatedPolicy);
 

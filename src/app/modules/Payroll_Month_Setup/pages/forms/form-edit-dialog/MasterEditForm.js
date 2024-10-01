@@ -61,7 +61,6 @@ export function MasterEditForm({
     return currentMonth + 1; // Convert to 1-based (1 = January)
   };
 
-  console.log("months", getCurrentMonth())
 
   const getEndOfMonth = () => {
     const now = new Date();
@@ -107,17 +106,13 @@ export function MasterEditForm({
       setDefaultYear(setDaysInDate.getFullYear());
 
 
-      console.log("prv month", response?.data?.data[0]?.month)
       const pmonth_db = response?.data?.data[0]?.month || 0;
-      console.log("pmonth_db", pmonth_db)
       if (pmonth_db == 12) {
         setDefaulMonth(1)
-        console.log("step2")
         const defaultStartDate = "01" + "" + setDaysInDate.getFullYear().toString().substring(2, 4)
         setDefaulShortFormat(defaultStartDate)
       }
       else {
-        console.log("step1")
         if (pmonth_db <= 9)
 
           setDefaulShortFormat((pmonth_db + 1) + "" + setDaysInDate.getFullYear().toString().substring(2, 4))
@@ -148,27 +143,22 @@ export function MasterEditForm({
 
     const year = shortFormatGlobal || new Date().getFullYear().toString().substring(2, 4); // Use the provided year or the current year
     const daysInMonth = await getDaysInMonth(month - 1, year);
-    console.log("daysInMonth", daysInMonth)
     
   };
 
   const daysDiff = (startDate, endDate) => {
 
-    console.log("startDate", startDate)
-    console.log("endDate", endDate)
     var date1 = new Date(startDate);
     var date2 = new Date(endDate);
     var diff = Math.abs(date1.getTime() - date2.getTime());
     var diffDays = Math.ceil(diff / (1000 * 3600 * 24));
     setDefaultDays(diffDays + 1);
-    console.log("Diff in Days: " + diffDays);
   }
 
 
   const handleChanged = (e, setFieldValue) => {
     const newValue = e.target.value;
     setDefaulMonth(newValue);
-    console.log('Selected value:', newValue);
 
   };
 
@@ -209,7 +199,6 @@ export function MasterEditForm({
       setDefaultYear(defYear);
     }
   }, [user.year]);
-  console.log("test", user)
   return (
     <>
       <Formik
@@ -218,7 +207,6 @@ export function MasterEditForm({
 
         // validationSchema={formValidation}
         onSubmit={(values) => {
-          console.log("values", values);
           enableLoading();
           SavePayrollMonthSetup(values);
         }}
@@ -246,10 +234,8 @@ export function MasterEditForm({
                     <div className="col-12 col-md-4 mt-3">
                       <select className="form-control" name="month" value={defMonth}
                         onChange={(e) => {
-                          console.log("bell", e.target.value)
                           setFieldValue("month", e.target.value);
                           setDefaulMonth(e.target.value);
-                          console.log("shortFormatGlobal", shortFormatGlobal)
                           setDefaulShortFormat(e.target.value > 9 ? e.target.value + "" + shortFormatGlobal : +"0" + e.target.value + "" + shortFormatGlobal)
                           handleMonthChange(e.target.value);
 
@@ -345,7 +331,6 @@ export function MasterEditForm({
                         onChange={(date) => {
                           setFieldValue("endDate", date);
                           setDefaultEndDate(date);
-                          console.log("my end date", date)
                           setFieldValue("startDate", defstartDate);
                           setDefaultStartDate(defstartDate);
                           daysDiff(defstartDate, date)

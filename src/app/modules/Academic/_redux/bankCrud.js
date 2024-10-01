@@ -15,7 +15,7 @@ export function createAcademic(body) {
 
 // Read
 export function getAllAcademics(body) {
-  console.log("body",body);
+  
   return axios.post(`${USERS_URL}/academic/read-all-academic`, body);
 }
 
@@ -34,8 +34,7 @@ export function updateAcademic(academic) {
 
 //Delete
 export function deleteAcademic(body) {
-  console.log("body")
-  console.log(body);
+  
   return axios.patch(`${USERS_URL}/academic/delete-academic`, body);
 }
 

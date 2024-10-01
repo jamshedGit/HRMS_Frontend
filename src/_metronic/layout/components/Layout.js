@@ -37,7 +37,6 @@ export function Layout({ children }) {
   }, [uiService]);
   
   const url = window.location.href;
-  console.log("url",url);
   return layoutProps.selfLayout !== "blank" ? (
     <>
       {/*begin::Main*/}

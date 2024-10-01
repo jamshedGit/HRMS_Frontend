@@ -6,13 +6,10 @@ const { actions } = PayrollMonthSlice;
 // const { roleActions } = getAllrolesSlice
 
 export const fetchUsers = (queryparm) => async (dispatch) => {
-  // console.log("Receive QPsss", queryparm)
   dispatch(actions.startCall({ callType: callTypes.list }));
-  console.log("test query param", queryparm)
   return requestFromServer.getAllPayrollMonthSetup(queryparm)
    
     .then((response) => {
-      //  console.log("user action receipt fetched 321")
      
 
       const formatDates = (dataArray) => {
@@ -26,11 +23,9 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
     
     // Format the dates in the response
     response.data.data.rows = formatDates(response.data?.data?.rows);
-      console.log("response", response)
       dispatch(actions.payrollMonthFetched(response));
     })
     .catch((error) => {
-      //console.log("Can't find user", error)
       error.clientMessage = "Can't find receipts";
       dispatch(actions.catchError({ error, callType: callTypes.list }));
     });
@@ -38,7 +33,6 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
 
 export const fetchUser = (id) => (dispatch) => {
 
-  console.log("User Action id " + id)
   if (!id) {
     return dispatch(actions.payrollMonthFetchedForEdit({ userForEdit: undefined }));
   }
@@ -49,7 +43,6 @@ export const fetchUser = (id) => (dispatch) => {
     .then((response) => {
       const entities = response.data?.data;
 
-      console.log("User fetched for search " + id)
       dispatch(actions.payrollMonthFetchedForEdit({ userForEdit: entities }));
     })
     .catch((error) => {
@@ -63,7 +56,6 @@ export const deletePayrollMonth = (id) => (dispatch) => {
   return requestFromServer
     .deletePayrollMonthSetup({ Id: id })
     .then((response) => {
-      //console.log("response from delete user ", response.data.message)
       dispatch(actions.payrollMonthDeleted({ Id: id }));
       toast.success("Successfully Deleted", {
         position: "top-right",
@@ -86,7 +78,6 @@ export const activeUser = (id) => (dispatch) => {
   return requestFromServer
     .deletePayrollMonthSetup({ receiptId: id })
     .then((response) => {
-      //console.log("response from delete user ", response.data.message)
       dispatch(actions.userDeleted({ id: id }));
       toast.success("Successfully Activated", {
         position: "top-right",
@@ -110,14 +101,11 @@ export const createPayrollMonth = (PayrollMonthForCreation, disbaleLoading, onHi
   // PayrollMonthForCreation.phNo = PayrollMonthForCreation.phNo.toString();
   // PayrollMonthForCreation.cnic = PayrollMonthForCreation.cnic.toString();
 
-  console.log("PayrollMonth for creation", PayrollMonthForCreation);
   return requestFromServer
     .createPayrollMonthSetup(PayrollMonthForCreation)
     .then((res) => {
       dispatch(actions.startCall({ callType: callTypes.action }));
       const user = res.data?.data;
-      console.log("PayrollMonth data");
-      console.log(user);
       dispatch(actions.payrollMonthCreated(user));
       disbaleLoading();
       toast.success("Successfully Created", {
@@ -151,9 +139,7 @@ export const updatePayrollMonth = (user, disbaleLoading, onHide) => (dispatch) =
   return requestFromServer
     .updatePayrollMonthSetup(user)
     .then((response) => {
-      console.log("my response",response?.config?.data);
       const updatedPayrollMonth = response?.config?.data; // response.data?.data;
-      console.log("bnkAction Res", response)
       dispatch(actions.payrollMonthCreated({ updatedPayrollMonth }));
       dispatch(actions.startCall({ callType: callTypes.action }));
       disbaleLoading();
@@ -169,7 +155,6 @@ export const updatePayrollMonth = (user, disbaleLoading, onHide) => (dispatch) =
       });
     })
     .catch((error) => {
-      // console.log("error User update", error)
       //error.clientMessage = "Can't update User"
       dispatch(actions.catchError({ error, callType: callTypes.action }));
       disbaleLoading();
@@ -192,7 +177,6 @@ export const fetchRoles = () => (dispatch) => {
     .getAllRoles()
     .then((response) => {
       const entities = response.data?.data;
-      // console.log("User entities: ", entities)
       dispatch(actions.RolesFetched(entities));
     })
     .catch((error) => {
@@ -222,7 +206,6 @@ export const fetchDonationReport = (body) => async (dispatch) => {
   return await requestFromServer
     .donationReport(body)
     .then((response) => {
-      console.log("Res", response);
       const entities = response?.data?.data;
       dispatch(actions.donationReportFetch(entities));
     })

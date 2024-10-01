@@ -51,7 +51,6 @@ export function TripLogViewForm({
   ]
   // const DriverTripLog = { ...driverTrip, status }
   // const getStatus = DriverTripLog.status
-  // console.log("incident for edit", DriverTripLog)
   return (
     <>
       <Formik

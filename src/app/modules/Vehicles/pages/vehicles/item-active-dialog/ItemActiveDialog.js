@@ -20,7 +20,6 @@ export function ItemActiveDialog({ id, show, onHide }) {
     (state) => ({ isLoading: state.vehicles.actionsLoading }),
     shallowEqual
   );
-  //console.log("isLoading", isLoading)
   // if !id we should close modal
   useEffect(() => {
     if (!id) {

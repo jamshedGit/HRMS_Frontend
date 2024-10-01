@@ -54,7 +54,6 @@ export function FormActiveDialog({ id, status, show, onHide }) {
       disableLoading();
     });
   };
-  //console.log("status", status, id);
   return (
     <Modal
       show={show}

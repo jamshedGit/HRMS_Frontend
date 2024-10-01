@@ -60,9 +60,7 @@ export function SubCenterTable() {
   const isAccessForDelete = userAccess.find(
     (item) => item.componentName === "DeleteCenter"
   );
-  //console.log("currentStatecenters", currentStatecenters);
   const { totalCount, entities, listLoading } = currentStatecenters;
-  // console.log("currentStatecenters", currentStatecenters)
 
   // Table columns
   const columns = [

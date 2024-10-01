@@ -8,11 +8,11 @@ const { actions } = deduction_transactionSlice;
 export const fetchUsers = (queryparm) => async (dispatch) => {
   // console.log("Receive QPsss", queryparm)
   dispatch(actions.startCall({ callType: callTypes.list }));
-  console.log("test query param", queryparm)
+  
   return requestFromServer.getAllEarningDeductionTran({...queryparm,id:'null',transactionType:'Deduction'})
     .then((response) => {
       //  console.log("user action receipt fetched 321")
-      console.log("response", response)
+      
       dispatch(actions.earning_deduction_tran_Fetched(response));
     })
     .catch((error) => {
@@ -24,7 +24,7 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
 
 export const fetchUser = (id) => (dispatch) => {
 
-  console.log("User Action id " + id)
+  
   if (!id) {
     return dispatch(actions.earning_deduction_tran_FetchedForEdit({ userForEdit: undefined }));
   }

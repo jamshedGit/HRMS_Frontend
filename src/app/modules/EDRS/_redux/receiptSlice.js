@@ -39,7 +39,7 @@ export const receiptSlice = createSlice({
             }
         },
         receiptFetched: (state, action) => {
-            // console.log(action)
+            // 
             console.log("user slice")
             const entities = action.payload.data?.data.rows;
             const totalResult = action.payload.data?.data.totalResults;
@@ -51,8 +51,8 @@ export const receiptSlice = createSlice({
         },
         //get User By ID
         userFetched: (state, action) => {
-            console.log("get user detail from receipt slice")
-            console.log(action);
+            
+            ;
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
@@ -81,7 +81,6 @@ export const receiptSlice = createSlice({
 
             state.entities = state.entities.map((entity) => {
                 console.log("user update state");
-                console.log(action.payload.updatedUser.receiptId);
                 if (entity.receiptId === action.payload.updatedUser.receiptId) {
                     return action.payload.updatedUser;
                 }

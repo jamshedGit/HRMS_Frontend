@@ -13,7 +13,6 @@ import { useSelector, shallowEqual } from "react-redux"
 
 export function UsersCard() {
   const usersUIContext = useUsersUIContext()
-  //console.log("usersUIContext", usersUIContext)
   const usersUIProps = useMemo(() => {
     return {
       newUserButtonClick: usersUIContext.newUserButtonClick,

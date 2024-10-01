@@ -15,7 +15,7 @@ export function createEmployee_Salary_Expatriate(body) {
 
 // Read
 export function getAllEmployee_Salary_Expatriate(body) {
-  console.log("body",body);
+  
   return axios.post(`${USERS_URL}/salary_expatriate/read-all-employee-salary-expatriate`, body);
 }
 
@@ -34,8 +34,7 @@ export function updateEmployee_Salary_Expatriate(earning) {
 
 //Delete
 export function deleteEmployee_Salary_Expatriate(body) {
-  console.log("body")
-  console.log(body);
+  
   return axios.patch(`${USERS_URL}/salary_expatriate/delete-employee-salary-expatriate`, body);
 }
 

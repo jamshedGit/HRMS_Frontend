@@ -34,8 +34,7 @@ export function updateReligion(religion) {
 
 //Delete
 export function deleteReligion(body) {
-  console.log("body")
-  console.log(body);
+  
   return axios.patch(`${USERS_URL}/religion/delete-religion`, body);
 }
 

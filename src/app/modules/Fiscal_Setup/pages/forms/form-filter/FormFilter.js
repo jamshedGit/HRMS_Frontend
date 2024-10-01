@@ -66,7 +66,7 @@ export function FormFilter({ listLoading, user, setCity,
   useEffect(() => {
     if (cityId) {
 
-      console.log("city id drop", cityId);
+      
       dispatch(fetchAllCityCenters(cityId));
     }
   }, [cityId, dispatch]);

@@ -35,7 +35,6 @@ export function BranchUIProvider({ BranchUIEvents, children }) {
   
   };
 
-  console.log("bank ui events",BranchUIEvents);
 
   const value = {
     queryParams,

@@ -53,8 +53,6 @@ export function DesignationUIProvider({ DesignationUIEvents, children }) {
     
   };
 
-  console.log("bank ui events",DesignationUIEvents);
-
   const value = {
     queryParams,
     setQueryParamsBase,

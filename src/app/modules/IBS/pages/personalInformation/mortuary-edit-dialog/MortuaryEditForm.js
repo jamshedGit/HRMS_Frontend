@@ -5,7 +5,6 @@ import { Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 // import Fab from "@material-ui/core/Fab";
 // import AddIcon from "@material-ui/icons/Add";
-import InputMask from "react-input-mask";
 import ClearIcon from "@material-ui/icons/Clear";
 import DatePicker from "react-datepicker";
 import * as Yup from "yup";
@@ -27,6 +26,7 @@ import {
   fetchAllPoliceStations,
 } from "../../../_redux/mortuary/reduxActions";
 
+/*
 //const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
 // Validation schema
 const userEditSchema = Yup.object().shape({
@@ -51,7 +51,7 @@ const userEditSchema = Yup.object().shape({
   callerPhNo: Yup.string().nullable(),
   description: Yup.string().nullable(),
 });
-
+*/
 const useStyles = makeStyles((theme) => ({
   margin: {
     margin: theme.spacing(1),
@@ -239,12 +239,9 @@ export function MortuaryEditForm({
       );
     });
 
-  //console.log("seletedImages", seletedImages);
   const enableLoading = () => {
     setLoading(true);
   };
-
-  console.log("initialValue", initialValue);
 
   return (
     <>

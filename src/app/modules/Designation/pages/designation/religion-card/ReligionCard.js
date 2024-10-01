@@ -6,14 +6,13 @@ import {
   CardHeader,
   CardHeaderToolbar,
 } from "../../../../../../_metronic/_partials/controls"
-import { DesignationTable, ReligionTable } from "../designation-table/DesignationTable"
+import { DesignationTable } from "../designation-table/DesignationTable"
 import { useDesignationUIContext } from "../DesignationUIContext"
 import { BanksFilter } from "../bank-filter/BanksFIlter"
 import { useSelector, shallowEqual } from "react-redux"
 
 export function ReligionCard() {
   const designationUIContext = useDesignationUIContext()
-  //console.log("designationUIContext", designationUIContext)
   const DesignationUIProps = useMemo(() => {
     return {
       newDesignationButtonClick: designationUIContext.newDesignationButtonClick,
@@ -27,7 +26,6 @@ export function ReligionCard() {
     }),
     shallowEqual
   )
-  console.log("userAccess Temp",userAccess)
   const accessUser = userAccess.find(
     (item) => item.componentName === "CreateDesignation"
   )

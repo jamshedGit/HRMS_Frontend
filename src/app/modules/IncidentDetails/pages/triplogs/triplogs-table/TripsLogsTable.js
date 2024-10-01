@@ -41,7 +41,6 @@ export function TripLogsTable() {
     };
   }, [triplogsUIContext]);
 
-  // console.log("triplogsUIProps", triplogsUIProps)
   const { currentState, userAccess } = useSelector(
     (state) => ({
       currentState: state.triplogs,
@@ -50,7 +49,6 @@ export function TripLogsTable() {
     shallowEqual
   );
 
-  //console.log("userAccess", currentState)
 
   const { totalCount, entities, listLoading } = currentState;
   const dispatch = useDispatch();
@@ -74,7 +72,6 @@ export function TripLogsTable() {
     return forDelete?.isAccess;
   };
 
-  console.log("entities", entities);
   // Table columns
   const columns = [
     {

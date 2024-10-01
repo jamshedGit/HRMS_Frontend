@@ -39,8 +39,8 @@ export const compensationExpSlice = createSlice({
             }
         },
         compensation_exp_Fetched: (state, action) => {
-            // console.log(action)
-            console.log("user slice",action.payload)
+            // 
+            
             
             const entities = action.payload.data?.data.rows;
             console.log("ent compensation_exp_",entities)
@@ -54,8 +54,8 @@ export const compensationExpSlice = createSlice({
 
          //get User By ID
          compensation_exp_FetchedForEdit: (state, action) => {
-            console.log("get user detail from receipt slice")
-            console.log(action);
+            
+            ;
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
@@ -63,8 +63,8 @@ export const compensationExpSlice = createSlice({
 
         //get User By ID
         userFetched: (state, action) => {
-            console.log("get user detail from receipt slice")
-            console.log(action);
+            
+            ;
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;

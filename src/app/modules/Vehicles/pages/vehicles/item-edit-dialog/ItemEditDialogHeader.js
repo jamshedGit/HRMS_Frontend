@@ -15,8 +15,6 @@ export function ItemEditDialogHeader({ id, itemForRead }) {
     shallowEqual
   );
 
-  //console.log("itemForEdit", itemForEdit)
-
   useEffect(() => {
     let _title = id ? "" : "New Vehicle";
     if (itemForEdit && id) {

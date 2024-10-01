@@ -11,7 +11,7 @@ export function createReceipt(body) {
 
 // Read
 export function getAllReceipts(body) {
-  console.log("body",body);
+  
   
   return axios.post(`${USERS_URL}/edrs/read-all-receipt`, body);
 }
@@ -36,8 +36,7 @@ export function updateUser(user) {
 
 //Delete
 export function deleteUser(body) {
-  console.log("body")
-  console.log(body);
+  
   return axios.patch(`${USERS_URL}/edrs/delete-receipt`, body);
 }
 

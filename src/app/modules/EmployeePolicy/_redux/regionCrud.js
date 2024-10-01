@@ -14,7 +14,7 @@ export function createRegion(body) {
 }
 // Read
 export function getAllRegion(body) {
-  console.log("body",body);
+  
   return axios.post(`${USERS_URL}/region/read-all-region`, body);
 }
 
@@ -38,8 +38,7 @@ export function updateRegion(Region) {
 
 //Delete
 export function deleteRegion(body) {
-  console.log("body")
-  console.log(body);
+  
   return axios.patch(`${USERS_URL}/region/delete-region`, body);
 }
 

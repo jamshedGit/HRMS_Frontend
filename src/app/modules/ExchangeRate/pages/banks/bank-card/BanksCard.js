@@ -27,7 +27,6 @@ export function BanksCard() {
     }),
     shallowEqual
   )
-  console.log("userAccess exchange",userAccess)
   const accessUser = userAccess.find(
     (item) => item.componentName === "CreateExchangeRate"
   )

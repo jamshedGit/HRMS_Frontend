@@ -15,7 +15,7 @@ export function createincident(body) {
 
 // Read
 export function getAllincident(body) {
-  console.log("body",body);
+  
   return axios.post(`${USERS_URL}/incident/read-all-incident`, body);
 }
 
@@ -34,8 +34,7 @@ export function updateincident(incident) {
 
 //Delete
 export function deleteincident(body) {
-  console.log("body")
-  console.log(body);
+  
   return axios.patch(`${USERS_URL}/incident/delete-incident`, body);
 }
 

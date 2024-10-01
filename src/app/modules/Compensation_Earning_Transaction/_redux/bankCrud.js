@@ -15,7 +15,7 @@ export function createEarningDeductionTran(body) {
 
 // Read
 export function getAllEarningDeductionTran(body) {
-  console.log("body",body);
+  
   return axios.post(`${USERS_URL}/earning_transaction/read-all-earning-transaction`, body);
 }
 
@@ -34,8 +34,7 @@ export function updateEarningDeductionTran(earning) {
 
 //Delete
 export function deleteEarningDeductionTran(body) {
-  console.log("body")
-  console.log(body);
+  
   return axios.patch(`${USERS_URL}/earning_transaction/delete-earning-transaction`, body);
 }
 

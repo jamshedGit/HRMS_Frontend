@@ -15,7 +15,7 @@ export function createExchangeRate(body) {
 
 // Read
 export function getAllExchangeRate(body) {
-  console.log("body",body);
+  
   return axios.post(`${USERS_URL}/exchange/read-all-exchange-rate`, body);
 }
 
@@ -34,8 +34,7 @@ export function updateExchangeRate(ExchangeRate) {
 
 //Delete
 export function deleteExchangeRate(body) {
-  console.log("body")
-  console.log(body);
+  
   return axios.patch(`${USERS_URL}/exchange/delete-exchange-rate`, body);
 }
 

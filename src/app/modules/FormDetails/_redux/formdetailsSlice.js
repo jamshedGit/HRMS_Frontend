@@ -39,8 +39,8 @@ export const formDetailsSlice = createSlice({
             }
         },
        formFetched: (state, action) => {
-            // console.log(action)
-            console.log("user slice",action.payload)
+            // 
+            
             const entities = action.payload.data?.data.rows;
             console.log("ent form",action.payload.data?.data)
             const totalResult = action.payload.data?.data.totalResults;
@@ -51,8 +51,8 @@ export const formDetailsSlice = createSlice({
             state.totalCount = totalResult;
         },
         customFetchedList: (state, action) => {
-            // console.log(action)
-            console.log("user slice",action.payload)
+            // 
+            
             const entities = action.payload.data?.data.rows;
             console.log("ent form",action.payload.data?.data)
             const totalResult = action.payload.data?.data.totalResults;
@@ -67,7 +67,7 @@ export const formDetailsSlice = createSlice({
          //get User By ID
          formFetchedForEdit: (state, action) => {
             console.log("get user detail from form slice")
-            console.log(action);
+            ;
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
@@ -76,7 +76,7 @@ export const formDetailsSlice = createSlice({
         //get User By ID
         userFetched: (state, action) => {
             console.log("get user detail from form slice")
-            console.log(action);
+            ;
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;

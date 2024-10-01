@@ -13,7 +13,6 @@ import { useDispatch, useSelector, shallowEqual } from "react-redux";
 
 export function TripLogsCard() {
   const incidentsUIContext = useTripLogsUIContext();
-  //console.log("incidentsUIContext", incidentsUIContext)
   const incidentsUIProps = useMemo(() => {
     return {
       newUserButtonClick: incidentsUIContext.newUserButtonClick,

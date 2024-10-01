@@ -35,16 +35,14 @@ export function RegionTable() {
     };
   }, [religionUIContext]);
 
-  //console.log("queryparms", usersUIProps.queryparms)
   const { currentState, userAccess } = useSelector(
-    (state) => {  console.log("state ",state); return {
+    (state) => {  return {
       
       currentState: state.region,
       userAccess: state?.auth?.userAccess["Region"],
     }},
     shallowEqual
   );
-  console.log("currentState", currentState);
   
   const { totalCount, entities, listLoading } = currentState;
 
@@ -54,7 +52,6 @@ export function RegionTable() {
 
   useEffect(() => {
     religionUIProps.setIds([]);
-    console.log("test 2",religionUIProps.queryParams)
     dispatch(actions.fetchUsers(religionUIProps.queryParams));
   }, [religionUIProps.queryParams, dispatch, totalCount]);
 

@@ -38,7 +38,6 @@ export function ItemEditDialog({ id, show, onHide, itemForRead }) {
     shallowEqual
   );
 
-  // console.log("itemForEdit", itemForEdit)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,7 +49,6 @@ export function ItemEditDialog({ id, show, onHide, itemForRead }) {
     // if (id) {
     //   dispatch(actions.fetchVehicle(id));
     // }
-    //console.log("useEffect called")
   }, []);
 
   // useEffect(() => {
@@ -60,11 +58,9 @@ export function ItemEditDialog({ id, show, onHide, itemForRead }) {
   //   if (id) {
   //     dispatch(actions.fetchVehicle(id));
   //   }
-  //   //console.log("useEffect called")
   // }, [id, dispatch, itemUIProps.queryParams]);
 
   const saveItem = (item) => {
-    console.log("itrem", item);
     if (!id) {
       const itemUpdatedFields = {};
 

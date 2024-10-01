@@ -63,7 +63,7 @@ export function UsersFilter({ listLoading, user, setCity,
   const [receiptDateTo, setReceiptDateTo] = useState(null);
   useEffect(() => {
     if (countryId) {
-      console.log("countryId id drop", countryId);
+      
       dispatch(fetchAllCity(1));
     }
   }, [countryId, dispatch]);
@@ -71,7 +71,7 @@ export function UsersFilter({ listLoading, user, setCity,
   useEffect(() => {
     if (cityId) {
 
-      console.log("city id drop", cityId);
+      
       dispatch(fetchAllCityCenters(cityId));
     }
   }, [cityId, dispatch]);

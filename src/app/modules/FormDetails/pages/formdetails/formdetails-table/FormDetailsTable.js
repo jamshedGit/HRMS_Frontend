@@ -44,7 +44,7 @@ export function FormTable() {
   //console.log("queryparms", usersUIProps.queryparms)
   const { currentState, userAccess } = useSelector(
     (state) => {
-      console.log("state ", state); return {
+       return {
 
         currentState: state.formDetails,
         userAccess: state?.auth?.userAccess["FormDetails"],
@@ -68,7 +68,6 @@ export function FormTable() {
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
   const [heading, setHeading] = useState('');
-  console.log("currentState ent", currentState.entities);
 
   const { totalCount, entities, listLoading } = currentState;
 

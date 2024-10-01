@@ -4,7 +4,6 @@ export const USERS_URL = process.env.REACT_APP_API_URL;
 
 //Create user
 export function createUser(body) {
-  // console.log("CreateUser", body)
   return axios.post(`${USERS_URL}/users/create-user`, body);
 }
 
@@ -14,13 +13,11 @@ export function getAllUsers(body) {
 }
 
 export function getUserById(id) {
-  // console.log("getUserById id", id)
   return axios.post(`${USERS_URL}/users/read-user`, id);
 }
 
 //Update
 export function updateUser(user) {
-  // console.log("updateUser", user)
   return axios.put(`${USERS_URL}/users/update-user`, user);
 }
 

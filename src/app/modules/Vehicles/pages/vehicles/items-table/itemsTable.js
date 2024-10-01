@@ -41,13 +41,11 @@ export function ItemsTable() {
     shallowEqual
   );
 
-  console.log("currentState", currentState);
   // Centers Redux state
   const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(itemUIProps.queryParms);
       await dispatch(actions.fetchVehicles(itemUIProps.queryParms));
     };
     fetchData();

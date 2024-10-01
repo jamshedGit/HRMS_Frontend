@@ -39,12 +39,8 @@ export const taxSetupSlice = createSlice({
             }
         },
         TaxSetupFetched: (state, action) => {
-            // console.log(action)
-            console.log("user slice",action.payload)
             const entities = action.payload.data?.data.rows;
-            console.log("ent TaxSetup",entities)
             const totalResult = action.payload.data?.data.totalResults;
-            console.log(entities);
             state.listLoading = false;
             state.error = null;
             state.entities = entities;
@@ -53,8 +49,6 @@ export const taxSetupSlice = createSlice({
 
          //get User By ID
          TaxSetupFetchedForEdit: (state, action) => {
-            console.log("get user detail from receipt slice")
-            console.log(action);
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
@@ -62,8 +56,6 @@ export const taxSetupSlice = createSlice({
 
         //get User By ID
         userFetched: (state, action) => {
-            console.log("get user detail from receipt slice")
-            console.log(action);
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
@@ -72,14 +64,11 @@ export const taxSetupSlice = createSlice({
 
             state.error = null;
             state.actionsLoading = false;
-            console.log("TaxSetup deleted ")
-            console.log(state.entities);
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );
         },
         TaxSetupCreated: (state, action) => {
-             console.log("action payload for TaxSetup", action.payload);
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);

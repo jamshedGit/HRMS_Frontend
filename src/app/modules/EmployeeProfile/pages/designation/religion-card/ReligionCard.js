@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardHeaderToolbar,
 } from "../../../../../../_metronic/_partials/controls"
-import { DesignationTable, ReligionTable } from "../designation-table/DesignationTable"
+import { DesignationTable } from "../designation-table/DesignationTable"
 import { useDesignationUIContext } from "../DesignationUIContext"
 import { BanksFilter } from "../bank-filter/BanksFIlter"
 import { useSelector, shallowEqual } from "react-redux"
@@ -14,7 +14,6 @@ import { useModal } from '../../../../../../context/ModalContext';
 
 export function ReligionCard() {
   const designationUIContext = useDesignationUIContext()
-  //console.log("designationUIContext", designationUIContext)
   const { openModal } = useModal();
   const DesignationUIProps = useMemo(() => {
     return {
@@ -30,7 +29,6 @@ export function ReligionCard() {
     }),
     shallowEqual
   )
-  console.log("userAccess Temp",userAccess)
   const accessUser = userAccess.find(
     (item) => item.componentName === "CreateProfile"
   )

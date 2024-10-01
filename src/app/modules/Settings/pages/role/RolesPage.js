@@ -14,7 +14,6 @@ export function RolePage({ history }) {
 
   const dispatch = useDispatch()
 
-  //console.log("rolePage history", history)
   const rolesUIEvents = {
     newRoleButtonClick: () => {
       history.push("/settings/read-all-roles/new")

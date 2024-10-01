@@ -43,7 +43,7 @@ export function MortuaryTable() {
     shallowEqual
   );
 
-  // console.log("userAccess", userAccess);
+  ;
 
   useEffect(() => {
     async function fetchData() {

@@ -47,7 +47,6 @@ export function Demo2Dashboard({ history }) {
 
   useEffect(() => {
     // const interval = setInterval(() => {
-    //   console.log("Set interval called");
     //   dispatch(fetchDashboardVehicles({ cityId: user.cityId || city.values }));
     // }, 5000);
     // setOnDutyVehicels(dashboard.onDuty);
@@ -57,10 +56,7 @@ export function Demo2Dashboard({ history }) {
     // //dispatch(fetchAllCityCenters(user.cityId));
   }, []);
 
-  //console.log("dashboard", dashboard);
-  // console.log("city", city);
   useEffect(() => {
-    //console.log("seleted cit yis called");
     const getSeletedCity =
       dashboard.allCity &&
       dashboard.allCity.find((item) => {
@@ -78,7 +74,6 @@ export function Demo2Dashboard({ history }) {
     setDisableOnDutyButton(seletedOnDuty.length > 0 ? false : true);
   }, [seletedOnDuty]);
 
-  //console.log("vehicle", vehicle);
 
   useEffect(() => {
     setStandbyVehicels(dashboard.standBy);

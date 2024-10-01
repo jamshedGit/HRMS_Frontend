@@ -15,7 +15,7 @@ export function createEarning(body) {
 
 // Read
 export function getAllEarning(body) {
-  console.log("body",body);
+  
   return axios.post(`${USERS_URL}/earning/read-all-earning`, body);
 }
 
@@ -34,8 +34,7 @@ export function updateEarning(earning) {
 
 //Delete
 export function deleteEarning(body) {
-  console.log("body")
-  console.log(body);
+  
   return axios.patch(`${USERS_URL}/earning/delete-earning`, body);
 }
 

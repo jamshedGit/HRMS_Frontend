@@ -75,7 +75,6 @@ export function IncidentEditForm({
 
   const { dashboard } = useSelector((state) => state);
 
-  //console.log("dashboard time", dashboard);
 
   // console.log("alaramTime option in form", alaramTime);
   const getCenterId = (id) => {

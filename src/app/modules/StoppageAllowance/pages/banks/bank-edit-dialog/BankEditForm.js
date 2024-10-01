@@ -63,9 +63,7 @@ export function BankEditForm({
 
   // EMployee Dropdown Binding
   useEffect(() => {
-    console.log("ppp")
     dispatch(fetchAllEarningDeductionList(1));
-    console.log("user1", user)
 
 
   }, [dispatch]);
@@ -73,7 +71,6 @@ export function BankEditForm({
   // // For Earning Deduction 
   // useEffect(() => {
   //   const id = defEarningDeductionListType?.value ? defEarningDeductionListType.value : user.earning_deduction_type;
-  //   console.log("google", dashboard.allEearningDeductList)
   //   setDefaultEarningDeductionList(
 
 
@@ -89,7 +86,6 @@ export function BankEditForm({
   // For Earning Deduction 
   useEffect(() => {
     const id = defEarningDeductionList?.value ? defEarningDeductionList.value : user.earning_deduction_Id;
-    console.log("google", dashboard.allEearningDeductList)
 
     setDefaultEarningDeductionList(
       dashboard.allEearningDeductList &&
@@ -100,12 +96,10 @@ export function BankEditForm({
         if (user.earning_deduction_type == 'Earning') {
           dispatch(fetchAllEarningDeductionList(1));
           setDefaultEarningDeductionType(defaultType)
-            console.log("p1",defaultType)
         }
         else {
           dispatch(fetchAllEarningDeductionList(2));
           setDefaultEarningDeductionType(defaultType)
-          console.log("p2",defaultType)
         }
       
 
@@ -135,7 +129,6 @@ export function BankEditForm({
   }, [user.endDate]);
 
   //=========== END
-  console.log("dashboar111", dashboard, user)
   return (
     <>
       <Formik
@@ -143,7 +136,6 @@ export function BankEditForm({
         initialValues={user}
         validationSchema={formValidation}
         onSubmit={(values) => {
-          console.log("values", values);
           enableLoading();
           saveIncident(values);
         }}

@@ -15,7 +15,7 @@ export function createDeduction(body) {
 
 // Read
 export function getAllDeduction(body) {
-  console.log("body",body);
+  
   return axios.post(`${USERS_URL}/deduction/read-all-deduction`, body);
 }
 
@@ -34,8 +34,7 @@ export function updateDeduction(Deduction) {
 
 //Delete
 export function deleteDeduction(body) {
-  console.log("body")
-  console.log(body);
+  
   return axios.patch(`${USERS_URL}/deduction/delete-deduction`, body);
 }
 

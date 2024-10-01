@@ -27,7 +27,7 @@ export function FormCard() {
     }),
     shallowEqual
   )
-  console.log("userAccess Temp",userAccess)
+  
   const accessUser = userAccess.find(
     (item) => item.componentName === "CreateFiscalSetup"
   )

@@ -35,16 +35,14 @@ export function FormTable() {
     };
   }, [formUIContext]);
 
-  //console.log("queryparms", usersUIProps.queryparms)
   const { currentState, userAccess } = useSelector(
-    (state) => {  console.log("state ",state); return {
+    (state) => { return {
       
       currentState: state.payroll_month,
       userAccess: state?.auth?.userAccess["Payroll_Month"],
     }},
     shallowEqual
   );
-  console.log("currentState", currentState);
   
   const { totalCount, entities, listLoading } = currentState;
 
@@ -54,7 +52,6 @@ export function FormTable() {
 
   useEffect(() => {
     FormUIProps.setIds([]);
-    console.log("test 2",FormUIProps.queryParams)
     dispatch(actions.fetchUsers(FormUIProps.queryParams));
   }, [FormUIProps.queryParams, dispatch, totalCount]);
 

@@ -36,7 +36,6 @@ export const rolesSlice = createSlice({
       }
     },
     rolesFetched: (state, action) => {
-      //console.log("action.payload", action.payload)
       const { totalResults, rows } = action.payload
       state.listLoading = false
       state.error = null
@@ -44,7 +43,6 @@ export const rolesSlice = createSlice({
       state.totalCount = totalResults
     },
     roleFetched: (state, action) => {
-      //console.log("action.payload.roleForEdit", action.payload)
       state.actionsLoading = false
       state.roleForEdit = action.payload.roleForEdit
       state.error = null

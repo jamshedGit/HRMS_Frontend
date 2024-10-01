@@ -13,7 +13,7 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
     
     .then((response) => {
       //  console.log("user action receipt fetched 321")
-      console.log("response", response)
+      
       dispatch(actions.regionFetched(response));
     })
     .catch((error) => {
@@ -25,7 +25,7 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
 
 export const fetchUser = (id) => (dispatch) => {
 
-  console.log("User Action id " + id)
+  
   if (!id) {
     return dispatch(actions.regionFetchedForEdit({ userForEdit: undefined }));
   }

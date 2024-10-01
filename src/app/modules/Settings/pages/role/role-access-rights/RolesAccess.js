@@ -64,16 +64,12 @@ export function RolesAccess({
   const newdata = Object.entries(currentState);
   // newdata.push(currentState);
 
-  // console.log("currentState_new", Object.keys(currentState).length)
-  // console.log('newdata', newdata);
   // const { entities, listLoading, totalCount } = currentState
   // newdata.forEach((data) => {
-  //   console.log('data', data[0]);
   // })
 
   // function changeState (id){
 
-  //   console.log('yeloid', id);
 
   // }
 
@@ -86,11 +82,6 @@ export function RolesAccess({
     const name = target.name;
     const id = target.id;
     const checked = target.checked;
-    // console.log("Access Right", {
-    //   roleId: name,
-    //   resourceId: id,
-    //   isAccess: checked,
-    // })
 
     // openRoleAccessPage(row.id)
     await dispatch(

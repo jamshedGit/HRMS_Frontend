@@ -6,18 +6,13 @@ const { actions } = policySlice;
 // const { roleActions } = getAllrolesSlice
 
 export const fetchUsers = (queryparm) => async (dispatch) => {
-  // console.log("Receive QPsss", queryparm)
   dispatch(actions.startCall({ callType: callTypes.list }));
-  console.log("test query param", queryparm)
   return requestFromServer.getAllpolicy(queryparm)
     
     .then((response) => {
-      //  console.log("user action receipt fetched 321")
-      console.log("response", response)
       dispatch(actions.policyFetched(response));
     })
     .catch((error) => {
-      //console.log("Can't find user", error)
       error.clientMessage = "Can't find religion record";
       dispatch(actions.catchError({ error, callType: callTypes.list }));
     });
@@ -25,7 +20,6 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
 
 export const fetchUser = (id) => (dispatch) => {
 
-  console.log("User Action id " + id)
   if (!id) {
     return dispatch(actions.policyFetchedForEdit({ userForEdit: undefined }));
   }
@@ -35,7 +29,6 @@ export const fetchUser = (id) => (dispatch) => {
     .getpolicyById({ Id: id })
     .then((response) => {
       const entities = response.data?.data;
-      console.log("entities " + entities)
       dispatch(actions.policyFetchedForEdit({ userForEdit: entities }));
     })
     .catch((error) => {
@@ -49,7 +42,6 @@ export const deletePolicy = (id) => (dispatch) => {
   return requestFromServer
     .deletepolicy({ Id: id })
     .then((response) => {
-      //console.log("response from delete user ", response.data.message)
       dispatch(actions.policyDeleted({ Id: id }));
       toast.success("Successfully Deleted", {
         position: "top-right",
@@ -72,7 +64,6 @@ export const activeUser = (id) => (dispatch) => {
   return requestFromServer
     .deletepolicy({ Id: id })
     .then((response) => {
-      //console.log("response from delete user ", response.data.message)
       dispatch(actions.policyDeleted({ id: id }));
       toast.success("Successfully Activated", {
         position: "top-right",
@@ -96,14 +87,11 @@ export const createPolicy = (religionForCreation, disbaleLoading, onHide) => (
   // religionForCreation.phNo = religionForCreation.phNo.toString();
   // religionForCreation.cnic = religionForCreation.cnic.toString();
 
-  console.log("policy for creation", religionForCreation);
   return requestFromServer
     .createpolicy(religionForCreation)
     .then((res) => {
       dispatch(actions.startCall({ callType: callTypes.action }));
       const list = res.data?.data;
-      console.log("policy data");
-      console.log(list);
       dispatch(actions.policyCreated(list));
       disbaleLoading();
       toast.success("Successfully Created", {
@@ -137,9 +125,7 @@ export const updatePolicy = (user, disbaleLoading, onHide) => (dispatch) => {
   return requestFromServer
     .updatepolicy(user)
     .then((response) => {
-      console.log("my response",response?.config?.data);
       const updatedPolicy = response?.config?.data; // response.data?.data;
-      console.log("policy Res", response,updatedPolicy)
       dispatch(actions.policyUpdated({ updatedPolicy }));
       dispatch(actions.startCall({ callType: callTypes.action }));
       disbaleLoading();
@@ -157,7 +143,6 @@ export const updatePolicy = (user, disbaleLoading, onHide) => (dispatch) => {
 
     })
     .catch((error) => {
-      // console.log("error User update", error)
       //error.clientMessage = "Can't update User"
       dispatch(actions.catchError({ error, callType: callTypes.action }));
       disbaleLoading();
@@ -180,7 +165,6 @@ export const fetchRoles = () => (dispatch) => {
     .getAllRoles()
     .then((response) => {
       const entities = response.data?.data;
-      // console.log("User entities: ", entities)
       dispatch(actions.RolesFetched(entities));
     })
     .catch((error) => {

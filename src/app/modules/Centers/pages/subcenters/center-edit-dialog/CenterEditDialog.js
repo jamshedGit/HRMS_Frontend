@@ -5,11 +5,10 @@ import { CenterEditForm } from "./CenterEditForm";
 import { CenterEditDialogHeader } from "./CenterEditDialogHeader";
 import { useCentersUIContext } from "../CentersUIContext";
 import * as actions from "../../../_redux/subcenters/subCentersActions";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { fetchAllCity } from "../../../../../../_metronic/redux/dashboardActions";
 import { makeStyles } from "@material-ui/core/styles";
-import CircularProgress from "@material-ui/core/CircularProgress";
+// import CircularProgress from "@material-ui/core/CircularProgress";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,8 +20,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export function CenterEditDialog({ id, show, isNew, onHide, userForRead }) {
-  const classes = useStyles();
-  const [isForEdit, setIsForEdit] = useState();
+  // const classes = useStyles();
+  // const [isForEdit, setIsForEdit] = useState();
   const centersUIContext = useCentersUIContext();
   const centersUIProps = useMemo(() => {
     return {
