@@ -10,7 +10,7 @@ const { actions } = compensationBenefitsSlice;
 export const fetchUsers = (queryparm) => async (dispatch) => {
   // console.log("Receive QPsss", queryparm)
   dispatch(actions.startCall({ callType: callTypes.list }));
-  console.log("test query param", queryparm)
+  
   return requestFromServer.getAllCompensationBenefits({ ...queryparm, id: 'null' })
 
     .then((response) => {
@@ -28,7 +28,7 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
 
 export const fetchUser = (id) => (dispatch) => {
 
-  console.log("User Action id " + id)
+  
   if (!id) {
     return dispatch(actions.compensationBenefitsFetchedForEdit({ userForEdit: undefined }));
   }

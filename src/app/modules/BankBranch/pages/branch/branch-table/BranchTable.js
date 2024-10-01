@@ -37,14 +37,14 @@ export function BranchTable() {
 
   //console.log("queryparms", usersUIProps.queryparms)
   const { currentState, userAccess } = useSelector(
-    (state) => {  console.log("state ",state); return {
+    (state) => {   return {
       
       currentState: state.branch,
       userAccess: state?.auth?.userAccess["Branch"],
     }},
     shallowEqual
   );
-  console.log("currentState", currentState);
+  
   
   const { totalCount, entities, listLoading } = currentState;
 

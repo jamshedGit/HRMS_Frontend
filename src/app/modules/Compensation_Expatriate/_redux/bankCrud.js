@@ -15,7 +15,7 @@ export function createCompensation_Expatriate(body) {
 
 // Read
 export function getAllCompensation_Expatriate(body) {
-  console.log("body",body);
+  
   return axios.post(`${USERS_URL}/compensation_expatriate/read-all-compensation-expatriate`, body);
 }
 
@@ -34,8 +34,7 @@ export function updateCompensation_Expatriate(earning) {
 
 //Delete
 export function deleteCompensation_Expatriate(body) {
-  console.log("body")
-  console.log(body);
+  
   return axios.patch(`${USERS_URL}/compensation_expatriate/delete-compensation-expatriate`, body);
 }
 

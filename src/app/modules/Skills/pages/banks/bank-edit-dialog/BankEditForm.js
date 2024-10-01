@@ -6,7 +6,6 @@ import { Input, Select, TextArea } from "../../../../../../_metronic/_partials/c
 import { useDispatch, useSelector } from "react-redux";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import {
-  fetchAllCity,
   fetchAllCountry,
   fetchAllFormsMenu,
   fetchAllActiveEmployees
@@ -14,32 +13,6 @@ import {
 } from "../../../../../../_metronic/redux/dashboardActions";
 import DatePicker from "react-datepicker";
 
-// Phone Number Regex
-const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
-// CNIC Regex
-const cnicRegExp = /^[0-9]{5}-[0-9]{7}-[0-9]$/;
-// Password Regex
-const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-// Validation schema
-const formValidation = Yup.object().shape(
-  {
-    employeeId: Yup.string()
-      .required("Required*"),
-    companyName: Yup.string()
-      .required("Required*"),
-    positionHeld: Yup.string()
-      .required("Required*"),
-    countryId: Yup.string()
-      .required("Required*"),
-    cityId: Yup.string()
-      .required("Required*"),
-    startDate: Yup.string()
-      .required("Required*"),
-    endDate: Yup.string()
-      .required("Required*"),
-  },
-
-);
 export function BankEditForm({
   saveSkills,
   user,
@@ -53,7 +26,6 @@ export function BankEditForm({
   enableLoading,
   loading,
 }) {
-console.log("tree",values)
   const { dashboard } = useSelector((state) => state);
   // Get User Details
   const { auth } = useSelector((state) => state);
@@ -191,7 +163,6 @@ console.log("tree",values)
         initialValues={user}
         //validationSchema={formValidation}
         onSubmit={(values) => {
-          console.log("values", values);
           enableLoading();
           saveSkills(values);
         }}

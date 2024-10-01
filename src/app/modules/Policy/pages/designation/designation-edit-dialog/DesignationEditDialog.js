@@ -66,13 +66,10 @@ export function DesignationEditDialog({ id, show, onHide, userForRead }) {
   const saveEmpPolicy = (user) => {
 
     if (!id) {
-      console.log("emp policy save");
-      console.log(user);
       const finalObject = { user }
       dispatch(actions.createPolicy(user, disbaleLoading, onHide));
     } else {
 
-      console.log("getUserStatus", user);
       const policyUpdatedFields = {
         Id: user.Id,
         policyName: user.policyName,
@@ -93,7 +90,6 @@ export function DesignationEditDialog({ id, show, onHide, userForRead }) {
         contractualPolicyInMonth: user.contractualPolicyInMonth
       };
 
-      console.log("policyUpdatedFields", policyUpdatedFields);
       dispatch(actions.updatePolicy(policyUpdatedFields, disbaleLoading, onHide));
       dispatch(actions.fetchUser(usersUIProps.queryParams));
     }

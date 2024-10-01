@@ -39,13 +39,9 @@ export const skillslice = createSlice({
             }
         },
         skillsFetched: (state, action) => {
-            // console.log(action)
-            console.log("user slice",action.payload)
             
             const entities = action.payload.data?.data.rows;
-            console.log("ent skills",entities)
             const totalResult = action.payload.data?.data.totalResults;
-            console.log(entities);
             state.listLoading = false;
             state.error = null;
             state.entities = entities;
@@ -54,8 +50,6 @@ export const skillslice = createSlice({
 
          //get User By ID
          skillsFetchedForEdit: (state, action) => {
-            console.log("get user detail from receipt slice")
-            console.log(action);
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
@@ -63,8 +57,6 @@ export const skillslice = createSlice({
 
         //get User By ID
         userFetched: (state, action) => {
-            console.log("get user detail from receipt slice")
-            console.log(action);
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
@@ -73,14 +65,11 @@ export const skillslice = createSlice({
 
             state.error = null;
             state.actionsLoading = false;
-            console.log("skills deleted ")
-            console.log(state.entities);
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );
         },
         skillsCreated: (state, action) => {
-             console.log("action payload for skills", action.payload);
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);
@@ -91,7 +80,6 @@ export const skillslice = createSlice({
             // state.entities.push(action.payload)
           
             state.entities = state.entities.map((entity) => {
-                console.log("payload aca",action.payload);
                 //const payload = { ...action.payload };
                 let payload = JSON.stringify(action.payload)
                 let payloadObj = JSON.parse(payload);

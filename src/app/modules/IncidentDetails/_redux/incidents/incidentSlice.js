@@ -63,8 +63,6 @@ export const incidentSlice = createSlice({
     },
     incidentCreated: (state, action) => {
       const data = action.payload;
-      // console.log("state.entities", state.entities);
-      // console.log("action.payload", action.payload);
       state.actionsLoading = false;
       state.error = null;
       state.entities.push(action.payload);

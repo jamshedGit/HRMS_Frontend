@@ -42,7 +42,7 @@ export function ReceiptsTable() {
     }),
     shallowEqual
   );
-  //console.log("currentState", currentState);
+  //
   const { totalCount, entities, listLoading } = currentState;
   //console.log("listLoading", listLoading);
   const dispatch = useDispatch();

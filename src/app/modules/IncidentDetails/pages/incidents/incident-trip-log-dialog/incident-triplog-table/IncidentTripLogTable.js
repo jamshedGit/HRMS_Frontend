@@ -93,7 +93,6 @@ export function IncidentTripLogTable({ vehiclesForCenter, totalCount }) {
   //     return entities.limit
   //   }, 3000)
   // )
-  //console.log("userAccess", userAccess, "Current State", currentState)
   // const isAccessForEdit = userAccess.find(
   //   (item) => item.componentName === "UpdateUser"
   // )
@@ -101,7 +100,6 @@ export function IncidentTripLogTable({ vehiclesForCenter, totalCount }) {
   // const isAccessForDelete = userAccess.find(
   //   (item) => item.componentName === "DeleteUser"
   // )
-  // console.log("currentStatecenters", currentStatecenters.vehiclesForCenter)
   // const entities = currentStatecenters.vehiclesForCenter
   // const totalCount = currentStatecenters.vehiclesForCenter.totalResults
   // const listLoading = currentStatecenters.listLoading

@@ -29,7 +29,6 @@ export const fetchVehicle = (id) => (dispatch) => {
   return requestFromServer
     .getById({ id: id })
     .then((response) => {
-      //console.log("get center by Id response", response)
       const entities = response.data?.data;
       dispatch(actions.vehicleFetched({ itemForEdit: entities }));
     })
@@ -92,7 +91,6 @@ export const createVehicle = (item) => (dispatch) => {
   return requestFromServer
     .createRequest(item)
     .then((res) => {
-      // console.log("createRequest", res)
       const vehicle = res.data?.data;
       dispatch(actions.vehicleCreated({ vehicle }));
       toast.success(res.data.message, {
@@ -121,13 +119,11 @@ export const createVehicle = (item) => (dispatch) => {
 };
 
 export const updateVehicle = (user) => (dispatch) => {
-  // console.log("Update Vehicle data", user);
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
     .updateRequest(user)
     .then((response) => {
       const updatedVehicle = response.data?.data;
-      // console.log("userAction Res", updatedVehicle);
       dispatch(actions.vehicleUpdated({ updatedVehicle }));
       toast.success("Successfully Updated", {
         position: "top-right",
@@ -173,7 +169,6 @@ export const fetchCategory = () => (dispatch) => {
       // .getAllRoles()
       // .then((response) => {
       //   const entities = response.data?.data
-      //   // console.log("User entities: ", entities)
       //   dispatch(actions.RolesFetched(entities))
       //})
       .catch((error) => {

@@ -6,7 +6,6 @@ import * as actions from "../../../_redux/usersActions";
 import { useUsersUIContext } from "../UsersUIContext";
 
 export function UserDeleteDialog({ id, status, show, onHide }) {
-  // console.log("Status", status);
   const [loading, setLoading] = useState(false);
   // Customers UI Context
   const usersUIContext = useUsersUIContext();
@@ -55,7 +54,6 @@ export function UserDeleteDialog({ id, status, show, onHide }) {
       disableLoading();
     });
   };
-  //console.log("status", status, id);
   return (
     <Modal
       show={show}

@@ -62,7 +62,6 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   //   }
   // }, [actionsLoading === true]);
 
-  //console.log("action", action);
 
   useEffect(() => {
     dispatch(actions.fetchUser(id));
@@ -71,13 +70,10 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   }, [id, dispatch]);
 
   // useEffect(() => {
-  //   console.log("UseEffect call");
   //   if (actionsLoading === false) {
-  //     console.log("UseEffect call inside function");
   //     disbaleLoading();
   //   }
   // }, [actionsLoading]);
-  //console.log("userForEdit", userForEdit);
 
   const SavePayrollMonthSetup = async (user) => {
 
@@ -94,7 +90,6 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
       //   return item.value === +user.status;
       // });
 
-      console.log("getUserStatus", user);
 
       const payrollMonthSetupUpdatedFields = {
         Id: user.Id,
@@ -106,7 +101,6 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         year: user.year
       };
 
-      console.log("payrollMonthSetupUpdatedFields", payrollMonthSetupUpdatedFields);
       await dispatch(actions.updatePayrollMonth(payrollMonthSetupUpdatedFields, disbaleLoading, onHide));
       await dispatch(actions.fetchUsers(usersUIProps.queryParams));
     }

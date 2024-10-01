@@ -13,7 +13,7 @@ export function createBranch(body) {
 
 // Read
 export function getAllBranch(body) {
-  console.log("body",body);
+  
   return axios.post(`${USERS_URL}/branch/read-all-branch`, body);
 }
  
@@ -31,8 +31,7 @@ export function updateBranch(bank) {
 
 //Delete
 export function deleteBranch(body) {
-  console.log("body")
-  console.log(body);
+  
   return axios.patch(`${USERS_URL}/branch/delete-branch`, body);
 }
 

@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 const { actions } = rolesSlice;
 
 export const fetchRoles = (queryParams) => (dispatch) => {
-  //console.log("Roles Fetch queryParams", queryParams)
   dispatch(actions.startCall({ callType: callTypes.list }));
 
   return requestFromServer
@@ -13,7 +12,6 @@ export const fetchRoles = (queryParams) => (dispatch) => {
     .then((response) => {
       //const entities = response.data?.data
       dispatch(actions.rolesFetched(response.data?.data));
-      // console.log("Roles Api entities", entities)
     })
     .catch((error) => {
       error.clientMessage = "Can't find Roles";
@@ -121,7 +119,6 @@ export const updateRole = (role) => (dispatch) => {
       });
     })
     .catch((error) => {
-      // console.log("error User update", error)
       //error.clientMessage = "Can't update User"
       toast.error(error, {
         position: "top-right",
@@ -141,9 +138,7 @@ export const accessRights = (queryParams) => (dispatch) => {
   return requestFromServer
     .getAllAccessRights(queryParams)
     .then((response) => {
-      // console.log("response", response)
       const queryParams = response.data?.data;
-      // console.log("queryParams", queryParams)
       dispatch(actions.accessRightsFetched(queryParams));
     })
     .catch((error) => {
@@ -153,7 +148,6 @@ export const accessRights = (queryParams) => (dispatch) => {
 };
 
 export const updateAccessRightByRoleAndResourceId = (role) => (dispatch) => {
-  // console.log("updatedUser data", role)
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
     .updateAccessRightByRoleAndResourceId(role)
@@ -170,7 +164,6 @@ export const updateAccessRightByRoleAndResourceId = (role) => (dispatch) => {
       });
     })
     .catch((error) => {
-      // console.log("error User update", error)
       //error.clientMessage = "Can't update User"
       toast.error(error, {
         position: "top-right",

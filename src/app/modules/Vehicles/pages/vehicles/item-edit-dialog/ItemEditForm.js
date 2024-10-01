@@ -39,8 +39,6 @@ export function ItemEditForm({
   const [defSubcenter, setDefaultSubCenter] = useState([]);
   const [defDriver, setDefaultDriver] = useState([]);
 
-  console.log("defSubcenter", defSubcenter);
-  //console.log("item", item);
   // useEffect(() => {
   //   dispatch(fetchDrivers(cetnerId));
   // }, [cetnerId]);
@@ -57,7 +55,6 @@ export function ItemEditForm({
   };
   const onChangeSubcenterdOption = (e) => {
     //setCenterId(e.value);
-    // console.log("E value", e);
     // //dispatch(fetchAllSubCenter())
   };
 
@@ -72,7 +69,6 @@ export function ItemEditForm({
   const drivers = useSelector((state) => state?.vehicles?.drivers);
   const { dashboard } = useSelector((state) => state);
 
-  //console.log("dashboard", dashboard);
   useEffect(
     (e) => {
       item.tempCenterId && dispatch(fetchAllSubCenter(item.tempCenterId));
@@ -96,10 +92,8 @@ export function ItemEditForm({
 
   useEffect(() => {
     const getDefaultValue = dashboard?.allSubCenter.filter((e) => {
-      //console.log("e", e);
       return e.value == item.tempSubCenterId;
     });
-    // console.log("getDefaultValue", getDefaultValue);
     setDefaultSubCenter(getDefaultValue);
   }, [dashboard?.allSubCenter]);
 
@@ -129,7 +123,6 @@ export function ItemEditForm({
         validationSchema={itemEditSchema}
         onSubmit={(values) => {
           enableLoading();
-          //console.log("values", values);
           saveItem(values)
             .then(() => disableLoading())
             .catch((error) => alert("something went wrong"));
@@ -493,7 +486,6 @@ export function ItemEditForm({
                         onChange={(e) => {
                           handleChange(e);
                           setDriverId(e.target.value);
-                          console.log("Set driver id", driverId);
                         }}
                         value={values.driverId}
                         onBlur={handleBlur}

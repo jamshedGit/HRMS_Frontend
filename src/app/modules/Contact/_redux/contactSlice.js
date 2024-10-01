@@ -39,8 +39,8 @@ export const contactSlice = createSlice({
             }
         },
         ContactFetched: (state, action) => {
-            // console.log(action)
-            console.log("user slice",action.payload)
+            // 
+            
             const entities = action.payload.data?.data.rows;
             console.log("ent Contact",entities)
             const totalResult = action.payload.data?.data.totalResults;
@@ -53,8 +53,8 @@ export const contactSlice = createSlice({
 
          //get User By ID
          ContactFetchedForEdit: (state, action) => {
-            console.log("get user detail from receipt slice")
-            console.log(action);
+            
+            ;
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
@@ -62,8 +62,8 @@ export const contactSlice = createSlice({
 
         //get User By ID
         userFetched: (state, action) => {
-            console.log("get user detail from receipt slice")
-            console.log(action);
+            
+            ;
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;

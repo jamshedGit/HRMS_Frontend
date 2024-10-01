@@ -39,7 +39,7 @@ export const employee_transfer_slice = createSlice({
             }
         },
         employeeTransferFetched: (state, action) => {
-            // console.log(action)
+            // 
            
             
             const entities = action.payload.data?.data.rows;
@@ -53,8 +53,8 @@ export const employee_transfer_slice = createSlice({
 
          //get User By ID
          employeeTransferFetchedForEdit: (state, action) => {
-            console.log("get user detail from receipt slice")
-            console.log(action);
+            
+            ;
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
@@ -62,8 +62,8 @@ export const employee_transfer_slice = createSlice({
 
         //get User By ID
         userFetched: (state, action) => {
-            console.log("get user detail from receipt slice")
-            console.log(action);
+            
+            ;
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;

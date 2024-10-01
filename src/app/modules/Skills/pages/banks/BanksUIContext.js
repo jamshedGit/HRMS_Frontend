@@ -35,8 +35,6 @@ export function BanksUIProvider({ BanksUIEvents, children }) {
    
   };
 
-  console.log("acadenuc ui events",BanksUIEvents);
-
   const value = {
     queryParams,
     setQueryParamsBase,

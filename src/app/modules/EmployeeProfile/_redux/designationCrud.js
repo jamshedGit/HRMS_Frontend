@@ -14,7 +14,7 @@ export function createEmpProfile(body) {
 }
 // Read
 export function getAllEmpProfile(body) {
-  console.log("body",body);
+  
   return axios.post(`${USERS_URL}/profile/read-all-profile`, body);
 }
 
@@ -37,8 +37,7 @@ export function updateEmpProfile(religion) {
 
 //Delete
 export function deleteEmpProfile(body) {
-  console.log("body")
-  console.log(body);
+  
   return axios.patch(`${USERS_URL}/profile/delete-profile`, body);
 }
 

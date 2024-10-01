@@ -44,7 +44,7 @@ export function BanksTable() {
     }},
     shallowEqual
   );
-  console.log("currentState", currentState);
+  
   
   const { totalCount, entities, listLoading } = currentState;
 
@@ -54,7 +54,7 @@ export function BanksTable() {
 
   useEffect(() => {
     bankUIProps.setIds([]);
-    console.log("test 2",bankUIProps.queryParams)
+    
     dispatch(actions.fetchUsers(bankUIProps.queryParams));
   }, [bankUIProps.queryParams, dispatch, totalCount]);
 

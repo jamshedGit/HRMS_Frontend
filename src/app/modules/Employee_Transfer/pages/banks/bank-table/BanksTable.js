@@ -48,7 +48,7 @@ export function BanksTable() {
     },
     shallowEqual
   );
-  console.log("currentState", currentState);
+  
 
   const { totalCount, entities, listLoading } = currentState;
 

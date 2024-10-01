@@ -39,8 +39,8 @@ export const earningSlice = createSlice({
             }
         },
         earningFetched: (state, action) => {
-            // console.log(action)
-            console.log("user slice",action.payload)
+            // 
+            
             
             const entities = action.payload.data?.data.rows;
             console.log("ent earning",entities)
@@ -54,8 +54,8 @@ export const earningSlice = createSlice({
 
          //get User By ID
          earningFetchedForEdit: (state, action) => {
-            console.log("get user detail from receipt slice")
-            console.log(action);
+            
+            ;
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
@@ -63,8 +63,8 @@ export const earningSlice = createSlice({
 
         //get User By ID
         userFetched: (state, action) => {
-            console.log("get user detail from receipt slice")
-            console.log(action);
+            
+            ;
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;

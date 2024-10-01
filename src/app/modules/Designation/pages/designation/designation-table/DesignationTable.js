@@ -37,14 +37,14 @@ console.log("designation in")
 
   //console.log("queryparms", usersUIProps.queryparms)
   const { currentState, userAccess } = useSelector(
-    (state) => {  console.log("state ",state); return {
+    (state) => {   return {
       
       currentState: state.designation,
       userAccess: state?.auth?.userAccess["Designation"],
     }},
     shallowEqual
   );
-  console.log("currentState", currentState);
+  
   
   const { totalCount, entities, listLoading } = currentState;
 

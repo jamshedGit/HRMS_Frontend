@@ -85,8 +85,6 @@ export function DesignationEditForm({
           // //  obj.empPictureIsMandatory = obj.empPictureIsMandatory
           // obj.probationPolicyInMonth = "6"
           // obj.contractualPolicyInMonth = "12";
-           console.log("values employee policy obj", obj);
-          // console.log("ee:", user);
 
 
           enableLoading();

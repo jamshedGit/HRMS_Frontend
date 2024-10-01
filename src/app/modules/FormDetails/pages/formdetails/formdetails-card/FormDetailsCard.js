@@ -28,7 +28,6 @@ export function FormCard() {
     }),
     shallowEqual
   )
-  console.log("userAccess Temp details", userAccess)
   const accessUser = userAccess.find(
     (item) => item.componentName === "CreateChildForms"
   )

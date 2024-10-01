@@ -24,7 +24,6 @@ import { Formik, Field } from "formik";
 // import { RolesFilter } from "./role-filter/RolesFilter"
 export function AccessRightPage() {
   // const rolesUIContext = useRolesUIContext()
-  // //console.log("RoleUIContext", rolesUIContext)
 
   // const rolesUIProps = useMemo(() => {
   //   return {

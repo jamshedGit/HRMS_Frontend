@@ -69,13 +69,10 @@ export function RoleEditDialog({ id, show, onHide }) {
 
   // const saveRole = (role) => {
   //   if (!id) {
-  //     // console.log("i'm in if and role is", role)
   //     dispatch(actions.createRole(role)).then(() => onHide())
   //   } else {
-  //     // console.log("i'm in Else Section")
   //   }
   // }
-  // console.log("RoleState", actionsLoading)
   return (
     <Modal
       size="sm"

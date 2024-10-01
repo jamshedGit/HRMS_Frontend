@@ -6,19 +6,15 @@ const { actions } = usersSlice;
 // const { roleActions } = getAllrolesSlice
 
 export const fetchUsers = (queryparm) => async (dispatch) => {
-  //console.log("Receive QP", queryparm)
   dispatch(actions.startCall({ callType: callTypes.list }));
 
   return requestFromServer
     .getAllUsers(queryparm)
     .then((response) => {
-      //console.log("User Fetch Response is: ", response)
 
-      //console.log("User response: ", totalResult)
       dispatch(actions.usersFetched(response));
     })
     .catch((error) => {
-      //console.log("Can't find user", error)
       error.clientMessage = "Can't find customers";
       dispatch(actions.catchError({ error, callType: callTypes.list }));
     });
@@ -49,7 +45,6 @@ export const deleteUser = (id) => (dispatch) => {
   return requestFromServer
     .deleteUser({ id: id })
     .then((response) => {
-      //console.log("response from delete user ", response.data.message)
       dispatch(actions.userDeleted({ id: id }));
       toast.success("Successfully Deleted", {
         position: "top-right",
@@ -72,7 +67,6 @@ export const activeUser = (id) => (dispatch) => {
   return requestFromServer
     .deleteUser({ id: id })
     .then((response) => {
-      //console.log("response from delete user ", response.data.message)
       dispatch(actions.userDeleted({ id: id }));
       toast.success("Successfully Activated", {
         position: "top-right",
@@ -95,7 +89,6 @@ export const createUser = (userForCreation, disbaleLoading, onHide) => (
 ) => {
   userForCreation.phNo = userForCreation.phNo.toString();
   userForCreation.cnic = userForCreation.cnic.toString();
-  // console.log("userForCreation", userForCreation);
   return requestFromServer
     .createUser(userForCreation)
     .then((res) => {
@@ -135,7 +128,6 @@ export const updateUser = (user, disbaleLoading, onHide) => (dispatch) => {
     .updateUser(user)
     .then((response) => {
       const updatedUser = response.data?.data;
-      // console.log("userAction Res", response)
       dispatch(actions.userUpdated({ updatedUser }));
       dispatch(actions.startCall({ callType: callTypes.action }));
       disbaleLoading();
@@ -151,7 +143,6 @@ export const updateUser = (user, disbaleLoading, onHide) => (dispatch) => {
       });
     })
     .catch((error) => {
-      // console.log("error User update", error)
       //error.clientMessage = "Can't update User"
       dispatch(actions.catchError({ error, callType: callTypes.action }));
       disbaleLoading();
@@ -174,7 +165,6 @@ export const fetchRoles = () => (dispatch) => {
     .getAllRoles()
     .then((response) => {
       const entities = response.data?.data;
-      // console.log("User entities: ", entities)
       dispatch(actions.RolesFetched(entities));
     })
     .catch((error) => {

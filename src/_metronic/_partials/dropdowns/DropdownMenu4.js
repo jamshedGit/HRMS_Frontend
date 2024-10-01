@@ -7,8 +7,6 @@ import {
 } from "../../redux/dashboardActions";
 
 export function DropdownMenu4(column, seletedCity) {
-  console.log("seletedCity", seletedCity);
-  //console.log("row.veh", row.row.vehicleid);
   const dispatch = useDispatch();
 
   const standToOff = () => {
@@ -21,7 +19,6 @@ export function DropdownMenu4(column, seletedCity) {
     // dispatch(fetchDashboardVehicles({ cityId: +cityId }));
   };
 
-  // console.log("seletedCity", seletedCity);
   return (
     <>
       {/*begin::Navigation*/}

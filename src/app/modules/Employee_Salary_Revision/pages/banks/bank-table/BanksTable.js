@@ -130,7 +130,7 @@ export function BanksTable(save_salary_revision,
         console.log("grade", gradeId, employeeTypeId);
         const response = await axios.post(`${USERS_URL}/employee_salary_earning/read-compensation-grade-employeeType`, { gradeId: gradeId, employeeTypeId: employeeTypeId || 0 });
 
-        console.log("response", response);
+        ;
         setDefaultNew_MapEarningDeductionList(response?.data?.data);
 
       }

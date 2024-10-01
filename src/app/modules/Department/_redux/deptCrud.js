@@ -11,7 +11,7 @@ export function createDept(body) {
 
 // Read
 export function getAllDept(body) {
-  console.log("body",body);
+  
   return axios.post(`${USERS_URL}/department/read-all-dept`, body);
 } 
  

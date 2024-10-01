@@ -56,9 +56,9 @@ export function BanksFilter({ listLoading, user, setCity,
   const [receiptDateFrom, setReceiptDateFrom] = useState(null);
   const [receiptDateTo, setReceiptDateTo] = useState(null);
   useEffect(() => {
-    console.log("bank step 1")
+    
     if (countryId) {
-      console.log("countryId id drop", countryId);
+      
       dispatch(fetchAllCity(1));
     }
   }, [countryId, dispatch]);
@@ -66,7 +66,7 @@ export function BanksFilter({ listLoading, user, setCity,
   useEffect(() => {
     if (cityId) {
 
-      console.log("city id drop", cityId);
+      
       dispatch(fetchAllCityCenters(cityId));
     }
   }, [cityId, dispatch]);

@@ -43,7 +43,7 @@ export function ReceiptsTable() {
     }),
     shallowEqual
   );
-  console.log("currentState", currentState);
+  
   const { totalCount, entities, listLoading } = currentState;
 
   //totalCount = 10

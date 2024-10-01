@@ -13,7 +13,7 @@ export function createfiscalSetup(body) {
 
 // Read
 export function getAllfiscalSetup(body) {
-  console.log("body",body);
+  
   return axios.post(`${USERS_URL}/fiscal_setup/read-all-fiscal-setup`, body);
 }
 
@@ -37,8 +37,7 @@ export function updatefiscalSetup(body) {
 
 //Delete
 export function deletefiscalSetup(body) {
-  console.log("body")
-  console.log(body);
+  
   return axios.patch(`${USERS_URL}/fiscal_setup/delete-fiscal-setup`, body);
 }
 

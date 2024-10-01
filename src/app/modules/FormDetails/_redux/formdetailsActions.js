@@ -13,7 +13,7 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
     
     .then((response) => {
       //  console.log("user action receipt fetched 321")
-      console.log("response", response)
+      
       dispatch(actions.formFetched(response));
     })
     .catch((error) => {
@@ -31,7 +31,7 @@ export const customfetchFormDetail = (queryparm) => async (dispatch) => {
     
     .then((response) => {
       //  console.log("user action receipt fetched 321")
-      console.log("response", response)
+      
       dispatch(actions.customFetchedList(response));
     })
     .catch((error) => {
@@ -59,7 +59,7 @@ export const fetchChildForms = (id) => async (dispatch) => {
 
 export const fetchUser = (id) => (dispatch) => {
 
-  console.log("User Action id " + id)
+  
   if (!id) {
     return dispatch(actions.formFetchedForEdit({ userForEdit: undefined }));
   }

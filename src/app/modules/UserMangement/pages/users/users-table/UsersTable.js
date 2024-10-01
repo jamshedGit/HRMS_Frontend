@@ -34,7 +34,6 @@ export function UsersTable() {
     };
   }, [usersUIContext]);
 
-  //console.log("queryparms", usersUIProps.queryparms)
   const { currentState, userAccess } = useSelector(
     (state) => ({
       currentState: state.users,
@@ -42,9 +41,7 @@ export function UsersTable() {
     }),
     shallowEqual
   );
-  //console.log("currentState", currentState);
   const { totalCount, entities, listLoading } = currentState;
-  //console.log("listLoading", listLoading);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -196,7 +193,6 @@ export function UsersTable() {
     page: usersUIProps.queryParams.pageNumber,
   };
 
-  // console.log("entities", entities);
 
   return (
     <>

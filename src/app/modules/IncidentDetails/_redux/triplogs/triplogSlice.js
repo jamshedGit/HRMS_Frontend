@@ -67,7 +67,6 @@ export const TriplogSlice = createSlice({
     //   state.entities.push(entities)
     // },
     tripUpdated: (state, action) => {
-      // console.log("state", state.driverTripForEdit);
       state.error = null;
       state.actionsLoading = false;
       // state.entities.push(action.payload);

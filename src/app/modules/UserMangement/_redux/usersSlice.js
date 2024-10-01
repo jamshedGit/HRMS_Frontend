@@ -39,10 +39,8 @@ export const usersSlice = createSlice({
       }
     },
     usersFetched: (state, action) => {
-      console.log("user management slice")
       const entities = action.payload.data?.data.rows;
       const totalResult = action.payload.data?.data.totalResults;
-      console.log(entities);
       // const entities = action.payload
       //const length = entities.length
       state.listLoading = false;
@@ -64,7 +62,6 @@ export const usersSlice = createSlice({
       );
     },
     userCreated: (state, action) => {
-      // console.log("action payload for user", action.payload);
       state.actionsLoading = false;
       state.error = null;
       state.entities.unshift(action.payload);
@@ -73,12 +70,10 @@ export const usersSlice = createSlice({
       state.error = null;
       state.actionsLoading = false;
       // state.entities.push(action.payload)
-      // console.log("user update payload", action.payload);
       state.entities = state.entities.map((entity) => {
         if (entity.id === action.payload.updatedUser.id) {
           
                 
-                console.log('slice 1', JSON.stringify(state.entities),JSON.stringify(action.payload));
 
           return action.payload.updatedUser;
         }

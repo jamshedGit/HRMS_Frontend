@@ -8,8 +8,6 @@ export function RoleLoadingDialog() {
     shallowEqual
   )
 
-  console.log("isLoading", isLoading)
-
   //looking for loading/dispatch
 
   useEffect(() => {}, [isLoading])

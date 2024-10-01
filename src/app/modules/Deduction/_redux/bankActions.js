@@ -8,7 +8,7 @@ const { actions } = deductionSlice;
 export const fetchUsers = (queryparm) => async (dispatch) => {
   // console.log("Receive QPsss", queryparm)
   dispatch(actions.startCall({ callType: callTypes.list }));
-  console.log("test query param", queryparm)
+  
   return requestFromServer.getAllDeduction({...queryparm,id:'null'})
     // .getAllReceipts({
     //   filter: {
@@ -20,7 +20,7 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
     // })
     .then((response) => {
       //  console.log("user action receipt fetched 321")
-      console.log("response", response)
+      
       dispatch(actions.deductionFetched(response));
     })
     .catch((error) => {
@@ -32,7 +32,7 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
 
 export const fetchUser = (id) => (dispatch) => {
 
-  console.log("User Action id " + id)
+  
   if (!id) {
     return dispatch(actions.deductionFetchedForEdit({ userForEdit: undefined }));
   }

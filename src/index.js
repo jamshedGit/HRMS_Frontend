@@ -28,7 +28,6 @@ import {
 import { MetronicI18nProvider } from "./_metronic/i18n"
 
 const { PUBLIC_URL, REACT_APP_ENV } = process.env
-//console.log("Env", process.env)
 // This the mock-axios-data setup. You can comment this part when you want to integrate your server.
 // Don't forget to update server url in .env file
 
@@ -53,14 +52,11 @@ const { PUBLIC_URL, REACT_APP_ENV } = process.env
  */
 
 if (REACT_APP_ENV !== "server") {
-  console.log("Get Mock Data")
   // _redux.mockAxios(axios)
   _redux.setupAxios(axios, store)
 } else {
-  //console.log("Get Server Data")
   _redux.setupAxios(axios, store)
 }
-//console.log("Initial Store State in index.js", store.getState())
 ReactDOM.render(
   <MetronicI18nProvider>
     <MetronicLayoutProvider>

@@ -8,12 +8,12 @@ const { actions } = empProfileSlice;
 export const fetchUsers = (queryparm) => async (dispatch) => {
   // console.log("Receive QPsss", queryparm)
   dispatch(actions.startCall({ callType: callTypes.list }));
-  console.log("test query param", queryparm)
+  
   return requestFromServer.getAllEmpProfile(queryparm)
     
     .then((response) => {
       //  console.log("user action receipt fetched 321")
-      console.log("response", response)
+      
       dispatch(actions.profileFetched(response));
     })
     .catch((error) => {
@@ -26,12 +26,12 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
 export const fetchContactInfo = (queryparm) => async (dispatch) => {
   // console.log("Receive QPsss", queryparm)
   dispatch(actions.startCall({ callType: callTypes.list }));
-  console.log("test query param", queryparm)
+  
   return requestFromServer.getAllContactInfo(queryparm)
     
     .then((response) => {
       //  console.log("user action receipt fetched 321")
-      console.log("response", response)
+      
       dispatch(actions.profileFetched(response));
     })
     .catch((error) => {
@@ -43,7 +43,7 @@ export const fetchContactInfo = (queryparm) => async (dispatch) => {
 
 export const fetchUser = (id) => (dispatch) => {
 
-  console.log("User Action id " + id)
+  
   if (!id) {
     return dispatch(actions.emp_profileFetchedForEdit({ userForEdit: undefined }));
   }

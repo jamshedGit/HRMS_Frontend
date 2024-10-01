@@ -4,7 +4,6 @@ import { Formik, Form, Field } from "formik";
 import { Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Fab from "@material-ui/core/Fab";
-import AddIcon from "@material-ui/icons/Add";
 import ClearIcon from "@material-ui/icons/Clear";
 import DatePicker from "react-datepicker";
 import * as Yup from "yup";
@@ -28,8 +27,6 @@ import {
   fetchAllPoliceStations,
 } from "../../../_redux/info-personal/infoActions";
 import { InfoImageSlider } from "../info-image-slider/InfoImageSlider";
-const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
-const nameRegExp = /r'^[a-zA-Z]+$'/;
 
 // Validation schema
 const formSchema = Yup.object().shape({

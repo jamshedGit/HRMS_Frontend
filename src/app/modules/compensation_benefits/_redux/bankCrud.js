@@ -15,7 +15,7 @@ export function createCompensationBenefits(body) {
 
 // Read
 export function getAllCompensationBenefits(body) {
-  console.log("body",body);
+  
   return axios.post(`${USERS_URL}/compensation/read-all-compensation-benefits`, body);
 }
 
@@ -34,8 +34,7 @@ export function updateCompensationBenefits(CompensationBenefits) {
 
 //Delete
 export function deleteCompensationBenefits(body) {
-  console.log("body")
-  console.log(body);
+  
   return axios.patch(`${USERS_URL}/compensation/delete-compensation-benefits`, body);
 }
 

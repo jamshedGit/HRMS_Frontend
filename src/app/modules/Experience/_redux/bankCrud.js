@@ -15,7 +15,7 @@ export function createExperience(body) {
 
 // Read
 export function getAllExperiences(body) {
-  console.log("body",body);
+  
   return axios.post(`${USERS_URL}/experience/read-all-experience`, body);
 }
 
@@ -34,8 +34,7 @@ export function updateExperience(experience) {
 
 //Delete
 export function deleteExperience(body) {
-  console.log("body")
-  console.log(body);
+  
   return axios.patch(`${USERS_URL}/experience/delete-experience`, body);
 }
 

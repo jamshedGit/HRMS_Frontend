@@ -14,7 +14,6 @@ import { RegionTable } from "../region-table/RegionTable"
 
 export function RegionCard() {
   const banksUIContext = useBanksUIContext()
-  //console.log("banksUIContext", banksUIContext)
   const BanksUIProps = useMemo(() => {
     return {
       newBankButtonClick: banksUIContext.newBankButtonClick,
@@ -28,7 +27,6 @@ export function RegionCard() {
     }),
     shallowEqual
   )
-  console.log("userAccess Temp region",userAccess)
   const accessUser = userAccess.find(
     (item) => item.componentName === "CreateRegion"
   )

@@ -4,7 +4,7 @@ import { LayoutSplashScreen, ContentRoute } from "../../../../_metronic/layout";
 import { PayrollMonthSetupPage } from "./forms/PayrollMonthPage";
 
 export default function PayrollMonthSetupManagement() {
-  console.log('Fiscal Setup Page mein aya')
+  
   return (
     <Suspense fallback={<LayoutSplashScreen />}>
       <Switch>
