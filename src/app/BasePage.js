@@ -22,6 +22,7 @@ const Centers = lazy(() => import("./modules/Centers/pages"));
 const IBSModule = lazy(() => import("./modules/IBS/pages/index"));
 const EDRSModule = lazy(() => import("./modules/EDRS/pages/index"));
 const BankModule = lazy(() => import("./modules/Banks/pages/index"));
+const salarypolicyModule = lazy(() => import("./modules/Salarypolicy/pages/index"));
 const BranchModule = lazy(() => import("./modules/BankBranch/pages/index"));
 const DepartmenModule = lazy(() => import("./modules/Department/pages/index"));
 const EmployeeTypeModule = lazy(() => import("./modules/EmployeeType/pages/index"));
@@ -66,6 +67,7 @@ const ROUTES = {
   ibs: IBSModule,
   edrs: EDRSModule,
   bank: BankModule,
+  salarypolicy:salarypolicyModule,
   branch:BranchModule,
   department:DepartmenModule,
   emptype: EmployeeTypeModule,
