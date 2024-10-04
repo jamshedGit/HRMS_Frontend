@@ -31,7 +31,11 @@ export function BanksUIProvider({ BanksUIEvents, children }) {
     });
   }, []);
   const initUser = {
-    Name: "",
+    Id:"",
+    type: "",
+    value: "",
+    multiplier: "",
+    divisor: "",
   
   };
 

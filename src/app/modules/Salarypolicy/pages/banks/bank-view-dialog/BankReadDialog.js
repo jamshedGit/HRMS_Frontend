@@ -4,7 +4,7 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux"
 import { BankReadForm } from "./BankReadForm"
 import { UserReadDialogHeader } from "./BankReadDialogHeader"
 import { useBanksUIContext } from "../BanksUIContext"
-import * as actions from "../../../_redux/bankActions"
+import * as actions from "../../../_redux/salarypolicyActions"
 
 export function BankEditDialog({ id, show, onHide }) {
   const title = "BankEditDialog"
@@ -19,7 +19,7 @@ export function BankEditDialog({ id, show, onHide }) {
   const dispatch = useDispatch()
   const { actionsLoading, userForEdit, roles, centers } = useSelector(
     (state) => ({
-      
+
       actionsLoading: state.users.actionsLoading,
       userForEdit: state.receipt.userForEdit,
       roles: state.users.roles,
@@ -39,7 +39,7 @@ export function BankEditDialog({ id, show, onHide }) {
   }, [id, dispatch])
   console.log("userForEdit", userForEdit)
   const saveBank = (user) => {
-     console.log("CreateUserResponse", user)
+    console.log("CreateUserResponse", user)
     if (!id) {
       dispatch(actions.createUser(user)).then((res) => {
         onHide()
@@ -49,7 +49,7 @@ export function BankEditDialog({ id, show, onHide }) {
       const userUpdatedFields = {
         Id: user.Id,
         Name: user.Name,
-       
+
       }
       dispatch(actions.updateUser(userUpdatedFields)).then(() => onHide())
     }

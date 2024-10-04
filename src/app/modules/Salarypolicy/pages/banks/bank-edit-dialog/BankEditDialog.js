@@ -4,7 +4,7 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { BankEditForm } from "./BankEditForm";
 import { BankEditDialogHeader } from './BankEditDialogHeader'
 
-import * as actions from "../../../_redux/bankActions";
+import * as actions from "../../../_redux/salarypolicyActions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useBanksUIContext } from "../BanksUIContext";
@@ -14,7 +14,7 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
   const [loading, setLoading] = useState(false);
   const title = "BankEditDialog";
   const banksUIContext = useBanksUIContext();
-
+console.log("id for salary policy",id)
  
   const usersUIProps = useMemo(() => {
     return {
@@ -47,15 +47,17 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
     isuserForRead,
   } = useSelector((state) => ({
     
+    
     actionsLoading: state.users.actionsLoading,
     user: state.users, // change for users to receipt
-    userForEdit: state.bank.userForEdit,
+    userForEdit: state.salarypolicy.userForEdit,
     roles: state.users.roles,
     centers: state.users.centers,
     userStatusTypes: state.users.userStatusTypes,
-    isuserForRead: state.bank.userForRead,
+    isuserForRead: state.salarypolicy.userForRead,
   }));
 
+  console.log("for salary policy isuserForRead",userForEdit)
   // useEffect(() => {
   //   if (actionsLoading) {
   //     onHide();
@@ -79,7 +81,7 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
   // }, [actionsLoading]);
   //console.log("userForEdit", userForEdit);
 
-  const saveBank = (user) => {
+  const saveBank = async (user) => {
 
     if (!id) {
       console.log("bank edit dialog");
@@ -104,26 +106,26 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
       //   return item.value === +user.status;
       // });
      
-      console.log("getUserStatus", user);
+      console.log("salary policy getUserStatus", user);
 
-      // const bankUpdatedFields = {
-      //   Id: user.Id,
-      //   Type: user.Type,
-      //   Value: user.Value,
-      //   Multipiler: user.Multipiler,
-      //   Divisor: user.Divisor,
-      // };
-
-      
       const bankUpdatedFields = {
         Id: user.Id,
-        Name: user.Name,
-        
+        type: user.type,
+        value: user.value,
+        multiplier: user.multiplier,
+        divisor: user.divisor,
       };
 
+      
+      // const bankUpdatedFields = {
+      //   Id: user.Id,
+      //   Name: user.Name,
+        
+      // };
+      console.log("salary policy getUserStatus", user);
       console.log("bankUpdatedFields", bankUpdatedFields);
-      dispatch(actions.updateBank(bankUpdatedFields, disbaleLoading, onHide));
-      dispatch(actions.fetchUsers(usersUIProps.queryParams));
+     await dispatch(actions.updateBank(bankUpdatedFields, disbaleLoading, onHide));
+     await dispatch(actions.fetchUsers(usersUIProps.queryParams));
     }
   };
 

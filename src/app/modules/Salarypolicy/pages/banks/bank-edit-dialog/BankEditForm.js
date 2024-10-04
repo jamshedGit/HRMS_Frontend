@@ -1,6 +1,3 @@
-
-
-
 import React from "react";
 import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
@@ -9,19 +6,36 @@ import { Input } from "../../../../../../_metronic/_partials/controls"; // Adjus
 import { useDispatch, useSelector } from "react-redux";
 
 // Validation schema
+// const salarypolicyEditSchema = Yup.object().shape({
+//   type: Yup.string().required("Required*"),
+//   value: Yup.string().when("Name", {
+//     is: "Ratio of Year",
+//     then: Yup.string().nullable(), // Change required to nullable for disabling
+//   }),
+//   multiplier: Yup.number().when("Name", {
+//     is: "Month Days",
+//     then: Yup.number().nullable(),
+//   }),
+//   divisor: Yup.number().when("Name", {
+//     is: "Fixed Days",
+//     then: Yup.number().nullable(),
+//   }),
+// });
+
+
 const salarypolicyEditSchema = Yup.object().shape({
   type: Yup.string().required("Required*"),
-  value: Yup.string().when("Name", {
-    is: "Ratio of Year",
-    then: Yup.string().nullable(), // Change required to nullable for disabling
-  }),
-  multiplier: Yup.number().when("Name", {
-    is: "Month Days",
-    then: Yup.number().nullable(),
-  }),
-  divisor: Yup.number().when("Name", {
+  value: Yup.number().when("type", {
     is: "Fixed Days",
-    then: Yup.number().nullable(),
+    then: Yup.number().required("Value is required for Ratio of Year"),
+  }),
+  multiplier: Yup.number().when("type", {
+    is: "Ratio of Year",
+    then: Yup.number().required("Multiplier is required for Month Days"),
+  }),
+  divisor: Yup.number().when("type", {
+    is: "Ratio of Year",
+    then: Yup.number().required("Divisor is required for Fixed Days"),
   }),
 });
 
@@ -45,7 +59,7 @@ export function BankEditForm({
       <label>{label}</label>
       <select {...field} className="form-control" onChange={onChange}>
         <option value="">Select Type</option>
-        {options.map(option => (
+        {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
           </option>
@@ -56,16 +70,19 @@ export function BankEditForm({
       )}
     </div>
   );
-
+  console.log("initialValues user.Type", user);
   return (
     <Formik
       enableReinitialize={true}
-      initialValues={{
-        type:  '',
-        value:0,
-        multiplier:0,
-        divisor: 0,
-      }}
+      // initialValues={{
+      //   Id:user.Id || '',
+      //   type: user.type ||  '',
+      //   value:user.value || 0,
+      //   multiplier: user.multiplier || 0,
+      //   divisor: user.divisor || 0,
+      // }}
+
+      initialValues={user}
       validationSchema={salarypolicyEditSchema}
       onSubmit={(values) => {
         console.log("values", values);
@@ -99,70 +116,134 @@ export function BankEditForm({
                           setFieldValue("divisor", "");
                         }
                         if (e.target.value === "Fixed Days") {
-                          setFieldValue("multiplier", 0); 
-                          setFieldValue("divisor", 0); 
+                          setFieldValue("multiplier", 0);
+                          setFieldValue("divisor", 0);
                           setFieldValue("value", "");
                         }
                         if (e.target.value === "Month Days") {
-                          setFieldValue("multiplier", 0); 
-                          setFieldValue("divisor",0);
-                          setFieldValue("value",1); 
+                          setFieldValue("multiplier", 0);
+                          setFieldValue("divisor", 0);
+                          setFieldValue("value", 1);
                         }
                       }}
                     />
                   </div>
-                  <div className="col-12 col-md-4 mt-3">
-                    <Field
-                      name="value"
-                      component={Input}
-                      placeholder="Value"
-                      label="Value"
-                      type="number"
-                      disabled={values.type == "Ratio of Year" || values.type === "Month Days"}
-                    />
-                  </div>
-                  <div className="col-12 col-md-4 mt-3">
-                    <Field
+
+                 
+                    {/* <Field
                       name="multiplier"
                       component={Input}
                       placeholder="Enter Multiplier"
                       label="Multiplier"
                        type="number"
                       disabled={values.type == "Month Days" || values.type == "Fixed Days"}
-                    />
-                  </div>
-                  <div className="col-12 col-md-4 mt-3">
-                    <Field
+                    /> */}
+
+                    {!(
+                      values.type === "Month Days" ||
+                      values.type === "Fixed Days"
+                    ) && (
+                      <div className="col-12 col-md-4 mt-3">
+                      <Field
+                        name="multiplier"
+                        component={Input}
+                        placeholder="Enter Multiplier"
+                        label="Multiplier"
+                        type="number"
+                 
+                      />
+                          </div>
+                    )}
+              
+                 
+                    {/* <Field
                       name="divisor"
                       component={Input}
                       placeholder="Enter Divisor"
                       label="Divisor"
-                       type="number"
-                      disabled={values.type == "Month Days" || values.type == "Fixed Days"}
-                    />
-                  </div>
+                      type="number"
+                      disabled={
+                        values.type == "Month Days" ||
+                        values.type == "Fixed Days"
+                      }
+                    /> */}
+
+                    {!(
+                      values.type === "Month Days" ||
+                      values.type === "Fixed Days"
+                    ) && (
+                      <div className="col-12 col-md-4 mt-3">
+                      <Field
+                        name="divisor"
+                        component={Input}
+                        placeholder="Enter Divisor"
+                        label="Divisor"
+                        type="number"
+                       
+                      />
+                           </div>
+                    )}
+             
+                
+                    {/* <Field
+                      name="value"
+                      component={Input}
+                      placeholder="Value"
+                      label="Value"
+                      type="number"
+                      disabled={
+                        values.type == "Ratio of Year" ||
+                        values.type === "Month Days"
+                      }
+                    /> */}
+
+{!(values.type === "Ratio of Year" || values.type === "Month Days") && (
+    <div className="col-12 col-md-4 mt-3">
+  <Field
+    name="value"
+    component={Input}
+    placeholder="Value"
+    label="Value"
+    type="number"
+  
+  
+  />
+       </div>
+)}
+
+             
                 </div>
               </fieldset>
             </Form>
           </Modal.Body>
           <Modal.Footer>
             {!isUserForRead ? (
-              <button type="button" onClick={onHide} className="btn btn-light btn-elevate">
+              <button
+                type="button"
+                onClick={onHide}
+                className="btn btn-light btn-elevate"
+              >
                 Cancel
               </button>
             ) : (
-              <button type="button" onClick={onHide} className="btn btn-primary btn-elevate">
+              <button
+                type="button"
+                onClick={onHide}
+                className="btn btn-primary btn-elevate"
+              >
                 Ok
               </button>
             )}
-            {!isUserForRead && (
+            {!isUserForRead  && values.type && (
               <button
                 type="submit"
                 onClick={() => handleSubmit()}
                 className="btn btn-primary btn-elevate"
               >
                 Save
-                {loading && <span className="ml-3 mr-3 spinner spinner-white"></span>}
+                {loading && (
+                  <span className="ml-3 mr-3 spinner spinner-white"></span>
+                )}
               </button>
             )}
           </Modal.Footer>

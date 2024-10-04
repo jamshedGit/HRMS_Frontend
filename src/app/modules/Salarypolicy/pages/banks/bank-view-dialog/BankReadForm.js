@@ -8,7 +8,7 @@ import {
   DatePickerField,
 } from "../../../../../../_metronic/_partials/controls"
 import { shallowEqual, useDispatch, useSelector } from "react-redux"
-import * as actions from "../../../_redux/bankActions"
+import * as actions from "../../../_redux/salarypolicyActions"
 
 // Validation schema
 const bankEditSchema = Yup.object().shape({

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls";
-import * as actions from "../../../_redux/bankActions";
+import * as actions from "../../../_redux/salarypolicyActions";
 import { useBanksUIContext } from "../BanksUIContext";
 
 export function BankActiveDialog({ id, status, show, onHide }) {

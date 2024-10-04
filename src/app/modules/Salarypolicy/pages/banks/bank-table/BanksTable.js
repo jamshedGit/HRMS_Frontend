@@ -4,7 +4,7 @@ import paginationFactory, {
   PaginationProvider,
 } from "react-bootstrap-table2-paginator";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import * as actions from "../../../_redux/bankActions";
+import * as actions from "../../../_redux/salarypolicyActions";
 import {
   getHandlerTableChange,
   NoRecordsFoundMessage,
@@ -54,7 +54,8 @@ export function BanksTable() {
 
   useEffect(() => {
     bankUIProps.setIds([]);
-    console.log("test 2",bankUIProps.queryParams)
+    console.log("salarypolicy test 2",bankUIProps.queryParams)
+    console.log("salarypolicy userAccess",bankUIProps.queryParams)
     dispatch(actions.fetchUsers(bankUIProps.queryParams));
   }, [bankUIProps.queryParams, dispatch, totalCount]);
 

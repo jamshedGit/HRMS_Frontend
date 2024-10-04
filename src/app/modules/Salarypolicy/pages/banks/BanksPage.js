@@ -13,7 +13,7 @@ import {
   fetchUserStatusTypes,
   fetchRoles,
   fetchCenters,
-} from "../../_redux/bankActions";
+} from "../../_redux/salarypolicyActions";
 
 
 // dispatch(actions.fetchRoles());
