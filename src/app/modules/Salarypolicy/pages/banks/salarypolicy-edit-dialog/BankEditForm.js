@@ -5,22 +5,6 @@ import * as Yup from "yup";
 import { Input } from "../../../../../../_metronic/_partials/controls"; // Adjust import as needed
 import { useDispatch, useSelector } from "react-redux";
 
-// Validation schema
-// const salarypolicyEditSchema = Yup.object().shape({
-//   type: Yup.string().required("Required*"),
-//   value: Yup.string().when("Name", {
-//     is: "Ratio of Year",
-//     then: Yup.string().nullable(), // Change required to nullable for disabling
-//   }),
-//   multiplier: Yup.number().when("Name", {
-//     is: "Month Days",
-//     then: Yup.number().nullable(),
-//   }),
-//   divisor: Yup.number().when("Name", {
-//     is: "Fixed Days",
-//     then: Yup.number().nullable(),
-//   }),
-// });
 
 
 const salarypolicyEditSchema = Yup.object().shape({
