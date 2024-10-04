@@ -4,10 +4,10 @@ import { Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BanksUIProvider } from "./BanksUIContext";
-import { BankEditDialog } from "./bank-edit-dialog/BankEditDialog";
-import { BankDeleteDialog } from "./bank-delete-dialog/BankDeleteDialog";
-import { BankActiveDialog } from "./bank-active-dialog/BankActiveDialog";
-import { BanksCard } from "./bank-card/BanksCard";
+import { BankEditDialog } from "./salarypolicy-edit-dialog/BankEditDialog";
+import { BankDeleteDialog } from "./salarypolicy-delete-dialog/BankDeleteDialog";
+import { BankActiveDialog } from "./salarypolicy-active-dialog/BankActiveDialog";
+import { BanksCard } from "./salarypolicy-card/BanksCard";
 import { fetchAllCountry } from "../../../../../_metronic/redux/dashboardActions";
 import {
   fetchUserStatusTypes,

@@ -1,5 +1,5 @@
-import * as requestFromServer from "./bankCrud";
-import { salarypolicySlice, callTypes } from "./bankSlice";
+import * as requestFromServer from "./salarypolicyCrud";
+import { salarypolicySlice, callTypes } from "./salarypolicySlice";
 import { toast } from "react-toastify";
 
 const { actions } = salarypolicySlice;

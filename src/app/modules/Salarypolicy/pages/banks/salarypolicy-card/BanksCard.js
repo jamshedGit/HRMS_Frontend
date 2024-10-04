@@ -6,9 +6,9 @@ import {
   CardHeader,
   CardHeaderToolbar,
 } from "../../../../../../_metronic/_partials/controls"
-import { BanksTable } from "../bank-table/BanksTable"
+import { BanksTable } from "../salarypolicy-table/BanksTable"
 import { useBanksUIContext } from "../BanksUIContext"
-import { BanksFilter } from "../bank-filter/BanksFIlter"
+import { BanksFilter } from "../salarypolicy-filter/BanksFIlter"
 import { useSelector, shallowEqual } from "react-redux"
 
 export function BanksCard() {

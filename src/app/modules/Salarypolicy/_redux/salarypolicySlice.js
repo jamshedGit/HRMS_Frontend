@@ -13,6 +13,7 @@ const initialBankState = {
     userForRead: false,
 };
 
+
 export const callTypes = {
     list: "list",
     action: "action",
