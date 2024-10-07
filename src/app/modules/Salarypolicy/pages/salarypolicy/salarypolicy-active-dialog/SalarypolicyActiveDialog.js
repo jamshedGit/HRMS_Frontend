@@ -47,7 +47,7 @@ export function SalarypolicyActiveDialog({ id, status, show, onHide }) {
     dispatch(actions.activeUser(id)).then(() => {
       onHide();
       // refresh list after deletion
-      dispatch(actions.fetchUsers(salarypolicyUIProps .queryParams));
+      dispatch(actions.fetchSalarypolicies(salarypolicyUIProps .queryParams));
       // clear selections list
       // salarypolicyUIProps .setIds([]);
       // closing delete modal

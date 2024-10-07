@@ -67,9 +67,9 @@ console.log("id for salary policy",id)
   //console.log("action", action);
 
   useEffect(() => {
-    dispatch(actions.fetchUser(id));
+    dispatch(actions.fetchSalarypolicy(id));
 
-    // dispatch(actions.fetchUser(salarypolicyUIProps .queryParams))
+    // dispatch(actions.fetchSalarypolicy(salarypolicyUIProps .queryParams))
   }, [id, dispatch]);
 
   // useEffect(() => {
@@ -125,7 +125,7 @@ console.log("id for salary policy",id)
       console.log("salary policy getUserStatus", user);
       console.log("salarypolicyUpdatedFields", salarypolicyUpdatedFields);
      await dispatch(actions.updateSalarypolicy(salarypolicyUpdatedFields, disbaleLoading, onHide));
-     await dispatch(actions.fetchUsers(usersUIProps.queryParams));
+     await dispatch(actions.fetchSalarypolicies(usersUIProps.queryParams));
     }
   };
 

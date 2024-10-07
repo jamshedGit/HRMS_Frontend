@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 const { actions } = salarypolicySlice;
 // const { roleActions } = getAllrolesSlice
 
-export const fetchUsers = (queryparm) => async (dispatch) => {
+export const fetchSalarypolicies = (queryparm) => async (dispatch) => {
   // console.log("Receive QPsss", queryparm)
   dispatch(actions.startCall({ callType: callTypes.list }));
   console.log("test query param", queryparm)
@@ -30,7 +30,7 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
     });
 };
 
-export const fetchUser = (id) => (dispatch) => {
+export const fetchSalarypolicy = (id) => (dispatch) => {
 
   console.log("User Action id " + id)
   if (!id) {

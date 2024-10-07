@@ -56,7 +56,7 @@ export function SalarypolicyTable() {
     salarypolicyUIProps.setIds([]);
     console.log("salarypolicy test 2",salarypolicyUIProps.queryParams)
     console.log("salarypolicy userAccess",salarypolicyUIProps.queryParams)
-    dispatch(actions.fetchUsers(salarypolicyUIProps.queryParams));
+    dispatch(actions.fetchSalarypolicies(salarypolicyUIProps.queryParams));
   }, [salarypolicyUIProps.queryParams, dispatch, totalCount]);
 
   const isAccessForEdit = userAccess?.find(
