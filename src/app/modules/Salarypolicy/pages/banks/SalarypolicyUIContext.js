@@ -51,7 +51,7 @@ export function BanksUIProvider({ BanksUIEvents, children }) {
     newSalarypolicyButtonClick: BanksUIEvents.newSalarypolicyButtonClick,
     openEditSalarypolicyDialog: BanksUIEvents.openEditSalarypolicyDialog,
     openDeleteSalarypolicyDialog: BanksUIEvents.openDeleteSalarypolicyDialog,
-    openActiveBankDialog: BanksUIEvents.openActiveBankDialog,
+    openActiveSalarypolicyDialog: BanksUIEvents.openActiveSalarypolicyDialog,
     openReadBankDialog: BanksUIEvents.openReadBankDialog,
   };
   return (

@@ -39,7 +39,7 @@ export function SalarypolicyPage({ history }) {
     openDeleteSalarypolicyDialog: (id, status) => {
       history.push(`/salarypolicy/read-all-salarypolicy/${id}/${status}/delete`);
     },
-    openActiveBankDialog: (id) => {
+    openActiveSalarypolicyDialog: (id) => {
       history.push(`/salarypolicy/read-all-salarypolicy/${id}/active`);
     },
     openReadBankDialog: (id, isUserRead) => {

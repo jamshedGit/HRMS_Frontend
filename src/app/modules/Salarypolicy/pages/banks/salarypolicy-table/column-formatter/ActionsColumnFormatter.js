@@ -12,7 +12,7 @@ export function ActionsColumnFormatter(
   {
     openEditSalarypolicyDialog,
     openDeleteSalarypolicyDialog,
-    openActiveBankDialog,
+    openActiveSalarypolicyDialog,
     openReadUserDialog,
     isAccessForEdit,
     isAccessForDelete,
@@ -81,7 +81,7 @@ export function ActionsColumnFormatter(
             <a
               title=""
               className="btn btn-icon btn-light btn-hover-success btn-sm mx-3"
-              onClick={() => openActiveBankDialog(row.Id, row.isActive)}
+              onClick={() => openActiveSalarypolicyDialog(row.Id, row.isActive)}
             >
               <span className="svg-icon svg-icon-md svg-icon-success">A</span>
             </a>
