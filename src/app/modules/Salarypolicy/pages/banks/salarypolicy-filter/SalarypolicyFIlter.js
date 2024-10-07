@@ -56,7 +56,7 @@ export function SalarypolicyFIlter({ listLoading, user, setCity,
   const [receiptDateFrom, setReceiptDateFrom] = useState(null);
   const [receiptDateTo, setReceiptDateTo] = useState(null);
   useEffect(() => {
-    console.log("bank step 1")
+    
     if (countryId) {
       console.log("countryId id drop", countryId);
       dispatch(fetchAllCity(1));
@@ -457,7 +457,7 @@ export function SalarypolicyFIlter({ listLoading, user, setCity,
               </div> */}
              {/* <div className="col-12 col-md-12">
              
-                <label>Bank</label>
+                <label>Salarypolicy</label>
                 <input
 
                   className="form-control"
@@ -467,8 +467,8 @@ export function SalarypolicyFIlter({ listLoading, user, setCity,
                   //   setFieldValue("txtBookNo", e.target.value.trim())
                   //   // handleSubmit()
                   // }}
-                  name="txtBankSearch"
-                  placeholder="Enter Bank Name"
+                  name="txtSalarypolicySearch"
+                  placeholder="Enter Salarypolicy Name"
                 // onBlur={handleBlur}
 
                 />
