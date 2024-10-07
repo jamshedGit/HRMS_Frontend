@@ -61,14 +61,7 @@ export const salarypolicySlice = createSlice({
             state.error = null;
         },
 
-        //get User By ID
-        userFetched: (state, action) => {
-            console.log("get user detail from receipt slice")
-            console.log(action);
-            state.actionsLoading = false;
-            state.userForEdit = action.payload.userForEdit;
-            state.error = null;
-        },
+      
         SalarypolicyDeleted: (state, action) => {
 
             state.error = null;
@@ -103,54 +96,7 @@ export const salarypolicySlice = createSlice({
             });
            
         },
-        RolesFetched: (state, action) => {
-            const entities = action.payload;
-            state.listLoading = false;
-            state.error = null;
-            state.roles = entities;
-        },
-        CentersFetched: (state, action) => {
-            const entities = action.payload;
-            state.listLoading = false;
-            state.error = null;
-            state.centers = entities;
-        },
-        UserStatusTypesFetched: (state, action) => {
-            const entities = action.payload;
-            state.listLoading = false;
-            state.error = null;
-            state.userStatusTypes = entities;
-        },
+
 
     },
 });
-
-// export const RoleSlice = createSlice({
-//   name: "getAllRole",
-//   initialState: initialRolesState,
-//   reducers: {
-//     catchError: (state, action) => {
-//       state.error = `${action.type}: ${action.payload.error}`
-//       if (action.payload.callType === callTypes.list) {
-//         state.listLoading = false
-//       } else {
-//         state.actionsLoading = false
-//       }
-//     },
-//     startCall: (state, action) => {
-//       state.error = null
-//       if (action.payload.callType === callTypes.list) {
-//         state.listLoading = true
-//       } else {
-//         state.actionsLoading = true
-//       }
-//     },
-//     dataFetched: (state, action) => {
-//       const entities = action.payload
-//       state.listLoading = false
-//       state.error = null
-//       state.entities = entities
-//       state.totalCount = entities.length
-//     },
-//   },
-// })
