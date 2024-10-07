@@ -10,7 +10,7 @@ export function ActionsColumnFormatter(
   rowIndex,
 
   {
-    openEditBankDialog,
+    openEditSalarypolicyDialog,
     openDeleteBankDialog,
     openActiveBankDialog,
     openReadUserDialog,
@@ -43,7 +43,7 @@ export function ActionsColumnFormatter(
           <a
             title=""
             className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
-            onClick={() => openEditBankDialog(row.Id)}
+            onClick={() => openEditSalarypolicyDialog(row.Id)}
           >
             <span className="svg-icon svg-icon-md svg-icon-primary">
               <SVG

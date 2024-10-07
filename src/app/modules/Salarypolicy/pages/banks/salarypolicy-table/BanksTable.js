@@ -28,7 +28,7 @@ export function BanksTable() {
       setIds: bankUIContext.setIds,
       queryParams: bankUIContext.queryParams,
       setQueryParams: bankUIContext.setQueryParams,
-      openEditBankDialog: bankUIContext.openEditBankDialog,
+      openEditSalarypolicyDialog: bankUIContext.openEditSalarypolicyDialog,
       openDeleteBankDialog: bankUIContext.openDeleteBankDialog,
       openActiveBankDialog: bankUIContext.openActiveBankDialog,
       openReadBankDialog: bankUIContext.openReadBankDialog,
@@ -146,7 +146,7 @@ export function BanksTable() {
       isDummyField: true,
       formatter: ActionsColumnFormatter,
       formatExtraData: {
-        openEditBankDialog: bankUIProps.openEditBankDialog,
+        openEditSalarypolicyDialog: bankUIProps.openEditSalarypolicyDialog,
         openDeleteBankDialog: bankUIProps.openDeleteBankDialog,
         openActiveBankDialog: bankUIProps.openActiveBankDialog,
         openReadBankDialog: bankUIProps.openReadBankDialog,

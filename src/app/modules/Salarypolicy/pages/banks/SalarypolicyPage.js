@@ -22,14 +22,14 @@ import {
 export function SalarypolicyPage({ history }) {
   const dispatch = useDispatch();
   const BanksUIEvents = {
-    newBankButtonClick: () => {
+    newSalarypolicyButtonClick: () => {
       dispatch(fetchAllCountry());
       dispatch(fetchRoles());
       dispatch(fetchCenters());
       dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
       history.push("/salarypolicy/read-all-salarypolicy/new");
     },
-    openEditBankDialog: (id) => {
+    openEditSalarypolicyDialog: (id) => {
       dispatch(fetchAllCountry());
       dispatch(fetchRoles());
       dispatch(fetchCenters());

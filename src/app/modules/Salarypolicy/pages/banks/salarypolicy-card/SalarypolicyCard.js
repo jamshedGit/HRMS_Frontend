@@ -16,8 +16,8 @@ export function SalarypolicyCard() {
   //console.log("SalarypolicyUIContext", SalarypolicyUIContext)
   const SalarypolicyUIProps  = useMemo(() => {
     return {
-      newBankButtonClick: SalarypolicyUIContext.newBankButtonClick,
-      openEditBankDialog: SalarypolicyUIContext.openEditBankDialog,
+      newSalarypolicyButtonClick: SalarypolicyUIContext.newSalarypolicyButtonClick,
+      openEditSalarypolicyDialog: SalarypolicyUIContext.openEditSalarypolicyDialog,
     }
   }, [SalarypolicyUIContext])
 
@@ -45,7 +45,7 @@ export function SalarypolicyCard() {
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={SalarypolicyUIProps .newBankButtonClick}
+                onClick={SalarypolicyUIProps .newSalarypolicyButtonClick}
               >
                 + Add Salary Policy
               </button>
