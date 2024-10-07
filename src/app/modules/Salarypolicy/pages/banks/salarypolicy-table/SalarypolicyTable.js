@@ -18,7 +18,7 @@ import { Pagination } from "../../../../../../_metronic/_partials/controls";
 import { useSalarypolicyUIContext } from "../SalarypolicyUIContext";
 import { DatetimeColumnFormatter } from "../../../../Dashboard/pages/dashboard/last-trips-vehicles-table/column-formatter/CreatedColumnFormatter";
 
-export function BanksTable() {
+export function SalarypolicyTable() {
   //Users UI Context
   const bankUIContext = useSalarypolicyUIContext();
 

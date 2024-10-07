@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardHeaderToolbar,
 } from "../../../../../../_metronic/_partials/controls"
-import { BanksTable } from "../salarypolicy-table/BanksTable"
+import { SalarypolicyTable } from "../salarypolicy-table/SalarypolicyTable"
 import { useSalarypolicyUIContext } from "../SalarypolicyUIContext"
 import { SalarypolicyFIlter } from "../salarypolicy-filter/SalarypolicyFIlter"
 import { useSelector, shallowEqual } from "react-redux"
@@ -73,7 +73,7 @@ export function SalarypolicyCard() {
 
         <CardBody>
 
-          <BanksTable />
+          <SalarypolicyTable />
         </CardBody>
       </Card>
     </>
