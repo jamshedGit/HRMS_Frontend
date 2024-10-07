@@ -33,13 +33,13 @@ export function getBankById(id) {
 }
 
 //Update
-export function updateBank(bank) {
+export function updateSalarypolicy(bank) {
    console.log("updateUser 12", bank)
   return axios.put(`${USERS_URL}/salarypolicy/update-salarypolicy`, bank);
 }
 
 //Delete
-export function deleteBank(body) {
+export function deleteSalarypolicy(body) {
   console.log("body")
   console.log(body);
   return axios.patch(`${USERS_URL}/salarypolicy/delete-salarypolicy`, body);

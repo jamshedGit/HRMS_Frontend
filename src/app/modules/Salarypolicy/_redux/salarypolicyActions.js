@@ -52,10 +52,10 @@ export const fetchUser = (id) => (dispatch) => {
     });
 };
 
-export const deleteBank = (id) => (dispatch) => {
+export const deleteSalarypolicy = (id) => (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
-    .deleteBank({ Id: id })
+    .deleteSalarypolicy({ Id: id })
     .then((response) => {
       //console.log("response from delete user ", response.data.message)
       dispatch(actions.BankDeleted({ Id: id }));
@@ -78,7 +78,7 @@ export const deleteBank = (id) => (dispatch) => {
 export const activeUser = (id) => (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
-    .deleteBank({ receiptId: id })
+    .deleteSalarypolicy({ receiptId: id })
     .then((response) => {
       //console.log("response from delete user ", response.data.message)
       dispatch(actions.userDeleted({ id: id }));
@@ -141,9 +141,9 @@ export const salarypolicyBank = (bankForCreation, disbaleLoading, onHide) => (
     });
 };
 
-export const updateBank = (user, disbaleLoading, onHide) => (dispatch) => {
+export const updateSalarypolicy = (user, disbaleLoading, onHide) => (dispatch) => {
   return requestFromServer
-    .updateBank(user)
+    .updateSalarypolicy(user)
     .then((response) => {
       console.log("my response",response?.config?.data);
       const updatedBank = response?.config?.data; // response.data?.data;

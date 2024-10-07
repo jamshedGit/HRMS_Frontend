@@ -124,7 +124,7 @@ console.log("id for salary policy",id)
       // };
       console.log("salary policy getUserStatus", user);
       console.log("bankUpdatedFields", bankUpdatedFields);
-     await dispatch(actions.updateBank(bankUpdatedFields, disbaleLoading, onHide));
+     await dispatch(actions.updateSalarypolicy(bankUpdatedFields, disbaleLoading, onHide));
      await dispatch(actions.fetchUsers(usersUIProps.queryParams));
     }
   };

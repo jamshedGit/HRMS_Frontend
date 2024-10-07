@@ -41,7 +41,7 @@ export function SalarypolicyActiveDialog({ id, status, show, onHide }) {
   // looking for loading/dispatch
   useEffect(() => {}, [isLoading, dispatch]);
 
-  const deleteBank = () => {
+  const deleteSalarypolicy = () => {
     // server request for deleting customer by id
     enableLoading();
     dispatch(actions.activeUser(id)).then(() => {
@@ -84,7 +84,7 @@ export function SalarypolicyActiveDialog({ id, status, show, onHide }) {
           <> </>
           <button
             type="button"
-            onClick={deleteBank}
+            onClick={deleteSalarypolicy}
             className="btn btn-primary btn-elevate"
           >
             Activate
