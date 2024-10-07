@@ -39,7 +39,7 @@ export const salarypolicySlice = createSlice({
                 state.actionsLoading = true;
             }
         },
-        bankFetched: (state, action) => {
+        salarypolicyFetched: (state, action) => {
             // console.log(action)
             console.log("salary policyuser slice",action.payload)
             const entities = action.payload.data?.data.rows;
@@ -53,7 +53,7 @@ export const salarypolicySlice = createSlice({
         },
 
          //get User By ID
-         BankFetchedForEdit: (state, action) => {
+         SalarypolicyFetchedForEdit: (state, action) => {
             console.log("get user detail from receipt slice")
             console.log(action);
             state.actionsLoading = false;
@@ -69,7 +69,7 @@ export const salarypolicySlice = createSlice({
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
         },
-        BankDeleted: (state, action) => {
+        SalarypolicyDeleted: (state, action) => {
 
             state.error = null;
             state.actionsLoading = false;
@@ -79,7 +79,7 @@ export const salarypolicySlice = createSlice({
                 (el) => el.Id !== action.payload.Id
             );
         },
-        bankCreated: (state, action) => {
+        salarypolicyCreated: (state, action) => {
              console.log("action payload for bank", action.payload);
             state.actionsLoading = false;
             state.error = null;
@@ -95,9 +95,9 @@ export const salarypolicySlice = createSlice({
                 //const payload = { ...action.payload };
                 let payload = JSON.stringify(action.payload)
                 let payloadObj = JSON.parse(payload);
-                let finalObj = JSON.parse(payloadObj.updatedBank);
+                let finalObj = JSON.parse(payloadObj.updatedSalarypolicy);
                 if (entity.Id === finalObj.Id) {
-                    return finalObj; //action.payload.updatedBank;
+                    return finalObj; //action.payload.updatedSalarypolicy;
                 }
                 return entity;
             });

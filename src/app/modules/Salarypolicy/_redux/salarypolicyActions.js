@@ -21,7 +21,7 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
     .then((response) => {
       //  console.log("user action receipt fetched 321")
       console.log("response", response)
-      dispatch(actions.bankFetched(response));
+      dispatch(actions.salarypolicyFetched(response));
     })
     .catch((error) => {
       //console.log("Can't find user", error)
@@ -34,17 +34,17 @@ export const fetchUser = (id) => (dispatch) => {
 
   console.log("User Action id " + id)
   if (!id) {
-    return dispatch(actions.BankFetchedForEdit({ userForEdit: undefined }));
+    return dispatch(actions.SalarypolicyFetchedForEdit({ userForEdit: undefined }));
   }
 
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
-    .getBankById({ Id: id })
+    .getSalarypolicyById({ Id: id })
     .then((response) => {
       const entities = response.data?.data;
 
       console.log("User fetched for search " + id)
-      dispatch(actions.BankFetchedForEdit({ userForEdit: entities }));
+      dispatch(actions.SalarypolicyFetchedForEdit({ userForEdit: entities }));
     })
     .catch((error) => {
       error.clientMessage = "Can't find user";
@@ -58,7 +58,7 @@ export const deleteSalarypolicy = (id) => (dispatch) => {
     .deleteSalarypolicy({ Id: id })
     .then((response) => {
       //console.log("response from delete user ", response.data.message)
-      dispatch(actions.BankDeleted({ Id: id }));
+      dispatch(actions.SalarypolicyDeleted({ Id: id }));
       toast.success("Successfully Deleted", {
         position: "top-right",
         autoClose: 5000,
@@ -98,21 +98,21 @@ export const activeUser = (id) => (dispatch) => {
     });
 };
 
-export const createSalarypolicy = (bankForCreation, disbaleLoading, onHide) => (
+export const createSalarypolicy = (salarypolicyForCreation, disbaleLoading, onHide) => (
   dispatch
 ) => {
-  // bankForCreation.phNo = bankForCreation.phNo.toString();
-  // bankForCreation.cnic = bankForCreation.cnic.toString();
+  // salarypolicyForCreation.phNo = salarypolicyForCreation.phNo.toString();
+  // salarypolicyForCreation.cnic = salarypolicyForCreation.cnic.toString();
 
-  console.log("bank for creation", bankForCreation);
+  
   return requestFromServer
-    .createSalarypolicy(bankForCreation)
+    .createSalarypolicy(salarypolicyForCreation)
     .then((res) => {
       dispatch(actions.startCall({ callType: callTypes.action }));
       const user = res.data?.data;
-      console.log("bank data");
+     
       console.log(user);
-      dispatch(actions.bankCreated(user));
+      dispatch(actions.salarypolicyCreated(user));
       disbaleLoading();
       toast.success("Successfully Created", {
         position: "top-right",
@@ -146,9 +146,9 @@ export const updateSalarypolicy = (user, disbaleLoading, onHide) => (dispatch) =
     .updateSalarypolicy(user)
     .then((response) => {
       console.log("my response",response?.config?.data);
-      const updatedBank = response?.config?.data; // response.data?.data;
+      const updatedSalarypolicy = response?.config?.data; // response.data?.data;
       console.log("bnkAction Res", response)
-      dispatch(actions.bankUpdated({ updatedBank }));
+      dispatch(actions.bankUpdated({ updatedSalarypolicy }));
       dispatch(actions.startCall({ callType: callTypes.action }));
       disbaleLoading();
       onHide();

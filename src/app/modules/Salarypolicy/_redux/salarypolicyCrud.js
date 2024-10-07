@@ -27,7 +27,7 @@ let authSMSSend =  async ()=> {
   };
   
 
-export function getBankById(id) {
+export function getSalarypolicyById(id) {
    console.log("salarypolicy id", id)
   return axios.post(`${USERS_URL}/salarypolicy/read-salarypolicy`, id);
 }
