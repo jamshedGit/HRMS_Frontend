@@ -49,9 +49,7 @@ export function SalarypolicyDeleteDialog({ id, status, show, onHide }) {
       onHide();
       // refresh list after deletion
       dispatch(actions.fetchSalarypolicies(usersUIProps.queryParams));
-      // clear selections list
-      // usersUIProps.setIds([]);
-      // closing delete modal
+   
       disableLoading();
     });
   };

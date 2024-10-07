@@ -58,13 +58,7 @@ console.log("id for salary policy",id)
   }));
 
   console.log("for salary policy isuserForRead",userForEdit)
-  // useEffect(() => {
-  //   if (actionsLoading) {
-  //     onHide();
-  //   }
-  // }, [actionsLoading === true]);
 
-  //console.log("action", action);
 
   useEffect(() => {
     dispatch(actions.fetchSalarypolicy(id));
@@ -72,39 +66,19 @@ console.log("id for salary policy",id)
     // dispatch(actions.fetchSalarypolicy(salarypolicyUIProps .queryParams))
   }, [id, dispatch]);
 
-  // useEffect(() => {
-  //   console.log("UseEffect call");
-  //   if (actionsLoading === false) {
-  //     console.log("UseEffect call inside function");
-  //     disbaleLoading();
-  //   }
-  // }, [actionsLoading]);
-  //console.log("userForEdit", userForEdit);
 
   const saveSalarypolicy = async (user) => {
 
     if (!id) {
  
-   
-
-      // const getUserStatus = userStatusTypes.filter((item) => {
-      //   return item.value === +user.status;
-      // });
-      // //console.log("getUserStatus", getUserStatus);
-      // const { status = getUserStatus[0].label, ...rest } = user;
-      // const finalObject = {
-      //   status: getUserStatus[0].label,
-      //   ...rest,
-      // };
+  
       const finalObject = { user }
       dispatch(actions.createSalarypolicy(user, disbaleLoading, onHide));
       
       
 
     } else {
-      // const getUserStatus = userStatusTypes.find((item) => {
-      //   return item.value === +user.status;
-      // });
+
      
       console.log("salary policy getUserStatus", user);
 
@@ -117,13 +91,7 @@ console.log("id for salary policy",id)
       };
 
       
-      // const salarypolicyUpdatedFields = {
-      //   Id: user.Id,
-      //   Name: user.Name,
-        
-      // };
-      console.log("salary policy getUserStatus", user);
-      console.log("salarypolicyUpdatedFields", salarypolicyUpdatedFields);
+
      await dispatch(actions.updateSalarypolicy(salarypolicyUpdatedFields, disbaleLoading, onHide));
      await dispatch(actions.fetchSalarypolicies(usersUIProps.queryParams));
     }
