@@ -36,7 +36,7 @@ export function SalarypolicyPage({ history }) {
       dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
       history.push(`/salarypolicy/read-all-salarypolicy/${id}/edit`);
     },
-    openDeleteBankDialog: (id, status) => {
+    openDeleteSalarypolicyDialog: (id, status) => {
       history.push(`/salarypolicy/read-all-salarypolicy/${id}/${status}/delete`);
     },
     openActiveBankDialog: (id) => {

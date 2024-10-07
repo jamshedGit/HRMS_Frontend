@@ -29,7 +29,7 @@ export function BanksTable() {
       queryParams: bankUIContext.queryParams,
       setQueryParams: bankUIContext.setQueryParams,
       openEditSalarypolicyDialog: bankUIContext.openEditSalarypolicyDialog,
-      openDeleteBankDialog: bankUIContext.openDeleteBankDialog,
+      openDeleteSalarypolicyDialog: bankUIContext.openDeleteSalarypolicyDialog,
       openActiveBankDialog: bankUIContext.openActiveBankDialog,
       openReadBankDialog: bankUIContext.openReadBankDialog,
     };
@@ -147,7 +147,7 @@ export function BanksTable() {
       formatter: ActionsColumnFormatter,
       formatExtraData: {
         openEditSalarypolicyDialog: bankUIProps.openEditSalarypolicyDialog,
-        openDeleteBankDialog: bankUIProps.openDeleteBankDialog,
+        openDeleteSalarypolicyDialog: bankUIProps.openDeleteSalarypolicyDialog,
         openActiveBankDialog: bankUIProps.openActiveBankDialog,
         openReadBankDialog: bankUIProps.openReadBankDialog,
         isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,
