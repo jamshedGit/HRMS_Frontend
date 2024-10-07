@@ -3,8 +3,8 @@ import { Redirect, Switch } from "react-router-dom";
 import { LayoutSplashScreen, ContentRoute } from "../../../../_metronic/layout";
 import { SalarypolicyPage } from "./banks/SalarypolicyPage";
 
-export default function BankManagement() {
-  console.log('Bank mein aya')
+export default function SalarypolicyManagement() {
+ 
   return (
     <Suspense fallback={<LayoutSplashScreen />}>
       <Switch>

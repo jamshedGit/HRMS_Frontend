@@ -39,7 +39,7 @@ export function SalarypolicyUIProvider({ SalarypolicyUIEvents, children }) {
   
   };
 
-  console.log("bank ui events",SalarypolicyUIEvents);
+
 
   const value = {
     queryParams,
