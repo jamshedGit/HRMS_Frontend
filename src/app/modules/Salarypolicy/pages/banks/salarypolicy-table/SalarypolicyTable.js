@@ -20,20 +20,20 @@ import { DatetimeColumnFormatter } from "../../../../Dashboard/pages/dashboard/l
 
 export function SalarypolicyTable() {
   //Users UI Context
-  const bankUIContext = useSalarypolicyUIContext();
+  const salarypolicyUIContext = useSalarypolicyUIContext();
 
   const bankUIProps = useMemo(() => {
     return {
-      ids: bankUIContext.ids,
-      setIds: bankUIContext.setIds,
-      queryParams: bankUIContext.queryParams,
-      setQueryParams: bankUIContext.setQueryParams,
-      openEditSalarypolicyDialog: bankUIContext.openEditSalarypolicyDialog,
-      openDeleteSalarypolicyDialog: bankUIContext.openDeleteSalarypolicyDialog,
-      openActiveSalarypolicyDialog: bankUIContext.openActiveSalarypolicyDialog,
-      openReadSalarypolicyDialog: bankUIContext.openReadSalarypolicyDialog,
+      ids: salarypolicyUIContext.ids,
+      setIds: salarypolicyUIContext.setIds,
+      queryParams: salarypolicyUIContext.queryParams,
+      setQueryParams: salarypolicyUIContext.setQueryParams,
+      openEditSalarypolicyDialog: salarypolicyUIContext.openEditSalarypolicyDialog,
+      openDeleteSalarypolicyDialog: salarypolicyUIContext.openDeleteSalarypolicyDialog,
+      openActiveSalarypolicyDialog: salarypolicyUIContext.openActiveSalarypolicyDialog,
+      openReadSalarypolicyDialog: salarypolicyUIContext.openReadSalarypolicyDialog,
     };
-  }, [bankUIContext]);
+  }, [salarypolicyUIContext]);
 
   //console.log("queryparms", usersUIProps.queryparms)
   const { currentState, userAccess } = useSelector(
