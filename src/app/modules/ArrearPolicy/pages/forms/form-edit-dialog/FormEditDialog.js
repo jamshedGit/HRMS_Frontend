@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Modal } from "react-bootstrap";
-import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { MasterEditForm } from "./MasterEditForm";
 import { FormEditDialogHeader } from './FormEditDialogHeader'
 
@@ -29,30 +29,24 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
 
   const dispatch = useDispatch();
   const {
-    entities,
-    actionsLoading,
-    user,
     userForEdit,
     roles,
     centers,
     userStatusTypes,
-    isuserForRead,
   } = useSelector((state) => ({
-    entities: state.arrear_policy.entities,
-    actionsLoading: state.users.actionsLoading,
-    user: state.users, // change for users to receipt
     userForEdit: state.arrear_policy.userForEdit,
     roles: state.users.roles,
     centers: state.users.centers,
     userStatusTypes: state.users.userStatusTypes,
-    isuserForRead: state.arrear_policy.userForRead,
   }
   ));
 
+  //Fetch record to edit on dialog load
   useEffect(() => {
     dispatch(actions.fetchEditRecord(id));
   }, [id, dispatch]);
 
+  //Create or Update record according to values from dialog
   const submitForm = (values) => {
     dispatch(actions.saveRecord(values, id, disbaleLoading, onHide))
   }

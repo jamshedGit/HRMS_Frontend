@@ -49,7 +49,7 @@ export function FormTable() {
 
   useEffect(() => {
     FormUIProps.setIds([]);
-    dispatch(actions.fetchUsers(FormUIProps.queryParams));
+    dispatch(actions.fetchArrears(FormUIProps.queryParams));
   }, [FormUIProps.queryParams, dispatch, totalCount]);
 
   const isAccessForEdit = userAccess?.find(
@@ -83,7 +83,7 @@ export function FormTable() {
     },
 
     {
-      dataField: "isActive",
+      dataField: "isActiveText",
       text: "Active",
       sort: false,
       sortCaret: sortCaret,

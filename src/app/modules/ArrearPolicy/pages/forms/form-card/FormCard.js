@@ -1,5 +1,4 @@
 import React, { useMemo } from "react"
-
 import {
   Card,
   CardBody,
@@ -22,12 +21,14 @@ export function FormCard() {
 
   const { userAccess } = useSelector(
     (state) => ({
-      userAccess: state.auth.userAccess.Fiscal_Setup,
+      userAccess: state.auth.userAccess.Arrear_Policy,
     }),
     shallowEqual
   )
+
+  //Check if access to create Arrear Policy
   const accessUser = userAccess.find(
-    (item) => item.componentName === "CreateFiscalSetup"
+    (item) => item.componentName === "CreateArrearPolicy"
   )
 
   return (
@@ -48,22 +49,6 @@ export function FormCard() {
             ) : (
               <></>
             )}
-            {/* {userAccess.find((item) => {
-              if (
-                item.componentName === "CreateUser" ||
-                item.isAccess === true
-              ) {
-                return (
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={FormsUIProps.newUserButtonClick}
-                  >
-                    Add New User
-                  </button>
-                )
-              }
-            })} */}
           </CardHeaderToolbar>
         </CardHeader>
 

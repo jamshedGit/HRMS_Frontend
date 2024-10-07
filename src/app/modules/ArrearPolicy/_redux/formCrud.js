@@ -55,25 +55,3 @@ export function updateArrearSetup(body) {
 export function deleteArrearSetup(id) {
   return axios.delete(`${USERS_URL}/arrear_policy/delete-arrear-policy/${id}`);
 }
-
-//get All Roles
-export function getAllRoles() {
-  return axios.get(`${USERS_URL}/settings/read-all-roles-master-data`);
-}
-
-//get All Centers
-export function getAllCenters() {
-  return axios.get(`${USERS_URL}/settings/read-all-centers-master-data`);
-}
-
-export function getAllUserStatusTypes(body) {
-  return axios.post(
-    `${USERS_URL}/settings/read-all-status-types-master-data`,
-    body
-  );
-}
-
-export const donationReport = async (body) => {
-  return await axios.post(`${USERS_URL}/edrs/donation-report`, body);
-};
-

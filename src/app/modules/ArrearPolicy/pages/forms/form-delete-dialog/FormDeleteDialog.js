@@ -3,17 +3,9 @@ import { Modal } from "react-bootstrap";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls";
 import * as actions from "../../../_redux/formActions";
-import { useFormUIContext } from "../FormUIContext";
 
 export function FormDeleteDialog({ id, status, show, onHide }) {
   const [loading, setLoading] = useState(false);
-  // Customers UI Context
-  const usersUIContext = useFormUIContext();
-  const usersUIProps = useMemo(() => {
-    return {
-      queryParams: usersUIContext.queryParams,
-    };
-  }, [usersUIContext]);
 
   // Customers Redux state
   const dispatch = useDispatch();
@@ -38,6 +30,7 @@ export function FormDeleteDialog({ id, status, show, onHide }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
+  //Delete Record
   const deleteArrear = ()=> {
     enableLoading();
     dispatch(actions.deleteRecord(id, disableLoading, onHide))

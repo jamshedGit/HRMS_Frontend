@@ -2,9 +2,15 @@ import * as requestFromServer from "./formCrud";
 import { ArrearSetupSlice, callTypes } from "./arrearPolicySlice";
 import { toast } from "react-toastify";
 const { actions } = ArrearSetupSlice;
-// const { roleActions } = getAllrolesSlice
 
-export const fetchUsers = (queryparm) => async (dispatch) => {
+/**
+ * 
+ * Fetch All Arrears Paginated from the server
+ * 
+ * @param {Object} queryparm 
+ * @returns 
+ */
+export const fetchArrears = (queryparm) => async (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.list }));
   return requestFromServer.getAllArrearSetup(queryparm)
     .then((response) => {
@@ -16,6 +22,13 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
     });
 };
 
+/**
+ * 
+ * Fetch Single Arrear Policy Record by Id
+ * 
+ * @param {string|number} id 
+ * @returns
+ */
 export const fetchEditRecord = (id) => (dispatch) => {
   if (!id) {
     return dispatch(actions.ArrearsFetchedForEdit(null));
@@ -34,6 +47,16 @@ export const fetchEditRecord = (id) => (dispatch) => {
     });
 };
 
+/**
+ * 
+ * Save or update Arrear Policy Record
+ * 
+ * @param {Object} data 
+ * @param {String|Number|Null} id 
+ * @param {Function} disableLoading 
+ * @param {Function} onHide 
+ * @returns 
+ */
 export const saveRecord = (data, id, disableLoading, onHide) => (dispatch) => {
   if (!id) {
     return requestFromServer.createArrearSetup(data)
@@ -103,6 +126,15 @@ export const saveRecord = (data, id, disableLoading, onHide) => (dispatch) => {
   }
 };
 
+/**
+ * 
+ * Delete Single Arrear Policy Record By Id
+ * 
+ * @param {String|Number} id 
+ * @param {Function} disableLoading 
+ * @param {Function} onHide 
+ * @returns 
+ */
 export const deleteRecord = (id, disableLoading, onHide) => (dispatch) => {
   return requestFromServer.deleteArrearSetup(id)
     .then((res) => {
@@ -133,18 +165,3 @@ export const deleteRecord = (id, disableLoading, onHide) => (dispatch) => {
       });
     });
 }
-
-export const fetchRoles = () => (dispatch) => {
-  dispatch(actions.startCall({ callType: callTypes.list }));
-
-  return requestFromServer
-    .getAllRoles()
-    .then((response) => {
-      const entities = response.data?.data;
-      dispatch(actions.RolesFetched(entities));
-    })
-    .catch((error) => {
-      error.clientMessage = "Can't find roles";
-      dispatch(actions.catchError({ error, callType: callTypes.list }));
-    });
-};

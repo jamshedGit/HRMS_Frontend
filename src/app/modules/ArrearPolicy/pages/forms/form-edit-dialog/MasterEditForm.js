@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import { Input, Select } from "../../../../../../_metronic/_partials/controls";
 import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLabel";
 
+//Validation for Form
 const formValidation = Yup.object().shape({
   type: Yup.number().required('Type is required').min(0, 'Type is required'),
   divisor: Yup.number()
@@ -51,12 +52,10 @@ export function MasterEditForm({
         {({
           handleSubmit,
           errors,
-          touched,
           values,
           handleBlur,
           handleChange,
           setFieldValue,
-          formik,
         }) => (
           <>
             <Modal.Body className="overlay overlay-block cursor-default">
@@ -72,7 +71,6 @@ export function MasterEditForm({
                       <Field
                         name="type"
                         component={Select}
-                        touched={false}
                         placeholder=""
                         onBlur={handleBlur}
                         onChange={(e) => {
@@ -109,7 +107,6 @@ export function MasterEditForm({
                             name="divisor"
                             component={Input}
                             placeholder=""
-                            touched={false}
                             onChange={handleChange}
                             onBlur={handleBlur}
                             label={
@@ -152,7 +149,6 @@ export function MasterEditForm({
                           <Field
                             name="days"
                             component={Input}
-                            touched={false}
                             placeholder=""
                             value={values.days}
                             onChange={handleChange}

@@ -8,12 +8,9 @@ export function ActionsColumnFormatter(
   cellContent,
   row,
   rowIndex,
-
   {
     openEditFormDialog,
     openDeleteFormDialog,
-    openActiveFormDialog,
-    openReadUserDialog,
     isAccessForEdit,
     isAccessForDelete,
     openReadFormDialog

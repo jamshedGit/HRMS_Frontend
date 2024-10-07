@@ -7,19 +7,14 @@ import { FormUIProvider } from "./FormUIContext";
 import { FormEditDialog } from "./form-edit-dialog/FormEditDialog";
 import { FormDeleteDialog } from "./form-delete-dialog/FormDeleteDialog";
 import { FormCard } from "./form-card/FormCard";
-import {
-  fetchRoles,
-} from "../../_redux/formActions";
 
 export function ArrearPolicyPage({ history }) {
   const dispatch = useDispatch();
   const FormUIEvents = {
     newFormButtonClick: () => {
-      dispatch(fetchRoles());
       history.push("/arrear_policy/read-all-arrear-policy/new");
     },
     openEditFormDialog: (id) => {
-      dispatch(fetchRoles());
       history.push(`/arrear_policy/read-all-arrear-policy/${id}/edit`);
     },
     openDeleteFormDialog: (id, status) => {

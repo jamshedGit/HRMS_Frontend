@@ -54,13 +54,6 @@ export const ArrearSetupSlice = createSlice({
             state.userForEdit = entities;
             state.error = null;
         },
-
-        //get User By ID
-        userFetched: (state, action) => {
-            state.actionsLoading = false;
-            state.userForEdit = action.payload.userForEdit;
-            state.error = null;
-        },
         ArrearsDeleted: (state, action) => {
             state.error = null;
             state.actionsLoading = false;
@@ -77,36 +70,12 @@ export const ArrearSetupSlice = createSlice({
             const id = action.payload.Id;
             state.error = null;
             state.actionsLoading = false;
-            state.entities = state.entities.map((el)=> {
-                if(el.Id == id){
+            state.entities = state.entities.map((el) => {
+                if (el.Id == id) {
                     return action.payload;
                 }
                 return el;
             });
-        },
-        RolesFetched: (state, action) => {
-            const entities = action.payload;
-            state.listLoading = false;
-            state.error = null;
-            state.roles = entities;
-        },
-        CentersFetched: (state, action) => {
-            const entities = action.payload;
-            state.listLoading = false;
-            state.error = null;
-            state.centers = entities;
-        },
-        UserStatusTypesFetched: (state, action) => {
-            const entities = action.payload;
-            state.listLoading = false;
-            state.error = null;
-            state.userStatusTypes = entities;
-        },
-        donationReportFetch: (state, action) => {
-            state.donationReportFetch = action.payload;
-        },
-        MaxIdFetchForReceipt: (state, action) => {
-            state.donationReportFetch = action.payload;
-        },
+        }
     },
 });

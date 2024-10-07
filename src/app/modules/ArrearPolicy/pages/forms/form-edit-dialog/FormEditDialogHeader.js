@@ -10,19 +10,14 @@ export function FormEditDialogHeader({ id, isUserForRead }) {
   const { userForEdit, actionsLoading } = useSelector(
     
     (state) => ({
-      userForEdit: state.fiscal_setup.userForEdit,
+      userForEdit: state.arrear_policy.userForEdit,
       actionsLoading: state.users.actionsLoading,
     }),
     shallowEqual
   );
 
   useEffect(() => {
-    let _title = id ? "" : "New Arrear Policy";
-    if (id) {
-      _title = `Edit Arrear Policy`;
-    } //else if (isUserForRead) {
-    //   _title = `Read user '}'`
-    // }
+    let _title = id ? "Edit Arrear Policy" : "New Arrear Policy";
     setTitle(_title);
   }, [userForEdit, actionsLoading]);
 

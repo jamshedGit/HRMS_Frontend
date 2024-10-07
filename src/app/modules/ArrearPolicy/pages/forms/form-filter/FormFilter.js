@@ -43,13 +43,7 @@ export function FormFilter() {
       <Formik
         enableReinitialize={true}
         initialValues={{
-          donorName: "", // values => All=""/Susspended=0/Active=1/Pending=2
-          receiptNo: "", // values => All=""/Business=0/Individual=1
-          searchText: "",
-          cityId: [],
-          centerId: [],
-          subCenterId: [],
-          alarmTimeId: [],
+          searchText: ""
         }}
         onSubmit={(values) => {
           applyFilter(values)
@@ -59,11 +53,7 @@ export function FormFilter() {
           values,
           handleSubmit,
           handleBlur,
-          handleChange,
           setFieldValue,
-          errors,
-          touched,
-
         }) => (
           <form className="form form-label-right">
             <div className="row">
@@ -81,7 +71,7 @@ export function FormFilter() {
                   }}
                 />
                 <small className="form-text text-muted">
-                  <b>Search</b> in all fields
+                  <b>Search</b> in Type field
                 </small>
               </div>
             </div>
