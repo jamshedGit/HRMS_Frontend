@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react"
+import React, { useMemo, useState, useEffect, useCallback } from "react"
 import { Formik } from "formik"
 import { isEqual } from "lodash"
 import { useSalarypolicyUIContext } from "../SalarypolicyUIContext"
@@ -11,6 +11,7 @@ import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect"
 import * as actions from "../../../../Dashboard/_redux/dashboardActions";
 import DatePicker from "react-datepicker";
 import {} from "../../../../../../_metronic/redux/dashboardActions";
+import { debounce } from "redux-saga/effects";
 
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -67,13 +68,16 @@ export function SalarypolicyFIlter({ listLoading,user }) {
     const newQueryParams = prepareFilter(salarypolicyUIProps .queryParams, values)
     if (!isEqual(newQueryParams, salarypolicyUIProps .queryParams)) {
       newQueryParams.pageNumber = 1
-      // update list by queryParams
-      console.log("update list by queryParams");
-      console.log(newQueryParams);
+    
       salarypolicyUIProps .setQueryParams(newQueryParams)
     }
   }
 
+
+  // const waitapplyFilter = useCallback(
+  //   debounce((values) => applyFilter(values), 500),
+  //   []
+  // );
   return (
     <>
       <Formik
