@@ -97,7 +97,7 @@ console.log("id for salary policy",id)
       //   ...rest,
       // };
       const finalObject = { user }
-      dispatch(actions.salarypolicyBank(user, disbaleLoading, onHide));
+      dispatch(actions.createSalarypolicy(user, disbaleLoading, onHide));
       
       
 

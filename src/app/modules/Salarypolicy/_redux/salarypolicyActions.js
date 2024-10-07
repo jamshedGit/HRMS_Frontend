@@ -9,7 +9,7 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
   // console.log("Receive QPsss", queryparm)
   dispatch(actions.startCall({ callType: callTypes.list }));
   console.log("test query param", queryparm)
-  return requestFromServer.getAllBanks(queryparm)
+  return requestFromServer.getAllSalarypolicy(queryparm)
     // .getAllReceipts({
     //   filter: {
     //     searchQuery: ""
@@ -98,7 +98,7 @@ export const activeUser = (id) => (dispatch) => {
     });
 };
 
-export const salarypolicyBank = (bankForCreation, disbaleLoading, onHide) => (
+export const createSalarypolicy = (bankForCreation, disbaleLoading, onHide) => (
   dispatch
 ) => {
   // bankForCreation.phNo = bankForCreation.phNo.toString();
@@ -106,7 +106,7 @@ export const salarypolicyBank = (bankForCreation, disbaleLoading, onHide) => (
 
   console.log("bank for creation", bankForCreation);
   return requestFromServer
-    .salarypolicyBank(bankForCreation)
+    .createSalarypolicy(bankForCreation)
     .then((res) => {
       dispatch(actions.startCall({ callType: callTypes.action }));
       const user = res.data?.data;

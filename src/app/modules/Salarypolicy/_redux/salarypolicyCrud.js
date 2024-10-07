@@ -3,7 +3,7 @@ import axios from "axios";
 export const USERS_URL = process.env.REACT_APP_API_URL;
 
 //Create user
-export function salarypolicyBank(body) {
+export function createSalarypolicy(body) {
   console.log("salary policy  step 1", body)
   
   // body.Name = body.txtbankName;
@@ -15,7 +15,7 @@ export function salarypolicyBank(body) {
 
 
 // Read
-export function getAllBanks(body) {
+export function getAllSalarypolicy(body) {
   console.log("salarypolicy body",body);
   return axios.post(`${USERS_URL}/salarypolicy/read-all-salarypolicy`, body);
 }
