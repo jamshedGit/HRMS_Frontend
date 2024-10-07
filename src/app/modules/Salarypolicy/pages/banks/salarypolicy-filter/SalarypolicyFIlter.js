@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useEffect } from "react"
 import { Formik } from "formik"
 import { isEqual } from "lodash"
-import { useBanksUIContext } from "../BanksUIContext"
+import { useSalarypolicyUIContext } from "../SalarypolicyUIContext"
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import axios from "axios";
@@ -34,7 +34,7 @@ const prepareFilter = (queryParams, values) => {
   return newQueryParams
 }
 
-export function BanksFilter({ listLoading, user, setCity,
+export function SalarypolicyFIlter({ listLoading, user, setCity,
   seletCity,
   setCenter,
   center,
@@ -47,7 +47,7 @@ export function BanksFilter({ listLoading, user, setCity,
 
   const [defCity, setDefaultCity] = useState({});
   const dispatch = useDispatch();
-  const banksUIContext = useBanksUIContext()
+  const SalarypolicyUIContext = useSalarypolicyUIContext()
   const [Loading, setLoading] = useState(false)
   const { countryId, cityId } = useSelector((state) => state.auth.user);
   const dashboard = useSelector((state) => state.dashboard);
@@ -73,10 +73,10 @@ export function BanksFilter({ listLoading, user, setCity,
 
   const banksUIProps = useMemo(() => {
     return {
-      queryParams: banksUIContext.queryParams,
-      setQueryParams: banksUIContext.setQueryParams,
+      queryParams: SalarypolicyUIContext.queryParams,
+      setQueryParams: SalarypolicyUIContext.setQueryParams,
     }
-  }, [banksUIContext])
+  }, [SalarypolicyUIContext])
 
   async function fetchDonationReport(filterVal) {
     try {

@@ -12,15 +12,15 @@ import {
   sortCaret,
   headerSortingClasses,
 } from "../../../../../../_metronic/_helpers";
-import * as uiHelpers from "../BanksUIHelpers";
+import * as uiHelpers from "../SalarypolicyUIHelpers";
 import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatter";
 import { Pagination } from "../../../../../../_metronic/_partials/controls";
-import { useBanksUIContext } from "../BanksUIContext";
+import { useSalarypolicyUIContext } from "../SalarypolicyUIContext";
 import { DatetimeColumnFormatter } from "../../../../Dashboard/pages/dashboard/last-trips-vehicles-table/column-formatter/CreatedColumnFormatter";
 
 export function BanksTable() {
   //Users UI Context
-  const bankUIContext = useBanksUIContext();
+  const bankUIContext = useSalarypolicyUIContext();
 
   const bankUIProps = useMemo(() => {
     return {

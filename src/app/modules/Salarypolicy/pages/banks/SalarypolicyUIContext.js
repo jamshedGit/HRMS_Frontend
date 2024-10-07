@@ -1,14 +1,14 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
 import { isEqual, isFunction } from "lodash";
-import { initialFilter } from "./BanksUIHelpers";
+import { initialFilter } from "./SalarypolicyUIHelpers";
 
-const BanksUIContext = createContext();
+const SalarypolicyUIContext = createContext();
 
-export function useBanksUIContext() {
-  return useContext(BanksUIContext);
+export function useSalarypolicyUIContext() {
+  return useContext(SalarypolicyUIContext);
 }
 
-export const ReceiptUIConsumer = BanksUIContext.Consumer;
+export const ReceiptUIConsumer = SalarypolicyUIContext.Consumer;
 // const initialFilter = {
 //   sortBy: "name",
 //   limit: 10,
@@ -55,6 +55,6 @@ export function BanksUIProvider({ BanksUIEvents, children }) {
     openReadBankDialog: BanksUIEvents.openReadBankDialog,
   };
   return (
-    <BanksUIContext.Provider value={value}>{children}</BanksUIContext.Provider>
+    <SalarypolicyUIContext.Provider value={value}>{children}</SalarypolicyUIContext.Provider>
   );
 }

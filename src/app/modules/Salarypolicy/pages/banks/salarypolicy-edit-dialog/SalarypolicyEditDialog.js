@@ -1,33 +1,33 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Modal } from "react-bootstrap";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { BankEditForm } from "./BankEditForm";
-import { BankEditDialogHeader } from './BankEditDialogHeader'
+import { SalarypolicyEditForm } from "./SalarypolicyEditForm";
+import { SalarypolicyEditDialogHeader } from './SalarypolicyEditDialogHeader'
 
 import * as actions from "../../../_redux/salarypolicyActions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useBanksUIContext } from "../BanksUIContext";
+import { useSalarypolicyUIContext } from "../SalarypolicyUIContext";
 
-export function BankEditDialog({ id, show, onHide, userForRead }) {
+export function SalarypolicyEditDialog({ id, show, onHide, userForRead }) {
   const [action, setaction] = useState(false);
   const [loading, setLoading] = useState(false);
-  const title = "BankEditDialog";
-  const banksUIContext = useBanksUIContext();
+  const title = "SalarypolicyEditDialog";
+  const SalarypolicyUIContext = useSalarypolicyUIContext();
 console.log("id for salary policy",id)
  
   const usersUIProps = useMemo(() => {
     return {
-      queryParams: banksUIContext.queryParams,
+      queryParams: SalarypolicyUIContext.queryParams,
     };
-  }, [banksUIContext]);
+  }, [SalarypolicyUIContext]);
 
   const banksUIProps = useMemo(() => {
     return {
-      initUser: banksUIContext.initUser,
-      queryParams: banksUIContext.queryParams,
+      initUser: SalarypolicyUIContext.initUser,
+      queryParams: SalarypolicyUIContext.queryParams,
     };
-  }, [banksUIContext]);
+  }, [SalarypolicyUIContext]);
 
   const enableLoading = () => {
     setLoading(true);
@@ -97,7 +97,7 @@ console.log("id for salary policy",id)
       //   ...rest,
       // };
       const finalObject = { user }
-      dispatch(actions.createBank(user, disbaleLoading, onHide));
+      dispatch(actions.salarypolicyBank(user, disbaleLoading, onHide));
       
       
 
@@ -136,8 +136,8 @@ console.log("id for salary policy",id)
       onHide={onHide}
       aria-labelledby="example-modal-sizes-title-lg"
     >
-      <BankEditDialogHeader id={id} isUserForRead={userForRead} />
-      <BankEditForm
+      <SalarypolicyEditDialogHeader id={id} isUserForRead={userForRead} />
+      <SalarypolicyEditForm
         saveBank={saveBank}
         user={userForEdit || banksUIProps.initUser}
         onHide={onHide}

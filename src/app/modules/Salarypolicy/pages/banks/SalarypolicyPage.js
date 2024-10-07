@@ -3,11 +3,11 @@ import { useDispatch } from "react-redux";
 import { Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { BanksUIProvider } from "./BanksUIContext";
-import { BankEditDialog } from "./salarypolicy-edit-dialog/BankEditDialog";
-import { BankDeleteDialog } from "./salarypolicy-delete-dialog/BankDeleteDialog";
-import { BankActiveDialog } from "./salarypolicy-active-dialog/BankActiveDialog";
-import { BanksCard } from "./salarypolicy-card/BanksCard";
+import { BanksUIProvider } from "./SalarypolicyUIContext";
+import { SalarypolicyEditDialog } from "./salarypolicy-edit-dialog/SalarypolicyEditDialog";
+import { SalarypolicyDeleteDialog } from "./salarypolicy-delete-dialog/SalarypolicyDeleteDialog";
+import { SalarypolicyActiveDialog } from "./salarypolicy-active-dialog/SalarypolicyActiveDialog";
+import { SalarypolicyCard } from "./salarypolicy-card/SalarypolicyCard";
 import { fetchAllCountry } from "../../../../../_metronic/redux/dashboardActions";
 import {
   fetchUserStatusTypes,
@@ -19,7 +19,7 @@ import {
 // dispatch(actions.fetchRoles());
 //     dispatch(actions.fetchCenters());
 
-export function BanksPage({ history }) {
+export function SalarypolicyPage({ history }) {
   const dispatch = useDispatch();
   const BanksUIEvents = {
     newBankButtonClick: () => {
@@ -56,7 +56,7 @@ export function BanksPage({ history }) {
     <BanksUIProvider BanksUIEvents={BanksUIEvents}>
       <Route exact path="/salarypolicy/read-all-salarypolicy/new">
         {({ history, match }) => (
-          <BankEditDialog
+          <SalarypolicyEditDialog
             show={match != null}
             onHide={() => {
               history.push("/salarypolicy/read-all-salarypolicy");
@@ -66,7 +66,7 @@ export function BanksPage({ history }) {
       </Route>
       <Route path="/salarypolicy/read-all-salarypolicy/:id/edit">
         {({ history, match }) => (
-          <BankEditDialog
+          <SalarypolicyEditDialog
             show={match != null}
             id={match && match.params.id}
             onHide={() => {
@@ -77,7 +77,7 @@ export function BanksPage({ history }) {
       </Route>
       <Route path="/salarypolicy/read-all-salarypolicy/:id/read">
         {({ history, match }) => (
-          <BankEditDialog
+          <SalarypolicyEditDialog
             show={match != null}
             id={match && match.params.id}
             userForRead={true}
@@ -89,7 +89,7 @@ export function BanksPage({ history }) {
       </Route>
       <Route path="/salarypolicy/read-all-salarypolicy/:id/:status/delete">
         {({ history, match }) => (
-          <BankDeleteDialog
+          <SalarypolicyDeleteDialog
             show={match != null}
             id={match && match.params.id}
             status={match && match.params.status}
@@ -101,7 +101,7 @@ export function BanksPage({ history }) {
       </Route>
       <Route path="/salarypolicy/read-all-salarypolicy/:id/active">
         {({ history, match }) => (
-          <BankActiveDialog
+          <SalarypolicyActiveDialog
             show={match != null}
             id={match && match.params.id}
             //status={match && match.params.status}
@@ -111,7 +111,7 @@ export function BanksPage({ history }) {
           />
         )}
       </Route>
-      <BanksCard />
+      <SalarypolicyCard />
       <ToastContainer
         position="top-right"
         autoClose={5000}

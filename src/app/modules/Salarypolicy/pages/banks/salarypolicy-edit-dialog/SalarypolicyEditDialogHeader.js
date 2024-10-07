@@ -3,7 +3,7 @@ import { shallowEqual, useSelector } from "react-redux";
 import { Modal } from "react-bootstrap";
 import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls";
 
-export function BankEditDialogHeader({ id, isUserForRead }) {
+export function SalarypolicyEditDialogHeader({ id, isUserForRead }) {
   //const userForEdit = false
   const [title, setTitle] = useState("");
  

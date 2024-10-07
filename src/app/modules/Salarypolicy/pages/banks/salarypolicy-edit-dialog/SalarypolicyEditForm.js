@@ -23,7 +23,7 @@ const salarypolicyEditSchema = Yup.object().shape({
   }),
 });
 
-export function BankEditForm({
+export function SalarypolicyEditForm({
   saveBank,
   user,
   actionsLoading,

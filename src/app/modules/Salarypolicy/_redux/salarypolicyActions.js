@@ -98,7 +98,7 @@ export const activeUser = (id) => (dispatch) => {
     });
 };
 
-export const createBank = (bankForCreation, disbaleLoading, onHide) => (
+export const salarypolicyBank = (bankForCreation, disbaleLoading, onHide) => (
   dispatch
 ) => {
   // bankForCreation.phNo = bankForCreation.phNo.toString();
@@ -106,7 +106,7 @@ export const createBank = (bankForCreation, disbaleLoading, onHide) => (
 
   console.log("bank for creation", bankForCreation);
   return requestFromServer
-    .createBank(bankForCreation)
+    .salarypolicyBank(bankForCreation)
     .then((res) => {
       dispatch(actions.startCall({ callType: callTypes.action }));
       const user = res.data?.data;

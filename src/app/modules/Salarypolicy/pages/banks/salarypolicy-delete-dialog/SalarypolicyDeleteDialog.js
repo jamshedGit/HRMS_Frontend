@@ -3,13 +3,13 @@ import { Modal } from "react-bootstrap";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls";
 import * as actions from "../../../_redux/salarypolicyActions";
-import { useBanksUIContext } from "../BanksUIContext";
+import { useSalarypolicyUIContext } from "../SalarypolicyUIContext";
 
-export function BankDeleteDialog({ id, status, show, onHide }) {
+export function SalarypolicyDeleteDialog({ id, status, show, onHide }) {
   // console.log("Status", status);
   const [loading, setLoading] = useState(false);
   // Customers UI Context
-  const usersUIContext = useBanksUIContext();
+  const usersUIContext = useSalarypolicyUIContext();
   const usersUIProps = useMemo(() => {
     return {
       queryParams: usersUIContext.queryParams,

@@ -7,29 +7,31 @@ import {
   CardHeaderToolbar,
 } from "../../../../../../_metronic/_partials/controls"
 import { BanksTable } from "../salarypolicy-table/BanksTable"
-import { useBanksUIContext } from "../BanksUIContext"
-import { BanksFilter } from "../salarypolicy-filter/BanksFIlter"
+import { useSalarypolicyUIContext } from "../SalarypolicyUIContext"
+import { SalarypolicyFIlter } from "../salarypolicy-filter/SalarypolicyFIlter"
 import { useSelector, shallowEqual } from "react-redux"
 
-export function BanksCard() {
-  const banksUIContext = useBanksUIContext()
-  //console.log("banksUIContext", banksUIContext)
+export function SalarypolicyCard() {
+  const SalarypolicyUIContext = useSalarypolicyUIContext()
+  //console.log("SalarypolicyUIContext", SalarypolicyUIContext)
   const BanksUIProps = useMemo(() => {
     return {
-      newBankButtonClick: banksUIContext.newBankButtonClick,
-      openEditBankDialog: banksUIContext.openEditBankDialog,
+      newBankButtonClick: SalarypolicyUIContext.newBankButtonClick,
+      openEditBankDialog: SalarypolicyUIContext.openEditBankDialog,
     }
-  }, [banksUIContext])
+  }, [SalarypolicyUIContext])
 
   const { userAccess } = useSelector(
+   
     (state) => ({
-      userAccess: state.auth.userAccess.Bank,
+      
+      userAccess: state.auth.userAccess.salarypolicy,
     }),
     shallowEqual
   )
   console.log("userAccess Temp",userAccess)
   const accessUser = userAccess.find(
-    (item) => item.componentName === "CreateBank"
+    (item) => item.componentName === "CreateSalarypolicy"
   )
 
   return (
@@ -37,7 +39,7 @@ export function BanksCard() {
 
       <Card>
         <CardHeader title="">
-          <BanksFilter />
+          <SalarypolicyFIlter />
           <CardHeaderToolbar>
             {accessUser ? (
               <button
