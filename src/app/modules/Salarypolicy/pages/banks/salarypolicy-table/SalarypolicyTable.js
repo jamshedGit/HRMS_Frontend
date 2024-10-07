@@ -22,7 +22,7 @@ export function SalarypolicyTable() {
   //Users UI Context
   const salarypolicyUIContext = useSalarypolicyUIContext();
 
-  const bankUIProps = useMemo(() => {
+  const salarypolicyUIProps = useMemo(() => {
     return {
       ids: salarypolicyUIContext.ids,
       setIds: salarypolicyUIContext.setIds,
@@ -53,11 +53,11 @@ export function SalarypolicyTable() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    bankUIProps.setIds([]);
-    console.log("salarypolicy test 2",bankUIProps.queryParams)
-    console.log("salarypolicy userAccess",bankUIProps.queryParams)
-    dispatch(actions.fetchUsers(bankUIProps.queryParams));
-  }, [bankUIProps.queryParams, dispatch, totalCount]);
+    salarypolicyUIProps.setIds([]);
+    console.log("salarypolicy test 2",salarypolicyUIProps.queryParams)
+    console.log("salarypolicy userAccess",salarypolicyUIProps.queryParams)
+    dispatch(actions.fetchUsers(salarypolicyUIProps.queryParams));
+  }, [salarypolicyUIProps.queryParams, dispatch, totalCount]);
 
   const isAccessForEdit = userAccess?.find(
     (item) => item.componentName === "UpdateSalarypolicy"
@@ -146,10 +146,10 @@ export function SalarypolicyTable() {
       isDummyField: true,
       formatter: ActionsColumnFormatter,
       formatExtraData: {
-        openEditSalarypolicyDialog: bankUIProps.openEditSalarypolicyDialog,
-        openDeleteSalarypolicyDialog: bankUIProps.openDeleteSalarypolicyDialog,
-        openActiveSalarypolicyDialog: bankUIProps.openActiveSalarypolicyDialog,
-        openReadSalarypolicyDialog: bankUIProps.openReadSalarypolicyDialog,
+        openEditSalarypolicyDialog: salarypolicyUIProps.openEditSalarypolicyDialog,
+        openDeleteSalarypolicyDialog: salarypolicyUIProps.openDeleteSalarypolicyDialog,
+        openActiveSalarypolicyDialog: salarypolicyUIProps.openActiveSalarypolicyDialog,
+        openReadSalarypolicyDialog: salarypolicyUIProps.openReadSalarypolicyDialog,
         isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,
         isAccessForDelete: isAccessForDelete
           ? isAccessForDelete.isAccess
@@ -168,8 +168,8 @@ export function SalarypolicyTable() {
     custom: true,
     totalSize: totalCount,
     sizePerPageList: uiHelpers.sizePerPageList,
-    sizePerPage: bankUIProps.queryParams.pageSize,
-    page: bankUIProps.queryParams.pageNumber,
+    sizePerPage: salarypolicyUIProps.queryParams.pageSize,
+    page: salarypolicyUIProps.queryParams.pageNumber,
   };
 
     return (
@@ -192,7 +192,7 @@ export function SalarypolicyTable() {
                 columns={columns}
                 defaultSorted={uiHelpers.defaultSorted}
                 onTableChange={getHandlerTableChange(
-                  bankUIProps.setQueryParams
+                  salarypolicyUIProps.setQueryParams
                 )}
                 // selectRow={getSelectRow({
                 //   entities,
