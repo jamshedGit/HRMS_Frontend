@@ -31,7 +31,7 @@ export function BanksTable() {
       openEditSalarypolicyDialog: bankUIContext.openEditSalarypolicyDialog,
       openDeleteSalarypolicyDialog: bankUIContext.openDeleteSalarypolicyDialog,
       openActiveSalarypolicyDialog: bankUIContext.openActiveSalarypolicyDialog,
-      openReadBankDialog: bankUIContext.openReadBankDialog,
+      openReadSalarypolicyDialog: bankUIContext.openReadSalarypolicyDialog,
     };
   }, [bankUIContext]);
 
@@ -149,7 +149,7 @@ export function BanksTable() {
         openEditSalarypolicyDialog: bankUIProps.openEditSalarypolicyDialog,
         openDeleteSalarypolicyDialog: bankUIProps.openDeleteSalarypolicyDialog,
         openActiveSalarypolicyDialog: bankUIProps.openActiveSalarypolicyDialog,
-        openReadBankDialog: bankUIProps.openReadBankDialog,
+        openReadSalarypolicyDialog: bankUIProps.openReadSalarypolicyDialog,
         isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,
         isAccessForDelete: isAccessForDelete
           ? isAccessForDelete.isAccess

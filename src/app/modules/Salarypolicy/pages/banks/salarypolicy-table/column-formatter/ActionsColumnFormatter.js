@@ -16,7 +16,7 @@ export function ActionsColumnFormatter(
     openReadUserDialog,
     isAccessForEdit,
     isAccessForDelete,
-    openReadBankDialog
+    openReadSalarypolicyDialog
   }
 ) {
   const isUserRead = false;
@@ -27,7 +27,7 @@ export function ActionsColumnFormatter(
         <a
           title=""
           className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
-          onClick={() => openReadBankDialog(row.Id, isUserRead)}
+          onClick={() => openReadSalarypolicyDialog(row.Id, isUserRead)}
         >
           <span className="svg-icon svg-icon-md svg-icon-primary">
             <SVG

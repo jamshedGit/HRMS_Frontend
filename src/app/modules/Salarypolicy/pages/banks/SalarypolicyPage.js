@@ -42,7 +42,7 @@ export function SalarypolicyPage({ history }) {
     openActiveSalarypolicyDialog: (id) => {
       history.push(`/salarypolicy/read-all-salarypolicy/${id}/active`);
     },
-    openReadBankDialog: (id, isUserRead) => {
+    openReadSalarypolicyDialog: (id, isUserRead) => {
       
       // dispatch(fetchAllCountry());
       // dispatch(fetchRoles());

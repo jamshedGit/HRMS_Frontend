@@ -52,7 +52,7 @@ export function BanksUIProvider({ BanksUIEvents, children }) {
     openEditSalarypolicyDialog: BanksUIEvents.openEditSalarypolicyDialog,
     openDeleteSalarypolicyDialog: BanksUIEvents.openDeleteSalarypolicyDialog,
     openActiveSalarypolicyDialog: BanksUIEvents.openActiveSalarypolicyDialog,
-    openReadBankDialog: BanksUIEvents.openReadBankDialog,
+    openReadSalarypolicyDialog: BanksUIEvents.openReadSalarypolicyDialog,
   };
   return (
     <SalarypolicyUIContext.Provider value={value}>{children}</SalarypolicyUIContext.Provider>
