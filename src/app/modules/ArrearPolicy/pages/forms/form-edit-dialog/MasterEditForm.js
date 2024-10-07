@@ -7,24 +7,24 @@ import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLab
 
 //Validation for Form
 const formValidation = Yup.object().shape({
-  type: Yup.number().required('Type is required').min(0, 'Type is required'),
-  divisor: Yup.number()
+  type: Yup.string().required('Type is required'),
+  divisor: Yup.string()
     .when('type', {
-      is: 2, // if select value is 2
-      then: Yup.number().required('Divisor is required').min(1, 'Divisor must be greated than 0'),
-      otherwise: Yup.number().notRequired(),
+      is: '2', // if select value is 2
+      then: Yup.string().required('Divisor is required').matches(/^\d+(\.\d+)?$/, 'Must be a valid number'),
+      otherwise: Yup.string().notRequired(),
     }),
-  multiplier: Yup.number()
+  multiplier: Yup.string()
     .when('type', {
-      is: 2, // if select value is 2
-      then: Yup.number().required('Multiplier is required').min(1, 'Multiplier must be greated than 0'),
-      otherwise: Yup.number().notRequired(),
+      is: '2', // if select value is 2
+      then: Yup.string().required('Multiplier is required').matches(/^\d+(\.\d+)?$/, 'Must be a valid number'),
+      otherwise: Yup.string().notRequired(),
     }),
-  days: Yup.number()
+  days: Yup.string()
     .when('type', {
-      is: 3, // if select value is 3
-      then: Yup.number().required('Days are required').min(1, 'Days must be greated than 0'),
-      otherwise: Yup.number().notRequired(),
+      is: '3', // if select value is 3
+      then: Yup.string().required('Days are required').matches(/^\d+(\.\d+)?$/, 'Must be a valid number'),
+      otherwise: Yup.string().notRequired(),
     }),
 });
 
@@ -37,6 +37,24 @@ export function MasterEditForm({
   enableLoading,
   loading,
 }) {
+
+  //Handle other fields when dropdown value changes
+  const handleDropdownChange = (el, setFieldValue) => {
+    const value = el.target.value;
+    setFieldValue('type', value)
+    if (value == '2') {
+      setFieldValue('days', '')
+    }
+    else if (value == '3') {
+      setFieldValue('divisor', '')
+      setFieldValue('multiplier', '')
+    }
+    else {
+      setFieldValue('divisor', '')
+      setFieldValue('multiplier', '')
+      setFieldValue('days', '')
+    }
+  }
 
   return (
     <>
@@ -75,6 +93,7 @@ export function MasterEditForm({
                         onBlur={handleBlur}
                         onChange={(e) => {
                           setFieldValue('type', e.target.value)
+                          handleDropdownChange(e, setFieldValue)
                         }}
                         label={
                           <span>
@@ -86,25 +105,24 @@ export function MasterEditForm({
                         autoComplete="off"
                         children={
                           <>
-                            <option value={-1}>--Select--</option>
-                            <option value={1}>Month Days</option>
-                            <option value={2}>Ratio Of Years</option>
-                            <option value={3}>Fixed Days</option>
+                            <option value={''}>--Select--</option>
+                            <option value={'1'}>Month Days</option>
+                            <option value={'2'}>Ratio Of Years</option>
+                            <option value={'3'}>Fixed Days</option>
                           </>}
                       />
                       {
-                        errors.type && <CustomErrorLabel touched={true} error={errors.type} />
+                        errors.type && !values.type && <CustomErrorLabel touched={true} error={errors.type} />
                       }
                     </div>
 
                     {
-                      values.type == 2 &&
+                      values.type == '2' &&
                       <>
                         <div className="col-12 col-md-4 mt-3">
                           <Field
                             name="divisor"
                             component={Input}
-                            type="number"
                             placeholder=""
                             onChange={handleChange}
                             onBlur={handleBlur}
@@ -124,7 +142,6 @@ export function MasterEditForm({
                           <Field
                             name="multiplier"
                             component={Input}
-                            type="number"
                             placeholder=""
                             onChange={handleChange}
                             onBlur={handleBlur}
@@ -143,13 +160,12 @@ export function MasterEditForm({
                     }
 
                     {
-                      values.type == 3 &&
+                      values.type == '3' &&
                       <>
                         <div className="col-12 col-md-4 mt-3">
                           <Field
                             name="days"
                             component={Input}
-                            type="number"
                             placeholder=""
                             value={values.days}
                             onChange={handleChange}

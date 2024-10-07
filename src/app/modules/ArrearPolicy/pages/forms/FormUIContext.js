@@ -26,10 +26,10 @@ export function FormUIProvider({ FormUIEvents, children }) {
   }, []);
 
   const initUser = {
-    type: -1,
-    divisor: 0,
-    multiplier: 0,
-    days: 0,
+    type: "",
+    divisor: "",
+    multiplier: '',
+    days: '',
   };
 
 
