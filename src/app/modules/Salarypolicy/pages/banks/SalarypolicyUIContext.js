@@ -14,7 +14,7 @@ export const ReceiptUIConsumer = SalarypolicyUIContext.Consumer;
 //   limit: 10,
 //   page: 1,
 // }
-export function BanksUIProvider({ BanksUIEvents, children }) {
+export function SalarypolicyUIProvider({ BanksUIEvents, children }) {
   const [queryParams, setQueryParamsBase] = useState(initialFilter);
   const [ids, setIds] = useState([]);
   const setQueryParams = useCallback((nextQueryParams) => {

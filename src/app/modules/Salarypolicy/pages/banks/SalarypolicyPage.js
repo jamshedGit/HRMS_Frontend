@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { BanksUIProvider } from "./SalarypolicyUIContext";
+import { SalarypolicyUIProvider } from "./SalarypolicyUIContext";
 import { SalarypolicyEditDialog } from "./salarypolicy-edit-dialog/SalarypolicyEditDialog";
 import { SalarypolicyDeleteDialog } from "./salarypolicy-delete-dialog/SalarypolicyDeleteDialog";
 import { SalarypolicyActiveDialog } from "./salarypolicy-active-dialog/SalarypolicyActiveDialog";
@@ -53,7 +53,7 @@ export function SalarypolicyPage({ history }) {
   };
   return (
     
-    <BanksUIProvider BanksUIEvents={BanksUIEvents}>
+    <SalarypolicyUIProvider BanksUIEvents={BanksUIEvents}>
       <Route exact path="/salarypolicy/read-all-salarypolicy/new">
         {({ history, match }) => (
           <SalarypolicyEditDialog
@@ -123,6 +123,6 @@ export function SalarypolicyPage({ history }) {
         draggable
         pauseOnHover
       />
-    </BanksUIProvider>
+    </SalarypolicyUIProvider>
   );
 }
