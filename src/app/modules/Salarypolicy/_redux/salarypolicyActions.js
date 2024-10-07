@@ -75,28 +75,6 @@ export const deleteSalarypolicy = (id) => (dispatch) => {
     });
 };
 
-export const activeUser = (id) => (dispatch) => {
-  dispatch(actions.startCall({ callType: callTypes.action }));
-  return requestFromServer
-    .deleteSalarypolicy({ receiptId: id })
-    .then((response) => {
-      //console.log("response from delete user ", response.data.message)
-      dispatch(actions.userDeleted({ id: id }));
-      toast.success("Successfully Activated", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    })
-    .catch((error) => {
-      dispatch(actions.catchError({ error, callType: callTypes.action }));
-      toast.error(error.response.data.message);
-    });
-};
 
 export const createSalarypolicy = (salarypolicyForCreation, disbaleLoading, onHide) => (
   dispatch

@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { SalarypolicyUIProvider } from "./SalarypolicyUIContext";
 import { SalarypolicyEditDialog } from "./salarypolicy-edit-dialog/SalarypolicyEditDialog";
 import { SalarypolicyDeleteDialog } from "./salarypolicy-delete-dialog/SalarypolicyDeleteDialog";
-import { SalarypolicyActiveDialog } from "./salarypolicy-active-dialog/SalarypolicyActiveDialog";
+
 import { SalarypolicyCard } from "./salarypolicy-card/SalarypolicyCard";
 import { fetchAllCountry } from "../../../../../_metronic/redux/dashboardActions";
 import {} from "../../_redux/salarypolicyActions";
@@ -86,18 +86,7 @@ export function SalarypolicyPage({ history }) {
           />
         )}
       </Route>
-      <Route path="/salarypolicy/read-all-salarypolicy/:id/active">
-        {({ history, match }) => (
-          <SalarypolicyActiveDialog
-            show={match != null}
-            id={match && match.params.id}
-            //status={match && match.params.status}
-            onHide={() => {
-              history.push("/salarypolicy/read-all-salarypolicy");
-            }}
-          />
-        )}
-      </Route>
+    
       <SalarypolicyCard />
       <ToastContainer
         position="top-right"
