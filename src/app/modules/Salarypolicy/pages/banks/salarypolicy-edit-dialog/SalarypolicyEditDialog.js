@@ -81,11 +81,11 @@ console.log("id for salary policy",id)
   // }, [actionsLoading]);
   //console.log("userForEdit", userForEdit);
 
-  const saveBank = async (user) => {
+  const saveSalarypolicy = async (user) => {
 
     if (!id) {
-      console.log("bank edit dialog");
-      console.log(user);
+ 
+   
 
       // const getUserStatus = userStatusTypes.filter((item) => {
       //   return item.value === +user.status;
@@ -138,7 +138,7 @@ console.log("id for salary policy",id)
     >
       <SalarypolicyEditDialogHeader id={id} isUserForRead={userForRead} />
       <SalarypolicyEditForm
-        saveBank={saveBank}
+        saveSalarypolicy={saveSalarypolicy}
         user={userForEdit || salarypolicyUIProps .initUser}
         onHide={onHide}
         roles={roles}

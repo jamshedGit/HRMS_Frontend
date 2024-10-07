@@ -24,7 +24,7 @@ const salarypolicyEditSchema = Yup.object().shape({
 });
 
 export function SalarypolicyEditForm({
-  saveBank,
+  saveSalarypolicy,
   user,
   actionsLoading,
   onHide,
@@ -71,7 +71,7 @@ export function SalarypolicyEditForm({
       onSubmit={(values) => {
         console.log("values", values);
         enableLoading();
-        saveBank(values);
+        saveSalarypolicy(values);
       }}
     >
       {({ handleSubmit, values, setFieldValue }) => (
