@@ -2,6 +2,8 @@ import React, { useMemo } from "react"
 import { Formik } from "formik"
 import { isEqual } from "lodash"
 import { useFormUIContext } from "../FormUIContext"
+import { debounce } from "lodash";
+import { useCallback } from "react";
 
 const prepareFilter = (queryParams, values) => {
   const { searchText } = values
@@ -29,7 +31,6 @@ export function FormFilter() {
 
   // queryParams, setQueryParams,
   const applyFilter = (values) => {
-
     const newQueryParams = prepareFilter(formUIProps.queryParams, values)
     if (!isEqual(newQueryParams, formUIProps.queryParams)) {
       newQueryParams.pageNumber = 1
@@ -37,6 +38,13 @@ export function FormFilter() {
       formUIProps.setQueryParams(newQueryParams)
     }
   }
+
+
+  //This is a Debounce Function that will run the function only after 500ms even if the function is triggered every second.
+  const debouncedApplyFilter = useCallback(
+    debounce((values) => applyFilter(values), 500), 
+    []
+  );
 
   return (
     <>
@@ -46,7 +54,7 @@ export function FormFilter() {
           searchText: ""
         }}
         onSubmit={(values) => {
-          applyFilter(values)
+          debouncedApplyFilter(values)
         }}
       >
         {({
@@ -66,8 +74,8 @@ export function FormFilter() {
                   onBlur={handleBlur}
                   value={values.searchText}
                   onChange={(e) => {
-                    setFieldValue("searchText", e.target.value.trim())
-                    handleSubmit()
+                      setFieldValue("searchText", e.target.value)
+                      handleSubmit()
                   }}
                 />
                 <small className="form-text text-muted">

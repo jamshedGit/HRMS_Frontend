@@ -11,19 +11,19 @@ const formValidation = Yup.object().shape({
   divisor: Yup.number()
     .when('type', {
       is: 2, // if select value is 2
-      then: Yup.number().required('Divisor is required'),
+      then: Yup.number().required('Divisor is required').min(1, 'Divisor must be greated than 0'),
       otherwise: Yup.number().notRequired(),
     }),
   multiplier: Yup.number()
     .when('type', {
       is: 2, // if select value is 2
-      then: Yup.number().required('Multiplier is required'),
+      then: Yup.number().required('Multiplier is required').min(1, 'Multiplier must be greated than 0'),
       otherwise: Yup.number().notRequired(),
     }),
   days: Yup.number()
     .when('type', {
       is: 3, // if select value is 3
-      then: Yup.number().required('Days are required'),
+      then: Yup.number().required('Days are required').min(1, 'Days must be greated than 0'),
       otherwise: Yup.number().notRequired(),
     }),
 });
@@ -100,12 +100,11 @@ export function MasterEditForm({
                     {
                       values.type == 2 &&
                       <>
-
-
                         <div className="col-12 col-md-4 mt-3">
                           <Field
                             name="divisor"
                             component={Input}
+                            type="number"
                             placeholder=""
                             onChange={handleChange}
                             onBlur={handleBlur}
@@ -125,6 +124,7 @@ export function MasterEditForm({
                           <Field
                             name="multiplier"
                             component={Input}
+                            type="number"
                             placeholder=""
                             onChange={handleChange}
                             onBlur={handleBlur}
@@ -149,6 +149,7 @@ export function MasterEditForm({
                           <Field
                             name="days"
                             component={Input}
+                            type="number"
                             placeholder=""
                             value={values.days}
                             onChange={handleChange}

@@ -34,16 +34,16 @@ export function FormTable() {
   }, [formUIContext]);
 
   const { currentState, userAccess } = useSelector(
-    (state) => { return {
-      currentState: state.arrear_policy,
-      userAccess: state?.auth?.userAccess["Arrear_Policy"],
-    }},
+    (state) => {
+      return {
+        currentState: state.arrear_policy,
+        userAccess: state?.auth?.userAccess["Arrear_Policy"],
+      }
+    },
     shallowEqual
   );
-  
-  const { totalCount, entities, listLoading } = currentState;
 
-  //totalCount = 10
+  const { totalCount, entities, listLoading } = currentState;
 
   const dispatch = useDispatch();
 
@@ -61,16 +61,7 @@ export function FormTable() {
   );
   // Table columns
   const columns = [
-    {
-      dataField: "Id",
-      text: "ID",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
+    
     {
       dataField: "type_name",
       text: "Type",
@@ -83,8 +74,28 @@ export function FormTable() {
     },
 
     {
-      dataField: "isActiveText",
-      text: "Active",
+      dataField: "divisor",
+      text: "Divisor",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
+    {
+      dataField: "multiplier",
+      text: "Multiplier",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
+    {
+      dataField: "days",
+      text: "Days",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -123,7 +134,7 @@ export function FormTable() {
     page: FormUIProps.queryParams.pageNumber,
   };
 
-    return (
+  return (
     <>
       <PaginationProvider pagination={paginationFactory(paginationOptions)}>
         {({ paginationProps, paginationTableProps }) => {

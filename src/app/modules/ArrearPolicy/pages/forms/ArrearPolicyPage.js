@@ -1,5 +1,4 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 import { Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -9,7 +8,6 @@ import { FormDeleteDialog } from "./form-delete-dialog/FormDeleteDialog";
 import { FormCard } from "./form-card/FormCard";
 
 export function ArrearPolicyPage({ history }) {
-  const dispatch = useDispatch();
   const FormUIEvents = {
     newFormButtonClick: () => {
       history.push("/arrear_policy/read-all-arrear-policy/new");
