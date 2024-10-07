@@ -115,7 +115,7 @@ export function SalarypolicyFIlter({ listLoading, user, setCity,
     console.log("creaet PDF", filterVal)
     if (filterVal != null) {
       setLoading(true);
-      // const data = await fetchDonationReport(filterVal);
+   
       // console.log("donation report 1", data);
       
       const table = {

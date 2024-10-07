@@ -3,7 +3,7 @@ import { salarypolicySlice, callTypes } from "./salarypolicySlice";
 import { toast } from "react-toastify";
 
 const { actions } = salarypolicySlice;
-// const { roleActions } = getAllrolesSlice
+
 
 export const fetchSalarypolicies = (queryparm) => async (dispatch) => {
   // console.log("Receive QPsss", queryparm)

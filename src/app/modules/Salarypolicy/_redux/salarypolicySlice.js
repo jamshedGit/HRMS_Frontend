@@ -121,12 +121,7 @@ export const salarypolicySlice = createSlice({
             state.error = null;
             state.userStatusTypes = entities;
         },
-        donationReportFetch: (state, action) => {
-            state.donationReportFetch = action.payload;
-        },
-        MaxIdFetchForReceipt: (state, action) => {
-            state.donationReportFetch = action.payload;
-        },
+
     },
 });
 
