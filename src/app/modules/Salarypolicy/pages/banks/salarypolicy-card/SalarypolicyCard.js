@@ -14,7 +14,7 @@ import { useSelector, shallowEqual } from "react-redux"
 export function SalarypolicyCard() {
   const SalarypolicyUIContext = useSalarypolicyUIContext()
   //console.log("SalarypolicyUIContext", SalarypolicyUIContext)
-  const BanksUIProps = useMemo(() => {
+  const SalarypolicyUIProps  = useMemo(() => {
     return {
       newBankButtonClick: SalarypolicyUIContext.newBankButtonClick,
       openEditBankDialog: SalarypolicyUIContext.openEditBankDialog,
@@ -45,7 +45,7 @@ export function SalarypolicyCard() {
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={BanksUIProps.newBankButtonClick}
+                onClick={SalarypolicyUIProps .newBankButtonClick}
               >
                 + Add Salary Policy
               </button>
@@ -61,7 +61,7 @@ export function SalarypolicyCard() {
                   <button
                     type="button"
                     className="btn btn-primary"
-                    onClick={BanksUIProps.newUserButtonClick}
+                    onClick={SalarypolicyUIProps .newUserButtonClick}
                   >
                     Add New User
                   </button>

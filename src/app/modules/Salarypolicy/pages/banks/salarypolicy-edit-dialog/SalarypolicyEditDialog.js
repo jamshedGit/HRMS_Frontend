@@ -22,7 +22,7 @@ console.log("id for salary policy",id)
     };
   }, [SalarypolicyUIContext]);
 
-  const banksUIProps = useMemo(() => {
+  const salarypolicyUIProps  = useMemo(() => {
     return {
       initUser: SalarypolicyUIContext.initUser,
       queryParams: SalarypolicyUIContext.queryParams,
@@ -69,7 +69,7 @@ console.log("id for salary policy",id)
   useEffect(() => {
     dispatch(actions.fetchUser(id));
 
-    // dispatch(actions.fetchUser(banksUIProps.queryParams))
+    // dispatch(actions.fetchUser(salarypolicyUIProps .queryParams))
   }, [id, dispatch]);
 
   // useEffect(() => {
@@ -139,7 +139,7 @@ console.log("id for salary policy",id)
       <SalarypolicyEditDialogHeader id={id} isUserForRead={userForRead} />
       <SalarypolicyEditForm
         saveBank={saveBank}
-        user={userForEdit || banksUIProps.initUser}
+        user={userForEdit || salarypolicyUIProps .initUser}
         onHide={onHide}
         roles={roles}
         centers={centers}

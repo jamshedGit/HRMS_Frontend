@@ -71,7 +71,7 @@ export function SalarypolicyFIlter({ listLoading, user, setCity,
     }
   }, [cityId, dispatch]);
 
-  const banksUIProps = useMemo(() => {
+  const salarypolicyUIProps  = useMemo(() => {
     return {
       queryParams: SalarypolicyUIContext.queryParams,
       setQueryParams: SalarypolicyUIContext.setQueryParams,
@@ -328,13 +328,13 @@ export function SalarypolicyFIlter({ listLoading, user, setCity,
   // queryParams, setQueryParams,
   const applyFilter = (values) => {
 
-    const newQueryParams = prepareFilter(banksUIProps.queryParams, values)
-    if (!isEqual(newQueryParams, banksUIProps.queryParams)) {
+    const newQueryParams = prepareFilter(salarypolicyUIProps .queryParams, values)
+    if (!isEqual(newQueryParams, salarypolicyUIProps .queryParams)) {
       newQueryParams.pageNumber = 1
       // update list by queryParams
       console.log("update list by queryParams");
       console.log(newQueryParams);
-      banksUIProps.setQueryParams(newQueryParams)
+      salarypolicyUIProps .setQueryParams(newQueryParams)
     }
   }
 

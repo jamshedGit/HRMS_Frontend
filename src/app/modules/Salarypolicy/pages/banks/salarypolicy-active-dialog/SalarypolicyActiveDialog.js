@@ -9,7 +9,7 @@ export function SalarypolicyActiveDialog({ id, status, show, onHide }) {
   const [loading, setLoading] = useState(false);
   // Customers UI Context
   const usersUIContext = useSalarypolicyUIContext();
-  const banksUIProps = useMemo(() => {
+  const salarypolicyUIProps = useMemo(() => {
     return {
       queryParams: usersUIContext.queryParams,
     };
@@ -47,9 +47,9 @@ export function SalarypolicyActiveDialog({ id, status, show, onHide }) {
     dispatch(actions.activeUser(id)).then(() => {
       onHide();
       // refresh list after deletion
-      dispatch(actions.fetchUsers(banksUIProps.queryParams));
+      dispatch(actions.fetchUsers(salarypolicyUIProps .queryParams));
       // clear selections list
-      // banksUIProps.setIds([]);
+      // salarypolicyUIProps .setIds([]);
       // closing delete modal
       disableLoading();
     });
