@@ -148,7 +148,7 @@ export const updateSalarypolicy = (user, disbaleLoading, onHide) => (dispatch) =
       console.log("my response",response?.config?.data);
       const updatedSalarypolicy = response?.config?.data; // response.data?.data;
       console.log("bnkAction Res", response)
-      dispatch(actions.bankUpdated({ updatedSalarypolicy }));
+      dispatch(actions.salarypolicyUpdated({ updatedSalarypolicy }));
       dispatch(actions.startCall({ callType: callTypes.action }));
       disbaleLoading();
       onHide();

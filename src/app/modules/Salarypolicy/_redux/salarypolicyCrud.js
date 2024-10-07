@@ -6,8 +6,8 @@ export const USERS_URL = process.env.REACT_APP_API_URL;
 export function createSalarypolicy(body) {
   console.log("salary policy  step 1", body)
   
-  // body.Name = body.txtbankName;
-  // delete body.txtbankName
+  // body.Name = body.txtsalarypolicyName;
+  // delete body.txtsalarypolicyName
 
   return axios.post(`${USERS_URL}/salarypolicy/create-salarypolicy`, body);
   
@@ -33,9 +33,9 @@ export function getSalarypolicyById(id) {
 }
 
 //Update
-export function updateSalarypolicy(bank) {
-   console.log("updateUser 12", bank)
-  return axios.put(`${USERS_URL}/salarypolicy/update-salarypolicy`, bank);
+export function updateSalarypolicy(salarypolicy) {
+   
+  return axios.put(`${USERS_URL}/salarypolicy/update-salarypolicy`, salarypolicy);
 }
 
 //Delete

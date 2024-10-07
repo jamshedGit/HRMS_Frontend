@@ -108,7 +108,7 @@ console.log("id for salary policy",id)
      
       console.log("salary policy getUserStatus", user);
 
-      const bankUpdatedFields = {
+      const salarypolicyUpdatedFields = {
         Id: user.Id,
         type: user.type,
         value: user.value,
@@ -117,14 +117,14 @@ console.log("id for salary policy",id)
       };
 
       
-      // const bankUpdatedFields = {
+      // const salarypolicyUpdatedFields = {
       //   Id: user.Id,
       //   Name: user.Name,
         
       // };
       console.log("salary policy getUserStatus", user);
-      console.log("bankUpdatedFields", bankUpdatedFields);
-     await dispatch(actions.updateSalarypolicy(bankUpdatedFields, disbaleLoading, onHide));
+      console.log("salarypolicyUpdatedFields", salarypolicyUpdatedFields);
+     await dispatch(actions.updateSalarypolicy(salarypolicyUpdatedFields, disbaleLoading, onHide));
      await dispatch(actions.fetchUsers(usersUIProps.queryParams));
     }
   };

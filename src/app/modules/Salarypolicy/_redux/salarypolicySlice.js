@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialBankState = {
+const initialSalarypolicyState = {
     listLoading: false,
     actionsLoading: null,
     totalCount: 0,
@@ -21,7 +21,7 @@ export const callTypes = {
 
 export const salarypolicySlice = createSlice({
     name: "salarypolicy",
-    initialState: initialBankState,
+    initialState: initialSalarypolicyState,
     reducers: {
         catchError: (state, action) => {
             state.error = `${action.type}: ${action.payload.error}`;
@@ -73,19 +73,19 @@ export const salarypolicySlice = createSlice({
 
             state.error = null;
             state.actionsLoading = false;
-            console.log("bank deleted ")
-            console.log(state.entities);
+         
+          
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );
         },
         salarypolicyCreated: (state, action) => {
-             console.log("action payload for bank", action.payload);
+           
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);
         },
-        bankUpdated: (state, action) => {
+        salarypolicyUpdated: (state, action) => {
             state.error = null;
             state.actionsLoading = false;
             // state.entities.push(action.payload)
