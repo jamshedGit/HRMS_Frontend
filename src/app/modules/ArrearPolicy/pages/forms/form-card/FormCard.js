@@ -13,7 +13,6 @@ import { useSelector, shallowEqual } from "react-redux"
 
 export function FormCard() {
   const FormUIContext = useFormUIContext()
-  //console.log("FormUIContext", FormUIContext)
   const formUIProps = useMemo(() => {
     return {
       newFormButtonClick: FormUIContext.newFormButtonClick,
@@ -27,7 +26,6 @@ export function FormCard() {
     }),
     shallowEqual
   )
-  
   const accessUser = userAccess.find(
     (item) => item.componentName === "CreateFiscalSetup"
   )
@@ -45,7 +43,7 @@ export function FormCard() {
                 className="btn btn-primary"
                 onClick={formUIProps.newFormButtonClick}
               >
-                + Add Fiscal Year
+                + Add Arrear Policy
               </button>
             ) : (
               <></>
