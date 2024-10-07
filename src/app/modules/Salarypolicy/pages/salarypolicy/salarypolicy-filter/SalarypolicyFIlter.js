@@ -78,27 +78,7 @@ export function SalarypolicyFIlter({ listLoading, user, setCity,
     }
   }, [SalarypolicyUIContext])
 
-  async function fetchDonationReport(filterVal) {
-    try {
-        console.log("filter",filterVal.receiptDateFrom);
-     // console.log(`${API_URL}/edrs/donation-report`);
-     // console.log("filter value", filterVal)
-      const response = await axios.post(`${API_URL}/edrs/donation-report`, {
-        bookNo: filterVal.txtBookNo,
-        cityId: filterVal.cityId || "0",
-        centerId: filterVal.centerId || "0",
-        subCenterId: filterVal.subCenterId || "0",
-        dateFrom: filterVal.receiptDateFrom || "",
-        dateTo: filterVal.receiptDateTo,
-               
-      });
-      console.log("donation report", response);
-      return response?.data?.data;
-    } catch (error) {
-      console.log("Error fetching data:", error);
-      console.error("Error fetching data:", error);
-    }
-  }
+
 
   function getBase64ImageFromURL(url) {
     return new Promise((resolve, reject) => {
@@ -135,8 +115,8 @@ export function SalarypolicyFIlter({ listLoading, user, setCity,
     console.log("creaet PDF", filterVal)
     if (filterVal != null) {
       setLoading(true);
-      const data = await fetchDonationReport(filterVal);
-      console.log("donation report 1", data);
+      // const data = await fetchDonationReport(filterVal);
+      // console.log("donation report 1", data);
       
       const table = {
         headerRow: [
@@ -165,30 +145,30 @@ export function SalarypolicyFIlter({ listLoading, user, setCity,
 
       let total = 0;
       let t = 0;
-      data &&
-        data.forEach((item, index) => {
-          console.log("index", data.length);
+      // data &&
+      //   data.forEach((item, index) => {
+      //     console.log("index", data.length);
 
-          if (data.length - 1 == index) {
-            data.forEach((item) => { total += parseFloat(item.amount) })
+      //     if (data.length - 1 == index) {
+      //       data.forEach((item) => { total += parseFloat(item.amount) })
 
-          }
-          const row = [
-            index+1,
-            item.receiptNo,
-            item.donorName,
-            item.amount,
-            item.type,
-            // item.city,
+      //     }
+      //     const row = [
+      //       index+1,
+      //       item.receiptNo,
+      //       item.donorName,
+      //       item.amount,
+      //       item.type,
+      //       // item.city,
 
-            item.clerkName,
-            item.center,
-            item.subcenter,
-            item.createdon
+      //       item.clerkName,
+      //       item.center,
+      //       item.subcenter,
+      //       item.createdon
 
-          ];
-          table.body.push(row);
-        });
+      //     ];
+      //     table.body.push(row);
+      //   });
 
       // Add Row For Total Amount
       const totall = [

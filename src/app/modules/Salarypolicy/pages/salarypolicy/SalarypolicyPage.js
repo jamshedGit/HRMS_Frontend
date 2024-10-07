@@ -9,31 +9,21 @@ import { SalarypolicyDeleteDialog } from "./salarypolicy-delete-dialog/Salarypol
 import { SalarypolicyActiveDialog } from "./salarypolicy-active-dialog/SalarypolicyActiveDialog";
 import { SalarypolicyCard } from "./salarypolicy-card/SalarypolicyCard";
 import { fetchAllCountry } from "../../../../../_metronic/redux/dashboardActions";
-import {
-  fetchUserStatusTypes,
-  fetchRoles,
-  fetchCenters,
-} from "../../_redux/salarypolicyActions";
+import {} from "../../_redux/salarypolicyActions";
 
 
-// dispatch(actions.fetchRoles());
-//     dispatch(actions.fetchCenters());
 
 export function SalarypolicyPage({ history }) {
   const dispatch = useDispatch();
   const SalarypolicyUIEvents = {
     newSalarypolicyButtonClick: () => {
       dispatch(fetchAllCountry());
-      dispatch(fetchRoles());
-      dispatch(fetchCenters());
-      dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
+
       history.push("/salarypolicy/read-all-salarypolicy/new");
     },
     openEditSalarypolicyDialog: (id) => {
       dispatch(fetchAllCountry());
-      dispatch(fetchRoles());
-      dispatch(fetchCenters());
-      dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
+
       history.push(`/salarypolicy/read-all-salarypolicy/${id}/edit`);
     },
     openDeleteSalarypolicyDialog: (id, status) => {
@@ -44,10 +34,7 @@ export function SalarypolicyPage({ history }) {
     },
     openReadSalarypolicyDialog: (id, isUserRead) => {
       
-      // dispatch(fetchAllCountry());
-      // dispatch(fetchRoles());
-      // dispatch(fetchCenters());
-      // dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
+      
       history.push(`/salarypolicy/read-all-salarypolicy/${id}/read`);
     },
   };
