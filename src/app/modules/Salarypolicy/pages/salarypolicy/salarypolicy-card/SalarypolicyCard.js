@@ -34,6 +34,20 @@ export function SalarypolicyCard() {
     (item) => item.componentName === "CreateSalarypolicy"
   )
 
+  const { currentState } = useSelector(
+    (state) => {  console.log("state ",state); return {
+      
+      currentState: state.salarypolicy,
+      userAccess: state?.auth?.userAccess["salarypolicy"],
+    }},
+    shallowEqual
+  );
+
+  // const { currentState } = useSelector();
+  
+  const {entities } = currentState;
+  console.log("currentState salary policy entities button",  entities?.length);
+
   return (
     <>
 
@@ -41,7 +55,7 @@ export function SalarypolicyCard() {
         <CardHeader title="">
           <SalarypolicyFIlter />
           <CardHeaderToolbar>
-            {accessUser ? (
+          {accessUser &&  entities?.length==0 ? (
               <button
                 type="button"
                 className="btn btn-primary"
