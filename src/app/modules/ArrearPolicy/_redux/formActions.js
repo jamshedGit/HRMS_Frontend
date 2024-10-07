@@ -18,7 +18,7 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
 
 export const fetchEditRecord = (id) => (dispatch) => {
   if (!id) {
-    return dispatch(actions.ArrearsFetchedForEdit({}));
+    return dispatch(actions.ArrearsFetchedForEdit(null));
   }
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer

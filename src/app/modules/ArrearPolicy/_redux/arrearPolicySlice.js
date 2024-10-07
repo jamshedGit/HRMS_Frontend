@@ -49,7 +49,7 @@ export const ArrearSetupSlice = createSlice({
 
         //get User By ID
         ArrearsFetchedForEdit: (state, action) => {
-            const entities = {...action.payload.userForEdit};
+            const entities = action?.payload?.userForEdit;
             state.actionsLoading = false;
             state.userForEdit = entities;
             state.error = null;

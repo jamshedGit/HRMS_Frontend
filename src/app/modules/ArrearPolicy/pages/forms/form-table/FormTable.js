@@ -16,7 +16,6 @@ import * as uiHelpers from "../FormUIHelpers";
 import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatter";
 import { Pagination } from "../../../../../../_metronic/_partials/controls";
 import { useFormUIContext } from "../FormUIContext";
-import { DatetimeColumnFormatter } from "../../../../Dashboard/pages/dashboard/last-trips-vehicles-table/column-formatter/CreatedColumnFormatter";
 
 export function FormTable() {
   //Users UI Context

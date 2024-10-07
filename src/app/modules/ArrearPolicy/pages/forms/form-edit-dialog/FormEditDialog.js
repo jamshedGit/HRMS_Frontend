@@ -10,17 +10,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { useFormUIContext } from "../FormUIContext";
 
 export function FormEditDialog({ id, show, onHide, userForRead }) {
-  const [action, setaction] = useState(false);
   const [loading, setLoading] = useState(false);
-  const title = "FormEditDialog";
   const FormUIContext = useFormUIContext();
-
-
-  const usersUIProps = useMemo(() => {
-    return {
-      queryParams: FormUIContext.queryParams,
-    };
-  }, [FormUIContext]);
 
   const formUIProps = useMemo(() => {
     return {
