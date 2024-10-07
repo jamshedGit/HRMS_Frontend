@@ -14,7 +14,7 @@ export const ReceiptUIConsumer = SalarypolicyUIContext.Consumer;
 //   limit: 10,
 //   page: 1,
 // }
-export function SalarypolicyUIProvider({ BanksUIEvents, children }) {
+export function SalarypolicyUIProvider({ SalarypolicyUIEvents, children }) {
   const [queryParams, setQueryParamsBase] = useState(initialFilter);
   const [ids, setIds] = useState([]);
   const setQueryParams = useCallback((nextQueryParams) => {
@@ -39,7 +39,7 @@ export function SalarypolicyUIProvider({ BanksUIEvents, children }) {
   
   };
 
-  console.log("bank ui events",BanksUIEvents);
+  console.log("bank ui events",SalarypolicyUIEvents);
 
   const value = {
     queryParams,
@@ -48,11 +48,11 @@ export function SalarypolicyUIProvider({ BanksUIEvents, children }) {
     ids,
     setIds,
     initUser,
-    newSalarypolicyButtonClick: BanksUIEvents.newSalarypolicyButtonClick,
-    openEditSalarypolicyDialog: BanksUIEvents.openEditSalarypolicyDialog,
-    openDeleteSalarypolicyDialog: BanksUIEvents.openDeleteSalarypolicyDialog,
-    openActiveSalarypolicyDialog: BanksUIEvents.openActiveSalarypolicyDialog,
-    openReadSalarypolicyDialog: BanksUIEvents.openReadSalarypolicyDialog,
+    newSalarypolicyButtonClick: SalarypolicyUIEvents.newSalarypolicyButtonClick,
+    openEditSalarypolicyDialog: SalarypolicyUIEvents.openEditSalarypolicyDialog,
+    openDeleteSalarypolicyDialog: SalarypolicyUIEvents.openDeleteSalarypolicyDialog,
+    openActiveSalarypolicyDialog: SalarypolicyUIEvents.openActiveSalarypolicyDialog,
+    openReadSalarypolicyDialog: SalarypolicyUIEvents.openReadSalarypolicyDialog,
   };
   return (
     <SalarypolicyUIContext.Provider value={value}>{children}</SalarypolicyUIContext.Provider>

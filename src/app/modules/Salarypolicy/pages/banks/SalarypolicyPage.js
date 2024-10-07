@@ -21,7 +21,7 @@ import {
 
 export function SalarypolicyPage({ history }) {
   const dispatch = useDispatch();
-  const BanksUIEvents = {
+  const SalarypolicyUIEvents = {
     newSalarypolicyButtonClick: () => {
       dispatch(fetchAllCountry());
       dispatch(fetchRoles());
@@ -53,7 +53,7 @@ export function SalarypolicyPage({ history }) {
   };
   return (
     
-    <SalarypolicyUIProvider BanksUIEvents={BanksUIEvents}>
+    <SalarypolicyUIProvider SalarypolicyUIEvents={SalarypolicyUIEvents}>
       <Route exact path="/salarypolicy/read-all-salarypolicy/new">
         {({ history, match }) => (
           <SalarypolicyEditDialog
