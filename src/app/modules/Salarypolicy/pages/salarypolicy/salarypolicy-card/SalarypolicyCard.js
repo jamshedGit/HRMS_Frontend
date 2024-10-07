@@ -66,22 +66,7 @@ export function SalarypolicyCard() {
             ) : (
               <></>
             )}
-            {/* {userAccess.find((item) => {
-              if (
-                item.componentName === "CreateUser" ||
-                item.isAccess === true
-              ) {
-                return (
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={SalarypolicyUIProps .newUserButtonClick}
-                  >
-                    Add New User
-                  </button>
-                )
-              }
-            })} */}
+   
           </CardHeaderToolbar>
         </CardHeader>
 
