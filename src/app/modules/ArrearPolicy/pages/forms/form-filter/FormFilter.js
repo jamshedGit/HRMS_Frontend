@@ -55,14 +55,14 @@ export function FormFilter() {
           handleBlur,
           setFieldValue,
         }) => (
-          <form className="form form-label-right">
+          <form className="form form-label-right" style={{margin: '0.8rem 0'}}>
             <div className="row">
               <div className="col-12 col-md-12">
                 <input
                   type="text"
                   className="form-control"
                   name="searchText"
-                  placeholder="Search"
+                  placeholder="Search By Type"
                   onBlur={handleBlur}
                   value={values.searchText}
                   onChange={(e) => {
@@ -71,7 +71,7 @@ export function FormFilter() {
                   }}
                 />
                 <small className="form-text text-muted">
-                  <b>Search</b> in Type field
+                  {/* <b>Search</b> in Type field */}
                 </small>
               </div>
             </div>

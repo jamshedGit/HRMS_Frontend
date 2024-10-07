@@ -35,10 +35,10 @@ export function FormCard() {
     <>
 
       <Card>
-        <CardHeader title="">
+        <CardHeader title={null}>
           <FormFilter />
           <CardHeaderToolbar>
-            {accessUser ? (
+            {accessUser && (
               <button
                 type="button"
                 className="btn btn-primary"
@@ -46,8 +46,6 @@ export function FormCard() {
               >
                 + Add Arrear Policy
               </button>
-            ) : (
-              <></>
             )}
           </CardHeaderToolbar>
         </CardHeader>
