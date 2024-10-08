@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { Input } from "../../../../../../_metronic/_partials/controls"; // Adjust import as needed
 import { useDispatch, useSelector } from "react-redux";
 
-
+console.log("Salary policy input",Input)
 
 const salarypolicyEditSchema = Yup.object().shape({
   type: Yup.string().required("Required*"),
@@ -32,6 +32,7 @@ export function SalarypolicyEditForm({
   enableLoading,
   loading,
 }) {
+  console.log("SalarypolicyEditForm user",user)
   const options = [
     { value: "Ratio of Year", label: "Ratio of Year" },
     { value: "Month Days", label: "Month Days" },
@@ -42,7 +43,7 @@ export function SalarypolicyEditForm({
     <div className="form-group">
       <label>{label}</label>
       <select {...field} className="form-control" onChange={onChange}>
-        <option value="">Select Type</option>
+      <option value="">{user?.type || 'Select Type'}</option>
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
@@ -55,6 +56,8 @@ export function SalarypolicyEditForm({
     </div>
   );
   console.log("initialValues user.Type", user);
+
+  
   return (
     <Formik
       enableReinitialize={true}
@@ -66,6 +69,8 @@ export function SalarypolicyEditForm({
       //   divisor: user.divisor || 0,
       // }}
 
+
+
       initialValues={user}
       validationSchema={salarypolicyEditSchema}
       onSubmit={(values) => {
@@ -75,6 +80,7 @@ export function SalarypolicyEditForm({
       }}
     >
       {({ handleSubmit, values, setFieldValue }) => (
+        
         <>
           <Modal.Body className="overlay overlay-block cursor-default">
             {actionsLoading && (
