@@ -20,6 +20,7 @@ import { coffinSlice } from "../app/modules/IBS/_redux/coffin/reduxSlice";
 import { receiptSlice } from "../app/modules/EDRS/_redux/receiptSlice"
 import { bankSlice } from "../app/modules/Banks/_redux/bankSlice";
 import { salarypolicySlice } from "../app/modules/Salarypolicy/_redux/salarypolicySlice";
+import { tax_slabSlice } from "../app/modules/Tax_Slab/_redux/redux-Slice";
 import { branchSlice } from "../app/modules/BankBranch/_redux/branchSlice";
 import { deptSlice } from "../app/modules/Department/_redux/deptSlice";
 import { empTypeSlice } from "../app/modules/EmployeeType/_redux/employeeTypeSlice";
@@ -74,6 +75,7 @@ export const rootReducer = combineReducers({
   receipt: receiptSlice.reducer,
   bank: bankSlice.reducer,
  salarypolicy: salarypolicySlice.reducer,
+ tax_slab:tax_slabSlice.reducer,
   branch: branchSlice.reducer,
   dept: deptSlice.reducer,
   empType: empTypeSlice.reducer,
