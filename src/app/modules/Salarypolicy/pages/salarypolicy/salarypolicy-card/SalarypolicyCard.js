@@ -53,7 +53,7 @@ export function SalarypolicyCard() {
 
       <Card>
         <CardHeader title="">
-          <SalarypolicyFIlter />
+          {/* <SalarypolicyFIlter /> */}
           <CardHeaderToolbar>
           {accessUser &&  entities?.length==0 ? (
               <button
