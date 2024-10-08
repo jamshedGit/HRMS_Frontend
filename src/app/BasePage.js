@@ -56,6 +56,7 @@ const EmployeeSalaryRevisionModule = lazy(() => import("./modules/Employee_Salar
 const TaxSetupModule = lazy(() => import("./modules/Tax_Setup/pages/index"));
 const FiscalSetupModule = lazy(() => import("./modules/Fiscal_Setup/pages/index"));
 const PayrollMonthSetupModule = lazy(() => import("./modules/Payroll_Month_Setup/pages/index"));
+const ArrearPolicyModule = lazy(() => import("./modules/ArrearPolicy/pages/index"));
 
 
 const ROUTES = {
@@ -100,7 +101,8 @@ const ROUTES = {
   salary_revision: EmployeeSalaryRevisionModule,
   tax_setup: TaxSetupModule,
   fiscal_setup: FiscalSetupModule,
-  payroll_month: PayrollMonthSetupModule
+  payroll_month: PayrollMonthSetupModule,
+  arrear_policy: ArrearPolicyModule
 };
 
 export default function BasePage() {

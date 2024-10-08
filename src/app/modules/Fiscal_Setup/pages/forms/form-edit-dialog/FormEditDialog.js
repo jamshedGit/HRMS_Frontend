@@ -38,6 +38,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
 
   const dispatch = useDispatch();
   const {
+    entities,
     actionsLoading,
     user,
     userForEdit,
@@ -46,7 +47,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     userStatusTypes,
     isuserForRead,
   } = useSelector((state) => ({
-
+    entities: state.fiscal_setup.entities,
     actionsLoading: state.users.actionsLoading,
     user: state.users, // change for users to receipt
     userForEdit: state.fiscal_setup.userForEdit,
@@ -108,6 +109,25 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     }
   };
 
+  //Get Table data from entities key and get the record with the latest start date from the data.
+  //then add one month to the last date for start date and 2 months for endate to create record for the month after the last record
+  //If no previous records are found then set current month in start date and next month in end date
+  const userData = useMemo(() => {
+    let lastEntry = entities?.map(el => el).sort((a, b) => new Date(b.startDate) - new Date(a.startDate))?.[0];
+    if (lastEntry) {
+      const startDate = new Date(new Date(lastEntry.startDate).setDate(1));
+      return {
+        startDate: new Date(startDate.setMonth(startDate.getMonth() + 1)),
+        endDate: new Date(startDate.setMonth(startDate.getMonth() + 1))
+      }
+    }
+    const startDate = new Date(new Date().setDate(1))
+    return {
+      startDate: new Date(startDate.setMonth(startDate.getMonth())),
+      endDate: new Date(startDate.setMonth(startDate.getMonth() + 1))
+    }
+  }, [entities]);
+
   return (
     <Modal
       size="lg"
@@ -118,7 +138,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
       <FormEditDialogHeader id={id} isUserForRead={userForRead} />
       <MasterEditForm
         SaveTaxSetup={SaveTaxSetup}
-        user={userForEdit || formUIProps.initUser}
+        user={userForEdit || userData || formUIProps.initUser}
         onHide={onHide}
         roles={roles}
         centers={centers}

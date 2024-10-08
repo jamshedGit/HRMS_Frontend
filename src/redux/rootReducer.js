@@ -53,6 +53,7 @@ import { SalaryRevisionSlice } from "../app/modules/Employee_Salary_Revision/_re
 import { taxSetupSlice } from "../app/modules/Tax_Setup/_redux/taxSetupSlice";
 import { fiscalSetupSlice } from "../app/modules/Fiscal_Setup/_redux/fiscalSetupSlice";
 import { PayrollMonthSlice } from "../app/modules/Payroll_Month_Setup/_redux/PayrollMonthSlice";
+import { ArrearSetupSlice } from "../app/modules/ArrearPolicy/_redux/arrearPolicySlice";
 
 export const rootReducer = combineReducers({
   auth: auth.reducer,
@@ -106,7 +107,8 @@ export const rootReducer = combineReducers({
   salary_revision: SalaryRevisionSlice.reducer,
   tax_setup: taxSetupSlice.reducer,
   fiscal_setup: fiscalSetupSlice.reducer,
-  payroll_month:PayrollMonthSlice.reducer
+  payroll_month:PayrollMonthSlice.reducer,
+  arrear_policy: ArrearSetupSlice.reducer
 });
 
 export function* rootSaga() {
