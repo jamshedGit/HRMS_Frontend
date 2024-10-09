@@ -68,7 +68,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   }, [id, dispatch]);
 
 
-  const saveSalarypolicy = async (user) => {
+  const saveForm = async (user) => {
 
     console.log("tax slab getUserStatus", user);
 
@@ -109,7 +109,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     >
       <FormEditDialogHeader id={id} isUserForRead={userForRead} />
       <FormEditForm
-        saveSalarypolicy={saveSalarypolicy}
+        saveForm={saveForm}
         user={userForEdit || formUIProps .initUser}
         onHide={onHide}
         roles={roles}

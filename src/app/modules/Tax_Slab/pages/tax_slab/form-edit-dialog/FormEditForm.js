@@ -37,7 +37,7 @@ const tax_slabEditSchema = Yup.object().shape({
 
 
 export function FormEditForm({
-  saveSalarypolicy,
+  saveForm,
   user,
   actionsLoading,
   onHide,
@@ -65,7 +65,7 @@ export function FormEditForm({
       onSubmit={(values) => {
         console.log("values", values);
         enableLoading();
-        saveSalarypolicy(values);
+        saveForm(values);
       }}
     >
       {({ handleSubmit, values, setFieldValue }) => (
