@@ -63,7 +63,6 @@ export function RoundingPolicyPage({ history }) {
           <FormDeleteDialog
             show={match != null}
             id={match && match.params.id}
-            status={match && match.params.status}
             onHide={() => {
               history.push("/salary_rounding_policy/read-all-rounding-policy");
             }}

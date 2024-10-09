@@ -4,6 +4,7 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { Input, Select } from "../../../../../../_metronic/_partials/controls";
 import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLabel";
+import { getClassName } from "../../../../../utils/common";
 
 //Validation for Form
 const formValidation = Yup.object().shape({
@@ -23,7 +24,7 @@ export function MasterEditForm({
 }) {
 
   const dropdown = (data) => {
-    return [{Id: "", formName: "--Select Mode--"},...data].map((el) => {
+    return [{ Id: "", formName: "--Select Mode--" }, ...data].map((el) => {
       return (<>
         <option value={el.Id}>{el.formName}</option>
       </>)

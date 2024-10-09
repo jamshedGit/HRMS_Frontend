@@ -1,10 +1,10 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls";
 import * as actions from "../../../_redux/formActions";
 
-export function FormDeleteDialog({ id, status, show, onHide }) {
+export function FormDeleteDialog({ id, show, onHide }) {
   const [loading, setLoading] = useState(false);
 
   // Customers Redux state
