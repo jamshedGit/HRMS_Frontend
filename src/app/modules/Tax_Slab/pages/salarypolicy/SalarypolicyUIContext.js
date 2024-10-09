@@ -32,10 +32,10 @@ export function SalarypolicyUIProvider({ SalarypolicyUIEvents, children }) {
   }, []);
   const initUser = {
     Id:"",
-    type: "",
-    value: "",
-    multiplier: "",
-    divisor: "",
+    from_amount: "",
+    to_amount: "",
+    percentage: "",
+    fixed_amount: "",
   
   };
 

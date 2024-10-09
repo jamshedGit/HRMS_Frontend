@@ -69,6 +69,8 @@ console.log("id for salary policy",id)
 
   const saveSalarypolicy = async (user) => {
 
+    console.log("tax slab getUserStatus", user);
+
     if (!id) {
  
   
@@ -84,10 +86,10 @@ console.log("id for salary policy",id)
 
       const salarypolicyUpdatedFields = {
         Id: user.Id,
-        type: user.type,
-        value: user.value,
-        multiplier: user.multiplier,
-        divisor: user.divisor,
+        from_amount: user.from_amount,
+        to_amount: user.to_amount,
+        percentage: user.percentage,
+        fixed_amount: user.fixed_amount,
       };
 
       

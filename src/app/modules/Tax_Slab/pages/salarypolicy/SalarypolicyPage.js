@@ -7,7 +7,7 @@ import { SalarypolicyUIProvider } from "./SalarypolicyUIContext";
 import { SalarypolicyEditDialog } from "./salarypolicy-edit-dialog/SalarypolicyEditDialog";
 import { SalarypolicyDeleteDialog } from "./salarypolicy-delete-dialog/SalarypolicyDeleteDialog";
 
-import { SalarypolicyCard } from "./salarypolicy-card/SalarypolicyCard";
+import { SalarypolicyCard } from "./form-card/SalarypolicyCard";
 import { fetchAllCountry } from "../../../../../_metronic/redux/dashboardActions";
 import {} from "../../_redux/redux-Actions";
 
@@ -26,18 +26,18 @@ export function SalarypolicyPage({ history }) {
     openEditSalarypolicyDialog: (id) => {
       dispatch(fetchAllCountry());
 
-      history.push(`/salarypolicy/read-all-salarypolicy/${id}/edit`);
+      history.push(`/tax_slab/read-all-tax-slab/${id}/edit`);
     },
     openDeleteSalarypolicyDialog: (id, status) => {
-      history.push(`/salarypolicy/read-all-salarypolicy/${id}/${status}/delete`);
+      history.push(`/tax_slab/read-all-tax-slab/${id}/${status}/delete`);
     },
     openActiveSalarypolicyDialog: (id) => {
-      history.push(`/salarypolicy/read-all-salarypolicy/${id}/active`);
+      history.push(`/tax_slab/read-all-tax-slab/${id}/active`);
     },
     openReadSalarypolicyDialog: (id, isUserRead) => {
       
       
-      history.push(`/salarypolicy/read-all-salarypolicy/${id}/read`);
+      history.push(`/tax_slab/read-all-tax-slab/${id}/read`);
     },
   };
   return (

@@ -5,23 +5,26 @@ import * as Yup from "yup";
 import { Input } from "../../../../../../_metronic/_partials/controls"; // Adjust import as needed
 import { useDispatch, useSelector } from "react-redux";
 
-console.log("Salary policy input", Input);
 
-const salarypolicyEditSchema = Yup.object().shape({
-  type: Yup.string().required("Required*"),
-  value: Yup.number().when("type", {
-    is: "Fixed Days",
-    then: Yup.number().required("Value is required for Ratio of Year"),
-  }),
-  multiplier: Yup.number().when("type", {
-    is: "Ratio of Year",
-    then: Yup.number().required("Multiplier is required for Month Days"),
-  }),
-  divisor: Yup.number().when("type", {
-    is: "Ratio of Year",
-    then: Yup.number().required("Divisor is required for Fixed Days"),
-  }),
-});
+
+
+const tax_slabEditSchema = Yup.object().shape(
+  {
+    from_amount: Yup.string()
+      .required("Required*"),
+
+      to_amount: Yup.string()
+      .required("Required*"),
+
+      percentage: Yup.string()
+      .required("Required*"),
+
+      fixed_amount: Yup.string()
+      .required("Required*"),
+   
+  },
+  
+);
 
 export function SalarypolicyEditForm({
   saveSalarypolicy,
@@ -33,28 +36,9 @@ export function SalarypolicyEditForm({
   loading,
 }) {
   console.log("SalarypolicyEditForm user", user);
-  const options = [
-    { value: "Ratio of Year", label: "Ratio of Year" },
-    { value: "Month Days", label: "Month Days" },
-    { value: "Fixed Days", label: "Fixed Days" },
-  ];
 
-  // const Dropdown = ({ field, form, options, label, onChange }) => (
-  //   <div className="form-group">
-  //     <label>{label}</label>
-  //     <select {...field} className="form-control" onChange={onChange}>
-  //     <option value="">{user?.type || 'Select Type'}</option>
-  //       {options.map((option) => (
-  //         <option key={option.value} value={option.value}>
-  //           {option.label}
-  //         </option>
-  //       ))}
-  //     </select>
-  //     {form.touched[field.name] && form.errors[field.name] && (
-  //       <div className="text-danger">{form.errors[field.name]}</div>
-  //     )}
-  //   </div>
-  // );
+
+
   console.log("initialValues user.Type", user);
 
   return (
@@ -69,7 +53,7 @@ export function SalarypolicyEditForm({
       // }}
 
       initialValues={user}
-      validationSchema={salarypolicyEditSchema}
+      validationSchema={tax_slabEditSchema}
       onSubmit={(values) => {
         console.log("values", values);
         enableLoading();
@@ -87,34 +71,7 @@ export function SalarypolicyEditForm({
             <Form className="form form-label-right">
               <fieldset disabled={isUserForRead}>
                 <div className="form-group row">
-                  <div className="col-12 col-md-4 mt-3">
-                    <Field
-                      name="Name"
-                      component={Input}
-                      options={options}
-                        placeholder="Enter Type"
-                      label="Type"
-                      // onChange={(e) => {
-                      //   setFieldValue("type", e.target.value);
-                      //   // Clear fields based on selection
-                      //   if (e.target.value === "Ratio of Year") {
-                      //     setFieldValue("value", 0);
-                      //     setFieldValue("multiplier", "");
-                      //     setFieldValue("divisor", "");
-                      //   }
-                      //   if (e.target.value === "Fixed Days") {
-                      //     setFieldValue("multiplier", 0);
-                      //     setFieldValue("divisor", 0);
-                      //     setFieldValue("value", "");
-                      //   }
-                      //   if (e.target.value === "Month Days") {
-                      //     setFieldValue("multiplier", 0);
-                      //     setFieldValue("divisor", 0);
-                      //     setFieldValue("value", 1);
-                      //   }
-                      // }}
-                    />
-                  </div>
+            
 
                   <div className="col-12 col-md-4 mt-3">
                     <Field
@@ -126,21 +83,7 @@ export function SalarypolicyEditForm({
                     />
                   </div>
 
-                  {/* {!(
-                      values.type === "Month Days" ||
-                      values.type === "Fixed Days"
-                    ) && (
-                      <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="multiplier"
-                        component={Input}
-                        placeholder="Enter Multiplier"
-                        label="Multiplier"
-                        type="number"
-                 
-                      />
-                          </div>
-                    )} */}
+                  
 
                   <div className="col-12 col-md-4 mt-3">
                     <Field
@@ -152,22 +95,7 @@ export function SalarypolicyEditForm({
                     />
                   </div>
 
-                  {/* 
-                    {!(
-                      values.type === "Month Days" ||
-                      values.type === "Fixed Days"
-                    ) && (
-                      <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="divisor"
-                        component={Input}
-                        placeholder="Enter Divisor"
-                        label="Divisor"
-                        type="number"
-                       
-                      />
-                           </div>
-                    )} */}
+                
 
                   <div className="col-12 col-md-4 mt-3">
                     <Field
@@ -188,19 +116,7 @@ export function SalarypolicyEditForm({
                     />
                   </div>
 
-                  {/* {!(values.type === "Ratio of Year" || values.type === "Month Days") && (
-    <div className="col-12 col-md-4 mt-3">
-  <Field
-    name="value"
-    component={Input}
-    placeholder="Value"
-    label="Value"
-    type="number"
-  
-  
-  />
-       </div>
-)} */}
+                
                 </div>
               </fieldset>
             </Form>
@@ -223,8 +139,8 @@ export function SalarypolicyEditForm({
                 Ok
               </button>
             )}
-            {!isUserForRead && values.type && (
-              <button
+         
+              {/* <button
                 type="submit"
                 onClick={() => handleSubmit()}
                 className="btn btn-primary btn-elevate"
@@ -233,8 +149,21 @@ export function SalarypolicyEditForm({
                 {loading && (
                   <span className="ml-3 mr-3 spinner spinner-white"></span>
                 )}
-              </button>
-            )}
+              </button> */}
+
+{!isUserForRead && (
+                <button
+                  type="submit"
+                  onClick={() => handleSubmit()}
+                  className="btn btn-primary btn-elevate"
+                >
+                  Save
+                  {loading && (
+                    <span className="ml-3 mr-3 spinner spinner-white"></span>
+                  )}
+                </button>
+              )}
+         
           </Modal.Footer>
         </>
       )}

@@ -61,7 +61,7 @@ export function SalarypolicyCard() {
                 className="btn btn-primary"
                 onClick={SalarypolicyUIProps .newSalarypolicyButtonClick}
               >
-                + Add Salary Policy
+                + Add Tax Slab
               </button>
             {/* ) : (
               <></>

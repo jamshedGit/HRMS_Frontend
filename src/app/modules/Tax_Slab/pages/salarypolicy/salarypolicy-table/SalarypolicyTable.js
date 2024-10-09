@@ -40,7 +40,7 @@ export function SalarypolicyTable() {
     (state) => {  console.log("state ",state); return {
       
       currentState: state.salarypolicy,
-      userAccess: state?.auth?.userAccess["salarypolicy"],
+      userAccess: state?.auth?.userAccess["tax_slab"],
     }},
     shallowEqual
   );
@@ -60,11 +60,11 @@ export function SalarypolicyTable() {
   }, [salarypolicyUIProps.queryParams, dispatch, totalCount]);
 
   const isAccessForEdit = userAccess?.find(
-    (item) => item.componentName === "UpdateSalarypolicy"
+    (item) => item.componentName === "UpdateTaxSlab"
   );
 
   const isAccessForDelete = userAccess?.find(
-    (item) => item.componentName === "DeleteSalarypolicy"
+    (item) => item.componentName === "DeleteTaxSlab"
   );
   // Table columns
   const columns = [
@@ -109,10 +109,7 @@ export function SalarypolicyTable() {
   style: {
     minWidth: "10px",
   },
-  formatter: (cell, row) => {
-    console.log("Row data:", row); // Debug log
-    return row.type === "Month Days" ? "Current Month" : cell;
-  },
+ 
 },
 
 

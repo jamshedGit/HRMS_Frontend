@@ -9,7 +9,7 @@ export function createSalarypolicy(body) {
   // body.Name = body.txtsalarypolicyName;
   // delete body.txtsalarypolicyName
 
-  return axios.post(`${USERS_URL}/salarypolicy/create-salarypolicy`, body);
+  return axios.post(`${USERS_URL}/tax_slab/create-tax-slab`, body);
   
 }
 
@@ -33,7 +33,6 @@ export function updateSalarypolicy(salarypolicy) {
 
 //Delete
 export function deleteSalarypolicy(body) {
-  console.log("body")
-  console.log(body);
+
   return axios.patch(`${USERS_URL}/tax_slab/delete-tax-slab`, body);
 }
