@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardHeaderToolbar,
 } from "../../../../../../_metronic/_partials/controls"
-import { SalarypolicyTable } from "../salarypolicy-table/SalarypolicyTable"
+import { SalarypolicyTable } from "../form-table/SalarypolicyTable"
 import { useSalarypolicyUIContext } from "../SalarypolicyUIContext"
 import { SalarypolicyFIlter } from "../form-filter/SalarypolicyFIlter"
 import { useSelector, shallowEqual } from "react-redux"
