@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import { Redirect, Switch } from "react-router-dom";
 import { LayoutSplashScreen, ContentRoute } from "../../../../_metronic/layout";
-import { SalarypolicyPage } from "./salarypolicy/SalarypolicyPage";
+import { FormPage } from "./salarypolicy/FormPage";
 
 export default function SalarypolicyManagement() {
  
@@ -9,7 +9,7 @@ export default function SalarypolicyManagement() {
     <Suspense fallback={<LayoutSplashScreen />}>
       <Switch>
         {<Redirect exact={true} from="/tax_slab" to="/tax_slab/read-all-tax-slab" />}
-        <ContentRoute path="/tax_slab/read-all-tax-slab" component={SalarypolicyPage} />
+        <ContentRoute path="/tax_slab/read-all-tax-slab" component={FormPage} />
       </Switch>
     </Suspense>
   );

@@ -13,7 +13,7 @@ import {} from "../../_redux/redux-Actions";
 
 
 
-export function SalarypolicyPage({ history }) {
+export function FormPage({ history }) {
 
   console.log("tax_slab page")
   const dispatch = useDispatch();

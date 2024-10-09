@@ -12,7 +12,7 @@ import {
   sortCaret,
   headerSortingClasses,
 } from "../../../../../../_metronic/_helpers";
-import * as uiHelpers from "../SalarypolicyUIHelpers";
+import * as uiHelpers from "../FormUIHelpers";
 import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatter";
 import { Pagination } from "../../../../../../_metronic/_partials/controls";
 import { useSalarypolicyUIContext } from "../SalarypolicyUIContext";
