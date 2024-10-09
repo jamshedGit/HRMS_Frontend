@@ -74,7 +74,7 @@ export function FormTable() {
     },
 
     {
-      dataField: "amount",
+      dataField: "amountWithSuffix",
       text: "Rounding Up to",
       sort: false,
       sortCaret: sortCaret,
