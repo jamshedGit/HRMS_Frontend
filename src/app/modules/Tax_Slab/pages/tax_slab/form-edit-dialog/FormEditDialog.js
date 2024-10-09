@@ -15,7 +15,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   const [loading, setLoading] = useState(false);
   const title = "FormEditDialog";
   const FormUIContext = useFormUIContext();
-console.log("id for salary policy",id)
+
  
   const usersUIProps = useMemo(() => {
     return {

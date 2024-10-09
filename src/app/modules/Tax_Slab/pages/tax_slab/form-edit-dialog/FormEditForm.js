@@ -7,24 +7,34 @@ import { useDispatch, useSelector } from "react-redux";
 
 
 
+ // percentage: Yup.string().required("Required*"),
+const tax_slabEditSchema = Yup.object().shape({
+  // from_amount: Yup.string().required("Required*"),
 
-const tax_slabEditSchema = Yup.object().shape(
-  {
-    from_amount: Yup.string()
-      .required("Required*"),
+  from_amount: Yup.number() 
+  .min(0, "Must be at least 0") 
+  .required("Required*"),
 
-      to_amount: Yup.string()
-      .required("Required*"),
+  // to_amount: Yup.string().required("Required*"),
 
-      percentage: Yup.string()
-      .required("Required*"),
+  to_amount: Yup.number() 
+  .min(0, "Must be at least 0") 
+  .required("Required*"),
 
-      fixed_amount: Yup.string()
-      .required("Required*"),
-   
-  },
-  
-);
+  percentage: Yup.number() 
+    .min(0, "Must be at least 0") 
+    .max(100, "Must be at most 100") 
+    .required("Required*"),
+
+  // fixed_amount: Yup.string().required("Required*"),
+
+  fixed_amount: Yup.number() 
+  .min(0, "Must be at least 0") 
+  .required("Required*"),
+});
+
+
+
 
 export function FormEditForm({
   saveSalarypolicy,
@@ -36,8 +46,6 @@ export function FormEditForm({
   loading,
 }) {
   console.log("FormEditForm user", user);
-
-
 
   console.log("initialValues user.Type", user);
 
@@ -71,8 +79,6 @@ export function FormEditForm({
             <Form className="form form-label-right">
               <fieldset disabled={isUserForRead}>
                 <div className="form-group row">
-            
-
                   <div className="col-12 col-md-4 mt-3">
                     <Field
                       name="from_amount"
@@ -80,10 +86,9 @@ export function FormEditForm({
                       placeholder="Enter From Amount"
                       label="From Amount"
                       type="number"
+                      min={0}
                     />
                   </div>
-
-                  
 
                   <div className="col-12 col-md-4 mt-3">
                     <Field
@@ -92,10 +97,9 @@ export function FormEditForm({
                       placeholder="Enter To Amount"
                       label="To Amount"
                       type="number"
+                      min={0}
                     />
                   </div>
-
-                
 
                   <div className="col-12 col-md-4 mt-3">
                     <Field
@@ -104,6 +108,8 @@ export function FormEditForm({
                       placeholder="Enter Percentage"
                       label="Percentage"
                       type="number"
+                      min={0}
+                      max={100}
                     />
                   </div>
                   <div className="col-12 col-md-4 mt-3">
@@ -113,10 +119,9 @@ export function FormEditForm({
                       placeholder="Enter Fixed Amount"
                       label="Fixed Amount"
                       type="number"
+                      min={0}
                     />
                   </div>
-
-                
                 </div>
               </fieldset>
             </Form>
@@ -139,8 +144,8 @@ export function FormEditForm({
                 Ok
               </button>
             )}
-         
-              {/* <button
+
+            {/* <button
                 type="submit"
                 onClick={() => handleSubmit()}
                 className="btn btn-primary btn-elevate"
@@ -151,19 +156,18 @@ export function FormEditForm({
                 )}
               </button> */}
 
-{!isUserForRead && (
-                <button
-                  type="submit"
-                  onClick={() => handleSubmit()}
-                  className="btn btn-primary btn-elevate"
-                >
-                  Save
-                  {loading && (
-                    <span className="ml-3 mr-3 spinner spinner-white"></span>
-                  )}
-                </button>
-              )}
-         
+            {!isUserForRead && (
+              <button
+                type="submit"
+                onClick={() => handleSubmit()}
+                className="btn btn-primary btn-elevate"
+              >
+                Save
+                {loading && (
+                  <span className="ml-3 mr-3 spinner spinner-white"></span>
+                )}
+              </button>
+            )}
           </Modal.Footer>
         </>
       )}
