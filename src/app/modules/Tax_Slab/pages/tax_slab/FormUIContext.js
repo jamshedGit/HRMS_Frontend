@@ -52,7 +52,7 @@ export function FormUIProvider({ FormUIEvents, children }) {
     openEditFormDialog: FormUIEvents.openEditFormDialog,
     openDeleteFormDialog: FormUIEvents.openDeleteFormDialog,
     openActiveFormDialog: FormUIEvents.openActiveFormDialog,
-    openReadSalarypolicyDialog: FormUIEvents.openReadSalarypolicyDialog,
+    openReadFormDialog: FormUIEvents.openReadFormDialog,
   };
   return (
     <FormUIContext.Provider value={value}>{children}</FormUIContext.Provider>

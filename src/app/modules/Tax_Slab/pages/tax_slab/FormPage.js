@@ -34,7 +34,7 @@ export function FormPage({ history }) {
     openActiveFormDialog: (id) => {
       history.push(`/tax_slab/read-all-tax-slab/${id}/active`);
     },
-    openReadSalarypolicyDialog: (id, isUserRead) => {
+    openReadFormDialog: (id, isUserRead) => {
       
       
       history.push(`/tax_slab/read-all-tax-slab/${id}/read`);

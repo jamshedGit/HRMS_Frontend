@@ -31,7 +31,7 @@ export function FormTable() {
       openEditFormDialog: formUIContext.openEditFormDialog,
       openDeleteFormDialog: formUIContext.openDeleteFormDialog,
       openActiveFormDialog: formUIContext.openActiveFormDialog,
-      openReadSalarypolicyDialog: formUIContext.openReadSalarypolicyDialog,
+      openReadFormDialog: formUIContext.openReadFormDialog,
     };
   }, [formUIContext]);
 
@@ -146,7 +146,7 @@ export function FormTable() {
         openEditFormDialog: salarypolicyUIProps.openEditFormDialog,
         openDeleteFormDialog: salarypolicyUIProps.openDeleteFormDialog,
         openActiveFormDialog: salarypolicyUIProps.openActiveFormDialog,
-        openReadSalarypolicyDialog: salarypolicyUIProps.openReadSalarypolicyDialog,
+        openReadFormDialog: salarypolicyUIProps.openReadFormDialog,
         isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,
         isAccessForDelete: isAccessForDelete
           ? isAccessForDelete.isAccess
