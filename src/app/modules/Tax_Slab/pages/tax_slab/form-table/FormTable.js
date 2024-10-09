@@ -28,7 +28,7 @@ export function FormTable() {
       setIds: formUIContext.setIds,
       queryParams: formUIContext.queryParams,
       setQueryParams: formUIContext.setQueryParams,
-      openEditSalarypolicyDialog: formUIContext.openEditSalarypolicyDialog,
+      openEditFormDialog: formUIContext.openEditFormDialog,
       openDeleteSalarypolicyDialog: formUIContext.openDeleteSalarypolicyDialog,
       openActiveSalarypolicyDialog: formUIContext.openActiveSalarypolicyDialog,
       openReadSalarypolicyDialog: formUIContext.openReadSalarypolicyDialog,
@@ -143,7 +143,7 @@ export function FormTable() {
       isDummyField: true,
       formatter: ActionsColumnFormatter,
       formatExtraData: {
-        openEditSalarypolicyDialog: salarypolicyUIProps.openEditSalarypolicyDialog,
+        openEditFormDialog: salarypolicyUIProps.openEditFormDialog,
         openDeleteSalarypolicyDialog: salarypolicyUIProps.openDeleteSalarypolicyDialog,
         openActiveSalarypolicyDialog: salarypolicyUIProps.openActiveSalarypolicyDialog,
         openReadSalarypolicyDialog: salarypolicyUIProps.openReadSalarypolicyDialog,

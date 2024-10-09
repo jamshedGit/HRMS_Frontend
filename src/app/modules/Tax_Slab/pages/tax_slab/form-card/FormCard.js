@@ -17,7 +17,7 @@ export function FormCard() {
   const SalarypolicyUIProps  = useMemo(() => {
     return {
       newFormButtonClick: FormUIContext.newFormButtonClick,
-      openEditSalarypolicyDialog: FormUIContext.openEditSalarypolicyDialog,
+      openEditFormDialog: FormUIContext.openEditFormDialog,
     }
   }, [FormUIContext])
 

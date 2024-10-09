@@ -23,7 +23,7 @@ export function FormPage({ history }) {
 
       history.push("/tax_slab/read-all-tax-slab/new");
     },
-    openEditSalarypolicyDialog: (id) => {
+    openEditFormDialog: (id) => {
       dispatch(fetchAllCountry());
 
       history.push(`/tax_slab/read-all-tax-slab/${id}/edit`);
