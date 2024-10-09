@@ -7,28 +7,28 @@ import { FormEditDialogHeader } from './FormEditDialogHeader'
 import * as actions from "../../../_redux/redux-Actions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useSalarypolicyUIContext } from "../SalarypolicyUIContext";
+import { useFormUIContext } from "../FormUIContext";
 
 
 export function FormEditDialog({ id, show, onHide, userForRead }) {
   const [action, setaction] = useState(false);
   const [loading, setLoading] = useState(false);
   const title = "FormEditDialog";
-  const SalarypolicyUIContext = useSalarypolicyUIContext();
+  const FormUIContext = useFormUIContext();
 console.log("id for salary policy",id)
  
   const usersUIProps = useMemo(() => {
     return {
-      queryParams: SalarypolicyUIContext.queryParams,
+      queryParams: FormUIContext.queryParams,
     };
-  }, [SalarypolicyUIContext]);
+  }, [FormUIContext]);
 
   const salarypolicyUIProps  = useMemo(() => {
     return {
-      initUser: SalarypolicyUIContext.initUser,
-      queryParams: SalarypolicyUIContext.queryParams,
+      initUser: FormUIContext.initUser,
+      queryParams: FormUIContext.queryParams,
     };
-  }, [SalarypolicyUIContext]);
+  }, [FormUIContext]);
 
   const enableLoading = () => {
     setLoading(true);

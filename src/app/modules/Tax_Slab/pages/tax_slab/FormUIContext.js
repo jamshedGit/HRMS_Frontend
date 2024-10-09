@@ -2,13 +2,13 @@ import React, { createContext, useContext, useState, useCallback } from "react";
 import { isEqual, isFunction } from "lodash";
 import { initialFilter } from "./FormUIHelpers";
 
-const SalarypolicyUIContext = createContext();
+const FormUIContext = createContext();
 
-export function useSalarypolicyUIContext() {
-  return useContext(SalarypolicyUIContext);
+export function useFormUIContext() {
+  return useContext(FormUIContext);
 }
 
-export const ReceiptUIConsumer = SalarypolicyUIContext.Consumer;
+export const ReceiptUIConsumer = FormUIContext.Consumer;
 // const initialFilter = {
 //   sortBy: "name",
 //   limit: 10,
@@ -55,6 +55,6 @@ export function SalarypolicyUIProvider({ SalarypolicyUIEvents, children }) {
     openReadSalarypolicyDialog: SalarypolicyUIEvents.openReadSalarypolicyDialog,
   };
   return (
-    <SalarypolicyUIContext.Provider value={value}>{children}</SalarypolicyUIContext.Provider>
+    <FormUIContext.Provider value={value}>{children}</FormUIContext.Provider>
   );
 }

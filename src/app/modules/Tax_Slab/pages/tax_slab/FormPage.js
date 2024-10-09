@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { SalarypolicyUIProvider } from "./SalarypolicyUIContext";
+import { SalarypolicyUIProvider } from "./FormUIContext";
 import { FormEditDialog } from "./form-edit-dialog/FormEditDialog";
 import { FormDeleteDialog } from "./form-delete-dialog/FormDeleteDialog";
 

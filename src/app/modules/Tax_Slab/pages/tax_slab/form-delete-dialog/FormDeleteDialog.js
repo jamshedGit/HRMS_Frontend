@@ -3,13 +3,13 @@ import { Modal } from "react-bootstrap";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls";
 import * as actions from "../../../_redux/redux-Actions";
-import { useSalarypolicyUIContext } from "../SalarypolicyUIContext";
+import { useFormUIContext } from "../FormUIContext";
 
 export function FormDeleteDialog({ id, status, show, onHide }) {
   // console.log("Status", status);
   const [loading, setLoading] = useState(false);
   // Customers UI Context
-  const usersUIContext = useSalarypolicyUIContext();
+  const usersUIContext = useFormUIContext();
   const usersUIProps = useMemo(() => {
     return {
       queryParams: usersUIContext.queryParams,

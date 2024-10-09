@@ -15,25 +15,25 @@ import {
 import * as uiHelpers from "../FormUIHelpers";
 import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatter";
 import { Pagination } from "../../../../../../_metronic/_partials/controls";
-import { useSalarypolicyUIContext } from "../SalarypolicyUIContext";
+import { useFormUIContext } from "../FormUIContext";
 import { DatetimeColumnFormatter } from "../../../../Dashboard/pages/dashboard/last-trips-vehicles-table/column-formatter/CreatedColumnFormatter";
 
 export function FormTable() {
   //Users UI Context
-  const salarypolicyUIContext = useSalarypolicyUIContext();
+  const formUIContext = useFormUIContext();
 
   const salarypolicyUIProps = useMemo(() => {
     return {
-      ids: salarypolicyUIContext.ids,
-      setIds: salarypolicyUIContext.setIds,
-      queryParams: salarypolicyUIContext.queryParams,
-      setQueryParams: salarypolicyUIContext.setQueryParams,
-      openEditSalarypolicyDialog: salarypolicyUIContext.openEditSalarypolicyDialog,
-      openDeleteSalarypolicyDialog: salarypolicyUIContext.openDeleteSalarypolicyDialog,
-      openActiveSalarypolicyDialog: salarypolicyUIContext.openActiveSalarypolicyDialog,
-      openReadSalarypolicyDialog: salarypolicyUIContext.openReadSalarypolicyDialog,
+      ids: formUIContext.ids,
+      setIds: formUIContext.setIds,
+      queryParams: formUIContext.queryParams,
+      setQueryParams: formUIContext.setQueryParams,
+      openEditSalarypolicyDialog: formUIContext.openEditSalarypolicyDialog,
+      openDeleteSalarypolicyDialog: formUIContext.openDeleteSalarypolicyDialog,
+      openActiveSalarypolicyDialog: formUIContext.openActiveSalarypolicyDialog,
+      openReadSalarypolicyDialog: formUIContext.openReadSalarypolicyDialog,
     };
-  }, [salarypolicyUIContext]);
+  }, [formUIContext]);
 
   //console.log("queryparms", usersUIProps.queryparms)
   const { currentState, userAccess } = useSelector(

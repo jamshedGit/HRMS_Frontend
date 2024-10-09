@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useEffect, useCallback } from "react"
 import { Formik } from "formik"
 import { isEqual } from "lodash"
-import { useSalarypolicyUIContext } from "../SalarypolicyUIContext"
+import { useFormUIContext } from "../FormUIContext"
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import axios from "axios";
@@ -35,17 +35,17 @@ export function FormFIlter({ listLoading,user }) {
 
 
   const dispatch = useDispatch();
-  const SalarypolicyUIContext = useSalarypolicyUIContext()
+  const FormUIContext = useFormUIContext()
   const [Loading, setLoading] = useState(false)
 
 
 
   const salarypolicyUIProps  = useMemo(() => {
     return {
-      queryParams: SalarypolicyUIContext.queryParams,
-      setQueryParams: SalarypolicyUIContext.setQueryParams,
+      queryParams: FormUIContext.queryParams,
+      setQueryParams: FormUIContext.setQueryParams,
     }
-  }, [SalarypolicyUIContext])
+  }, [FormUIContext])
 
 
 

@@ -7,19 +7,19 @@ import {
   CardHeaderToolbar,
 } from "../../../../../../_metronic/_partials/controls"
 import { FormTable } from "../form-table/FormTable"
-import { useSalarypolicyUIContext } from "../SalarypolicyUIContext"
+import { useFormUIContext } from "../FormUIContext"
 import { FormFIlter } from "../form-filter/FormFIlter"
 import { useSelector, shallowEqual } from "react-redux"
 
 export function FormCard() {
-  const SalarypolicyUIContext = useSalarypolicyUIContext()
-  //console.log("SalarypolicyUIContext", SalarypolicyUIContext)
+  const FormUIContext = useFormUIContext()
+  //console.log("FormUIContext", FormUIContext)
   const SalarypolicyUIProps  = useMemo(() => {
     return {
-      newSalarypolicyButtonClick: SalarypolicyUIContext.newSalarypolicyButtonClick,
-      openEditSalarypolicyDialog: SalarypolicyUIContext.openEditSalarypolicyDialog,
+      newSalarypolicyButtonClick: FormUIContext.newSalarypolicyButtonClick,
+      openEditSalarypolicyDialog: FormUIContext.openEditSalarypolicyDialog,
     }
-  }, [SalarypolicyUIContext])
+  }, [FormUIContext])
 
   const { userAccess } = useSelector(
    
