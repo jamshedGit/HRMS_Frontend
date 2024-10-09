@@ -28,7 +28,7 @@ export function FormPage({ history }) {
 
       history.push(`/tax_slab/read-all-tax-slab/${id}/edit`);
     },
-    openDeleteSalarypolicyDialog: (id, status) => {
+    openDeleteFormDialog: (id, status) => {
       history.push(`/tax_slab/read-all-tax-slab/${id}/${status}/delete`);
     },
     openActiveSalarypolicyDialog: (id) => {

@@ -29,7 +29,7 @@ export function FormTable() {
       queryParams: formUIContext.queryParams,
       setQueryParams: formUIContext.setQueryParams,
       openEditFormDialog: formUIContext.openEditFormDialog,
-      openDeleteSalarypolicyDialog: formUIContext.openDeleteSalarypolicyDialog,
+      openDeleteFormDialog: formUIContext.openDeleteFormDialog,
       openActiveSalarypolicyDialog: formUIContext.openActiveSalarypolicyDialog,
       openReadSalarypolicyDialog: formUIContext.openReadSalarypolicyDialog,
     };
@@ -144,7 +144,7 @@ export function FormTable() {
       formatter: ActionsColumnFormatter,
       formatExtraData: {
         openEditFormDialog: salarypolicyUIProps.openEditFormDialog,
-        openDeleteSalarypolicyDialog: salarypolicyUIProps.openDeleteSalarypolicyDialog,
+        openDeleteFormDialog: salarypolicyUIProps.openDeleteFormDialog,
         openActiveSalarypolicyDialog: salarypolicyUIProps.openActiveSalarypolicyDialog,
         openReadSalarypolicyDialog: salarypolicyUIProps.openReadSalarypolicyDialog,
         isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,
