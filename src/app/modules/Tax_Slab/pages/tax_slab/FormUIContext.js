@@ -51,7 +51,7 @@ export function FormUIProvider({ FormUIEvents, children }) {
     newFormButtonClick: FormUIEvents.newFormButtonClick,
     openEditFormDialog: FormUIEvents.openEditFormDialog,
     openDeleteFormDialog: FormUIEvents.openDeleteFormDialog,
-    openActiveSalarypolicyDialog: FormUIEvents.openActiveSalarypolicyDialog,
+    openActiveFormDialog: FormUIEvents.openActiveFormDialog,
     openReadSalarypolicyDialog: FormUIEvents.openReadSalarypolicyDialog,
   };
   return (
