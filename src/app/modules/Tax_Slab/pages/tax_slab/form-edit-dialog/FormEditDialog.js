@@ -51,14 +51,14 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     
     actionsLoading: state.users.actionsLoading,
     user: state.users, // change for users to receipt
-    userForEdit: state.salarypolicy.userForEdit,
+    userForEdit: state.tax_slab.userForEdit,
     roles: state.users.roles,
     centers: state.users.centers,
     userStatusTypes: state.users.userStatusTypes,
-    isuserForRead: state.salarypolicy.userForRead,
+    isuserForRead: state.tax_slab.userForRead,
   }));
 
-  console.log("for salary policy isuserForRead",userForEdit)
+  console.log("for tax slab isuserForRead",userForEdit)
 
 
   useEffect(() => {
