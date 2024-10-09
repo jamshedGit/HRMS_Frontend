@@ -14,7 +14,7 @@ import { useSelector, shallowEqual } from "react-redux"
 export function FormCard() {
   const FormUIContext = useFormUIContext()
   //console.log("FormUIContext", FormUIContext)
-  const SalarypolicyUIProps  = useMemo(() => {
+  const FormUIProps  = useMemo(() => {
     return {
       newFormButtonClick: FormUIContext.newFormButtonClick,
       openEditFormDialog: FormUIContext.openEditFormDialog,
@@ -59,7 +59,7 @@ export function FormCard() {
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={SalarypolicyUIProps .newFormButtonClick}
+                onClick={FormUIProps .newFormButtonClick}
               >
                 + Add Tax Slab
               </button>

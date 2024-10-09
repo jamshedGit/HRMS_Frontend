@@ -22,7 +22,7 @@ export function FormTable() {
   //Users UI Context
   const formUIContext = useFormUIContext();
 
-  const salarypolicyUIProps = useMemo(() => {
+  const formUIProps = useMemo(() => {
     return {
       ids: formUIContext.ids,
       setIds: formUIContext.setIds,
@@ -53,11 +53,11 @@ export function FormTable() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    salarypolicyUIProps.setIds([]);
-    console.log("salarypolicy test 2",salarypolicyUIProps.queryParams)
-    console.log("salarypolicy userAccess",salarypolicyUIProps.queryParams)
-    dispatch(actions.fetchSalarypolicies(salarypolicyUIProps.queryParams));
-  }, [salarypolicyUIProps.queryParams, dispatch, totalCount]);
+    formUIProps.setIds([]);
+ 
+ 
+    dispatch(actions.fetchSalarypolicies(formUIProps.queryParams));
+  }, [formUIProps.queryParams, dispatch, totalCount]);
 
   const isAccessForEdit = userAccess?.find(
     (item) => item.componentName === "UpdateTaxSlab"
@@ -143,10 +143,10 @@ export function FormTable() {
       isDummyField: true,
       formatter: ActionsColumnFormatter,
       formatExtraData: {
-        openEditFormDialog: salarypolicyUIProps.openEditFormDialog,
-        openDeleteFormDialog: salarypolicyUIProps.openDeleteFormDialog,
-        openActiveFormDialog: salarypolicyUIProps.openActiveFormDialog,
-        openReadFormDialog: salarypolicyUIProps.openReadFormDialog,
+        openEditFormDialog: formUIProps.openEditFormDialog,
+        openDeleteFormDialog: formUIProps.openDeleteFormDialog,
+        openActiveFormDialog: formUIProps.openActiveFormDialog,
+        openReadFormDialog: formUIProps.openReadFormDialog,
         isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,
         isAccessForDelete: isAccessForDelete
           ? isAccessForDelete.isAccess
@@ -165,8 +165,8 @@ export function FormTable() {
     custom: true,
     totalSize: totalCount,
     sizePerPageList: uiHelpers.sizePerPageList,
-    sizePerPage: salarypolicyUIProps.queryParams.pageSize,
-    page: salarypolicyUIProps.queryParams.pageNumber,
+    sizePerPage: formUIProps.queryParams.pageSize,
+    page: formUIProps.queryParams.pageNumber,
   };
 
     return (
@@ -189,7 +189,7 @@ export function FormTable() {
                 columns={columns}
                 defaultSorted={uiHelpers.defaultSorted}
                 onTableChange={getHandlerTableChange(
-                  salarypolicyUIProps.setQueryParams
+                  formUIProps.setQueryParams
                 )}
                 // selectRow={getSelectRow({
                 //   entities,

@@ -23,7 +23,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     };
   }, [FormUIContext]);
 
-  const salarypolicyUIProps  = useMemo(() => {
+  const formUIProps  = useMemo(() => {
     return {
       initUser: FormUIContext.initUser,
       queryParams: FormUIContext.queryParams,
@@ -64,7 +64,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   useEffect(() => {
     dispatch(actions.fetchSalarypolicy(id));
 
-    // dispatch(actions.fetchSalarypolicy(salarypolicyUIProps .queryParams))
+    // dispatch(actions.fetchSalarypolicy(formUIProps .queryParams))
   }, [id, dispatch]);
 
 
@@ -110,7 +110,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
       <FormEditDialogHeader id={id} isUserForRead={userForRead} />
       <FormEditForm
         saveSalarypolicy={saveSalarypolicy}
-        user={userForEdit || salarypolicyUIProps .initUser}
+        user={userForEdit || formUIProps .initUser}
         onHide={onHide}
         roles={roles}
         centers={centers}

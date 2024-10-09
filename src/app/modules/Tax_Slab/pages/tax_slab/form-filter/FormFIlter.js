@@ -40,7 +40,7 @@ export function FormFIlter({ listLoading,user }) {
 
 
 
-  const salarypolicyUIProps  = useMemo(() => {
+  const formUIProps  = useMemo(() => {
     return {
       queryParams: FormUIContext.queryParams,
       setQueryParams: FormUIContext.setQueryParams,
@@ -65,11 +65,11 @@ export function FormFIlter({ listLoading,user }) {
   // queryParams, setQueryParams,
   const applyFilter = (values) => {
 
-    const newQueryParams = prepareFilter(salarypolicyUIProps .queryParams, values)
-    if (!isEqual(newQueryParams, salarypolicyUIProps .queryParams)) {
+    const newQueryParams = prepareFilter(formUIProps .queryParams, values)
+    if (!isEqual(newQueryParams, formUIProps .queryParams)) {
       newQueryParams.pageNumber = 1
     
-      salarypolicyUIProps .setQueryParams(newQueryParams)
+      formUIProps .setQueryParams(newQueryParams)
     }
   }
 
