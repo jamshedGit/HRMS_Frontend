@@ -17,7 +17,7 @@ export function FormPage({ history }) {
 
   console.log("tax_slab page")
   const dispatch = useDispatch();
-  const SalarypolicyUIEvents = {
+  const FormUIEvents = {
     newSalarypolicyButtonClick: () => {
       dispatch(fetchAllCountry());
 
@@ -43,7 +43,7 @@ export function FormPage({ history }) {
   return (
 
     
-    <FormUIProvider SalarypolicyUIEvents={SalarypolicyUIEvents}>
+    <FormUIProvider FormUIEvents={FormUIEvents}>
       <Route exact path="/tax_slab/read-all-tax-slab/new">
         {({ history, match }) => (
           <FormEditDialog

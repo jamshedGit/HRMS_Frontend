@@ -14,7 +14,7 @@ export const ReceiptUIConsumer = FormUIContext.Consumer;
 //   limit: 10,
 //   page: 1,
 // }
-export function FormUIProvider({ SalarypolicyUIEvents, children }) {
+export function FormUIProvider({ FormUIEvents, children }) {
   const [queryParams, setQueryParamsBase] = useState(initialFilter);
   const [ids, setIds] = useState([]);
   const setQueryParams = useCallback((nextQueryParams) => {
@@ -48,11 +48,11 @@ export function FormUIProvider({ SalarypolicyUIEvents, children }) {
     ids,
     setIds,
     initUser,
-    newSalarypolicyButtonClick: SalarypolicyUIEvents.newSalarypolicyButtonClick,
-    openEditSalarypolicyDialog: SalarypolicyUIEvents.openEditSalarypolicyDialog,
-    openDeleteSalarypolicyDialog: SalarypolicyUIEvents.openDeleteSalarypolicyDialog,
-    openActiveSalarypolicyDialog: SalarypolicyUIEvents.openActiveSalarypolicyDialog,
-    openReadSalarypolicyDialog: SalarypolicyUIEvents.openReadSalarypolicyDialog,
+    newSalarypolicyButtonClick: FormUIEvents.newSalarypolicyButtonClick,
+    openEditSalarypolicyDialog: FormUIEvents.openEditSalarypolicyDialog,
+    openDeleteSalarypolicyDialog: FormUIEvents.openDeleteSalarypolicyDialog,
+    openActiveSalarypolicyDialog: FormUIEvents.openActiveSalarypolicyDialog,
+    openReadSalarypolicyDialog: FormUIEvents.openReadSalarypolicyDialog,
   };
   return (
     <FormUIContext.Provider value={value}>{children}</FormUIContext.Provider>
