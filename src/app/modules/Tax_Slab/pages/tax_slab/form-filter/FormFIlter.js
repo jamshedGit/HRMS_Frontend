@@ -31,7 +31,7 @@ const prepareFilter = (queryParams, values) => {
   return newQueryParams
 }
 
-export function SalarypolicyFIlter({ listLoading,user }) {
+export function FormFIlter({ listLoading,user }) {
 
 
   const dispatch = useDispatch();

@@ -17,9 +17,9 @@ export function FormEditDialogHeader({ id, isUserForRead }) {
   );
 
   useEffect(() => {
-    let _title = id ? "" : "Add Salary Policy";
+    let _title = id ? "" : "Add Tax Slab";
     if (id) {
-      _title = `Edit Salary Policy`;
+      _title = `Edit Tax Slab`;
     } //else if (isUserForRead) {
     //   _title = `Read user '}'`
     // }

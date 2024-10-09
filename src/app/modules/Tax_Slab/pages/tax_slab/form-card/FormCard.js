@@ -6,9 +6,9 @@ import {
   CardHeader,
   CardHeaderToolbar,
 } from "../../../../../../_metronic/_partials/controls"
-import { SalarypolicyTable } from "../form-table/SalarypolicyTable"
+import { FormTable } from "../form-table/FormTable"
 import { useSalarypolicyUIContext } from "../SalarypolicyUIContext"
-import { SalarypolicyFIlter } from "../form-filter/SalarypolicyFIlter"
+import { FormFIlter } from "../form-filter/FormFIlter"
 import { useSelector, shallowEqual } from "react-redux"
 
 export function FormCard() {
@@ -53,7 +53,7 @@ export function FormCard() {
 
       <Card>
         <CardHeader title="">
-          {/* <SalarypolicyFIlter /> */}
+          {/* <FormFIlter /> */}
           <CardHeaderToolbar>
           {/* {accessUser &&  entities?.length==0 ? ( */}
               <button
@@ -72,7 +72,7 @@ export function FormCard() {
 
         <CardBody>
 
-          <SalarypolicyTable />
+          <FormTable />
         </CardBody>
       </Card>
     </>
