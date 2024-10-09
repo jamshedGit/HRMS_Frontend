@@ -89,6 +89,7 @@ export function MasterEditForm({
                       <Field
                         name="type"
                         component={Select}
+                        className={errors.type && !values.type ? 'form-control is-invalid' : 'form-control'}
                         placeholder=""
                         onBlur={handleBlur}
                         onChange={(e) => {
