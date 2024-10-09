@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { SalarypolicyUIProvider } from "./FormUIContext";
+import { FormUIProvider } from "./FormUIContext";
 import { FormEditDialog } from "./form-edit-dialog/FormEditDialog";
 import { FormDeleteDialog } from "./form-delete-dialog/FormDeleteDialog";
 
@@ -43,7 +43,7 @@ export function FormPage({ history }) {
   return (
 
     
-    <SalarypolicyUIProvider SalarypolicyUIEvents={SalarypolicyUIEvents}>
+    <FormUIProvider SalarypolicyUIEvents={SalarypolicyUIEvents}>
       <Route exact path="/tax_slab/read-all-tax-slab/new">
         {({ history, match }) => (
           <FormEditDialog
@@ -102,6 +102,6 @@ export function FormPage({ history }) {
         draggable
         pauseOnHover
       />
-    </SalarypolicyUIProvider>
+    </FormUIProvider>
   );
 }
