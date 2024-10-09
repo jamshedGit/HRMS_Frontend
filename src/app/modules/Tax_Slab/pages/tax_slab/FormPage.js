@@ -18,7 +18,7 @@ export function FormPage({ history }) {
   console.log("tax_slab page")
   const dispatch = useDispatch();
   const FormUIEvents = {
-    newSalarypolicyButtonClick: () => {
+    newFormButtonClick: () => {
       dispatch(fetchAllCountry());
 
       history.push("/tax_slab/read-all-tax-slab/new");

@@ -16,7 +16,7 @@ export function FormCard() {
   //console.log("FormUIContext", FormUIContext)
   const SalarypolicyUIProps  = useMemo(() => {
     return {
-      newSalarypolicyButtonClick: FormUIContext.newSalarypolicyButtonClick,
+      newFormButtonClick: FormUIContext.newFormButtonClick,
       openEditSalarypolicyDialog: FormUIContext.openEditSalarypolicyDialog,
     }
   }, [FormUIContext])
@@ -59,7 +59,7 @@ export function FormCard() {
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={SalarypolicyUIProps .newSalarypolicyButtonClick}
+                onClick={SalarypolicyUIProps .newFormButtonClick}
               >
                 + Add Tax Slab
               </button>

@@ -48,7 +48,7 @@ export function FormUIProvider({ FormUIEvents, children }) {
     ids,
     setIds,
     initUser,
-    newSalarypolicyButtonClick: FormUIEvents.newSalarypolicyButtonClick,
+    newFormButtonClick: FormUIEvents.newFormButtonClick,
     openEditSalarypolicyDialog: FormUIEvents.openEditSalarypolicyDialog,
     openDeleteSalarypolicyDialog: FormUIEvents.openDeleteSalarypolicyDialog,
     openActiveSalarypolicyDialog: FormUIEvents.openActiveSalarypolicyDialog,
