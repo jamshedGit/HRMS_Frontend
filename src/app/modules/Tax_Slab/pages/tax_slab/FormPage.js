@@ -4,7 +4,7 @@ import { Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { SalarypolicyUIProvider } from "./SalarypolicyUIContext";
-import { SalarypolicyEditDialog } from "./form-edit-dialog/SalarypolicyEditDialog";
+import { FormEditDialog } from "./form-edit-dialog/FormEditDialog";
 import { FormDeleteDialog } from "./form-delete-dialog/FormDeleteDialog";
 
 import { FormCard } from "./form-card/FormCard";
@@ -46,7 +46,7 @@ export function FormPage({ history }) {
     <SalarypolicyUIProvider SalarypolicyUIEvents={SalarypolicyUIEvents}>
       <Route exact path="/tax_slab/read-all-tax-slab/new">
         {({ history, match }) => (
-          <SalarypolicyEditDialog
+          <FormEditDialog
             show={match != null}
             onHide={() => {
               history.push("/tax_slab/read-all-tax-slab");
@@ -56,7 +56,7 @@ export function FormPage({ history }) {
       </Route>
       <Route path="/tax_slab/read-all-tax-slab/:id/edit">
         {({ history, match }) => (
-          <SalarypolicyEditDialog
+          <FormEditDialog
             show={match != null}
             id={match && match.params.id}
             onHide={() => {
@@ -67,7 +67,7 @@ export function FormPage({ history }) {
       </Route>
       <Route path="/tax_slab/read-all-tax-slab/:id/read">
         {({ history, match }) => (
-          <SalarypolicyEditDialog
+          <FormEditDialog
             show={match != null}
             id={match && match.params.id}
             userForRead={true}

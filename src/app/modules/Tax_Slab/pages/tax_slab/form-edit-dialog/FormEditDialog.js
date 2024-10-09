@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Modal } from "react-bootstrap";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { SalarypolicyEditForm } from "./SalarypolicyEditForm";
-import { SalarypolicyEditDialogHeader } from './SalarypolicyEditDialogHeader'
+import { FormEditForm } from "./FormEditForm";
+import { FormEditDialogHeader } from './FormEditDialogHeader'
 
 import * as actions from "../../../_redux/redux-Actions";
 import { ToastContainer, toast } from "react-toastify";
@@ -10,10 +10,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { useSalarypolicyUIContext } from "../SalarypolicyUIContext";
 
 
-export function SalarypolicyEditDialog({ id, show, onHide, userForRead }) {
+export function FormEditDialog({ id, show, onHide, userForRead }) {
   const [action, setaction] = useState(false);
   const [loading, setLoading] = useState(false);
-  const title = "SalarypolicyEditDialog";
+  const title = "FormEditDialog";
   const SalarypolicyUIContext = useSalarypolicyUIContext();
 console.log("id for salary policy",id)
  
@@ -107,8 +107,8 @@ console.log("id for salary policy",id)
       onHide={onHide}
       aria-labelledby="example-modal-sizes-title-lg"
     >
-      <SalarypolicyEditDialogHeader id={id} isUserForRead={userForRead} />
-      <SalarypolicyEditForm
+      <FormEditDialogHeader id={id} isUserForRead={userForRead} />
+      <FormEditForm
         saveSalarypolicy={saveSalarypolicy}
         user={userForEdit || salarypolicyUIProps .initUser}
         onHide={onHide}

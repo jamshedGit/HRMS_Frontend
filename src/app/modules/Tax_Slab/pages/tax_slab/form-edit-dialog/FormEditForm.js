@@ -26,7 +26,7 @@ const tax_slabEditSchema = Yup.object().shape(
   
 );
 
-export function SalarypolicyEditForm({
+export function FormEditForm({
   saveSalarypolicy,
   user,
   actionsLoading,
@@ -35,7 +35,7 @@ export function SalarypolicyEditForm({
   enableLoading,
   loading,
 }) {
-  console.log("SalarypolicyEditForm user", user);
+  console.log("FormEditForm user", user);
 
 
 
