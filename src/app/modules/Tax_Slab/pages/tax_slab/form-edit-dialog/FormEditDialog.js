@@ -85,7 +85,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
      
       console.log("salary policy getUserStatus", user);
 
-      const salarypolicyUpdatedFields = {
+      const formUpdatedFields = {
         Id: user.Id,
         from_amount: user.from_amount,
         to_amount: user.to_amount,
@@ -95,7 +95,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
 
       
 
-     await dispatch(actions.updateSalarypolicy(salarypolicyUpdatedFields, disbaleLoading, onHide));
+     await dispatch(actions.updateSalarypolicy(formUpdatedFields, disbaleLoading, onHide));
      await dispatch(actions.fetchSalarypolicies(usersUIProps.queryParams));
     }
   };
