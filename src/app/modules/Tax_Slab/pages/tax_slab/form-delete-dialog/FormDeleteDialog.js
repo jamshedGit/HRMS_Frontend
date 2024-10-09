@@ -5,7 +5,7 @@ import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls
 import * as actions from "../../../_redux/redux-Actions";
 import { useSalarypolicyUIContext } from "../SalarypolicyUIContext";
 
-export function SalarypolicyDeleteDialog({ id, status, show, onHide }) {
+export function FormDeleteDialog({ id, status, show, onHide }) {
   // console.log("Status", status);
   const [loading, setLoading] = useState(false);
   // Customers UI Context

@@ -11,7 +11,7 @@ import { useSalarypolicyUIContext } from "../SalarypolicyUIContext"
 import { SalarypolicyFIlter } from "../form-filter/SalarypolicyFIlter"
 import { useSelector, shallowEqual } from "react-redux"
 
-export function SalarypolicyCard() {
+export function FormCard() {
   const SalarypolicyUIContext = useSalarypolicyUIContext()
   //console.log("SalarypolicyUIContext", SalarypolicyUIContext)
   const SalarypolicyUIProps  = useMemo(() => {

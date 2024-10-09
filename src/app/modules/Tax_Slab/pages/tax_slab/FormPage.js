@@ -5,9 +5,9 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { SalarypolicyUIProvider } from "./SalarypolicyUIContext";
 import { SalarypolicyEditDialog } from "./form-edit-dialog/SalarypolicyEditDialog";
-import { SalarypolicyDeleteDialog } from "./form-delete-dialog/SalarypolicyDeleteDialog";
+import { FormDeleteDialog } from "./form-delete-dialog/FormDeleteDialog";
 
-import { SalarypolicyCard } from "./form-card/SalarypolicyCard";
+import { FormCard } from "./form-card/FormCard";
 import { fetchAllCountry } from "../../../../../_metronic/redux/dashboardActions";
 import {} from "../../_redux/redux-Actions";
 
@@ -79,7 +79,7 @@ export function FormPage({ history }) {
       </Route>
       <Route path="/tax_slab/read-all-tax-slab/:id/:status/delete">
         {({ history, match }) => (
-          <SalarypolicyDeleteDialog
+          <FormDeleteDialog
             show={match != null}
             id={match && match.params.id}
             status={match && match.params.status}
@@ -90,7 +90,7 @@ export function FormPage({ history }) {
         )}
       </Route>
     
-      <SalarypolicyCard />
+      <FormCard />
       <ToastContainer
         position="top-right"
         autoClose={5000}
