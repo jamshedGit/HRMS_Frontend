@@ -9,6 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSalarypolicyUIContext } from "../SalarypolicyUIContext";
 
+
 export function SalarypolicyEditDialog({ id, show, onHide, userForRead }) {
   const [action, setaction] = useState(false);
   const [loading, setLoading] = useState(false);

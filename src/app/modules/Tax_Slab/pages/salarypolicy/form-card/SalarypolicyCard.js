@@ -8,7 +8,7 @@ import {
 } from "../../../../../../_metronic/_partials/controls"
 import { SalarypolicyTable } from "../salarypolicy-table/SalarypolicyTable"
 import { useSalarypolicyUIContext } from "../SalarypolicyUIContext"
-import { SalarypolicyFIlter } from "../salarypolicy-filter/SalarypolicyFIlter"
+import { SalarypolicyFIlter } from "../form-filter/SalarypolicyFIlter"
 import { useSelector, shallowEqual } from "react-redux"
 
 export function SalarypolicyCard() {

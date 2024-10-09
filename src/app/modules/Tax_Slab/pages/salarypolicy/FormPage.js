@@ -4,7 +4,7 @@ import { Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { SalarypolicyUIProvider } from "./SalarypolicyUIContext";
-import { SalarypolicyEditDialog } from "./salarypolicy-edit-dialog/SalarypolicyEditDialog";
+import { SalarypolicyEditDialog } from "./form-edit-dialog/SalarypolicyEditDialog";
 import { SalarypolicyDeleteDialog } from "./form-delete-dialog/SalarypolicyDeleteDialog";
 
 import { SalarypolicyCard } from "./form-card/SalarypolicyCard";
