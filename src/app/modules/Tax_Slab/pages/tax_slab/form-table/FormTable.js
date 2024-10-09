@@ -39,12 +39,13 @@ export function FormTable() {
   const { currentState, userAccess } = useSelector(
     (state) => {  console.log("state ",state); return {
       
-      currentState: state.salarypolicy,
+      // currentState: state.salarypolicy,
+      currentState: state.tax_slab,
       userAccess: state?.auth?.userAccess["tax_slab"],
     }},
     shallowEqual
   );
-  console.log("currentState salary policy", currentState);
+  console.log("currentState tax_slab",currentState)
   
   const { totalCount, entities, listLoading } = currentState;
 
