@@ -5,7 +5,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { SalarypolicyUIProvider } from "./SalarypolicyUIContext";
 import { SalarypolicyEditDialog } from "./salarypolicy-edit-dialog/SalarypolicyEditDialog";
-import { SalarypolicyDeleteDialog } from "./salarypolicy-delete-dialog/SalarypolicyDeleteDialog";
+import { SalarypolicyDeleteDialog } from "./form-delete-dialog/SalarypolicyDeleteDialog";
 
 import { SalarypolicyCard } from "./form-card/SalarypolicyCard";
 import { fetchAllCountry } from "../../../../../_metronic/redux/dashboardActions";
