@@ -70,7 +70,7 @@ export function FormFilter() {
                   type="text"
                   className="form-control"
                   name="searchText"
-                  placeholder="Search By Type"
+                  placeholder="Search By Payment Mode"
                   onBlur={handleBlur}
                   value={values.searchText}
                   onChange={(e) => {
