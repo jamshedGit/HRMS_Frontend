@@ -4,6 +4,8 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { Input, Select } from "../../../../../../_metronic/_partials/controls";
 import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLabel";
+import { format } from 'date-fns';
+import './form.css'
 
 //Validation for Form
 const formValidation = Yup.object().shape({
@@ -29,6 +31,7 @@ const formValidation = Yup.object().shape({
 });
 
 export function MasterEditForm({
+  activePayrollMonth,
   submitForm,
   user,
   actionsLoading,
@@ -116,6 +119,14 @@ export function MasterEditForm({
                         errors.type && !values.type && <CustomErrorLabel touched={true} error={errors.type} />
                       }
                     </div>
+
+                    {
+                      values.type == '1' && activePayrollMonth.startDate && activePayrollMonth.endDate &&
+                      <>
+                       
+                          <p className="date-in-line">{format(new Date(activePayrollMonth.startDate), 'dd-MMM-yyyy')}-{format(new Date(activePayrollMonth.endDate), 'dd-MMM-yyyy')}</p>
+                      </>
+                    }
 
                     {
                       values.type == '2' &&

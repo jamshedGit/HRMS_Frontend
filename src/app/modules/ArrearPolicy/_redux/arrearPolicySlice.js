@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { addMinutes } from "date-fns";
 
 const initialState = {
     listLoading: false,
@@ -11,6 +12,7 @@ const initialState = {
     userForEdit: undefined,
     lastError: null,
     userForRead: false,
+    activePayrollMonth: {}
 };
 
 export const callTypes = {
@@ -76,6 +78,12 @@ export const ArrearSetupSlice = createSlice({
                 }
                 return el;
             });
-        }
+        },
+        ActivePayrollMonthFetched: (state, action) => {
+            const data = action?.payload;
+            state.actionsLoading = false;
+            state.activePayrollMonth = { ...data, expiry: addMinutes(new Date(), 5) };
+            state.error = null;
+        },
     },
 });

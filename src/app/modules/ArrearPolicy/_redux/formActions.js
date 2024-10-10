@@ -49,6 +49,26 @@ export const fetchEditRecord = (id) => (dispatch) => {
 
 /**
  * 
+ * Fetch Active Payroll Month Dates
+ * 
+ * @returns
+ */
+export const fetchActivePayrollDates = () => (dispatch) => {
+  return requestFromServer
+    .getActivePayroll()
+    .then((response) => {
+
+      const data = response.data?.data;
+      dispatch(actions.ActivePayrollMonthFetched(data));
+    })
+    .catch((error) => {
+      error.clientMessage = "Can't find user";
+      dispatch(actions.catchError({ error, callType: callTypes.action }));
+    });
+};
+
+/**
+ * 
  * Save or update Arrear Policy Record
  * 
  * @param {Object} data 

@@ -35,6 +35,16 @@ export function getArrearSetupById(id) {
 }
 
 /**
+ * 
+ * Get Single Active Payroll Month Data
+ * 
+ * @returns 
+ */
+export function getActivePayroll() {
+  return axios.get(`${USERS_URL}/arrear_policy/read-active-payroll-month`);
+}
+
+/**
  *
  * Update Single Arrear Policy By Id
  *  

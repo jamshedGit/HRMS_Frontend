@@ -30,11 +30,13 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   const dispatch = useDispatch();
   const {
     userForEdit,
+    activePayrollMonth,
     roles,
     centers,
     userStatusTypes,
   } = useSelector((state) => ({
     userForEdit: state.arrear_policy.userForEdit,
+    activePayrollMonth: state.arrear_policy.activePayrollMonth,
     roles: state.users.roles,
     centers: state.users.centers,
     userStatusTypes: state.users.userStatusTypes,
@@ -44,6 +46,9 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   //Fetch record to edit on dialog load
   useEffect(() => {
     dispatch(actions.fetchEditRecord(id));
+    if(!activePayrollMonth.startDate || new Date(activePayrollMonth.expiry).getTime() < new Date().getTime()){
+      dispatch(actions.fetchActivePayrollDates());
+    }
   }, [id, dispatch]);
 
   //Create or Update record according to values from dialog
@@ -62,6 +67,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
       <MasterEditForm
         submitForm={submitForm}
         user={userForEdit || formUIProps.initUser}
+        activePayrollMonth={activePayrollMonth}
         onHide={onHide}
         roles={roles}
         centers={centers}
