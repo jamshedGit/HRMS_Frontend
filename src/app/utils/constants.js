@@ -170,6 +170,7 @@ export class RedirectURLs {
 export const DateTimeFormats = {
   General1: "MMMM Do YYYY - h:mm a",
   General: "d MMM H:m a",
+  ActiveLabel: 'dd-MM-yyyy'
 };
 
 export const REGEX = {
