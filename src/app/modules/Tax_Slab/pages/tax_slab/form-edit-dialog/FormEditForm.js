@@ -86,7 +86,7 @@ export function FormEditForm({
                       placeholder="Enter From Amount"
                       label="From Amount"
                       type="number"
-                      min={0}
+                      // min={0}
                     />
                   </div>
 

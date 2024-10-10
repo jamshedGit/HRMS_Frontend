@@ -3,9 +3,9 @@ import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { Input } from "../../../../../../_metronic/_partials/controls"; // Adjust import as needed
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector, shallowEqual } from "react-redux";
 
-console.log("Salary policy input",Input)
+console.log("Salary policy input", Input);
 
 const salarypolicyEditSchema = Yup.object().shape({
   type: Yup.string().required("Required*"),
@@ -32,7 +32,19 @@ export function SalarypolicyEditForm({
   enableLoading,
   loading,
 }) {
-  console.log("SalarypolicyEditForm user",user)
+  console.log("SalarypolicyEditForm user", user);
+  console.log("Salarypolicy current month data", user);
+  // const [defMonth, setDefaultMonth] = useState(false);
+
+  const { userAccess, currentMonthList } = useSelector(
+    (state) => ({
+      userAccess: state.auth.userAccess.salarypolicy,
+      currentMonthList: state.salarypolicy.currentMonth,
+    }),
+    shallowEqual
+  );
+  console.log("userAccess Temp current month", userAccess);
+
   const options = [
     { value: "Ratio of Year", label: "Ratio of Year" },
     { value: "Month Days", label: "Month Days" },
@@ -43,7 +55,7 @@ export function SalarypolicyEditForm({
     <div className="form-group">
       <label>{label}</label>
       <select {...field} className="form-control" onChange={onChange}>
-      <option value="">{user?.type || 'Select Type'}</option>
+        <option value="">{user?.type || "Select Type"}</option>
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
@@ -55,9 +67,61 @@ export function SalarypolicyEditForm({
       )}
     </div>
   );
-  console.log("initialValues user.Type", user);
+  console.log(
+    "{month} {year} ({start_date} - {end_date})",
+    currentMonthList && currentMonthList[0].month,
+    currentMonthList && currentMonthList[0].year,
+    currentMonthList && currentMonthList[0].startDate,
+    currentMonthList && currentMonthList[0].endDate
+  );
+  const monthIndex = currentMonthList && currentMonthList[0].month - 1; // 9 for September
+  const year = currentMonthList && currentMonthList[0].year; // 2024
 
+  // Format the month
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const monthName = monthNames[monthIndex]; // "Sep"
+
+  // Get the start and end dates
+  const startDate = new Date(currentMonthList && currentMonthList[0].startDate);
+  const endDate = new Date(currentMonthList && currentMonthList[0].endDate);
+
+  // Format the dates
+  // const formattedStartDate = `${String(startDate.getDate()).padStart(
+  //   2,
+  //   "0"
+  // )}-${String(startDate.getMonth() + 1).padStart(
+  //   2,
+  //   "0"
+  // )}-${startDate.getFullYear()}`;
+  // const formattedEndDate = `${String(endDate.getDate()).padStart(
+  //   2,
+  //   "0"
+  // )}-${String(endDate.getMonth() + 1).padStart(
+  //   2,
+  //   "0"
+  // )}-${endDate.getFullYear()}`;
+
+  const formattedStartDate = `${String(startDate.getUTCDate()).padStart(2, '0')}-${String(startDate.getUTCMonth() + 1).padStart(2, '0')}-${startDate.getUTCFullYear()}`;
+  const formattedEndDate = `${String(endDate.getUTCDate()).padStart(2, '0')}-${String(endDate.getUTCMonth() + 1).padStart(2, '0')}-${endDate.getUTCFullYear()}`;
   
+  // Create the final formatted string
+  const formattedString = `${monthName} ${year} (${formattedStartDate} - ${formattedEndDate})`;
+
+  console.log("{month} {year} ({start_date} - {end_date})", formattedString);
+
   return (
     <Formik
       enableReinitialize={true}
@@ -69,8 +133,6 @@ export function SalarypolicyEditForm({
       //   divisor: user.divisor || 0,
       // }}
 
-
-
       initialValues={user}
       validationSchema={salarypolicyEditSchema}
       onSubmit={(values) => {
@@ -80,7 +142,6 @@ export function SalarypolicyEditForm({
       }}
     >
       {({ handleSubmit, values, setFieldValue }) => (
-        
         <>
           <Modal.Body className="overlay overlay-block cursor-default">
             {actionsLoading && (
@@ -119,8 +180,7 @@ export function SalarypolicyEditForm({
                     />
                   </div>
 
-                 
-                    {/* <Field
+                  {/* <Field
                       name="multiplier"
                       component={Input}
                       placeholder="Enter Multiplier"
@@ -129,24 +189,21 @@ export function SalarypolicyEditForm({
                       disabled={values.type == "Month Days" || values.type == "Fixed Days"}
                     /> */}
 
-                    {!(
-                      values.type === "Month Days" ||
-                      values.type === "Fixed Days"
-                    ) && (
+                  {!(
+                    values.type === "Month Days" || values.type === "Fixed Days"
+                  ) && (
                       <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="multiplier"
-                        component={Input}
-                        placeholder="Enter Multiplier"
-                        label="Multiplier"
-                        type="number"
-                 
-                      />
-                          </div>
+                        <Field
+                          name="multiplier"
+                          component={Input}
+                          placeholder="Enter Multiplier"
+                          label="Multiplier"
+                          type="number"
+                        />
+                      </div>
                     )}
-              
-                 
-                    {/* <Field
+
+                  {/* <Field
                       name="divisor"
                       component={Input}
                       placeholder="Enter Divisor"
@@ -158,24 +215,21 @@ export function SalarypolicyEditForm({
                       }
                     /> */}
 
-                    {!(
-                      values.type === "Month Days" ||
-                      values.type === "Fixed Days"
-                    ) && (
+                  {!(
+                    values.type === "Month Days" || values.type === "Fixed Days"
+                  ) && (
                       <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="divisor"
-                        component={Input}
-                        placeholder="Enter Divisor"
-                        label="Divisor"
-                        type="number"
-                       
-                      />
-                           </div>
+                        <Field
+                          name="divisor"
+                          component={Input}
+                          placeholder="Enter Divisor"
+                          label="Divisor"
+                          type="number"
+                        />
+                      </div>
                     )}
-             
-                
-                    {/* <Field
+
+                  {/* <Field
                       name="value"
                       component={Input}
                       placeholder="Value"
@@ -185,23 +239,59 @@ export function SalarypolicyEditForm({
                         values.type == "Ratio of Year" ||
                         values.type === "Month Days"
                       }
+
+
                     /> */}
 
-{!(values.type === "Ratio of Year" || values.type === "Month Days") && (
-    <div className="col-12 col-md-4 mt-3">
-  <Field
-    name="value"
-    component={Input}
-    placeholder="Value"
-    label="Value"
-    type="number"
-  
-  
-  />
-       </div>
-)}
+                  {/* <div className="col-12 col-md-12 mt-3 row"> */}
 
-             
+                  {values.type === "Month Days" && formattedString && (
+                    <div className="col-6 mt-3">
+                      <Field
+                        name="month_days"
+                        component={Input}
+                        value={formattedString || 0}
+                        placeholder={formattedString || 0}
+                        label="  "
+                        type="number"
+                        disabled
+                        style={{
+                          border: "none",
+                          padding: "5px",
+                          backgroundColor: "transparent",
+                        }}
+                      />
+                    </div>
+                  )}
+                  {/* {values.type === "Month Days" && (
+                      <div className="col-12 col-md-4 mt-3">
+                        <Field
+                          name="month"
+                          component={Input}
+                          // component={currentMonthList && currentMonthList[0].month}
+                          value = {currentMonthList && currentMonthList[0].month}
+                          placeholder="Month"
+                          label="Current Month"
+                          type="number"
+                          disabled
+                        />
+                      </div>
+                    )} */}
+
+                  {/* {values.type === "Month Days" && (
+                      <div className="col-12 col-md-4 mt-3">
+                        <Field
+                          name="year"
+                          component={Input}
+                          value = {currentMonthList && currentMonthList[0].year}
+                          placeholder="Year"
+                          label="Current Year"
+                          type="number"
+                          disabled
+                        />
+                      </div>
+                    )} */}
+                  {/* </div> */}
                 </div>
               </fieldset>
             </Form>
@@ -224,7 +314,7 @@ export function SalarypolicyEditForm({
                 Ok
               </button>
             )}
-            {!isUserForRead  && values.type && (
+            {!isUserForRead && values.type && (
               <button
                 type="submit"
                 onClick={() => handleSubmit()}

@@ -54,10 +54,19 @@ export function SalarypolicyTable() {
 
   useEffect(() => {
     salarypolicyUIProps.setIds([]);
-    console.log("salarypolicy test 2",salarypolicyUIProps.queryParams)
-    console.log("salarypolicy userAccess",salarypolicyUIProps.queryParams)
+
     dispatch(actions.fetchSalarypolicies(salarypolicyUIProps.queryParams));
   }, [salarypolicyUIProps.queryParams, dispatch, totalCount]);
+
+
+
+  useEffect(() => {
+    salarypolicyUIProps.setIds([]);
+    console.log("salarypolicy payroll month test 2")
+    console.log("salarypolicy payroll month userAccess",salarypolicyUIProps.queryParams)
+    dispatch(actions.getCurrentMonth());
+  }, []);
+
 
   const isAccessForEdit = userAccess?.find(
     (item) => item.componentName === "UpdateSalarypolicy"
@@ -66,6 +75,9 @@ export function SalarypolicyTable() {
   const isAccessForDelete = userAccess?.find(
     (item) => item.componentName === "DeleteSalarypolicy"
   );
+
+
+  
   // Table columns
   const columns = [
     {

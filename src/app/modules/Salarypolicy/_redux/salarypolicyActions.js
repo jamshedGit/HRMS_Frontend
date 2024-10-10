@@ -10,16 +10,8 @@ export const fetchSalarypolicies = (queryparm) => async (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.list }));
   console.log("test query param", queryparm)
   return requestFromServer.getAllSalarypolicy(queryparm)
-    // .getAllReceipts({
-    //   filter: {
-    //     searchQuery: ""
-    //   },
-    //   sortBy: "receiptNo",
-    //   limit: 10,
-    //   page: 1
-    // })
     .then((response) => {
-      //  console.log("user action receipt fetched 321")
+
       console.log("response", response)
       dispatch(actions.salarypolicyFetched(response));
     })
@@ -156,5 +148,22 @@ export const updateSalarypolicy = (user, disbaleLoading, onHide) => (dispatch) =
         draggable: true,
         progress: undefined,
       });
+    });
+};
+
+export const getCurrentMonth = () => (dispatch) => {
+
+
+  dispatch(actions.startCall({ callType: callTypes.action }));
+  return requestFromServer
+    .getCurrentMonth()
+    .then((response) => {
+
+
+      dispatch(actions.CurrentMonthFetched({ response }));
+    })
+    .catch((error) => {
+      error.clientMessage = "Can't find user";
+      dispatch(actions.catchError({ error, callType: callTypes.action }));
     });
 };

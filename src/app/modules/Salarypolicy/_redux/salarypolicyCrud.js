@@ -37,3 +37,10 @@ export function deleteSalarypolicy(body) {
   console.log(body);
   return axios.patch(`${USERS_URL}/salarypolicy/delete-salarypolicy`, body);
 }
+ 
+
+//Read current month 
+export function getCurrentMonth() {
+  console.log("getCurrentMonth ");
+  return axios.get(`${USERS_URL}/salarypolicy/read-currentmonth`);
+}
