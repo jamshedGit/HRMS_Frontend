@@ -19,7 +19,7 @@ import { mortuarySlice } from "../app/modules/IBS/_redux/mortuary/reduxSlice";
 import { coffinSlice } from "../app/modules/IBS/_redux/coffin/reduxSlice";
 import { receiptSlice } from "../app/modules/EDRS/_redux/receiptSlice"
 import { bankSlice } from "../app/modules/Banks/_redux/bankSlice";
-import { salarypolicySlice } from "../app/modules/Salarypolicy/_redux/salarypolicySlice";
+
 import { tax_slabSlice } from "../app/modules/Tax_Slab/_redux/redux-Slice";
 import { branchSlice } from "../app/modules/BankBranch/_redux/branchSlice";
 import { deptSlice } from "../app/modules/Department/_redux/deptSlice";
@@ -51,9 +51,12 @@ import { employeeSalaryExpSlice } from "../app/modules/Employee_Salary_Expatriat
 import { compensationExpSlice } from "../app/modules/Compensation_Expatriate/_redux/compensationExpSlice";
 import { employee_transfer_slice } from "../app/modules/Employee_Transfer/_redux/employee_transfer_slice";
 import { SalaryRevisionSlice } from "../app/modules/Employee_Salary_Revision/_redux/SalaryRevisionSlice";
-import { taxSetupSlice } from "../app/modules/Tax_Setup/_redux/taxSetupSlice";
+
 import { fiscalSetupSlice } from "../app/modules/Fiscal_Setup/_redux/fiscalSetupSlice";
 import { PayrollMonthSlice } from "../app/modules/Payroll_Month_Setup/_redux/PayrollMonthSlice";
+import { salarypolicySlice } from "../app/modules/Salarypolicy/_redux/salarypolicySlice";
+import { taxSetupSlice } from "../app/modules/Tax_Setup/_redux/taxSetupSlice";
+import { loan_manag_confSetupSlice } from "../app/modules/Loan_manag_conf/_redux/loan_manag_confSetupSlice"
 
 export const rootReducer = combineReducers({
   auth: auth.reducer,
@@ -74,8 +77,7 @@ export const rootReducer = combineReducers({
   coffin: coffinSlice.reducer,
   receipt: receiptSlice.reducer,
   bank: bankSlice.reducer,
- salarypolicy: salarypolicySlice.reducer,
- tax_slab:tax_slabSlice.reducer,
+
   branch: branchSlice.reducer,
   dept: deptSlice.reducer,
   empType: empTypeSlice.reducer,
@@ -108,7 +110,10 @@ export const rootReducer = combineReducers({
   salary_revision: SalaryRevisionSlice.reducer,
   tax_setup: taxSetupSlice.reducer,
   fiscal_setup: fiscalSetupSlice.reducer,
-  payroll_month:PayrollMonthSlice.reducer
+  payroll_month:PayrollMonthSlice.reducer,
+  salarypolicy: salarypolicySlice.reducer,
+  tax_slab:tax_slabSlice.reducer,
+  loan_manag_conf:loan_manag_confSetupSlice.reducer,
 });
 
 export function* rootSaga() {
