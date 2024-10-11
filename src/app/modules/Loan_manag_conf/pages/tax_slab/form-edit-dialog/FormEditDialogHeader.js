@@ -10,16 +10,16 @@ export function FormEditDialogHeader({ id, isUserForRead }) {
   const { userForEdit, actionsLoading } = useSelector(
     
     (state) => ({
-      userForEdit: state.tax_setup.userForEdit,
+      userForEdit: state.receipt.userForEdit,
       actionsLoading: state.users.actionsLoading,
     }),
     shallowEqual
   );
 
   useEffect(() => {
-    let _title = id ? "" : "New Tax Setup";
+    let _title = id ? "" : "Add Loan Configuration";
     if (id) {
-      _title = `Edit Tax Setup`;
+      _title = `Edit Loan Configuration`;
     } //else if (isUserForRead) {
     //   _title = `Read user '}'`
     // }

@@ -4,7 +4,7 @@ import paginationFactory, {
   PaginationProvider,
 } from "react-bootstrap-table2-paginator";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import * as actions from "../../../_redux/formActions";
+import * as actions from "../../../_redux/redux-Actions";
 import {
   getHandlerTableChange,
   NoRecordsFoundMessage,
@@ -22,7 +22,7 @@ export function FormTable() {
   //Users UI Context
   const formUIContext = useFormUIContext();
 
-  const FormUIProps = useMemo(() => {
+  const formUIProps = useMemo(() => {
     return {
       ids: formUIContext.ids,
       setIds: formUIContext.setIds,
@@ -39,12 +39,13 @@ export function FormTable() {
   const { currentState, userAccess } = useSelector(
     (state) => {  console.log("state ",state); return {
       
-      currentState: state.tax_setup,
-      userAccess: state?.auth?.userAccess["Tax_Setup"],
+      // currentState: state.salarypolicy,
+      currentState: state.loan_management_configuration,
+      userAccess: state?.auth?.userAccess["loan_management_configuration"],
     }},
     shallowEqual
   );
-  console.log("currentState", currentState);
+  console.log("currentState loan_management_configuration",currentState)
   
   const { totalCount, entities, listLoading } = currentState;
 
@@ -53,44 +54,34 @@ export function FormTable() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    FormUIProps.setIds([]);
-    console.log("test 2",FormUIProps.queryParams)
-    dispatch(actions.fetchUsers(FormUIProps.queryParams));
-  }, [FormUIProps.queryParams, dispatch, totalCount]);
+    formUIProps.setIds([]);
+ 
+ 
+    dispatch(actions.fetchSalarypolicies(formUIProps.queryParams));
+  }, [formUIProps.queryParams, dispatch, totalCount]);
 
   const isAccessForEdit = userAccess?.find(
-    (item) => item.componentName === "UpdateTaxSetup"
+    (item) => item.componentName === "UpdateLoanManagementConfiguration"
   );
 
   const isAccessForDelete = userAccess?.find(
-    (item) => item.componentName === "DeleteTaxSetup"
+    (item) => item.componentName === "DeleteLoanManagementConfiguration"
   );
   // Table columns
   const columns = [
+    // {
+    //   dataField: "Id",
+    //   text: "ID",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "10px",
+    //   },
+    // },
     {
-      dataField: "Id",
-      text: "ID",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
-    {
-      dataField: "startDate",
-      text: "Start Date",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
-   
-    {
-      dataField: "endDate",
-      text: "end Date",
+      dataField: "subsidiary",
+      text: "subsidiary",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -99,26 +90,99 @@ export function FormTable() {
       },
     },
 
+
+
+{
+  dataField: "account",
+  text: "account",
+  sort: false,
+  sortCaret: sortCaret,
+  headerSortingClasses,
+  style: {
+    minWidth: "10px",
+  },
+ 
+},
+
+
     {
-      dataField: "isActive",
-      text: "Active",
+      dataField: "human_resource_role",
+      text: "role",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
       style: {
-        minWidth: "160px",
+        minWidth: "10px",
       },
     },
+
+    {
+      dataField: "emp_loan_account",
+      text: "loan accountt",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "10px",
+      },
+    },
+
+
+    {
+      dataField: "installment_deduction_percentage",
+      text: "deduction (%)",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "10px",
+      },
+    },
+
+    {
+      dataField: "installment_deduction_bases",
+      text: "deduction bases",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "10px",
+      },
+    },
+
+    {
+      dataField: "max_loan_amount",
+      text: "max loan",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "10px",
+      },
+    },
+
+    {
+      dataField: "salary_count",
+      text: "salary count",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "10px",
+      },
+    },
+
+
        {
       dataField: "action",
       text: "Actions",
       isDummyField: true,
       formatter: ActionsColumnFormatter,
       formatExtraData: {
-        openEditFormDialog: FormUIProps.openEditFormDialog,
-        openDeleteFormDialog: FormUIProps.openDeleteFormDialog,
-        openActiveFormDialog: FormUIProps.openActiveFormDialog,
-        openReadFormDialog: FormUIProps.openReadFormDialog,
+        openEditFormDialog: formUIProps.openEditFormDialog,
+        openDeleteFormDialog: formUIProps.openDeleteFormDialog,
+        openActiveFormDialog: formUIProps.openActiveFormDialog,
+        openReadFormDialog: formUIProps.openReadFormDialog,
         isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,
         isAccessForDelete: isAccessForDelete
           ? isAccessForDelete.isAccess
@@ -127,7 +191,7 @@ export function FormTable() {
       classes: "text-right pr-0",
       headerClasses: "text-right pr-3",
       style: {
-        minWidth: "170px",
+        minWidth: "10px",
       },
     },
   ];
@@ -137,8 +201,8 @@ export function FormTable() {
     custom: true,
     totalSize: totalCount,
     sizePerPageList: uiHelpers.sizePerPageList,
-    sizePerPage: FormUIProps.queryParams.pageSize,
-    page: FormUIProps.queryParams.pageNumber,
+    sizePerPage: formUIProps.queryParams.pageSize,
+    page: formUIProps.queryParams.pageNumber,
   };
 
     return (
@@ -161,7 +225,7 @@ export function FormTable() {
                 columns={columns}
                 defaultSorted={uiHelpers.defaultSorted}
                 onTableChange={getHandlerTableChange(
-                  FormUIProps.setQueryParams
+                  formUIProps.setQueryParams
                 )}
                 // selectRow={getSelectRow({
                 //   entities,

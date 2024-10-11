@@ -22,8 +22,7 @@ const Centers = lazy(() => import("./modules/Centers/pages"));
 const IBSModule = lazy(() => import("./modules/IBS/pages/index"));
 const EDRSModule = lazy(() => import("./modules/EDRS/pages/index"));
 const BankModule = lazy(() => import("./modules/Banks/pages/index"));
-const salarypolicyModule = lazy(() => import("./modules/Salarypolicy/pages/index"));
-const tax_slabModule = lazy(() => import("./modules/Tax_Slab/pages/index"));
+
 const BranchModule = lazy(() => import("./modules/BankBranch/pages/index"));
 const DepartmenModule = lazy(() => import("./modules/Department/pages/index"));
 const EmployeeTypeModule = lazy(() => import("./modules/EmployeeType/pages/index"));
@@ -57,7 +56,9 @@ const EmployeeSalaryRevisionModule = lazy(() => import("./modules/Employee_Salar
 const TaxSetupModule = lazy(() => import("./modules/Tax_Setup/pages/index"));
 const FiscalSetupModule = lazy(() => import("./modules/Fiscal_Setup/pages/index"));
 const PayrollMonthSetupModule = lazy(() => import("./modules/Payroll_Month_Setup/pages/index"));
-
+const salarypolicyModule = lazy(() => import("./modules/Salarypolicy/pages/index"));
+const tax_slabModule = lazy(() => import("./modules/Tax_Slab/pages/index"));
+const loan_manag_confModule = lazy(() => import("./modules/Loan_manag_conf/pages/index"));
 
 const ROUTES = {
   settings: SettingsPage,
@@ -68,8 +69,7 @@ const ROUTES = {
   ibs: IBSModule,
   edrs: EDRSModule,
   bank: BankModule,
-  salarypolicy:salarypolicyModule,
-  tax_slab:tax_slabModule,
+
   branch:BranchModule,
   department:DepartmenModule,
   emptype: EmployeeTypeModule,
@@ -102,7 +102,10 @@ const ROUTES = {
   salary_revision: EmployeeSalaryRevisionModule,
   tax_setup: TaxSetupModule,
   fiscal_setup: FiscalSetupModule,
-  payroll_month: PayrollMonthSetupModule
+  payroll_month: PayrollMonthSetupModule,
+  salarypolicy:salarypolicyModule,
+  tax_slab:tax_slabModule,
+  loan_management_configuration:loan_manag_confModule,
 };
 
 export default function BasePage() {

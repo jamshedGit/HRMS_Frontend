@@ -10,6 +10,7 @@ const initialDashboardState = {
   allEmployeesSalaryDDL: [],
   allEarningDeductionList: [],
   allSubidiaryList: [],
+  allAccountList: [],
   allBankBranch: [],
   allCity: [],
   allBanks:[],
@@ -147,6 +148,9 @@ export const dashboardSlice = createSlice({
     },
     AlaramTime: (state, action) => {
       state.alarmTime = action.payload;
+    },
+    AllAccountListFetch: (state, action) => {
+      state.allAccountList = action.payload;
     },
   },
 });

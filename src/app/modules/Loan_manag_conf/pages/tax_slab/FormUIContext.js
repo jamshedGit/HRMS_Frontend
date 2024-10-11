@@ -31,12 +31,20 @@ export function FormUIProvider({ FormUIEvents, children }) {
     });
   }, []);
   const initUser = {
-    startDate: "",
-    endDate: "",
-  
+    Id:"",
+    subsidiary: "",
+    account: "",
+    human_resource_role: "",
+    emp_loan_account: "",
+    installment_deduction_percentage:"",
+    installment_deduction_bases:"",
+    loan_type:"",
+    max_loan_amount:"",
+    salary_count:""
   };
 
-  
+
+
   const value = {
     queryParams,
     setQueryParamsBase,

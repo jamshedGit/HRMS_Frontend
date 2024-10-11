@@ -2,14 +2,15 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls";
-import * as actions from "../../../_redux/formActions";
+import * as actions from "../../../_redux/redux-Actions";
 import { useFormUIContext } from "../FormUIContext";
 
-export function FormActiveDialog({ id, status, show, onHide }) {
+export function FormDeleteDialog({ id, status, show, onHide }) {
+  // console.log("Status", status);
   const [loading, setLoading] = useState(false);
   // Customers UI Context
   const usersUIContext = useFormUIContext();
-  const formUIProps = useMemo(() => {
+  const usersUIProps = useMemo(() => {
     return {
       queryParams: usersUIContext.queryParams,
     };
@@ -41,16 +42,14 @@ export function FormActiveDialog({ id, status, show, onHide }) {
   // looking for loading/dispatch
   useEffect(() => {}, [isLoading, dispatch]);
 
-  const deleteForm = () => {
+  const deleteSalarypolicy = () => {
     // server request for deleting customer by id
     enableLoading();
-    dispatch(actions.activeUser(id)).then(() => {
+    dispatch(actions.deleteSalarypolicy(id)).then(() => {
       onHide();
       // refresh list after deletion
-      dispatch(actions.fetchUsers(formUIProps.queryParams));
-      // clear selections list
-      // formUIProps.setIds([]);
-      // closing delete modal
+      dispatch(actions.fetchSalarypolicies(usersUIProps.queryParams));
+   
       disableLoading();
     });
   };
@@ -66,28 +65,29 @@ export function FormActiveDialog({ id, status, show, onHide }) {
       {/*end::Loading*/}
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-lg">
-          Activate User
+          Delete Record
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {!isLoading && <span>Are you sure to activate this user?</span>}
-        {isLoading && <span>user is activating...</span>}
+        {!isLoading && <span>Are you sure want to delete this record?</span>}
+        {isLoading && <span>user is deactivating...</span>}
       </Modal.Body>
       <Modal.Footer>
         <div>
           <button
             type="button"
             onClick={onHide}
-            className="btn btn-light btn-elevate">
+            className="btn btn-light btn-elevate"
+          >
             Cancel
           </button>
           <> </>
           <button
             type="button"
-            onClick={deleteForm}
+            onClick={deleteSalarypolicy}
             className="btn btn-primary btn-elevate"
           >
-            Activate
+            Delete Record
             {loading && (
               <span className="ml-3 mr-3 spinner spinner-white"></span>
             )}

@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Modal } from "react-bootstrap";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { MasterEditForm } from "./MasterEditForm";
+import { FormEditForm } from "./FormEditForm";
 import { FormEditDialogHeader } from './FormEditDialogHeader'
 
-import * as actions from "../../../_redux/formActions";
+import * as actions from "../../../_redux/redux-Actions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useFormUIContext } from "../FormUIContext";
+
 
 export function FormEditDialog({ id, show, onHide, userForRead }) {
   const [action, setaction] = useState(false);
@@ -15,14 +16,14 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   const title = "FormEditDialog";
   const FormUIContext = useFormUIContext();
 
-
+ 
   const usersUIProps = useMemo(() => {
     return {
       queryParams: FormUIContext.queryParams,
     };
   }, [FormUIContext]);
 
-  const formUIProps = useMemo(() => {
+  const formUIProps  = useMemo(() => {
     return {
       initUser: FormUIContext.initUser,
       queryParams: FormUIContext.queryParams,
@@ -46,65 +47,61 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     userStatusTypes,
     isuserForRead,
   } = useSelector((state) => ({
-
+    
+    
     actionsLoading: state.users.actionsLoading,
     user: state.users, // change for users to receipt
-    userForEdit: state.tax_setup.userForEdit,
+    userForEdit: state.tax_slab.userForEdit,
     roles: state.users.roles,
     centers: state.users.centers,
     userStatusTypes: state.users.userStatusTypes,
-    isuserForRead: state.tax_setup.userForRead,
+    isuserForRead: state.tax_slab.userForRead,
   }));
 
-  // useEffect(() => {
-  //   if (actionsLoading) {
-  //     onHide();
-  //   }
-  // }, [actionsLoading === true]);
+  console.log("for tax slab isuserForRead",userForEdit)
 
-  //console.log("action", action);
 
   useEffect(() => {
-    dispatch(actions.fetchUser(id));
+    dispatch(actions.fetchSalarypolicy(id));
 
-    // dispatch(actions.fetchUser(FormUIProps.queryParams))
+    // dispatch(actions.fetchSalarypolicy(formUIProps .queryParams))
   }, [id, dispatch]);
 
-  // useEffect(() => {
-  //   console.log("UseEffect call");
-  //   if (actionsLoading === false) {
-  //     console.log("UseEffect call inside function");
-  //     disbaleLoading();
-  //   }
-  // }, [actionsLoading]);
-  //console.log("userForEdit", userForEdit);
 
-  const SaveTaxSetup = async (user) => {
+  const saveForm = async (user) => {
+
+    console.log("tax slab getUserStatus", user);
 
     if (!id) {
-
-
+ 
+  
       const finalObject = { user }
-      await dispatch(actions.createTaxSetup(user, disbaleLoading, onHide));
-      await dispatch(actions.fetchUsers(usersUIProps.queryParams));
-
+      dispatch(actions.createSalarypolicy(user, disbaleLoading, onHide));
+      
+      
 
     } else {
-      // const getUserStatus = userStatusTypes.find((item) => {
-      //   return item.value === +user.status;
-      // });
 
-      console.log("getUserStatus", user);
+     
+      console.log("salary policy getUserStatus", user);
 
-      const taxSetupUpdatedFields = {
+      const formUpdatedFields = {
         Id: user.Id,
-        startDate: user.startDate,
-        endDate: user.endDate,
+        subsidiary: user.subsidiary,
+        account: user.account,
+        human_resource_role: user.human_resource_role,
+        emp_loan_account: user.emp_loan_account,
+        installment_deduction_percentage: user.installment_deduction_percentage,
+        installment_deduction_bases: user.installment_deduction_bases,
+        loan_type: user.loan_type,
+        max_loan_amount: user.max_loan_amount,
+        salary_count: user.salary_count,
       };
 
-      console.log("taxSetupUpdatedFields", taxSetupUpdatedFields);
-      await dispatch(actions.updateTaxSetup(taxSetupUpdatedFields, disbaleLoading, onHide));
-      await dispatch(actions.fetchUsers(usersUIProps.queryParams));
+      
+
+     await dispatch(actions.updateSalarypolicy(formUpdatedFields, disbaleLoading, onHide));
+     await dispatch(actions.fetchSalarypolicies(usersUIProps.queryParams));
     }
   };
 
@@ -116,9 +113,9 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
       aria-labelledby="example-modal-sizes-title-lg"
     >
       <FormEditDialogHeader id={id} isUserForRead={userForRead} />
-      <MasterEditForm
-        SaveTaxSetup={SaveTaxSetup}
-        user={userForEdit || formUIProps.initUser}
+      <FormEditForm
+        saveForm={saveForm}
+        user={userForEdit || formUIProps .initUser}
         onHide={onHide}
         roles={roles}
         centers={centers}

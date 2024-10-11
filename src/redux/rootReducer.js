@@ -56,7 +56,7 @@ import { fiscalSetupSlice } from "../app/modules/Fiscal_Setup/_redux/fiscalSetup
 import { PayrollMonthSlice } from "../app/modules/Payroll_Month_Setup/_redux/PayrollMonthSlice";
 import { salarypolicySlice } from "../app/modules/Salarypolicy/_redux/salarypolicySlice";
 import { taxSetupSlice } from "../app/modules/Tax_Setup/_redux/taxSetupSlice";
-import { loan_manag_confSetupSlice } from "../app/modules/Loan_manag_conf/_redux/loan_manag_confSetupSlice"
+import { loan_manag_confSlice } from "../app/modules/Loan_manag_conf/_redux/redux-Slice"
 
 export const rootReducer = combineReducers({
   auth: auth.reducer,
@@ -113,7 +113,7 @@ export const rootReducer = combineReducers({
   payroll_month:PayrollMonthSlice.reducer,
   salarypolicy: salarypolicySlice.reducer,
   tax_slab:tax_slabSlice.reducer,
-  loan_manag_conf:loan_manag_confSetupSlice.reducer,
+  loan_management_configuration:loan_manag_confSlice.reducer,
 });
 
 export function* rootSaga() {

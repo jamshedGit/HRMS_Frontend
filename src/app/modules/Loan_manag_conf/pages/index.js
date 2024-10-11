@@ -1,16 +1,20 @@
 import React, { Suspense } from "react";
 import { Redirect, Switch } from "react-router-dom";
 import { LayoutSplashScreen, ContentRoute } from "../../../../_metronic/layout";
-import { TaxSetupPage } from "./forms/TaxSetupPage";
+import { FormPage } from "./tax_slab/FormPage";
 
-export default function TaxSetupManagement() {
-  console.log('tax_setup mein aya')
+export default function loan_manag_confManagement() {
+ console.log("render loan PAGE")
   return (
+
+    <>
+   
+    
     <Suspense fallback={<LayoutSplashScreen />}>
       <Switch>
-        {<Redirect exact={true} from="/tax_setup" to="/tax_setup/read-all-tax-setup" />}
-        <ContentRoute path="/tax_setup/read-all-tax-setup" component={TaxSetupPage} />
+        {<Redirect exact={true} from="/loan_management_configuration" to="/loan_management_configuration/read-all-loan-management-configuration" />}
+        <ContentRoute path="/loan_management_configuration/read-all-loan-management-configuration" component={FormPage} />
       </Switch>
-    </Suspense>
+    </Suspense></>
   );
 }

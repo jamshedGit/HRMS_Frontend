@@ -6,111 +6,90 @@ import "react-toastify/dist/ReactToastify.css";
 import { FormUIProvider } from "./FormUIContext";
 import { FormEditDialog } from "./form-edit-dialog/FormEditDialog";
 import { FormDeleteDialog } from "./form-delete-dialog/FormDeleteDialog";
-import { FormActiveDialog } from "./form-active-dialog/FormActiveDialog";
+
 import { FormCard } from "./form-card/FormCard";
 import { fetchAllCountry } from "../../../../../_metronic/redux/dashboardActions";
-import {
-  fetchUserStatusTypes,
-  fetchRoles,
-  fetchCenters,
-} from "../../_redux/formActions";
+import {} from "../../_redux/redux-Actions";
 
 
-// dispatch(actions.fetchRoles());
-//     dispatch(actions.fetchCenters());
 
-export function TaxSetupPage({ history }) {
+export function FormPage({ history }) {
+
+  console.log("laon mange conf page")
   const dispatch = useDispatch();
   const FormUIEvents = {
     newFormButtonClick: () => {
       dispatch(fetchAllCountry());
-      dispatch(fetchRoles());
-      dispatch(fetchCenters());
-      dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
-      history.push("/tax_setup/read-all-tax-setup/new");
+
+      history.push("/loan_management_configuration/read-all-loan-management-configuration/new");
     },
     openEditFormDialog: (id) => {
       dispatch(fetchAllCountry());
-      dispatch(fetchRoles());
-      dispatch(fetchCenters());
-      dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
-      history.push(`/tax_setup/read-all-tax-setup/${id}/edit`);
+
+      history.push(`/loan_management_configuration/read-all-loan-management-configuration/${id}/edit`);
     },
     openDeleteFormDialog: (id, status) => {
-      history.push(`/tax_setup/read-all-tax-setup/${id}/${status}/delete`);
+      history.push(`/loan_management_configuration/read-all-loan-management-configuration/${id}/${status}/delete`);
     },
     openActiveFormDialog: (id) => {
-      history.push(`/tax_setup/read-all-tax-setup/${id}/active`);
+      history.push(`/loan_management_configuration/read-all-loan-management-configuration/${id}/active`);
     },
     openReadFormDialog: (id, isUserRead) => {
       
-      // dispatch(fetchAllCountry());
-      // dispatch(fetchRoles());
-      // dispatch(fetchCenters());
-      // dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
-      history.push(`/tax_setup/read-all-tax-setup/${id}/read`);
+      
+      history.push(`/loan_management_configuration/read-all-loan-management-configuration/${id}/read`);
     },
   };
   return (
+
     
     <FormUIProvider FormUIEvents={FormUIEvents}>
-      <Route exact path="/tax_setup/read-all-tax-setup/new">
+      <Route exact path="/loan_management_configuration/read-all-loan-management-configuration/new">
         {({ history, match }) => (
           <FormEditDialog
             show={match != null}
             onHide={() => {
-              history.push("/tax_setup/read-all-tax-setup");
+              history.push("/loan_management_configuration/read-all-loan-management-configuration");
             }}
           />
         )}
       </Route>
-      <Route path="/tax_setup/read-all-tax-setup/:id/edit">
+      <Route path="/loan_management_configuration/read-all-loan-management-configuration/:id/edit">
         {({ history, match }) => (
           <FormEditDialog
             show={match != null}
             id={match && match.params.id}
             onHide={() => {
-              history.push("/tax_setup/read-all-tax-setup");
+              history.push("/loan_management_configuration/read-all-loan-management-configuration");
             }}
           />
         )}
       </Route>
-      <Route path="/tax_setup/read-all-tax-setup/:id/read">
+      <Route path="/loan_management_configuration/read-all-loan-management-configuration/:id/read">
         {({ history, match }) => (
           <FormEditDialog
             show={match != null}
             id={match && match.params.id}
             userForRead={true}
             onHide={() => {
-              history.push("/tax_setup/read-all-tax-setup");
+              history.push("/loan_management_configuration/read-all-loan-management-configuration");
             }}
           />
         )}
       </Route>
-      <Route path="/tax_setup/read-all-tax-setup/:id/:status/delete">
+      <Route path="/loan_management_configuration/read-all-loan-management-configuration/:id/:status/delete">
         {({ history, match }) => (
           <FormDeleteDialog
             show={match != null}
             id={match && match.params.id}
             status={match && match.params.status}
             onHide={() => {
-              history.push("/tax_setup/read-all-tax-setup");
+              history.push("/loan_management_configuration/read-all-loan-management-configuration");
             }}
           />
         )}
       </Route>
-      <Route path="/tax_setup/read-all-tax-setup/:id/active">
-        {({ history, match }) => (
-          <FormActiveDialog
-            show={match != null}
-            id={match && match.params.id}
-            //status={match && match.params.status}
-            onHide={() => {
-              history.push("/tax_setup/read-all-tax-setup");
-            }}
-          />
-        )}
-      </Route>
+    
       <FormCard />
       <ToastContainer
         position="top-right"
