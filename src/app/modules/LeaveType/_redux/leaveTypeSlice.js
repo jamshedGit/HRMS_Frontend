@@ -50,7 +50,6 @@ export const LeaveTypeSlice = createSlice({
             const dropdownData = action.payload.dropdownData;
             state.typeDropdownData = dropdownData;
         },
-        //get User By ID
         LeaveTypeFetchedForEdit: (state, action) => {
             const entities = action?.payload?.userForEdit;
             state.actionsLoading = false;
@@ -63,11 +62,13 @@ export const LeaveTypeSlice = createSlice({
             state.entities = state.entities.filter(
                 (el) => el.Id != action.payload.id
             );
+            state.totalCount--;
         },
         LeaveTypeCreated: (state, action) => {
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);
+            state.totalCount++;
         },
         LeaveTypeUpdated: (state, action) => {
             const id = action.payload.Id;

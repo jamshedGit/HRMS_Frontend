@@ -134,6 +134,7 @@ export function FormTable() {
               paginationProps={paginationProps}
             >
               <BootstrapTable
+                noDataIndication={NoRecordsFoundMessage({ entities })}
                 wrapperClasses="table-responsive"
                 bordered={false}
                 classes="table table-head-custom table-vertical-center overflow-hidden table-hover"
@@ -152,6 +153,7 @@ export function FormTable() {
                 // })}
                 {...paginationTableProps}
               >
+
                 <PleaseWaitMessage entities={entities} />
                 <NoRecordsFoundMessage entities={entities} />
               </BootstrapTable>
