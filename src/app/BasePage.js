@@ -58,6 +58,7 @@ const FiscalSetupModule = lazy(() => import("./modules/Fiscal_Setup/pages/index"
 const PayrollMonthSetupModule = lazy(() => import("./modules/Payroll_Month_Setup/pages/index"));
 const ArrearPolicyModule = lazy(() => import("./modules/ArrearPolicy/pages/index"));
 const RoundingPolicyModule = lazy(() => import("./modules/SalaryRoundingPolicy/pages/index"));
+const LeaveTypeModule = lazy(() => import("./modules/LeaveType/pages/index"));
 
 
 const ROUTES = {
@@ -104,7 +105,8 @@ const ROUTES = {
   fiscal_setup: FiscalSetupModule,
   payroll_month: PayrollMonthSetupModule,
   arrear_policy: ArrearPolicyModule,
-  salary_rounding_policy: RoundingPolicyModule
+  salary_rounding_policy: RoundingPolicyModule,
+  leave_type: LeaveTypeModule
 };
 
 export default function BasePage() {

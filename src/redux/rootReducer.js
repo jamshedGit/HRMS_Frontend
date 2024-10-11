@@ -55,6 +55,7 @@ import { fiscalSetupSlice } from "../app/modules/Fiscal_Setup/_redux/fiscalSetup
 import { PayrollMonthSlice } from "../app/modules/Payroll_Month_Setup/_redux/PayrollMonthSlice";
 import { ArrearSetupSlice } from "../app/modules/ArrearPolicy/_redux/arrearPolicySlice";
 import { SalaryRoundingPolicySlice } from "../app/modules/SalaryRoundingPolicy/_redux/salaryRoundingPolicySlice";
+import { LeaveTypeSlice } from "../app/modules/LeaveType/_redux/leaveTypeSlice";
 
 export const rootReducer = combineReducers({
   auth: auth.reducer,
@@ -110,7 +111,8 @@ export const rootReducer = combineReducers({
   fiscal_setup: fiscalSetupSlice.reducer,
   payroll_month:PayrollMonthSlice.reducer,
   arrear_policy: ArrearSetupSlice.reducer,
-  salary_rounding_policy: SalaryRoundingPolicySlice.reducer
+  salary_rounding_policy: SalaryRoundingPolicySlice.reducer,
+  leave_type: LeaveTypeSlice.reducer
 });
 
 export function* rootSaga() {
