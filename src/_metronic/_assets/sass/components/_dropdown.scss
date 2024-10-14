@@ -73,6 +73,7 @@
 
 // Hover
 .dropdown {
+    margin-right: 20px;
     &.dropdown-hover:hover {
         > .dropdown-menu {
             display: block;
