@@ -20,7 +20,7 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
     // })
     .then((response) => {
       //  console.log("user action receipt fetched 321")
-      console.log("response", response)
+      console.log("response dept", response)
       dispatch(actions.deptFetched(response));
     })
     .catch((error) => {

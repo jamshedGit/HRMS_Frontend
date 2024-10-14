@@ -82,7 +82,7 @@ export function EmployeeSalaryExpPage({ history }) {
             id={match && match.params.id}
             userForRead={true}
             onHide={() => {
-              history.push("/salary_expatriate/read-all-employee-sasalary-expatriatelary");
+              history.push("/salary_expatriate/read-all-employee-salary-expatriate");
             }}
           />
         )}
