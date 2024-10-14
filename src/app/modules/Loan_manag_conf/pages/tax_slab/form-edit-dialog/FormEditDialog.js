@@ -70,7 +70,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
 
   const saveForm = async (user) => {
 
-    console.log("tax slab getUserStatus", user);
+    console.log("loan management conf getUserStatus", user);
 
     if (!id) {
  
@@ -87,15 +87,15 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
 
       const formUpdatedFields = {
         Id: user.Id,
-        subsidiary: user.subsidiary,
-        account: user.account,
+        subsidiaryId: user.subsidiaryId,
+        accountId: user.accountId,
         human_resource_role: user.human_resource_role,
         emp_loan_account: user.emp_loan_account,
         installment_deduction_percentage: user.installment_deduction_percentage,
-        installment_deduction_bases: user.installment_deduction_bases,
-        loan_type: user.loan_type,
-        max_loan_amount: user.max_loan_amount,
-        salary_count: user.salary_count,
+        installment_deduction_bases_type: user.type,
+        // loan_type: user.loan_type,
+        // max_loan_amount: user.max_loan_amount,
+        // salary_count: user.salary_count,
       };
 
       

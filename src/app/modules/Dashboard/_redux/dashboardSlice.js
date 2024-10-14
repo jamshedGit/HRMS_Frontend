@@ -42,7 +42,8 @@ const initialDashboardState = {
   alarmTime: [],
   incidentTypes: [],
   allCompensationBenefitsList:[],
-  allAccountList:[]
+  allAccountList:[],
+  allHumanResourceRoleList:[]
 };
 
 export const callTypes = {
@@ -179,6 +180,10 @@ export const dashboardSlice = createSlice({
     },
     AllAccountListFetch: (state, action) => {
       state.allAccountList = action.payload;
+    },
+    AllHumanResourceRoleListFetch: (state, action) => {
+  
+      state.allHumanResourceRoleList = action.payload.entities;
     },
 
   },

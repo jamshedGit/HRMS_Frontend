@@ -11,6 +11,7 @@ const initialDashboardState = {
   allEarningDeductionList: [],
   allSubidiaryList: [],
   allAccountList: [],
+  allHumanResourceRoleList:[],
   allBankBranch: [],
   allCity: [],
   allBanks:[],
@@ -152,5 +153,10 @@ export const dashboardSlice = createSlice({
     AllAccountListFetch: (state, action) => {
       state.allAccountList = action.payload;
     },
+
+    AllHumanResourceRoleListFetch: (state, action) => {
+      state.allHumanResourceRoleList = action.payload;
+    },
+
   },
 });

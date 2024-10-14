@@ -80,8 +80,8 @@ export function FormTable() {
     //   },
     // },
     {
-      dataField: "subsidiary",
-      text: "subsidiary",
+      dataField: "subsidiaryId",
+      text: "subsidiaryId",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -93,8 +93,8 @@ export function FormTable() {
 
 
 {
-  dataField: "account",
-  text: "account",
+  dataField: "accountId",
+  text: "account Id",
   sort: false,
   sortCaret: sortCaret,
   headerSortingClasses,
@@ -140,8 +140,8 @@ export function FormTable() {
     },
 
     {
-      dataField: "installment_deduction_bases",
-      text: "deduction bases",
+      dataField: "installment_deduction_bases_type",
+      text: "deduction bases type",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -150,27 +150,27 @@ export function FormTable() {
       },
     },
 
-    {
-      dataField: "max_loan_amount",
-      text: "max loan",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "10px",
-      },
-    },
+    // {
+    //   dataField: "max_loan_amount",
+    //   text: "max loan",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "10px",
+    //   },
+    // },
 
-    {
-      dataField: "salary_count",
-      text: "salary count",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "10px",
-      },
-    },
+    // {
+    //   dataField: "salary_count",
+    //   text: "salary count",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "10px",
+    //   },
+    // },
 
 
        {
