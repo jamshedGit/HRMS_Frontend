@@ -56,6 +56,11 @@ export function FormEditForm({
   const [defHumanResourceRole = null, setHumanResourceRoleList] = useState(
     null
   );
+  const [defMapLoanManagConfDetailList = null, setDefaultMapLoanManagConfDetailList] = useState([]);
+
+
+
+
 
   useEffect(() => {
     if (!user.Id) {
@@ -87,6 +92,46 @@ export function FormEditForm({
       )}
     </div>
   );
+
+
+  const addRow = (element) => {
+    console.log("click", element.target.id)
+    if (element.target.id == "Other") {
+      setDefaultMapLoanManagConfDetailList([...defMapLoanManagConfDetailList, { transactionType: "Earning", isPartOfGrossSalary: 0 }])
+    }
+    else {
+      setDefaultMapLoanManagConfDetailList([...defMapLoanManagConfDetailList, { transactionType: element.target.id, isPartOfGrossSalary: 1 }])
+    }
+
+  }
+
+
+
+  const handleFieldChanged = (el) => {
+    const index = el.target.id.split('-')[1]
+    const key = el.target.id.split('-')[0]
+    setDefaultMapLoanManagConfDetailList([...defMapLoanManagConfDetailList.map((val, ind) => {
+
+      if (ind == index) {
+        if (!(key == "factorValue" && Number(el.target.value) > 100)) {
+          val[key] = key == 'basis' ? (el.target.value) : Number(el.target.value)
+        }
+      }
+
+      return val
+    })])
+
+  }
+
+
+  const deleteRow = (element) => {
+
+    const data = defMapLoanManagConfDetailList;
+    data.splice(element.target.id, 1);
+
+    setDefaultMapLoanManagConfDetailList([...data])
+  }
+
   console.log("allHumanResourceRoleList admin",user);
   return (
     <Formik
@@ -122,6 +167,7 @@ export function FormEditForm({
                 <div className="spinner spinner-lg spinner-success" />
               </div>
             )}
+            <>
             <Form className="form form-label-right">
               <fieldset disabled={isUserForRead}>
                 <div className="form-group row">
@@ -306,6 +352,79 @@ export function FormEditForm({
                 </div>
               </fieldset>
             </Form>
+
+
+
+            <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
+                    <h6>Details </h6>
+                    {/* {<a onClick={ModalUIProps.newButtonEarningTran} href='javascript:void(0)'>+ Add New </a>} */}
+                    <table id='testtable' class="table table table-head-custom table-vertical-center overflow-hidden table-hover">
+                      <tr style={{ backgroundColor: '#4d5f7a', color: '#fff' }}>
+                        {/* <td>Employee</td> */}
+                        <td>Action</td>
+                        <td>Loan Type</td>
+                        <td>Max Loan Amount</td>
+                        <td>Basis</td>
+                        <td>Salary Count</td>
+                      </tr>
+                      {defMapLoanManagConfDetailList?.map((obj, rightindex) => (
+                       
+                        <><tr>
+                          <td id={rightindex} onClick={deleteRow}> Delete</td>
+                          <td>
+                            <select onChange={handleFieldChanged} id={'earning_deduction_id-' + rightindex} value={obj.earning_deduction_id}>
+                              <option value="-1"> --Select--</option>
+                              {
+                                dashboard.allEarnings?.map((x) => {
+                                  return <option disabled={defMapLoanManagConfDetailList.find(el => el.earning_deduction_id == x.value) ? true : false} value={x.value}> {x.label} </option>
+                                })}
+                            </select>
+
+
+                  
+                          </td>
+                       
+                          {/* <td>{obj.transactionType}</td> */}
+                          <td>
+                            <input disabled={obj.basis == 'Fixed Amount'} style={{ width: "100px" }} type="number" onChange={handleFieldChanged}
+                              value={obj.factorValue} id={'factorValue-' + rightindex}></input>
+                          </td>
+
+                          <td>
+                            <select value={obj.basis} onChange={handleFieldChanged} id={'basis-' + rightindex} >
+                              <option value="-1">--Select--</option>
+                              <option value="Gross">Gross</option>
+                              <option value="Net">Net</option>
+                            </select>
+
+                          </td>
+
+                          <td>
+                            <input disabled={obj.basis == '% Of Basic'} style={{ width: "100px" }} type="number" onChange={handleFieldChanged}
+                              value={obj.amount} id={'amount-' + rightindex}></input> </td>
+                        </tr>
+
+                        </>
+                      ))}
+
+                    </table>
+
+                    {<> <div className="from-group row">
+                      <div className="col-12 col-md-4 mt-3">
+                        <input type='button' id="Earning" onClick={addRow} value='+Add'></input>
+                      </div>
+
+                    </div>
+                    </>}
+
+                  </div>
+
+
+
+
+
+                  </>
+
           </Modal.Body>
           <Modal.Footer>
             {!isUserForRead ? (
