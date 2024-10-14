@@ -6,15 +6,11 @@ const { actions } = fiscalSetupSlice;
 // const { roleActions } = getAllrolesSlice
 
 export const fetchUsers = (queryparm) => async (dispatch) => {
-  // console.log("Receive QPsss", queryparm)
   dispatch(actions.startCall({ callType: callTypes.list }));
   
   return requestFromServer.getAllfiscalSetup(queryparm)
    
     .then((response) => {
-      //  console.log("user action receipt fetched 321")
-     
-
       const formatDates = (dataArray) => {
         return dataArray.map(item => ({
             ...item,
@@ -26,11 +22,9 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
     
     // Format the dates in the response
     response.data.data.rows = formatDates(response.data?.data?.rows);
-      console.log("response", response)
       dispatch(actions.FiscalSetupFetched(response));
     })
     .catch((error) => {
-      //console.log("Can't find user", error)
       error.clientMessage = "Can't find receipts";
       dispatch(actions.catchError({ error, callType: callTypes.list }));
     });
@@ -49,7 +43,6 @@ export const fetchUser = (id) => (dispatch) => {
     .then((response) => {
       const entities = response.data?.data;
 
-      console.log("User fetched for search " + id)
       dispatch(actions.FiscalSetupFetchedForEdit({ userForEdit: entities }));
     })
     .catch((error) => {
@@ -63,7 +56,6 @@ export const deleteFiscalSetup = (id) => (dispatch) => {
   return requestFromServer
     .deletefiscalSetup({ Id: id })
     .then((response) => {
-      //console.log("response from delete user ", response.data.message)
       dispatch(actions.FiscalSetupDeleted({ Id: id }));
       toast.success("Successfully Deleted", {
         position: "top-right",
@@ -86,7 +78,6 @@ export const activeUser = (id) => (dispatch) => {
   return requestFromServer
     .deletefiscalSetup({ receiptId: id })
     .then((response) => {
-      //console.log("response from delete user ", response.data.message)
       dispatch(actions.userDeleted({ id: id }));
       toast.success("Successfully Activated", {
         position: "top-right",
@@ -110,14 +101,11 @@ export const createFiscalSetup = (FiscalSetupForCreation, disbaleLoading, onHide
   // FiscalSetupForCreation.phNo = FiscalSetupForCreation.phNo.toString();
   // FiscalSetupForCreation.cnic = FiscalSetupForCreation.cnic.toString();
 
-  console.log("FiscalSetup for creation", FiscalSetupForCreation);
   return requestFromServer
     .createfiscalSetup(FiscalSetupForCreation)
     .then((res) => {
       dispatch(actions.startCall({ callType: callTypes.action }));
       const user = res.data?.data;
-      console.log("FiscalSetup data");
-      console.log(user);
       dispatch(actions.FiscalSetupCreated(user));
       disbaleLoading();
       toast.success("Successfully Created", {
@@ -151,9 +139,7 @@ export const updateFiscalSetup = (user, disbaleLoading, onHide) => (dispatch) =>
   return requestFromServer
     .updatefiscalSetup(user)
     .then((response) => {
-      console.log("my response",response?.config?.data);
       const updatedFiscalSetup = response?.config?.data; // response.data?.data;
-      console.log("bnkAction Res", response)
       dispatch(actions.FiscalSetupUpdated({ updatedFiscalSetup }));
       dispatch(actions.startCall({ callType: callTypes.action }));
       disbaleLoading();
@@ -169,7 +155,6 @@ export const updateFiscalSetup = (user, disbaleLoading, onHide) => (dispatch) =>
       });
     })
     .catch((error) => {
-      // console.log("error User update", error)
       //error.clientMessage = "Can't update User"
       dispatch(actions.catchError({ error, callType: callTypes.action }));
       disbaleLoading();
@@ -192,7 +177,6 @@ export const fetchRoles = () => (dispatch) => {
     .getAllRoles()
     .then((response) => {
       const entities = response.data?.data;
-      // console.log("User entities: ", entities)
       dispatch(actions.RolesFetched(entities));
     })
     .catch((error) => {
@@ -222,7 +206,6 @@ export const fetchDonationReport = (body) => async (dispatch) => {
   return await requestFromServer
     .donationReport(body)
     .then((response) => {
-      console.log("Res", response);
       const entities = response?.data?.data;
       dispatch(actions.donationReportFetch(entities));
     })
