@@ -55,7 +55,12 @@ const EmployeeSalaryRevisionModule = lazy(() => import("./modules/Employee_Salar
 const TaxSetupModule = lazy(() => import("./modules/Tax_Setup/pages/index"));
 const FiscalSetupModule = lazy(() => import("./modules/Fiscal_Setup/pages/index"));
 const PayrollMonthSetupModule = lazy(() => import("./modules/Payroll_Month_Setup/pages/index"));
-
+const FinalSettlementPolicyModule = lazy(() => import("./modules/Final_Settlement_Policy/pages/index"));
+const salarypolicyModule = lazy(() => import("./modules/Salarypolicy/pages/index"));
+const OnetimeAllowance = lazy(() => import("./modules/Onetime_Allowance/pages/index"));
+const LoanType = lazy(() => import("./modules/LoanType/pages/index"));
+const TaxSlab = lazy(() => import("./modules/LoanType/pages/index"));
+   
 
 const ROUTES = {
   settings: SettingsPage,
@@ -98,7 +103,11 @@ const ROUTES = {
   salary_revision: EmployeeSalaryRevisionModule,
   tax_setup: TaxSetupModule,
   fiscal_setup: FiscalSetupModule,
-  payroll_month: PayrollMonthSetupModule
+  payroll_month: PayrollMonthSetupModule,
+  final_settlement_policy :FinalSettlementPolicyModule,
+  salarypolicy:salarypolicyModule,
+  onetime_earning: OnetimeAllowance,
+  tax_slab: TaxSlab
 };
 
 export default function BasePage() {
@@ -123,7 +132,7 @@ export default function BasePage() {
             .join("-")
             .toLowerCase();
             if (ROUTES[accessName])
-              console.log("path", UserAccess);
+            //  console.log("path", UserAccess);
             {
             return (
               <Route

@@ -50,7 +50,7 @@ export function Layout({ children }) {
           {layoutProps.asideDisplay && <Aside />}
           {/*begin::Wrapper*/}
           <div
-            className="d-flex flex-column flex-row-fluid wrapper"
+            className="flex-column flex-row-fluid wrapper"
             id="kt_wrapper"
           >
             <Header />
@@ -58,7 +58,7 @@ export function Layout({ children }) {
             
             {/* <div><h2>test</h2></div> */}
             <div
-              id="kt_content"
+              id="kt_content" style={{zIndex:"-2"}}
               className={`content ${layoutProps.contentCssClasses} d-flex flex-column flex-column-fluid`}
             >
              

@@ -25,7 +25,7 @@ export function Brand() {
       {/* begin::Brand */}
       <div
         className={`brand flex-column-auto ${layoutProps.brandClasses}`}
-        id="kt_brand"
+        id="kt_brand" style={{ position: "fixed", width: "100%",zIndex:"10" }}
       >
         {/* begin::Logo */}
         <Link to="" className="brand-logo">

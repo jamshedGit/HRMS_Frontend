@@ -102,8 +102,7 @@ export const createEarningDeductionTran = (bankForCreation, disbaleLoading, onHi
     .then((res) => {
       dispatch(actions.startCall({ callType: callTypes.action }));
       const user = res.data?.data;
-      console.log("mira",user);
-      console.log("academic data");
+     
       console.log(user);
       dispatch(actions.earning_deduction_tran_Created(user));
       disbaleLoading();

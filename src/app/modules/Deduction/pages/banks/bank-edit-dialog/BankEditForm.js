@@ -30,8 +30,8 @@ const formValidation = Yup.object().shape(
       .required("Required*"),
     linkedAttendance: Yup.string()
       .required("Required*"),
-    loan: Yup.string()
-      .required("Required*"),
+    // loan: Yup.string()
+    //   .required("Required*"),
     mappedDeduction: Yup.string()
       .required("Required*"),
     account: Yup.string()
@@ -200,7 +200,7 @@ export function BankEditForm({
                       </div>
 
                     }
-                    {
+                    {/* {
 
                       <div className="col-12 col-md-4 mt-3">
                         <Select
@@ -231,7 +231,7 @@ export function BankEditForm({
                         )}
                       </div>
 
-                    }
+                    } */}
                   </div>
 
                   <div className="from-group row">

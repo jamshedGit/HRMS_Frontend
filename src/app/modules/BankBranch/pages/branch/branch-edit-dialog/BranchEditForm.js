@@ -166,9 +166,7 @@ export function BranchEditForm({
                         placeholder="Enter Branch Code"
                         label={<span> Branch Code<span style={{ color: 'red' }}>*</span></span>}
                       />
-                      {errors.branchCode && touched.branchCode && (
-                        <div className="invalid-text">{errors.branchCode}</div>
-                      )}
+                      {errors.branchCode && touched.branchCode}
                     </div>
 
                     <div className="col-12 col-md-4 mt-3">
