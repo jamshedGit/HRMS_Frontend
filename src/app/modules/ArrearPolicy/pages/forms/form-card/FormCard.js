@@ -1,5 +1,4 @@
 import React, { useMemo } from "react"
-
 import {
   Card,
   CardBody,
@@ -13,7 +12,6 @@ import { useSelector, shallowEqual } from "react-redux"
 
 export function FormCard() {
   const FormUIContext = useFormUIContext()
-  //console.log("FormUIContext", FormUIContext)
   const formUIProps = useMemo(() => {
     return {
       newFormButtonClick: FormUIContext.newFormButtonClick,
@@ -23,49 +21,32 @@ export function FormCard() {
 
   const { userAccess } = useSelector(
     (state) => ({
-      userAccess: state.auth.userAccess.Fiscal_Setup,
+      userAccess: state.auth.userAccess.Arrear_Policy,
     }),
     shallowEqual
   )
-  
+
+  //Check if access to create Arrear Policy
   const accessUser = userAccess.find(
-    (item) => item.componentName === "CreateFiscalSetup"
+    (item) => item.componentName === "CreateArrearPolicy"
   )
 
   return (
     <>
 
       <Card>
-        <CardHeader title="">
+        <CardHeader title={null}>
           <FormFilter />
           <CardHeaderToolbar>
-            {accessUser ? (
+            {accessUser && (
               <button
                 type="button"
                 className="btn btn-primary"
                 onClick={formUIProps.newFormButtonClick}
               >
-                + Add Fiscal Year
+                + Add Arrear Policy
               </button>
-            ) : (
-              <></>
             )}
-            {/* {userAccess.find((item) => {
-              if (
-                item.componentName === "CreateUser" ||
-                item.isAccess === true
-              ) {
-                return (
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={FormsUIProps.newUserButtonClick}
-                  >
-                    Add New User
-                  </button>
-                )
-              }
-            })} */}
           </CardHeaderToolbar>
         </CardHeader>
 
