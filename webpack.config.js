@@ -32,7 +32,7 @@ const mainConfig = function () {
 			// output path based on the entries' filename
 			filename: "[name].js"
 		},
-		resolve: {extensions: ['.scss']},
+		resolve: { extensions: ['.scss'] },
 		plugins: [
 			// webpack log message
 			new WebpackMessages({
@@ -51,7 +51,7 @@ const mainConfig = function () {
 					// hook name
 					compiler.hooks.afterEmit.tap('AfterEmitPlugin', (compilation) => {
 						(async () => {
-							await del.sync(distPath + "/sass/*.js", {force: true});
+							await del.sync(distPath + "/sass/*.js", { force: true });
 						})();
 					});
 				}
@@ -59,6 +59,16 @@ const mainConfig = function () {
 		],
 		module: {
 			rules: [
+				{
+					test: /\.js$/,
+					include: path.resolve(__dirname, 'src'),
+					exclude: /(node_modules|bower_components|build)/,
+					loader: 'babel-loader',
+					query: {
+						presets: ['env', 'react', 'es2015', 'stage-0'],
+						plugins: ["transform-class-properties"]
+					}
+				},
 				{
 					test: /\.scss$/,
 					use: [

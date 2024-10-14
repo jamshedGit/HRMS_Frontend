@@ -32,6 +32,10 @@ export function BranchUIProvider({ BranchUIEvents, children }) {
   }, []);
   const initUser = {
     Name: "",
+    countryId: "",
+    cityId:"",
+    branchCode: "",
+    BankId: ""
   
   };
 

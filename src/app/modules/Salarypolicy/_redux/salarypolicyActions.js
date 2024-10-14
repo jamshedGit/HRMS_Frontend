@@ -3,13 +3,13 @@ import { salarypolicySlice, callTypes } from "./salarypolicySlice";
 import { toast } from "react-toastify";
 
 const { actions } = salarypolicySlice;
-// const { roleActions } = getAllrolesSlice
 
-export const fetchUsers = (queryparm) => async (dispatch) => {
+
+export const fetchSalarypolicies = (queryparm) => async (dispatch) => {
   // console.log("Receive QPsss", queryparm)
   dispatch(actions.startCall({ callType: callTypes.list }));
   console.log("test query param", queryparm)
-  return requestFromServer.getAllBanks(queryparm)
+  return requestFromServer.getAllSalarypolicy(queryparm)
     // .getAllReceipts({
     //   filter: {
     //     searchQuery: ""
@@ -21,7 +21,7 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
     .then((response) => {
       //  console.log("user action receipt fetched 321")
       console.log("response", response)
-      dispatch(actions.bankFetched(response));
+      dispatch(actions.salarypolicyFetched(response));
     })
     .catch((error) => {
       //console.log("Can't find user", error)
@@ -30,21 +30,21 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
     });
 };
 
-export const fetchUser = (id) => (dispatch) => {
+export const fetchSalarypolicy = (id) => (dispatch) => {
 
   console.log("User Action id " + id)
   if (!id) {
-    return dispatch(actions.BankFetchedForEdit({ userForEdit: undefined }));
+    return dispatch(actions.SalarypolicyFetchedForEdit({ userForEdit: undefined }));
   }
 
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
-    .getBankById({ Id: id })
+    .getSalarypolicyById({ Id: id })
     .then((response) => {
       const entities = response.data?.data;
 
       console.log("User fetched for search " + id)
-      dispatch(actions.BankFetchedForEdit({ userForEdit: entities }));
+      dispatch(actions.SalarypolicyFetchedForEdit({ userForEdit: entities }));
     })
     .catch((error) => {
       error.clientMessage = "Can't find user";
@@ -52,13 +52,13 @@ export const fetchUser = (id) => (dispatch) => {
     });
 };
 
-export const deleteBank = (id) => (dispatch) => {
+export const deleteSalarypolicy = (id) => (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
-    .deleteBank({ Id: id })
+    .deleteSalarypolicy({ Id: id })
     .then((response) => {
       //console.log("response from delete user ", response.data.message)
-      dispatch(actions.BankDeleted({ Id: id }));
+      dispatch(actions.SalarypolicyDeleted({ Id: id }));
       toast.success("Successfully Deleted", {
         position: "top-right",
         autoClose: 5000,
@@ -75,44 +75,22 @@ export const deleteBank = (id) => (dispatch) => {
     });
 };
 
-export const activeUser = (id) => (dispatch) => {
-  dispatch(actions.startCall({ callType: callTypes.action }));
-  return requestFromServer
-    .deleteBank({ receiptId: id })
-    .then((response) => {
-      //console.log("response from delete user ", response.data.message)
-      dispatch(actions.userDeleted({ id: id }));
-      toast.success("Successfully Activated", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    })
-    .catch((error) => {
-      dispatch(actions.catchError({ error, callType: callTypes.action }));
-      toast.error(error.response.data.message);
-    });
-};
 
-export const createBank = (bankForCreation, disbaleLoading, onHide) => (
+export const createSalarypolicy = (salarypolicyForCreation, disbaleLoading, onHide) => (
   dispatch
 ) => {
-  // bankForCreation.phNo = bankForCreation.phNo.toString();
-  // bankForCreation.cnic = bankForCreation.cnic.toString();
+  // salarypolicyForCreation.phNo = salarypolicyForCreation.phNo.toString();
+  // salarypolicyForCreation.cnic = salarypolicyForCreation.cnic.toString();
 
-  console.log("bank for creation", bankForCreation);
+  
   return requestFromServer
-    .createBank(bankForCreation)
+    .createSalarypolicy(salarypolicyForCreation)
     .then((res) => {
       dispatch(actions.startCall({ callType: callTypes.action }));
       const user = res.data?.data;
-      console.log("bank data");
+     
       console.log(user);
-      dispatch(actions.bankCreated(user));
+      dispatch(actions.salarypolicyCreated(user));
       disbaleLoading();
       toast.success("Successfully Created", {
         position: "top-right",
@@ -141,14 +119,14 @@ export const createBank = (bankForCreation, disbaleLoading, onHide) => (
     });
 };
 
-export const updateBank = (user, disbaleLoading, onHide) => (dispatch) => {
+export const updateSalarypolicy = (user, disbaleLoading, onHide) => (dispatch) => {
   return requestFromServer
-    .updateBank(user)
+    .updateSalarypolicy(user)
     .then((response) => {
       console.log("my response",response?.config?.data);
-      const updatedBank = response?.config?.data; // response.data?.data;
+      const updatedSalarypolicy = response?.config?.data; // response.data?.data;
       console.log("bnkAction Res", response)
-      dispatch(actions.bankUpdated({ updatedBank }));
+      dispatch(actions.salarypolicyUpdated({ updatedSalarypolicy }));
       dispatch(actions.startCall({ callType: callTypes.action }));
       disbaleLoading();
       onHide();
@@ -178,51 +156,5 @@ export const updateBank = (user, disbaleLoading, onHide) => (dispatch) => {
         draggable: true,
         progress: undefined,
       });
-    });
-};
-
-export const fetchRoles = () => (dispatch) => {
-  dispatch(actions.startCall({ callType: callTypes.list }));
-
-  return requestFromServer
-    .getAllRoles()
-    .then((response) => {
-      const entities = response.data?.data;
-      // console.log("User entities: ", entities)
-      dispatch(actions.RolesFetched(entities));
-    })
-    .catch((error) => {
-      error.clientMessage = "Can't find roles";
-      dispatch(actions.catchError({ error, callType: callTypes.list }));
-    });
-};
-
-export const fetchCenters = () => (dispatch) => {
-  dispatch(actions.startCall({ callType: callTypes.list }));
-  return requestFromServer.getAllCenters().then((response) => {
-    const entities = response.data?.data;
-    dispatch(actions.CentersFetched(entities));
-  });
-};
-
-export const fetchUserStatusTypes = (body) => (dispatch) => {
-  dispatch(actions.startCall({ callType: callTypes.list }));
-  return requestFromServer.getAllUserStatusTypes(body).then((response) => {
-    const entities = response.data?.data;
-    dispatch(actions.UserStatusTypesFetched(entities));
-  });
-};
-
-
-export const fetchDonationReport = (body) => async (dispatch) => {
-  return await requestFromServer
-    .donationReport(body)
-    .then((response) => {
-      console.log("Res", response);
-      const entities = response?.data?.data;
-      dispatch(actions.donationReportFetch(entities));
-    })
-    .catch((error) => {
-      toast("error", "Data not found");
     });
 };
