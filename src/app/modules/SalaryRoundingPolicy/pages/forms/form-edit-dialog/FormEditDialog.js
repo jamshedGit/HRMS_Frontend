@@ -5,7 +5,7 @@ import { MasterEditForm } from "./MasterEditForm";
 import { FormEditDialogHeader } from './FormEditDialogHeader'
 
 import * as actions from "../../../_redux/formActions";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useFormUIContext } from "../FormUIContext";
 
@@ -30,30 +30,23 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   const dispatch = useDispatch();
   const {
     userForEdit,
-    activePayrollMonth,
-    roles,
-    centers,
-    userStatusTypes,
+    paymentModeDropdown
   } = useSelector((state) => ({
-    userForEdit: state.arrear_policy.userForEdit,
-    activePayrollMonth: state.arrear_policy.activePayrollMonth,
-    roles: state.users.roles,
-    centers: state.users.centers,
-    userStatusTypes: state.users.userStatusTypes,
+    userForEdit: state.salary_rounding_policy.userForEdit,
+    paymentModeDropdown: state.salary_rounding_policy.paymentModeDropdown
   }
   ));
 
   //Fetch record to edit on dialog load
   useEffect(() => {
     dispatch(actions.fetchEditRecord(id));
-    if(!activePayrollMonth.startDate || new Date(activePayrollMonth.expiry).getTime() < new Date().getTime()){
-      dispatch(actions.fetchActivePayrollDates());
-    }
+    dispatch(actions.fetchPaymentModeData(150)); //Fetch Dropdown data with parent id = 150
   }, [id, dispatch]);
 
   //Create or Update record according to values from dialog
   const submitForm = (values) => {
-    dispatch(actions.saveRecord(values, id, disbaleLoading, onHide))
+    //Converting paymentMode to Number format for server
+    dispatch(actions.saveRecord({...values, paymentMode: Number(values.paymentMode)}, id, disbaleLoading, onHide))
   }
 
   return (
@@ -67,11 +60,8 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
       <MasterEditForm
         submitForm={submitForm}
         user={userForEdit || formUIProps.initUser}
-        activePayrollMonth={activePayrollMonth}
         onHide={onHide}
-        roles={roles}
-        centers={centers}
-        userStatusTypes={userStatusTypes}
+        dropdownData={paymentModeDropdown || []}
         isUserForRead={userForRead}
         enableLoading={enableLoading}
         loading={loading}

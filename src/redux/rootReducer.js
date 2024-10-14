@@ -53,6 +53,7 @@ import { taxSetupSlice } from "../app/modules/Tax_Setup/_redux/taxSetupSlice";
 import { fiscalSetupSlice } from "../app/modules/Fiscal_Setup/_redux/fiscalSetupSlice";
 import { PayrollMonthSlice } from "../app/modules/Payroll_Month_Setup/_redux/PayrollMonthSlice";
 import { ArrearSetupSlice } from "../app/modules/ArrearPolicy/_redux/arrearPolicySlice";
+import { SalaryRoundingPolicySlice } from "../app/modules/SalaryRoundingPolicy/_redux/salaryRoundingPolicySlice";
 import { FinalSettlementPolicySlice } from "../app/modules/Final_Settlement_Policy/_redux/FinalSettlementPolicySlice";
 import { salarypolicySlice } from "../app/modules/Salarypolicy/_redux/salarypolicySlice";
 import { OnetimeAllowanceSlice } from "../app/modules/Onetime_Allowance/_redux/OnetimeAllowanceSlice";
@@ -111,6 +112,7 @@ export const rootReducer = combineReducers({
   fiscal_setup: fiscalSetupSlice.reducer,
   payroll_month:PayrollMonthSlice.reducer,
   arrear_policy: ArrearSetupSlice.reducer,
+  salary_rounding_policy: SalaryRoundingPolicySlice.reducer,
   final_settlement_policy: FinalSettlementPolicySlice.reducer,
   salarypolicy: salarypolicySlice.reducer,
   onetime_earning: OnetimeAllowanceSlice.reducer,

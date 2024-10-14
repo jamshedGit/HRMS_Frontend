@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addMinutes } from "date-fns";
 
 const initialState = {
     listLoading: false,
@@ -12,7 +11,6 @@ const initialState = {
     userForEdit: undefined,
     lastError: null,
     userForRead: false,
-    activePayrollMonth: {}
 };
 
 export const callTypes = {
@@ -20,8 +18,8 @@ export const callTypes = {
     action: "action",
 };
 
-export const ArrearSetupSlice = createSlice({
-    name: "ArrearSetup",
+export const SalaryRoundingPolicySlice = createSlice({
+    name: "SalaryRoundingPolicy",
     initialState: initialState,
     reducers: {
         catchError: (state, action) => {
@@ -40,7 +38,7 @@ export const ArrearSetupSlice = createSlice({
                 state.actionsLoading = true;
             }
         },
-        ArrearsFetched: (state, action) => {
+        RoundingPolicyFetched: (state, action) => {
             const entities = action.payload.data?.data.rows;
             const totalResult = action.payload.data?.data.totalResults;
             state.listLoading = false;
@@ -48,27 +46,30 @@ export const ArrearSetupSlice = createSlice({
             state.entities = entities;
             state.totalCount = totalResult;
         },
-
+        paymentModeFetched: (state, action) => {
+            const dropdownData = action.payload.dropdownData;
+            state.paymentModeDropdown = dropdownData;
+        },
         //get User By ID
-        ArrearsFetchedForEdit: (state, action) => {
+        RoundingPolicyFetchedForEdit: (state, action) => {
             const entities = action?.payload?.userForEdit;
             state.actionsLoading = false;
             state.userForEdit = entities;
             state.error = null;
         },
-        ArrearsDeleted: (state, action) => {
+        RoundingPolicyDeleted: (state, action) => {
             state.error = null;
             state.actionsLoading = false;
             state.entities = state.entities.filter(
                 (el) => el.Id != action.payload.id
             );
         },
-        ArrearsCreated: (state, action) => {
+        RoundingPolicyCreated: (state, action) => {
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);
         },
-        ArrearsUpdated: (state, action) => {
+        RoundingPolicyUpdated: (state, action) => {
             const id = action.payload.Id;
             state.error = null;
             state.actionsLoading = false;
@@ -78,12 +79,6 @@ export const ArrearSetupSlice = createSlice({
                 }
                 return el;
             });
-        },
-        ActivePayrollMonthFetched: (state, action) => {
-            const data = action?.payload;
-            state.actionsLoading = false;
-            state.activePayrollMonth = { ...data, expiry: addMinutes(new Date(), 5) };
-            state.error = null;
-        },
+        }
     },
 });

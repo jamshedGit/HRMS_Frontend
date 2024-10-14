@@ -5,6 +5,8 @@ import * as Yup from "yup";
 import { Input, Select } from "../../../../../../_metronic/_partials/controls";
 import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLabel";
 
+import ActivePayrollMonthLabel from "../../../../../utils/common-modules/ActivePayrollMonthLabel";
+
 //Validation for Form
 const formValidation = Yup.object().shape({
   type: Yup.string().required('Type is required'),
@@ -29,6 +31,7 @@ const formValidation = Yup.object().shape({
 });
 
 export function MasterEditForm({
+  activePayrollMonth,
   submitForm,
   user,
   actionsLoading,
@@ -89,6 +92,7 @@ export function MasterEditForm({
                       <Field
                         name="type"
                         component={Select}
+                        className={errors.type && !values.type ? 'form-control is-invalid' : 'form-control'}
                         placeholder=""
                         onBlur={handleBlur}
                         onChange={(e) => {
@@ -115,6 +119,16 @@ export function MasterEditForm({
                         errors.type && !values.type && <CustomErrorLabel touched={true} error={errors.type} />
                       }
                     </div>
+
+                    {
+                      values.type == '1' && activePayrollMonth.startDate && activePayrollMonth.endDate &&
+                      <ActivePayrollMonthLabel
+                        month={activePayrollMonth.month}
+                        year={activePayrollMonth.year}
+                        startDate={activePayrollMonth.startDate}
+                        endDate={activePayrollMonth.endDate}
+                      />
+                    }
 
                     {
                       values.type == '2' &&

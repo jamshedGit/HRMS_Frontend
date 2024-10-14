@@ -15,4 +15,19 @@ export const getTime = (
 
 export const getCurrentTime = () => moment().format("LT");
 
-//export const getDate = (data) => {};
+/**
+ * 
+ * Get Class name according to value and error
+ * 
+ * @param {string|number} error 
+ * @param {string|number} value 
+ * @returns 
+ */
+export const getClassName = (error, value) => {
+  if (error && !value ) {
+    return 'form-control is-invalid';
+  } else if (!error && value ) {
+    return 'form-control is-valid';
+  }
+  return 'form-control';
+}

@@ -1,20 +1,20 @@
 import * as requestFromServer from "./formCrud";
-import { ArrearSetupSlice, callTypes } from "./arrearPolicySlice";
+import { SalaryRoundingPolicySlice, callTypes } from "./salaryRoundingPolicySlice";
 import { toast } from "react-toastify";
-const { actions } = ArrearSetupSlice;
+const { actions } = SalaryRoundingPolicySlice;
 
 /**
  * 
- * Fetch All Arrears Paginated from the server
+ * Fetch All Rounding Policies Paginated from the server
  * 
  * @param {Object} queryparm 
  * @returns 
  */
-export const fetchArrears = (queryparm) => async (dispatch) => {
+export const fetchRoundingPolicies = (queryparm) => async (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.list }));
-  return requestFromServer.getAllArrearSetup(queryparm)
+  return requestFromServer.getAllRoundingPolicySetup(queryparm)
     .then((response) => {
-      dispatch(actions.ArrearsFetched(response));
+      dispatch(actions.RoundingPolicyFetched(response));
     })
     .catch((error) => {
       error.clientMessage = "Can't find receipts";
@@ -24,22 +24,22 @@ export const fetchArrears = (queryparm) => async (dispatch) => {
 
 /**
  * 
- * Fetch Single Arrear Policy Record by Id
+ * Fetch Single Rounding Policy Record by Id
  * 
  * @param {string|number} id 
  * @returns
  */
 export const fetchEditRecord = (id) => (dispatch) => {
   if (!id) {
-    return dispatch(actions.ArrearsFetchedForEdit(null));
+    return dispatch(actions.RoundingPolicyFetchedForEdit(null));
   }
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
-    .getArrearSetupById(id)
+    .getRoundingPolicySetupById(id)
     .then((response) => {
 
       const entities = response.data?.data;
-      dispatch(actions.ArrearsFetchedForEdit({ userForEdit: entities }));
+      dispatch(actions.RoundingPolicyFetchedForEdit({ userForEdit: entities }));
     })
     .catch((error) => {
       error.clientMessage = "Can't find user";
@@ -49,27 +49,29 @@ export const fetchEditRecord = (id) => (dispatch) => {
 
 /**
  * 
- * Fetch Active Payroll Month Dates
+ * Fetch Payment Mode Dropdown Data
  * 
+ * @param {string|number} id (150 is the Parent Form Id of Payment Mode Menu data)
  * @returns
  */
-export const fetchActivePayrollDates = () => (dispatch) => {
-  return requestFromServer
-    .getActivePayroll()
-    .then((response) => {
-
-      const data = response.data?.data;
-      dispatch(actions.ActivePayrollMonthFetched(data));
-    })
-    .catch((error) => {
-      error.clientMessage = "Can't find user";
-      dispatch(actions.catchError({ error, callType: callTypes.action }));
-    });
+export const fetchPaymentModeData = (id) => (dispatch) => {
+  if (id) {
+    return requestFromServer
+      .getPaymentModeData(id)
+      .then((response) => {
+        const dropdownData = response.data?.data;
+        dispatch(actions.paymentModeFetched({ dropdownData }));
+      })
+      .catch((error) => {
+        error.clientMessage = "Can't find user";
+        dispatch(actions.catchError({ error, callType: callTypes.action }));
+      });
+  }
 };
 
 /**
  * 
- * Save or update Arrear Policy Record
+ * Save or update Rounding Policy Record
  * 
  * @param {Object} data 
  * @param {String|Number|Null} id 
@@ -79,11 +81,11 @@ export const fetchActivePayrollDates = () => (dispatch) => {
  */
 export const saveRecord = (data, id, disableLoading, onHide) => (dispatch) => {
   if (!id) {
-    return requestFromServer.createArrearSetup(data)
+    return requestFromServer.createRoundingPolicySetup(data)
       .then((res) => {
-        const arrearData = res.data?.data;
-        if (arrearData) {
-          dispatch(actions.ArrearsCreated(arrearData));
+        const roundingData = res.data?.data;
+        if (roundingData) {
+          dispatch(actions.RoundingPolicyCreated(roundingData));
           disableLoading();
           toast.success("Successfully Created", {
             position: "top-right",
@@ -99,7 +101,7 @@ export const saveRecord = (data, id, disableLoading, onHide) => (dispatch) => {
       })
       .catch((error) => {
         disableLoading();
-        error.clientMessage = "Can't Update Arrear";
+        error.clientMessage = "Can't Update Rounding Policy";
         toast.error(error?.response?.data?.message, {
           position: "top-right",
           autoClose: 5000,
@@ -112,11 +114,11 @@ export const saveRecord = (data, id, disableLoading, onHide) => (dispatch) => {
       });
   }
   else {
-    return requestFromServer.updateArrearSetup(data)
+    return requestFromServer.updateRoundingPolicySetup(data)
       .then((res) => {
-        const arrearData = res.data?.data;
-        if (arrearData) {
-          dispatch(actions.ArrearsUpdated(arrearData));
+        const roundingData = res.data?.data;
+        if (roundingData) {
+          dispatch(actions.RoundingPolicyUpdated(roundingData));
           disableLoading();
           toast.success("Successfully Updated", {
             position: "top-right",
@@ -132,7 +134,7 @@ export const saveRecord = (data, id, disableLoading, onHide) => (dispatch) => {
       })
       .catch((error) => {
         disableLoading();
-        error.clientMessage = "Can't Update Arrear";
+        error.clientMessage = "Can't Update Rounding Policy";
         toast.error(error?.response?.data?.message, {
           position: "top-right",
           autoClose: 5000,
@@ -148,7 +150,7 @@ export const saveRecord = (data, id, disableLoading, onHide) => (dispatch) => {
 
 /**
  * 
- * Delete Single Arrear Policy Record By Id
+ * Delete Single Rounding Policy Record By Id
  * 
  * @param {String|Number} id 
  * @param {Function} disableLoading 
@@ -156,9 +158,9 @@ export const saveRecord = (data, id, disableLoading, onHide) => (dispatch) => {
  * @returns 
  */
 export const deleteRecord = (id, disableLoading, onHide) => (dispatch) => {
-  return requestFromServer.deleteArrearSetup(id)
+  return requestFromServer.deleteRoundingPolicySetup(id)
     .then((res) => {
-      dispatch(actions.ArrearsDeleted({ id }));
+      dispatch(actions.RoundingPolicyDeleted({ id }));
       disableLoading();
       toast.success("Successfully Deleted", {
         position: "top-right",
@@ -173,7 +175,7 @@ export const deleteRecord = (id, disableLoading, onHide) => (dispatch) => {
     })
     .catch((error) => {
       disableLoading();
-      error.clientMessage = "Can't Delete Arrear";
+      error.clientMessage = "Can't Delete Rounding Policy";
       toast.error(error?.response?.data?.message, {
         position: "top-right",
         autoClose: 5000,
