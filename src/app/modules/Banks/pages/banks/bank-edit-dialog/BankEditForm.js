@@ -53,7 +53,7 @@ export function BankEditForm({
         initialValues={user}
          validationSchema={bankEditSchema}
         onSubmit={(values) => {
-          console.log("values", values);
+          console.log("bank values", values);
           enableLoading();
           saveBank(values);
         }}
