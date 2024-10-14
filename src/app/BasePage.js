@@ -22,7 +22,6 @@ const Centers = lazy(() => import("./modules/Centers/pages"));
 const IBSModule = lazy(() => import("./modules/IBS/pages/index"));
 const EDRSModule = lazy(() => import("./modules/EDRS/pages/index"));
 const BankModule = lazy(() => import("./modules/Banks/pages/index"));
-const salarypolicyModule = lazy(() => import("./modules/Salarypolicy/pages/index"));
 const BranchModule = lazy(() => import("./modules/BankBranch/pages/index"));
 const DepartmenModule = lazy(() => import("./modules/Department/pages/index"));
 const EmployeeTypeModule = lazy(() => import("./modules/EmployeeType/pages/index"));
@@ -56,7 +55,12 @@ const EmployeeSalaryRevisionModule = lazy(() => import("./modules/Employee_Salar
 const TaxSetupModule = lazy(() => import("./modules/Tax_Setup/pages/index"));
 const FiscalSetupModule = lazy(() => import("./modules/Fiscal_Setup/pages/index"));
 const PayrollMonthSetupModule = lazy(() => import("./modules/Payroll_Month_Setup/pages/index"));
-
+const FinalSettlementPolicyModule = lazy(() => import("./modules/Final_Settlement_Policy/pages/index"));
+const salarypolicyModule = lazy(() => import("./modules/Salarypolicy/pages/index"));
+const OnetimeAllowance = lazy(() => import("./modules/Onetime_Allowance/pages/index"));
+const LoanType = lazy(() => import("./modules/LoanType/pages/index"));
+const TaxSlab = lazy(() => import("./modules/LoanType/pages/index"));
+   
 
 const ROUTES = {
   settings: SettingsPage,
@@ -67,7 +71,6 @@ const ROUTES = {
   ibs: IBSModule,
   edrs: EDRSModule,
   bank: BankModule,
-  salarypolicy:salarypolicyModule,
   branch:BranchModule,
   department:DepartmenModule,
   emptype: EmployeeTypeModule,
@@ -100,7 +103,11 @@ const ROUTES = {
   salary_revision: EmployeeSalaryRevisionModule,
   tax_setup: TaxSetupModule,
   fiscal_setup: FiscalSetupModule,
-  payroll_month: PayrollMonthSetupModule
+  payroll_month: PayrollMonthSetupModule,
+  final_settlement_policy :FinalSettlementPolicyModule,
+  salarypolicy:salarypolicyModule,
+  onetime_earning: OnetimeAllowance,
+  tax_slab: TaxSlab
 };
 
 export default function BasePage() {
@@ -125,7 +132,7 @@ export default function BasePage() {
             .join("-")
             .toLowerCase();
             if (ROUTES[accessName])
-              console.log("path", UserAccess);
+            //  console.log("path", UserAccess);
             {
             return (
               <Route
@@ -137,17 +144,10 @@ export default function BasePage() {
           }
         })}
 
-        {isDashboardAccess ? (
-          <>
+<>
             {<Redirect exact from="/" to="/dashboard" />}
             <ContentRoute path="/dashboard" component={Dashboard} />
           </>
-        ) : (
-          <>
-            {<Redirect exact from="/" to="/ibs" />}
-            <ContentRoute path="/ibs" component={IBSModule} />
-          </>
-        )}
 
         <Redirect to="error/error-v1" />
       </Switch>

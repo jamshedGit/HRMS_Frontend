@@ -1,15 +1,15 @@
 import React, { Suspense } from "react";
 import { Redirect, Switch } from "react-router-dom";
 import { LayoutSplashScreen, ContentRoute } from "../../../../_metronic/layout";
-import { BanksPage } from "./banks/BanksPage";
+import { SalarypolicyPage } from "./salarypolicy/SalarypolicyPage";
 
-export default function BankManagement() {
-  console.log('Bank mein aya')
+export default function SalarypolicyManagement() {
+ 
   return (
     <Suspense fallback={<LayoutSplashScreen />}>
       <Switch>
         {<Redirect exact={true} from="/salarypolicy" to="/salarypolicy/read-all-salarypolicy" />}
-        <ContentRoute path="/salarypolicy/read-all-salarypolicy" component={BanksPage} />
+        <ContentRoute path="/salarypolicy/read-all-salarypolicy" component={SalarypolicyPage} />
       </Switch>
     </Suspense>
   );

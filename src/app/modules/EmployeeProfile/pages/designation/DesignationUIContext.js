@@ -31,11 +31,23 @@ export function DesignationUIProvider({ DesignationUIEvents, children }) {
     });
   }, []);
   const initUser = {
-    // designationName: "",
-    // designationCode:"",
-    // createdBy: "",
-    // createdAt:"",
-    
+    firstName:'',
+    lastName: '',
+    middleName:'',
+    employeeCode: '',
+    title: '',
+    subsidiaryId: '',
+    gradeId: '',
+    designationId : '',
+    departmentId : '',
+    teamId: '',
+    payrollGroupId: '',
+    regionId: '',
+    employeeTypeId: '',
+    locationId: '',
+    countryId: '',
+    cityId: '',
+    dateOfJoining: ''
   };
 
   console.log("employee profile ui events",DesignationUIEvents);

@@ -9,7 +9,8 @@ import {
   fetchAllCity,
   fetchAllCountry,
   fetchAllFormsMenu,
-  fetchAllActiveEmployees
+  fetchAllActiveEmployees,
+  getLatestTableId
 
 } from "../../../../../../_metronic/redux/dashboardActions";
 import DatePicker from "react-datepicker";
@@ -23,18 +24,18 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 // Validation schema
 const formValidation = Yup.object().shape(
   {
-   
-      earningCode: Yup.string()
+
+    earningCode: Yup.string()
       .required("Required*"),
-      earningName: Yup.string()
+    earningName: Yup.string()
       .required("Required*"),
-      linkedAttendance: Yup.string()
+    linkedAttendance: Yup.string()
       .required("Required*"),
-      isTaxable: Yup.string()
+    isTaxable: Yup.string()
       .required("Required*"),
-      mappedAllowance: Yup.string()
+    mappedAllowance: Yup.string()
       .required("Required*"),
-      account: Yup.string()
+    account: Yup.string()
       .required("Required*"),
   },
 
@@ -57,57 +58,47 @@ export function BankEditForm({
   const { auth } = useSelector((state) => state);
 
   const dispatch = useDispatch();
-  const [defCountry, setDefaultCountry] = useState({});
-  const [defCity, setDefaultCity] = useState({});
-  const [defDegreeTitle, setDefaultDegreeTitle] = useState({});
-  const [defInstitution, setInstitution] = useState({});
 
-  // Drop Downs Controls
-  const [incidentDate, setIncidentDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-  const [defStatus, setStatus] = useState(null);
-  const [attachment, setPDFAttached] = useState('');
-  const [file, setFile] = useState('');
+  const [defEarningCode = null, setDefaultEarningCode] = useState(null);
 
-  const [defEmployee = null, setEmployeeDefault] = useState(null);
-
-  const [defActionBy = null, setActionByDefault] = useState(null);
-  useEffect(() => {
-
-    if (!user.Id) {
-      setPDFAttached(user.attachment || '');
-      dispatch(fetchAllActiveEmployees());
-
-    }
-  }, [dispatch]);
-
-  //===== Date Of startDate
-  useEffect(() => {
-
-    if (user.date) {
-      setIncidentDate(new Date(user.date));
-    }
-  }, [user.date]);
-
-  //===== Date Of End Date
-  useEffect(() => {
-
-    if (user.endDate) {
-      setEndDate(new Date(user.endDate));
-    }
-  }, [user.endDate]);
 
   //=========== END
 
+  useEffect(() => {
+    
+    // Define an async function within useEffect
+    if (!user.Id) {
+
+      const fetchData = async () => {
+        try {
+          console.log("User:", user);
+          if (user.earningCode === '') {
+            const response = await dispatch(getLatestTableId("t_employee_earning", "E-000"));
+
+            // Assuming response[0].Id is the correct way to access the ID
+            console.log("Response:", response[0]?.Id);
+            setDefaultEarningCode(response[0]?.Id);
+          }
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+
+      fetchData(); // Call the async function
+    }
+    else {
+
+      setDefaultEarningCode(user.earningCode);
+    }
+  }, [dispatch, user.earningCode]);
 
 
-
-
+  console.log("defEarningCode",defEarningCode)
   return (
     <>
       <Formik
         enableReinitialize={true}
-        initialValues={user}
+        initialValues={user.earningCode ? user : { ...user, earningCode: defEarningCode }}
         validationSchema={formValidation}
         onSubmit={(values) => {
           console.log("values", values);
@@ -165,8 +156,13 @@ export function BankEditForm({
                         <Field
                           name="earningCode"
                           component={Input}
+                          onChange={(e) => {
+                            setFieldValue("earningCode", e.value || null);
+                            setDefaultEarningCode(e.value);
+
+                          }}
                           placeholder="Enter Earning Code"
-                          // value = {values.skill}
+                          value={defEarningCode}
                           label={<span> Earning Code<span style={{ color: 'red' }}>*</span></span>}
                           autoComplete="off"
                         />
@@ -269,7 +265,7 @@ export function BankEditForm({
                       </div>
                     }
                   </div>
-                 
+
 
                 </fieldset>
               </Form>

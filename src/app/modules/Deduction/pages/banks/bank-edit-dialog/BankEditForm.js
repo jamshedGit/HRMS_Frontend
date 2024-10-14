@@ -30,8 +30,8 @@ const formValidation = Yup.object().shape(
       .required("Required*"),
     linkedAttendance: Yup.string()
       .required("Required*"),
-    loan: Yup.string()
-      .required("Required*"),
+    // loan: Yup.string()
+    //   .required("Required*"),
     mappedDeduction: Yup.string()
       .required("Required*"),
     account: Yup.string()
@@ -59,16 +59,16 @@ export function BankEditForm({
   const dispatch = useDispatch();
 
 
-//   useEffect(() => {
-   
-//     const response = dispatch(getLatestTableId("t_employee_deduction", "ED-")) // For Getting Last ID For Code
-//     console.log("dish",response[0].Id);
-//     setDefDeductionCode(response[0].Id)
-  
-// }, [dispatch]);
+  //   useEffect(() => {
+
+  //     const response = dispatch(getLatestTableId("t_employee_deduction", "ED-")) // For Getting Last ID For Code
+  //     console.log("dish",response[0].Id);
+  //     setDefDeductionCode(response[0].Id)
+
+  // }, [dispatch]);
   // EMployee Dropdown Binding
   useEffect(() => {
-   
+
     const employeeId = defEmployee?.value ? defEmployee.value : user.employeeId;
 
     setEmployeeDefault(
@@ -82,24 +82,30 @@ export function BankEditForm({
 
   useEffect(() => {
     // Define an async function within useEffect
-    const fetchData = async () => {
-      try {
-        console.log("User:", user);
-        if (user.deductionCode === '') {
-          const response = await dispatch(getLatestTableId("t_employee_deduction", "D-000"));
-          
-          // Assuming response[0].Id is the correct way to access the ID
-          console.log("Response:", response[0]?.Id);
-          setDefDeductionCode(response[0]?.Id);
+    if (!user.Id) {
+
+      const fetchData = async () => {
+        try {
+          console.log("User:", user);
+          if (user.deductionCode === '') {
+            const response = await dispatch(getLatestTableId("t_employee_deduction", "D-000"));
+
+            // Assuming response[0].Id is the correct way to access the ID
+            console.log("Response:", response[0]?.Id);
+            setDefDeductionCode(response[0]?.Id);
+          }
+        } catch (error) {
+          console.error("Error fetching data:", error);
         }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+      };
 
-    fetchData(); // Call the async function
+      fetchData(); // Call the async function
+    }
+    else{
 
-  }, [dispatch, user.deductionCode]); 
+      setDefDeductionCode(user.deductionCode);
+    }
+  }, [dispatch, user.deductionCode]);
 
   return (
     <>
@@ -140,9 +146,9 @@ export function BankEditForm({
                         <Field
                           name="deductionCode"
                           component={Input}
-                          
+
                           placeholder="Enter Deduction Code"
-                          value = {defDeductionCode}
+                          value={defDeductionCode}
                           label={<span> Deduction Code<span style={{ color: 'red' }}>*</span></span>}
                           autoComplete="off"
                         />
@@ -194,7 +200,7 @@ export function BankEditForm({
                       </div>
 
                     }
-                    {
+                    {/* {
 
                       <div className="col-12 col-md-4 mt-3">
                         <Select
@@ -225,7 +231,7 @@ export function BankEditForm({
                         )}
                       </div>
 
-                    }
+                    } */}
                   </div>
 
                   <div className="from-group row">
