@@ -43,7 +43,8 @@ const initialDashboardState = {
   incidentTypes: [],
   allCompensationBenefitsList:[],
   allAccountList:[],
-  allHumanResourceRoleList:[]
+  allHumanResourceRoleList:[],
+  allLoan_typeList:[]
 };
 
 export const callTypes = {

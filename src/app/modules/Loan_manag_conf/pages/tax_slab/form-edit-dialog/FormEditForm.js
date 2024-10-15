@@ -67,6 +67,8 @@ export function FormEditForm({
       dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsisidaries
       dispatch(fetchAllFormsMenu(45, "allAccountList")); // For All Subsisidaries
       dispatch(fetchAllHumanResourceRole("allHumanResourceRoleList"));
+      dispatch(fetchAllFormsMenu(179, "allLoan_typeList")); // For All Subsisidaries
+    
       console.log("allHumanResourceRoleList admin", defHumanResourceRole);
     }
   }, [dispatch]);
@@ -375,7 +377,7 @@ export function FormEditForm({
                             <select onChange={handleFieldChanged} id={'earning_deduction_id-' + rightindex} value={obj.earning_deduction_id}>
                               <option value="-1"> --Select--</option>
                               {
-                                dashboard.allEarnings?.map((x) => {
+                                dashboard.allLoan_typeList?.map((x) => {
                                   return <option disabled={defMapLoanManagConfDetailList.find(el => el.earning_deduction_id == x.value) ? true : false} value={x.value}> {x.label} </option>
                                 })}
                             </select>

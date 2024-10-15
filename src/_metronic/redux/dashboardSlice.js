@@ -33,7 +33,8 @@ const initialDashboardState = {
   offDuty: [],
   lastTrips: [],
   alarmTime: [],
-  allCompensationBenefitsList:[]
+  allCompensationBenefitsList:[],
+  allLoan_typeList:[]
 };
 
 export const callTypes = {
@@ -157,6 +158,12 @@ export const dashboardSlice = createSlice({
     AllHumanResourceRoleListFetch: (state, action) => {
       state.allHumanResourceRoleList = action.payload;
     },
+    // AllLoan_typeListListFetch: (state, action) => {
+    //   state.allLoan_typeList = action.payload;
+    // },
+
+
+
 
   },
 });
