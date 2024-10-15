@@ -92,7 +92,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         human_resource_role: user.human_resource_role,
         emp_loan_account: user.emp_loan_account,
         installment_deduction_percentage: user.installment_deduction_percentage,
-        installment_deduction_bases_type: user.type,
+        installment_deduction_basis_type: user.type,
         // loan_type: user.loan_type,
         // max_loan_amount: user.max_loan_amount,
         // salary_count: user.salary_count,

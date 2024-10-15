@@ -140,7 +140,7 @@ export function FormTable() {
     },
 
     {
-      dataField: "installment_deduction_bases_type",
+      dataField: "installment_deduction_basis_type",
       text: "deduction bases type",
       sort: false,
       sortCaret: sortCaret,

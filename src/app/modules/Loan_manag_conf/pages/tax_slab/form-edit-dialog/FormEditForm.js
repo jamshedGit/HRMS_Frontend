@@ -309,7 +309,7 @@ export function FormEditForm({
                       options={options}
                       label="Deduction Basis Type"
                       onChange={(e) => {
-                        setFieldValue("installment_deduction_bases_type", e.target.value);
+                        setFieldValue("installment_deduction_basis_type", e.target.value);
                         // Clear fields based on selection
                       
                       
