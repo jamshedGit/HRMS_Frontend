@@ -7,8 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import {
   fetchAllCity,
-  fetchAllCityCenters,
-  fetchAllSubCenter,
+  // fetchAllCityCenters,
+  // fetchAllSubCenter,
   getLatestBookingNo,
 } from "../../../../../../_metronic/redux/dashboardActions";
 
@@ -101,13 +101,13 @@ export function UserEditForm({
     if (user.cityId) {
 
       console.log(user);
-      dispatch(fetchAllCityCenters(user.cityId));
+      // dispatch(fetchAllCityCenters(user.cityId));
     }
   }, [user.cityId, dispatch]);
 
   useEffect(() => {
     if (user.centerId) {
-      dispatch(fetchAllSubCenter(user.centerId));
+      // dispatch(fetchAllSubCenter(user.centerId));
     }
   }, [user.centerId, dispatch]);
 
@@ -305,7 +305,7 @@ export function UserEditForm({
                         onChange={(e) => {
                           setFieldValue("cityId", e.value);
                           setDefaultCity(e);
-                          dispatch(fetchAllCityCenters(e.value));
+                          // dispatch(fetchAllCityCenters(e.value));
                         }}
                         value={defCity}
                         error={errors.cityId}
@@ -345,7 +345,7 @@ export function UserEditForm({
                         onChange={(e) => {
                           setFieldValue("centerId", e.value);
                           setDefaultCenter(e);
-                          dispatch(fetchAllSubCenter(e.value));
+                          // dispatch(fetchAllSubCenter(e.value));
                         }}
                         value={defCenter}
                         // error={user.centerId}

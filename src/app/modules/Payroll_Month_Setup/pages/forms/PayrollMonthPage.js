@@ -12,7 +12,7 @@ import { fetchAllCountry } from "../../../../../_metronic/redux/dashboardActions
 import {
   fetchUserStatusTypes,
   fetchRoles,
-  fetchCenters,
+
 } from "../../_redux/formActions";
 
 
@@ -25,14 +25,14 @@ export function PayrollMonthSetupPage({ history }) {
     newFormButtonClick: () => {
       dispatch(fetchAllCountry());
       dispatch(fetchRoles());
-      dispatch(fetchCenters());
+ 
       dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
       history.push("/payroll_month/read-all-payroll-month/new");
     },
     openEditFormDialog: (id) => {
       dispatch(fetchAllCountry());
       dispatch(fetchRoles());
-      dispatch(fetchCenters());
+
       dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
       history.push(`/payroll_month/read-all-payroll-month/${id}/edit`);
     },

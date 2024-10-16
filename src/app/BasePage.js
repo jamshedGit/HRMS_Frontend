@@ -18,7 +18,7 @@ const IncidentDetailsManagment = lazy(() =>
   import("./modules/IncidentDetails/pages")
 );
 const UserManagment = lazy(() => import("./modules/UserMangement/pages"));
-const Centers = lazy(() => import("./modules/Centers/pages"));
+// const Centers = lazy(() => import("./modules/Centers/pages"));
 const IBSModule = lazy(() => import("./modules/IBS/pages/index"));
 const EDRSModule = lazy(() => import("./modules/EDRS/pages/index"));
 const BankModule = lazy(() => import("./modules/Banks/pages/index"));
@@ -68,7 +68,7 @@ const PayrollProcessPolicy = lazy(() => import("./modules/Payroll_Process_Policy
 const ROUTES = {
   settings: SettingsPage,
   users: UserManagment,
-  centers: Centers,
+
   vehicles: VehicleManagment,
   incidentdetails: IncidentDetailsManagment,
   ibs: IBSModule,
@@ -120,7 +120,7 @@ const ROUTES = {
 export default function BasePage() {
   const dispatch = useDispatch();
   dispatch(fetchAllCountry());
-  dispatch(incidentTypes());
+  
   const auth = useSelector(({ auth }) => auth, shallowEqual);
   const UserAccess = auth?.userAccess;
   const SettingsAccess = auth?.userAccess?.Settings;

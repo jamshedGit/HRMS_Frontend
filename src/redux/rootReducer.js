@@ -8,8 +8,7 @@ import { remarksSlice } from "../app/modules/ECommerce/_redux/remarks/remarksSli
 import { usersSlice } from "../app/modules/UserMangement/_redux/usersSlice";
 import { specificationsSlice } from "../app/modules/ECommerce/_redux/specifications/specificationsSlice";
 import { rolesSlice } from "../app/modules/Settings/_redux/roles/rolesSlice";
-import { centersSlice } from "../app/modules/Centers/_redux/centers/centersSlice";
-import { subCentersSlice } from "../app/modules/Centers/_redux/subcenters/subCentersSlice";
+
 import { vehiclesSlice } from "../app/modules/Vehicles/_redux/vehiclesSlice";
 //import { incidentSlice } from "../app/modules/IncidentDetails/_redux/incidents/incidentSlice";
 import { TriplogSlice } from "../app/modules/IncidentDetails/_redux/triplogs/triplogSlice";
@@ -69,8 +68,7 @@ export const rootReducer = combineReducers({
   specifications: specificationsSlice.reducer,
   users: usersSlice.reducer,
   roles: rolesSlice.reducer,
-  centers: centersSlice.reducer,
-  subCenters: subCentersSlice.reducer,
+
   vehicles: vehiclesSlice.reducer,
   //incidentDetails: incidentSlice.reducer,
   triplogs: TriplogSlice.reducer,

@@ -12,7 +12,7 @@ import { fetchAllCountry } from "../../../../../_metronic/redux/dashboardActions
 import {
   fetchUserStatusTypes,
   fetchRoles,
-  fetchCenters,
+
 } from "../../_redux/usersActions";
 
 // dispatch(actions.fetchRoles());
@@ -25,7 +25,7 @@ export function UsersPage({ history }) {
      
       dispatch(fetchAllCountry());
       dispatch(fetchRoles());
-      dispatch(fetchCenters());
+
       dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
       history.push("/users/read-all-users/new");
     },
@@ -33,7 +33,7 @@ export function UsersPage({ history }) {
     
       dispatch(fetchAllCountry());
       dispatch(fetchRoles());
-      dispatch(fetchCenters());
+   
       dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
       history.push(`/users/read-all-users/${id}/edit`);
     },
@@ -46,7 +46,7 @@ export function UsersPage({ history }) {
     openReadUserDialog: (id, isUserRead) => {
       dispatch(fetchAllCountry());
       dispatch(fetchRoles());
-      dispatch(fetchCenters());
+  
       dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
       history.push(`/users/read-all-users/${id}/read`);
     },

@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-//import { ActionsColumnFormatter } from "../../ECommerce/pages/customers/customers-table/column-formatters";
 
 const initialVehiclesState = {
   listLoading: false,

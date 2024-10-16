@@ -18,7 +18,7 @@ import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect"
 import { ImageDropZone } from "../../../../../../_metronic/_helpers/ImageDropZone";
 import {
   fetchAllCity,
-  fetchAllCityCenters,
+
   fetchAllSubCenter,
   fetchDashboardVehicles,
 } from "../../../../Dashboard/_redux/dashboardActions";
@@ -188,7 +188,7 @@ export function MortuaryEditForm({
 
   useEffect(() => {
     if (initialValue.cityId) {
-      dispatch(fetchAllCityCenters(initialValue.cityId));
+
       dispatch(fetchAllHospitals({ cityId: initialValue.cityId }));
     }
   }, [initialValue.cityId]);
@@ -318,7 +318,7 @@ export function MortuaryEditForm({
                         label="City*"
                         isDisabled={isUserForRead ? true : false}
                         onChange={(e) => {
-                          dispatch(fetchAllCityCenters(e.value));
+                         
                           dispatch(fetchAllHospitals({ cityId: e.value }));
                           dispatch(fetchAllPoliceStations({ cityId: e.value }));
                           setFieldValue("cityId", e.value);

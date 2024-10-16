@@ -12,7 +12,7 @@ import { fetchAllCountry } from "../../../../../_metronic/redux/dashboardActions
 import {
   fetchUserStatusTypes,
   fetchRoles,
-  fetchCenters,
+
 } from "../../_redux/usersActions";
 
 // dispatch(actions.fetchRoles());
@@ -24,14 +24,14 @@ export function UsersPage({ history }) {
     newUserButtonClick: () => {
       dispatch(fetchAllCountry());
       dispatch(fetchRoles());
-      dispatch(fetchCenters());
+  
       dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
       history.push("/edrs/read-all-receipt/new");
     },
     openEditUserDialog: (id) => {
       dispatch(fetchAllCountry());
       dispatch(fetchRoles());
-      dispatch(fetchCenters());
+     
       dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
       history.push(`/edrs/read-all-receipt/${id}/edit`);
     },
@@ -45,7 +45,7 @@ export function UsersPage({ history }) {
       
       dispatch(fetchAllCountry());
       dispatch(fetchRoles());
-      dispatch(fetchCenters());
+     
       dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
       history.push(`/edrs/read-all-receipt/${id}/read`);
     },

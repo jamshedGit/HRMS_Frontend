@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   fetchAllCity,
   fetchDashboardVehicles,
-  fetchAllCityCenters,
-  alaramTime,
+
+  // alaramTime,
 } from "../../redux/dashboardActions";
 import { Route } from "react-router-dom";
 import { TilesWidget1, TilesWidget10 } from "../widgets";
@@ -39,23 +39,13 @@ export function Demo2Dashboard({ history }) {
   const { dashboard, auth } = useSelector((state) => state);
   const { user } = auth;
 
-  useEffect(() => {
-    dispatch(fetchAllCity(user.countryId));
-    dispatch(fetchAllCityCenters(user.cityId));
-    dispatch(alaramTime());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(fetchAllCity(user.countryId));
+ 
+  //   dispatch(alaramTime());
+  // }, []);
 
-  useEffect(() => {
-    // const interval = setInterval(() => {
-    //   console.log("Set interval called");
-    //   dispatch(fetchDashboardVehicles({ cityId: user.cityId || city.values }));
-    // }, 5000);
-    // setOnDutyVehicels(dashboard.onDuty);
-    // return () => clearInterval(interval);
 
-    dispatch(fetchDashboardVehicles({ cityId: user.cityId || city.value }));
-    // //dispatch(fetchAllCityCenters(user.cityId));
-  }, []);
 
   //console.log("dashboard", dashboard);
   // console.log("city", city);

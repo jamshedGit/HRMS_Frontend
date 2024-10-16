@@ -78,30 +78,8 @@ export function IncidentEditForm({
   //console.log("dashboard time", dashboard);
 
   // console.log("alaramTime option in form", alaramTime);
-  const getCenterId = (id) => {
-    const queryParams = {
-      // filter: {
-      //   searchQuery: "",
-      // },
-      // sortOrder: "name",
-      // pageSize: 10,
-      // pageNumber: 1,
-      centerId: id,
-      available: true,
-      inProgress: false,
-    };
 
-    dispatch(actions.fetchVehicleById({ ...queryParams }));
-  };
-  const getVehicleIdsForDropdown = (id) => {
-    const queryParams = {
-      centerId: id,
-      available: true,
-      inProgress: false,
-    };
 
-    dispatch(actions.fetchVehicleByDropdown({ ...queryParams }));
-  };
 
   const queryParamsOnLoad = {
     // filter: {

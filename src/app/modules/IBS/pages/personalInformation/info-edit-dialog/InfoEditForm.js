@@ -18,7 +18,7 @@ import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect"
 import { ImageDropZone } from "../../../../../../_metronic/_helpers/ImageDropZone";
 import {
   fetchAllCity,
-  fetchAllCityCenters,
+
   fetchAllSubCenter,
   fetchDashboardVehicles,
 } from "../../../../Dashboard/_redux/dashboardActions";
@@ -261,7 +261,7 @@ export function InfoEditForm({ saveInfo, initialInfo, onHide, isUserForRead }) {
 
   useEffect(() => {
     if (initialInfo.cityId) {
-      dispatch(fetchAllCityCenters(initialInfo.cityId));
+ 
       dispatch(fetchAllHospitals({ cityId: initialInfo.cityId }));
       dispatch(fetchAllPoliceStations({ cityId: initialInfo.cityId }));
     }
@@ -451,7 +451,7 @@ export function InfoEditForm({ saveInfo, initialInfo, onHide, isUserForRead }) {
                         label="City*"
                         isDisabled={isUserForRead ? true : false}
                         onChange={(e) => {
-                          dispatch(fetchAllCityCenters(e.value));
+                         
                           dispatch(fetchAllHospitals({ cityId: e.value }));
                           dispatch(fetchAllPoliceStations({ cityId: e.value }));
                           setFieldValue("cityId", e.value);

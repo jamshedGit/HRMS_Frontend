@@ -9,20 +9,20 @@ import { ItemsCard } from "./items-card/ItemsCard";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { fetchVehicle, fetchCategory } from "../../_redux/vehiclesActions";
-import { fetchAllCenters } from "../../../../../_metronic/redux/dashboardActions";
+// import { fetchAllCenters } from "../../../../../_metronic/redux/dashboardActions";
 
 export function ItemPage({ history }) {
   const dispatch = useDispatch();
   const itemUIEvents = {
     newCenterButtonClick: () => {
       dispatch(fetchVehicle(0));
-      dispatch(fetchAllCenters());
+      // dispatch(fetchAllCenters());
       dispatch(fetchCategory());
       history.push("/vehicles/read-all-vehicles/new");
     },
     openEditCenterDialog: (id) => {
       dispatch(fetchVehicle(id));
-      dispatch(fetchAllCenters());
+      // dispatch(fetchAllCenters());
       dispatch(fetchCategory());
       history.push(`/vehicles/read-all-vehicles/${id}/edit`);
     },
@@ -33,7 +33,7 @@ export function ItemPage({ history }) {
       history.push(`/vehicles/read-all-vehicles/${id}/active`);
     },
     openReadCenterDialog: (id) => {
-      dispatch(fetchAllCenters());
+      // dispatch(fetchAllCenters());
       dispatch(fetchVehicle(id));
       history.push(`/vehicles/read-all-vehicles/${id}/read`);
     },

@@ -12,7 +12,6 @@ import * as actions from "../../../../Dashboard/_redux/dashboardActions";
 import DatePicker from "react-datepicker";
 import {
   fetchAllCity,
-  fetchAllCityCenters,
   fetchAllSubCenter,
 } from "../../../../../../_metronic/redux/dashboardActions";
 
@@ -63,13 +62,7 @@ export function BanksFilter({ listLoading, user, setCity,
     }
   }, [countryId, dispatch]);
 
-  useEffect(() => {
-    if (cityId) {
 
-      console.log("city id drop", cityId);
-      dispatch(fetchAllCityCenters(cityId));
-    }
-  }, [cityId, dispatch]);
 
   const banksUIProps = useMemo(() => {
     return {

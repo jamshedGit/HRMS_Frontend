@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import {
   fetchAllCity,
-  fetchAllCityCenters,
+
   fetchAllSubCenter,
 } from "../../../../../../_metronic/redux/dashboardActions";
 
@@ -96,11 +96,7 @@ export function UserEditForm({
     }
   }, [user.countryId, dispatch]);
 
-  useEffect(() => {
-    if (user.cityId) {
-      dispatch(fetchAllCityCenters(user.cityId));
-    }
-  }, [user.cityId, dispatch]);
+
 
 
   useEffect(() => {
@@ -189,7 +185,7 @@ export function UserEditForm({
                         onChange={(e) => {
                           setFieldValue("cityId", e.value || null);
                           setDefaultCity(e);
-                          dispatch(fetchAllCityCenters(e.value));
+                     
                         }}
                         value={defCity}
                         error={errors.cityId}

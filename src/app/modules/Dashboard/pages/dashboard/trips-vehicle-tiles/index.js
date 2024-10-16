@@ -47,7 +47,7 @@ export function DashboardTiles({ history }) {
 
   useEffect(() => {
     dispatch(action.fetchAllCity(user.countryId));
-    dispatch(action.fetchAllCityCenters(user.cityId));
+
     dispatch(action.alaramTime());
   }, []);
 

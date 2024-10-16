@@ -12,8 +12,8 @@ import * as actions from "../../../../Dashboard/_redux/dashboardActions";
 import DatePicker from "react-datepicker";
 import {
   fetchAllCity,
-  fetchAllCityCenters,
-  fetchAllSubCenter,
+  // fetchAllCityCenters,
+  // fetchAllSubCenter,
 } from "../../../../../../_metronic/redux/dashboardActions";
 
 
@@ -72,7 +72,7 @@ export function UsersFilter({ listLoading, user, setCity,
     if (cityId) {
 
       console.log("city id drop", cityId);
-      dispatch(fetchAllCityCenters(cityId));
+      // dispatch(fetchAllCityCenters(cityId));
     }
   }, [cityId, dispatch]);
 
@@ -493,7 +493,7 @@ export function UsersFilter({ listLoading, user, setCity,
                   onChange={(e) => {
                     setFieldValue("cityId", e.value || null);
                     setDefaultCity(e);
-                    dispatch(fetchAllCityCenters(e.value));
+                    // dispatch(fetchAllCityCenters(e.value));
                   }}
                   value={defCity}
                   error={errors.cityId}
@@ -512,7 +512,7 @@ export function UsersFilter({ listLoading, user, setCity,
                   onChange={(e) => {
                     setFieldValue("centerId", e.value || '0');
                     setDefaultCenter(e);
-                    dispatch(fetchAllSubCenter(e.value));
+                    // dispatch(fetchAllSubCenter(e.value));
                   }}
                   value={defCenter}
                   // error={user.centerId}

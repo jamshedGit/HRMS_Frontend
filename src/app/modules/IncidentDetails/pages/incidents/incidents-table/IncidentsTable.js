@@ -50,7 +50,7 @@ export function IncidentsTable() {
   useEffect(() => {
     async function fetchData() {
       await dispatch(actions.fetchIncidents(incidentsUIProps.queryParams));
-      await dispatch(actions.fetchCenters());
+      // await dispatch(actions.fetchCenters());
     }
     fetchData();
   }, [incidentsUIProps.queryParams]);

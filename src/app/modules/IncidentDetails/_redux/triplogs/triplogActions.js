@@ -177,13 +177,7 @@ export const updateTrip = (updatedData, disabledLoading, onHide) => (
 //     dispatch(actions.incidentSeverityfetched(entities))
 //   })
 // }
-// export const fetchCenters = () => (dispatch) => {
-//   dispatch(actions.startCall({ callType: callTypes.list }))
-//   return requestFromServer.getAllCenters().then((response) => {
-//     const entities = response.data?.data
-//     dispatch(actions.CentersFetched(entities))
-//   })
-// }
+
 
 // export const fetchVehicleById = (queryParams) => (dispatch) => {
 //   // console.log("queryparams is", queryParams)

@@ -13,7 +13,7 @@ import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect"
 import { useSelector, useDispatch } from "react-redux";
 import {
   fetchAllCity,
-  fetchAllCityCenters,
+  // fetchAllCityCenters,
   fetchAllSubCenter,
 } from "../../../../../../_metronic/redux/dashboardActions";
 import { useNavigate } from "react-router-dom";
@@ -111,13 +111,13 @@ export function TripLogEditForm({
   //   dispatch(fetchAllCity(user.countryId));
   // }, [driverTrip]);
 
-  useEffect(() => {
-    dispatch(fetchAllCityCenters(sourcecenter.city.id));
-  }, [user, driverTrip]);
+  // useEffect(() => {
+  //   dispatch(fetchAllCityCenters(sourcecenter.city.id));
+  // }, [user, driverTrip]);
 
-  useEffect(() => {
-    dispatch(fetchAllSubCenter(driverTrip.sourceCenterId));
-  }, [user, driverTrip]);
+  // useEffect(() => {
+  //   dispatch(fetchAllSubCenter(driverTrip.sourceCenterId));
+  // }, [user, driverTrip]);
 
   useEffect(() => {
     setSelectCity(
@@ -198,10 +198,10 @@ export function TripLogEditForm({
                         onBlur={() => {
                           handleBlur({ target: { name: "cityId" } });
                         }}
-                        onChange={(e) => {
-                          dispatch(fetchAllCityCenters(e.value));
-                          setSelectCity(e);
-                        }}
+                        // onChange={(e) => {
+                        //   dispatch(fetchAllCityCenters(e.value));
+                        //   setSelectCity(e);
+                        // }}
                         value={seletCity}
                         // error={errors.cityId}
                         //touched={touched.cityId}
@@ -217,11 +217,11 @@ export function TripLogEditForm({
                             target: { name: "destinationCenterId" },
                           });
                         }}
-                        onChange={(e) => {
-                          //setFieldValue("destinationCenterId", e.value);
-                          dispatch(fetchAllSubCenter(e.value));
-                          setSelectCenter(e);
-                        }}
+                        // onChange={(e) => {
+                        //   //setFieldValue("destinationCenterId", e.value);
+                        //   dispatch(fetchAllSubCenter(e.value));
+                        //   setSelectCenter(e);
+                        // }}
                         value={seletCenter}
                         // error={errors.destinationCenterId}
                         //touched={touched.destinationCenterId}

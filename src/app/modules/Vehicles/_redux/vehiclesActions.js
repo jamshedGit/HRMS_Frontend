@@ -153,13 +153,7 @@ export const updateVehicle = (user) => (dispatch) => {
     });
 };
 
-export const fetchCenters = () => (dispatch) => {
-  dispatch(actions.startCall({ callType: callTypes.list }));
-  return requestFromServer.getAllCenters().then((response) => {
-    const entities = response.data?.data;
-    dispatch(actions.CenterFetched(entities));
-  });
-};
+
 
 export const fetchCategory = () => (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.list }));

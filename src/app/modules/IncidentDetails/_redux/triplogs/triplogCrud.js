@@ -44,10 +44,7 @@ export function getIncidentSeveritiesType() {
   )
 }
 
-//get All Centers
-export function getAllCenters() {
-  return axios.get(`${USERS_URL}/settings/read-all-centers-master-data`)
-}
+
 
 // get Vehicle By id
 export function getVhicleById(body) {

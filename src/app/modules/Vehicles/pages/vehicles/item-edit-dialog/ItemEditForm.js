@@ -8,7 +8,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { Input, Select } from "../../../../../../_metronic/_partials/controls";
 import { fetchDrivers } from "../../../_redux/vehiclesActions";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
-import { fetchAllSubCenter } from "../../../../../../_metronic/redux/dashboardActions";
+// import { fetchAllSubCenter } from "../../../../../../_metronic/redux/dashboardActions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,7 +50,7 @@ export function ItemEditForm({
   // }, [item.centerId]);
 
   const onChangeSelectedOption = (e) => {
-    dispatch(fetchAllSubCenter(e.value));
+    // dispatch(fetchAllSubCenter(e.value));
     setCenterId(e.value);
     // selectedVal({ selectedVal: e.value });
     //this.setState({ selectedVal: e.value });
@@ -73,12 +73,12 @@ export function ItemEditForm({
   const { dashboard } = useSelector((state) => state);
 
   //console.log("dashboard", dashboard);
-  useEffect(
-    (e) => {
-      item.tempCenterId && dispatch(fetchAllSubCenter(item.tempCenterId));
-    },
-    [item]
-  );
+  // useEffect(
+  //   (e) => {
+  //     item.tempCenterId && dispatch(fetchAllSubCenter(item.tempCenterId));
+  //   },
+  //   [item]
+  // );
 
   useEffect(
     (e) => {
@@ -192,7 +192,7 @@ export function ItemEditForm({
                           setDefaultCenter(e);
                           setDefaultSubCenter([]);
                           setDefaultDriver([]);
-                          dispatch(fetchAllSubCenter(e.value));
+                          // dispatch(fetchAllSubCenter(e.value));
                           dispatch(fetchDrivers(0));
                         }}
                         value={defCenter && defCenter[0]}
