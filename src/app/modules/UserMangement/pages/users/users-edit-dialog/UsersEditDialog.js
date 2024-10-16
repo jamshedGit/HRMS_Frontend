@@ -74,7 +74,7 @@ export function UsersEditDialog({ id, show, onHide, userForRead }) {
       const getUserStatus = userStatusTypes.filter((item) => {
         return item.value === +user.status;
       });
-      //console.log("getUserStatus", getUserStatus);
+      console.log("getUserStatus", getUserStatus);
       const { status = getUserStatus[0].label, ...rest } = user;
       const finalObject = {
         status: getUserStatus[0].label,
@@ -97,11 +97,11 @@ export function UsersEditDialog({ id, show, onHide, userForRead }) {
         firstName: user.firstName,
         lastName: user.lastName,
         roleId: user.roleId,
-        centerId: user.centerId,
+       
         status: getUserStatus?.label,
         countryId: user.countryId,
         cityId: user.cityId,
-        subCenterId: user.subCenterId,
+       
       };
 
       // console.log("userUpdatedFields", userUpdatedFields);

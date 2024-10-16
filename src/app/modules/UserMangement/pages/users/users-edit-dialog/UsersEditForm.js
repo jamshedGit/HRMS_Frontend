@@ -22,9 +22,7 @@ const userEditSchema = Yup.object().shape(
   {
     countryId: Yup.string().required("Please select Country"),
     cityId: Yup.string().required("Please select City"),
-    centerId: Yup.string(),
-    //.required("Please select center"),
-    subCenterId: Yup.string().required("Please select subCenter"),
+   
     firstName: Yup.string()
       .min(3, "Minimum 3 symbols")
       .max(50, "Maximum 50 symbols")
@@ -104,11 +102,6 @@ export function UserEditForm({
     }
   }, [user.cityId, dispatch]);
 
-  useEffect(() => {
-    if (user.centerId) {
-      dispatch(fetchAllSubCenter(user.centerId));
-    }
-  }, [user.centerId, dispatch]);
 
   useEffect(() => {
     const countryId = defCountry?.value ? defCountry.value : user.countryId;
@@ -126,19 +119,7 @@ export function UserEditForm({
     );
   }, [user.cityId, dashboard.allCity]);
 
-  useEffect(() => {
-    setDefaultCenter(
-      dashboard.cityCenters &&
-        dashboard.cityCenters.filter((item) => item.value === user.centerId)
-    );
-  }, [user.centerId, dashboard.cityCenters]);
 
-  useEffect(() => {
-    setDefaultSubCenter(
-      dashboard.allSubCenter &&
-        dashboard.allSubCenter.filter((item) => item.value === user.subCenterId)
-    );
-  }, [user.subCenterId, dashboard.allSubCenter]);
 
   useEffect(() => {
     setDefaultStatus(
@@ -216,7 +197,11 @@ export function UserEditForm({
                         options={dashboard.allCity}
                       />
                     </div>
-                    <div className="col-12 col-md-4">
+                    {
+                      console.log(':::::asdasda::::', errors)
+                      
+                    }
+                    {/* <div className="col-12 col-md-4">
                       <SearchSelect
                         name="centerId"
                         label="Select Circle*"
@@ -252,7 +237,7 @@ export function UserEditForm({
                         touched={touched.subCenterId}
                         options={dashboard.allSubCenter}
                       />
-                    </div>
+                    </div> */}
                     <div className="col-12 col-md-4 mt-3">
                       <Select
                         label="Role*"
@@ -339,7 +324,8 @@ export function UserEditForm({
                         <div className="invalid-text">{errors.status}</div>
                       )}
                     </div>
-                    {!isUserForRead && user.centerId === "" ? (
+
+                    {!isUserForRead && !user.Id ? (
                       <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="password"
