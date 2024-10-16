@@ -5,21 +5,6 @@ import { UsersPage } from "./users/UsersPage";
 import Welcome from "./users/test";
 
 export default function UserManagment() {
-  // const { auth } = useSelector((auth) => auth)
-  // console.log("UserManagement, Auth: ", auth)
-  // const { userAccess } = auth
-  // console.log("UserManagement, userAccess: ", userAccess)
-  // const isAll = userAccess["Settings"]?.find(
-  //   (access) => access.resourceId === 2
-  // )
-  //   ? true
-  //   : false
-  // console.log("UserManagement, isAll: ", isAll)
-
-  // if (!isAll) {
-  //   return <></>
-  // }
-
   return (
     <Suspense fallback={<LayoutSplashScreen />}>
       <Switch>

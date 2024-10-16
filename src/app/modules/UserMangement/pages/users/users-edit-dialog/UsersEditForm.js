@@ -67,6 +67,7 @@ const userEditSchema = Yup.object().shape(
 );
 export function UserEditForm({
   saveUser,
+  isPasswordHide,
   user,
   actionsLoading,
   onHide,
@@ -128,6 +129,8 @@ export function UserEditForm({
     );
   }, [user]);
 
+  console.log(':::::user::::::');
+  
   return (
     <>
       <Formik
@@ -325,7 +328,7 @@ export function UserEditForm({
                       )}
                     </div>
 
-                    {!isUserForRead && !user.Id ? (
+                    {!isUserForRead && !isPasswordHide ? (
                       <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="password"
