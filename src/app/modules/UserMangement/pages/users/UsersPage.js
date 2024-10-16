@@ -67,6 +67,7 @@ export function UsersPage({ history }) {
         {({ history, match }) => (
           <UsersEditDialog
             show={match != null}
+            isPasswordHide={true}
             id={match && match.params.id}
             onHide={() => {
               history.push("/users/read-all-users");
@@ -79,6 +80,7 @@ export function UsersPage({ history }) {
         {({ history, match }) => (
           <UsersEditDialog
             show={match != null}
+            isPasswordHide={true}
             id={match && match.params.id}
             userForRead={true}
             onHide={() => {

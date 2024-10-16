@@ -63,11 +63,13 @@ export const SalaryRoundingPolicySlice = createSlice({
             state.entities = state.entities.filter(
                 (el) => el.Id != action.payload.id
             );
+            state.totalCount--;
         },
         RoundingPolicyCreated: (state, action) => {
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);
+            state.totalCount++
         },
         RoundingPolicyUpdated: (state, action) => {
             const id = action.payload.Id;

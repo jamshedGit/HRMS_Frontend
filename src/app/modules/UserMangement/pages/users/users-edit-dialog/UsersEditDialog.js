@@ -8,7 +8,7 @@ import * as actions from "../../../_redux/usersActions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export function UsersEditDialog({ id, show, onHide, userForRead }) {
+export function UsersEditDialog({ id, show, onHide, userForRead, isPasswordHide }) {
   const [action, setaction] = useState(false);
   const [loading, setLoading] = useState(false);
   const title = "UserEditDialog";
@@ -97,11 +97,11 @@ export function UsersEditDialog({ id, show, onHide, userForRead }) {
         firstName: user.firstName,
         lastName: user.lastName,
         roleId: user.roleId,
-       
+
         status: getUserStatus?.label,
         countryId: user.countryId,
         cityId: user.cityId,
-       
+
       };
 
       // console.log("userUpdatedFields", userUpdatedFields);
@@ -118,6 +118,7 @@ export function UsersEditDialog({ id, show, onHide, userForRead }) {
     >
       <UserEditDialogHeader id={id} isUserForRead={userForRead} />
       <UserEditForm
+        isPasswordHide={isPasswordHide || false}
         saveUser={saveUser}
         user={userForEdit || usersUIProps.initUser}
         onHide={onHide}

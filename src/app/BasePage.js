@@ -57,6 +57,7 @@ const FiscalSetupModule = lazy(() => import("./modules/Fiscal_Setup/pages/index"
 const PayrollMonthSetupModule = lazy(() => import("./modules/Payroll_Month_Setup/pages/index"));
 const ArrearPolicyModule = lazy(() => import("./modules/ArrearPolicy/pages/index"));
 const RoundingPolicyModule = lazy(() => import("./modules/SalaryRoundingPolicy/pages/index"));
+const LeaveTypeModule = lazy(() => import("./modules/LeaveType/pages/index"));
 const FinalSettlementPolicyModule = lazy(() => import("./modules/Final_Settlement_Policy/pages/index"));
 const salarypolicyModule = lazy(() => import("./modules/Salarypolicy/pages/index"));
 const OnetimeAllowance = lazy(() => import("./modules/Onetime_Allowance/pages/index"));
@@ -109,6 +110,7 @@ const ROUTES = {
   payroll_month: PayrollMonthSetupModule,
   arrear_policy: ArrearPolicyModule,
   salary_rounding_policy: RoundingPolicyModule,
+  leave_type: LeaveTypeModule,
   final_settlement_policy :FinalSettlementPolicyModule,
   salarypolicy:salarypolicyModule,
   onetime_earning: OnetimeAllowance,
@@ -127,7 +129,6 @@ export default function BasePage() {
   const isDashboardAccess = SettingsAccess?.some((obj) =>
     Object.values(obj).includes("read-all-vehicles-dashboard")
   );
-  console.log("auth", auth);
   return (
     <Suspense fallback={<LayoutSplashScreen />}>
       <Switch>
@@ -139,7 +140,6 @@ export default function BasePage() {
             .join("-")
             .toLowerCase();
             if (ROUTES[accessName])
-            //  console.log("path", UserAccess);
             {
             return (
               <Route
