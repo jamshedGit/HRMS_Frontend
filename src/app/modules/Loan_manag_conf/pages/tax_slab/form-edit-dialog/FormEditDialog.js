@@ -194,17 +194,20 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
    
     actionsLoading: state.users.actionsLoading,
     user: state.users, // change for users to receipt
-    userForEdit: state.tax_slab.userForEdit,
+    userForEdit: state.loan_management_configuration
+    .userForEdit,
     roles: state.users.roles,
     centers: state.users.centers,
     userStatusTypes: state.users.userStatusTypes,
-    isuserForRead: state.tax_slab.userForRead,
+    isuserForRead: state.loan_management_configuration
+    .userForRead,
   }));
  
   console.log("for tax slab isuserForRead",userForEdit)
  
  
   useEffect(() => {
+    console.log("fetch loan",id);
     dispatch(actions.fetchSalarypolicy(id));
  
     // dispatch(actions.fetchSalarypolicy(formUIProps .queryParams))
@@ -236,12 +239,13 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         emp_loan_account: user.emp_loan_account,
         installment_deduction_percentage: user.installment_deduction_percentage,
         installment_deduction_basis_type: user.type,
+        details: user.details
         // loan_type: user.loan_type,
         // max_loan_amount: user.max_loan_amount,
         // salary_count: user.salary_count,
       };
- 
-     
+
+  
  
      await dispatch(actions.updateSalarypolicy(formUpdatedFields, disbaleLoading, onHide));
      await dispatch(actions.fetchSalarypolicies(usersUIProps.queryParams));

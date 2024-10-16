@@ -30,18 +30,32 @@ export function FormUIProvider({ FormUIEvents, children }) {
       return nextQueryParams;
     });
   }, []);
-  const initUser = {
-    Id:"",
-    subsidiary: "",
-    account: "",
-    human_resource_role: "",
-    emp_loan_account: "",
-    installment_deduction_percentage:"",
-    installment_deduction_bases:"",
-    loan_type:"",
-    max_loan_amount:"",
-    salary_count:""
-  };
+  // const initUser = {
+  //   Id:"",
+  //   subsidiary: "",
+  //   account: "",
+  //   human_resource_role: "",
+  //   emp_loan_account: "",
+  //   installment_deduction_percentage:"",
+  //   installment_deduction_bases:"",
+  //   loan_type:"",
+  //   max_loan_amount:"",
+  //   salary_count:""
+  // };
+
+  const initUser={
+    Id: "",
+        subsidiaryId: "",
+        accountId:"",
+        human_resource_role: "",
+        emp_loan_account: "",
+        installment_deduction_percentage: "",
+        installment_deduction_basis_type:"",
+        details:""
+        // loan_type: user.loan_type,
+        // max_loan_amount: user.max_loan_amount,
+        // salary_count: user.salary_count,
+  }
 
 
 
