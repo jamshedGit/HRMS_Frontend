@@ -34,7 +34,7 @@ const initialDashboardState = {
   lastTrips: [],
   alarmTime: [],
   allCompensationBenefitsList:[],
-  allLoan_typeList:[]
+  allLoanTypeList: []
 };
 
 export const callTypes = {

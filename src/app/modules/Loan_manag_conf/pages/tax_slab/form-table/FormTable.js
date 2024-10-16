@@ -1,3 +1,250 @@
+// import React, { useEffect, useMemo } from "react";
+// import BootstrapTable from "react-bootstrap-table-next";
+// import paginationFactory, {
+//   PaginationProvider,
+// } from "react-bootstrap-table2-paginator";
+// import { shallowEqual, useDispatch, useSelector } from "react-redux";
+// import * as actions from "../../../_redux/redux-Actions";
+// import {
+//   getHandlerTableChange,
+//   NoRecordsFoundMessage,
+//   PleaseWaitMessage,
+//   sortCaret,
+//   headerSortingClasses,
+// } from "../../../../../../_metronic/_helpers";
+// import * as uiHelpers from "../FormUIHelpers";
+// import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatter";
+// import { Pagination } from "../../../../../../_metronic/_partials/controls";
+// import { useFormUIContext } from "../FormUIContext";
+// import { DatetimeColumnFormatter } from "../../../../Dashboard/pages/dashboard/last-trips-vehicles-table/column-formatter/CreatedColumnFormatter";
+
+// export function FormTable() {
+//   //Users UI Context
+//   const formUIContext = useFormUIContext();
+
+//   const formUIProps = useMemo(() => {
+//     return {
+//       ids: formUIContext.ids,
+//       setIds: formUIContext.setIds,
+//       queryParams: formUIContext.queryParams,
+//       setQueryParams: formUIContext.setQueryParams,
+//       openEditFormDialog: formUIContext.openEditFormDialog,
+//       openDeleteFormDialog: formUIContext.openDeleteFormDialog,
+//       openActiveFormDialog: formUIContext.openActiveFormDialog,
+//       openReadFormDialog: formUIContext.openReadFormDialog,
+//     };
+//   }, [formUIContext]);
+
+//   //console.log("queryparms", usersUIProps.queryparms)
+//   const { currentState, userAccess } = useSelector(
+//     (state) => {  console.log("state ",state); return {
+      
+//       // currentState: state.salarypolicy,
+//       currentState: state.loan_management_configuration,
+//       userAccess: state?.auth?.userAccess["loan_management_configuration"],
+//     }},
+//     shallowEqual
+//   );
+//   console.log("currentState loan_management_configuration",currentState)
+  
+//   const { totalCount, entities, listLoading } = currentState;
+
+//   //totalCount = 10
+
+//   const dispatch = useDispatch();
+
+//   useEffect(() => {
+//     formUIProps.setIds([]);
+ 
+ 
+//     dispatch(actions.fetchSalarypolicies(formUIProps.queryParams));
+//   }, [formUIProps.queryParams, dispatch, totalCount]);
+
+//   const isAccessForEdit = userAccess?.find(
+//     (item) => item.componentName === "UpdateLoanManagementConfiguration"
+//   );
+
+//   const isAccessForDelete = userAccess?.find(
+//     (item) => item.componentName === "DeleteLoanManagementConfiguration"
+//   );
+//   // Table columns
+//   const columns = [
+//     // {
+//     //   dataField: "Id",
+//     //   text: "ID",
+//     //   sort: false,
+//     //   sortCaret: sortCaret,
+//     //   headerSortingClasses,
+//     //   style: {
+//     //     minWidth: "10px",
+//     //   },
+//     // },
+//     {
+//       dataField: "subsidiaryId",
+//       text: "subsidiaryId",
+//       sort: false,
+//       sortCaret: sortCaret,
+//       headerSortingClasses,
+//       style: {
+//         minWidth: "160px",
+//       },
+//     },
+
+
+
+// {
+//   dataField: "accountId",
+//   text: "account Id",
+//   sort: false,
+//   sortCaret: sortCaret,
+//   headerSortingClasses,
+//   style: {
+//     minWidth: "10px",
+//   },
+ 
+// },
+
+
+//     {
+//       dataField: "human_resource_role",
+//       text: "role",
+//       sort: false,
+//       sortCaret: sortCaret,
+//       headerSortingClasses,
+//       style: {
+//         minWidth: "10px",
+//       },
+//     },
+
+//     {
+//       dataField: "emp_loan_account",
+//       text: "loan accountt",
+//       sort: false,
+//       sortCaret: sortCaret,
+//       headerSortingClasses,
+//       style: {
+//         minWidth: "10px",
+//       },
+//     },
+
+
+//     {
+//       dataField: "installment_deduction_percentage",
+//       text: "deduction (%)",
+//       sort: false,
+//       sortCaret: sortCaret,
+//       headerSortingClasses,
+//       style: {
+//         minWidth: "10px",
+//       },
+//     },
+
+//     {
+//       dataField: "installment_deduction_basis_type",
+//       text: "deduction bases type",
+//       sort: false,
+//       sortCaret: sortCaret,
+//       headerSortingClasses,
+//       style: {
+//         minWidth: "10px",
+//       },
+//     },
+
+//     // {
+//     //   dataField: "max_loan_amount",
+//     //   text: "max loan",
+//     //   sort: false,
+//     //   sortCaret: sortCaret,
+//     //   headerSortingClasses,
+//     //   style: {
+//     //     minWidth: "10px",
+//     //   },
+//     // },
+
+//     // {
+//     //   dataField: "salary_count",
+//     //   text: "salary count",
+//     //   sort: false,
+//     //   sortCaret: sortCaret,
+//     //   headerSortingClasses,
+//     //   style: {
+//     //     minWidth: "10px",
+//     //   },
+//     // },
+
+
+//        {
+//       dataField: "action",
+//       text: "Actions",
+//       isDummyField: true,
+//       formatter: ActionsColumnFormatter,
+//       formatExtraData: {
+//         openEditFormDialog: formUIProps.openEditFormDialog,
+//         openDeleteFormDialog: formUIProps.openDeleteFormDialog,
+//         openActiveFormDialog: formUIProps.openActiveFormDialog,
+//         openReadFormDialog: formUIProps.openReadFormDialog,
+//         isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,
+//         isAccessForDelete: isAccessForDelete
+//           ? isAccessForDelete.isAccess
+//           : false,
+//       },
+//       classes: "text-right pr-0",
+//       headerClasses: "text-right pr-3",
+//       style: {
+//         minWidth: "10px",
+//       },
+//     },
+//   ];
+
+//   //Table pagination properties
+//   const paginationOptions = {
+//     custom: true,
+//     totalSize: totalCount,
+//     sizePerPageList: uiHelpers.sizePerPageList,
+//     sizePerPage: formUIProps.queryParams.pageSize,
+//     page: formUIProps.queryParams.pageNumber,
+//   };
+
+//     return (
+//     <>
+//       <PaginationProvider pagination={paginationFactory(paginationOptions)}>
+//         {({ paginationProps, paginationTableProps }) => {
+//           return (
+//             <Pagination
+//               isLoading={listLoading}
+//               paginationProps={paginationProps}
+//             >
+//               <BootstrapTable
+//                 wrapperClasses="table-responsive"
+//                 bordered={false}
+//                 classes="table table-head-custom table-vertical-center overflow-hidden table-hover"
+//                 bootstrap4
+//                 remote
+//                 keyField="Id"
+//                 data={entities === null ? [] : entities}
+//                 columns={columns}
+//                 defaultSorted={uiHelpers.defaultSorted}
+//                 onTableChange={getHandlerTableChange(
+//                   formUIProps.setQueryParams
+//                 )}
+//                 // selectRow={getSelectRow({
+//                 //   entities,
+
+//                 // })}
+//                 {...paginationTableProps}
+//               >
+//                 <PleaseWaitMessage entities={entities} />
+//                 <NoRecordsFoundMessage entities={entities} />
+//               </BootstrapTable>
+//             </Pagination>
+//           );
+//         }}
+//       </PaginationProvider>
+//     </>
+//   );
+// }
+
+
 import React, { useEffect, useMemo } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, {
@@ -17,11 +264,11 @@ import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatte
 import { Pagination } from "../../../../../../_metronic/_partials/controls";
 import { useFormUIContext } from "../FormUIContext";
 import { DatetimeColumnFormatter } from "../../../../Dashboard/pages/dashboard/last-trips-vehicles-table/column-formatter/CreatedColumnFormatter";
-
+ 
 export function FormTable() {
   //Users UI Context
   const formUIContext = useFormUIContext();
-
+ 
   const formUIProps = useMemo(() => {
     return {
       ids: formUIContext.ids,
@@ -34,11 +281,11 @@ export function FormTable() {
       openReadFormDialog: formUIContext.openReadFormDialog,
     };
   }, [formUIContext]);
-
+ 
   //console.log("queryparms", usersUIProps.queryparms)
   const { currentState, userAccess } = useSelector(
     (state) => {  console.log("state ",state); return {
-      
+     
       // currentState: state.salarypolicy,
       currentState: state.loan_management_configuration,
       userAccess: state?.auth?.userAccess["loan_management_configuration"],
@@ -46,24 +293,24 @@ export function FormTable() {
     shallowEqual
   );
   console.log("currentState loan_management_configuration",currentState)
-  
+ 
   const { totalCount, entities, listLoading } = currentState;
-
+ 
   //totalCount = 10
-
+ 
   const dispatch = useDispatch();
-
+ 
   useEffect(() => {
     formUIProps.setIds([]);
  
  
     dispatch(actions.fetchSalarypolicies(formUIProps.queryParams));
   }, [formUIProps.queryParams, dispatch, totalCount]);
-
+ 
   const isAccessForEdit = userAccess?.find(
     (item) => item.componentName === "UpdateLoanManagementConfiguration"
   );
-
+ 
   const isAccessForDelete = userAccess?.find(
     (item) => item.componentName === "DeleteLoanManagementConfiguration"
   );
@@ -80,7 +327,7 @@ export function FormTable() {
     //   },
     // },
     {
-      dataField: "subsidiaryId",
+      dataField: "Subsidiary.formName",
       text: "subsidiaryId",
       sort: false,
       sortCaret: sortCaret,
@@ -89,11 +336,11 @@ export function FormTable() {
         minWidth: "160px",
       },
     },
-
-
-
+ 
+ 
+ 
 {
-  dataField: "accountId",
+  dataField: "Account.formName",
   text: "account Id",
   sort: false,
   sortCaret: sortCaret,
@@ -103,10 +350,10 @@ export function FormTable() {
   },
  
 },
-
-
+ 
+ 
     {
-      dataField: "human_resource_role",
+      dataField: "t_role.name",
       text: "role",
       sort: false,
       sortCaret: sortCaret,
@@ -115,7 +362,7 @@ export function FormTable() {
         minWidth: "10px",
       },
     },
-
+ 
     {
       dataField: "emp_loan_account",
       text: "loan accountt",
@@ -126,8 +373,8 @@ export function FormTable() {
         minWidth: "10px",
       },
     },
-
-
+ 
+ 
     {
       dataField: "installment_deduction_percentage",
       text: "deduction (%)",
@@ -138,10 +385,10 @@ export function FormTable() {
         minWidth: "10px",
       },
     },
-
+ 
     {
       dataField: "installment_deduction_basis_type",
-      text: "deduction bases type",
+      text: "deduction basis type",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -149,7 +396,7 @@ export function FormTable() {
         minWidth: "10px",
       },
     },
-
+ 
     // {
     //   dataField: "max_loan_amount",
     //   text: "max loan",
@@ -160,7 +407,7 @@ export function FormTable() {
     //     minWidth: "10px",
     //   },
     // },
-
+ 
     // {
     //   dataField: "salary_count",
     //   text: "salary count",
@@ -171,8 +418,8 @@ export function FormTable() {
     //     minWidth: "10px",
     //   },
     // },
-
-
+ 
+ 
        {
       dataField: "action",
       text: "Actions",
@@ -195,7 +442,7 @@ export function FormTable() {
       },
     },
   ];
-
+ 
   //Table pagination properties
   const paginationOptions = {
     custom: true,
@@ -204,7 +451,7 @@ export function FormTable() {
     sizePerPage: formUIProps.queryParams.pageSize,
     page: formUIProps.queryParams.pageNumber,
   };
-
+ 
     return (
     <>
       <PaginationProvider pagination={paginationFactory(paginationOptions)}>
@@ -229,7 +476,7 @@ export function FormTable() {
                 )}
                 // selectRow={getSelectRow({
                 //   entities,
-
+ 
                 // })}
                 {...paginationTableProps}
               >
@@ -243,3 +490,4 @@ export function FormTable() {
     </>
   );
 }
+ 

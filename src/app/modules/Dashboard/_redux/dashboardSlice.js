@@ -44,7 +44,7 @@ const initialDashboardState = {
   allCompensationBenefitsList:[],
   allAccountList:[],
   allHumanResourceRoleList:[],
-  allLoan_typeList:[]
+  allLoanTypeList: []
 };
 
 export const callTypes = {
