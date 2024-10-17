@@ -75,6 +75,24 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   const saveForm = async (user) => {
  
     console.log("loan management conf getUserStatus", user);
+    const loanTypeIds = user.details.map((detail) => detail.loan_typeId);
+
+    // Check for duplicate loan_typeId values
+    const hasDuplicates = loanTypeIds.length !== new Set(loanTypeIds).size;
+  
+    if (hasDuplicates) {
+      toast.error("Duplicate loan types are not allowed. Please ensure each loan type is unique.", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return
+
+    }
  
     if (!id) {
  
