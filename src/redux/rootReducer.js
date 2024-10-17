@@ -8,16 +8,15 @@ import { remarksSlice } from "../app/modules/ECommerce/_redux/remarks/remarksSli
 import { usersSlice } from "../app/modules/UserMangement/_redux/usersSlice";
 import { specificationsSlice } from "../app/modules/ECommerce/_redux/specifications/specificationsSlice";
 import { rolesSlice } from "../app/modules/Settings/_redux/roles/rolesSlice";
-import { centersSlice } from "../app/modules/Centers/_redux/centers/centersSlice";
-import { subCentersSlice } from "../app/modules/Centers/_redux/subcenters/subCentersSlice";
-import { vehiclesSlice } from "../app/modules/Vehicles/_redux/vehiclesSlice";
+
+// import { vehiclesSlice } from "../app/modules/Vehicles/_redux/vehiclesSlice";
 //import { incidentSlice } from "../app/modules/IncidentDetails/_redux/incidents/incidentSlice";
-import { TriplogSlice } from "../app/modules/IncidentDetails/_redux/triplogs/triplogSlice";
+// import { TriplogSlice } from "../app/modules/IncidentDetails/_redux/triplogs/triplogSlice";
 import { dashboardSlice } from "../app/modules/Dashboard/_redux/dashboardSlice";
 // import { infoSlice } from "../app/modules/IBS/_redux/info-personal/infoSlice";
 // import { mortuarySlice } from "../app/modules/IBS/_redux/mortuary/reduxSlice";
 // import { coffinSlice } from "../app/modules/IBS/_redux/coffin/reduxSlice";
-import { receiptSlice } from "../app/modules/EDRS/_redux/receiptSlice"
+// import { receiptSlice } from "../app/modules/EDRS/_redux/receiptSlice"
 import { bankSlice } from "../app/modules/Banks/_redux/bankSlice";
 import { branchSlice } from "../app/modules/BankBranch/_redux/branchSlice";
 import { deptSlice } from "../app/modules/Department/_redux/deptSlice";
@@ -54,6 +53,7 @@ import { fiscalSetupSlice } from "../app/modules/Fiscal_Setup/_redux/fiscalSetup
 import { PayrollMonthSlice } from "../app/modules/Payroll_Month_Setup/_redux/PayrollMonthSlice";
 import { ArrearSetupSlice } from "../app/modules/ArrearPolicy/_redux/arrearPolicySlice";
 import { SalaryRoundingPolicySlice } from "../app/modules/SalaryRoundingPolicy/_redux/salaryRoundingPolicySlice";
+import { LeaveTypeSlice } from "../app/modules/LeaveType/_redux/leaveTypeSlice";
 import { FinalSettlementPolicySlice } from "../app/modules/Final_Settlement_Policy/_redux/FinalSettlementPolicySlice";
 import { salarypolicySlice } from "../app/modules/Salarypolicy/_redux/salarypolicySlice";
 import { OnetimeAllowanceSlice } from "../app/modules/Onetime_Allowance/_redux/OnetimeAllowanceSlice";
@@ -69,15 +69,14 @@ export const rootReducer = combineReducers({
   specifications: specificationsSlice.reducer,
   users: usersSlice.reducer,
   roles: rolesSlice.reducer,
-  centers: centersSlice.reducer,
-  subCenters: subCentersSlice.reducer,
-  vehicles: vehiclesSlice.reducer,
+
+  // vehicles: vehiclesSlice.reducer,
   //incidentDetails: incidentSlice.reducer,
-  triplogs: TriplogSlice.reducer,
+  // triplogs: TriplogSlice.reducer,
   // personalInformation: infoSlice.reducer,
   // mortuary: mortuarySlice.reducer,
   // coffin: coffinSlice.reducer,
-  receipt: receiptSlice.reducer,
+  // receipt: receiptSlice.reducer,
   bank: bankSlice.reducer,
   branch: branchSlice.reducer,
   dept: deptSlice.reducer,
@@ -114,6 +113,7 @@ export const rootReducer = combineReducers({
   payroll_month:PayrollMonthSlice.reducer,
   arrear_policy: ArrearSetupSlice.reducer,
   salary_rounding_policy: SalaryRoundingPolicySlice.reducer,
+  leave_type: LeaveTypeSlice.reducer,
   final_settlement_policy: FinalSettlementPolicySlice.reducer,
   salarypolicy: salarypolicySlice.reducer,
   onetime_earning: OnetimeAllowanceSlice.reducer,

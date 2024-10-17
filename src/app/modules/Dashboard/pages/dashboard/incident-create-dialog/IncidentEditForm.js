@@ -10,7 +10,7 @@ import {
   TextArea,
 } from "../../../../../../_metronic/_partials/controls";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
-import * as actions from "../../../../IncidentDetails/_redux/incidents/incidentActions";
+// import * as actions from "../../../../IncidentDetails/_redux/incidents/incidentActions";
 
 const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
 const cnicRegExp = /^[0-9]{5}-[0-9]{7}-[0-9]$/;

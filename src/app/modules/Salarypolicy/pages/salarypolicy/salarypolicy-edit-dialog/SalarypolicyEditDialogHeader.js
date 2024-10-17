@@ -6,11 +6,11 @@ import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls
 export function SalarypolicyEditDialogHeader({ id, isUserForRead }) {
   //const userForEdit = false
   const [title, setTitle] = useState("");
- 
+ console.log("Add Salary Policy Rendering")
   const { userForEdit, actionsLoading } = useSelector(
     
     (state) => ({
-      userForEdit: state.receipt.userForEdit,
+      userForEdit: state.salarypolicy.userForEdit,
       actionsLoading: state.users.actionsLoading,
     }),
     shallowEqual
