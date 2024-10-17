@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import {
   fetchAllCity,
-  fetchAllCityCenters,
+ 
   fetchAllSubCenter,
   getLatestBookingNo,
 } from "../../../../../../_metronic/redux/dashboardActions";
@@ -21,14 +21,16 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 // Validation schema
 const formValidation = Yup.object().shape(
   {
-    startDate: Yup.string()
-      .required("Required*"),
-      endDate: Yup.string()
-      .required("Required*"),
+    startDate: Yup.date()
+      .required('*Required')
+      .nullable(),
+    endDate:Yup.date()
+    .required('*Required')
+    .nullable(),
 
-   
+
   },
-  
+
 );
 export function MasterEditForm({
   SaveTaxSetup,
@@ -43,7 +45,7 @@ export function MasterEditForm({
   enableLoading,
   loading,
 }) {
-  
+
   const { dashboard } = useSelector((state) => state);
   // Get User Details
   const { auth } = useSelector((state) => state);
@@ -67,7 +69,7 @@ export function MasterEditForm({
       <Formik
         enableReinitialize={true}
         initialValues={user}
-         validationSchema={formValidation}
+        validationSchema={formValidation}
         onSubmit={(values) => {
           console.log("values", values);
           enableLoading();
@@ -94,51 +96,57 @@ export function MasterEditForm({
               <Form className="form form-label-right">
                 <fieldset disabled={isUserForRead}>
                   <div className="from-group row">
-                  <div className="col-12 col-md-4 mt-3">
+                    <div className="col-12 col-md-4 mt-3">
 
-                       <span> Start Date<span style={{ color: 'red' }}>*</span></span>
-                        <DatePicker
-                          className="form-control"
-                          placeholder="Enter Start Date"
-                          selected={defstartDate}
-                          onChange={(date) => {
-                            setFieldValue("startDate", date);
-                            setDefaultStartDate(date);
-                          }}
-                          timeInputLabel="Time:"
-                          dateFormat="dd/MM/yyyy"
-                          showTimeInput
-                          name="startDate"
-                          disabled={isUserForRead}
-                            autoComplete="off"
-                        // value = {values.dateOfJoining}
-                        />
-                      </div>
-
-                      <div className="col-12 col-md-4 mt-3">
-                                              <span> End Date<span style={{ color: 'red' }}>*</span></span>
-                        <DatePicker
-                          className="form-control"
-                          placeholder="Enter End Date"
-                          selected={defendDate}
-                          onChange={(date) => {
-                            setFieldValue("endDate", date);
-                            setDefaultEndDate(date);
-                          }}
-                          
-                          timeInputLabel="Time:"
-                          dateFormat="dd/MM/yyyy"
-                          showTimeInput
-                          name="endDate"
-                          disabled={isUserForRead}
-                          autoComplete="off"
-                        // value = {values.dateOfJoining}
-                        />
-                      </div>
+                      <span> Start Date<span style={{ color: 'red' }}>*</span></span>
+                      <DatePicker
+                        className="form-control"
+                        placeholder="Enter Start Date"
+                        selected={defstartDate}
+                        onChange={(date) => {
+                          setFieldValue("startDate", date);
+                          setDefaultStartDate(date);
+                        }}
+                        timeInputLabel="Time:"
+                        dateFormat="dd/MM/yyyy"
+                        showTimeInput
+                        name="startDate"
+                        disabled={isUserForRead}
+                        autoComplete="off"
+                    
+                      />
+                      {errors.startDate && touched.startDate && (
+                        <div className="error" style={{color:"red"}}>{errors.startDate}</div>
+                      )}
                     </div>
-                   
-                   
-                  
+
+                    <div className="col-12 col-md-4 mt-3">
+                      <span> End Date<span style={{ color: 'red' }}>*</span></span>
+                      <DatePicker
+                        className="form-control"
+                        placeholder="Enter End Date"
+                        selected={defendDate}
+                        onChange={(date) => {
+                          setFieldValue("endDate", date);
+                          setDefaultEndDate(date);
+                        }}
+
+                        timeInputLabel="Time:"
+                        dateFormat="dd/MM/yyyy"
+                        showTimeInput
+                        name="endDate"
+                        disabled={isUserForRead}
+                        autoComplete="off"
+                      // value = {values.dateOfJoining}
+                      />
+                     {errors.endDate && touched.endDate && (
+                        <div className="error" style={{color:"red"}}>{errors.endDate}</div>
+                      )}
+                    </div>
+                  </div>
+
+
+
                   <div className="form-group row"></div>
                 </fieldset>
               </Form>

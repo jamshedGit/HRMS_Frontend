@@ -12,7 +12,7 @@ import { fetchAllCountry } from "../../../../../_metronic/redux/dashboardActions
 import {
   fetchUserStatusTypes,
   fetchRoles,
-  fetchCenters,
+
 } from "../../_redux/employeeTypeActions";
 
 
@@ -25,14 +25,14 @@ export function EmpTypePage({ history }) {
     newBankButtonClick: () => {
       dispatch(fetchAllCountry());
       dispatch(fetchRoles());
-      dispatch(fetchCenters());
+
       dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
       history.push("/emptype/read-all-emptype/new");
     },
     openEditBankDialog: (id) => {
       dispatch(fetchAllCountry());
       dispatch(fetchRoles());
-      dispatch(fetchCenters());
+   
       dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
       history.push(`/emptype/read-all-emptype/${id}/edit`);
     },

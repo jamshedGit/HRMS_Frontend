@@ -8,7 +8,6 @@ import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect"
 import {
   fetchAllCountry,
   fetchAllCity,
-  fetchAllCityCenters,
   fetchAllSubCenter,
   getLatestBookingNo,
   fetchAllDept,
@@ -41,10 +40,36 @@ const profileValidation = Yup.object().shape(
       .required("Required*"),
     employeeCode: Yup.string()
       .required("Required*"),
-    title: Yup.string()
+      title: Yup.string()
+      .required("Required*"),
+      subsidiaryId: Yup.string()
+      .required("Required*"),
+      gradeId: Yup.string()
+      .required("Required*"),
+      designationId: Yup.string()
+      .required("Required*"),
+      departmentId: Yup.string()
+      .required("Required*"),
+      teamId: Yup.string()
+      .required("Required*"),
+      payrollGroupId: Yup.string()
+      .required("Required*"),
+      regionId: Yup.string()
+      .required("Required*"),
+      employeeTypeId: Yup.string()
       .required("Required*"),
 
+      locationId: Yup.string()
+      .required("Required*"),
 
+      countryId: Yup.string()
+      .required("Required*"),
+
+      cityId: Yup.string()
+      .required("Required*"),
+
+      dateOfJoining: Yup.date()
+      .required("Required*").min(Yup.ref("dateOfJoining"),"Error")
   },
 
 );
@@ -382,7 +407,7 @@ useEffect(() => {
 
       console.log(user);
       setImage(user.profile_image || '');
-      dispatch(fetchAllCityCenters(user.cityId));
+
     }
   }, [user.cityId, dispatch]);
 
@@ -570,7 +595,7 @@ useEffect(() => {
                             <option value="Captain." label="Captain." />
 
                           </Select>
-                          {errors.fuelType && touched.fuelType && (
+                          {errors.title && touched.title && (
                             <div className="invalid-text">{errors.title}</div>
                           )}
                         </div>
@@ -675,8 +700,8 @@ useEffect(() => {
                             dispatch(fetchAllDept(e.value));
                           }}
                           value={(defDept || null)}
-                          error={errors.Id}
-                          touched={touched.Id}
+                          error={errors.departmentId}
+                          touched={touched.departmentId}
                           options={dashboard.allDept}
                         />
                       </div>
@@ -694,8 +719,8 @@ useEffect(() => {
                             // dispatch(fetchAllFormsMenu(e.value));
                           }}
                           value={(defchildTeamMenus || null)}
-                          error={errors.Id}
-                          touched={touched.Id}
+                          error={errors.teamId}
+                          touched={touched.teamId}
                           options={dashboard.allTeamsChildMenus}
                         />
                       </div>
@@ -713,8 +738,8 @@ useEffect(() => {
                             // dispatch(fetchAllFormsMenu(e.value));
                           }}
                           value={(defchildMenus || null)}
-                          error={errors.Id}
-                          touched={touched.Id}
+                          error={errors.payrollGroupId}
+                          touched={touched.payrollGroupId}
                           options={dashboard.allChildMenus}
                         />
                       </div>
@@ -734,8 +759,8 @@ useEffect(() => {
                             // dispatch(fetchAllFormsMenu(e.value));
                           }}
                           value={(defchildRegionMenus || null)}
-                          error={errors.Id}
-                          touched={touched.Id}
+                          error={errors.regionId}
+                          touched={touched.regionId}
                           options={dashboard.allRegionChildMenus}
                         />
                       </div>
@@ -754,8 +779,8 @@ useEffect(() => {
                             // dispatch(fetchAllFormsMenu(e.value));
                           }}
                           value={(defchildEmptypeMenus || null)}
-                          error={errors.Id}
-                          touched={touched.Id}
+                          error={errors.employeeTypeId}
+                          touched={touched.employeeTypeId}
                           options={dashboard.allEmpTypeChildMenus}
                         />
                       </div>
@@ -773,8 +798,8 @@ useEffect(() => {
                             // dispatch(fetchAllFormsMenu(e.value));
                           }}
                           value={(defchildLocationMenus || null)}
-                          error={errors.Id}
-                          touched={touched.Id}
+                          error={errors.locationId}
+                          touched={touched.locationId}
                           options={dashboard.allLocationChildMenus}
                         />
                       </div>
@@ -808,7 +833,7 @@ useEffect(() => {
                           onChange={(e) => {
                             setFieldValue("cityId", e.value);
                             setDefaultCity(e);
-                            dispatch(fetchAllCityCenters(e.value));
+                      
                           }}
                           value={defCity}
                           error={errors.cityId}
@@ -832,6 +857,8 @@ useEffect(() => {
                           autoComplete="off"
                           name="dateOfJoining"
                           disabled={isUserForRead}
+                          error={errors.dateOfJoining}
+                          touched={touched.dateOfJoining}
                         // value = {values.dateOfJoining}
                         />
                       </div>

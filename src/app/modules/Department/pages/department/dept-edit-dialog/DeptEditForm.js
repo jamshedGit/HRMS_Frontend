@@ -22,7 +22,7 @@ const cnicRegExp = /^[0-9]{5}-[0-9]{7}-[0-9]$/;
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 const userEditSchema_2 = Yup.object().shape(
   {
-    // parentDept: Yup.string().required("Please select Department"),
+    // parentDept: Yup.string().required("Please select parent department"),
     deptCode: Yup.string().required("*Required"),
     deptName: Yup.string().required("*Required"),
     budgetStrength: Yup.string().required("*Required"),
@@ -123,6 +123,7 @@ export function DeptEditForm({
         validationSchema={userEditSchema_2}
         onSubmit={(values) => {
           console.log("values", values);
+          
           enableLoading();
           saveDept(values);
         }}
@@ -152,7 +153,7 @@ export function DeptEditForm({
                         name="deptName"
                         component={Input}
                         placeholder="Enter Department Name"
-                        label="Department"
+                        label={<span> Department<span style={{ color: 'red' }}>*</span></span>}
                       />
                     </div>
                     {
@@ -161,7 +162,7 @@ export function DeptEditForm({
                           name="deptCode"
                           component={Input}
                           placeholder="Enter Department Code"
-                          label="Department Code"
+                          label={<span> Code<span style={{ color: 'red' }}>*</span></span>}
                         />
                       </div>
                     }
@@ -169,7 +170,7 @@ export function DeptEditForm({
                       <div className="col-12 col-md-4 mt-3">
                         <SearchSelect
                           name="  "
-                          label="Select Department*"
+                          label={<span> Parent Dept<span style={{ color: 'red' }}>*</span></span>}
                           isDisabled={isUserForRead && true}
                           onBlur={() => {
                             // handleBlur({ target: { name: "countryId" } });
@@ -177,14 +178,14 @@ export function DeptEditForm({
                           onChange={(e) => {
                             setFieldValue("parentDept", e.value || null);
                             setDefaultDept(e);
-                            dispatch(fetchAllDept(e.value));
+                          //  dispatch(fetchAllDept(e.value));
                           }}
                           value={(defDept || null)}
-                          error={errors.Id}
-                          touched={touched.Id}
+                          error={errors.parentDept}
+                          touched={touched.parentDept}
                           options={dashboard.allDept}
                         />
-                        isParent &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                        {/* isParent &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
                          <Field
                           type="checkbox"
                           id="chkParent"
@@ -200,7 +201,7 @@ export function DeptEditForm({
                               }
 
                            }}
-                        />
+                        /> */}
                         {/* <input
                           type="checkbox"
                           className="form-check-input"
@@ -220,38 +221,18 @@ export function DeptEditForm({
                           name="budgetStrength"
                           component={Input}
                           placeholder="Enter budgetStrength"
-                          label="Bugdet Strength"
+                          label={<span> Bugdet Strength<span style={{ color: 'red' }}>*</span></span>}
+                          
                         />
                       </div>
                     }
-                    {/* {
-                      <div className="col-12 col-md-4 mt-3">
-                      <SearchSelect
-                        name="subsidiary"
-                        label="Select Subsidiary*"
-                        isDisabled={isUserForRead && true}
-                        onBlur={() => {
-                          // handleBlur({ target: { name: "countryId" } });
-                        }}
-                        onChange={(e) => {
-                          setFieldValue("subsidiaryId", e.value);
-                          setDefaultBanks(e);
-                          //dispatch(fetchAllBanks(e.value));
-                        }}
-                        value={defBank}
-                        error={errors.Id}
-                        touched={touched.Id}
-                        options={dashboard.allBanks}
-                      />
-                    </div>
-
-                    }  */}
+                  
                     {
                       <><div className="col-12 col-md-4 mt-3">
                         <Select
-                          label="Subsidiary"
+                         
                           name="subsidiary"
-                          value={values.subsidiary}
+                          label={<span> Subsidiary<span style={{ color: 'red' }}>*</span></span>}
                           onChange={handleChange}
                           onBlur={handleBlur}
                           style={{ display: "block" }}
@@ -262,8 +243,8 @@ export function DeptEditForm({
                           <option value="3" label="Australia" />
 
                         </Select>
-                        {errors.fuelType && touched.fuelType && (
-                          <div className="invalid-text">{errors.Subsidiary}</div>
+                        {errors.subsidiary && touched.subsidiary && (
+                          <div className="invalid-text">{errors.subsidiary}</div>
                         )}
                       </div></>
 

@@ -61,7 +61,6 @@ export const salarypolicySlice = createSlice({
             state.error = null;
         },
 
-
         SalarypolicyDeleted: (state, action) => {
 
             state.error = null;
@@ -73,7 +72,6 @@ export const salarypolicySlice = createSlice({
             );
         },
         salarypolicyCreated: (state, action) => {
-
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);

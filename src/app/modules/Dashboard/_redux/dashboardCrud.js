@@ -1,9 +1,7 @@
 import axios from "axios";
 export const USERS_URL = process.env.REACT_APP_API_URL;
 
-export const getAllCeters = async () => {
-  return await axios.get(`${USERS_URL}/settings/read-all-centers-master-data`);
-};
+
 
 export const getAllSubcenter = async (centerId) => {
   return await axios.post(
@@ -37,12 +35,7 @@ export const getCityByCountryId = async (countryId) => {
   });
 };
 
-export const getCentersByCityId = async (cityId) => {
-  return await axios.post(
-    `${USERS_URL}/settings/read-all-centers-master-data-by-cityId`,
-    { cityId: cityId }
-  );
-};
+
 
 export const getVehiclesByCenterAndSubcenterId = async (body) => {
   return await axios.post(
@@ -85,8 +78,3 @@ export const getAlaramTime = async () => {
   );
 };
 
-export const getIncidentTypes = async () => {
-  return await axios.get(
-    `${USERS_URL}/settings/read-all-incident-types-master-data`
-  );
-};

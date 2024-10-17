@@ -198,7 +198,7 @@ export function BankEditForm({
         return item.value === employeeId;
       })
     );
-    
+
     fetchEmployeeSalaryEarningList(employeeId, 0, null);
   }, [user?.employeeId, dashboard.employeeId]);
 
@@ -269,7 +269,7 @@ export function BankEditForm({
     try {
 
       const response = await axios.post(`${USERS_URL}/employee_salary_earning/read-all-emp-earning_byId`, { id: empId, basicSalary: basicSalary || 0 });
-
+      console.log("::test::", response)
       setDefaultMapEarningDeductionList(response?.data?.data);
       setBasicSalaryFactor(response?.data?.data[0]?.basicFactor);
       setGrossSalaryDB(response?.data?.data[0]?.grossSalary)
@@ -374,7 +374,7 @@ export function BankEditForm({
     return curr.transactionType == 'Deduction' ? prev + curr.amount : prev
   }, 0) || 0;
 
-  console.log("my user",user)
+  console.log("my user", user)
   return (
     <>
       <Formik
@@ -459,7 +459,7 @@ export function BankEditForm({
                       <Field
                         name="grossSalary"
                         onChange={(e) => {
-                        
+
                           setGrossSalaryDB(e.target.value);
                           setFieldValue("grossSalary", e.target.value);
                         }}
@@ -689,7 +689,7 @@ export function BankEditForm({
                       </div>
                       <div className="col-12 col-md-4 mt-3">
                       </div>
-                     
+
                     </div>
                     <div className="from-group row">
                       <div className="col-12 col-md-4 mt-3">
@@ -705,7 +705,7 @@ export function BankEditForm({
                       <div className="col-12 col-md-4 mt-3">
 
                       </div>
-                     
+
                       <div className="col-12 col-md-4 mt-3">
                         Total Deductions <input disabled="true" type="number" value={totalDeduction} id="txtTotalDeductions"></input>
                       </div>
@@ -719,7 +719,7 @@ export function BankEditForm({
                       </div>
                       <div className="col-12 col-md-4 mt-3">
                       </div>
-                     
+
                     </div>
 
 

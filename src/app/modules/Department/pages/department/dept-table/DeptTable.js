@@ -88,16 +88,16 @@ export function DeptTable() {
         minWidth: "160px",
       },
     },
-    {
-      dataField: "parentDept",
-      text: "Parent Dept",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
+    // {
+    //   dataField: "parentDept",
+    //   text: "Parent Dept",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "160px",
+    //   },
+    // },
    
    
        {

@@ -3,8 +3,8 @@ import { Modal } from "react-bootstrap";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { IncidentEditForm } from "./IncidentEditForm";
 import { IncidentEditDialogHeader } from "./IncidentEditDialogHeader";
-import { useIncidentsUIContext } from "../../../../../app/modules/IncidentDetails/pages/incidents/IncidentsUIContext";
-import * as actions from "../../../../../app/modules/IncidentDetails/_redux/incidents/incidentActions";
+// import { useIncidentsUIContext } from "../../../../../app/modules/IncidentDetails/pages/incidents/IncidentsUIContext";
+// import * as actions from "../../../../../app/modules/IncidentDetails/_redux/incidents/incidentActions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { makeStyles } from "@material-ui/core/styles";
@@ -57,7 +57,7 @@ export function IncidentCreateDialog({
   const [centerId, setCenter] = useState("");
   const [loading, setLoading] = useState(false);
   //const [alaramTime, setAlaramTime] = useState();
-  const incidentsUIContext = useIncidentsUIContext();
+  // const incidentsUIContext = useIncidentsUIContext();
 
   const { dashboard } = useSelector((state) => state);
 
@@ -72,28 +72,28 @@ export function IncidentCreateDialog({
   // }, [incidentsUIContext]);
 
   const dispatch = useDispatch();
-  const {
-    actionsLoading,
-    incidentForEdit,
-    isuserForRead,
-    IncidentType,
-    incidentSeverity,
-    centers,
-    vehicleByCenterId,
-    vehiclesForDropdown,
-  } = useSelector(
-    (state) => ({
-      actionsLoading: state.incidentDetails.actionsLoading,
-      incidentForEdit: state.incidentDetails.incidentForEdit,
-      isuserForRead: state.incidentDetails.userForRead,
-      IncidentType: state.incidentDetails.incidentTypes,
-      incidentSeverity: state.incidentDetails.incidentSeverity,
-      centers: state.incidentDetails.centers,
-      vehicleByCenterId: state.incidentDetails.vehicleByCenterId,
-      vehiclesForDropdown: state.incidentDetails.vehiclesForDropdown,
-    }),
-    shallowEqual
-  );
+  // const {
+  //   actionsLoading,
+  //   incidentForEdit,
+  //   isuserForRead,
+  //   IncidentType,
+  //   incidentSeverity,
+  //   centers,
+  //   vehicleByCenterId,
+  //   vehiclesForDropdown,
+  // } = useSelector(
+  //   (state) => ({
+  //     actionsLoading: state.incidentDetails.actionsLoading,
+  //     incidentForEdit: state.incidentDetails.incidentForEdit,
+  //     isuserForRead: state.incidentDetails.userForRead,
+  //     IncidentType: state.incidentDetails.incidentTypes,
+  //     incidentSeverity: state.incidentDetails.incidentSeverity,
+  //     centers: state.incidentDetails.centers,
+  //     vehicleByCenterId: state.incidentDetails.vehicleByCenterId,
+  //     vehiclesForDropdown: state.incidentDetails.vehiclesForDropdown,
+  //   }),
+  //   shallowEqual
+  // );
 
   // Enable Loading
   const enableLoading = () => {
@@ -106,24 +106,24 @@ export function IncidentCreateDialog({
 
   const saveIncident = (incident) => {
     enableLoading();
-    dispatch(actions.createIncident(incident)).then((res) => {
-      var filterObj = {};
-      if (city.value) {
-        filterObj.cityId = city.value;
-      }
-      if (center) {
-        filterObj.centerId = center;
-      }
-      if (subCenter) {
-        filterObj.subCenterId = subCenter;
-      }
+    // dispatch(actions.createIncident(incident)).then((res) => {
+    //   var filterObj = {};
+    //   if (city.value) {
+    //     filterObj.cityId = city.value;
+    //   }
+    //   if (center) {
+    //     filterObj.centerId = center;
+    //   }
+    //   if (subCenter) {
+    //     filterObj.subCenterId = subCenter;
+    //   }
 
-      dispatch(fetchDashboardVehicles(filterObj));
+    //   dispatch(fetchDashboardVehicles(filterObj));
 
-      disabledLoading();
-      onHide();
-      setVehicle([]);
-    });
+    //   disabledLoading();
+    //   onHide();
+    //   setVehicle([]);
+    // });
   };
 
   return (
@@ -137,11 +137,11 @@ export function IncidentCreateDialog({
       <IncidentEditForm
         saveIncident={saveIncident}
         incident={initIncident}
-        IncidentType={IncidentType}
-        incidentSeverityOption={incidentSeverity}
-        centers={centers}
-        vehicleByCenterId={vehicleByCenterId}
-        vehiclesForDropdown={vehiclesForDropdown}
+        // IncidentType={IncidentType}
+        // incidentSeverityOption={incidentSeverity}
+        // centers={centers}
+        // vehicleByCenterId={vehicleByCenterId}
+        // vehiclesForDropdown={vehiclesForDropdown}
         onHide={onHide}
         isUserForRead={userForRead}
         setCenter={setCenter}

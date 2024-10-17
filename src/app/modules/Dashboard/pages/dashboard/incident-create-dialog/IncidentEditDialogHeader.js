@@ -7,13 +7,13 @@ export function IncidentEditDialogHeader({ id, isUserForRead }) {
   //const userForEdit = false
   const [title, setTitle] = useState("");
 
-  const { incidentForEdit, actionsLoading } = useSelector(
-    (state) => ({
-      incidentForEdit: state.incidentDetails.incidentForEdit,
-      actionsLoading: state.incidentDetails.actionsLoading,
-    }),
-    shallowEqual
-  );
+  // const { incidentForEdit, actionsLoading } = useSelector(
+  //   (state) => ({
+  //     incidentForEdit: state.incidentDetails.incidentForEdit,
+  //     actionsLoading: state.incidentDetails.actionsLoading,
+  //   }),
+  //   shallowEqual
+  // );
   // console.log(";current state for incident", incidentForEdit)
   useEffect(() => {
     let _title = id ? "" : "Add Incident";

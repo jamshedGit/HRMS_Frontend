@@ -512,7 +512,7 @@ $input-focus-box-shadow:                            none !default;
 $input-height-border:                               $input-border-width * 2 !default;
 
 $input-bg:                                          $white !default;
-$input-disabled-bg:                     			#e7e7e7;
+$input-disabled-bg:                     			#f2f2f2; //$gray-100 !default;
 $input-readonly-bg:                     			$white !default; // Custom variable
 $input-group-icon-color:                     		$dark-75 !default;
 $input-group-addon-color:               			$dark-75 !default;
