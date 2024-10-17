@@ -63,6 +63,7 @@ const salarypolicyModule = lazy(() => import("./modules/Salarypolicy/pages/index
 const OnetimeAllowance = lazy(() => import("./modules/Onetime_Allowance/pages/index"));
 const LoanType = lazy(() => import("./modules/LoanType/pages/index"));
 const TaxSlab = lazy(() => import("./modules/LoanType/pages/index"));
+const leaveManagementConfiguration = lazy(() => import("./modules/leaveManagementConfiguration/pages/index"));
    
 
 const ROUTES = {
@@ -113,7 +114,8 @@ const ROUTES = {
   final_settlement_policy :FinalSettlementPolicyModule,
   salarypolicy:salarypolicyModule,
   onetime_earning: OnetimeAllowance,
-  tax_slab: TaxSlab
+  tax_slab: TaxSlab,
+  leave_management_configuration: leaveManagementConfiguration
 };
 
 export default function BasePage() {
