@@ -1,5 +1,3 @@
-
-
 import React, { useEffect } from "react";
 import { Modal } from "react-bootstrap";
 import { Formik, Form, Field, FieldArray } from "formik";
@@ -11,7 +9,7 @@ import {
   fetchAllFormsMenu,
   fetchAllHumanResourceRole,
 } from "../../../../../../_metronic/redux/dashboardActions";
- 
+
 // Define the validation schema for the main form and the details
 const loanManagementSchema = Yup.object().shape({
   subsidiaryId: Yup.number().required("Subsidiary is required"),
@@ -27,15 +25,13 @@ const loanManagementSchema = Yup.object().shape({
   details: Yup.array().of(
     Yup.object().shape({
       loan_typeId: Yup.number().required(" Type is required"),
-      max_loan_amount: Yup.number()
-      .required("Max  Amount is required"),
+      max_loan_amount: Yup.number().required("Max  Amount is required"),
       basis: Yup.number().required("Basis is required"),
-      salary_count: Yup.number()
-      .required("Count is required"),
+      salary_count: Yup.number().required("Count is required"),
     })
   ),
 });
- 
+
 export function FormEditForm({
   saveForm,
   user,
@@ -47,11 +43,9 @@ export function FormEditForm({
 }) {
   const dispatch = useDispatch();
   const { dashboard } = useSelector((state) => state);
- 
+
   // Fetch necessary data if not already present
   useEffect(() => {
-
-    
     if (!user.Id) {
       dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsidiaries
       dispatch(fetchAllFormsMenu(45, "allAccountList")); // For All Accounts
@@ -59,42 +53,22 @@ export function FormEditForm({
       dispatch(fetchAllHumanResourceRole("allHumanResourceRoleList"));
     }
   }, [dispatch, user.Id]);
- 
+
   // Define options for basis type
   const basisOptions = [
     { value: 0, label: "Gross" },
     { value: 1, label: "Basic" },
   ];
- useEffect(()=>{
-  console.log("user is present",user)
-
- },[user])
+  useEffect(() => {
+    console.log("user is present", user);
+  }, [user]);
   return (
     <Formik
       enableReinitialize={true}
-      // initialValues={{
-      //   subsidiaryId: user.subsidiaryId || "",
-      //   accountId: user.accountId || "",
-      //   human_resource_role: user.human_resource_role || "",
-      //   emp_loan_account: user.emp_loan_account || "",
-      //   installment_deduction_percentage:
-      //     user.installment_deduction_percentage || "",
-      //   installment_deduction_basis_type:
-      //     user.installment_deduction_basis_type || "",
-      //   details: user.details || [
-      //     {
-      //       loan_typeId: "",
-      //       max_loan_amount: "",
-      //       basis: "",
-      //       salary_count: "",
-      //     },
-      //   ],
-      // }}
-
       initialValues={user}
       validationSchema={loanManagementSchema}
       onSubmit={(values) => {
-        console.log("Form Values:", values);
+        console.log("Form Values: updated", values);
         enableLoading();
         saveForm(values);
       }}
@@ -133,7 +107,7 @@ export function FormEditForm({
                       touched={touched.subsidiaryId}
                     />
                   </div>
- 
+
                   {/* Account Field */}
                   <div className="col-12 col-md-6 mt-3">
                     <SearchSelect
@@ -157,7 +131,7 @@ export function FormEditForm({
                       touched={touched.accountId}
                     />
                   </div>
- 
+
                   {/* Human Resource Role Field */}
                   <div className="col-12 col-md-6 mt-3">
                     <SearchSelect
@@ -183,7 +157,7 @@ export function FormEditForm({
                       touched={touched.human_resource_role}
                     />
                   </div>
- 
+
                   {/* Employee Loan Account Field */}
                   <div className="col-12 col-md-6 mt-3">
                     <Field
@@ -198,7 +172,7 @@ export function FormEditForm({
                       <div className="text-danger">{errors.emp_loan_account}</div>
                     )} */}
                   </div>
- 
+
                   {/* Installment Deduction Percentage Field */}
                   <div className="col-12 col-md-6 mt-3">
                     <Field
@@ -213,14 +187,13 @@ export function FormEditForm({
                       <div className="text-danger">{errors.installment_deduction_percentage}</div>
                     )} */}
                   </div>
- 
+
                   {/* Installment Deduction Basis Type Field */}
                   <div className="col-12 col-md-6 mt-3">
                     <label htmlFor="installment_deduction_basis_type">
                       Installment Deduction Basis Type
-                     
                     </label>
-                    <Field
+                    {/* <Field
                       name="installment_deduction_basis_type"
                       as="select"
                       label="Installment Deduction Basis Type"
@@ -240,15 +213,37 @@ export function FormEditForm({
                           {option.label}
                         </option>
                       ))}
+                    </Field> */}
+                    <Field
+                      name="installment_deduction_basis_type"
+                      as="select"
+                      className="form-control"
+                      disabled={isUserForRead}
+                      onChange={(e) => {
+                        setFieldValue(
+                          "installment_deduction_basis_type",
+                          e.target.value
+                        ); // Use the raw value
+                      }}
+                    >
+                      <option value="">Select Deduction Basis Type</option>
+                      {basisOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
                     </Field>
-                    {errors.installment_deduction_basis_type && touched.installment_deduction_basis_type && (
-                      <div className="text-danger">{errors.installment_deduction_basis_type}</div>
-                    )}
+
+                    {errors.installment_deduction_basis_type &&
+                      touched.installment_deduction_basis_type && (
+                        <div className="text-danger">
+                          {errors.installment_deduction_basis_type}
+                        </div>
+                      )}
                   </div>
                 </div>
               </fieldset>
- 
-              {/* Details Section */}
+
               <FieldArray name="details">
                 {({ push, remove }) => (
                   <div
@@ -278,7 +273,6 @@ export function FormEditForm({
                           values.details.length > 0 &&
                           values.details.map((detail, index) => (
                             <tr key={index}>
-                              {/* Delete Button */}
                               <td>
                                 {!isUserForRead && (
                                   <button
@@ -288,10 +282,12 @@ export function FormEditForm({
                                   >
                                     Delete
                                   </button>
+
+                                  
                                 )}
                               </td>
- 
-                              {/* Loan Type Field */}
+                              
+
                               <td>
                                 <Field
                                   name={`details[${index}].loan_typeId`}
@@ -318,8 +314,7 @@ export function FormEditForm({
                                     </div>
                                   )}
                               </td>
- 
-                              {/* Max Loan Amount Field */}
+
                               <td>
                                 <Field
                                   name={`details[${index}].max_loan_amount`}
@@ -334,8 +329,7 @@ export function FormEditForm({
                                     </div>
                                   )}
                               </td>
- 
-                              {/* Basis Field */}
+
                               <td>
                                 <Field
                                   name={`details[${index}].basis`}
@@ -360,8 +354,7 @@ export function FormEditForm({
                                     </div>
                                   )}
                               </td>
- 
-                              {/* Salary Count Field */}
+
                               <td>
                                 <Field
                                   name={`details[${index}].salary_count`}
@@ -380,8 +373,7 @@ export function FormEditForm({
                           ))}
                       </tbody>
                     </table>
- 
-                    {/* Add Detail Button */}
+
                     {!isUserForRead && (
                       <button
                         type="button"
@@ -403,7 +395,7 @@ export function FormEditForm({
               </FieldArray>
             </Form>
           </Modal.Body>
- 
+
           <Modal.Footer>
             {/* Cancel / Ok Button */}
             {!isUserForRead ? (
@@ -423,7 +415,7 @@ export function FormEditForm({
                 Ok
               </button>
             )}
- 
+
             {/* Save Button */}
             {!isUserForRead && (
               <button

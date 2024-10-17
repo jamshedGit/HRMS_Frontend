@@ -123,7 +123,6 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         user={userForEdit || formUIProps .initUser}
         onHide={onHide}
         roles={roles}
-        centers={centers}
         userStatusTypes={userStatusTypes}
         isUserForRead={userForRead}
         enableLoading={enableLoading}
