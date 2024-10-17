@@ -10,7 +10,7 @@ import { Route } from "react-router-dom";
 import { TilesWidget1, TilesWidget10 } from "../widgets";
 //import CreateIncidentDialog from "../widgets/modal/CreateIncidentDialog";
 import { IncidentCreateDialog } from "../widgets/modal/incident-create-dialog/IncidentCreateDialog";
-import { TripLogEditDialog } from "../../../app/modules/IncidentDetails/pages/triplogs/triplog-edit-dialog/TripLogEditDialog";
+// import { TripLogEditDialog } from "../../../app/modules/IncidentDetails/pages/triplogs/triplog-edit-dialog/TripLogEditDialog";
 //import { DropdownMenu4 } from "../dropdowns";
 import { LastTripsUIProvider } from "../widgets/tiles/LastTrips/LastTripsUIContext";
 //import LastTripsDialog from "../widgets/tiles/LastTrips/LastTripsDialog";
@@ -186,7 +186,7 @@ export function Demo2Dashboard({ history }) {
               diable={diableOnDutyButton}
               rowSelection={false}
             />
-            <TripLogEditDialog
+            {/* <TripLogEditDialog
               show={openCloseTripDialogue}
               onHide={() => setCloseTripDialogue(false)}
               id={closeTripId}
@@ -194,7 +194,7 @@ export function Demo2Dashboard({ history }) {
               center={center && center.value}
               subCenter={subCenter && subCenter.value}
               setVehicle={setVehicle}
-            />
+            /> */}
           </div>
           <div className="col-xl-4">
             <TilesWidget1

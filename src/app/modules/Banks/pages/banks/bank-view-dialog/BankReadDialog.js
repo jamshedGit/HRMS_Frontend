@@ -21,7 +21,7 @@ export function BankEditDialog({ id, show, onHide }) {
     (state) => ({
       
       actionsLoading: state.users.actionsLoading,
-      userForEdit: state.receipt.userForEdit,
+      userForEdit: state.bank.userForEdit,
       roles: state.users.roles,
       centers: state.users.centers,
     }),

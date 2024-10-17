@@ -206,15 +206,15 @@ export const fetchUserStatusTypes = (body) => (dispatch) => {
 };
 
 
-export const fetchDonationReport = (body) => async (dispatch) => {
-  return await requestFromServer
-    .donationReport(body)
-    .then((response) => {
-      console.log("Res", response);
-      const entities = response?.data?.data;
-      dispatch(actions.donationReportFetch(entities));
-    })
-    .catch((error) => {
-      toast("error", "Data not found");
-    });
-};
+// export const fetchDonationReport = (body) => async (dispatch) => {
+//   return await requestFromServer
+//     .donationReport(body)
+//     .then((response) => {
+//       console.log("Res", response);
+//       const entities = response?.data?.data;
+//       dispatch(actions.donationReportFetch(entities));
+//     })
+//     .catch((error) => {
+//       toast("error", "Data not found");
+//     });
+// };

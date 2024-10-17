@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 import { dashboardSlice, callTypes } from "./dashboardSlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { receiptSlice } from "../../app/modules/EDRS/_redux/receiptSlice";
+// import { receiptSlice } from "../../app/modules/EDRS/_redux/receiptSlice";
 
 const { actions } = dashboardSlice;
 

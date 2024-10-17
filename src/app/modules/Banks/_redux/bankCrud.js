@@ -62,9 +62,9 @@ export function getAllUserStatusTypes(body) {
 }
 
 
-export const donationReport = async (body) => {
-  return await axios.post(`${USERS_URL}/edrs/donation-report`, body);
-};
+// export const donationReport = async (body) => {
+//   return await axios.post(`${USERS_URL}/edrs/donation-report`, body);
+// };
 
 export function sms_athentication(body) {
   return axios.post(

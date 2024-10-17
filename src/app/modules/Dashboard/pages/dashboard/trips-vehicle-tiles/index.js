@@ -7,7 +7,7 @@ import { Route, Switch } from "react-router-dom";
 // import { IncidentCreateDialog } from "../incident-create-dialog/IncidentCreateDialog";
 // import { TripLogEditDialog } from "../../../../IncidentDetails/pages/triplogs/triplog-edit-dialog/TripLogEditDialog";
 import LastTripsDialog from "../LastTrips/LastTripsDialog";
-import { fetchTripLog } from "../../../../IncidentDetails/_redux/incidents/incidentActions";
+// import { fetchTripLog } from "../../../../IncidentDetails/_redux/incidents/incidentActions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 export function DashboardTiles({ history }) {

@@ -13,14 +13,14 @@ import { incidentTypes } from "./modules/Dashboard/_redux/dashboardActions";
 const SettingsPage = lazy(() =>
   import("./modules/Settings/pages/SettingsPage")
 );
-const VehicleManagment = lazy(() => import("./modules/Vehicles/pages"));
-const IncidentDetailsManagment = lazy(() =>
-  import("./modules/IncidentDetails/pages")
-);
+// const VehicleManagment = lazy(() => import("./modules/Vehicles/pages"));
+// const IncidentDetailsManagment = lazy(() =>
+//   import("./modules/IncidentDetails/pages")
+// );
 const UserManagment = lazy(() => import("./modules/UserMangement/pages"));
 // const Centers = lazy(() => import("./modules/Centers/pages"));
-const IBSModule = lazy(() => import("./modules/IBS/pages/index"));
-const EDRSModule = lazy(() => import("./modules/EDRS/pages/index"));
+// const IBSModule = lazy(() => import("./modules/IBS/pages/index"));
+// const EDRSModule = lazy(() => import("./modules/EDRS/pages/index"));
 const BankModule = lazy(() => import("./modules/Banks/pages/index"));
 const BranchModule = lazy(() => import("./modules/BankBranch/pages/index"));
 const DepartmenModule = lazy(() => import("./modules/Department/pages/index"));
@@ -70,10 +70,10 @@ const ROUTES = {
   settings: SettingsPage,
   users: UserManagment,
 
-  vehicles: VehicleManagment,
-  incidentdetails: IncidentDetailsManagment,
-  ibs: IBSModule,
-  edrs: EDRSModule,
+  // vehicles: VehicleManagment,
+  // incidentdetails: IncidentDetailsManagment,
+  // ibs: IBSModule,
+  // edrs: EDRSModule,
   bank: BankModule,
   branch:BranchModule,
   department:DepartmenModule,
@@ -132,7 +132,7 @@ export default function BasePage() {
   return (
     <Suspense fallback={<LayoutSplashScreen />}>
       <Switch>
-        <Route path='vehicles/read-all-vehicles' component={VehicleManagment} />
+        {/* <Route path='vehicles/read-all-vehicles' component={VehicleManagment} /> */}
         {Object.keys(UserAccess).map((access, key) => {
           const accessName = access.replace(/ /g, "").toLowerCase();
           const path = access
