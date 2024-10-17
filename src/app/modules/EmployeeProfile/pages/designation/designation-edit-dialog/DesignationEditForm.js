@@ -8,7 +8,6 @@ import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect"
 import {
   fetchAllCountry,
   fetchAllCity,
-  fetchAllCityCenters,
   fetchAllSubCenter,
   getLatestBookingNo,
   fetchAllDept,
@@ -408,7 +407,7 @@ useEffect(() => {
 
       console.log(user);
       setImage(user.profile_image || '');
-      dispatch(fetchAllCityCenters(user.cityId));
+
     }
   }, [user.cityId, dispatch]);
 
@@ -834,7 +833,7 @@ useEffect(() => {
                           onChange={(e) => {
                             setFieldValue("cityId", e.value);
                             setDefaultCity(e);
-                            dispatch(fetchAllCityCenters(e.value));
+                      
                           }}
                           value={defCity}
                           error={errors.cityId}

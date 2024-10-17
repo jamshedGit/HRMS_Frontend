@@ -6,17 +6,17 @@ import "react-toastify/dist/ReactToastify.css";
 
 const { actions } = dashboardSlice;
 
-export const fetchAllCenters = () => async (dispatch) => {
-  return await requestFromServer
-    .getAllCeters()
-    .then((response) => {
-      const entities = response.data?.data;
-      dispatch(actions.AllCentersFetch(entities));
-    })
-    .catch((error) => {
-      toast.error("Some thing went wrong");
-    });
-};
+// export const fetchAllCenters = () => async (dispatch) => {
+//   return await requestFromServer
+//     .getAllCeters()
+//     .then((response) => {
+//       const entities = response.data?.data;
+//       dispatch(actions.AllCentersFetch(entities));
+//     })
+//     .catch((error) => {
+//       toast.error("Some thing went wrong");
+//     });
+// };
 
 export const fetchAllSubCenter = (centerId) => async (dispatch) => {
   return await requestFromServer
@@ -72,17 +72,7 @@ export const fetchAllCity = (cityId) => async (dispatch) => {
     });
 };
 
-export const fetchAllCityCenters = (cityId) => async (dispatch) => {
-  return await requestFromServer
-    .getCentersByCityId(cityId)
-    .then((response) => {
-      const entities = response.data?.data;
-      dispatch(actions.AllCentersByCityIdFetch(entities));
-    })
-    .catch((error) => {
-      toast.error("something went wrong");
-    });
-};
+
 
 export const fetchStandByVehicles = (body) => async (dispatch) => {
   return await requestFromServer
@@ -162,13 +152,3 @@ export const alaramTime = () => async (dispatch) => {
     });
 };
 
-export const incidentTypes = () => async (dispatch) => {
-  return await requestFromServer
-    .getIncidentTypes()
-    .then((response) => {
-      dispatch(actions.AllIncidentTypes(response.data?.data));
-    })
-    .catch((error) => {
-      toast.error(error?.response?.data?.message);
-    });
-};

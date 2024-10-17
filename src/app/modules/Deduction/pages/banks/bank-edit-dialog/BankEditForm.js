@@ -88,11 +88,11 @@ export function BankEditForm({
         try {
           console.log("User:", user);
           if (user.deductionCode === '') {
-            const response = await dispatch(getLatestTableId("t_employee_deduction", "D-000"));
+            // const response = await dispatch(getLatestTableId("t_employee_deduction", "D-000"));
 
-            // Assuming response[0].Id is the correct way to access the ID
-            console.log("Response:", response[0]?.Id);
-            setDefDeductionCode(response[0]?.Id);
+            // // Assuming response[0].Id is the correct way to access the ID
+            // console.log("Response:", response[0]?.Id);
+            // setDefDeductionCode(response[0]?.Id);
           }
         } catch (error) {
           console.error("Error fetching data:", error);

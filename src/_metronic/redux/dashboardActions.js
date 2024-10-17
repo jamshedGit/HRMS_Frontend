@@ -4,34 +4,34 @@ import { format } from 'date-fns';
 import { dashboardSlice, callTypes } from "./dashboardSlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { receiptSlice } from "../../app/modules/EDRS/_redux/receiptSlice";
+// import { receiptSlice } from "../../app/modules/EDRS/_redux/receiptSlice";
 
 const { actions } = dashboardSlice;
 
-export const fetchAllCenters = () => async (dispatch) => {
+// export const fetchAllCenters = () => async (dispatch) => {
 
-  return await requestFromServer
-    .getAllCeters()
-    .then((response) => {
-      const entities = response.data?.data;
-      dispatch(actions.AllCentersFetch(entities));
-    })
-    .catch((error) => {
-      toast.error("Some thing went wrong");
-    });
-};
+//   return await requestFromServer
+//     .getAllCeters()
+//     .then((response) => {
+//       const entities = response.data?.data;
+//       dispatch(actions.AllCentersFetch(entities));
+//     })
+//     .catch((error) => {
+//       toast.error("Some thing went wrong");
+//     });
+// };
 
-export const fetchAllSubCenter = (centerId) => async (dispatch) => {
-  return await requestFromServer
-    .getAllSubcenter(centerId)
-    .then((response) => {
-      const entities = response.data?.data;
-      dispatch(actions.AllSubCenterFetch(entities));
-    })
-    .catch((error) => {
-      toast.error("Some thing went wrong");
-    });
-};
+// export const fetchAllSubCenter = (centerId) => async (dispatch) => {
+//   return await requestFromServer
+//     .getAllSubcenter(centerId)
+//     .then((response) => {
+//       const entities = response.data?.data;
+//       dispatch(actions.AllSubCenterFetch(entities));
+//     })
+//     .catch((error) => {
+//       toast.error("Some thing went wrong");
+//     });
+// };
 
 export const fetchAllCountry = () => async (dispatch) => {
   return await requestFromServer
@@ -260,18 +260,7 @@ export const fetchAllCity = (cityId) => async (dispatch) => {
     });
 };
 
-export const fetchAllCityCenters = (cityId) => async (dispatch) => {
-  return await requestFromServer
-    .getCentersByCityId(cityId)
-    .then((response) => {
-      const entities = response.data?.data;
-      console.log("City Centers", entities);
-      dispatch(actions.AllCentersByCityIdFetch(entities));
-    })
-    .catch((error) => {
-      toast.error("something went wrong");
-    });
-};
+
 
 export const fetchStandByVehicles = (body) => async (dispatch) => {
   return await requestFromServer
@@ -308,40 +297,40 @@ export const updateVehicelStatus = (body) => async (dispatch) => {
     });
 };
 
-export const getLastTrips = (body) => async (dispatch) => {
-  return await requestFromServer
-    .getLastTrips(body)
-    .then((response) => {
-      // console.log("res", response);
-      dispatch(actions.lastTripsVehicles(response?.data?.data));
-    })
-    .catch((error) => {
-      toast.error("Something went wrong");
-    });
-};
+// export const getLastTrips = (body) => async (dispatch) => {
+//   return await requestFromServer
+//     .getLastTrips(body)
+//     .then((response) => {
+//       // console.log("res", response);
+//       dispatch(actions.lastTripsVehicles(response?.data?.data));
+//     })
+//     .catch((error) => {
+//       toast.error("Something went wrong");
+//     });
+// };
 
-export const updateTripLog = (payload) => async (dispatch) => {
-  return await requestFromServer
-    .updateTripLog(payload)
-    .then((response) => {
-      //console.log("response?.data?.data", response?.data?.data);
-      dispatch(actions.updateData(response?.data?.data));
-    })
-    .catch((error) => {
-      toast.error(error?.response?.data?.message);
-    });
-};
+// export const updateTripLog = (payload) => async (dispatch) => {
+//   return await requestFromServer
+//     .updateTripLog(payload)
+//     .then((response) => {
+//       //console.log("response?.data?.data", response?.data?.data);
+//       dispatch(actions.updateData(response?.data?.data));
+//     })
+//     .catch((error) => {
+//       toast.error(error?.response?.data?.message);
+//     });
+// };
 
-export const alaramTime = () => async (dispatch) => {
-  return await requestFromServer
-    .getAlaramTime()
-    .then((response) => {
-      dispatch(actions.AlaramTime(response?.data?.data));
-    })
-    .catch((error) => {
-      toast.error(error?.response?.data?.message);
-    });
-};
+// export const alaramTime = () => async (dispatch) => {
+//   return await requestFromServer
+//     .getAlaramTime()
+//     .then((response) => {
+//       dispatch(actions.AlaramTime(response?.data?.data));
+//     })
+//     .catch((error) => {
+//       toast.error(error?.response?.data?.message);
+//     });
+// };
 
 export const getLatestBookingNo = (bookingNo) => async (dispatch) => {
   return await requestFromServer

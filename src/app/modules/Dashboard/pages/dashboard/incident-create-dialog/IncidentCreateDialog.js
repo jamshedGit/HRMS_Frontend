@@ -3,8 +3,8 @@ import { Modal } from "react-bootstrap";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { IncidentEditForm } from "./IncidentEditForm";
 import { IncidentEditDialogHeader } from "./IncidentEditDialogHeader";
-import { useIncidentsUIContext } from "../../../../IncidentDetails/pages/incidents/IncidentsUIContext";
-import * as actions from "../../../../IncidentDetails/_redux/incidents/incidentActions";
+// import { useIncidentsUIContext } from "../../../../IncidentDetails/pages/incidents/IncidentsUIContext";
+// import * as actions from "../../../../IncidentDetails/_redux/incidents/incidentActions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { makeStyles } from "@material-ui/core/styles";
@@ -74,28 +74,28 @@ export function IncidentCreateDialog({
   // }, [incidentsUIContext]);
 
   const dispatch = useDispatch();
-  const {
-    actionsLoading,
-    incidentForEdit,
-    isuserForRead,
-    IncidentType,
-    incidentSeverity,
-    centers,
-    vehicleByCenterId,
-    vehiclesForDropdown,
-  } = useSelector(
-    (state) => ({
-      actionsLoading: state.incidentDetails.actionsLoading,
-      incidentForEdit: state.incidentDetails.incidentForEdit,
-      isuserForRead: state.incidentDetails.userForRead,
-      IncidentType: state.incidentDetails.incidentTypes,
-      incidentSeverity: state.incidentDetails.incidentSeverity,
-      centers: state.incidentDetails.centers,
-      vehicleByCenterId: state.incidentDetails.vehicleByCenterId,
-      vehiclesForDropdown: state.incidentDetails.vehiclesForDropdown,
-    }),
-    shallowEqual
-  );
+  // const {
+  //   actionsLoading,
+  //   incidentForEdit,
+  //   isuserForRead,
+  //   IncidentType,
+  //   incidentSeverity,
+  //   centers,
+  //   vehicleByCenterId,
+  //   vehiclesForDropdown,
+  // } = useSelector(
+  //   (state) => ({
+  //     actionsLoading: state.incidentDetails.actionsLoading,
+  //     incidentForEdit: state.incidentDetails.incidentForEdit,
+  //     isuserForRead: state.incidentDetails.userForRead,
+  //     IncidentType: state.incidentDetails.incidentTypes,
+  //     incidentSeverity: state.incidentDetails.incidentSeverity,
+  //     centers: state.incidentDetails.centers,
+  //     vehicleByCenterId: state.incidentDetails.vehicleByCenterId,
+  //     vehiclesForDropdown: state.incidentDetails.vehiclesForDropdown,
+  //   }),
+  //   shallowEqual
+  // );
 
   // Enable Loading
   const enableLoading = () => {

@@ -12,7 +12,7 @@ import { fetchAllCountry } from "../../../../../_metronic/redux/dashboardActions
 import {
   fetchUserStatusTypes,
   fetchRoles,
-  fetchCenters,
+
 } from "../../_redux/religionActions";
 
 
@@ -25,14 +25,14 @@ export function ReligionPage({ history }) {
     newBankButtonClick: () => {
       dispatch(fetchAllCountry());
       dispatch(fetchRoles());
-      dispatch(fetchCenters());
+  
       dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
       history.push("/religion/read-all-religion/new");
     },
     openEditBankDialog: (id) => {
       dispatch(fetchAllCountry());
       dispatch(fetchRoles());
-      dispatch(fetchCenters());
+   
       dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
       history.push(`/religion/read-all-religion/${id}/edit`);
     },

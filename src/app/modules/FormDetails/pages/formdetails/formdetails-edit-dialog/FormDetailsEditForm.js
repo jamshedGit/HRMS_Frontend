@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import {
   fetchAllCity,
-  fetchAllCityCenters,
   fetchAllSubCenter,
   getLatestBookingNo,
   fetchAllFormsMenu

@@ -8,7 +8,7 @@ import {
 } from "../../../../../../_metronic/_partials/controls"
 import { BanksTable } from "../salarypolicy-table/BanksTable"
 import { useBanksUIContext } from "../BanksUIContext"
-import { BanksFilter } from "../salarypolicy-filter/BanksFIlter"
+// import { BanksFilter } from "../salarypolicy-filter/BanksFIlter"
 import { useSelector, shallowEqual } from "react-redux"
 
 export function BanksCard() {
@@ -37,7 +37,7 @@ export function BanksCard() {
 
       <Card>
         <CardHeader title="">
-          <BanksFilter />
+          {/* <BanksFilter /> */}
           <CardHeaderToolbar>
             {accessUser ? (
               <button

@@ -7,7 +7,7 @@ import { useBanksUIContext } from "../BanksUIContext"
 import * as actions from "../../../_redux/salarypolicyActions"
 
 export function BankEditDialog({ id, show, onHide }) {
-  const title = "BankEditDialog"
+  const title = "SalarypolicyEditDialog"
   const banksUIContext = useBanksUIContext()
   const usersUIProps = useMemo(() => {
     return {
@@ -21,7 +21,7 @@ export function BankEditDialog({ id, show, onHide }) {
     (state) => ({
 
       actionsLoading: state.users.actionsLoading,
-      userForEdit: state.receipt.userForEdit,
+      userForEdit: state.salarypolicy.userForEdit,
       roles: state.users.roles,
       centers: state.users.centers,
     }),

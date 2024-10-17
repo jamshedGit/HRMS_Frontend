@@ -54,7 +54,7 @@ export const salarypolicySlice = createSlice({
 
          //get User By ID
          SalarypolicyFetchedForEdit: (state, action) => {
-            console.log("get user detail from receipt slice")
+          
             console.log(action);
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
