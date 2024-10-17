@@ -19,12 +19,12 @@ export function FormPage({ history }) {
   const dispatch = useDispatch();
   const FormUIEvents = {
     newFormButtonClick: () => {
-      dispatch(fetchAllCountry());
+      // dispatch(fetchAllCountry());
 
       history.push("/tax_slab/read-all-tax-slab/new");
     },
     openEditFormDialog: (id) => {
-      dispatch(fetchAllCountry());
+      // dispatch(fetchAllCountry());
 
       history.push(`/tax_slab/read-all-tax-slab/${id}/edit`);
     },

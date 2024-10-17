@@ -53,7 +53,6 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     user: state.users, // change for users to receipt
     userForEdit: state.tax_slab.userForEdit,
     roles: state.users.roles,
-    centers: state.users.centers,
     userStatusTypes: state.users.userStatusTypes,
     isuserForRead: state.tax_slab.userForRead,
   }));

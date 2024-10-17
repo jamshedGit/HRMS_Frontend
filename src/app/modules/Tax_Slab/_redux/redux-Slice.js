@@ -20,7 +20,7 @@ export const callTypes = {
 };
 
 export const tax_slabSlice = createSlice({
-    name: "salarypolicy",
+    name: "tax_slab",
     initialState: initialSalarypolicyState,
     reducers: {
         catchError: (state, action) => {
@@ -41,9 +41,9 @@ export const tax_slabSlice = createSlice({
         },
         salarypolicyFetched: (state, action) => {
             // console.log(action)
-            console.log("salary policyuser slice",action.payload)
+    
             const entities = action.payload.data?.data.rows;
-            console.log("ent salary policyuser slice",entities)
+           
             const totalResult = action.payload.data?.data.totalResults;
             console.log(entities);
             state.listLoading = false;
@@ -54,7 +54,7 @@ export const tax_slabSlice = createSlice({
 
          //get User By ID
          SalarypolicyFetchedForEdit: (state, action) => {
-            console.log("get user detail from receipt slice")
+           
             console.log(action);
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;

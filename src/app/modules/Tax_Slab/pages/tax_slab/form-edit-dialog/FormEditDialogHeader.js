@@ -10,7 +10,7 @@ export function FormEditDialogHeader({ id, isUserForRead }) {
   const { userForEdit, actionsLoading } = useSelector(
     
     (state) => ({
-      userForEdit: state.receipt.userForEdit,
+      userForEdit: state.tax_slab.userForEdit,
       actionsLoading: state.users.actionsLoading,
     }),
     shallowEqual
