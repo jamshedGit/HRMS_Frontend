@@ -45,7 +45,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     user,
     userForEdit,
     roles,
-    centers,
+ 
     userStatusTypes,
     isuserForRead,
   } = useSelector((state) => ({
@@ -87,7 +87,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     } else {
  
      
-      console.log("salary policy getUserStatus", user);
+      console.log("loan management getUserStatus", user);
  
       const formUpdatedFields = {
         Id: user.Id,
@@ -96,7 +96,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         human_resource_role: user.human_resource_role,
         emp_loan_account: user.emp_loan_account,
         installment_deduction_percentage: user.installment_deduction_percentage,
-        installment_deduction_basis_type: user.type,
+        installment_deduction_basis_type: user.installment_deduction_basis_type,
         details: user.details
         // loan_type: user.loan_type,
         // max_loan_amount: user.max_loan_amount,

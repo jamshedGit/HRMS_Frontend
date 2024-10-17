@@ -6,7 +6,6 @@ const initialSalarypolicyState = {
     totalCount: 0,
     entities: null,
     roles: null,
-    centers: null,
     userStatusTypes: null,
     userForEdit: undefined,
     lastError: null,
