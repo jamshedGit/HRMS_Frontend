@@ -14,10 +14,10 @@ import {
 } from "../../../../../../_metronic/_helpers";
 import * as uiHelpers from "../FormUIHelpers";
 import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatter";
-import { Input, Pagination } from "../../../../../../_metronic/_partials/controls";
+import { Input, Pagination, Select } from "../../../../../../_metronic/_partials/controls";
 import { useFormUIContext } from "../FormUIContext";
 import { DatetimeColumnFormatter } from "../../../../Dashboard/pages/dashboard/last-trips-vehicles-table/column-formatter/CreatedColumnFormatter";
-import { fetchAllFormsMenu } from "../../../../../../_metronic/redux/dashboardActions";
+import { fetchAllActiveEmployeesSalaryForDDL, fetchAllFormsMenu } from "../../../../../../_metronic/redux/dashboardActions";
 import { Formik, Field } from "formik";
 import { Form, Modal } from "react-bootstrap";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
@@ -59,8 +59,9 @@ export function FormTable(user
 
   const { dashboard } = useSelector((state) => state);
   const [defSubsidiary = null, setDefualtSubsidiaryList] = useState(null);
+  const [defEmployee = null, setEmployeeDefault] = useState(null);
   //totalCount = 10
-
+  const [defPayrollGroupId = null, setDefaultPayrollGroup] = useState(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -82,7 +83,8 @@ export function FormTable(user
     if (!user.deptId) {
 
       dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsisidaries
-      // dispatch(fetchAllFormsMenu(87));
+      dispatch(fetchAllActiveEmployeesSalaryForDDL(null));
+      dispatch(fetchAllFormsMenu(127, "allChildMenus")); // For Payroll Group
     }
   }, [dispatch]);
 
@@ -99,6 +101,29 @@ export function FormTable(user
 
   }, [user?.subsidiaryId, dashboard.subsidiaryId]);
 
+
+  useEffect(() => {
+    const payroll_groupId = defPayrollGroupId?.value ? defPayrollGroupId.value : user.payroll_groupId;
+    setDefaultPayrollGroup(
+      dashboard.allChildMenus &&
+      dashboard.allChildMenus.filter((item) => {
+        return item.value === payroll_groupId;
+      })
+    );
+
+  }, [user?.payroll_groupId, dashboard.payroll_groupId]);
+
+  useEffect(() => {
+    const payroll_approverId = user.payroll_approverId; // defEmployee?.value ? defEmployee.value : user.employeeId;
+
+    setEmployeeDefault(
+      dashboard.allEmployeesSalaryDDL &&
+      dashboard.allEmployeesSalaryDDL.filter((item) => {
+        return item.value === payroll_approverId;
+      })
+    );
+
+  }, [user?.payroll_approverId, dashboard.payroll_approverId]);
 
 
   // Table columns
@@ -269,7 +294,6 @@ export function FormTable(user
                     <SearchSelect
                       name="subsidiaryId"
                       label={<span> Subsidiary<span style={{ color: 'red' }}>*</span></span>}
-
                       onBlur={() => {
                         // handleBlur({ target: { name: "countryId" } });
                       }}
@@ -288,18 +312,17 @@ export function FormTable(user
                   </div>
 
                   <div className="col-12 col-md-4 mt-3">
-                 
-                    <SearchSelect
+
+                    <Select
                       className="form-control"
                       name="payroll_templateId"
                       placeholder="Filter by Status"
-                      label= {<span> Payroll Template</span>}
+                      label={<span> Payroll Template</span>}
                       onChange={(e) => {
                         setFieldValue("payroll_templateId", e.target.value);
                         handleSubmit();
                       }}
                       onBlur={handleBlur}
-                     
                     >
                       <option value="-1">--Select--</option>
                       <option value="1">Payroll Type-Period Name-Subsidiary</option>
@@ -308,7 +331,7 @@ export function FormTable(user
                       <option value="4">Subsidiary-Payroll Type-Period Name</option>
                       <option value="5">Period Name-Subsidiary-Payroll Type</option>
                       <option value="6">Period Name-Payroll Type-Subsidiary</option>
-                    </SearchSelect>
+                    </Select>
 
                   </div>
 
@@ -319,6 +342,47 @@ export function FormTable(user
                       placeholder="Employee Unique ID"
                       label={<span> Employee Unique ID<span style={{ color: 'red' }}>*</span></span>}
                       autoComplete="off"
+                    />
+                  </div>
+
+                  <div className="col-12 col-md-4 mt-3">
+                    <SearchSelect
+                      name="payroll_approverId"
+                      label={<span> Payroll Approver<span style={{ color: 'red' }}>*</span></span>}
+                      onBlur={() => {
+                        // handleBlur({ target: { name: "countryId" } });
+                      }}
+                      onChange={(e) => {
+                        setFieldValue("payroll_approverId", e.value || null);
+                        setEmployeeDefault(e);
+                        //handlePaymenModeChanged(e)
+                      }}
+
+                      value={(defEmployee || null)}
+                      error={errors.payroll_approverId}
+                      touched={touched.payroll_approverId}
+                      options={dashboard.allEmployeesSalaryDDL}
+                    />
+
+                  </div>
+
+                  <div className="col-12 col-md-4 mt-3">
+                    <SearchSelect
+                      name="payroll_groupId"
+                      label={<span> Payroll Group<span style={{ color: 'red' }}>*</span></span>}
+                      // isDisabled={isUserForRead}
+                      onBlur={() => {
+                        // handleBlur({ target: { name: "countryId" } });
+                      }}
+                      onChange={(e) => {
+                        setFieldValue("payroll_groupId", e.value || null);
+                        setDefaultPayrollGroup(e);
+                        // dispatch(fetchAllFormsMenu(e.value));
+                      }}
+                      value={(defPayrollGroupId || null)}
+                      error={errors.payroll_groupId}
+                      touched={touched.payroll_groupId}
+                      options={dashboard.allChildMenus}
                     />
                   </div>
                 </div>
