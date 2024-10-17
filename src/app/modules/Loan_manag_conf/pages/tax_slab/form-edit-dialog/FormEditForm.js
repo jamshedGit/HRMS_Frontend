@@ -55,7 +55,7 @@ export function FormEditForm({
     if (!user.Id) {
       dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsidiaries
       dispatch(fetchAllFormsMenu(45, "allAccountList")); // For All Accounts
-      dispatch(fetchAllFormsMenu(179, "allLoanTypeList")); // For All Loan Types
+      dispatch(fetchAllFormsMenu(181, "allLoanTypeList")); // For All Loan Types
       dispatch(fetchAllHumanResourceRole("allHumanResourceRoleList"));
     }
   }, [dispatch, user.Id]);

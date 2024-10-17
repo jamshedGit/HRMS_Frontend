@@ -25,7 +25,7 @@ export function FormCard() {
    
     (state) => ({
       
-      userAccess: state.auth.userAccess.tax_slab,
+      userAccess: state.auth.userAccess.loan_management_configuration,
     }),
     shallowEqual
   )
@@ -37,7 +37,7 @@ export function FormCard() {
   const { currentState } = useSelector(
     (state) => {  console.log("state ",state); return {
       
-      currentState: state.tax_slab,
+      currentState: state.loan_management_configuration,
       userAccess: state?.auth?.userAccess["loan_management_configuration"],
     }},
     shallowEqual

@@ -10,22 +10,15 @@ export const fetchSalarypolicies = (queryparm) => async (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.list }));
   console.log("test query param", queryparm)
   return requestFromServer.getAllSalarypolicy(queryparm)
-    // .getAllReceipts({
-    //   filter: {
-    //     searchQuery: ""
-    //   },
-    //   sortBy: "receiptNo",
-    //   limit: 10,
-    //   page: 1
-    // })
+
     .then((response) => {
-      //  console.log("user action receipt fetched 321")
-      console.log("response loan_management_configuration", response)
+   
+  
       dispatch(actions.salarypolicyFetched(response));
     })
     .catch((error) => {
       //console.log("Can't find user", error)
-      error.clientMessage = "Can't find receipts";
+      error.clientMessage = "Can't find ";
       dispatch(actions.catchError({ error, callType: callTypes.list }));
     });
 };
