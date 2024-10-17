@@ -7,7 +7,7 @@ import { DropdownCustomToggler } from "../../dropdowns";
 import {
   updateVehicelStatus,
   fetchDashboardVehicles,
-  getLastTrips,
+  // getLastTrips,
 } from "../../../redux/dashboardActions";
 import { useDispatch } from "react-redux";
 import { getDate, getTime, getCurrentTime } from "../../../../app/utils/common";
@@ -102,7 +102,7 @@ export function TilesWidget1({
         pageSize: 20,
         pageNumber: 1,
       };
-      dispatch(getLastTrips(body));
+      // dispatch(getLastTrips(body));
       setOpen(true);
     };
 

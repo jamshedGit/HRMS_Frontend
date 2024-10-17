@@ -73,11 +73,11 @@ export function BankEditForm({
         try {
           console.log("User:", user);
           if (user.earningCode === '') {
-            const response = await dispatch(getLatestTableId("t_employee_earning", "E-000"));
+            // const response = await dispatch(getLatestTableId("t_employee_earning", "E-000"));
 
-            // Assuming response[0].Id is the correct way to access the ID
-            console.log("Response:", response[0]?.Id);
-            setDefaultEarningCode(response[0]?.Id);
+            // // Assuming response[0].Id is the correct way to access the ID
+            // console.log("Response:", response[0]?.Id);
+            // setDefaultEarningCode(response[0]?.Id);
           }
         } catch (error) {
           console.error("Error fetching data:", error);

@@ -120,9 +120,9 @@ export const bankSlice = createSlice({
             state.error = null;
             state.userStatusTypes = entities;
         },
-        donationReportFetch: (state, action) => {
-            state.donationReportFetch = action.payload;
-        },
+        // donationReportFetch: (state, action) => {
+        //     state.donationReportFetch = action.payload;
+        // },
         MaxIdFetchForReceipt: (state, action) => {
             state.donationReportFetch = action.payload;
         },

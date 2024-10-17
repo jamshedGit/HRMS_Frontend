@@ -13,14 +13,14 @@ import { incidentTypes } from "./modules/Dashboard/_redux/dashboardActions";
 const SettingsPage = lazy(() =>
   import("./modules/Settings/pages/SettingsPage")
 );
-const VehicleManagment = lazy(() => import("./modules/Vehicles/pages"));
-const IncidentDetailsManagment = lazy(() =>
-  import("./modules/IncidentDetails/pages")
-);
+// const VehicleManagment = lazy(() => import("./modules/Vehicles/pages"));
+// const IncidentDetailsManagment = lazy(() =>
+//   import("./modules/IncidentDetails/pages")
+// );
 const UserManagment = lazy(() => import("./modules/UserMangement/pages"));
-const Centers = lazy(() => import("./modules/Centers/pages"));
-const IBSModule = lazy(() => import("./modules/IBS/pages/index"));
-const EDRSModule = lazy(() => import("./modules/EDRS/pages/index"));
+// const Centers = lazy(() => import("./modules/Centers/pages"));
+// const IBSModule = lazy(() => import("./modules/IBS/pages/index"));
+// const EDRSModule = lazy(() => import("./modules/EDRS/pages/index"));
 const BankModule = lazy(() => import("./modules/Banks/pages/index"));
 const BranchModule = lazy(() => import("./modules/BankBranch/pages/index"));
 const DepartmenModule = lazy(() => import("./modules/Department/pages/index"));
@@ -64,16 +64,17 @@ const OnetimeAllowance = lazy(() => import("./modules/Onetime_Allowance/pages/in
 const LoanType = lazy(() => import("./modules/LoanType/pages/index"));
 const TaxSlab = lazy(() => import("./modules/LoanType/pages/index"));
 const leaveManagementConfiguration = lazy(() => import("./modules/leaveManagementConfiguration/pages/index"));
-   
+const PayrollProcessPolicy = lazy(() => import("./modules/Payroll_Process_Policy/pages/index"));
+    
 
 const ROUTES = {
   settings: SettingsPage,
   users: UserManagment,
-  centers: Centers,
-  vehicles: VehicleManagment,
-  incidentdetails: IncidentDetailsManagment,
-  ibs: IBSModule,
-  edrs: EDRSModule,
+
+  // vehicles: VehicleManagment,
+  // incidentdetails: IncidentDetailsManagment,
+  // ibs: IBSModule,
+  // edrs: EDRSModule,
   bank: BankModule,
   branch:BranchModule,
   department:DepartmenModule,
@@ -114,14 +115,16 @@ const ROUTES = {
   final_settlement_policy :FinalSettlementPolicyModule,
   salarypolicy:salarypolicyModule,
   onetime_earning: OnetimeAllowance,
-  tax_slab: TaxSlab,
-  leave_management_configuration: leaveManagementConfiguration
+  leave_management_configuration: leaveManagementConfiguration,
+  loan_type: LoanType,
+  tax_slab: TaxSlab  ,
+  payroll_process_policy :PayrollProcessPolicy
 };
 
 export default function BasePage() {
   const dispatch = useDispatch();
   dispatch(fetchAllCountry());
-  dispatch(incidentTypes());
+  
   const auth = useSelector(({ auth }) => auth, shallowEqual);
   const UserAccess = auth?.userAccess;
   const SettingsAccess = auth?.userAccess?.Settings;
@@ -131,7 +134,7 @@ export default function BasePage() {
   return (
     <Suspense fallback={<LayoutSplashScreen />}>
       <Switch>
-        <Route path='vehicles/read-all-vehicles' component={VehicleManagment} />
+        {/* <Route path='vehicles/read-all-vehicles' component={VehicleManagment} /> */}
         {Object.keys(UserAccess).map((access, key) => {
           const accessName = access.replace(/ /g, "").toLowerCase();
           const path = access

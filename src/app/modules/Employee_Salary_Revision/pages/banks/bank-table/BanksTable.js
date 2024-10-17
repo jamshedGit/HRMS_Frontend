@@ -285,10 +285,10 @@ export function BanksTable(save_salary_revision,
   const fnAddNewRevision = (ele, setFieldValue) => {
 
     setReviewDropdownDisabled(true);
-   
+
     setFieldValue("empSalaryReviewHist", null);
     setdefReviewDateDDL(null); // Reset the dropdown value
-    console.log("review ddl",defReviewDropdownDisabled)
+    console.log("review ddl", defReviewDropdownDisabled)
     setReviewDateFlag(false);
 
   }
@@ -340,8 +340,6 @@ export function BanksTable(save_salary_revision,
   const isAccessForDelete = userAccess?.find(
     (item) => item.componentName === "DeleteEmployeeSalary"
   );
-
-
 
 
   useEffect(() => {
@@ -605,9 +603,7 @@ export function BanksTable(save_salary_revision,
       ...salObj
     }))
 
-    // const newObjList = [...oldList, ...newList];
-    console.log("oldlist", oldList);
-    console.log("newList", newList);
+    
 
     //console.log("newObj",newObjList)
 
@@ -755,15 +751,9 @@ export function BanksTable(save_salary_revision,
 
           if (values.empSalaryReviewHist) {
             const t = new Date(formatDate(values.empSalaryReviewHist))
-            console.log("time", t)
-            console.log("t2")
-            values.reviewDate = t; //(new Date(values.empSalaryReviewHist).toLocaleString())//new Date(values.empSalaryReviewHist).toLocaleString()
+          
           }
-          else {
-            console.log("t1")
-          }
-          console.log("values", values, defNew_MapEarningDeductionList);
-          //  enableLoading();
+        
           fnSaveSalaryRevision([values], defOld_MapEarningDeductionList, defNew_MapEarningDeductionList);
 
         }}

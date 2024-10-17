@@ -10,7 +10,7 @@ export function BankEditDialogHeader({ id, isUserForRead }) {
   const { userForEdit, actionsLoading } = useSelector(
     
     (state) => ({
-      userForEdit: state.receipt.userForEdit,
+      userForEdit: state.bank.userForEdit,
       actionsLoading: state.users.actionsLoading,
     }),
     shallowEqual

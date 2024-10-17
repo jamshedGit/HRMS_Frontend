@@ -10,7 +10,7 @@ import DatePicker from "react-datepicker";
 import {
   fetchAllBanks,
   fetchAllCity,
-  fetchAllCityCenters,
+
   fetchAllSubCenter,
   getLatestBookingNo,
 } from "../../../../../../_metronic/redux/dashboardActions";
@@ -210,7 +210,7 @@ export function BranchEditForm({
                         onChange={(e) => {
                           setFieldValue("cityId", e.value);
                           setDefaultCity(e);
-                          dispatch(fetchAllCityCenters(e.value));
+                      
                         }}
                         value={defCity}
                         error={errors.cityId}

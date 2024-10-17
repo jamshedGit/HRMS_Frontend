@@ -67,7 +67,7 @@ export function BanksFilter({ listLoading, user, setCity,
     if (cityId) {
 
       console.log("city id drop", cityId);
-      dispatch(fetchAllCityCenters(cityId));
+    
     }
   }, [cityId, dispatch]);
 
