@@ -9,14 +9,9 @@ import { usersSlice } from "../app/modules/UserMangement/_redux/usersSlice";
 import { specificationsSlice } from "../app/modules/ECommerce/_redux/specifications/specificationsSlice";
 import { rolesSlice } from "../app/modules/Settings/_redux/roles/rolesSlice";
 
-// import { vehiclesSlice } from "../app/modules/Vehicles/_redux/vehiclesSlice";
-//import { incidentSlice } from "../app/modules/IncidentDetails/_redux/incidents/incidentSlice";
-// import { TriplogSlice } from "../app/modules/IncidentDetails/_redux/triplogs/triplogSlice";
+
 import { dashboardSlice } from "../app/modules/Dashboard/_redux/dashboardSlice";
-// import { infoSlice } from "../app/modules/IBS/_redux/info-personal/infoSlice";
-// import { mortuarySlice } from "../app/modules/IBS/_redux/mortuary/reduxSlice";
-// import { coffinSlice } from "../app/modules/IBS/_redux/coffin/reduxSlice";
-// import { receiptSlice } from "../app/modules/EDRS/_redux/receiptSlice"
+
 import { bankSlice } from "../app/modules/Banks/_redux/bankSlice";
 
 import { tax_slabSlice } from "../app/modules/Tax_Slab/_redux/redux-Slice";
@@ -73,13 +68,6 @@ export const rootReducer = combineReducers({
   users: usersSlice.reducer,
   roles: rolesSlice.reducer,
 
-  // vehicles: vehiclesSlice.reducer,
-  //incidentDetails: incidentSlice.reducer,
-  // triplogs: TriplogSlice.reducer,
-  // personalInformation: infoSlice.reducer,
-  // mortuary: mortuarySlice.reducer,
-  // coffin: coffinSlice.reducer,
-  // receipt: receiptSlice.reducer,
   bank: bankSlice.reducer,
   branch: branchSlice.reducer,
   dept: deptSlice.reducer,

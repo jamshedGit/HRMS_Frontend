@@ -72,11 +72,6 @@ export function FormEditForm({
 
   const { entities } = currentState;
 
-  const clear_Existed_Data = () => {
-    console.log("click state for clear data loan_management_configuration", currentState);
-
-
-  };
   
 
   let existedId = 0;
@@ -134,6 +129,10 @@ export function FormEditForm({
                         ) || null
                       }
                       options={dashboard.allSubidiaryList}
+                      // options={dashboard.allSubidiaryList.map(option => ({
+                      //   label: `${option.label} (${option.value})`, // Adding the value to the label
+                      //   value: option.value,
+                      // }))}
                       error={errors.subsidiaryId}
                       touched={touched.subsidiaryId}
                     />
@@ -157,7 +156,11 @@ export function FormEditForm({
                           (option) => option.value === values.accountId
                         ) || null
                       }
-                      options={dashboard.allAccountList}
+                      // options={dashboard.allAccountList}
+                      options={dashboard.allAccountList.map(option => ({
+                        label: `${option.label} (${option.code})`, // Adding the value to the label
+                        value: option.value,
+                      }))}
                       error={errors.accountId}
                       touched={touched.accountId}
                     />
@@ -217,7 +220,11 @@ export function FormEditForm({
                           (option) => option.value === values.emp_loan_account
                         ) || null
                       }
-                      options={dashboard.allAccountList}
+                      // options={dashboard.allAccountList}
+                      options={dashboard.allAccountList.map(option => ({
+                        label: `${option.label} (${option.code})`, // Adding the value to the label
+                        value: option.value,
+                      }))}
                       error={errors.accountId}
                       touched={touched.accountId}
                     />
