@@ -160,17 +160,36 @@ export function FormEditForm({
 
                   {/* Employee Loan Account Field */}
                   <div className="col-12 col-md-6 mt-3">
-                    <Field
+                    {/* <Field
                       name="emp_loan_account"
                       component={Input}
                       placeholder="Enter employee loan account"
                       label="Employee Loan Account"
                       type="number"
                       disabled={isUserForRead}
+                    /> */}
+
+                    <SearchSelect
+                      name="emp_loan_account"
+                      label={
+                        <span>
+                          Employee Loan Account
+                          <span style={{ color: "red" }}>*</span>
+                        </span>
+                      }
+                      isDisabled={isUserForRead}
+                      onChange={(e) => {
+                        setFieldValue("emp_loan_account", e.value || null);
+                      }}
+                      value={
+                        dashboard.allAccountList.find(
+                          (option) => option.value === values.emp_loan_account
+                        ) || null
+                      }
+                      options={dashboard.allAccountList}
+                      error={errors.accountId}
+                      touched={touched.accountId}
                     />
-                    {/* {errors.emp_loan_account && touched.emp_loan_account && (
-                      <div className="text-danger">{errors.emp_loan_account}</div>
-                    )} */}
                   </div>
 
                   {/* Installment Deduction Percentage Field */}
@@ -282,11 +301,8 @@ export function FormEditForm({
                                   >
                                     Delete
                                   </button>
-
-                                  
                                 )}
                               </td>
-                              
 
                               <td>
                                 <Field
@@ -295,8 +311,8 @@ export function FormEditForm({
                                   className="form-control"
                                   disabled={isUserForRead}
                                 >
-                                  <option value="">Select Loan Type</option>
-                                  {dashboard.allLoanTypeList?.map(
+                                  {/* <option value="">Select Loan Type</option> */}
+                                  {/* {dashboard.allLoanTypeList?.map(
                                     (loanType) => (
                                       <option
                                         key={loanType.value}
@@ -305,7 +321,12 @@ export function FormEditForm({
                                         {loanType.label}
                                       </option>
                                     )
-                                  )}
+                                  )} */}
+
+{
+                                dashboard.allLoanTypeList?.map((x) => {
+                                  return <option disabled={values.details.find(el => el.loan_typeId == x.value) ? true : false} value={x.value}> {x.label} </option>
+                                })}
                                 </Field>
                                 {errors.details?.[index]?.loan_typeId &&
                                   touched.details?.[index]?.loan_typeId && (

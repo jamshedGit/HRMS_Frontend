@@ -41,6 +41,6 @@ export function deleteSalarypolicy(body) {
 
 //Read current month 
 export function getCurrentMonth() {
-  console.log("getCurrentMonth ");
+  console.log("getCurrentMonth date salarypolicy ");
   return axios.get(`${USERS_URL}/salarypolicy/read-currentmonth`);
 }

@@ -159,7 +159,7 @@ export const getCurrentMonth = () => (dispatch) => {
     .getCurrentMonth()
     .then((response) => {
 
-
+console.log("getCurrentMonth date salarypolicy response",response)
       dispatch(actions.CurrentMonthFetched({ response }));
     })
     .catch((error) => {
