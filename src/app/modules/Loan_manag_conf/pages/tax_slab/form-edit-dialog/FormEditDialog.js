@@ -69,7 +69,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     dispatch(actions.fetchSalarypolicy(id));
  
     // dispatch(actions.fetchSalarypolicy(formUIProps .queryParams))
-  }, [id, dispatch]);
+  }, [id, dispatch,show]);
  
  
   const saveForm = async (user) => {
@@ -94,7 +94,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
 
     }
  
-    if (!id) {
+    if (!user.Id) {
  
  
       const finalObject = { user }

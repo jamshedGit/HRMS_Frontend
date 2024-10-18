@@ -3,7 +3,8 @@ import { Modal } from "react-bootstrap";
 import { Formik, Form, Field, FieldArray } from "formik";
 import * as Yup from "yup";
 import { Input } from "../../../../../../_metronic/_partials/controls"; // Adjust import as needed
-import { useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import * as actions from "../../../_redux/redux-Actions";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import {
   fetchAllFormsMenu,
@@ -59,9 +60,38 @@ export function FormEditForm({
     { value: 0, label: "Gross" },
     { value: 1, label: "Basic" },
   ];
-  useEffect(() => {
-    console.log("user is present", user);
-  }, [user]);
+
+  const { currentState, userAccess } = useSelector((state) => {
+    console.log("state for clear data ", state);
+    return {
+      currentState: state.loan_management_configuration,
+      userAccess: state?.auth?.userAccess["loan_management_configuration"],
+     
+    };
+  }, shallowEqual);
+
+  const { entities } = currentState;
+
+  const clear_Existed_Data = () => {
+    console.log("click state for clear data loan_management_configuration", currentState);
+
+
+  };
+  
+
+  let existedId = 0;
+  const check_Existed_Data = (subsidiaryId) => {
+    entities.forEach((i) => {
+      if (i.subsidiaryId == subsidiaryId) {
+        existedId = i.Id;
+        console.log("update api hit");
+        dispatch(actions.fetchSalarypolicy(existedId));
+      }else{
+        dispatch(actions.fetchSalarypolicy(0));
+      }
+    });
+  };
+
   return (
     <Formik
       enableReinitialize={true}
@@ -69,7 +99,7 @@ export function FormEditForm({
       validationSchema={loanManagementSchema}
       onSubmit={(values) => {
         console.log("Form Values: updated", values);
-        // enableLoading();
+        enableLoading();
         saveForm(values);
       }}
     >
@@ -96,6 +126,7 @@ export function FormEditForm({
                       isDisabled={isUserForRead}
                       onChange={(e) => {
                         setFieldValue("subsidiaryId", e.value || null);
+                        check_Existed_Data(e.value);
                       }}
                       value={
                         dashboard.allSubidiaryList.find(
@@ -323,10 +354,23 @@ export function FormEditForm({
                                     )
                                   )} */}
 
-{
-                                dashboard.allLoanTypeList?.map((x) => {
-                                  return <option disabled={values.details.find(el => el.loan_typeId == x.value) ? true : false} value={x.value}> {x.label} </option>
-                                })}
+                                  {dashboard.allLoanTypeList?.map((x) => {
+                                    return (
+                                      <option
+                                        disabled={
+                                          values.details.find(
+                                            (el) => el.loan_typeId == x.value
+                                          )
+                                            ? true
+                                            : false
+                                        }
+                                        value={x.value}
+                                      >
+                                        {" "}
+                                        {x.label}{" "}
+                                      </option>
+                                    );
+                                  })}
                                 </Field>
                                 {errors.details?.[index]?.loan_typeId &&
                                   touched.details?.[index]?.loan_typeId && (
@@ -423,6 +467,8 @@ export function FormEditForm({
               <button
                 type="button"
                 onClick={onHide}
+                // onClick={() => clear_Existed_Data()}
+                
                 className="btn btn-light btn-elevate"
               >
                 Cancel
