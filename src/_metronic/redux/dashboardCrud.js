@@ -83,7 +83,6 @@ export const getAllDepartments = async (Id) => {
 };
 
 export const getAllFormMenus = async (Id) => {
-  console.log("eee:", Id);
   return await axios.post(`${USERS_URL}/settings/read-all-form`, {
     Id: Id,
   });

@@ -8,6 +8,7 @@ import * as actions from "../../../_redux/formActions";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useFormUIContext } from "../FormUIContext";
+import { fetchAllFormsMenu } from "../../../../../../_metronic/redux/dashboardActions";
 
 export function FormEditDialog({ id, show, onHide, userForRead }) {
   const [loading, setLoading] = useState(false);
@@ -30,20 +31,28 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   const dispatch = useDispatch();
   const {
     userForEdit,
+    dashboard
   } = useSelector((state) => ({
     userForEdit: state.leave_management_configuration.userForEdit,
+    dashboard: state.dashboard
   }
   ));
 
   //Fetch record to edit on dialog load
   useEffect(() => {
-    dispatch(actions.fetchEditRecord(id));
+    // dispatch(actions.fetchEditRecord(id));
+    if (!dashboard?.allEmployeeGradeList || !dashboard?.allEmployeeGradeList?.length)
+      dispatch(fetchAllFormsMenu(143, "allEmployeeGradeList"));
+    if (!dashboard?.allEmpTypeChildMenus || !dashboard?.allEmpTypeChildMenus?.length)
+      dispatch(fetchAllFormsMenu(88, "allEmpTypeChildMenus"));
+    if (!dashboard?.allSubidiaryList || !dashboard?.allSubidiaryList?.length)
+      dispatch(fetchAllFormsMenu(133, "allSubidiaryList"));
   }, [id, dispatch]);
 
   //Create or Update record according to values from dialog
   const submitForm = (values) => {
     //Converting Type to Number format for server
-    dispatch(actions.saveRecord({...values, type: Number(values.type)}, id, disbaleLoading, onHide))
+    dispatch(actions.saveRecord({ ...values, type: Number(values.type) }, id, disbaleLoading, onHide))
   }
 
   return (
