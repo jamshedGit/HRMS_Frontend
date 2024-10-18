@@ -65,7 +65,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
  
  
   useEffect(() => {
-    console.log("fetch loan",id);
+    console.log("fetch loan show",show,id);
     dispatch(actions.fetchSalarypolicy(id));
  
     // dispatch(actions.fetchSalarypolicy(formUIProps .queryParams))
