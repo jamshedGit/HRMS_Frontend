@@ -41,8 +41,8 @@ export async function getTypeDropdownData(id) {
  * @param {String|Number} id 
  * @returns 
  */
-export function getleaveManagementConfigurationSetupById(id) {
-  return axios.get(`${USERS_URL}/leave_management_configuration/read-leave-type/${id}`);
+export function getleaveManagementConfigurationSetupById(payload) {
+  return axios.post(`${USERS_URL}/leave_management_configuration/read-leave-management-configuration`,payload);
 }
 
 /**
@@ -65,4 +65,26 @@ export function updateleaveManagementConfigurationSetup(body) {
  */
 export function deleteleaveManagementConfigurationSetup(id) {
   return axios.delete(`${USERS_URL}/leave_management_configuration/delete-leave-management-configuration/${id}`);
+}
+
+/**
+ *
+ * Delete Single Leave Type Policy By Id
+ *  
+ * @param {Object} body 
+ * @returns 
+ */
+export function deletleaveTypePolicySetup(id) {
+  return axios.delete(`${USERS_URL}/leave_management_configuration/delete-leave-type-policy/${id}`);
+}
+
+/**
+ *
+ * Delete Single Leave Type Salary Deduction Policy By Id
+ *  
+ * @param {Object} body 
+ * @returns 
+ */
+export function deletleaveTypeDeductionPolicySetup(id) {
+  return axios.delete(`${USERS_URL}/leave_management_configuration/delete-leave-type-salary-deduction-policy/${id}`);
 }

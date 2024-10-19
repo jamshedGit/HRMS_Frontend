@@ -30,7 +30,9 @@ export function FormUIProvider({ FormUIEvents, children }) {
     employeeTypeId: "",
     gradeId: "",
     weekend: [],
-    isSandwich: false
+    isSandwich: false,
+    leavetypePolicies: [],
+    leaveTypeSalaryDeductionPolicies: [],
   };
 
 

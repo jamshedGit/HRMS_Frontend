@@ -8,9 +8,9 @@ import * as actions from "../../../_redux/formActions";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useFormUIContext } from "../FormUIContext";
-import { fetchAllFormsMenu } from "../../../../../../_metronic/redux/dashboardActions";
+import { fetchAllFormsMenu, fetchAllLeaveType } from "../../../../../../_metronic/redux/dashboardActions";
 
-export function FormEditDialog({ id, show, onHide, userForRead }) {
+export function FormEditDialog({ id, show, onHide, userForRead, isEdit }) {
   const [loading, setLoading] = useState(false);
   const FormUIContext = useFormUIContext();
 
@@ -24,7 +24,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   const enableLoading = () => {
     setLoading(true);
   };
-  const disbaleLoading = () => {
+  const disableLoading = () => {
     setLoading(false);
   };
 
@@ -38,26 +38,33 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   }
   ));
 
-  //Fetch record to edit on dialog load
+  //If Id is present (In Edit case) then fetch data for edit. Also fetch all dropdown data if not present in state
   useEffect(() => {
-    // dispatch(actions.fetchEditRecord(id));
+    dispatch(actions.fetchEditRecord(id ? { Id: id } : null));
     if (!dashboard?.allEmployeeGradeList || !dashboard?.allEmployeeGradeList?.length)
       dispatch(fetchAllFormsMenu(143, "allEmployeeGradeList"));
     if (!dashboard?.allEmpTypeChildMenus || !dashboard?.allEmpTypeChildMenus?.length)
       dispatch(fetchAllFormsMenu(88, "allEmpTypeChildMenus"));
     if (!dashboard?.allSubidiaryList || !dashboard?.allSubidiaryList?.length)
       dispatch(fetchAllFormsMenu(133, "allSubidiaryList"));
-  }, [id, dispatch]);
+    if (!dashboard?.allGenderList || !dashboard?.allGenderList?.length)
+      dispatch(fetchAllFormsMenu(183, "allGenderList", 'All'));
+    if (!dashboard?.allLeaveStatus || !dashboard?.allLeaveStatus?.length)
+      dispatch(fetchAllFormsMenu(182, "allLeaveStatus", 'All'));
+    if (!dashboard?.allMaritalStatus || !dashboard?.allMaritalStatus?.length)
+      dispatch(fetchAllFormsMenu(184, "allMaritalStatus", 'All'));
+    if (!dashboard?.allLeaveTypes || !dashboard?.allLeaveTypes?.length)
+      dispatch(fetchAllLeaveType("allLeaveTypes"));
+  }, [id, dispatch, show]);
 
   //Create or Update record according to values from dialog
   const submitForm = (values) => {
-    //Converting Type to Number format for server
-    dispatch(actions.saveRecord({ ...values, type: Number(values.type) }, id, disbaleLoading, onHide))
+    dispatch(actions.saveRecord(values, disableLoading, onHide))
   }
 
   return (
     <Modal
-      size="lg"
+      size="xl"
       show={show}
       onHide={onHide}
       aria-labelledby="example-modal-sizes-title-lg"
@@ -66,10 +73,13 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
       <MasterEditForm
         submitForm={submitForm}
         user={userForEdit || formUIProps.initUser}
+        initUser={formUIProps.initUser}
         onHide={onHide}
         isUserForRead={userForRead}
+        isEdit={isEdit}
         enableLoading={enableLoading}
         loading={loading}
+        dispatch={dispatch}
       />
       <ToastContainer
         position="top-right"

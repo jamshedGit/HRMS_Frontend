@@ -38,6 +38,7 @@ export function leaveManagementConfigurationPage({ history }) {
       <Route path="/leave_management_configuration/read-all-leave-management-configuration/:id/edit">
         {({ history, match }) => (
           <FormEditDialog
+            isEdit={true}
             show={match != null}
             id={match && match.params.id}
             onHide={() => {

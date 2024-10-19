@@ -24,22 +24,26 @@ export const fetchleaveManagementConfiguration = (queryparm) => async (dispatch)
 
 /**
  * 
- * Fetch Single Leave Configurations Record by Id
+ * This function will fetch Leave Configuration data from server.
+ * Pyload consist of keys to filter from in the db. If Payload is not present it will just set null state key (In Add new Dialog)
  * 
- * @param {string|number} id 
- * @returns
+ * oldData is used when dropdowns are changed and data is needed to be fetched according to dropdown values.
+ * If no data is found from dropdown values then it will set the values provided in oldData key in the form
+ *  
+ * @param {Object} payload 
+ * @param {Object} oldData 
+ * @returns 
  */
-export const fetchEditRecord = (id) => (dispatch) => {
-  if (!id) {
+export const fetchEditRecord = (payload, oldData = null) => (dispatch) => {
+  if (!payload) {
     return dispatch(actions.leaveManagementConfigurationFetchedForEdit(null));
   }
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
-    .getleaveManagementConfigurationSetupById(id)
+    .getleaveManagementConfigurationSetupById(payload)
     .then((response) => {
-
       const entities = response.data?.data;
-      dispatch(actions.leaveManagementConfigurationFetchedForEdit({ userForEdit: entities }));
+      dispatch(actions.leaveManagementConfigurationFetchedForEdit({ userForEdit: entities || oldData }));
     })
     .catch((error) => {
       error.clientMessage = "Can't find Leave Configurations";
@@ -49,41 +53,21 @@ export const fetchEditRecord = (id) => (dispatch) => {
 
 /**
  * 
- * Fetch Leave Configurations Dropdown Data
- * 
- * @returns
- */
-export const fetchTypeDropdownData = () => (dispatch) => {
-  return requestFromServer
-    .getTypeDropdownData()
-    .then((response) => {
-      const dropdownData = response.data?.data;
-      dispatch(actions.typeDropdownFetched({ dropdownData }));
-    })
-    .catch((error) => {
-      error.clientMessage = "Can't find dropdown data";
-      dispatch(actions.catchError({ error, callType: callTypes.action }));
-    });
-};
-
-/**
- * 
  * Save or update Leave Configurations Record
  * 
  * @param {Object} data 
- * @param {String|Number|Null} id 
  * @param {Function} disableLoading 
  * @param {Function} onHide 
  * @returns 
  */
-export const saveRecord = (data, id, disableLoading, onHide) => (dispatch) => {
-  if (!id) {
+export const saveRecord = (data, disableLoading, onHide) => (dispatch) => {
+  if (!data.Id) {
     return requestFromServer.createleaveManagementConfigurationSetup(data)
       .then((res) => {
         const leaveManagementConfigurationData = res.data?.data;
         if (leaveManagementConfigurationData) {
-          dispatch(actions.leaveManagementConfigurationCreated(leaveManagementConfigurationData));
           disableLoading();
+          dispatch(actions.leaveManagementConfigurationCreated(leaveManagementConfigurationData));
           toast.success("Successfully Created", {
             position: "top-right",
             autoClose: 5000,
@@ -115,8 +99,8 @@ export const saveRecord = (data, id, disableLoading, onHide) => (dispatch) => {
       .then((res) => {
         const leaveManagementConfigurationData = res.data?.data;
         if (leaveManagementConfigurationData) {
-          dispatch(actions.leaveManagementConfigurationUpdated(leaveManagementConfigurationData));
           disableLoading();
+          dispatch(actions.leaveManagementConfigurationUpdated(leaveManagementConfigurationData));
           toast.success("Successfully Updated", {
             position: "top-right",
             autoClose: 5000,
@@ -173,6 +157,73 @@ export const deleteRecord = (id, disableLoading, onHide) => (dispatch) => {
     .catch((error) => {
       disableLoading();
       error.clientMessage = "Can't Delete Leave Configurations";
+      toast.error(error?.response?.data?.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    });
+}
+
+
+/**
+ * 
+ * This will Delete the Leave Type Policy record from server if Id is present
+ * then remove function will remove the record from view table for UI
+ * 
+ * @param {String|Number} id 
+ * @param {Function} remove 
+ * @param {Number} index 
+ * @returns 
+ */
+export const deleteLeaveTypePolicyRecord = (id, remove, index) => (dispatch) => {
+  if(!id){
+    remove(index);
+    return;
+  }
+  return requestFromServer.deletleaveTypePolicySetup(id)
+    .then((res) => {
+      remove(index)
+    })
+    .catch((error) => {
+      error.clientMessage = "Can't Delete Leave Type Policy";
+      toast.error(error?.response?.data?.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    });
+}
+
+/**
+ * 
+ * This will Delete the Leave Type deduction Policy record from server if Id is present
+ * then remove function will remove the record from view table for UI
+ * 
+ * @param {String|Number} id 
+ * @param {Function} remove 
+ * @param {Number} index 
+ * @returns 
+ */
+export const deleteLeaveTypeDeductionPolicyRecord = (id, remove, index) => (dispatch) => {
+  if (!id) {
+    remove(index);
+    return;
+  }
+  return requestFromServer.deletleaveTypeDeductionPolicySetup(id)
+    .then((res) => {
+      remove(index)
+    })
+    .catch((error) => {
+      error.clientMessage = "Can't Delete Deduction Policy";
       toast.error(error?.response?.data?.message, {
         position: "top-right",
         autoClose: 5000,

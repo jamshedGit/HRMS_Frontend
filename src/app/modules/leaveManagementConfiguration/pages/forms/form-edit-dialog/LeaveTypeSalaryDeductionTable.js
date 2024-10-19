@@ -3,32 +3,14 @@ import React from 'react'
 import { Input, Select } from '../../../../../../_metronic/_partials/controls'
 import CustomErrorLabel from '../../../../../utils/common-modules/CustomErrorLabel';
 
-// Dropdown options
-const leaveTypeOptions = [
-  { value: 35, label: 'Sick Leave' },
-  { value: 37, label: 'Annual Leave' },
-  // Add other leave types here
-];
-
-const genderOptions = [
-  { value: 191, label: 'Male' },
-  { value: 192, label: 'Female' },
-  // Add other genders here
-];
-
-const maritalStatusOptions = [
-  { value: 189, label: 'Single' },
-  { value: 190, label: 'Married' },
-  // Add other marital statuses here
-];
-
-function LeaveTypeSalaryDeductionTable({ values, setFieldValue, dropdown, errors, touched }) {
+function LeaveTypeSalaryDeductionTable({ values, setFieldValue, createDropdown, errors, touched, dropdownData, handleDelete }) {
   return (
     <>
       <h6>Leave Type Salary Deduction Policies</h6>
       <FieldArray name="leaveTypeSalaryDeductionPolicies">
         {({ insert, remove, push }) => (
           <>
+            {/* Table Starts */}
             <table className="table table-hover">
               <thead>
                 <tr style={{ backgroundColor: "#4d5f7a", color: "#fff" }}>
@@ -43,142 +25,168 @@ function LeaveTypeSalaryDeductionTable({ values, setFieldValue, dropdown, errors
               <tbody>
                 {values.leaveTypeSalaryDeductionPolicies.map((row, index) => (
                   <tr key={index}>
+                    {/* Row Starts */}
+
+                    {/* Delete Button Starts */}
                     <td>
-                      <button type="button" onClick={() => remove(index)}>
+                      <button type="button" onClick={() => {
+                        handleDelete('LeaveTypeSalaryDeductionTable', values?.leaveTypeSalaryDeductionPolicies?.[index]?.Id, remove, index)
+                      }}>
                         Delete
                       </button>
                     </td>
+                    {/* Delete Button Ends */}
+
+                    {/* Leave Type Field Starts */}
                     <td>
                       <Field
                         name={`leaveTypeSalaryDeductionPolicies[${index}].leaveType`}
                         component={Select}
-                        // className={errors.subsidiaryId && !values.subsidiaryId ? 'form-control is-invalid' : 'form-control'}
+                        className={errors.leaveTypeSalaryDeductionPolicies?.[index]?.leaveType && !row.leaveType ? 'form-control is-invalid' : 'form-control'}
                         onChange={(e) => {
+                          const value = e.target.value == '--Select--' ? null : e.target.value
                           setFieldValue(
                             `leaveTypeSalaryDeductionPolicies[${index}].leaveType`,
-                            e.target.value
+                            value
                           )
                         }}
-                        label={
-                          <span>
-                            {" "}
-                            leave Type<span style={{ color: "red" }}>*</span>
-                          </span>
-                        }
-                        value={row.subsidiaryId}
-                        children={dropdown(leaveTypeOptions)}
+                        // label={
+                        //   <span>
+                        //     {" "}
+                        //     leave Type<span style={{ color: "red" }}>*</span>
+                        //   </span>
+                        // }
+                        value={row.leaveType}
+                        children={createDropdown(dropdownData.allLeaveTypes || [], values?.leaveTypeSalaryDeductionPolicies)}
                       />
                       {errors.leaveTypeSalaryDeductionPolicies?.[index]?.leaveType &&
                         touched.leaveTypeSalaryDeductionPolicies?.[index]?.leaveType &&
-                          <CustomErrorLabel touched={true} error={errors.leaveTypeSalaryDeductionPolicies?.[index]?.leaveType} />
+                        <CustomErrorLabel touched={true} error={errors.leaveTypeSalaryDeductionPolicies?.[index]?.leaveType} />
                       }
                     </td>
+                    {/* Leave Type Field Ends */}
+
+                    {/* Min Leave Field Starts */}
                     <td>
                       <Field
                         name={`leaveTypeSalaryDeductionPolicies[${index}].minLeave`}
                         component={Input}
                         type="number"
-                        // className={errors.subsidiaryId && !values.subsidiaryId ? 'form-control is-invalid' : 'form-control'}
+                        className={errors.leaveTypeSalaryDeductionPolicies?.[index]?.minLeave && !row.minLeave ? 'form-control is-invalid' : 'form-control'}
                         onChange={(e) => {
                           setFieldValue(
                             `leaveTypeSalaryDeductionPolicies[${index}].minLeave`,
                             e.target.value
                           )
                         }}
-                        label={
-                          <span>
-                            {" "}
-                            Min Exp<span style={{ color: "red" }}>*</span>
-                          </span>
-                        }
+                        // label={
+                        //   <span>
+                        //     {" "}
+                        //     Min Leave<span style={{ color: "red" }}>*</span>
+                        //   </span>
+                        // }
                         value={row.minLeave}
                       />
                       {errors.leaveTypeSalaryDeductionPolicies?.[index]?.minLeave &&
                         touched.leaveTypeSalaryDeductionPolicies?.[index]?.minLeave &&
-                          <CustomErrorLabel touched={true} error={errors.leaveTypeSalaryDeductionPolicies?.[index]?.minLeave} />
+                        <CustomErrorLabel touched={true} error={errors.leaveTypeSalaryDeductionPolicies?.[index]?.minLeave} />
                       }
                     </td>
-                    <td>
+                    {/* Min Leave Field Ends */}
 
+                    {/* Max Leave Field Starts */}
+                    <td>
                       <Field
                         name={`leaveTypeSalaryDeductionPolicies[${index}].maxLeave`}
                         component={Input}
                         type="number"
-                        // className={errors.subsidiaryId && !values.subsidiaryId ? 'form-control is-invalid' : 'form-control'}
+                        className={errors.leaveTypeSalaryDeductionPolicies?.[index]?.maxLeave && !row.maxLeave ? 'form-control is-invalid' : 'form-control'}
                         onChange={(e) => {
                           setFieldValue(
                             `leaveTypeSalaryDeductionPolicies[${index}].maxLeave`,
                             e.target.value
                           )
                         }}
-                        label={
-                          <span>
-                            {" "}
-                            Max Allowed<span style={{ color: "red" }}>*</span>
-                          </span>
-                        }
+                        // label={
+                        //   <span>
+                        //     {" "}
+                        //     Max Leave<span style={{ color: "red" }}>*</span>
+                        //   </span>
+                        // }
                         value={row.maxLeave}
                       />
                       {errors.leaveTypeSalaryDeductionPolicies?.[index]?.maxLeave &&
                         touched.leaveTypeSalaryDeductionPolicies?.[index]?.maxLeave &&
-                          <CustomErrorLabel touched={true} error={errors.leaveTypeSalaryDeductionPolicies?.[index]?.maxLeave} />
+                        <CustomErrorLabel touched={true} error={errors.leaveTypeSalaryDeductionPolicies?.[index]?.maxLeave} />
                       }
                     </td>
+                    {/* Max Leave Field Ends */}
+
+                    {/* Deduction Field Starts */}
                     <td>
-                    <Field
+                      <Field
                         name={`leaveTypeSalaryDeductionPolicies[${index}].deduction`}
                         component={Input}
                         type="number"
-                        // className={errors.subsidiaryId && !values.subsidiaryId ? 'form-control is-invalid' : 'form-control'}
+                        className={errors.leaveTypeSalaryDeductionPolicies?.[index]?.deduction && !row.deduction ? 'form-control is-invalid' : 'form-control'}
                         onChange={(e) => {
                           setFieldValue(
                             `leaveTypeSalaryDeductionPolicies[${index}].deduction`,
                             e.target.value
                           )
                         }}
-                        label={
-                          <span>
-                            {" "}
-                            Max Allowed<span style={{ color: "red" }}>*</span>
-                          </span>
-                        }
+                        // label={
+                        //   <span>
+                        //     {" "}
+                        //     Deduction<span style={{ color: "red" }}>*</span>
+                        //   </span>
+                        // }
                         value={row.deduction}
                       />
                       {errors.leaveTypeSalaryDeductionPolicies?.[index]?.deduction &&
                         touched.leaveTypeSalaryDeductionPolicies?.[index]?.deduction &&
-                          <CustomErrorLabel touched={true} error={errors.leaveTypeSalaryDeductionPolicies?.[index]?.deduction} />
+                        <CustomErrorLabel touched={true} error={errors.leaveTypeSalaryDeductionPolicies?.[index]?.deduction} />
                       }
                     </td>
-                    <td>
+                    {/* Deduction Field Ends */}
 
+                    {/* Leave status Field Starts */}
+                    <td>
                       <Field
                         name={`leaveTypeSalaryDeductionPolicies[${index}].leaveStatus`}
                         component={Select}
-                        // className={errors.subsidiaryId && !values.subsidiaryId ? 'form-control is-invalid' : 'form-control'}
+                        className={errors.leaveTypeSalaryDeductionPolicies?.[index]?.leaveStatus && !row.leaveStatus ? 'form-control is-invalid' : 'form-control'}
                         onChange={(e) => {
+                          const value = e.target.value == 'All' ? null : e.target.value
                           setFieldValue(
                             `leaveTypeSalaryDeductionPolicies[${index}].leaveStatus`,
-                            e.target.value
+                            value
                           )
                         }}
-                        label={
-                          <span>
-                            {" "}
-                            Marital Status<span style={{ color: "red" }}>*</span>
-                          </span>
-                        }
+                        // label={
+                        //   <span>
+                        //     {" "}
+                        //     Leave Status<span style={{ color: "red" }}>*</span>
+                        //   </span>
+                        // }
                         value={row.leaveStatus}
-                        children={dropdown(maritalStatusOptions)}
+                        children={createDropdown(dropdownData.allLeaveStatus || [])}
                       />
                       {errors.leaveTypeSalaryDeductionPolicies?.[index]?.leaveStatus &&
                         touched.leaveTypeSalaryDeductionPolicies?.[index]?.leaveStatus &&
-                          <CustomErrorLabel touched={true} error={errors.leaveTypeSalaryDeductionPolicies?.[index]?.leaveStatus} />
+                        <CustomErrorLabel touched={true} error={errors.leaveTypeSalaryDeductionPolicies?.[index]?.leaveStatus} />
                       }
                     </td>
+                    {/* Leave status Field Ends */}
+
+                    {/* Row Ends */}
                   </tr>
                 ))}
               </tbody>
             </table>
+            {/* Table Ends */}
+
+            {/* Add Button Field Starts */}
             <button
               type="button"
               onClick={() =>
@@ -187,12 +195,13 @@ function LeaveTypeSalaryDeductionTable({ values, setFieldValue, dropdown, errors
                   minLeave: "",
                   maxLeave: "",
                   deduction: "",
-                  leaveStatus: "",
+                  leaveStatus: null,
                 })
               }
             >
               + Add Row
             </button>
+            {/* Add Button Field Ends */}
           </>
         )}
       </FieldArray></>

@@ -1,36 +1,30 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Modal } from "react-bootstrap";
-import { Formik, Form, Field, FieldArray } from "formik";
+import { Formik, Form, Field, FieldArray, useFormikContext } from "formik";
 import * as Yup from "yup";
 import { Checkbox, Input, Select } from "../../../../../../_metronic/_partials/controls";
 import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLabel";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import LeaveTypePolicyTable from "./LeaveTypePolicyTable";
 import LeaveTypeSalaryDeductionTable from "./LeaveTypeSalaryDeductionTable";
+import * as actions from "../../../_redux/formActions";
+import { WEEK_DAYS } from "../../../../../utils/constants";
 
-//Validation for Form
-// const formValidation = Yup.object().shape({
-//   subsidiaryId: Yup.number().required('Please Select a Subsidiary'),
-//   gradeId: Yup.number().required('Please Select a Grade'),
-//   employeeTypeId: Yup.number().required('Please Select a Employee Type'),
-//   weekend: Yup.string().optional(),
-//   isSandwich: Yup.boolean().optional()
-// });
-
+//Validations for Form
 const formValidation = Yup.object().shape({
-  subsidiaryId: Yup.number().required('Please Select a Subsidiary'),
-  gradeId: Yup.number().required('Please Select a Grade'),
-  employeeTypeId: Yup.number().required('Please Select a Employee Type'),
-  weekend: Yup.string().optional(),
+  subsidiaryId: Yup.number().required('Required'),
+  gradeId: Yup.number().required('Required'),
+  employeeTypeId: Yup.number().required('Required'),
+  weekend: Yup.array().optional(),
   isSandwich: Yup.boolean().optional(),
   leavetypePolicies: Yup.array().of(
     Yup.object().shape({
       leaveType: Yup.number().required('Required'),
-      gender: Yup.number().required('Required'),
+      gender: Yup.number().nullable(),
       minExp: Yup.number().min(0, 'Minimum experience should be 0 or more').required('Required'),
       maxAllowed: Yup.number().min(0, 'Max allowed should be 0 or more').required('Required'),
       attachmentRequired: Yup.boolean(),
-      maritalStatus: Yup.number().required('Required'),
+      maritalStatus: Yup.number().nullable(),
     })
   ),
   leaveTypeSalaryDeductionPolicies: Yup.array().of(
@@ -39,15 +33,14 @@ const formValidation = Yup.object().shape({
       minLeave: Yup.number().min(0, 'Minimum experience should be 0 or more').required('Required'),
       maxLeave: Yup.number().min(0, 'Minimum experience should be 0 or more').required('Required'),
       deduction: Yup.number().min(0, 'Max allowed should be 0 or more').required('Required'),
-      leaveStatus: Yup.number().required('Required'),
+      leaveStatus: Yup.number().nullable(),
     })
   )
 });
 
-
-
 export function MasterEditForm({
-  dropdownData = [],
+  initUser,
+  isEdit,
   submitForm,
   user,
   actionsLoading,
@@ -55,65 +48,69 @@ export function MasterEditForm({
   isUserForRead,
   enableLoading,
   loading,
+  dispatch
 }) {
 
+  //Get Dropdown Data from State
   const {
     allEmployeeGradeList,
     allEmpTypeChildMenus,
-    allSubidiaryList
+    allSubidiaryList,
+    allGenderList,
+    allLeaveStatus,
+    allMaritalStatus,
+    allLeaveTypes
   } = useSelector((state) => state.dashboard);
 
-  const dropdown = (data) => {
+  //Create Dropdown HTML from data for Select Components.
+  //when leaveTypeData is provided it will check one of leave type is already selected then it will not allow it to be selected again.
+  const createDropdown = (data, leaveTypData = null) => {
     return (data || []).map((el) => {
+      const disabled = leaveTypData && leaveTypData.find(sel => sel.leaveType == el.value) ? true : false
       return (<>
-        <option value={el.value}>{el.label}</option>
+        <option disabled={disabled} value={el.value}>{el.label}</option>
       </>)
     })
   }
 
+  //Function to fetch Data from server when all dropdown values are present or updated.
+  //If there is no old data for selected dropdown values then form will clear for user to enter new data
+  const getOldData = (values) => {
+    if (values.subsidiaryId && values.gradeId && values.employeeTypeId) {
+      dispatch(actions.fetchEditRecord(values, { ...initUser, ...values }));
+    }
+  }
+
+  //Function to Delete table row data from server.
+  const deleteTableRow = (key, id, remove, index) => {
+    switch (key) {
+      case 'LeaveTypePolicyTable':
+        dispatch(actions.deleteLeaveTypePolicyRecord(id, remove, index));
+        break;
+      case 'LeaveTypeSalaryDeductionTable':
+        dispatch(actions.deleteLeaveTypeDeductionPolicyRecord(id, remove, index));
+        break;
+      default:
+
+    }
+  }
   return (
     <>
       <Formik
         enableReinitialize={true}
-        initialValues={{
-          ...user, leavetypePolicies: [
-            {
-              "Id": 2,
-              "leaveType": 35,
-              "gender": 191,
-              "minExp": 2,
-              "maxAllowed": 3,
-              "attachmentRequired": true,
-              "maritalStatus": 189
-            },
-            {
-              "Id": 6,
-              "leaveType": 37,
-              "gender": 191,
-              "minExp": 4,
-              "maxAllowed": 5,
-              "attachmentRequired": true,
-              "maritalStatus": 189
-            }
-          ],
-          leaveTypeSalaryDeductionPolicies: []
-        }}
+        initialValues={user}
         validationSchema={formValidation}
         onSubmit={(values) => {
-          console.log('::::values::', values);
           enableLoading();
-
-          // submitForm(values)
+          submitForm(values)
         }}
       >
         {({
           handleSubmit,
           errors,
           values,
-          formik,
           touched,
           handleBlur,
-          handleChange,
           setFieldValue,
         }) => (
           <>
@@ -123,19 +120,26 @@ export function MasterEditForm({
                   <div className="spinner spinner-lg spinner-success" />
                 </div>
               )}
+
+              {/* Form Starts */}
               <Form className="form form-label-right">
                 <fieldset disabled={isUserForRead}>
                   <div className="from-group row">
 
+                    {/* Subsidiary Field Start */}
                     <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="subsidiaryId"
                         component={Select}
+                        disabled={isEdit}
                         className={errors.subsidiaryId && !values.subsidiaryId ? 'form-control is-invalid' : 'form-control'}
                         placeholder=""
                         onBlur={handleBlur}
                         onChange={(e) => {
-                          setFieldValue('subsidiaryId', e.target.value)
+                          const value = e.target.value == '--Select--' ? null : e.target.value
+                          setFieldValue('subsidiaryId', value)
+                          const filter = { subsidiaryId: value, gradeId: values.gradeId, employeeTypeId: values.employeeTypeId }
+                          getOldData(filter)
                         }}
                         label={
                           <span>
@@ -145,22 +149,28 @@ export function MasterEditForm({
                         }
                         value={values.subsidiaryId}
                         autoComplete="off"
-                        children={dropdown(allSubidiaryList)}
+                        children={createDropdown(allSubidiaryList)}
                       />
                       {
                         errors.subsidiaryId && !values.subsidiaryId && <CustomErrorLabel touched={true} error={errors.subsidiaryId} />
                       }
                     </div>
+                    {/* Subsidiary Field End */}
 
+                    {/* Grade Field Start */}
                     <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="gradeId"
                         component={Select}
+                        disabled={isEdit}
                         className={errors.gradeId && !values.gradeId ? 'form-control is-invalid' : 'form-control'}
                         placeholder=""
                         onBlur={handleBlur}
                         onChange={(e) => {
-                          setFieldValue('gradeId', e.target.value)
+                          const value = e.target.value == '--Select--' ? null : e.target.value
+                          setFieldValue('gradeId', value)
+                          const filter = { subsidiaryId: values.subsidiaryId, gradeId: value, employeeTypeId: values.employeeTypeId }
+                          getOldData(filter)
                         }}
                         label={
                           <span>
@@ -170,33 +180,41 @@ export function MasterEditForm({
                         }
                         value={values.gradeId}
                         autoComplete="off"
-                        children={dropdown(allEmployeeGradeList)}
+                        children={createDropdown(allEmployeeGradeList)}
                       />
                       {
                         errors.gradeId && !values.gradeId && <CustomErrorLabel touched={true} error={errors.gradeId} />
                       }
                     </div>
+                    {/* Grade Field End */}
 
+                    {/* Employee Type Field Start */}
                     <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="employeeTypeId"
                         component={Select}
+                        disabled={isEdit}
                         className={errors.employeeTypeId && !values.employeeTypeId ? 'form-control is-invalid' : 'form-control'}
                         placeholder=""
                         onBlur={handleBlur}
                         onChange={(e) => {
-                          setFieldValue('employeeTypeId', e.target.value)
+                          const value = e.target.value == '--Select--' ? null : e.target.value
+                          setFieldValue('employeeTypeId', value)
+                          const filter = { subsidiaryId: values.subsidiaryId, gradeId: values.gradeId, employeeTypeId: value }
+                          getOldData(filter)
                         }}
                         label={<span>{" "}Employee Type<span style={{ color: "red" }}>*</span></span>}
                         value={values.employeeTypeId}
                         autoComplete="off"
-                        children={dropdown(allEmpTypeChildMenus)}
+                        children={createDropdown(allEmpTypeChildMenus)}
                       />
                       {
                         errors.employeeTypeId && !values.employeeTypeId && <CustomErrorLabel touched={true} error={errors.employeeTypeId} />
                       }
                     </div>
+                    {/* Employee Type Field End */}
 
+                    {/* Weekends Field Start */}
                     <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="weekend"
@@ -207,7 +225,7 @@ export function MasterEditForm({
                         onBlur={handleBlur}
                         onChange={(e) => {
                           const data = Array.from(e.target.selectedOptions, option => option.value)
-                          setFieldValue('weekend', data)
+                          setFieldValue('weekend', data.map((el) => Number(el)))
                         }}
                         label={
                           <span>
@@ -217,24 +235,37 @@ export function MasterEditForm({
                         }
                         value={values.weekend}
                         autoComplete="off"
-                        children={dropdown([{ label: "Monday", value: 1 }, { label: "Tuesday", value: 2 }, { label: "Wednesday", value: 3 }, { label: "Thursday", value: 4 }, { label: "Friday", value: 5 }, { label: "Saturday", value: 6 }, { label: "Sunday", value: 7 }])}
+                        children={createDropdown(WEEK_DAYS)}
                       />
                     </div>
+                    {/* Weekends Field End */}
 
-
+                    {/* Sandwich Field Start */}
                     <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="isSandwich"
-                        component={Checkbox}
-                        onBlur={handleBlur}
-                        onChange={(e) => {
-                          setFieldValue('isSandwich', e.target.checked)
-                        }}
-                        children={'Sandwich'}
-                        isSelected={values.isSandwich}
-                      />
+                      <span>
+                        <Field
+                          name="isSandwich"
+                          component={Checkbox}
+                          onBlur={handleBlur}
+                          onChange={(e) => {
+                            setFieldValue('isSandwich', e.target.checked)
+                          }}
+                          isSelected={values.isSandwich}
+                        />
+                        <label>
+                          Sandwich
+                        </label>
+                      </span>
                     </div>
+                    {/* Sandwich Field End */}
+
                   </div>
+
+
+                  <br />
+                  <br />
+
+                  {/* Leave Type Policy Table Start */}
                   <div
                     style={{
                       backgroundColor: "rgb(235 243 255)",
@@ -246,12 +277,24 @@ export function MasterEditForm({
                     <LeaveTypePolicyTable
                       values={values}
                       setFieldValue={setFieldValue}
-                      dropdown={dropdown}
+                      createDropdown={createDropdown}
                       errors={errors}
                       touched={touched}
+                      dropdownData={{
+                        allGenderList,
+                        allMaritalStatus,
+                        allLeaveTypes
+                      }}
+                      handleDelete={deleteTableRow}
                     />
                   </div>
+                  {/* Leave Type Policy Table End */}
 
+
+                  <br />
+                  <br />
+
+                  {/* Leave Type Deduction Table Start */}
                   <div
                     style={{
                       backgroundColor: "rgb(235 243 255)",
@@ -263,13 +306,22 @@ export function MasterEditForm({
                     <LeaveTypeSalaryDeductionTable
                       values={values}
                       setFieldValue={setFieldValue}
-                      dropdown={dropdown}
+                      createDropdown={createDropdown}
                       errors={errors}
                       touched={touched}
+                      dropdownData={{
+                        allLeaveStatus,
+                        allLeaveTypes
+                      }}
+                      handleDelete={deleteTableRow}
                     />
                   </div>
+                  {/* Leave Type Deduction Table End */}
+
                 </fieldset>
               </Form>
+              {/* Form End */}
+
             </Modal.Body>
             <Modal.Footer>
               {!isUserForRead ? (
