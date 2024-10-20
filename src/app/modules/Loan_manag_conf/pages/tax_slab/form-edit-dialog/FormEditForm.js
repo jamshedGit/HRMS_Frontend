@@ -18,7 +18,8 @@ const loanManagementSchema = Yup.object().shape({
   human_resource_role: Yup.number().required("Human Resource Role is required"),
   emp_loan_account: Yup.number().required("Employee Loan Account is required"),
   installment_deduction_percentage: Yup.number()
-    .min(0, "Must be at least 0")
+  .min(0, "Must be at least 0") 
+  .max(100, "Must be at most 100") 
     .required("Installment Deduction Percentage is required"),
   installment_deduction_basis_type: Yup.number().required(
     "Installment Deduction Basis Type is required"
@@ -66,13 +67,10 @@ export function FormEditForm({
     return {
       currentState: state.loan_management_configuration,
       userAccess: state?.auth?.userAccess["loan_management_configuration"],
-     
     };
   }, shallowEqual);
 
   const { entities } = currentState;
-
-  
 
   let existedId = 0;
   const check_Existed_Data = (subsidiaryId) => {
@@ -81,7 +79,7 @@ export function FormEditForm({
         existedId = i.Id;
         console.log("update api hit");
         dispatch(actions.fetchSalarypolicy(existedId));
-      }else{
+      } else {
         dispatch(actions.fetchSalarypolicy(0));
       }
     });
@@ -157,7 +155,7 @@ export function FormEditForm({
                         ) || null
                       }
                       // options={dashboard.allAccountList}
-                      options={dashboard.allAccountList.map(option => ({
+                      options={dashboard.allAccountList.map((option) => ({
                         label: `${option.label} (${option.code})`, // Adding the value to the label
                         value: option.value,
                       }))}
@@ -221,7 +219,7 @@ export function FormEditForm({
                         ) || null
                       }
                       // options={dashboard.allAccountList}
-                      options={dashboard.allAccountList.map(option => ({
+                      options={dashboard.allAccountList.map((option) => ({
                         label: `${option.label} (${option.code})`, // Adding the value to the label
                         value: option.value,
                       }))}
@@ -232,6 +230,7 @@ export function FormEditForm({
 
                   {/* Installment Deduction Percentage Field */}
                   <div className="col-12 col-md-6 mt-3">
+              
                     <Field
                       name="installment_deduction_percentage"
                       component={Input}
@@ -475,7 +474,7 @@ export function FormEditForm({
                 type="button"
                 onClick={onHide}
                 // onClick={() => clear_Existed_Data()}
-                
+
                 className="btn btn-light btn-elevate"
               >
                 Cancel
