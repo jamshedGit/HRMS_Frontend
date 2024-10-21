@@ -31,7 +31,11 @@ const initialDashboardState = {
   offDuty: [],
   lastTrips: [],
   alarmTime: [],
-  allCompensationBenefitsList:[]
+  allCompensationBenefitsList:[],
+  allGenderList: [],
+  allLeaveStatus: [],
+  allMaritalStatus:[],
+  allLeaveTypes:[]
 };
 
 export const callTypes = {

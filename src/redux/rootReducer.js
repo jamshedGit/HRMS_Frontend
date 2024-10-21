@@ -58,6 +58,7 @@ import { FinalSettlementPolicySlice } from "../app/modules/Final_Settlement_Poli
 import { salarypolicySlice } from "../app/modules/Salarypolicy/_redux/salarypolicySlice";
 import { OnetimeAllowanceSlice } from "../app/modules/Onetime_Allowance/_redux/OnetimeAllowanceSlice";
 import { LoanTypeSlice } from "../app/modules/LoanType/_redux/LoanTypeSlice";
+import { leaveManagementConfigurationSlice } from "../app/modules/leaveManagementConfiguration/_redux/leaveManagementConfigurationSlice";
 import { payroll_policySlice } from "../app/modules/Payroll_Process_Policy/_redux/payroll_policySlice";
 
 export const rootReducer = combineReducers({
@@ -119,6 +120,7 @@ export const rootReducer = combineReducers({
   onetime_earning: OnetimeAllowanceSlice.reducer,
   loan_type: LoanTypeSlice.reducer,
   tax_slab: LoanTypeSlice.reducer,
+  leave_management_configuration: leaveManagementConfigurationSlice.reducer,
   payroll_process_policy: payroll_policySlice.reducer
 });
 

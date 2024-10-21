@@ -82,11 +82,15 @@ export const getAllDepartments = async (Id) => {
   });
 };
 
-export const getAllFormMenus = async (Id) => {
-  console.log("eee:", Id);
+export const getAllFormMenus = async (Id, text=null) => {
   return await axios.post(`${USERS_URL}/settings/read-all-form`, {
     Id: Id,
+    text: text
   });
+};
+
+export const getAllLeaveTypes = async (Id) => {
+  return await axios.get(`${USERS_URL}/settings/read-all-leave-types`);
 };
 
 export const getAllParentDepartments = async (Id) => {

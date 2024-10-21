@@ -119,7 +119,6 @@ export const dashboardSlice = createSlice({
     },
 
     AllChildMenusFetch: (state, action) => {
-      console.log('::action:modules:',action.payload)
       state[action.payload.key] = action.payload.entities;
     },
 
