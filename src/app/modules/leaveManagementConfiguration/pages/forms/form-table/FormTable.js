@@ -85,7 +85,7 @@ export function FormTable() {
     },
     {
       dataField: "employeeTypeName",
-      text: "Employee Ty[e",
+      text: "Employee Type",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
