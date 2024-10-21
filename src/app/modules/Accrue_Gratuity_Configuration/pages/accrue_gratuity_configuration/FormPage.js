@@ -17,66 +17,66 @@ export function FormPage({ history }) {
   const dispatch = useDispatch();
   const FormUIEvents = {
     newFormButtonClick: () => {
-      history.push("/gratuity_configuration/read-all-gratuity-configuration/new");
+      history.push("/accrue_gratuity_configuration/read-all-accrue-gratuity-configuration/new");
     },
     openEditFormDialog: (id) => {
-      history.push(`/gratuity_configuration/read-all-gratuity-configuration/${id}/edit`);
+      history.push(`/accrue_gratuity_configuration/read-all-accrue-gratuity-configuration/${id}/edit`);
     },
     openDeleteFormDialog: (id, status) => {
-      history.push(`/gratuity_configuration/read-all-gratuity-configuration/${id}/${status}/delete`);
+      history.push(`/accrue_gratuity_configuration/read-all-accrue-gratuity-configuration/${id}/${status}/delete`);
     },
     openActiveFormDialog: (id) => {
-      history.push(`/gratuity_configuration/read-all-gratuity-configuration/${id}/active`);
+      history.push(`/accrue_gratuity_configuration/read-all-accrue-gratuity-configuration/${id}/active`);
     },
     openReadFormDialog: (id, isUserRead) => {
-      history.push(`/gratuity_configuration/read-all-gratuity-configuration/${id}/read`);
+      history.push(`/accrue_gratuity_configuration/read-all-accrue-gratuity-configuration/${id}/read`);
     },
   };
   return (
 
     
     <FormUIProvider FormUIEvents={FormUIEvents}>
-      <Route exact path="/gratuity_configuration/read-all-gratuity-configuration/new">
+      <Route exact path="/accrue_gratuity_configuration/read-all-accrue-gratuity-configuration/new">
         {({ history, match }) => (
           <FormEditDialog
             show={match != null}
             onHide={() => {
-              history.push("/gratuity_configuration/read-all-gratuity-configuration");
+              history.push("/accrue_gratuity_configuration/read-all-accrue-gratuity-configuration");
             }}
           />
         )}
       </Route>
-      <Route path="/gratuity_configuration/read-all-gratuity-configuration/:id/edit">
+      <Route path="/accrue_gratuity_configuration/read-all-accrue-gratuity-configuration/:id/edit">
         {({ history, match }) => (
           <FormEditDialog
             show={match != null}
             id={match && match.params.id}
             onHide={() => {
-              history.push("/gratuity_configuration/read-all-gratuity-configuration");
+              history.push("/accrue_gratuity_configuration/read-all-accrue-gratuity-configuration");
             }}
           />
         )}
       </Route>
-      <Route path="/gratuity_configuration/read-all-gratuity-configuration/:id/read">
+      <Route path="/accrue_gratuity_configuration/read-all-accrue-gratuity-configuration/:id/read">
         {({ history, match }) => (
           <FormEditDialog
             show={match != null}
             id={match && match.params.id}
             userForRead={true}
             onHide={() => {
-              history.push("/gratuity_configuration/read-all-gratuity-configuration");
+              history.push("/accrue_gratuity_configuration/read-all-accrue-gratuity-configuration");
             }}
           />
         )}
       </Route>
-      <Route path="/gratuity_configuration/read-all-gratuity-configuration/:id/:status/delete">
+      <Route path="/accrue_gratuity_configuration/read-all-accrue-gratuity-configuration/:id/:status/delete">
         {({ history, match }) => (
           <FormDeleteDialog
             show={match != null}
             id={match && match.params.id}
             status={match && match.params.status}
             onHide={() => {
-              history.push("/gratuity_configuration/read-all-gratuity-configuration");
+              history.push("/accrue_gratuity_configuration/read-all-accrue-gratuity-configuration");
             }}
           />
         )}

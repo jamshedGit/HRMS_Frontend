@@ -60,6 +60,7 @@ import { taxSetupSlice } from "../app/modules/Tax_Setup/_redux/taxSetupSlice";
 import { loan_manag_confSlice } from "../app/modules/Loan_manag_conf/_redux/redux-Slice"
 
 import {gratuity_configurationSlice} from "../app/modules/Gratuity_Configuration/_redux/redux-Slice"
+import {accrue_gratuity_configurationSlice} from "../app/modules/Accrue_Gratuity_Configuration/_redux/redux-Slice"
 export const rootReducer = combineReducers({
   auth: auth.reducer,
   dashboard: dashboardSlice.reducer,
@@ -116,6 +117,8 @@ export const rootReducer = combineReducers({
   tax_slab:tax_slabSlice.reducer,
   loan_management_configuration:loan_manag_confSlice.reducer,
   gratuity_configuration:gratuity_configurationSlice.reducer,
+
+  accrue_gratuity_configuration:accrue_gratuity_configurationSlice.reducer
 });
 
 export function* rootSaga() {

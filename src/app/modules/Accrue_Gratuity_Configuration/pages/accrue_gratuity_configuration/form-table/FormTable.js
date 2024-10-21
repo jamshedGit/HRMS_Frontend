@@ -39,12 +39,12 @@ export function FormTable() {
     (state) => {  console.log("state ",state); return {
       
       // currentState: state.salarypolicy,
-      currentState: state.gratuity_configuration,
-      userAccess: state?.auth?.userAccess["gratuity_configuration"],
+      currentState: state.accrue_gratuity_configuration,
+      userAccess: state?.auth?.userAccess["accrue_gratuity_configuration"],
     }},
     shallowEqual
   );
-  console.log("currentState gratuity_configuration",currentState)
+  console.log("currentState accrue_gratuity_configuration",currentState)
   
   const { totalCount, entities, listLoading } = currentState;
 
@@ -60,14 +60,15 @@ export function FormTable() {
   }, [formUIProps.queryParams, dispatch, totalCount]);
 
   const isAccessForEdit = userAccess?.find(
-    (item) => item.componentName === "UpdateGratuityConfiguration"
+    (item) => item.componentName === "UpdateAccrueGratuityConfiguration"
   );
 
   const isAccessForDelete = userAccess?.find(
-    (item) => item.componentName === "DeleteGratuityConfiguration"
+    (item) => item.componentName === "DeleteAccrueGratuityConfiguration"
   );
   // Table columns
   const columns = [
+    
 
     {
       dataField: "Subsidiary.formName",
@@ -81,8 +82,8 @@ export function FormTable() {
     },
 
 {
-  dataField: "Contract_Type.formName",
-  text: "Contract Type",
+  dataField: "GraduityExpenseAccount.formName",
+  text: "Graduity Expense Account",
   sort: false,
   sortCaret: sortCaret,
   headerSortingClasses,
@@ -93,52 +94,9 @@ export function FormTable() {
 },
 
 
-    // {
-    //   dataField: "basis_of_gratuityId",
-    //   text: "Basis of Gratuity",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    //   headerSortingClasses,
-    //   style: {
-    //     minWidth: "10px",
-    //   },
-    // },
-
     {
-      dataField: "num_of_days",
-      text: "Number of Days",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "10px",
-      },
-    },
-    // {
-    //   dataField: "gratuity_fraction",
-    //   text: "Gratuity Fraction",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    //   headerSortingClasses,
-    //   style: {
-    //     minWidth: "10px",
-    //   },
-    // },
-
-    {
-      dataField: "min_year",
-      text: "Min Year",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "10px",
-      },
-    },
-
-    {
-      dataField: "max_year",
-      text: "Min Year",
+      dataField: "GraduityPayableAccount.formName",
+      text: "Graduity Payable Account",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -148,7 +106,18 @@ export function FormTable() {
     },
 
 
+    {
+      dataField: "BankCashAccount.formCode",
+      text: "Bank Cash Account",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "10px",
+      },
+    },
 
+  
        {
       dataField: "action",
       text: "Actions",

@@ -19,8 +19,8 @@ export const callTypes = {
     action: "action",
 };
 
-export const gratuity_configurationSlice = createSlice({
-    name: "gratuity_configuration",
+export const accrue_gratuity_configurationSlice = createSlice({
+    name: "accrue_gratuity_configuration",
     initialState: initialSalarypolicyState,
     reducers: {
         catchError: (state, action) => {

@@ -11,7 +11,7 @@ import {
 } from "../../../../../../_metronic/redux/dashboardActions";
 
 // percentage: Yup.string().required("Required*"),
-const gratuity_configurationEditSchema = Yup.object().shape({
+const accrue_gratuity_configurationEditSchema = Yup.object().shape({
   // from_amount: Yup.string().required("Required*"),
 
   subsidiaryId: Yup.number()
@@ -19,30 +19,18 @@ const gratuity_configurationEditSchema = Yup.object().shape({
 
   // to_amount: Yup.string().required("Required*"),
 
-  contract_typeId: Yup.number()
+  graduity_expense_accountId: Yup.number()
     .required("Required*"),
 
-    basis_of_gratuityId: Yup.number()
+    graduity_payable_accountId: Yup.number()
     .required("Required*"),
 
   // fixed_amount: Yup.string().required("Required*"),
 
-  num_of_days: Yup.number()
-    .min(1, "Must be at least 1")
-    .max(100, "Must be at most 100")
+  bank_cash_accountId: Yup.number()
+   
     .required("Required*"),
 
-
-    gratuity_fraction: Yup.number()
-    .required("Required*"),
-
-    min_year: Yup.number()
-    .min(0, "Must be at least 0")
-    .required("Required*"),
-
-    max_year: Yup.number()
-    .min(1, "Must be at least 0")
-    .required("Required*"),
 });
 
 export function FormEditForm({
@@ -59,23 +47,11 @@ export function FormEditForm({
   useEffect(() => {
     if (!user.Id) {
       dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsidiaries
-      dispatch(fetchAllFormsMenu(185, "allContractTypeList")); 
+      dispatch(fetchAllFormsMenu(45, "allAccountList"));
 
     }
   }, [dispatch, user.Id]);
 
-  const basisOptions = [
-    { value: 0, label: "Gross" },
-    { value: 1, label: "Basic" },
-  ];
-
-
-  
-  const gratuityFractionOptions = [
-    { value: 0, label: "1/3" },
-    { value: 1, label: "2/3" },
-    { value: 2, label: "3/3" },
-  ];
 
 
   return (
@@ -90,9 +66,9 @@ export function FormEditForm({
       // }}
 
       initialValues={user}
-      validationSchema={gratuity_configurationEditSchema}
+      validationSchema={accrue_gratuity_configurationEditSchema}
       onSubmit={(values) => {
-        console.log("values", values);
+        console.log("values accrue_gratuity_configurationEditSchema", values);
         enableLoading();
         saveForm(values);
       }}
@@ -137,103 +113,76 @@ export function FormEditForm({
 
                   <div className="col-12 col-md-6 mt-3">
                     <SearchSelect
-                      name="contract_typeId"
+                      name="graduity_expense_accountId"
                       label={
                         <span>
-                          Contract TypeId<span style={{ color: "red" }}>*</span>
+                          Graduity Expense Account<span style={{ color: "red" }}>*</span>
                         </span>
                       }
                       isDisabled={isUserForRead}
                       onChange={(e) => {
-                        setFieldValue("contract_typeId", e.value || null);
+                        setFieldValue("graduity_expense_accountId", e.value || null);
                       }}
                       value={
-                        dashboard.allContractTypeList.find(
-                          (option) => option.value === values.contract_typeId
+                        dashboard.allAccountList.find(
+                          (option) => option.value === values.graduity_expense_accountId
                         ) || null
                       }
-                      options={dashboard.allContractTypeList}
-                      error={errors.contract_typeId}
-                      touched={touched.contract_typeId}
+                      options={dashboard.allAccountList}
+               
+                      error={errors.graduity_expense_accountId}
+                      touched={touched.graduity_expense_accountId}
                     />
                   </div>
-
                   <div className="col-12 col-md-6 mt-3">
-                  <label htmlFor="basis_of_gratuityId">
-                  Basis of Gratuity
-                    </label>
-                    <Field
-                      name="basis_of_gratuityId"
-                      as="select"
-                      className="form-control"
-                      disabled={isUserForRead}
+                    <SearchSelect
+                      name="graduity_payable_accountId"
+                      label={
+                        <span>
+                          Graduity Payable Account<span style={{ color: "red" }}>*</span>
+                        </span>
+                      }
+                      isDisabled={isUserForRead}
                       onChange={(e) => {
-                        setFieldValue("basis_of_gratuityId", e.target.value); // Use the raw value
+                        setFieldValue("graduity_payable_accountId", e.value || null);
                       }}
-                    >
-                      <option value="">Select Deduction Basis Type</option>
-                      {basisOptions.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </Field>
-                  </div>
-                  <div className="col-12 col-md-6 mt-3">
-                    <Field
-                      name="num_of_days"
-                      component={Input}
-                      placeholder="Enter Number of Days"
-                      label="Number of Days"
-                      type="number"
-                      min={0}
+                      value={
+                        dashboard.allAccountList.find(
+                          (option) => option.value === values.graduity_payable_accountId
+                        ) || null
+                      }
+                      options={dashboard.allAccountList}
+               
+                      error={errors.graduity_payable_accountId}
+                      touched={touched.graduity_payable_accountId}
                     />
                   </div>
-
-
                   <div className="col-12 col-md-6 mt-3">
-                    <Field
-                      name="min_year"
-                      component={Input}
-                      placeholder="Enter Minimum Year"
-                      label="Minimum Year"
-                      type="number"
-                      min={0}
-                    />
-                  </div>
-
-                  <div className="col-12 col-md-6 mt-3">
-                    <Field
-                      name="max_year"
-                      component={Input}
-                      placeholder="Enter Maximum Year"
-                      label="Maximum Year"
-                      type="number"
-                      min={0}
-                    />
-                  </div>
-
-                  <div className="col-12 col-md-6 mt-3">
-                  <label htmlFor="basis_of_gratuityId">
-                  Gratuity Fraction
-                    </label>
-                    <Field
-                      name="gratuity_fraction"
-                      as="select"
-                      className="form-control"
-                      disabled={isUserForRead}
+                    <SearchSelect
+                      name="bank_cash_accountId"
+                      label={
+                        <span>
+                          Bank Cash Account<span style={{ color: "red" }}>*</span>
+                        </span>
+                      }
+                      isDisabled={isUserForRead}
                       onChange={(e) => {
-                        setFieldValue("gratuity_fraction", e.target.value); // Use the raw value
+                        setFieldValue("bank_cash_accountId", e.value || null);
                       }}
-                    >
-                      <option value="">Select Gratuity Fraction</option>
-                      {gratuityFractionOptions.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </Field>
+                      value={
+                        dashboard.allAccountList.find(
+                          (option) => option.value === values.bank_cash_accountId
+                        ) || null
+                      }
+                      options={dashboard.allAccountList}
+                 
+                      error={errors.bank_cash_accountId}
+                      touched={touched.bank_cash_accountId}
+                    />
                   </div>
+
+
+
 
                 </div>
               </fieldset>

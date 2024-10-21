@@ -87,12 +87,10 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
       const formUpdatedFields = {
         Id: user.Id,
         subsidiaryId: user.subsidiaryId,
-        contract_typeId: user.contract_typeId,
-        basis_of_gratuityId: user.basis_of_gratuityId,
-        num_of_days: user.num_of_days,
-        gratuity_fraction: user.gratuity_fraction,
-        min_year: user.min_year,
-        max_year: user.max_year,
+        graduity_expense_accountId: user.graduity_expense_accountId,
+        graduity_payable_accountId: user.graduity_payable_accountId,
+        bank_cash_accountId: user.bank_cash_accountId,
+  
       };
 
       

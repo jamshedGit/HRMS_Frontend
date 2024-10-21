@@ -1,8 +1,8 @@
 import * as requestFromServer from "./redux-Crud";
-import {gratuity_configurationSlice, callTypes } from "./redux-Slice";
+import {accrue_gratuity_configurationSlice, callTypes } from "./redux-Slice";
 import { toast } from "react-toastify";
 
-const { actions } = gratuity_configurationSlice;
+const { actions } = accrue_gratuity_configurationSlice;
 
 
 export const fetchSalarypolicies = (queryparm) => async (dispatch) => {

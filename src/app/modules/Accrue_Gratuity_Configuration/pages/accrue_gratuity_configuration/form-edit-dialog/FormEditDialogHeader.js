@@ -17,9 +17,9 @@ export function FormEditDialogHeader({ id, isUserForRead }) {
   );
 
   useEffect(() => {
-    let _title = id ? "" : "Add Gratuity Configuration";
+    let _title = id ? "" : "Add Accrue Gratuity Configuration";
     if (id) {
-      _title = `Edit Gratuity Configuration`;
+      _title = `Edit Accrue Gratuity Configuration`;
     } //else if (isUserForRead) {
     //   _title = `Read user '}'`
     // }

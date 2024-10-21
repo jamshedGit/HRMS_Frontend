@@ -29,12 +29,10 @@ export function FormUIProvider({ FormUIEvents, children }) {
   const initUser = {
     Id:"",
     subsidiaryId: "",
-    contract_typeId: "",
-    basis_of_gratuityId: "",
-    num_of_days: "",
-    gratuity_fraction:"",
-    min_year:"",
-    max_year:""
+    graduity_expense_accountId: "",
+    graduity_payable_accountId: "",
+    bank_cash_accountId: "",
+
   
   };
 
