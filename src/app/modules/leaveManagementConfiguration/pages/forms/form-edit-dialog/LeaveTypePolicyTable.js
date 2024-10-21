@@ -202,10 +202,7 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
                       }
                     </td>
                     {/* Marital Status Field Ends */}
-                      {
-                        console.log('::::::', errors.leavetypePolicies)
-                        
-                      }
+                  
                     {/* Row Starts */}
                   </tr>
                 ))}
