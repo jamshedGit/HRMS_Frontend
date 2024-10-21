@@ -61,7 +61,7 @@ const TaxSlab = lazy(() => import("./modules/LoanType/pages/index"));
 const PayrollProcessPolicy = lazy(() => import("./modules/Payroll_Process_Policy/pages/index"));
 const tax_slabModule = lazy(() => import("./modules/Tax_Slab/pages/index"));
 const loan_manag_confModule = lazy(() => import("./modules/Loan_manag_conf/pages/index"));   
-
+const gratuity_confModule = lazy(() => import("./modules/Gratuity_Configuration/pages/index"));   
 const ROUTES = {
   settings: SettingsPage,
   users: UserManagment,
@@ -110,6 +110,7 @@ const ROUTES = {
   payroll_process_policy :PayrollProcessPolicy,
   tax_slab:tax_slabModule,
   loan_management_configuration:loan_manag_confModule,
+  gratuity_configuration :gratuity_confModule
 };
 
 export default function BasePage() {

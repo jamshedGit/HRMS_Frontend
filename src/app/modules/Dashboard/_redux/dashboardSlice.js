@@ -44,7 +44,8 @@ const initialDashboardState = {
   allCompensationBenefitsList:[],
   allAccountList:[],
   allHumanResourceRoleList:[],
-  allLoanTypeList: []
+  allLoanTypeList: [],
+  allContractTypeList:[]
 };
 
 export const callTypes = {
@@ -186,6 +187,11 @@ export const dashboardSlice = createSlice({
   
       state.allHumanResourceRoleList = action.payload.entities;
     },
+    AllContractTypeListFetch: (state, action) => {
+      state.allContractTypeList = action.payload;
+    },
+
+    
 
   },
 });

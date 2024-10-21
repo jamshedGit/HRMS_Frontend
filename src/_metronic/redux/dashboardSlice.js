@@ -34,7 +34,8 @@ const initialDashboardState = {
   lastTrips: [],
   alarmTime: [],
   allCompensationBenefitsList:[],
-  allLoanTypeList: []
+  allLoanTypeList: [],
+  allContractTypeList: [],
 };
 
 export const callTypes = {
@@ -162,7 +163,9 @@ export const dashboardSlice = createSlice({
     //   state.allLoan_typeList = action.payload;
     // },
 
-
+    AllContractTypeListFetch: (state, action) => {
+      state.allContractTypeList = action.payload;
+    },
 
 
   },
