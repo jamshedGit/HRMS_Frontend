@@ -14,7 +14,7 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
             <table className="table table-hover">
               <thead>
                 <tr style={{ backgroundColor: "#4d5f7a", color: "#fff" }}>
-                  <td></td>
+                  <td>Action</td>
                   <td>Leave Type</td>
                   <td>Gender</td>
                   <td>Min Experience</td>
@@ -43,7 +43,7 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
                       <Field
                         name={`leavetypePolicies[${index}].leaveType`}
                         component={Select}
-                        className={errors.leavetypePolicies?.[index]?.leaveType && !row.leaveType ? 'form-control is-invalid' : 'form-control'}
+                        className={errors.leavetypePolicies?.[index]?.leaveType && touched.leavetypePolicies?.[index]?.leaveType ? 'form-control is-invalid' : 'form-control'}
                         onChange={(e) => {
                           const value = e.target.value == '--Select--' ? null : Number(e.target.value)
                           setFieldValue(
@@ -72,7 +72,7 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
                       <Field
                         name={`leavetypePolicies[${index}].gender`}
                         component={Select}
-                        className={errors.leavetypePolicies?.[index]?.gender && !row.gender ? 'form-control is-invalid' : 'form-control'}
+                        className={errors.leavetypePolicies?.[index]?.gender && touched.leavetypePolicies?.[index]?.gender ? 'form-control is-invalid' : 'form-control'}
                         onChange={(e) => {
                           const value = e.target.value == 'All' ? null : Number(e.target.value)
                           setFieldValue(
@@ -103,7 +103,7 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
                         component={Input}
                         type="number"
                         min="0"
-                        className={errors.leavetypePolicies?.[index]?.minExp && !row.minExp ? 'form-control is-invalid' : 'form-control'}
+                        className={errors.leavetypePolicies?.[index]?.minExp && touched.leavetypePolicies?.[index]?.minExp ? 'form-control is-invalid' : 'form-control'}
                         onChange={(e) => {
                           setFieldValue(
                             `leavetypePolicies[${index}].minExp`,
@@ -132,7 +132,7 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
                         component={Input}
                         type="number"
                         min="0"
-                        className={errors.leavetypePolicies?.[index]?.maxAllowed && !row.maxAllowed ? 'form-control is-invalid' : 'form-control'}
+                        className={errors.leavetypePolicies?.[index]?.maxAllowed && touched.leavetypePolicies?.[index]?.maxAllowed ? 'form-control is-invalid' : 'form-control'}
                         onChange={(e) => {
                           setFieldValue(
                             `leavetypePolicies[${index}].maxAllowed`,
@@ -167,10 +167,6 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
                         }}
                         isSelected={row.attachmentRequired}
                       />
-                      {errors.leavetypePolicies?.[index]?.attachmentRequired &&
-                        touched.leavetypePolicies?.[index]?.attachmentRequired &&
-                        <CustomErrorLabel touched={true} error={errors.leavetypePolicies?.[index]?.attachmentRequired} />
-                      }
                     </td>
                     {/* Attachement Required Field End */}
 
@@ -179,7 +175,7 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
                       <Field
                         name={`leavetypePolicies[${index}].maritalStatus`}
                         component={Select}
-                        className={errors.leavetypePolicies?.[index]?.maritalStatus && !row.maritalStatus ? 'form-control is-invalid' : 'form-control'}
+                        className={errors.leavetypePolicies?.[index]?.maritalStatus && touched.leavetypePolicies?.[index]?.maritalStatus ? 'form-control is-invalid' : 'form-control'}
                         onChange={(e) => {
                           const value = e.target.value == 'All' ? null : Number(e.target.value)
                           setFieldValue(
@@ -211,7 +207,7 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
              {/* Table Ends */}
 
             {/* Add button Field Starts */}
-            <button
+           {values.subsidiaryId && values.gradeId && values.employeeTypeId && <button
               type="button"
               onClick={() =>
                 push({
@@ -225,7 +221,7 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
               }
             >
               + Add Row
-            </button>
+            </button>}
             {/* Add button Field Ends */}
           </>
         )}

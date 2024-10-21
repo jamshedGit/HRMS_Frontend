@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Modal } from "react-bootstrap";
-import { Formik, Form, Field, FieldArray, useFormikContext } from "formik";
+import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import { Checkbox, Input, Select } from "../../../../../../_metronic/_partials/controls";
+import { Checkbox, Select } from "../../../../../../_metronic/_partials/controls";
 import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLabel";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import LeaveTypePolicyTable from "./LeaveTypePolicyTable";
 import LeaveTypeSalaryDeductionTable from "./LeaveTypeSalaryDeductionTable";
 import * as actions from "../../../_redux/formActions";
@@ -114,6 +114,9 @@ export function MasterEditForm({
           setFieldValue,
         }) => (
           <>
+          {
+            console.log(':::errors:::::',{errors, touched})
+          }
             <Modal.Body className="overlay overlay-block cursor-default">
               {actionsLoading && (
                 <div className="overlay-layer bg-transparent">
@@ -132,7 +135,7 @@ export function MasterEditForm({
                         name="subsidiaryId"
                         component={Select}
                         disabled={isEdit}
-                        className={errors.subsidiaryId && !values.subsidiaryId ? 'form-control is-invalid' : 'form-control'}
+                        className={errors.subsidiaryId && touched.subsidiaryId ? 'form-control is-invalid' : 'form-control'}
                         placeholder=""
                         onBlur={handleBlur}
                         onChange={(e) => {
@@ -152,7 +155,7 @@ export function MasterEditForm({
                         children={createDropdown(allSubidiaryList)}
                       />
                       {
-                        errors.subsidiaryId && !values.subsidiaryId && <CustomErrorLabel touched={true} error={errors.subsidiaryId} />
+                        errors.subsidiaryId && touched.subsidiaryId && <CustomErrorLabel touched={true} error={errors.subsidiaryId} />
                       }
                     </div>
                     {/* Subsidiary Field End */}
@@ -163,7 +166,7 @@ export function MasterEditForm({
                         name="gradeId"
                         component={Select}
                         disabled={isEdit}
-                        className={errors.gradeId && !values.gradeId ? 'form-control is-invalid' : 'form-control'}
+                        className={errors.gradeId && touched.gradeId ? 'form-control is-invalid' : 'form-control'}
                         placeholder=""
                         onBlur={handleBlur}
                         onChange={(e) => {
@@ -183,7 +186,7 @@ export function MasterEditForm({
                         children={createDropdown(allEmployeeGradeList)}
                       />
                       {
-                        errors.gradeId && !values.gradeId && <CustomErrorLabel touched={true} error={errors.gradeId} />
+                        errors.gradeId && touched.gradeId && <CustomErrorLabel touched={true} error={errors.gradeId} />
                       }
                     </div>
                     {/* Grade Field End */}
@@ -194,7 +197,7 @@ export function MasterEditForm({
                         name="employeeTypeId"
                         component={Select}
                         disabled={isEdit}
-                        className={errors.employeeTypeId && !values.employeeTypeId ? 'form-control is-invalid' : 'form-control'}
+                        className={errors.employeeTypeId && touched.employeeTypeId ? 'form-control is-invalid' : 'form-control'}
                         placeholder=""
                         onBlur={handleBlur}
                         onChange={(e) => {
@@ -209,7 +212,7 @@ export function MasterEditForm({
                         children={createDropdown(allEmpTypeChildMenus)}
                       />
                       {
-                        errors.employeeTypeId && !values.employeeTypeId && <CustomErrorLabel touched={true} error={errors.employeeTypeId} />
+                        errors.employeeTypeId && touched.employeeTypeId && <CustomErrorLabel touched={true} error={errors.employeeTypeId} />
                       }
                     </div>
                     {/* Employee Type Field End */}
@@ -219,7 +222,7 @@ export function MasterEditForm({
                       <Field
                         name="weekend"
                         component={Select}
-                        className={errors.weekend && !values.weekend ? 'form-control is-invalid' : 'form-control'}
+                        className={errors.weekend && touched.weekend ? 'form-control is-invalid' : 'form-control'}
                         placeholder=""
                         multiple={true}
                         onBlur={handleBlur}

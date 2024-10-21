@@ -14,7 +14,7 @@ function LeaveTypeSalaryDeductionTable({ values, setFieldValue, createDropdown, 
             <table className="table table-hover">
               <thead>
                 <tr style={{ backgroundColor: "#4d5f7a", color: "#fff" }}>
-                  <td></td>
+                  <td>Action</td>
                   <td>Leave Type</td>
                   <td>Min Leave</td>
                   <td>Max Leave</td>
@@ -42,7 +42,7 @@ function LeaveTypeSalaryDeductionTable({ values, setFieldValue, createDropdown, 
                       <Field
                         name={`leaveTypeSalaryDeductionPolicies[${index}].leaveType`}
                         component={Select}
-                        className={errors.leaveTypeSalaryDeductionPolicies?.[index]?.leaveType && !row.leaveType ? 'form-control is-invalid' : 'form-control'}
+                        className={errors.leaveTypeSalaryDeductionPolicies?.[index]?.leaveType && touched.leaveTypeSalaryDeductionPolicies?.[index]?.leaveType ? 'form-control is-invalid' : 'form-control'}
                         onChange={(e) => {
                           const value = e.target.value == '--Select--' ? null : e.target.value
                           setFieldValue(
@@ -73,7 +73,7 @@ function LeaveTypeSalaryDeductionTable({ values, setFieldValue, createDropdown, 
                         component={Input}
                         type="number"
                         min="0"
-                        className={errors.leaveTypeSalaryDeductionPolicies?.[index]?.minLeave && !row.minLeave ? 'form-control is-invalid' : 'form-control'}
+                        className={errors.leaveTypeSalaryDeductionPolicies?.[index]?.minLeave && touched.leaveTypeSalaryDeductionPolicies?.[index]?.minLeave ? 'form-control is-invalid' : 'form-control'}
                         onChange={(e) => {
                           setFieldValue(
                             `leaveTypeSalaryDeductionPolicies[${index}].minLeave`,
@@ -102,7 +102,7 @@ function LeaveTypeSalaryDeductionTable({ values, setFieldValue, createDropdown, 
                         component={Input}
                         type="number"
                         min="0"
-                        className={errors.leaveTypeSalaryDeductionPolicies?.[index]?.maxLeave && !row.maxLeave ? 'form-control is-invalid' : 'form-control'}
+                        className={errors.leaveTypeSalaryDeductionPolicies?.[index]?.maxLeave && touched.leaveTypeSalaryDeductionPolicies?.[index]?.maxLeave ? 'form-control is-invalid' : 'form-control'}
                         onChange={(e) => {
                           setFieldValue(
                             `leaveTypeSalaryDeductionPolicies[${index}].maxLeave`,
@@ -131,7 +131,7 @@ function LeaveTypeSalaryDeductionTable({ values, setFieldValue, createDropdown, 
                         component={Input}
                         type="number"
                         min="0"
-                        className={errors.leaveTypeSalaryDeductionPolicies?.[index]?.deduction && !row.deduction ? 'form-control is-invalid' : 'form-control'}
+                        className={errors.leaveTypeSalaryDeductionPolicies?.[index]?.deduction && touched.leaveTypeSalaryDeductionPolicies?.[index]?.deduction ? 'form-control is-invalid' : 'form-control'}
                         onChange={(e) => {
                           setFieldValue(
                             `leaveTypeSalaryDeductionPolicies[${index}].deduction`,
@@ -158,7 +158,7 @@ function LeaveTypeSalaryDeductionTable({ values, setFieldValue, createDropdown, 
                       <Field
                         name={`leaveTypeSalaryDeductionPolicies[${index}].leaveStatus`}
                         component={Select}
-                        className={errors.leaveTypeSalaryDeductionPolicies?.[index]?.leaveStatus && !row.leaveStatus ? 'form-control is-invalid' : 'form-control'}
+                        className={errors.leaveTypeSalaryDeductionPolicies?.[index]?.leaveStatus && touched.leaveTypeSalaryDeductionPolicies?.[index]?.leaveStatus ? 'form-control is-invalid' : 'form-control'}
                         onChange={(e) => {
                           const value = e.target.value == 'All' ? null : e.target.value
                           setFieldValue(
@@ -190,7 +190,7 @@ function LeaveTypeSalaryDeductionTable({ values, setFieldValue, createDropdown, 
             {/* Table Ends */}
 
             {/* Add Button Field Starts */}
-            <button
+            {values.subsidiaryId && values.gradeId && values.employeeTypeId && <button
               type="button"
               onClick={() =>
                 push({
@@ -203,7 +203,7 @@ function LeaveTypeSalaryDeductionTable({ values, setFieldValue, createDropdown, 
               }
             >
               + Add Row
-            </button>
+            </button>}
             {/* Add Button Field Ends */}
           </>
         )}
