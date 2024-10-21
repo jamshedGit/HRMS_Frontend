@@ -102,6 +102,7 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
                         name={`leavetypePolicies[${index}].minExp`}
                         component={Input}
                         type="number"
+                        min="0"
                         className={errors.leavetypePolicies?.[index]?.minExp && !row.minExp ? 'form-control is-invalid' : 'form-control'}
                         onChange={(e) => {
                           setFieldValue(
@@ -130,6 +131,7 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
                         name={`leavetypePolicies[${index}].maxAllowed`}
                         component={Input}
                         type="number"
+                        min="0"
                         className={errors.leavetypePolicies?.[index]?.maxAllowed && !row.maxAllowed ? 'form-control is-invalid' : 'form-control'}
                         onChange={(e) => {
                           setFieldValue(
@@ -200,7 +202,10 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
                       }
                     </td>
                     {/* Marital Status Field Ends */}
-
+                      {
+                        console.log('::::::', errors.leavetypePolicies)
+                        
+                      }
                     {/* Row Starts */}
                   </tr>
                 ))}

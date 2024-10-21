@@ -72,6 +72,7 @@ function LeaveTypeSalaryDeductionTable({ values, setFieldValue, createDropdown, 
                         name={`leaveTypeSalaryDeductionPolicies[${index}].minLeave`}
                         component={Input}
                         type="number"
+                        min="0"
                         className={errors.leaveTypeSalaryDeductionPolicies?.[index]?.minLeave && !row.minLeave ? 'form-control is-invalid' : 'form-control'}
                         onChange={(e) => {
                           setFieldValue(
@@ -100,6 +101,7 @@ function LeaveTypeSalaryDeductionTable({ values, setFieldValue, createDropdown, 
                         name={`leaveTypeSalaryDeductionPolicies[${index}].maxLeave`}
                         component={Input}
                         type="number"
+                        min="0"
                         className={errors.leaveTypeSalaryDeductionPolicies?.[index]?.maxLeave && !row.maxLeave ? 'form-control is-invalid' : 'form-control'}
                         onChange={(e) => {
                           setFieldValue(
@@ -128,6 +130,7 @@ function LeaveTypeSalaryDeductionTable({ values, setFieldValue, createDropdown, 
                         name={`leaveTypeSalaryDeductionPolicies[${index}].deduction`}
                         component={Input}
                         type="number"
+                        min="0"
                         className={errors.leaveTypeSalaryDeductionPolicies?.[index]?.deduction && !row.deduction ? 'form-control is-invalid' : 'form-control'}
                         onChange={(e) => {
                           setFieldValue(
