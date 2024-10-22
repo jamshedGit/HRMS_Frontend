@@ -51,29 +51,29 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     
     actionsLoading: state.users.actionsLoading,
     user: state.users, // change for users to receipt
-    userForEdit: state.gratuity_configuration.userForEdit,
+    userForEdit: state.accrue_gratuity_configuration.userForEdit,
     roles: state.users.roles,
     userStatusTypes: state.users.userStatusTypes,
-    isuserForRead: state.gratuity_configuration.userForRead,
+    isuserForRead: state.accrue_gratuity_configuration.userForRead,
   }));
 
-  console.log("for tax slab isuserForRead",userForEdit)
+  console.log("foraccrue  gratuity isuserForRead",userForEdit)
 
 
   useEffect(() => {
     dispatch(actions.fetchSalarypolicy(id));
 
     // dispatch(actions.fetchSalarypolicy(formUIProps .queryParams))
-  }, [id, dispatch]);
+  }, [id, dispatch,show]);
 
 
   const saveForm = async (user) => {
 
-    console.log("tax slab getUserStatus", user);
+    console.log(" getUserStatus", user);
 
-    if (!id) {
+    if (!user.Id) {
  
-  
+      console.log(" accure greatuity check update",id, user);
       const finalObject = { user }
       dispatch(actions.createSalarypolicy(user, disbaleLoading, onHide));
       

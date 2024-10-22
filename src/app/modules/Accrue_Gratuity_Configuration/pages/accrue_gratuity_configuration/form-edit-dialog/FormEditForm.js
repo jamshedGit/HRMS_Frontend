@@ -3,7 +3,8 @@ import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { Input } from "../../../../../../_metronic/_partials/controls"; // Adjust import as needed
-import { useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import * as actions from "../../../_redux/redux-Actions";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import {
   fetchAllFormsMenu,
@@ -53,6 +54,32 @@ export function FormEditForm({
   }, [dispatch, user.Id]);
 
 
+  const { currentState, userAccess } = useSelector((state) => {
+    console.log("state for clear data ", state);
+    return {
+      currentState: state.accrue_gratuity_configuration,
+      userAccess: state?.auth?.userAccess["accrue_gratuity_configuration"],
+    };
+  }, shallowEqual);
+
+  const { entities } = currentState;
+
+  let existedId = 0;
+  const check_Existed_Data = (subsidiaryId) => {
+
+    entities.forEach((i) => {
+      if (i.subsidiaryId == subsidiaryId) {
+        existedId = i.Id;
+ 
+        dispatch(actions.fetchSalarypolicy(existedId));
+      } else {
+        dispatch(actions.fetchSalarypolicy(0));
+      }
+    });
+  };
+
+
+
 
   return (
     <Formik
@@ -95,6 +122,7 @@ export function FormEditForm({
                       isDisabled={isUserForRead}
                       onChange={(e) => {
                         setFieldValue("subsidiaryId", e.value || null);
+                        check_Existed_Data(e.value);
                       }}
                       value={
                         dashboard.allSubidiaryList.find(
@@ -102,10 +130,12 @@ export function FormEditForm({
                         ) || null
                       }
                       options={dashboard.allSubidiaryList}
-                      // options={dashboard.allSubidiaryList.map(option => ({
-                      //   label: `${option.label} (${option.value})`, // Adding the value to the label
+                      // options={dashboard.allAccountList.map((option) => ({
+                      //   label: `${option.mergeLabel}`, // Adding the value to the label
                       //   value: option.value,
                       // }))}
+
+              
                       error={errors.subsidiaryId}
                       touched={touched.subsidiaryId}
                     />
@@ -128,7 +158,11 @@ export function FormEditForm({
                           (option) => option.value === values.graduity_expense_accountId
                         ) || null
                       }
-                      options={dashboard.allAccountList}
+                      // options={dashboard.allAccountList}
+                      options={dashboard.allAccountList.map((option) => ({
+                        label: `${option.mergeLabel}`, // Adding the value to the label
+                        value: option.value,
+                      }))}
                
                       error={errors.graduity_expense_accountId}
                       touched={touched.graduity_expense_accountId}
@@ -151,7 +185,11 @@ export function FormEditForm({
                           (option) => option.value === values.graduity_payable_accountId
                         ) || null
                       }
-                      options={dashboard.allAccountList}
+                      // options={dashboard.allAccountList}
+                      options={dashboard.allAccountList.map((option) => ({
+                        label: `${option.mergeLabel}`, // Adding the value to the label
+                        value: option.value,
+                      }))}
                
                       error={errors.graduity_payable_accountId}
                       touched={touched.graduity_payable_accountId}
@@ -174,7 +212,11 @@ export function FormEditForm({
                           (option) => option.value === values.bank_cash_accountId
                         ) || null
                       }
-                      options={dashboard.allAccountList}
+                      // options={dashboard.allAccountList}
+                      options={dashboard.allAccountList.map((option) => ({
+                        label: `${option.mergeLabel}`, // Adding the value to the label
+                        value: option.value,
+                      }))}
                  
                       error={errors.bank_cash_accountId}
                       touched={touched.bank_cash_accountId}

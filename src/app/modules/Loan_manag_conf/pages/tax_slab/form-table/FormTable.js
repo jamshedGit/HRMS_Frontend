@@ -173,6 +173,7 @@ export function FormTable() {
       headerClasses: "text-right pr-3",
       style: {
         minWidth: "10px",
+       
       },
     },
   ];

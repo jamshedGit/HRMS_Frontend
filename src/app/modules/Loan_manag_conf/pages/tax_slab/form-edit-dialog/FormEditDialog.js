@@ -61,7 +61,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     .userForRead,
   }));
  
-  console.log("for tax slab isuserForRead",userForEdit)
+  console.log("for  isuserForRead",userForEdit)
  
  
   useEffect(() => {

@@ -27,9 +27,13 @@ const loanManagementSchema = Yup.object().shape({
   details: Yup.array().of(
     Yup.object().shape({
       loan_typeId: Yup.number().required(" Type is required"),
-      max_loan_amount: Yup.number().required("Max  Amount is required"),
+      max_loan_amount: Yup.number()
+      .min(1, "Must be at least 1") 
+      .required("Max  Amount is required"),
       basis: Yup.number().required("Basis is required"),
-      salary_count: Yup.number().required("Count is required"),
+      salary_count: Yup.number()
+      .min(1, "Must be at least 1")
+      .required("Count is required"),
     })
   ),
 });
@@ -156,7 +160,7 @@ export function FormEditForm({
                       }
                       // options={dashboard.allAccountList}
                       options={dashboard.allAccountList.map((option) => ({
-                        label: `${option.label} (${option.code})`, // Adding the value to the label
+                        label: `${option.mergeLabel}`, // Adding the value to the label
                         value: option.value,
                       }))}
                       error={errors.accountId}
@@ -220,7 +224,7 @@ export function FormEditForm({
                       }
                       // options={dashboard.allAccountList}
                       options={dashboard.allAccountList.map((option) => ({
-                        label: `${option.label} (${option.code})`, // Adding the value to the label
+                        label: `${option.mergeLabel}`, // Adding the value to the label
                         value: option.value,
                       }))}
                       error={errors.accountId}

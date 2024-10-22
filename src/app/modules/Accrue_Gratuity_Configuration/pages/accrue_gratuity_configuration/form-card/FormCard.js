@@ -37,7 +37,7 @@ export function FormCard() {
   const { currentState } = useSelector(
     (state) => {  console.log("state ",state); return {
       
-      currentState: state.gratuity_configuration,
+      currentState: state.accrue_gratuity_configuration,
       userAccess: state?.auth?.userAccess["accrue_gratuity_configuration"],
     }},
     shallowEqual
@@ -60,7 +60,7 @@ export function FormCard() {
                 className="btn btn-primary"
                 onClick={FormUIProps .newFormButtonClick}
               >
-                + Add Accrue Gratuity Configration
+                + Add Accrue Gratuity Configuration
               </button>
             {/* ) : (
               <></>
