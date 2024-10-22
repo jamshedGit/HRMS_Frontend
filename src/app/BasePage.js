@@ -63,6 +63,8 @@ const tax_slabModule = lazy(() => import("./modules/Tax_Slab/pages/index"));
 const loan_manag_confModule = lazy(() => import("./modules/Loan_manag_conf/pages/index"));   
 const gratuity_confModule = lazy(() => import("./modules/Gratuity_Configuration/pages/index"));   
 const accrue_gratuity_confModule = lazy(() => import("./modules/Accrue_Gratuity_Configuration/pages/index"));  
+const reimbursement_configurationModule = lazy(() => import("./modules/Reimbursement_Configuration/pages/index"));  
+
 const ROUTES = {
   settings: SettingsPage,
   users: UserManagment,
@@ -112,7 +114,8 @@ const ROUTES = {
   tax_slab:tax_slabModule,
   loan_management_configuration:loan_manag_confModule,
   gratuity_configuration :gratuity_confModule,
-  accrue_gratuity_configuration :accrue_gratuity_confModule
+  accrue_gratuity_configuration :accrue_gratuity_confModule,
+  reimbursement_configuration:reimbursement_configurationModule
 };
 
 export default function BasePage() {
