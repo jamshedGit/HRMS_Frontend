@@ -45,9 +45,9 @@ export function FormEditForm({
   enableLoading,
   loading,
 }) {
-  console.log("FormEditForm user", user);
 
-  console.log("initialValues user.Type", user);
+
+
 
   return (
     <Formik
@@ -63,7 +63,7 @@ export function FormEditForm({
       initialValues={user}
       validationSchema={tax_slabEditSchema}
       onSubmit={(values) => {
-        console.log("values", values);
+  
         enableLoading();
         saveForm(values);
       }}

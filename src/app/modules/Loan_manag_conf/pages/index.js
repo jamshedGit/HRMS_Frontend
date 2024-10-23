@@ -4,7 +4,7 @@ import { LayoutSplashScreen, ContentRoute } from "../../../../_metronic/layout";
 import { FormPage } from "./tax_slab/FormPage";
 
 export default function loan_manag_confManagement() {
- console.log("render loan PAGE")
+
   return (
 
     <>

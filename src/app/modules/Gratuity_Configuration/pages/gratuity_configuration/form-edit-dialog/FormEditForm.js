@@ -92,7 +92,7 @@ export function FormEditForm({
       initialValues={user}
       validationSchema={gratuity_configurationEditSchema}
       onSubmit={(values) => {
-        console.log("values", values);
+  
         enableLoading();
         saveForm(values);
       }}

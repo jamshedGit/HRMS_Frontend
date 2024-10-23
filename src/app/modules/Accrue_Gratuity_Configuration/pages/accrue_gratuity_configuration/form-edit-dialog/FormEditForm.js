@@ -55,7 +55,7 @@ export function FormEditForm({
 
 
   const { currentState, userAccess } = useSelector((state) => {
-    console.log("state for clear data ", state);
+
     return {
       currentState: state.accrue_gratuity_configuration,
       userAccess: state?.auth?.userAccess["accrue_gratuity_configuration"],
@@ -95,7 +95,7 @@ export function FormEditForm({
       initialValues={user}
       validationSchema={accrue_gratuity_configurationEditSchema}
       onSubmit={(values) => {
-        console.log("values accrue_gratuity_configurationEditSchema", values);
+ 
         enableLoading();
         saveForm(values);
       }}

@@ -57,7 +57,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     isuserForRead: state.tax_slab.userForRead,
   }));
 
-  console.log("for tax slab isuserForRead",userForEdit)
+
 
 
   useEffect(() => {
@@ -69,7 +69,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
 
   const saveForm = async (user) => {
 
-    console.log("tax slab getUserStatus", user);
+
 
     if (!id) {
  
@@ -82,7 +82,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     } else {
 
      
-      console.log("salary policy getUserStatus", user);
+  
 
       const formUpdatedFields = {
         Id: user.Id,

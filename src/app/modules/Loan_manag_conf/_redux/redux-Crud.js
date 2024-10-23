@@ -4,7 +4,7 @@ export const USERS_URL = process.env.REACT_APP_API_URL;
 
 //Create user
 export function createSalarypolicy(body) {
-  console.log("loan step 1", body)
+
   
   // body.Name = body.txtsalarypolicyName;
   // delete body.txtsalarypolicyName
@@ -17,12 +17,12 @@ export function createSalarypolicy(body) {
 
 // Read
 export function getAllSalarypolicy(body) {
-  console.log("loan_management_configuration s body",body);
+
   return axios.post(`${USERS_URL}/loan_management_configuration/read-all-loan-management-configuration`, body);
 }
 
 export function getSalarypolicyById(id) {
-   console.log("salarypolicy id", id)
+
   return axios.post(`${USERS_URL}/loan_management_configuration/read-loan-management-configuration`, id);
 }
 

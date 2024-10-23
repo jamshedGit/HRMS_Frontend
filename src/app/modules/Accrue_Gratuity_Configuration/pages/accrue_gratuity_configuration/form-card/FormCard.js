@@ -13,7 +13,7 @@ import { useSelector, shallowEqual } from "react-redux"
 
 export function FormCard() {
   const FormUIContext = useFormUIContext()
-  //console.log("FormUIContext", FormUIContext)
+
   const FormUIProps  = useMemo(() => {
     return {
       newFormButtonClick: FormUIContext.newFormButtonClick,
@@ -29,13 +29,13 @@ export function FormCard() {
     }),
     shallowEqual
   )
-  console.log("userAccess Temp",userAccess)
+
   const accessUser = userAccess.find(
     (item) => item.componentName === "CreateAccrueGratuityConfiguration"
   )
 
   const { currentState } = useSelector(
-    (state) => {  console.log("state ",state); return {
+    (state) => {  console.log("s"); return {
       
       currentState: state.accrue_gratuity_configuration,
       userAccess: state?.auth?.userAccess["accrue_gratuity_configuration"],

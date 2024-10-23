@@ -35,16 +35,15 @@ export function SalarypolicyTable() {
     };
   }, [salarypolicyUIContext]);
 
-  //console.log("queryparms", usersUIProps.queryparms)
   const { currentState, userAccess } = useSelector(
-    (state) => {  console.log("state ",state); return {
+    (state) => {  console.log("s "); return {
       
       currentState: state.salarypolicy,
       userAccess: state?.auth?.userAccess["salarypolicy"],
     }},
     shallowEqual
   );
-  console.log("currentState salary policy", currentState);
+ 
   
   const { totalCount, entities, listLoading } = currentState;
 
@@ -62,8 +61,7 @@ export function SalarypolicyTable() {
 
   useEffect(() => {
     salarypolicyUIProps.setIds([]);
-    console.log("salarypolicy payroll month test 2")
-    console.log("salarypolicy payroll month userAccess",salarypolicyUIProps.queryParams)
+
     dispatch(actions.getCurrentMonth());
   }, []);
 
@@ -122,7 +120,7 @@ export function SalarypolicyTable() {
     minWidth: "10px",
   },
   formatter: (cell, row) => {
-    console.log("Row data:", row); // Debug log
+  
     return row.type === "Month Days" ? "Current Month" : cell;
   },
 },

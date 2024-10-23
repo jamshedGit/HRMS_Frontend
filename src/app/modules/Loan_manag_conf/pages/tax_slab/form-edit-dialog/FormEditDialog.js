@@ -61,11 +61,11 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     .userForRead,
   }));
  
-  console.log("for  isuserForRead",userForEdit)
+
  
  
   useEffect(() => {
-    console.log("fetch loan show",show,id);
+   
     dispatch(actions.fetchSalarypolicy(id));
  
     // dispatch(actions.fetchSalarypolicy(formUIProps .queryParams))
@@ -73,26 +73,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
  
  
   const saveForm = async (user) => {
- 
-    console.log("loan management conf getUserStatus updated", user.details);
-    // const loanTypeIds = user.details.map((detail) => detail.loan_typeId);
 
-    // Check for duplicate loan_typeId values
-    // const hasDuplicates = loanTypeIds.length !== new Set(loanTypeIds).size;
-  
-    // if (hasDuplicates) {
-    //   toast.error("Duplicate loan types are not allowed. Please ensure each loan type is unique.", {
-    //     position: "top-right",
-    //     autoClose: 5000,
-    //     hideProgressBar: false,
-    //     closeOnClick: true,
-    //     pauseOnHover: true,
-    //     draggable: true,
-    //     progress: undefined,
-    //   });
-    //   return
-
-    // }
 
        if (user.details=="") {
       toast.error("Detail is incomplete.", {
@@ -120,7 +101,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     } else {
  
      
-      console.log("loan management getUserStatus", user);
+ 
  
       const formUpdatedFields = {
         Id: user.Id,
