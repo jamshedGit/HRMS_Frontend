@@ -67,64 +67,49 @@ export function SalarypolicyEditForm({
     </div>
   );
 
-  const monthIndex = currentMonthList && currentMonthList[0].month - 1; // 9 for September
-  const year = currentMonthList && currentMonthList[0].year; // 2024
-
-  // Format the month
-  const monthNames = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
-  const monthName = monthNames[monthIndex]; // "Sep"
-
-  // Get the start and end dates
-  const startDate = new Date(currentMonthList && currentMonthList[0].startDate);
-  const endDate = new Date(currentMonthList && currentMonthList[0].endDate);
-
-  // Format the dates
-  // const formattedStartDate = `${String(startDate.getDate()).padStart(
-  //   2,
-  //   "0"
-  // )}-${String(startDate.getMonth() + 1).padStart(
-  //   2,
-  //   "0"
-  // )}-${startDate.getFullYear()}`;
-  // const formattedEndDate = `${String(endDate.getDate()).padStart(
-  //   2,
-  //   "0"
-  // )}-${String(endDate.getMonth() + 1).padStart(
-  //   2,
-  //   "0"
-  // )}-${endDate.getFullYear()}`;
-
-  const formattedStartDate = `${String(startDate.getUTCDate()).padStart(2, '0')}-${String(startDate.getUTCMonth() + 1).padStart(2, '0')}-${startDate.getUTCFullYear()}`;
-  const formattedEndDate = `${String(endDate.getUTCDate()).padStart(2, '0')}-${String(endDate.getUTCMonth() + 1).padStart(2, '0')}-${endDate.getUTCFullYear()}`;
   
-  // Create the final formatted string
-  const formattedString = `${monthName} ${year} (${formattedStartDate} - ${formattedEndDate})`;
+let formattedString;
+  if (currentMonthList.length>0) {
 
-
+    const monthIndex = currentMonthList && currentMonthList[0]?.month - 1; // 9 for September
+    const year = currentMonthList && currentMonthList[0]?.year; // 2024
+  
+    // Format the month
+    const monthNames = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    const monthName = monthNames[monthIndex]; // "Sep"
+  
+    // Get the start and end dates
+    const startDate = new Date(currentMonthList && currentMonthList[0]?.startDate);
+    const endDate = new Date(currentMonthList && currentMonthList[0]?.endDate);
+  
+    const formattedStartDate = `${String(startDate.getUTCDate()).padStart(2, '0')}-${String(startDate.getUTCMonth() + 1).padStart(2, '0')}-${startDate.getUTCFullYear()}`;
+    const formattedEndDate = `${String(endDate.getUTCDate()).padStart(2, '0')}-${String(endDate.getUTCMonth() + 1).padStart(2, '0')}-${endDate.getUTCFullYear()}`;
+  
+    // Create the final formatted string
+    formattedString = `${monthName} ${year} (${formattedStartDate} - ${formattedEndDate})`;
+    console.log("formattedString month set",formattedString)
+  
+  }else{
+    formattedString="Payroll month not available"
+  }
 
   return (
     <Formik
       enableReinitialize={true}
-      // initialValues={{
-      //   Id:user.Id || '',
-      //   type: user.type ||  '',
-      //   value:user.value || 0,
-      //   multiplier: user.multiplier || 0,
-      //   divisor: user.divisor || 0,
-      // }}
+
 
       initialValues={user}
       validationSchema={salarypolicyEditSchema}
@@ -173,15 +158,7 @@ export function SalarypolicyEditForm({
                     />
                   </div>
 
-                  {/* <Field
-                      name="multiplier"
-                      component={Input}
-                      placeholder="Enter Multiplier"
-                      label="Multiplier"
-                       type="number"
-                      disabled={values.type == "Month Days" || values.type == "Fixed Days"}
-                    /> */}
-
+                  
                   {!(
                     values.type === "Month Days" || values.type === "Fixed Days"
                   ) && (
@@ -196,17 +173,7 @@ export function SalarypolicyEditForm({
                       </div>
                     )}
 
-                  {/* <Field
-                      name="divisor"
-                      component={Input}
-                      placeholder="Enter Divisor"
-                      label="Divisor"
-                      type="number"
-                      disabled={
-                        values.type == "Month Days" ||
-                        values.type == "Fixed Days"
-                      }
-                    /> */}
+         {console.log("formattedString",formattedString)}
 
                   {!(
                     values.type === "Month Days" || values.type === "Fixed Days"
@@ -222,29 +189,15 @@ export function SalarypolicyEditForm({
                       </div>
                     )}
 
-                  {/* <Field
-                      name="value"
-                      component={Input}
-                      placeholder="Value"
-                      label="Value"
-                      type="number"
-                      disabled={
-                        values.type == "Ratio of Year" ||
-                        values.type === "Month Days"
-                      }
-
-
-                    /> */}
-
-                  {/* <div className="col-12 col-md-12 mt-3 row"> */}
+          
 
                   {values.type === "Month Days" && formattedString && (
                     <div className="col-6 mt-3">
                       <Field
                         name="month_days"
                         component={Input}
-                        value={formattedString || 0}
-                        placeholder={formattedString || 0}
+                        value={formattedString }
+                        placeholder={formattedString }
                         label="  "
                         type="number"
                         disabled
@@ -256,35 +209,7 @@ export function SalarypolicyEditForm({
                       />
                     </div>
                   )}
-                  {/* {values.type === "Month Days" && (
-                      <div className="col-12 col-md-4 mt-3">
-                        <Field
-                          name="month"
-                          component={Input}
-                          // component={currentMonthList && currentMonthList[0].month}
-                          value = {currentMonthList && currentMonthList[0].month}
-                          placeholder="Month"
-                          label="Current Month"
-                          type="number"
-                          disabled
-                        />
-                      </div>
-                    )} */}
-
-                  {/* {values.type === "Month Days" && (
-                      <div className="col-12 col-md-4 mt-3">
-                        <Field
-                          name="year"
-                          component={Input}
-                          value = {currentMonthList && currentMonthList[0].year}
-                          placeholder="Year"
-                          label="Current Year"
-                          type="number"
-                          disabled
-                        />
-                      </div>
-                    )} */}
-                  {/* </div> */}
+                 
                 </div>
               </fieldset>
             </Form>
