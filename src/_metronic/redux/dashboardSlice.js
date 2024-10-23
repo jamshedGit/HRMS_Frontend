@@ -34,6 +34,10 @@ const initialDashboardState = {
   lastTrips: [],
   alarmTime: [],
   allCompensationBenefitsList:[],
+  allGenderList: [],
+  allLeaveStatus: [],
+  allMaritalStatus:[],
+  allLeaveTypes:[],
   allLoanTypeList: [],
   allContractTypeList: [],
 };
