@@ -158,4 +158,9 @@ export const getLastDeductionNo = async (bookingNo) => {
   );
 };
 
+export const getAllHumanResourceRole = async () => {
+  console.log("getAllHumanResourceRole:");
+  return await axios.get(`${USERS_URL}/settings/read-all-roles-master-data`, {
+  });
+};
 
