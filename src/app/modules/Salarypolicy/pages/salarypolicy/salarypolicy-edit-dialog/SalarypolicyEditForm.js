@@ -305,7 +305,7 @@ export function SalarypolicyEditForm({
     <div className="form-group">
       <label>{label}</label>
       <select {...field} className="form-control" onChange={onChange}>
-        <option value="">Select Type</option>
+        <option value="">{user?.type || "Select Type"}</option>
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
@@ -507,8 +507,8 @@ let formattedString;
   <Field
     name="value"
     component={Input}
-    placeholder="Value"
-    label="Value"
+    placeholder="Duration (Days)"
+    label="Duration (Days)"
     type="number"
   
   
