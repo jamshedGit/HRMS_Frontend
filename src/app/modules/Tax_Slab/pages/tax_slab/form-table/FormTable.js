@@ -69,16 +69,7 @@ export function FormTable() {
   );
   // Table columns
   const columns = [
-    {
-      dataField: "Id",
-      text: "ID",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "10px",
-      },
-    },
+
     {
       dataField: "from_amount",
       text: "From Amount",
