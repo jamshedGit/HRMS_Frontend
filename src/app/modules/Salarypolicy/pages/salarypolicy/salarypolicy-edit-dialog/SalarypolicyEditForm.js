@@ -67,6 +67,7 @@ export function SalarypolicyEditForm({
     </div>
   );
 
+  
 let formattedString;
   if (currentMonthList.length>0) {
 
