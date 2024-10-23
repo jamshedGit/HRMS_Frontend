@@ -11,7 +11,7 @@ import { useFormUIContext } from "../FormUIContext"
 import { FormFilter } from "../form-filter/FormFilter"
 import { useSelector, shallowEqual } from "react-redux"
 
-export function FormCard() {
+export function FormCard({id}) {
   const FormUIContext = useFormUIContext()
   //console.log("FormUIContext", FormUIContext)
   const formUIProps = useMemo(() => {
@@ -72,7 +72,7 @@ export function FormCard() {
 
         <CardBody>
 
-          <FormTable />
+          <FormTable formid = {id} />
         </CardBody>
       </Card>
     </>

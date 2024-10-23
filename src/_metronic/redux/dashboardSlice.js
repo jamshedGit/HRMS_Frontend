@@ -21,6 +21,8 @@ const initialDashboardState = {
   allDeductions:[],
   allDept:[],
   allChildMenus:[],
+  allPayrollPayableAccounts: [],
+  allPayrollAccounts:[],
   allDegreeTitle: [],
   allTeamsChildMenus:[],
   allParentMenus:[],
@@ -43,9 +45,13 @@ export const dashboardSlice = createSlice({
   name: "dashboard",
   initialState: initialDashboardState,
   reducers: {
+    AllPayrollPayableAccounts: (state, action) => {
+      state.allPayrollPayableAccounts = action.payload;
+    },
     AllCentersFetch: (state, action) => {
       state.allCenters = action.payload;
     },
+    
     AllSubCenterFetch: (state, action) => {
       state.allSubCenter = action.payload;
     },
@@ -115,7 +121,10 @@ export const dashboardSlice = createSlice({
     AllParentMenusFetch: (state, action) => {
       state.allParentMenus = action .payload;
     },
-    
+       
+    allPayrollAccounts: (state, action) => {
+      state.allPayrollAccounts = action .payload;
+    },
 
     AllCentersByCityIdFetch: (state, action) => {
       state.cityCenters = action.payload;

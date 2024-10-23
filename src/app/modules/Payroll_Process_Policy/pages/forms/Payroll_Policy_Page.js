@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -8,28 +8,25 @@ import { FormEditDialog } from "./form-edit-dialog/FormEditDialog";
 import { FormDeleteDialog } from "./form-delete-dialog/FormDeleteDialog";
 import { FormActiveDialog } from "./form-active-dialog/FormActiveDialog";
 import { FormCard } from "./form-card/FormCard";
-import { fetchAllCountry } from "../../../../../_metronic/redux/dashboardActions";
-
-
 
 // dispatch(actions.fetchRoles());
 //     dispatch(actions.fetchCenters());
 
 export function Payroll_Policy({ history }) {
+  const [defRecordId, setDefaultRecordId] = useState(0);
+
   const dispatch = useDispatch();
+ 
   const FormUIEvents = {
     newFormButtonClick: () => {
-    //  dispatch(fetchAllCountry());
-      //dispatch(fetchRoles());
-     // dispatch(fetchCenters());
-      //dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
+   
       history.push("/payroll_process_policy/read-all-payroll-process-policy/new");
     },
     openEditFormDialog: (id) => {
-      // dispatch(fetchAllCountry());
-      // dispatch(fetchRoles());
-      // dispatch(fetchCenters());
-      // dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
+      console.log("my::",id);
+      
+      setDefaultRecordId(id);
+    
       history.push(`/payroll_process_policy/read-all-payroll-process-policy/${id}/edit`);
     },
     openDeleteFormDialog: (id, status) => {
@@ -57,13 +54,14 @@ export function Payroll_Policy({ history }) {
       </Route>
       <Route path="/payroll_process_policy/read-all-payroll-process-policy/:id/edit">
         {({ history, match }) => (
-          <FormEditDialog
-            show={match != null}
-            id={match && match.params.id}
-            onHide={() => {
-              history.push("/payroll_process_policy/read-all-payroll-process-policy");
-            }}
-          />
+          // <FormEditDialog
+          //   show={match != null}
+          //   id={match && match.params.id}
+          //   onHide={() => {
+          //     history.push("/payroll_process_policy/read-all-payroll-process-policy");
+          //   }}
+          // />
+          <></>
         )}
       </Route>
       <Route path="/payroll_process_policy/read-all-payroll-process-policy/:id/read">
@@ -102,7 +100,7 @@ export function Payroll_Policy({ history }) {
           />
         )}
       </Route>
-      <FormCard />
+      <FormCard id={defRecordId} />
       <ToastContainer
         position="top-right"
         autoClose={5000}

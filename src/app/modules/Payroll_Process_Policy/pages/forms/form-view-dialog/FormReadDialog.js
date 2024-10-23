@@ -36,7 +36,7 @@ export function FormEditDialog({ id, show, onHide }) {
     // dispatch(actions.fetchUser(usersUIProps.queryParams))
   }, [id, dispatch])
  
-  const SavePayrollMonthSetup = (user) => {
+  const SavePayrollPolicy = (user) => {
     
     if (!id) {
       dispatch(actions.createUser(user)).then((res) => {
@@ -62,7 +62,7 @@ export function FormEditDialog({ id, show, onHide }) {
     >
       <UserReadDialogHeader id={id} />
       <ReadForm
-        SavePayrollMonthSetup={SavePayrollMonthSetup}
+        SavePayrollPolicy={SavePayrollPolicy}
         user={userForEdit || usersUIProps.initUser}
         onHide={onHide}
         roles={roles}

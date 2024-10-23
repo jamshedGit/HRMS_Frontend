@@ -2,9 +2,9 @@ import axios from "axios";
 
 export const USERS_URL = process.env.REACT_APP_API_URL;
 
-//Create user
-export function create_Payroll_Policy(body) {
-  return axios.post(`${USERS_URL}/payroll_process_policy/create-payroll-process-policy`, body);
+//Create payroll,Policy
+export function create_Payroll_Policy(body, emailRecipentList, eobiAllowancesList,bankInfoList,sessiAllowanceList) {
+  return axios.post(`${USERS_URL}/payroll_process_policy/create-payroll-process-policy`, {  body, emailRecipentList, eobiAllowancesList ,bankInfoList,sessiAllowanceList});
 }
 
 
