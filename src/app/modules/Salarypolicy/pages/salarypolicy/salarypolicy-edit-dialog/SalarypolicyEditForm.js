@@ -295,8 +295,8 @@ export function SalarypolicyEditForm({
 
   const { userAccess, currentMonthList } = useSelector(
     (state) => ({
-      userAccess: state.auth.userAccess.salarypolicy,
-      currentMonthList: state.salarypolicy.currentMonth,
+      userAccess: state.auth.userAccess.salary_policy,
+      currentMonthList: state.salary_policy.currentMonth,
     }),
     shallowEqual
   );

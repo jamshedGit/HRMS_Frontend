@@ -10,7 +10,7 @@ export function SalarypolicyEditDialogHeader({ id, isUserForRead }) {
   const { userForEdit, actionsLoading } = useSelector(
     
     (state) => ({
-      userForEdit: state.salarypolicy.userForEdit,
+      userForEdit: state.salary_policy.userForEdit,
       actionsLoading: state.users.actionsLoading,
     }),
     shallowEqual
