@@ -3,14 +3,14 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   fetchAllCity,
   fetchDashboardVehicles,
-
-  // alaramTime,
+  fetchAllCityCenters,
+  alaramTime,
 } from "../../redux/dashboardActions";
 import { Route } from "react-router-dom";
 import { TilesWidget1, TilesWidget10 } from "../widgets";
 //import CreateIncidentDialog from "../widgets/modal/CreateIncidentDialog";
 import { IncidentCreateDialog } from "../widgets/modal/incident-create-dialog/IncidentCreateDialog";
-// import { TripLogEditDialog } from "../../../app/modules/IncidentDetails/pages/triplogs/triplog-edit-dialog/TripLogEditDialog";
+import { TripLogEditDialog } from "../../../app/modules/IncidentDetails/pages/triplogs/triplog-edit-dialog/TripLogEditDialog";
 //import { DropdownMenu4 } from "../dropdowns";
 import { LastTripsUIProvider } from "../widgets/tiles/LastTrips/LastTripsUIContext";
 //import LastTripsDialog from "../widgets/tiles/LastTrips/LastTripsDialog";
@@ -39,13 +39,23 @@ export function Demo2Dashboard({ history }) {
   const { dashboard, auth } = useSelector((state) => state);
   const { user } = auth;
 
-  // useEffect(() => {
-  //   dispatch(fetchAllCity(user.countryId));
- 
-  //   dispatch(alaramTime());
-  // }, []);
+  useEffect(() => {
+    dispatch(fetchAllCity(user.countryId));
+    dispatch(fetchAllCityCenters(user.cityId));
+    dispatch(alaramTime());
+  }, []);
 
+  useEffect(() => {
+    // const interval = setInterval(() => {
+    //   console.log("Set interval called");
+    //   dispatch(fetchDashboardVehicles({ cityId: user.cityId || city.values }));
+    // }, 5000);
+    // setOnDutyVehicels(dashboard.onDuty);
+    // return () => clearInterval(interval);
 
+    dispatch(fetchDashboardVehicles({ cityId: user.cityId || city.value }));
+    // //dispatch(fetchAllCityCenters(user.cityId));
+  }, []);
 
   //console.log("dashboard", dashboard);
   // console.log("city", city);
@@ -186,7 +196,7 @@ export function Demo2Dashboard({ history }) {
               diable={diableOnDutyButton}
               rowSelection={false}
             />
-            {/* <TripLogEditDialog
+            <TripLogEditDialog
               show={openCloseTripDialogue}
               onHide={() => setCloseTripDialogue(false)}
               id={closeTripId}
@@ -194,7 +204,7 @@ export function Demo2Dashboard({ history }) {
               center={center && center.value}
               subCenter={subCenter && subCenter.value}
               setVehicle={setVehicle}
-            /> */}
+            />
           </div>
           <div className="col-xl-4">
             <TilesWidget1

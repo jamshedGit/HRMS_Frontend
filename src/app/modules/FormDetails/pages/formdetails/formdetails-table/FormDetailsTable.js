@@ -98,16 +98,16 @@ export function FormTable() {
   );
   // Table columns
   const columns = [
-    // {
-    //   dataField: "Id",
-    //   text: "ID",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    //   headerSortingClasses,
-    //   style: {
-    //     minWidth: "160px",
-    //   },
-    // },
+    {
+      dataField: "Id",
+      text: "ID",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
     {
       dataField: "formName",
       text: "Form",
@@ -128,16 +128,16 @@ export function FormTable() {
         minWidth: "160px",
       },
     },
-    // {
-    //   dataField: "MenuName",
-    //   text: "Parent",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    //   headerSortingClasses,
-    //   style: {
-    //     minWidth: "160px",
-    //   },
-    // },
+    {
+      dataField: "MenuName",
+      text: "Parent",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
     {
       dataField: "action",
       text: "Actions",

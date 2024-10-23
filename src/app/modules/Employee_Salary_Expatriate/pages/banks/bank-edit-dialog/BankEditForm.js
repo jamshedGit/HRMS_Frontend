@@ -8,7 +8,7 @@ import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect"
 import {
 
   fetchAllCity,
-
+  fetchAllCityCenters,
   fetchAllFormsMenu,
   fetchAllActiveEmployees,
   fetchAllEarningList,
@@ -257,7 +257,7 @@ export function BankEditForm({
                         onChange={(e) => {
                           setFieldValue("cityId", e.value);
                           setDefaultCity(e);
-                     
+                          dispatch(fetchAllCityCenters(e.value));
                         }}
                         value={defCity}
                         error={errors.cityId}

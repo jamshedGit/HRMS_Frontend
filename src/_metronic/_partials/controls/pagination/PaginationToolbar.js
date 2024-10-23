@@ -17,9 +17,7 @@ export function PaginationToolbar(props) {
     ]
   } = paginationProps;
   const style = {
-    width: "75px",
-    color: "#f2f2f0",
-
+    width: "75px"
   };
 
   const onSizeChange = event => {

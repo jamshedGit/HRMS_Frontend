@@ -20,7 +20,7 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
     // })
     .then((response) => {
       //  console.log("user action receipt fetched 321")
-      console.log("response dept", response)
+      console.log("response", response)
       dispatch(actions.deptFetched(response));
     })
     .catch((error) => {
@@ -197,6 +197,13 @@ export const fetchRoles = () => (dispatch) => {
     });
 };
 
+export const fetchCenters = () => (dispatch) => {
+  dispatch(actions.startCall({ callType: callTypes.list }));
+  return requestFromServer.getAllCenters().then((response) => {
+    const entities = response.data?.data;
+    dispatch(actions.CentersFetched(entities));
+  });
+};
 
 export const fetchUserStatusTypes = (body) => (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.list }));

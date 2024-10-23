@@ -16,7 +16,6 @@ export function Footer() {
     <div
       className={`footer bg-white py-4 d-flex flex-lg-column  ${layoutProps.footerClasses}`}
       id="kt_footer"
-      // style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}
     >
       <div
         className={`${layoutProps.footerContainerClasses} d-flex flex-columnf flex-md-row align-items-center justify-content-between`}

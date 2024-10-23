@@ -17,8 +17,8 @@ import paginationFactory from "react-bootstrap-table2-paginator";
 import { Pagination } from "../../../controls";
 import { isEqual, isFunction } from "lodash";
 
-// import { TripLogsUIProvider } from "../../../../../app/modules/IncidentDetails/pages/triplogs/TripLogsUIContext";
-// import { TripLogsCard } from "../../../../../app/modules/IncidentDetails/pages/triplogs/triplogs-card/TripLogsCard";
+import { TripLogsUIProvider } from "../../../../../app/modules/IncidentDetails/pages/triplogs/TripLogsUIContext";
+import { TripLogsCard } from "../../../../../app/modules/IncidentDetails/pages/triplogs/triplogs-card/TripLogsCard";
 
 import { LastTripsUIProvider } from "./LastTripsUIContext";
 import { LastTripsCard } from "./triplogs-card/TripLogsCard";
@@ -32,7 +32,7 @@ import {
 } from "../../../../_helpers";
 
 import { useSelector, useDispatch } from "react-redux";
-// import { updateTrip } from "../../../../../app/modules/IncidentDetails/_redux/triplogs/triplogActions";
+import { updateTrip } from "../../../../../app/modules/IncidentDetails/_redux/triplogs/triplogActions";
 import { updateTripLog } from "../../../../redux/dashboardActions";
 //import { LastTripsTable } from "./centers-vehicles-table/LastTripsTable";
 

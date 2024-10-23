@@ -12,7 +12,7 @@ import { fetchAllCountry } from "../../../../../_metronic/redux/dashboardActions
 import {
   fetchUserStatusTypes,
   fetchRoles,
-
+  fetchCenters,
 } from "../../_redux/formActions";
 
 
@@ -25,14 +25,14 @@ export function TaxSetupPage({ history }) {
     newFormButtonClick: () => {
       dispatch(fetchAllCountry());
       dispatch(fetchRoles());
- 
+      dispatch(fetchCenters());
       dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
       history.push("/tax_setup/read-all-tax-setup/new");
     },
     openEditFormDialog: (id) => {
       dispatch(fetchAllCountry());
       dispatch(fetchRoles());
-
+      dispatch(fetchCenters());
       dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
       history.push(`/tax_setup/read-all-tax-setup/${id}/edit`);
     },

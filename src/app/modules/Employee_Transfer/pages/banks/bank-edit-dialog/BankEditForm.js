@@ -17,6 +17,7 @@ import {
   fetchAllDeductionList,
   fetchAllEarningList,
   fetchAllDept,
+  fetchAllCityCenters
 
 } from "../../../../../../_metronic/redux/dashboardActions";
 import DatePicker from "react-datepicker";
@@ -186,7 +187,7 @@ export function BankEditForm({
 
   useEffect(() => {
     if (user.cityId) {
-    
+      dispatch(fetchAllCityCenters(user.cityId));
     }
   }, [user.cityId, dispatch]);
 
@@ -856,7 +857,7 @@ export function BankEditForm({
                               onChange={(e) => {
                                 setFieldValue("cityId", e.value);
                                 setDefaultCity(e);
-                                
+                                dispatch(fetchAllCityCenters(e.value));
                               }}
                               value={defCity}
                               error={errors.cityId}

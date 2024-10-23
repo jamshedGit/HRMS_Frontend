@@ -52,7 +52,9 @@ export function getAllRoles() {
 
 //get All Centers
 
-
+export function getAllCenters() {
+  return axios.get(`${USERS_URL}/settings/read-all-centers-master-data`);
+}
 
 export function getAllUserStatusTypes(body) {
   return axios.post(
@@ -62,9 +64,9 @@ export function getAllUserStatusTypes(body) {
 }
 
 
-// export const donationReport = async (body) => {
-//   return await axios.post(`${USERS_URL}/edrs/donation-report`, body);
-// };
+export const donationReport = async (body) => {
+  return await axios.post(`${USERS_URL}/edrs/donation-report`, body);
+};
 
 export function sms_athentication(body) {
   return axios.post(

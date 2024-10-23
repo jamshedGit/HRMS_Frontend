@@ -13,7 +13,7 @@ import { SearchSelect } from "../../../../_helpers/SearchSelect";
 // import MaskedInput from "react-text-mask";
 // import InputMask from "react-input-mask";
 // import { TextField } from "@material-ui/core";
-// import * as actions from "../../../../../app/modules/IncidentDetails/_redux/incidents/incidentActions";
+import * as actions from "../../../../../app/modules/IncidentDetails/_redux/incidents/incidentActions";
 const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
 const cnicRegExp = /^[0-9]{5}-[0-9]{7}-[0-9]$/;
 
@@ -78,8 +78,30 @@ export function IncidentEditForm({
   //console.log("dashboard time", dashboard);
 
   // console.log("alaramTime option in form", alaramTime);
+  const getCenterId = (id) => {
+    const queryParams = {
+      // filter: {
+      //   searchQuery: "",
+      // },
+      // sortOrder: "name",
+      // pageSize: 10,
+      // pageNumber: 1,
+      centerId: id,
+      available: true,
+      inProgress: false,
+    };
 
+    dispatch(actions.fetchVehicleById({ ...queryParams }));
+  };
+  const getVehicleIdsForDropdown = (id) => {
+    const queryParams = {
+      centerId: id,
+      available: true,
+      inProgress: false,
+    };
 
+    dispatch(actions.fetchVehicleByDropdown({ ...queryParams }));
+  };
 
   const queryParamsOnLoad = {
     // filter: {

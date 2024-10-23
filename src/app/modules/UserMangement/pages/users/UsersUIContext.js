@@ -33,6 +33,8 @@ export function UsersUIProvider({ usersUIEvents, children }) {
   const initUser = {
     countryId: "",
     cityId: "",
+    centerId: "",
+    subCenterId: "",
     firstName: "",
     lastName: "",
     email: "",

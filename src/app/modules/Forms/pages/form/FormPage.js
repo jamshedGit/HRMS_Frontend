@@ -12,7 +12,7 @@ import { fetchAllCountry } from "../../../../../_metronic/redux/dashboardActions
 import {
   fetchUserStatusTypes,
   fetchRoles,
-
+  fetchCenters,
 } from "../../_redux/formActions";
 import { FormCard } from "./form-card/FormCard";
 import { FormActiveDialog } from "./form-active-dialog/FormActiveDialog";
@@ -27,14 +27,14 @@ export function FormPage({ history }) {
     newFormButtonClick: () => {
       dispatch(fetchAllCountry());
       dispatch(fetchRoles());
-
+      dispatch(fetchCenters());
       dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
       history.push("/form/read-all-form/new");
     },
     openEditFormDialog: (id) => {
       dispatch(fetchAllCountry());
       dispatch(fetchRoles());
-
+      dispatch(fetchCenters());
       dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
       history.push(`/form/read-all-form/${id}/edit`);
     },

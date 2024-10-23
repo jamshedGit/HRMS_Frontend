@@ -10,7 +10,7 @@ import DatePicker from "react-datepicker";
 import {
   fetchAllBanks,
   fetchAllCity,
-
+  fetchAllCityCenters,
   fetchAllSubCenter,
   getLatestBookingNo,
 } from "../../../../../../_metronic/redux/dashboardActions";
@@ -23,20 +23,11 @@ const cnicRegExp = /^[0-9]{5}-[0-9]{7}-[0-9]$/;
 // Password Regex
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 const userEditSchema_2 = Yup.object().shape(
-  {
-    countryId: Yup.string().required("*Required"),
-    cityId: Yup.string().required("*Required"),
-    branchCode: Yup.string().required("*Required"),
-    Name: Yup.string().required("*Required"),
-    BankId: Yup.string().required("*Required"),
-    email: Yup.string()
-      .email("Invalid email"),
-    phone: Yup
-      .number()
-      .nullable()
-      .notRequired()
-      .min(1)
-      .max(15)
+  {   countryId : Yup.string().required("Please select Country"),
+    cityId : Yup.string().required("Please select City"),
+      branchCode: Yup.string().required("*Required"),
+      Name: Yup.string().required("*Required"),
+      email: Yup.string().required("*Required"),
   }
 );
 
@@ -104,7 +95,7 @@ export function BranchEditForm({
     );
   }, [user.cityId, dashboard.allCity]);
 
-  console.log("master", user);
+
   return (
     <>
       <Formik
@@ -139,20 +130,20 @@ export function BranchEditForm({
                   <div className="from-group row">
                     {<div className="col-12 col-md-4 mt-3">
                       <SearchSelect
-                        name="BankId"
-                        label={<span> Bank<span style={{ color: 'red' }}>*</span></span>}
+                        name="ddlBank"
+                        label="Select Bank*"
                         isDisabled={isUserForRead && true}
                         onBlur={() => {
                           // handleBlur({ target: { name: "countryId" } });
                         }}
                         onChange={(e) => {
-                          setFieldValue("BankId", e.value);
+                          setFieldValue("bankId", e.value);
                           setDefaultBanks(e);
                           dispatch(fetchAllBanks(e.value));
                         }}
                         value={defBank}
-                        error={errors.BankId}
-                        touched={touched.BankId}
+                        error={errors.Id}
+                        touched={touched.Id}
                         options={dashboard.allBanks}
                       />
                     </div>
@@ -164,9 +155,8 @@ export function BranchEditForm({
                         name="branchCode"
                         component={Input}
                         placeholder="Enter Branch Code"
-                        label={<span> Branch Code<span style={{ color: 'red' }}>*</span></span>}
+                        label="Branch Code"
                       />
-                      {errors.branchCode && touched.branchCode}
                     </div>
 
                     <div className="col-12 col-md-4 mt-3">
@@ -174,14 +164,14 @@ export function BranchEditForm({
                         name="Name"
                         component={Input}
                         placeholder="Enter Branch Name"
-                        label={<span> Branch Name<span style={{ color: 'red' }}>*</span></span>}
+                        label="Branch Name"
                       />
                     </div>
 
                     {<div className="col-12 col-md-4 mt-3">
                       <SearchSelect
                         name="countryId"
-                        label={<span> Country<span style={{ color: 'red' }}>*</span></span>}
+                        label="Select Country*"
                         isDisabled={isUserForRead && true}
                         onBlur={() => {
                           // handleBlur({ target: { name: "countryId" } });
@@ -202,7 +192,7 @@ export function BranchEditForm({
                     {<div className="col-12 col-md-4 mt-3">
                       <SearchSelect
                         name="cityId"
-                        label={<span> City<span style={{ color: 'red' }}>*</span></span>}
+                        label="Select City*"
                         isDisabled={isUserForRead && true}
                         onBlur={() => {
                           //   handleBlur({ target: { name: "cityId" } });
@@ -210,12 +200,12 @@ export function BranchEditForm({
                         onChange={(e) => {
                           setFieldValue("cityId", e.value);
                           setDefaultCity(e);
-                      
+                          dispatch(fetchAllCityCenters(e.value));
                         }}
                         value={defCity}
                         error={errors.cityId}
                         touched={touched.cityId}
-                        options={dashboard.allCity}
+                         options={dashboard.allCity}
                       />
                     </div>}
                     {
@@ -285,7 +275,6 @@ export function BranchEditForm({
                         showTimeInput
                         name="accOpeningDate"
                         disabled={isUserForRead}
-                        autoComplete="off"
                       />
                     </div>}
 

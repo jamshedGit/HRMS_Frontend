@@ -32,12 +32,7 @@ export function DeptUIProvider({ DeptUIEvents, children }) {
   }, []);
   const initUser = {
     deptName: "",
-    deptCode:"",
-    budgetStrength: "",
-    subsidiary: "",
-    parentDept: "",
-    subsidiary: ""
-
+  
   };
 
   console.log("bank ui events",DeptUIEvents);

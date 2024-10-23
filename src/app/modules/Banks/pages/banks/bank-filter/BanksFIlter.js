@@ -12,7 +12,7 @@ import * as actions from "../../../../Dashboard/_redux/dashboardActions";
 import DatePicker from "react-datepicker";
 import {
   fetchAllCity,
-
+  fetchAllCityCenters,
   fetchAllSubCenter,
 } from "../../../../../../_metronic/redux/dashboardActions";
 
@@ -67,7 +67,7 @@ export function BanksFilter({ listLoading, user, setCity,
     if (cityId) {
 
       console.log("city id drop", cityId);
-     
+      dispatch(fetchAllCityCenters(cityId));
     }
   }, [cityId, dispatch]);
 
@@ -78,27 +78,27 @@ export function BanksFilter({ listLoading, user, setCity,
     }
   }, [banksUIContext])
 
-  // async function fetchDonationReport(filterVal) {
-  //   try {
-  //       console.log("filter",filterVal.receiptDateFrom);
-  //    // console.log(`${API_URL}/edrs/donation-report`);
-  //    // console.log("filter value", filterVal)
-  //     // const response = await axios.post(`${API_URL}/edrs/donation-report`, {
-  //     //   bookNo: filterVal.txtBookNo,
-  //     //   cityId: filterVal.cityId || "0",
-  //     //   centerId: filterVal.centerId || "0",
-  //     //   subCenterId: filterVal.subCenterId || "0",
-  //     //   dateFrom: filterVal.receiptDateFrom || "",
-  //     //   dateTo: filterVal.receiptDateTo,
+  async function fetchDonationReport(filterVal) {
+    try {
+        console.log("filter",filterVal.receiptDateFrom);
+     // console.log(`${API_URL}/edrs/donation-report`);
+     // console.log("filter value", filterVal)
+      const response = await axios.post(`${API_URL}/edrs/donation-report`, {
+        bookNo: filterVal.txtBookNo,
+        cityId: filterVal.cityId || "0",
+        centerId: filterVal.centerId || "0",
+        subCenterId: filterVal.subCenterId || "0",
+        dateFrom: filterVal.receiptDateFrom || "",
+        dateTo: filterVal.receiptDateTo,
                
-  //     // });
-  //     // console.log("donation report", response);
-  //     return response?.data?.data;
-  //   } catch (error) {
-  //     console.log("Error fetching data:", error);
-  //     console.error("Error fetching data:", error);
-  //   }
-  // }
+      });
+      console.log("donation report", response);
+      return response?.data?.data;
+    } catch (error) {
+      console.log("Error fetching data:", error);
+      console.error("Error fetching data:", error);
+    }
+  }
 
   function getBase64ImageFromURL(url) {
     return new Promise((resolve, reject) => {
@@ -126,192 +126,192 @@ export function BanksFilter({ listLoading, user, setCity,
     });
   }
 
-  // async function createPdf(filterVal) {
-  //   // console.log("e",e)
-  //   // setStartDate(e);
-  //   // const getYear = moment(e).format("yyyy");
-  //   //pbookNo = e;
-  //   const pbookNo = filterVal.txtBookNo;
-  //   console.log("creaet PDF", filterVal)
-  //   if (filterVal != null) {
-  //     setLoading(true);
-  //     // const data = await fetchDonationReport(filterVal);
-  //     // console.log("donation report 1", data);
+  async function createPdf(filterVal) {
+    // console.log("e",e)
+    // setStartDate(e);
+    // const getYear = moment(e).format("yyyy");
+    //pbookNo = e;
+    const pbookNo = filterVal.txtBookNo;
+    console.log("creaet PDF", filterVal)
+    if (filterVal != null) {
+      setLoading(true);
+      const data = await fetchDonationReport(filterVal);
+      console.log("donation report 1", data);
       
-  //     const table = {
-  //       headerRow: [
-  //         "SNo",
-  //         "Receipt#",
-  //         "Donor Name",
-  //         "Amount",
-  //         "Donation Type",
-  //         "Clerk",
-  //         "Center",
-  //         "Circle",
-  //         "Date",
-  //       ],
-  //       body: [],
-  //       footer: {
-  //         columns: [
-  //           'test123',
-  //           {
-  //             alignment: 'right',
-  //             text: 'Footer text'
-  //           }
-  //         ],
-  //         margin: [10, 0]
-  //       },
-  //     };
+      const table = {
+        headerRow: [
+          "SNo",
+          "Receipt#",
+          "Donor Name",
+          "Amount",
+          "Donation Type",
+          "Clerk",
+          "Center",
+          "Circle",
+          "Date",
+        ],
+        body: [],
+        footer: {
+          columns: [
+            'test123',
+            {
+              alignment: 'right',
+              text: 'Footer text'
+            }
+          ],
+          margin: [10, 0]
+        },
+      };
 
-  //     let total = 0;
-  //     let t = 0;
-  //     data &&
-  //       data.forEach((item, index) => {
-  //         console.log("index", data.length);
+      let total = 0;
+      let t = 0;
+      data &&
+        data.forEach((item, index) => {
+          console.log("index", data.length);
 
-  //         if (data.length - 1 == index) {
-  //           data.forEach((item) => { total += parseFloat(item.amount) })
+          if (data.length - 1 == index) {
+            data.forEach((item) => { total += parseFloat(item.amount) })
 
-  //         }
-  //         const row = [
-  //           index+1,
-  //           item.receiptNo,
-  //           item.donorName,
-  //           item.amount,
-  //           item.type,
-  //           // item.city,
+          }
+          const row = [
+            index+1,
+            item.receiptNo,
+            item.donorName,
+            item.amount,
+            item.type,
+            // item.city,
 
-  //           item.clerkName,
-  //           item.center,
-  //           item.subcenter,
-  //           item.createdon
+            item.clerkName,
+            item.center,
+            item.subcenter,
+            item.createdon
 
-  //         ];
-  //         table.body.push(row);
-  //       });
+          ];
+          table.body.push(row);
+        });
 
-  //     // Add Row For Total Amount
-  //     const totall = [
-  //       "",
-  //       "",
-  //       "Total",
-  //       "RS." + addCommas(total),
-  //       "",
-  //       "",
-  //       "",
-  //       "",
-  //       ""
-  //     ]
+      // Add Row For Total Amount
+      const totall = [
+        "",
+        "",
+        "Total",
+        "RS." + addCommas(total),
+        "",
+        "",
+        "",
+        "",
+        ""
+      ]
 
-  //     table.body.push(totall); // For Adding Total Amount in ROW
+      table.body.push(totall); // For Adding Total Amount in ROW
 
-  //     function GetDate() {
-  //       const today = new Date();
-  //       const yyyy = today.getFullYear();
-  //       let mm = today.getMonth() + 1; // Months start at 0!
-  //       let dd = today.getDate();
+      function GetDate() {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        let mm = today.getMonth() + 1; // Months start at 0!
+        let dd = today.getDate();
 
-  //       if (dd < 10) dd = '0' + dd;
-  //       if (mm < 10) mm = '0' + mm;
+        if (dd < 10) dd = '0' + dd;
+        if (mm < 10) mm = '0' + mm;
 
-  //       const formattedToday = dd + '/' + mm + '/' + yyyy;
-  //       return formattedToday;
-  //       // document.getElementById('DATE').value = formattedToday;
-  //     }
+        const formattedToday = dd + '/' + mm + '/' + yyyy;
+        return formattedToday;
+        // document.getElementById('DATE').value = formattedToday;
+      }
 
-  //     const documentDefinition = {
-  //       pageSize: 'A4',
-  //       pageOrientation: 'landscape',
-  //       fontSize: 6,
-  //       margin: [5, 0, 0, 30],
-  //       width:250,
-  //       content: [
-  //         {
-  //           alignment: "justify",
-  //           columns: [
-  //             // {
-  //             //   width: 80,
-  //             //   image: await getBase64ImageFromURL(
-  //             //     `${toAbsoluteUrl("/media/logos/abdul-start-edhi (1).png")}`
-  //             //     //`${toAbsoluteUrl("/media/logos/edhi1.png")}`
-  //             //   ),
-  //             // },
-  //             {
-  //               width: "*",
-  //               alignment: "center",
-  //               margin:[5,0,0,30],
-  //               top:[50],
-  //               text: [
-  //                 `DONATION REPORT\n 20-Receipt(s)
-  //                 BookNo# ${pbookNo} KARACHI`,
-  //               ],
-  //               style: "header",
-  //             },
-  //             {
-  //               width: 200,
-  //               image: await getBase64ImageFromURL(
-  //                 `${toAbsoluteUrl("/media/logos/edhi1.png")}`
-  //               ),
-  //             },
-  //           ],
-  //         },
-  //         {
-  //           table: {
-  //             headerRows:1,
-  //             body: [table.headerRow, ...table.body],
-  //             fontSize: 2,
-  //             style: {
-  //               body: {
-  //                 fontSize: 1,
-  //                 margin: [10, 0]
+      const documentDefinition = {
+        pageSize: 'A4',
+        pageOrientation: 'landscape',
+        fontSize: 6,
+        margin: [5, 0, 0, 30],
+        width:250,
+        content: [
+          {
+            alignment: "justify",
+            columns: [
+              // {
+              //   width: 80,
+              //   image: await getBase64ImageFromURL(
+              //     `${toAbsoluteUrl("/media/logos/abdul-start-edhi (1).png")}`
+              //     //`${toAbsoluteUrl("/media/logos/edhi1.png")}`
+              //   ),
+              // },
+              {
+                width: "*",
+                alignment: "center",
+                margin:[5,0,0,30],
+                top:[50],
+                text: [
+                  `DONATION REPORT\n 20-Receipt(s)
+                  BookNo# ${pbookNo} KARACHI`,
+                ],
+                style: "header",
+              },
+              {
+                width: 200,
+                image: await getBase64ImageFromURL(
+                  `${toAbsoluteUrl("/media/logos/edhi1.png")}`
+                ),
+              },
+            ],
+          },
+          {
+            table: {
+              headerRows:1,
+              body: [table.headerRow, ...table.body],
+              fontSize: 2,
+              style: {
+                body: {
+                  fontSize: 1,
+                  margin: [10, 0]
                   
-  //               },
-  //             }
-  //           },
-  //         },
-  //       ],
-  //       footer: {
-  //         columns: [
-  //           'Date: ' + GetDate(),
-  //           {
-  //             alignment: 'right',
-  //             text: 'Signature________________________ \n Zonal Office                \xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\ '
-  //           }
-  //         ],
-  //         margin: [10, 0]
-  //       },
-  //       styles: {
-  //         header: {
-  //           fontSize: 12,
-  //           bold: false,
-  //           margin: [50, 0, 0, 60],
-  //           alignment: "center",
-  //         },
-  //         body: {
-  //           fontSize: 2,
-  //           bold: false,
-  //           pageSize: 'A4',
-  //           pageOrientation: 'landscape'
-  //         }
-  //       },
+                },
+              }
+            },
+          },
+        ],
+        footer: {
+          columns: [
+            'Date: ' + GetDate(),
+            {
+              alignment: 'right',
+              text: 'Signature________________________ \n Zonal Office                \xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\ '
+            }
+          ],
+          margin: [10, 0]
+        },
+        styles: {
+          header: {
+            fontSize: 12,
+            bold: false,
+            margin: [50, 0, 0, 60],
+            alignment: "center",
+          },
+          body: {
+            fontSize: 2,
+            bold: false,
+            pageSize: 'A4',
+            pageOrientation: 'landscape'
+          }
+        },
 
-  //       defaultStyle: {
-  //         columnGap: 20,
-  //         pageSize: 'A4',
-  //         pageOrientation: 'landscape'
-  //       },
-  //     };
+        defaultStyle: {
+          columnGap: 20,
+          pageSize: 'A4',
+          pageOrientation: 'landscape'
+        },
+      };
 
-  //     setLoading(false);
+      setLoading(false);
 
-  //     try {
-  //       pdfMake.createPdf(documentDefinition).download();
-  //     } catch (error) {
-  //       // Handle the error
-  //       console.error(error);
-  //     }
-  //   }
-  // }
+      try {
+        pdfMake.createPdf(documentDefinition).download();
+      } catch (error) {
+        // Handle the error
+        console.error(error);
+      }
+    }
+  }
 
   function addCommas(nStr) {
     nStr += '';
