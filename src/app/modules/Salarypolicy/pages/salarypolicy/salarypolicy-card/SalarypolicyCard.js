@@ -13,7 +13,7 @@ import { useSelector, shallowEqual } from "react-redux"
 
 export function SalarypolicyCard() {
   const SalarypolicyUIContext = useSalarypolicyUIContext()
-  //console.log("SalarypolicyUIContext", SalarypolicyUIContext)
+
   const SalarypolicyUIProps  = useMemo(() => {
     return {
       newSalarypolicyButtonClick: SalarypolicyUIContext.newSalarypolicyButtonClick,
@@ -29,13 +29,13 @@ export function SalarypolicyCard() {
     }),
     shallowEqual
   )
-  console.log("userAccess Temp",userAccess)
+
   const accessUser = userAccess.find(
     (item) => item.componentName === "CreateSalarypolicy"
   )
 
   const { currentState } = useSelector(
-    (state) => {  console.log("state ",state); return {
+    (state) => {  console.log("s "); return {
       
       currentState: state.salarypolicy,
       userAccess: state?.auth?.userAccess["salarypolicy"],
@@ -46,7 +46,7 @@ export function SalarypolicyCard() {
   // const { currentState } = useSelector();
   
   const {entities } = currentState;
-  console.log("currentState salary policy entities button",  entities?.length);
+  
 
   return (
     <>

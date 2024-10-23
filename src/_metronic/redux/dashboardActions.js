@@ -210,6 +210,7 @@ export const fetchAllLeaveType = (key) => async (dispatch) => {
     .getAllLeaveTypes()
     .then((response) => {
       const entities = [...response.data?.data];
+      console.log("dispatching fetchAllFormsMenu",entities)
       dispatch(actions.AllChildMenusFetch({ entities, key }));
     })
     .catch((error) => {
@@ -388,4 +389,19 @@ export const getLatestTableId = (tableName, prefix) => async (dispatch) => {
       toast.error(error?.response?.data?.message);
     });
 };
+
+
+export const fetchAllHumanResourceRole = (key) => async (dispatch) => {
+  return await requestFromServer
+    .getAllHumanResourceRole()
+    .then((response) => {
+      const entities = [...response.data?.data];
+      console.log("dispatching entitties",entities)
+      dispatch(actions.AllHumanResourceRoleListFetch({ entities, key }));
+    })
+    .catch((error) => {
+      toast.error("Something went wrong");
+    });
+};
+
 

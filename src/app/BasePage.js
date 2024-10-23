@@ -6,21 +6,16 @@ import { MyPage } from "./pages/MyPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { Dashboard } from "./modules/Dashboard/pages";
 import { shallowEqual, useSelector, useDispatch } from "react-redux";
-//import { fetchAllCountry } from "./modules/Centers/_redux/centers/centersActions";
+
 import { fetchAllCountry } from "./modules/Dashboard/_redux/dashboardActions";
 import { incidentTypes } from "./modules/Dashboard/_redux/dashboardActions";
 
 const SettingsPage = lazy(() =>
   import("./modules/Settings/pages/SettingsPage")
 );
-// const VehicleManagment = lazy(() => import("./modules/Vehicles/pages"));
-// const IncidentDetailsManagment = lazy(() =>
-//   import("./modules/IncidentDetails/pages")
-// );
+
 const UserManagment = lazy(() => import("./modules/UserMangement/pages"));
-// const Centers = lazy(() => import("./modules/Centers/pages"));
-// const IBSModule = lazy(() => import("./modules/IBS/pages/index"));
-// const EDRSModule = lazy(() => import("./modules/EDRS/pages/index"));
+
 const BankModule = lazy(() => import("./modules/Banks/pages/index"));
 const BranchModule = lazy(() => import("./modules/BankBranch/pages/index"));
 const DepartmenModule = lazy(() => import("./modules/Department/pages/index"));
@@ -65,16 +60,14 @@ const LoanType = lazy(() => import("./modules/LoanType/pages/index"));
 const TaxSlab = lazy(() => import("./modules/LoanType/pages/index"));
 const leaveManagementConfiguration = lazy(() => import("./modules/leaveManagementConfiguration/pages/index"));
 const PayrollProcessPolicy = lazy(() => import("./modules/Payroll_Process_Policy/pages/index"));
-    
-
+const tax_slabModule = lazy(() => import("./modules/Tax_Slab/pages/index"));
+const loan_manag_confModule = lazy(() => import("./modules/Loan_manag_conf/pages/index"));   
+const gratuity_confModule = lazy(() => import("./modules/Gratuity_Configuration/pages/index"));   
+const accrue_gratuity_confModule = lazy(() => import("./modules/Accrue_Gratuity_Configuration/pages/index"));  
 const ROUTES = {
   settings: SettingsPage,
   users: UserManagment,
 
-  // vehicles: VehicleManagment,
-  // incidentdetails: IncidentDetailsManagment,
-  // ibs: IBSModule,
-  // edrs: EDRSModule,
   bank: BankModule,
   branch:BranchModule,
   department:DepartmenModule,
@@ -117,8 +110,11 @@ const ROUTES = {
   onetime_earning: OnetimeAllowance,
   leave_management_configuration: leaveManagementConfiguration,
   loan_type: LoanType,
-  tax_slab: TaxSlab  ,
-  payroll_process_policy :PayrollProcessPolicy
+  payroll_process_policy :PayrollProcessPolicy,
+  tax_slab:tax_slabModule,
+  loan_management_configuration:loan_manag_confModule,
+  gratuity_configuration :gratuity_confModule,
+  accrue_gratuity_configuration :accrue_gratuity_confModule
 };
 
 export default function BasePage() {

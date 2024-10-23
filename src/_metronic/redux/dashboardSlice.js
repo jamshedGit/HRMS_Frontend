@@ -10,6 +10,8 @@ const initialDashboardState = {
   allEmployeesSalaryDDL: [],
   allEarningDeductionList: [],
   allSubidiaryList: [],
+  allAccountList: [],
+  allHumanResourceRoleList:[],
   allBankBranch: [],
   allCity: [],
   allBanks:[],
@@ -35,7 +37,9 @@ const initialDashboardState = {
   allGenderList: [],
   allLeaveStatus: [],
   allMaritalStatus:[],
-  allLeaveTypes:[]
+  allLeaveTypes:[],
+  allLoanTypeList: [],
+  allContractTypeList: [],
 };
 
 export const callTypes = {
@@ -152,5 +156,21 @@ export const dashboardSlice = createSlice({
     AlaramTime: (state, action) => {
       state.alarmTime = action.payload;
     },
+    AllAccountListFetch: (state, action) => {
+      state.allAccountList = action.payload;
+    },
+
+    AllHumanResourceRoleListFetch: (state, action) => {
+      state.allHumanResourceRoleList = action.payload;
+    },
+    // AllLoan_typeListListFetch: (state, action) => {
+    //   state.allLoan_typeList = action.payload;
+    // },
+
+    AllContractTypeListFetch: (state, action) => {
+      state.allContractTypeList = action.payload;
+    },
+
+
   },
 });
