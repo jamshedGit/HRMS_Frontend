@@ -60,7 +60,7 @@ export function FormCard() {
                 className="btn btn-primary"
                 onClick={FormUIProps .newFormButtonClick}
               >
-                + Add Gratuity Configration
+                + Add Gratuity Configuration
               </button>
             {/* ) : (
               <></>
