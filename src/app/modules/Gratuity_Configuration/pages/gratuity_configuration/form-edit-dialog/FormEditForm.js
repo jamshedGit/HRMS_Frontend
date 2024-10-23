@@ -140,7 +140,7 @@ export function FormEditForm({
                       name="contract_typeId"
                       label={
                         <span>
-                          Contract TypeId<span style={{ color: "red" }}>*</span>
+                          Contract Type<span style={{ color: "red" }}>*</span>
                         </span>
                       }
                       isDisabled={isUserForRead}
