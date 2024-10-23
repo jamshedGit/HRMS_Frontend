@@ -146,7 +146,7 @@ export function FormEditForm({
                       name="graduity_expense_accountId"
                       label={
                         <span>
-                          Graduity Expense Account<span style={{ color: "red" }}>*</span>
+                          Gratuity Expense Account<span style={{ color: "red" }}>*</span>
                         </span>
                       }
                       isDisabled={isUserForRead}
@@ -173,7 +173,7 @@ export function FormEditForm({
                       name="graduity_payable_accountId"
                       label={
                         <span>
-                          Graduity Payable Account<span style={{ color: "red" }}>*</span>
+                          Gratuity Payable Account<span style={{ color: "red" }}>*</span>
                         </span>
                       }
                       isDisabled={isUserForRead}
