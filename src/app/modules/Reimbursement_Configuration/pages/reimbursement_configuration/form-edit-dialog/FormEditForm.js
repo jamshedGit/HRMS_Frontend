@@ -14,28 +14,12 @@ import {
 // Define the validation schema for the main form and the details
 const loanManagementSchema = Yup.object().shape({
   subsidiaryId: Yup.number().required("Subsidiary is required"),
-  accountId: Yup.number().required("Account is required"),
-  human_resource_role: Yup.number().required("Human Resource Role is required"),
-  emp_loan_account: Yup.number().required("Employee Loan Account is required"),
-  installment_deduction_percentage: Yup.number()
-  .min(0, "Must be at least 0") 
-  .max(100, "Must be at most 100") 
-    .required("Installment Deduction Percentage is required"),
-  installment_deduction_basis_type: Yup.number().required(
+  payroll_groupId: Yup.number().required("Account is required"),
+  cycle_typeId: Yup.number().required("Human Resource Role is required"),
+    cycle_typeId: Yup.number().required(
     "Installment Deduction Basis Type is required"
   ),
-  details: Yup.array().of(
-    Yup.object().shape({
-      loan_typeId: Yup.number().required(" Type is required"),
-      max_loan_amount: Yup.number()
-      .min(1, "Must be at least 1") 
-      .required("Max  Amount is required"),
-      basis: Yup.number().required("Basis is required"),
-      salary_count: Yup.number()
-      .min(1, "Must be at least 1")
-      .required("Count is required"),
-    })
-  ),
+
 });
 
 export function FormEditForm({
@@ -55,16 +39,11 @@ export function FormEditForm({
     if (!user.Id) {
       dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsidiaries
       dispatch(fetchAllFormsMenu(45, "allAccountList")); // For All Accounts
-      dispatch(fetchAllFormsMenu(181, "allLoanTypeList")); // For All Loan Types
-      dispatch(fetchAllHumanResourceRole("allHumanResourceRoleList"));
+      dispatch(fetchAllFormsMenu(181, "allLoanTypeList")); 
     }
   }, [dispatch, user.Id]);
 
-  // Define options for basis type
-  const basisOptions = [
-    { value: 0, label: "Gross" },
-    { value: 1, label: "Basic" },
-  ];
+
 
   const { currentState, userAccess } = useSelector((state) => {
     console.log("state for clear data ", state);
@@ -131,10 +110,7 @@ export function FormEditForm({
                         ) || null
                       }
                       options={dashboard.allSubidiaryList}
-                      // options={dashboard.allSubidiaryList.map(option => ({
-                      //   label: `${option.label} (${option.value})`, // Adding the value to the label
-                      //   value: option.value,
-                      // }))}
+          
                       error={errors.subsidiaryId}
                       touched={touched.subsidiaryId}
                     />
@@ -143,19 +119,19 @@ export function FormEditForm({
                   {/* Account Field */}
                   <div className="col-12 col-md-6 mt-3">
                     <SearchSelect
-                      name="accountId"
+                      name="payroll_groupId"
                       label={
                         <span>
-                          Account<span style={{ color: "red" }}>*</span>
+                          Payroll GroupId<span style={{ color: "red" }}>*</span>
                         </span>
                       }
                       isDisabled={isUserForRead}
                       onChange={(e) => {
-                        setFieldValue("accountId", e.value || null);
+                        setFieldValue("payroll_groupId", e.value || null);
                       }}
                       value={
                         dashboard.allAccountList.find(
-                          (option) => option.value === values.accountId
+                          (option) => option.value === values.payroll_groupId
                         ) || null
                       }
                       // options={dashboard.allAccountList}
@@ -163,63 +139,31 @@ export function FormEditForm({
                         label: `${option.mergeLabel}`, // Adding the value to the label
                         value: option.value,
                       }))}
-                      error={errors.accountId}
-                      touched={touched.accountId}
+                      error={errors.payroll_groupId}
+                      touched={touched.payroll_groupId}
                     />
                   </div>
 
-                  {/* Human Resource Role Field */}
-                  <div className="col-12 col-md-6 mt-3">
-                    <SearchSelect
-                      name="human_resource_role"
-                      label={
-                        <span>
-                          Human Resource Role
-                          <span style={{ color: "red" }}>*</span>
-                        </span>
-                      }
-                      isDisabled={isUserForRead}
-                      onChange={(e) => {
-                        setFieldValue("human_resource_role", e.value || null);
-                      }}
-                      value={
-                        dashboard.allHumanResourceRoleList.find(
-                          (option) =>
-                            option.value === values.human_resource_role
-                        ) || null
-                      }
-                      options={dashboard.allHumanResourceRoleList}
-                      error={errors.human_resource_role}
-                      touched={touched.human_resource_role}
-                    />
-                  </div>
-
+                
                   {/* Employee Loan Account Field */}
                   <div className="col-12 col-md-6 mt-3">
-                    {/* <Field
-                      name="emp_loan_account"
-                      component={Input}
-                      placeholder="Enter employee loan account"
-                      label="Employee Loan Account"
-                      type="number"
-                      disabled={isUserForRead}
-                    /> */}
+             
 
                     <SearchSelect
-                      name="emp_loan_account"
+                      name="cycle_typeId"
                       label={
                         <span>
-                          Employee Loan Account
+                          Cycle Type
                           <span style={{ color: "red" }}>*</span>
                         </span>
                       }
                       isDisabled={isUserForRead}
                       onChange={(e) => {
-                        setFieldValue("emp_loan_account", e.value || null);
+                        setFieldValue("cycle_typeId", e.value || null);
                       }}
                       value={
                         dashboard.allAccountList.find(
-                          (option) => option.value === values.emp_loan_account
+                          (option) => option.value === values.cycle_typeId
                         ) || null
                       }
                       // options={dashboard.allAccountList}
@@ -227,80 +171,13 @@ export function FormEditForm({
                         label: `${option.mergeLabel}`, // Adding the value to the label
                         value: option.value,
                       }))}
-                      error={errors.accountId}
-                      touched={touched.accountId}
+                      error={errors.cycle_typeId}
+                      touched={touched.cycle_typeId}
                     />
                   </div>
 
-                  {/* Installment Deduction Percentage Field */}
-                  <div className="col-12 col-md-6 mt-3">
-              
-                    <Field
-                      name="installment_deduction_percentage"
-                      component={Input}
-                      placeholder="Enter installment deduction percentage"
-                      label="Installment Deduction (%)"
-                      type="number"
-                      disabled={isUserForRead}
-                    />
-                    {/* {errors.installment_deduction_percentage && touched.installment_deduction_percentage && (
-                      <div className="text-danger">{errors.installment_deduction_percentage}</div>
-                    )} */}
-                  </div>
+         
 
-                  {/* Installment Deduction Basis Type Field */}
-                  <div className="col-12 col-md-6 mt-3">
-                    <label htmlFor="installment_deduction_basis_type">
-                      Installment Deduction Basis Type
-                    </label>
-                    {/* <Field
-                      name="installment_deduction_basis_type"
-                      as="select"
-                      label="Installment Deduction Basis Type"
-                      className="form-control"
-                      disabled={isUserForRead}
-                      onChange={(e) => {
-                        const value = parseInt(e.target.value, 10);
-                        setFieldValue(
-                          "installment_deduction_basis_type",
-                          value
-                        );
-                      }}
-                    >
-                      <option value="">Select Deduction Basis Type</option>
-                      {basisOptions.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </Field> */}
-                    <Field
-                      name="installment_deduction_basis_type"
-                      as="select"
-                      className="form-control"
-                      disabled={isUserForRead}
-                      onChange={(e) => {
-                        setFieldValue(
-                          "installment_deduction_basis_type",
-                          e.target.value
-                        ); // Use the raw value
-                      }}
-                    >
-                      <option value="">Select Deduction Basis Type</option>
-                      {basisOptions.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </Field>
-
-                    {errors.installment_deduction_basis_type &&
-                      touched.installment_deduction_basis_type && (
-                        <div className="text-danger">
-                          {errors.installment_deduction_basis_type}
-                        </div>
-                      )}
-                  </div>
                 </div>
               </fieldset>
 

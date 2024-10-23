@@ -21,23 +21,23 @@ export function FormPage({ history }) {
     newFormButtonClick: () => {
       dispatch(fetchAllCountry());
 
-      history.push("/reimbursement_configuration/read-all-loan-reimbursement-configuration/new");
+      history.push("/reimbursement_configuration/read-all-reimbursement-configuration/new");
     },
     openEditFormDialog: (id) => {
       dispatch(fetchAllCountry());
 
-      history.push(`/reimbursement_configuration/read-all-loan-reimbursement-configuration/${id}/edit`);
+      history.push(`/reimbursement_configuration/read-all-reimbursement-configuration/${id}/edit`);
     },
     openDeleteFormDialog: (id, status) => {
-      history.push(`/reimbursement_configuration/read-all-loan-reimbursement-configuration/${id}/${status}/delete`);
+      history.push(`/reimbursement_configuration/read-all-reimbursement-configuration/${id}/${status}/delete`);
     },
     openActiveFormDialog: (id) => {
-      history.push(`/reimbursement_configuration/read-all-loan-reimbursement-configuration/${id}/active`);
+      history.push(`/reimbursement_configuration/read-all-reimbursement-configuration/${id}/active`);
     },
     openReadFormDialog: (id, isUserRead) => {
       
       
-      history.push(`/reimbursement_configuration/read-all-loan-reimbursement-configuration/${id}/read`);
+      history.push(`/reimbursement_configuration/read-all-reimbursement-configuration/${id}/read`);
     },
   };
   return (

@@ -127,7 +127,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         subsidiaryId: user.subsidiaryId,
         payroll_groupId: user.payroll_groupId,
         cycle_typeId: user.cycle_typeId,
-        details: user.details
+        // details: user.details
         // loan_type: user.loan_type,
         // max_loan_amount: user.max_loan_amount,
         // salary_count: user.salary_count,
