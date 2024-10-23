@@ -65,6 +65,7 @@ const LoanType = lazy(() => import("./modules/LoanType/pages/index"));
 const TaxSlab = lazy(() => import("./modules/LoanType/pages/index"));
 const leaveManagementConfiguration = lazy(() => import("./modules/leaveManagementConfiguration/pages/index"));
 const PayrollProcessPolicy = lazy(() => import("./modules/Payroll_Process_Policy/pages/index"));
+const LeaveApplication = lazy(() => import("./modules/LeaveApplication/pages/index"));
     
 
 const ROUTES = {
@@ -118,7 +119,8 @@ const ROUTES = {
   leave_management_configuration: leaveManagementConfiguration,
   loan_type: LoanType,
   tax_slab: TaxSlab  ,
-  payroll_process_policy :PayrollProcessPolicy
+  payroll_process_policy :PayrollProcessPolicy,
+  leave_application :LeaveApplication,
 };
 
 export default function BasePage() {

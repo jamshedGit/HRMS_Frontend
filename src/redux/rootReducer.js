@@ -60,6 +60,7 @@ import { OnetimeAllowanceSlice } from "../app/modules/Onetime_Allowance/_redux/O
 import { LoanTypeSlice } from "../app/modules/LoanType/_redux/LoanTypeSlice";
 import { leaveManagementConfigurationSlice } from "../app/modules/leaveManagementConfiguration/_redux/leaveManagementConfigurationSlice";
 import { payroll_policySlice } from "../app/modules/Payroll_Process_Policy/_redux/payroll_policySlice";
+import { LeaveApplicationSlice } from "../app/modules/LeaveApplication/_redux/LeaveApplicationSlice";
 
 export const rootReducer = combineReducers({
   auth: auth.reducer,
@@ -121,7 +122,8 @@ export const rootReducer = combineReducers({
   loan_type: LoanTypeSlice.reducer,
   tax_slab: LoanTypeSlice.reducer,
   leave_management_configuration: leaveManagementConfigurationSlice.reducer,
-  payroll_process_policy: payroll_policySlice.reducer
+  payroll_process_policy: payroll_policySlice.reducer,
+  leave_application: LeaveApplicationSlice.reducer,
 });
 
 export function* rootSaga() {
