@@ -38,9 +38,10 @@ export function FormEditForm({
   useEffect(() => {
     if (!user.Id) {
       dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsidiaries
-      dispatch(fetchAllFormsMenu(45, "allAccountList")); // For All Accounts
-      dispatch(fetchAllFormsMenu(181, "allLoanTypeList")); 
+      dispatch(fetchAllFormsMenu(127, "allPayrolGroupList")); // For All Accounts
+      dispatch(fetchAllFormsMenu(181, "allCycleTypeList")); 
     }
+    //allPayrolGroupList
   }, [dispatch, user.Id]);
 
 
@@ -130,12 +131,12 @@ export function FormEditForm({
                         setFieldValue("payroll_groupId", e.value || null);
                       }}
                       value={
-                        dashboard.allAccountList.find(
+                        dashboard.allPayrolGroupList.find(
                           (option) => option.value === values.payroll_groupId
                         ) || null
                       }
                       // options={dashboard.allAccountList}
-                      options={dashboard.allAccountList.map((option) => ({
+                      options={dashboard.allPayrolGroupList.map((option) => ({
                         label: `${option.mergeLabel}`, // Adding the value to the label
                         value: option.value,
                       }))}
@@ -282,7 +283,7 @@ export function FormEditForm({
                                   )}
                               </td>
 
-                              <td>
+                              {/* <td>
                                 <Field
                                   name={`details[${index}].basis`}
                                   as="select"
@@ -305,7 +306,7 @@ export function FormEditForm({
                                       {errors.details[index].basis}
                                     </div>
                                   )}
-                              </td>
+                              </td> */}
 
                               <td>
                                 <Field
