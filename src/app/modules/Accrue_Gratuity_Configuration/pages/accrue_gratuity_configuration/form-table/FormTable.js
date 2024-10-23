@@ -83,7 +83,7 @@ export function FormTable() {
 
 {
   dataField: "GraduityExpenseAccount.formName",
-  text: "Graduity Expense Account",
+  text: "Gratuity Expense Account",
   sort: false,
   sortCaret: sortCaret,
   headerSortingClasses,
@@ -96,7 +96,7 @@ export function FormTable() {
 
     {
       dataField: "GraduityPayableAccount.formName",
-      text: "Graduity Payable Account",
+      text: "Gratuity Payable Account",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,

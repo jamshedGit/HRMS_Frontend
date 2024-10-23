@@ -314,8 +314,8 @@ export function BranchEditForm({
                         <Field
                           name="accNoForGrad"
                           component={Input}
-                          placeholder="Enter Account No For Graduity"
-                          label="Account No (Graduity)"
+                          placeholder="Enter Account No For Gratuity"
+                          label="Account No (Gratuity)"
                         />
                       </div>
                     }
