@@ -35,9 +35,9 @@ export function FormTable() {
     };
   }, [formUIContext]);
 
-  //console.log("queryparms", usersUIProps.queryparms)
+
   const { currentState, userAccess } = useSelector(
-    (state) => {  console.log("state ",state); return {
+    (state) => {  console.log("s "); return {
       
       // currentState: state.salarypolicy,
       currentState: state.tax_slab,
@@ -45,7 +45,7 @@ export function FormTable() {
     }},
     shallowEqual
   );
-  console.log("currentState tax_slab",currentState)
+
   
   const { totalCount, entities, listLoading } = currentState;
 

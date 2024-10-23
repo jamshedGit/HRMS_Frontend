@@ -57,7 +57,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     isuserForRead: state.accrue_gratuity_configuration.userForRead,
   }));
 
-  console.log("foraccrue  gratuity isuserForRead",userForEdit)
+
 
 
   useEffect(() => {
@@ -69,11 +69,11 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
 
   const saveForm = async (user) => {
 
-    console.log(" getUserStatus", user);
+ 
 
     if (!user.Id) {
  
-      console.log(" accure greatuity check update",id, user);
+    
       const finalObject = { user }
       dispatch(actions.createSalarypolicy(user, disbaleLoading, onHide));
       
@@ -82,7 +82,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     } else {
 
      
-      console.log("gratuity configration user", user);
+
 
       const formUpdatedFields = {
         Id: user.Id,

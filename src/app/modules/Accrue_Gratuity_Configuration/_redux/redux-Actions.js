@@ -6,18 +6,18 @@ const { actions } = accrue_gratuity_configurationSlice;
 
 
 export const fetchSalarypolicies = (queryparm) => async (dispatch) => {
-  // console.log("Receive QPsss", queryparm)
+
   dispatch(actions.startCall({ callType: callTypes.list }));
   
   return requestFromServer.getAllSalarypolicy(queryparm)
    
     .then((response) => {
     
-      console.log("response", response)
+   
       dispatch(actions.salarypolicyFetched(response));
     })
     .catch((error) => {
-      //console.log("Can't find user", error)
+      
       error.clientMessage = "Can't find";
       dispatch(actions.catchError({ error, callType: callTypes.list }));
     });
@@ -25,7 +25,7 @@ export const fetchSalarypolicies = (queryparm) => async (dispatch) => {
 
 export const fetchSalarypolicy = (id) => (dispatch) => {
 
-  console.log("User Action id " + id)
+
   if (!id) {
     return dispatch(actions.SalarypolicyFetchedForEdit({ userForEdit: undefined }));
   }
@@ -36,7 +36,7 @@ export const fetchSalarypolicy = (id) => (dispatch) => {
     .then((response) => {
       const entities = response.data?.data;
 
-      console.log("User fetched for search " + id)
+    
       dispatch(actions.SalarypolicyFetchedForEdit({ userForEdit: entities }));
     })
     .catch((error) => {
@@ -50,7 +50,7 @@ export const deleteSalarypolicy = (id) => (dispatch) => {
   return requestFromServer
     .deleteSalarypolicy({ Id: id })
     .then((response) => {
-      //console.log("response from delete user ", response.data.message)
+
       dispatch(actions.SalarypolicyDeleted({ Id: id }));
       toast.success("Successfully Deleted", {
         position: "top-right",
@@ -82,7 +82,7 @@ export const createSalarypolicy = (salarypolicyForCreation, disbaleLoading, onHi
       dispatch(actions.startCall({ callType: callTypes.action }));
       const user = res.data?.data;
      
-      console.log(user);
+
       dispatch(actions.salarypolicyCreated(user));
       disbaleLoading();
       toast.success("Successfully Created", {
@@ -116,9 +116,9 @@ export const updateSalarypolicy = (user, disbaleLoading, onHide) => (dispatch) =
   return requestFromServer
     .updateSalarypolicy(user)
     .then((response) => {
-      console.log("my response",response?.config?.data);
+  
       const updatedSalarypolicy = response?.config?.data; // response.data?.data;
-      console.log("bnkAction Res", response)
+    
       dispatch(actions.salarypolicyUpdated({ updatedSalarypolicy }));
       dispatch(actions.startCall({ callType: callTypes.action }));
       disbaleLoading();
@@ -136,8 +136,7 @@ export const updateSalarypolicy = (user, disbaleLoading, onHide) => (dispatch) =
 
     })
     .catch((error) => {
-      // console.log("error User update", error)
-      //error.clientMessage = "Can't update User"
+
       dispatch(actions.catchError({ error, callType: callTypes.action }));
       disbaleLoading();
       toast.error(error?.response?.data?.message, {

@@ -34,9 +34,9 @@ export function FormTable() {
     };
   }, [formUIContext]);
 
-  //console.log("queryparms", usersUIProps.queryparms)
+
   const { currentState, userAccess } = useSelector(
-    (state) => {  console.log("state ",state); return {
+    (state) => {  console.log("s "); return {
       
       // currentState: state.salarypolicy,
       currentState: state.gratuity_configuration,
@@ -44,7 +44,7 @@ export function FormTable() {
     }},
     shallowEqual
   );
-  console.log("currentState gratuity_configuration",currentState)
+
   
   const { totalCount, entities, listLoading } = currentState;
 

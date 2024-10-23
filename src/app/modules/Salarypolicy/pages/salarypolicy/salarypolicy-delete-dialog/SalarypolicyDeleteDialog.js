@@ -6,7 +6,7 @@ import * as actions from "../../../_redux/salarypolicyActions";
 import { useSalarypolicyUIContext } from "../SalarypolicyUIContext";
 
 export function SalarypolicyDeleteDialog({ id, status, show, onHide }) {
-  // console.log("Status", status);
+
   const [loading, setLoading] = useState(false);
   // Customers UI Context
   const usersUIContext = useSalarypolicyUIContext();
@@ -53,7 +53,7 @@ export function SalarypolicyDeleteDialog({ id, status, show, onHide }) {
       disableLoading();
     });
   };
-  //console.log("status", status, id);
+
   return (
     <Modal
       show={show}

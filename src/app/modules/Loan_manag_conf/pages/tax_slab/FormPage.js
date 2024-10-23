@@ -15,7 +15,7 @@ import {} from "../../_redux/redux-Actions";
 
 export function FormPage({ history }) {
 
-  console.log("laon mange conf page")
+
   const dispatch = useDispatch();
   const FormUIEvents = {
     newFormButtonClick: () => {

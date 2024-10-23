@@ -67,7 +67,7 @@ export function FormEditForm({
   ];
 
   const { currentState, userAccess } = useSelector((state) => {
-    console.log("state for clear data ", state);
+    
     return {
       currentState: state.loan_management_configuration,
       userAccess: state?.auth?.userAccess["loan_management_configuration"],
@@ -81,7 +81,7 @@ export function FormEditForm({
     entities.forEach((i) => {
       if (i.subsidiaryId == subsidiaryId) {
         existedId = i.Id;
-        console.log("update api hit");
+    
         dispatch(actions.fetchSalarypolicy(existedId));
       } else {
         dispatch(actions.fetchSalarypolicy(0));
@@ -95,7 +95,7 @@ export function FormEditForm({
       initialValues={user}
       validationSchema={loanManagementSchema}
       onSubmit={(values) => {
-        console.log("Form Values: updated", values);
+  
         // enableLoading();
         saveForm(values);
       }}

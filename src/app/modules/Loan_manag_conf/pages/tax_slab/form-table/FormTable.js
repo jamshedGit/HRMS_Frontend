@@ -35,9 +35,9 @@ export function FormTable() {
     };
   }, [formUIContext]);
  
-  //console.log("queryparms", usersUIProps.queryparms)
+
   const { currentState, userAccess } = useSelector(
-    (state) => {  console.log("state ",state); return {
+    (state) => {  console.log("s "); return {
      
       
       currentState: state.loan_management_configuration,
@@ -45,7 +45,7 @@ export function FormTable() {
     }},
     shallowEqual
   );
-  console.log("currentState loan_management_configuration",currentState)
+
  
   const { totalCount, entities, listLoading } = currentState;
  
@@ -69,16 +69,7 @@ export function FormTable() {
   );
   // Table columns
   const columns = [
-    // {
-    //   dataField: "Id",
-    //   text: "ID",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    //   headerSortingClasses,
-    //   style: {
-    //     minWidth: "10px",
-    //   },
-    // },
+
     {
       dataField: "Subsidiary.formName",
       text: "subsidiaryId",

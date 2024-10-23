@@ -88,7 +88,7 @@ export function FormFIlter({ listLoading,user }) {
 
         }}
         onSubmit={(values) => {
-          console.log(1);
+    
     
           applyFilter(values)
         }}
@@ -132,7 +132,7 @@ export function FormFIlter({ listLoading,user }) {
         enableReinitialize={true}
 
         onSubmit={(values) => {
-           console.log("values", values);
+   
 
         }}
       >

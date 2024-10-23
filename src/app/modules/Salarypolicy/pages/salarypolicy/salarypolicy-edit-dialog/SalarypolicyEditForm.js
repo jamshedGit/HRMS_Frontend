@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { Input } from "../../../../../../_metronic/_partials/controls"; // Adjust import as needed
 import { useDispatch, useSelector, shallowEqual } from "react-redux";
 
-console.log("Salary policy input", Input);
+
 
 const salarypolicyEditSchema = Yup.object().shape({
   type: Yup.string().required("Required*"),
@@ -32,8 +32,7 @@ export function SalarypolicyEditForm({
   enableLoading,
   loading,
 }) {
-  console.log("SalarypolicyEditForm user", user);
-  console.log("Salarypolicy current month data", user);
+
   // const [defMonth, setDefaultMonth] = useState(false);
 
   const { userAccess, currentMonthList } = useSelector(
@@ -43,7 +42,7 @@ export function SalarypolicyEditForm({
     }),
     shallowEqual
   );
-  console.log("userAccess Temp current month", userAccess);
+
 
   const options = [
     { value: "Ratio of Year", label: "Ratio of Year" },
@@ -67,13 +66,7 @@ export function SalarypolicyEditForm({
       )}
     </div>
   );
-  console.log(
-    "{month} {year} ({start_date} - {end_date})",
-    currentMonthList && currentMonthList[0].month,
-    currentMonthList && currentMonthList[0].year,
-    currentMonthList && currentMonthList[0].startDate,
-    currentMonthList && currentMonthList[0].endDate
-  );
+
   const monthIndex = currentMonthList && currentMonthList[0].month - 1; // 9 for September
   const year = currentMonthList && currentMonthList[0].year; // 2024
 
@@ -120,7 +113,7 @@ export function SalarypolicyEditForm({
   // Create the final formatted string
   const formattedString = `${monthName} ${year} (${formattedStartDate} - ${formattedEndDate})`;
 
-  console.log("{month} {year} ({start_date} - {end_date})", formattedString);
+
 
   return (
     <Formik
@@ -136,7 +129,7 @@ export function SalarypolicyEditForm({
       initialValues={user}
       validationSchema={salarypolicyEditSchema}
       onSubmit={(values) => {
-        console.log("values", values);
+    
         enableLoading();
         saveSalarypolicy(values);
       }}

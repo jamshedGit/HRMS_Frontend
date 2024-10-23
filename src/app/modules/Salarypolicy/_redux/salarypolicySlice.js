@@ -40,12 +40,12 @@ export const salarypolicySlice = createSlice({
             }
         },
         salarypolicyFetched: (state, action) => {
-            // console.log(action)
-            console.log("salary policyuser slice", action.payload)
+     
+   
             const entities = action.payload.data?.data.rows;
-            console.log("ent salary policyuser slice", entities)
+       
             const totalResult = action.payload.data?.data.totalResults;
-            console.log(entities);
+          
             state.listLoading = false;
             state.error = null;
             state.entities = entities;
@@ -54,8 +54,8 @@ export const salarypolicySlice = createSlice({
 
         //get User By ID
         SalarypolicyFetchedForEdit: (state, action) => {
-            console.log("get user detail from receipt slice")
-            console.log(action);
+        
+      
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
@@ -99,9 +99,9 @@ export const salarypolicySlice = createSlice({
         CurrentMonthFetched: (state, action) => {
           
             const entities = action.payload?.response?.data?.data?.rows;
-            console.log("CurrentMonthFetched slice", entities)
+    
             const totalResult = action.payload.data?.data.totalResults;
-            console.log(entities);
+   
             state.listLoading = false;
             state.error = null;
             state.currentMonth = entities;
