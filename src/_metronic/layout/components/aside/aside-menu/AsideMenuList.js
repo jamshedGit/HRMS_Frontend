@@ -15,6 +15,7 @@ export function AsideMenuList({ layoutProps }) {
   const auth = useSelector(({ auth }) => auth, shallowEqual);
   const UserAccess = auth?.userAccess;
   const Settings = auth?.userAccess?.Settings;
+  console.log("UserAccess", UserAccess);
 
   const [isVisible, setIsVisible] = useState(true);
   const menuRef = useRef(null);
@@ -36,6 +37,7 @@ export function AsideMenuList({ layoutProps }) {
   };
 
 
+  console.log("div visible", isVisible);
   const isDashboardAccess = Settings?.some((obj) =>
     Object.values(obj).includes("read-all-vehicles-dashboard")
   );
@@ -95,23 +97,21 @@ export function AsideMenuList({ layoutProps }) {
       </ul>
 
 
-      <div style={{ position: "fixed", width: "100%",marginTop:"2.8%" }}>
+      <div style={{ position: "fixed", width: "100%" }}>
         <Navbar className="navbar" bg="light" expand="lg">
           {/* <Navbar.Brand href="#home">MyApp</Navbar.Brand> */}
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <NavDropdown className="colorText" title="Dashboard" id="basic-nav-dropdown">
 
-                <NavDropdown.Item href='/dashboard'>Dashboard</NavDropdown.Item>
-
-              </NavDropdown>
               {
                 UserAccess && Object.keys(UserAccess)?.map((res) => {
+                  console.log('::res::', UserAccess, res, UserAccess[res])
                   return UserAccess[res].sort((a, b) => a.sortOrder - b.sortOrder).some(item => item.isResourceShow) &&
                     <>
-                      <NavDropdown className="colorText" title={res.replace('_', '')} id="basic-nav-dropdown">
+                      <NavDropdown className="colorText"  title={res.replace('_', '')} id="basic-nav-dropdown">
                         {UserAccess[res].map((ce) => {
+                          console.log('::ce 123::', ce)
                           return ce.isResourceShow &&
                             <NavDropdown.Item href={`/${ce.url}`}>{ce.name}</NavDropdown.Item>
                         })}

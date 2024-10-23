@@ -8,7 +8,7 @@ import * as actions from "../../../_redux/usersActions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export function UsersEditDialog({ id, show, onHide, userForRead, isPasswordHide }) {
+export function UsersEditDialog({ id, show, onHide, userForRead }) {
   const [action, setaction] = useState(false);
   const [loading, setLoading] = useState(false);
   const title = "UserEditDialog";
@@ -74,7 +74,7 @@ export function UsersEditDialog({ id, show, onHide, userForRead, isPasswordHide 
       const getUserStatus = userStatusTypes.filter((item) => {
         return item.value === +user.status;
       });
-      console.log("getUserStatus", getUserStatus);
+      //console.log("getUserStatus", getUserStatus);
       const { status = getUserStatus[0].label, ...rest } = user;
       const finalObject = {
         status: getUserStatus[0].label,
@@ -97,11 +97,11 @@ export function UsersEditDialog({ id, show, onHide, userForRead, isPasswordHide 
         firstName: user.firstName,
         lastName: user.lastName,
         roleId: user.roleId,
-
+        centerId: user.centerId,
         status: getUserStatus?.label,
         countryId: user.countryId,
         cityId: user.cityId,
-
+        subCenterId: user.subCenterId,
       };
 
       // console.log("userUpdatedFields", userUpdatedFields);
@@ -118,7 +118,6 @@ export function UsersEditDialog({ id, show, onHide, userForRead, isPasswordHide 
     >
       <UserEditDialogHeader id={id} isUserForRead={userForRead} />
       <UserEditForm
-        isPasswordHide={isPasswordHide || false}
         saveUser={saveUser}
         user={userForEdit || usersUIProps.initUser}
         onHide={onHide}

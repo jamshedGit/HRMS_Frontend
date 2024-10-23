@@ -51,7 +51,7 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
     user: state.users, // change for users to receipt
     userForEdit: state.bank.userForEdit,
     roles: state.users.roles,
-    // centers: state.users.centers,
+    centers: state.users.centers,
     userStatusTypes: state.users.userStatusTypes,
     isuserForRead: state.bank.userForRead,
   }));

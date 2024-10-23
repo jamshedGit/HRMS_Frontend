@@ -197,6 +197,14 @@ export const fetchRoles = () => (dispatch) => {
     });
 };
 
+export const fetchCenters = () => (dispatch) => {
+  dispatch(actions.startCall({ callType: callTypes.list }));
+  return requestFromServer.getAllCenters().then((response) => {
+    const entities = response.data?.data;
+    dispatch(actions.CentersFetched(entities));
+  });
+};
+
 export const fetchUserStatusTypes = (body) => (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.list }));
   return requestFromServer.getAllUserStatusTypes(body).then((response) => {
@@ -206,15 +214,15 @@ export const fetchUserStatusTypes = (body) => (dispatch) => {
 };
 
 
-// export const fetchDonationReport = (body) => async (dispatch) => {
-//   return await requestFromServer
-//     .donationReport(body)
-//     .then((response) => {
-//       console.log("Res", response);
-//       const entities = response?.data?.data;
-//       dispatch(actions.donationReportFetch(entities));
-//     })
-//     .catch((error) => {
-//       toast("error", "Data not found");
-//     });
-// };
+export const fetchDonationReport = (body) => async (dispatch) => {
+  return await requestFromServer
+    .donationReport(body)
+    .then((response) => {
+      console.log("Res", response);
+      const entities = response?.data?.data;
+      dispatch(actions.donationReportFetch(entities));
+    })
+    .catch((error) => {
+      toast("error", "Data not found");
+    });
+};

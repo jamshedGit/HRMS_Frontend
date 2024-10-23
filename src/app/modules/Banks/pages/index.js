@@ -4,7 +4,7 @@ import { LayoutSplashScreen, ContentRoute } from "../../../../_metronic/layout";
 import { BanksPage } from "./banks/BanksPage";
 
 export default function BankManagement() {
-  console.log('Bank mein aya not loading')
+  console.log('Bank mein aya')
   return (
     <Suspense fallback={<LayoutSplashScreen />}>
       <Switch>

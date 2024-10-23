@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import {
   fetchAllCity,
+  fetchAllCityCenters,
   fetchAllSubCenter,
   getLatestBookingNo,
   fetchAllFormsMenu
@@ -107,7 +108,7 @@ export function FormEditForm({
         onSubmit={(values) => {
           //  console.log("values", values);
           enableLoading();
-          //values.formCode = 'NA ';
+          values.formCode = 'NA ';
           saveReligion(values);
         }}
       >
@@ -165,7 +166,7 @@ export function FormEditForm({
 
                       />
                     </div>}
-                     {<div className="col-12 col-md-4 mt-3">
+                    {/* {<div className="col-12 col-md-4 mt-3">
                       <Field
                         name="formCode"
                         component={Input}
@@ -173,7 +174,7 @@ export function FormEditForm({
                         label="Form Code"
 
                       />
-                    </div>}
+                    </div>} */}
                   </div>
                   <div className="form-group row"></div>
                 </fieldset>

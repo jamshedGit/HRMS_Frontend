@@ -82,7 +82,7 @@ export function TilesWidget10({
                           setSubcenter([]);
                           setVehicle([]);
                           setAlarmTime([]);
-                  
+                          dispatch(actions.fetchAllCityCenters(e.value));
                           dispatch(
                             actions.fetchDashboardVehicles({ cityId: e.value })
                           );
@@ -122,7 +122,7 @@ export function TilesWidget10({
                           if (subCenter) {
                             payload.subCenterId = subCenter.value;
                           }
-                          // dispatch(actions.fetchAllSubCenter(e.value));
+                          dispatch(actions.fetchAllSubCenter(e.value));
                           dispatch(
                             actions.fetchDashboardVehicles({
                               ...payload,

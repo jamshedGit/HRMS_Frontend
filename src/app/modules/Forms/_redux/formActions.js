@@ -189,6 +189,14 @@ export const fetchRoles = () => (dispatch) => {
     });
 };
 
+export const fetchCenters = () => (dispatch) => {
+  dispatch(actions.startCall({ callType: callTypes.list }));
+  return requestFromServer.getAllCenters().then((response) => {
+    const entities = response.data?.data;
+    dispatch(actions.CentersFetched(entities));
+  });
+};
+
 export const fetchUserStatusTypes = (body) => (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.list }));
   return requestFromServer.getAllUserStatusTypes(body).then((response) => {

@@ -1,6 +1,9 @@
 import axios from "axios";
 export const USERS_URL = process.env.REACT_APP_API_URL;
 
+export const getAllCeters = async () => {
+  return await axios.get(`${USERS_URL}/settings/read-all-centers-master-data`);
+};
 
 export const getAllSubcenter = async (centerId) => {
   return await axios.post(
@@ -96,7 +99,12 @@ export const getAllParentDepartments = async (Id) => {
 };
 
 
-
+export const getCentersByCityId = async (cityId) => {
+  return await axios.post(
+    `${USERS_URL}/settings/read-all-centers-master-data-by-cityId`,
+    { cityId: cityId }
+  );
+};
 
 export const getVehiclesByCenterAndSubcenterId = async (body) => {
   return await axios.post(
@@ -158,9 +166,4 @@ export const getLastDeductionNo = async (bookingNo) => {
   );
 };
 
-export const getAllHumanResourceRole = async () => {
-  console.log("getAllHumanResourceRole:");
-  return await axios.get(`${USERS_URL}/settings/read-all-roles-master-data`, {
-  });
-};
 
