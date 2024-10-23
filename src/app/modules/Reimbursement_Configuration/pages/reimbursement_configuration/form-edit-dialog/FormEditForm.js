@@ -39,7 +39,7 @@ export function FormEditForm({
     if (!user.Id) {
       dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsidiaries
       dispatch(fetchAllFormsMenu(127, "allPayrolGroupList")); // For All Accounts
-      dispatch(fetchAllFormsMenu(181, "allCycleTypeList")); 
+      dispatch(fetchAllFormsMenu(191, "allCycleTypeList")); 
     }
     //allPayrolGroupList
   }, [dispatch, user.Id]);
@@ -163,12 +163,12 @@ export function FormEditForm({
                         setFieldValue("cycle_typeId", e.value || null);
                       }}
                       value={
-                        dashboard.allAccountList.find(
+                        dashboard.allCycleTypeList.find(
                           (option) => option.value === values.cycle_typeId
                         ) || null
                       }
                       // options={dashboard.allAccountList}
-                      options={dashboard.allAccountList.map((option) => ({
+                      options={dashboard.allCycleTypeList.map((option) => ({
                         label: `${option.mergeLabel}`, // Adding the value to the label
                         value: option.value,
                       }))}
@@ -181,171 +181,7 @@ export function FormEditForm({
 
                 </div>
               </fieldset>
-
-              <FieldArray name="details">
-                {({ push, remove }) => (
-                  <div
-                    style={{
-                      backgroundColor: "rgb(235 243 255)",
-                      padding: "20px",
-                      borderRadius: "5px",
-                      border: "2px solid #adceff",
-                      marginTop: "20px",
-                    }}
-                  >
-                    <h6>Details</h6>
-                    <table className="table table-head-custom table-vertical-center overflow-hidden table-hover">
-                      <thead>
-                        <tr
-                          style={{ backgroundColor: "#4d5f7a", color: "#fff" }}
-                        >
-                          <th>Action</th>
-                          <th>Loan Type</th>
-                          <th>Max Loan Amount</th>
-                          <th>Basis</th>
-                          <th>Salary Count</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {values.details &&
-                          values.details.length > 0 &&
-                          values.details.map((detail, index) => (
-                            <tr key={index}>
-                              <td>
-                                {!isUserForRead && (
-                                  <button
-                                    type="button"
-                                    onClick={() => remove(index)}
-                                    className="btn btn-danger btn-sm"
-                                  >
-                                    Delete
-                                  </button>
-                                )}
-                              </td>
-
-                              <td>
-                                <Field
-                                  name={`details[${index}].loan_typeId`}
-                                  as="select"
-                                  className="form-control"
-                                  disabled={isUserForRead}
-                                >
-                                  {/* <option value="">Select Loan Type</option> */}
-                                  {/* {dashboard.allLoanTypeList?.map(
-                                    (loanType) => (
-                                      <option
-                                        key={loanType.value}
-                                        value={loanType.value}
-                                      >
-                                        {loanType.label}
-                                      </option>
-                                    )
-                                  )} */}
-
-                                  {dashboard.allLoanTypeList?.map((x) => {
-                                    return (
-                                      <option
-                                        disabled={
-                                          values.details.find(
-                                            (el) => el.loan_typeId == x.value
-                                          )
-                                            ? true
-                                            : false
-                                        }
-                                        value={x.value}
-                                      >
-                                        {" "}
-                                        {x.label}{" "}
-                                      </option>
-                                    );
-                                  })}
-                                </Field>
-                                {errors.details?.[index]?.loan_typeId &&
-                                  touched.details?.[index]?.loan_typeId && (
-                                    <div className="text-danger">
-                                      {errors.details[index].loan_typeId}
-                                    </div>
-                                  )}
-                              </td>
-
-                              <td>
-                                <Field
-                                  name={`details[${index}].max_loan_amount`}
-                                  type="number"
-                                  className="form-control"
-                                  disabled={isUserForRead}
-                                />
-                                {errors.details?.[index]?.max_loan_amount &&
-                                  touched.details?.[index]?.max_loan_amount && (
-                                    <div className="text-danger">
-                                      {errors.details[index].max_loan_amount}
-                                    </div>
-                                  )}
-                              </td>
-
-                              {/* <td>
-                                <Field
-                                  name={`details[${index}].basis`}
-                                  as="select"
-                                  className="form-control"
-                                  disabled={isUserForRead}
-                                >
-                                  <option value="">Select Basis</option>
-                                  {basisOptions.map((option) => (
-                                    <option
-                                      key={option.value}
-                                      value={option.value}
-                                    >
-                                      {option.label}
-                                    </option>
-                                  ))}
-                                </Field>
-                                {errors.details?.[index]?.basis &&
-                                  touched.details?.[index]?.basis && (
-                                    <div className="text-danger">
-                                      {errors.details[index].basis}
-                                    </div>
-                                  )}
-                              </td> */}
-
-                              <td>
-                                <Field
-                                  name={`details[${index}].salary_count`}
-                                  type="number"
-                                  className="form-control"
-                                  disabled={isUserForRead}
-                                />
-                                {errors.details?.[index]?.salary_count &&
-                                  touched.details?.[index]?.salary_count && (
-                                    <div className="text-danger">
-                                      {errors.details[index].salary_count}
-                                    </div>
-                                  )}
-                              </td>
-                            </tr>
-                          ))}
-                      </tbody>
-                    </table>
-
-                    {!isUserForRead && (
-                      <button
-                        type="button"
-                        onClick={() =>
-                          push({
-                            loan_typeId: "",
-                            max_loan_amount: "",
-                            basis: "",
-                            salary_count: "",
-                          })
-                        }
-                        className="btn btn-primary btn-sm"
-                      >
-                        + Add Detail
-                      </button>
-                    )}
-                  </div>
-                )}
-              </FieldArray>
+{/*  */}
             </Form>
           </Modal.Body>
 

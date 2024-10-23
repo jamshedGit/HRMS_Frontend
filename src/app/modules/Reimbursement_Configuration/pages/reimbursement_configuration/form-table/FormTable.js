@@ -108,7 +108,7 @@ export function FormTable() {
 
  
     {
-      dataField: "cycle_typeId",
+      dataField: "CycleType.formName",
       text: "cycle type",
       sort: false,
       sortCaret: sortCaret,

@@ -75,24 +75,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   const saveForm = async (user) => {
  
     console.log("loan management conf getUserStatus updated", user.details);
-    // const loanTypeIds = user.details.map((detail) => detail.loan_typeId);
 
-    // Check for duplicate loan_typeId values
-    // const hasDuplicates = loanTypeIds.length !== new Set(loanTypeIds).size;
-  
-    // if (hasDuplicates) {
-    //   toast.error("Duplicate loan types are not allowed. Please ensure each loan type is unique.", {
-    //     position: "top-right",
-    //     autoClose: 5000,
-    //     hideProgressBar: false,
-    //     closeOnClick: true,
-    //     pauseOnHover: true,
-    //     draggable: true,
-    //     progress: undefined,
-    //   });
-    //   return
-
-    // }
 
        if (user.details=="") {
       toast.error("Detail is incomplete.", {
@@ -128,9 +111,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         payroll_groupId: user.payroll_groupId,
         cycle_typeId: user.cycle_typeId,
         // details: user.details
-        // loan_type: user.loan_type,
-        // max_loan_amount: user.max_loan_amount,
-        // salary_count: user.salary_count,
+
       };
 
   
