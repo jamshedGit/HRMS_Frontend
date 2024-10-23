@@ -173,10 +173,41 @@ export const fetchAllDept = (id) => async (dispatch) => {
     });
 };
 
-
-export const fetchAllFormsMenu = (id, key) => async (dispatch) => {
+/**
+ * 
+ * Get Data for dropdown according to id and set it in state on the key provided
+ * text key is sent so that when fetching dopdown data if text key has value it will add default entry in array for that value
+ * 
+ * like if text = 'All' the response will have 1 default object {label: 'All', value : null}
+ * if text is not provided then response will have 1 default object {label: '--Select--', value: null}
+ * 
+ * @param {String|Number} id 
+ * @param {string} key 
+ * @param {string} text 
+ * @returns 
+ */
+export const fetchAllFormsMenu = (id, key, text=null) => async (dispatch) => {
   return await requestFromServer
-    .getAllFormMenus(id)
+    .getAllFormMenus(id, text)
+    .then((response) => {
+      const entities = [...response.data?.data];
+      dispatch(actions.AllChildMenusFetch({ entities, key }));
+    })
+    .catch((error) => {
+      toast.error("Something went wrong");
+    });
+};
+
+/**
+ * 
+ * Get All leave Types Data from Server and set it in state on the key provided in argument
+ * 
+ * @param {String} key 
+ * @returns 
+ */
+export const fetchAllLeaveType = (key) => async (dispatch) => {
+  return await requestFromServer
+    .getAllLeaveTypes()
     .then((response) => {
       const entities = [...response.data?.data];
       console.log("dispatching fetchAllFormsMenu",entities)
