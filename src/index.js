@@ -53,7 +53,6 @@ const { PUBLIC_URL, REACT_APP_ENV } = process.env
  */
 
 if (REACT_APP_ENV !== "server") {
-  console.log("Get Mock Data")
   // _redux.mockAxios(axios)
   _redux.setupAxios(axios, store)
 } else {

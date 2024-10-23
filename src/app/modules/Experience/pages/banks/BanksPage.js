@@ -12,7 +12,7 @@ import { fetchAllCountry } from "../../../../../_metronic/redux/dashboardActions
 import {
   fetchUserStatusTypes,
   fetchRoles,
-  fetchCenters,
+  // fetchCenters,
 } from "../../_redux/bankActions";
 
 
@@ -25,14 +25,14 @@ export function ExperiencePage({ history }) {
     newBankButtonClick: () => {
       dispatch(fetchAllCountry());
       dispatch(fetchRoles());
-      dispatch(fetchCenters());
+
       dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
       history.push("/experience/read-all-experience/new");
     },
     openEditBankDialog: (id) => {
       dispatch(fetchAllCountry());
       dispatch(fetchRoles());
-      dispatch(fetchCenters());
+   
       dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
       history.push(`/experience/read-all-experience/${id}/edit`);
     },

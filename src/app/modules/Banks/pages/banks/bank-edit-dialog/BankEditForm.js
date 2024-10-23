@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import {
   fetchAllCity,
-  fetchAllCityCenters,
+
   fetchAllSubCenter,
   getLatestBookingNo,
 } from "../../../../../../_metronic/redux/dashboardActions";
@@ -83,7 +83,7 @@ export function BankEditForm({
                         name="Name"
                         component={Input}
                         placeholder="Bank Name"
-                        label="Bank Name"
+                        label={<span> Bank<span style={{ color: 'red' }}>*</span></span>}
                         
                       />
                     </div>

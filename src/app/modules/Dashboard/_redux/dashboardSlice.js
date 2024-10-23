@@ -41,7 +41,11 @@ const initialDashboardState = {
   lastTrips: [],
   alarmTime: [],
   incidentTypes: [],
-  allCompensationBenefitsList:[]
+  allCompensationBenefitsList:[],
+  allAccountList:[],
+  allHumanResourceRoleList:[],
+  allLoanTypeList: [],
+  allContractTypeList:[]
 };
 
 export const callTypes = {
@@ -176,5 +180,18 @@ export const dashboardSlice = createSlice({
     AllIncidentTypes: (state, action) => {
       state.incidentTypes = action.payload;
     },
+    AllAccountListFetch: (state, action) => {
+      state.allAccountList = action.payload;
+    },
+    AllHumanResourceRoleListFetch: (state, action) => {
+  
+      state.allHumanResourceRoleList = action.payload.entities;
+    },
+    AllContractTypeListFetch: (state, action) => {
+      state.allContractTypeList = action.payload;
+    },
+
+    
+
   },
 });

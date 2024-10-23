@@ -82,15 +82,15 @@ export function DeptEditDialog({ id, show, onHide, userForRead }) {
   // }, [actionsLoading]);
   //console.log("userForEdit", userForEdit);
 
-  const saveDept = (dept) => {
+  const saveDept = async (dept) => {
 
     if (!id) {
       console.log("department edit dialog");
       console.log(dept);
 
       const finalObject = { dept }
-      dispatch(actions.createDept(dept, disbaleLoading, onHide));
-      dispatch(actions.fetchUsers(usersUIProps.queryParams));
+     await dispatch(actions.createDept(dept, disbaleLoading, onHide));
+      await dispatch(actions.fetchUsers(usersUIProps.queryParams));
 
     } else {
       // const getUserStatus = userStatusTypes.find((item) => {
@@ -110,8 +110,8 @@ export function DeptEditDialog({ id, show, onHide, userForRead }) {
       };
 
       console.log("deptUpdatedFields", deptUpdatedFields);
-      dispatch(actions.updateDept(deptUpdatedFields, disbaleLoading, onHide));
-
+     await dispatch(actions.updateDept(deptUpdatedFields, disbaleLoading, onHide));
+     await dispatch(actions.fetchUsers(usersUIProps.queryParams));
     }
   };
 

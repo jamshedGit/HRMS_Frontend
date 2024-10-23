@@ -6,23 +6,17 @@ import { MyPage } from "./pages/MyPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { Dashboard } from "./modules/Dashboard/pages";
 import { shallowEqual, useSelector, useDispatch } from "react-redux";
-//import { fetchAllCountry } from "./modules/Centers/_redux/centers/centersActions";
+
 import { fetchAllCountry } from "./modules/Dashboard/_redux/dashboardActions";
 import { incidentTypes } from "./modules/Dashboard/_redux/dashboardActions";
 
 const SettingsPage = lazy(() =>
   import("./modules/Settings/pages/SettingsPage")
 );
-const VehicleManagment = lazy(() => import("./modules/Vehicles/pages"));
-const IncidentDetailsManagment = lazy(() =>
-  import("./modules/IncidentDetails/pages")
-);
+
 const UserManagment = lazy(() => import("./modules/UserMangement/pages"));
-const Centers = lazy(() => import("./modules/Centers/pages"));
-const IBSModule = lazy(() => import("./modules/IBS/pages/index"));
-const EDRSModule = lazy(() => import("./modules/EDRS/pages/index"));
+
 const BankModule = lazy(() => import("./modules/Banks/pages/index"));
-const salarypolicyModule = lazy(() => import("./modules/Salarypolicy/pages/index"));
 const BranchModule = lazy(() => import("./modules/BankBranch/pages/index"));
 const DepartmenModule = lazy(() => import("./modules/Department/pages/index"));
 const EmployeeTypeModule = lazy(() => import("./modules/EmployeeType/pages/index"));
@@ -56,18 +50,24 @@ const EmployeeSalaryRevisionModule = lazy(() => import("./modules/Employee_Salar
 const TaxSetupModule = lazy(() => import("./modules/Tax_Setup/pages/index"));
 const FiscalSetupModule = lazy(() => import("./modules/Fiscal_Setup/pages/index"));
 const PayrollMonthSetupModule = lazy(() => import("./modules/Payroll_Month_Setup/pages/index"));
-
-
+const ArrearPolicyModule = lazy(() => import("./modules/ArrearPolicy/pages/index"));
+const RoundingPolicyModule = lazy(() => import("./modules/SalaryRoundingPolicy/pages/index"));
+const LeaveTypeModule = lazy(() => import("./modules/LeaveType/pages/index"));
+const FinalSettlementPolicyModule = lazy(() => import("./modules/Final_Settlement_Policy/pages/index"));
+const salarypolicyModule = lazy(() => import("./modules/Salarypolicy/pages/index"));
+const OnetimeAllowance = lazy(() => import("./modules/Onetime_Allowance/pages/index"));
+const LoanType = lazy(() => import("./modules/LoanType/pages/index"));
+const TaxSlab = lazy(() => import("./modules/LoanType/pages/index"));
+const PayrollProcessPolicy = lazy(() => import("./modules/Payroll_Process_Policy/pages/index"));
+const tax_slabModule = lazy(() => import("./modules/Tax_Slab/pages/index"));
+const loan_manag_confModule = lazy(() => import("./modules/Loan_manag_conf/pages/index"));   
+const gratuity_confModule = lazy(() => import("./modules/Gratuity_Configuration/pages/index"));   
+const accrue_gratuity_confModule = lazy(() => import("./modules/Accrue_Gratuity_Configuration/pages/index"));  
 const ROUTES = {
   settings: SettingsPage,
   users: UserManagment,
-  centers: Centers,
-  vehicles: VehicleManagment,
-  incidentdetails: IncidentDetailsManagment,
-  ibs: IBSModule,
-  edrs: EDRSModule,
+
   bank: BankModule,
-  salarypolicy:salarypolicyModule,
   branch:BranchModule,
   department:DepartmenModule,
   emptype: EmployeeTypeModule,
@@ -100,24 +100,35 @@ const ROUTES = {
   salary_revision: EmployeeSalaryRevisionModule,
   tax_setup: TaxSetupModule,
   fiscal_setup: FiscalSetupModule,
-  payroll_month: PayrollMonthSetupModule
+  payroll_month: PayrollMonthSetupModule,
+  arrear_policy: ArrearPolicyModule,
+  salary_rounding_policy: RoundingPolicyModule,
+  leave_type: LeaveTypeModule,
+  final_settlement_policy :FinalSettlementPolicyModule,
+  salarypolicy:salarypolicyModule,
+  onetime_earning: OnetimeAllowance,
+  loan_type: LoanType,
+  payroll_process_policy :PayrollProcessPolicy,
+  tax_slab:tax_slabModule,
+  loan_management_configuration:loan_manag_confModule,
+  gratuity_configuration :gratuity_confModule,
+  accrue_gratuity_configuration :accrue_gratuity_confModule
 };
 
 export default function BasePage() {
   const dispatch = useDispatch();
   dispatch(fetchAllCountry());
-  dispatch(incidentTypes());
+  
   const auth = useSelector(({ auth }) => auth, shallowEqual);
   const UserAccess = auth?.userAccess;
   const SettingsAccess = auth?.userAccess?.Settings;
   const isDashboardAccess = SettingsAccess?.some((obj) =>
     Object.values(obj).includes("read-all-vehicles-dashboard")
   );
-  console.log("auth", auth);
   return (
     <Suspense fallback={<LayoutSplashScreen />}>
       <Switch>
-        <Route path='vehicles/read-all-vehicles' component={VehicleManagment} />
+        {/* <Route path='vehicles/read-all-vehicles' component={VehicleManagment} /> */}
         {Object.keys(UserAccess).map((access, key) => {
           const accessName = access.replace(/ /g, "").toLowerCase();
           const path = access
@@ -125,7 +136,6 @@ export default function BasePage() {
             .join("-")
             .toLowerCase();
             if (ROUTES[accessName])
-              console.log("path", UserAccess);
             {
             return (
               <Route
@@ -137,17 +147,10 @@ export default function BasePage() {
           }
         })}
 
-        {isDashboardAccess ? (
-          <>
+<>
             {<Redirect exact from="/" to="/dashboard" />}
             <ContentRoute path="/dashboard" component={Dashboard} />
           </>
-        ) : (
-          <>
-            {<Redirect exact from="/" to="/ibs" />}
-            <ContentRoute path="/ibs" component={IBSModule} />
-          </>
-        )}
 
         <Redirect to="error/error-v1" />
       </Switch>

@@ -25,11 +25,12 @@ export function Brand() {
       {/* begin::Brand */}
       <div
         className={`brand flex-column-auto ${layoutProps.brandClasses}`}
-        id="kt_brand"
+        id="kt_brand" style={{ position: "fixed", width: "100%",zIndex:"10" }}
       >
         {/* begin::Logo */}
         <Link to="" className="brand-logo">
-          <img alt="logo" width={100} height={80} src={layoutProps.headerLogo} />
+          <div style={{ float: "left" }}> <img alt="logo" width={55} height={50} src={layoutProps.headerLogo} /></div>
+          <div style={{ float: "left", color: "white", fontSize: "22px", marginLeft: "5px", marginTop: "5px" }}>Dynasoft Cloud</div>
         </Link>
         {/* end::Logo */}
 
