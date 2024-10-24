@@ -1,10 +1,9 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, {
   PaginationProvider,
 } from "react-bootstrap-table2-paginator";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import * as actions from "../../../_redux/formActions";
 import {
   getHandlerTableChange,
   NoRecordsFoundMessage,
@@ -17,7 +16,7 @@ import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatte
 import { Pagination } from "../../../../../../_metronic/_partials/controls";
 import { useFormUIContext } from "../FormUIContext";
 
-export function FormTable() {
+export function PendingLeaveTable() {
   //Users UI Context
   const formUIContext = useFormUIContext();
 
@@ -27,6 +26,7 @@ export function FormTable() {
       setIds: formUIContext.setIds,
       queryParams: formUIContext.queryParams,
       setQueryParams: formUIContext.setQueryParams,
+      editRecord: formUIContext.editRecord
     };
   }, [formUIContext]);
 
@@ -41,16 +41,7 @@ export function FormTable() {
     shallowEqual
   );
 
-  console.log(':::state::::',state);
-  
-
   const { totalCount, entities, listLoading } = currentState;
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(actions.fetchLeaveApplication(FormUIProps.queryParams));
-  }, [FormUIProps.queryParams, dispatch, totalCount]);
 
   const isAccessForEdit = userAccess?.find(
     (item) => item.componentName === "UpdateLeaveApplication"
@@ -63,7 +54,7 @@ export function FormTable() {
   const columns = [
     {
       dataField: "name",
-      text: "Name",
+      text: "Leave Type",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -72,8 +63,8 @@ export function FormTable() {
       },
     },
     {
-      dataField: "code",
-      text: "Code",
+      dataField: "from",
+      text: "Date From",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -82,8 +73,8 @@ export function FormTable() {
       },
     },
     {
-      dataField: "typeName",
-      text: "Type",
+      dataField: "to",
+      text: "Date To",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -92,25 +83,35 @@ export function FormTable() {
       },
     },
     {
-      dataField: "action",
-      text: "Actions",
-      isDummyField: true,
-      formatter: ActionsColumnFormatter,
-      formatExtraData: {
-        openEditFormDialog: FormUIProps.openEditFormDialog,
-        openDeleteFormDialog: FormUIProps.openDeleteFormDialog,
-        openReadFormDialog: FormUIProps.openReadFormDialog,
-        isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,
-        isAccessForDelete: isAccessForDelete
-          ? isAccessForDelete.isAccess
-          : false,
-      },
-      classes: "text-right pr-0",
-      headerClasses: "text-right pr-3",
+      dataField: "days",
+      text: "Leave Days",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
       style: {
-        minWidth: "170px",
+        minWidth: "160px",
       },
     },
+    {
+      dataField: "remarks",
+      text: "Remarks",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
+    {
+      dataField: "pendingDate",
+      text: "Pending At",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    }
   ];
 
   //Table pagination properties
@@ -132,28 +133,24 @@ export function FormTable() {
               paginationProps={paginationProps}
             >
               <BootstrapTable
-                noDataIndication={NoRecordsFoundMessage({ entities })}
+                noDataIndication={NoRecordsFoundMessage({ entities: [] })}
                 wrapperClasses="table-responsive"
                 bordered={false}
                 classes="table table-head-custom table-vertical-center overflow-hidden table-hover"
                 bootstrap4
                 remote
                 keyField="Id"
-                data={entities === null ? [] : entities}
+                data={[]}
                 columns={columns}
                 defaultSorted={uiHelpers.defaultSorted}
                 onTableChange={getHandlerTableChange(
                   FormUIProps.setQueryParams
                 )}
-                // selectRow={getSelectRow({
-                //   entities,
-
-                // })}
                 {...paginationTableProps}
               >
 
-                <PleaseWaitMessage entities={entities} />
-                <NoRecordsFoundMessage entities={entities} />
+                <PleaseWaitMessage entities={[]} />
+                <NoRecordsFoundMessage entities={[]} />
               </BootstrapTable>
             </Pagination>
           );

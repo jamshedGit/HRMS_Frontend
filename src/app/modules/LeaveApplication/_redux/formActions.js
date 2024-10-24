@@ -10,16 +10,42 @@ const { actions } = LeaveApplicationSlice;
  * @param {Object} queryparm 
  * @returns 
  */
-export const fetchLeaveApplication = (queryparm) => async (dispatch) => {
-  dispatch(actions.startCall({ callType: callTypes.list }));
-  return requestFromServer.getAllLeaveApplicationSetup(queryparm)
+export const uploadImage = (file) => {
+  console.log('::::file::::::',file);
+  
+  const formData = new FormData()
+  formData.append('file', file)
+  return requestFromServer.uploadImage(formData)
     .then((response) => {
-      dispatch(actions.LeaveApplicationFetched(response));
+      return response;
     })
     .catch((error) => {
-      error.clientMessage = "Can't find Leave Applications";
-      dispatch(actions.catchError({ error, callType: callTypes.list }));
+      error.clientMessage = "File not Uploaded";
+      // dispatch(actions.catchError({ error, callType: callTypes.list }));
     });
+
+};
+
+/**
+ * 
+ * Fetch All Leave Application Paginated from the server
+ * 
+ * @param {Object} queryparm 
+ * @returns 
+ */
+export const fetchLeaveApplication = (queryparm, employeeId) => async (dispatch) => {
+  dispatch(actions.startCall({ callType: callTypes.list }));
+  if (employeeId) {
+    return requestFromServer.getAllLeaveApplicationSetup({ ...queryparm, employeeId })
+      .then((response) => {
+        dispatch(actions.LeaveApplicationFetched(response));
+      })
+      .catch((error) => {
+        error.clientMessage = "Can't find Leave Applications";
+        dispatch(actions.catchError({ error, callType: callTypes.list }));
+      });
+  }
+
 };
 
 /**
@@ -57,15 +83,32 @@ export const fetchEditRecord = (id) => (dispatch) => {
  * @param {Function} onHide 
  * @returns 
  */
-export const saveRecord = (data, id, disableLoading, onHide) => (dispatch) => {
-  if (!id) {
-    return requestFromServer.createLeaveApplicationSetup(data)
-      .then((res) => {
-        const LeaveApplicationData = res.data?.data;
-        if (LeaveApplicationData) {
-          dispatch(actions.LeaveApplicationCreated(LeaveApplicationData));
+export const saveRecord = (data, employeeId, disableLoading) => (dispatch) => {
+  if (employeeId) {
+    if (!data.Id) {
+      return requestFromServer.createLeaveApplicationSetup({...data, employeeId})
+        .then((res) => {
+          const LeaveApplicationData = res.data?.data;
+          console.log('::::::LeaveApplicationData::::', LeaveApplicationData);
+
+          if (LeaveApplicationData) {
+            dispatch(actions.LeaveApplicationCreated(LeaveApplicationData));
+            disableLoading();
+            toast.success("Successfully Created", {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          }
+        })
+        .catch((error) => {
           disableLoading();
-          toast.success("Successfully Created", {
+          error.clientMessage = "Can't Create Leave Application";
+          toast.error(error?.response?.data?.message, {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -74,31 +117,30 @@ export const saveRecord = (data, id, disableLoading, onHide) => (dispatch) => {
             draggable: true,
             progress: undefined,
           });
-          onHide();
-        }
-      })
-      .catch((error) => {
-        disableLoading();
-        error.clientMessage = "Can't Create Leave Application";
-        toast.error(error?.response?.data?.message, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
         });
-      });
-  }
-  else {
-    return requestFromServer.updateLeaveApplicationSetup(data)
-      .then((res) => {
-        const LeaveApplicationData = res.data?.data;
-        if (LeaveApplicationData) {
-          dispatch(actions.LeaveApplicationUpdated(LeaveApplicationData));
+    }
+    else {
+      return requestFromServer.updateLeaveApplicationSetup(data)
+        .then((res) => {
+          const LeaveApplicationData = res.data?.data;
+          if (LeaveApplicationData) {
+            dispatch(actions.LeaveApplicationUpdated(LeaveApplicationData));
+            disableLoading();
+            toast.success("Successfully Updated", {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          }
+        })
+        .catch((error) => {
           disableLoading();
-          toast.success("Successfully Updated", {
+          error.clientMessage = "Can't Update Leave Application";
+          toast.error(error?.response?.data?.message, {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -107,23 +149,10 @@ export const saveRecord = (data, id, disableLoading, onHide) => (dispatch) => {
             draggable: true,
             progress: undefined,
           });
-          onHide();
-        }
-      })
-      .catch((error) => {
-        disableLoading();
-        error.clientMessage = "Can't Update Leave Application";
-        toast.error(error?.response?.data?.message, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
         });
-      });
+    }
   }
+
 };
 
 /**

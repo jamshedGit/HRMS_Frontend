@@ -2,37 +2,39 @@ import React from "react";
 import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import { Input } from "../../../../../../_metronic/_partials/controls";
+import { Input, Select } from "../../../../../../_metronic/_partials/controls";
+import { useSelector, shallowEqual } from "react-redux"
+import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
+import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLabel";
 
 //Validation for Form
 const formValidation = Yup.object().shape({
-
+  employeeId: Yup.number().min(1, 'Required').required('Required'),
 });
+
 
 export function EmployeeSelect({
   actionsLoading,
+  setemployeeId
 }) {
 
-  const dropdown = (data) => {
-    return [{ value: "", label: "--Select Type--" }, ...data].map((el) => {
-      return (<>
-        <option value={el.value}>{el.label}</option>
-      </>)
-    })
-  }
-
+  const { allEmployees } = useSelector(
+    (state) => ({
+      allEmployees: state.dashboard.allEmployees
+    }),
+    shallowEqual
+  )
   return (
     <>
       <Formik
         enableReinitialize={true}
-        initialValues={{}}
         validationSchema={formValidation}
+        initialValues={{}}
       >
         {({
           errors,
           values,
           handleBlur,
-          handleChange,
           setFieldValue,
         }) => (
           <>
@@ -50,31 +52,28 @@ export function EmployeeSelect({
                       <Field
                         name="employeeId"
                         component={Select}
-                        disabled={isEdit}
-                        className={errors.subsidiaryId && touched.subsidiaryId ? 'form-control is-invalid' : 'form-control'}
+                        className={errors.employeeId && !values.employeeId ? 'form-control is-invalid' : 'form-control'}
                         placeholder=""
                         onBlur={handleBlur}
                         onChange={(e) => {
-                          const value = e.target.value == '--Select--' ? null : e.target.value
-                          setFieldValue('subsidiaryId', value)
-                          const filter = { subsidiaryId: value, gradeId: values.gradeId, employeeTypeId: values.employeeTypeId }
-                          getOldData(filter)
+                          const value = e.target.value == '--Select--' ? null : Number(e.target.value)
+                          setFieldValue('employeeId', value)
+                          setemployeeId(value)
                         }}
                         label={
                           <span>
                             {" "}
-                            Subsidiary<span style={{ color: "red" }}>*</span>
+                            Employee<span style={{ color: "red" }}>*</span>
                           </span>
                         }
-                        value={values.subsidiaryId}
+                        value={values.employeeId}
                         autoComplete="off"
-                        children={createDropdown(allSubidiaryList)}
+                        children={CustomDropdown({ data: allEmployees, firstElement: { label: '--Select--', value: '' } })}
                       />
                       {
-                        errors.subsidiaryId && touched.subsidiaryId && <CustomErrorLabel touched={true} error={errors.subsidiaryId} />
+                        errors.employeeId && <CustomErrorLabel touched={true} error={errors.employeeId} />
                       }
                     </div>
-
                   </div>
                 </fieldset>
               </Form>

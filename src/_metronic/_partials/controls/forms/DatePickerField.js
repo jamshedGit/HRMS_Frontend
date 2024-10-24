@@ -16,8 +16,9 @@ const getFieldCSSClasses = (touched, errors) => {
 };
 
 export function DatePickerField({ ...props }) {
-  const { setFieldValue, errors, touched } = useFormikContext();
-  const [field] = useField(props);
+  const { setFieldValue, errors, touched, values } = useFormikContext();
+  // const [field] = useField(props);
+  const { field } = props
   return (
     <>
       {props.label && <label>{props.label}</label>}
@@ -26,7 +27,7 @@ export function DatePickerField({ ...props }) {
         style={{ width: "100%" }}
         {...field}
         {...props}
-        selected={(field.value && new Date(field.value)) || null}
+        selected={(field.value && new Date(field.value)) || new Date()}
         onChange={(val) => {
           setFieldValue(field.name, val);
         }}
@@ -37,7 +38,7 @@ export function DatePickerField({ ...props }) {
         </div>
       ) : (
         <div className="feedback">
-          Please enter <b>{props.label}</b> in 'mm/dd/yyyy' format
+          Please enter in 'mm/dd/yyyy' format
         </div>
       )}
     </>

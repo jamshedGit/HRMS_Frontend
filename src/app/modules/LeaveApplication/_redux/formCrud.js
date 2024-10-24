@@ -8,6 +8,16 @@ export const USERS_URL = process.env.REACT_APP_API_URL;
  * @param {Object} body 
  * @returns res
  */
+export function uploadImage(body) {
+  return axios.post(`${USERS_URL}/file-upload`, body);
+}
+
+/**
+ * Create Leave Application
+ * 
+ * @param {Object} body 
+ * @returns res
+ */
 export function createLeaveApplicationSetup(body) {
   return axios.post(`${USERS_URL}/leave_application/create-leave-application`, body);
 }

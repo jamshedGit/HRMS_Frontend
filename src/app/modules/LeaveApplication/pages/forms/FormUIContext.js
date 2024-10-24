@@ -8,9 +8,10 @@ export function useFormUIContext() {
   return useContext(FormUIContext);
 }
 
-export function FormUIProvider({ FormUIEvents, children }) {
+export function FormUIProvider({ children }) {
   const [queryParams, setQueryParamsBase] = useState(initialFilter);
-  const [ids, setIds] = useState([]);
+  const [employeeId, setemployeeId] = useState('');
+  const [id, setId] = useState('');
   const setQueryParams = useCallback((nextQueryParams) => {
     setQueryParamsBase((prevQueryParams) => {
       if (isFunction(nextQueryParams)) {
@@ -26,20 +27,25 @@ export function FormUIProvider({ FormUIEvents, children }) {
   }, []);
 
   const initUser = {
+    to: '',
+    from: '',
+    leaveType: '',
   };
 
+  const editRecord = (id) => {
+    setId(id)
+  }
 
   const value = {
     queryParams,
     setQueryParamsBase,
     setQueryParams,
-    ids,
-    setIds,
-    initUser,
-    newFormButtonClick: FormUIEvents.newFormButtonClick,
-    openEditFormDialog: FormUIEvents.openEditFormDialog,
-    openDeleteFormDialog: FormUIEvents.openDeleteFormDialog,
-    openReadFormDialog: FormUIEvents.openReadFormDialog,
+    employeeId,
+    setemployeeId,
+    id,
+    setId,
+    editRecord,
+    initUser
   };
   return (
     <FormUIContext.Provider value={value}>{children}</FormUIContext.Provider>

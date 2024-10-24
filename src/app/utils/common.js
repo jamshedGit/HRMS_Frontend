@@ -1,5 +1,6 @@
 import moment from "moment";
 import { DateTimeFormats } from "./constants";
+const { differenceInDays } = require('date-fns');
 
 export const getDate = (
   date,
@@ -30,4 +31,20 @@ export const getClassName = (error, value) => {
     return 'form-control is-valid';
   }
   return 'form-control';
+}
+
+
+/**
+ * 
+ * Get Diff in days between two provided dates
+ * 
+ * @param {Date|String} startDate 
+ * @param {Date|String} endDate 
+ * @returns 
+ */
+export const getDateDiffInDays = (startDate, endDate) => {
+  if (startDate && endDate) {
+    return differenceInDays(new Date(endDate), new Date(startDate)) + 1;
+  }
+  return 0;
 }

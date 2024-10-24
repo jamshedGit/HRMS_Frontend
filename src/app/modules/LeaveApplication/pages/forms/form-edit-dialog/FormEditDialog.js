@@ -9,14 +9,13 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useFormUIContext } from "../FormUIContext";
 
-export function FormEditDialog({ id, show, onHide, userForRead }) {
+export function FormEditDialog({ id, employeeId }) {
   const [loading, setLoading] = useState(false);
   const FormUIContext = useFormUIContext();
 
   const formUIProps = useMemo(() => {
     return {
       initUser: FormUIContext.initUser,
-      queryParams: FormUIContext.queryParams,
     };
   }, [FormUIContext]);
 
@@ -41,25 +40,25 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   }, [id, dispatch]);
 
   //Create or Update record according to values from dialog
-  const submitForm = (values) => {
-    dispatch(actions.saveRecord(values, id, disbaleLoading, onHide))
+  const submitForm = async (values) => {
+    if (values.fileDetail) {
+      const file = await actions.uploadImage(values.fileDetail)
+      dispatch(actions.saveRecord({ ...values, file: file.filename }, employeeId, disbaleLoading))
+    }
+    else {
+      dispatch(actions.saveRecord(values, employeeId, disbaleLoading))
+    }
   }
 
   return (
-    <Modal
-      size="lg"
-      show={show}
-      onHide={onHide}
-      aria-labelledby="example-modal-sizes-title-lg"
-    >
-      <FormEditDialogHeader id={id} isUserForRead={userForRead} />
+    <>
+      <FormEditDialogHeader />
       <MasterEditForm
         submitForm={submitForm}
         user={userForEdit || formUIProps.initUser}
-        onHide={onHide}
-        isUserForRead={userForRead}
         enableLoading={enableLoading}
         loading={loading}
+        isEdit={id ? true : false}
       />
       <ToastContainer
         position="top-right"
@@ -72,6 +71,6 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         draggable
         pauseOnHover
       />
-    </Modal>
+    </>
   );
 }
