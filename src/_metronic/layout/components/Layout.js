@@ -19,6 +19,7 @@ export function Layout({ children }) {
   const uiService = useHtmlClassService();
   const auth = useSelector(({ auth }) => auth, shallowEqual);
   const UserAccess = auth?.userAccess;
+  const pathName = window?.location?.pathname?.substring(1);
   // Layout settings (cssClasses/cssAttributes)
   const layoutProps = useMemo(() => {
     return {
@@ -35,8 +36,14 @@ export function Layout({ children }) {
       contentExtended: objectPath.get(uiService.config, "content.extended"),
     };
   }, [uiService]);
-  
-  const url = window.location.href;
+
+
+
+  const name = useMemo(() => {
+    return Object.values(UserAccess || {})?.flatMap(el => el)?.find(acc => acc?.url == pathName)?.name || '';
+  }, [pathName, UserAccess])
+
+
   return layoutProps.selfLayout !== "blank" ? (
     <>
       {/*begin::Main*/}
@@ -54,28 +61,28 @@ export function Layout({ children }) {
           >
             <Header />
             {/*begin::Content*/}
-            
+
             {/* <div><h2>test</h2></div> */}
             <div
-              id="kt_content" style={{zIndex:"-2"}}
+              id="kt_content" style={{ zIndex: "-2" }}
               className={`content ${layoutProps.contentCssClasses} d-flex flex-column flex-column-fluid`}
             >
-             
+
               {layoutProps.subheaderDisplay && <SubHeader />}
               {/*begin::Entry*/}
-              
+
               {!layoutProps.contentExtended && (
-                
+
                 <div className="d-flex flex-column-fluid">
-                 
+
                   {/*begin::Container*/}
                   <div className={layoutProps.contentContainerClasses}>
-                  <h1>{url.split(":")[2].split("/")[1]?.replaceAll("_"," ").toUpperCase()}</h1> 
-                   {children}
+                    <h1>{name}</h1>
+                    {children}
                   </div>
                   {/*end::Container*/}
                 </div>
-                
+
               )}
 
               {layoutProps.contentExtended && { children }}

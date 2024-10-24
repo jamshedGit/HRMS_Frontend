@@ -48,11 +48,11 @@ export function FormEditDialog({ id, show, onHide, userForRead, isEdit }) {
     if (!dashboard?.allSubidiaryList || !dashboard?.allSubidiaryList?.length)
       dispatch(fetchAllFormsMenu(133, "allSubidiaryList"));
     if (!dashboard?.allGenderList || !dashboard?.allGenderList?.length)
-      dispatch(fetchAllFormsMenu(183, "allGenderList", 'All'));
+      dispatch(fetchAllFormsMenu(187, "allGenderList", 'All'));
     if (!dashboard?.allLeaveStatus || !dashboard?.allLeaveStatus?.length)
-      dispatch(fetchAllFormsMenu(182, "allLeaveStatus", 'All'));
+      dispatch(fetchAllFormsMenu(191, "allLeaveStatus", 'All'));
     if (!dashboard?.allMaritalStatus || !dashboard?.allMaritalStatus?.length)
-      dispatch(fetchAllFormsMenu(184, "allMaritalStatus", 'All'));
+      dispatch(fetchAllFormsMenu(190, "allMaritalStatus", 'All'));
     if (!dashboard?.allLeaveTypes || !dashboard?.allLeaveTypes?.length)
       dispatch(fetchAllLeaveType("allLeaveTypes"));
   }, [id, dispatch, show]);
