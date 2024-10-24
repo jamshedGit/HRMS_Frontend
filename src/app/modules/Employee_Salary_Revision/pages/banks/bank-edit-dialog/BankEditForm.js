@@ -747,7 +747,7 @@ export function BankEditForm({
                         {<span> Date Of Registration<span style={{ color: 'red' }}>*</span></span>}
                         <DatePicker
                           className="form-control"
-                          placeholder="Enter Graduity Reg Date"
+                          placeholder="Enter Gratuity Reg Date"
                           selected={values.gratuity_member && defGrauityDate}
                           onChange={(date) => {
                             setFieldValue("gratuity_startDate", date);

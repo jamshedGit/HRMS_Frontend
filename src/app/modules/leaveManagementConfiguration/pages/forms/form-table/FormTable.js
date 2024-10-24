@@ -4,7 +4,7 @@ import paginationFactory, {
   PaginationProvider,
 } from "react-bootstrap-table2-paginator";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import * as actions from "../../../_redux/redux-Actions";
+import * as actions from "../../../_redux/formActions";
 import {
   getHandlerTableChange,
   NoRecordsFoundMessage,
@@ -21,7 +21,7 @@ export function FormTable() {
   //Users UI Context
   const formUIContext = useFormUIContext();
 
-  const formUIProps = useMemo(() => {
+  const FormUIProps = useMemo(() => {
     return {
       ids: formUIContext.ids,
       setIds: formUIContext.setIds,
@@ -29,49 +29,41 @@ export function FormTable() {
       setQueryParams: formUIContext.setQueryParams,
       openEditFormDialog: formUIContext.openEditFormDialog,
       openDeleteFormDialog: formUIContext.openDeleteFormDialog,
-      openActiveFormDialog: formUIContext.openActiveFormDialog,
       openReadFormDialog: formUIContext.openReadFormDialog,
     };
   }, [formUIContext]);
 
- 
   const { currentState, userAccess } = useSelector(
-    (state) => {  console.log("a "); return {
-      
-      // currentState: state.salarypolicy,
-      currentState: state.accrue_gratuity_configuration,
-      userAccess: state?.auth?.userAccess["accrue_gratuity_configuration"],
-    }},
+    (state) => {
+      return {
+        currentState: state.leave_management_configuration,
+        userAccess: state?.auth?.userAccess["Leave_Management_Configuration"],
+      }
+    },
     shallowEqual
   );
 
-  
   const { totalCount, entities, listLoading } = currentState;
-
-  //totalCount = 10
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    formUIProps.setIds([]);
- 
- 
-    dispatch(actions.fetchSalarypolicies(formUIProps.queryParams));
-  }, [formUIProps.queryParams, dispatch, totalCount]);
+    FormUIProps.setIds([]);
+    dispatch(actions.fetchleaveManagementConfiguration(FormUIProps.queryParams));
+  }, [FormUIProps.queryParams, dispatch, totalCount]);
 
   const isAccessForEdit = userAccess?.find(
-    (item) => item.componentName === "UpdateAccrueGratuityConfiguration"
+    (item) => item.componentName === "UpdateLeaveManagementConfiguration"
   );
 
   const isAccessForDelete = userAccess?.find(
-    (item) => item.componentName === "DeleteAccrueGratuityConfiguration"
+    (item) => item.componentName === "DeleteLeaveManagementConfiguration"
   );
   // Table columns
   const columns = [
-    
 
     {
-      dataField: "Subsidiary.formName",
+      dataField: "subsidiaryName",
       text: "Subsidiary",
       sort: false,
       sortCaret: sortCaret,
@@ -81,53 +73,35 @@ export function FormTable() {
       },
     },
 
-{
-  dataField: "GraduityExpenseAccount.formName",
-  text: "Gratuity Expense Account",
-  sort: false,
-  sortCaret: sortCaret,
-  headerSortingClasses,
-  style: {
-    minWidth: "10px",
-  },
- 
-},
-
-
     {
-      dataField: "GraduityPayableAccount.formName",
-      text: "Gratuity Payable Account",
+      dataField: "gradeName",
+      text: "Grade",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
       style: {
-        minWidth: "10px",
+        minWidth: "160px",
       },
     },
-
-
     {
-      dataField: "BankCashAccount.formName",
-      text: "Bank Cash Account",
+      dataField: "employeeTypeName",
+      text: "Employee Type",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
       style: {
-        minWidth: "10px",
+        minWidth: "160px",
       },
     },
-
-  
-       {
+    {
       dataField: "action",
       text: "Actions",
       isDummyField: true,
       formatter: ActionsColumnFormatter,
       formatExtraData: {
-        openEditFormDialog: formUIProps.openEditFormDialog,
-        openDeleteFormDialog: formUIProps.openDeleteFormDialog,
-        openActiveFormDialog: formUIProps.openActiveFormDialog,
-        openReadFormDialog: formUIProps.openReadFormDialog,
+        openEditFormDialog: FormUIProps.openEditFormDialog,
+        openDeleteFormDialog: FormUIProps.openDeleteFormDialog,
+        openReadFormDialog: FormUIProps.openReadFormDialog,
         isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,
         isAccessForDelete: isAccessForDelete
           ? isAccessForDelete.isAccess
@@ -136,7 +110,7 @@ export function FormTable() {
       classes: "text-right pr-0",
       headerClasses: "text-right pr-3",
       style: {
-        minWidth: "10px",
+        minWidth: "170px",
       },
     },
   ];
@@ -146,11 +120,11 @@ export function FormTable() {
     custom: true,
     totalSize: totalCount,
     sizePerPageList: uiHelpers.sizePerPageList,
-    sizePerPage: formUIProps.queryParams.pageSize,
-    page: formUIProps.queryParams.pageNumber,
+    sizePerPage: FormUIProps.queryParams.pageSize,
+    page: FormUIProps.queryParams.pageNumber,
   };
 
-    return (
+  return (
     <>
       <PaginationProvider pagination={paginationFactory(paginationOptions)}>
         {({ paginationProps, paginationTableProps }) => {
@@ -160,6 +134,7 @@ export function FormTable() {
               paginationProps={paginationProps}
             >
               <BootstrapTable
+                noDataIndication={NoRecordsFoundMessage({ entities })}
                 wrapperClasses="table-responsive"
                 bordered={false}
                 classes="table table-head-custom table-vertical-center overflow-hidden table-hover"
@@ -170,7 +145,7 @@ export function FormTable() {
                 columns={columns}
                 defaultSorted={uiHelpers.defaultSorted}
                 onTableChange={getHandlerTableChange(
-                  formUIProps.setQueryParams
+                  FormUIProps.setQueryParams
                 )}
                 // selectRow={getSelectRow({
                 //   entities,
@@ -178,6 +153,7 @@ export function FormTable() {
                 // })}
                 {...paginationTableProps}
               >
+
                 <PleaseWaitMessage entities={entities} />
                 <NoRecordsFoundMessage entities={entities} />
               </BootstrapTable>

@@ -1,5 +1,4 @@
 import React, { useMemo } from "react"
-
 import {
   Card,
   CardBody,
@@ -8,13 +7,12 @@ import {
 } from "../../../../../../_metronic/_partials/controls"
 import { FormTable } from "../form-table/FormTable"
 import { useFormUIContext } from "../FormUIContext"
-import { FormFIlter } from "../form-filter/FormFIlter"
+import { FormFilter } from "../form-filter/FormFilter"
 import { useSelector, shallowEqual } from "react-redux"
 
 export function FormCard() {
   const FormUIContext = useFormUIContext()
-
-  const FormUIProps  = useMemo(() => {
+  const formUIProps = useMemo(() => {
     return {
       newFormButtonClick: FormUIContext.newFormButtonClick,
       openEditFormDialog: FormUIContext.openEditFormDialog,
@@ -22,50 +20,33 @@ export function FormCard() {
   }, [FormUIContext])
 
   const { userAccess } = useSelector(
-   
     (state) => ({
-      
-      userAccess: state.auth.userAccess.gratuity_configuration,
+      userAccess: state.auth.userAccess.Leave_Management_Configuration,
     }),
     shallowEqual
   )
 
+  //Check if access to create Leave Type
   const accessUser = userAccess.find(
-    (item) => item.componentName === "CreateGratuityConfiguration"
+    (item) => item.componentName === "CreateLeaveManagementConfiguration"
   )
-
-  const { currentState } = useSelector(
-    (state) => {  console.log("s "); return {
-      
-      currentState: state.gratuity_configuration,
-      userAccess: state?.auth?.userAccess["gratuity_configuration"],
-    }},
-    shallowEqual
-  );
-
-  // const { currentState } = useSelector();
-  
-  const {entities } = currentState;
 
   return (
     <>
 
       <Card>
-        <CardHeader title="">
-          {/* <FormFIlter /> */}
+        <CardHeader title={null}>
+          <FormFilter />
           <CardHeaderToolbar>
-          {/* {accessUser &&  entities?.length==0 ? ( */}
+            {accessUser && (
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={FormUIProps .newFormButtonClick}
+                onClick={formUIProps.newFormButtonClick}
               >
-                + Add Gratuity Configuration
+                + Add Leave Type
               </button>
-            {/* ) : (
-              <></>
-            )} */}
-   
+            )}
           </CardHeaderToolbar>
         </CardHeader>
 

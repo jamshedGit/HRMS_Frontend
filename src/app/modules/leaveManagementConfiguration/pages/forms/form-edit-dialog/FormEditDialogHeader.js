@@ -3,26 +3,21 @@ import { shallowEqual, useSelector } from "react-redux";
 import { Modal } from "react-bootstrap";
 import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls";
 
-export function SalarypolicyEditDialogHeader({ id, isUserForRead }) {
+export function FormEditDialogHeader({ id, isUserForRead }) {
   //const userForEdit = false
   const [title, setTitle] = useState("");
-
+ 
   const { userForEdit, actionsLoading } = useSelector(
     
     (state) => ({
-      userForEdit: state.salary_policy.userForEdit,
+      userForEdit: state.leave_management_configuration.userForEdit,
       actionsLoading: state.users.actionsLoading,
     }),
     shallowEqual
   );
 
   useEffect(() => {
-    let _title = id ? "" : "Add Salary Policy";
-    if (id) {
-      _title = `Edit Salary Policy`;
-    } //else if (isUserForRead) {
-    //   _title = `Read user '}'`
-    // }
+    let _title = id ? "Edit Leave Management Configuration" : "New Leave Management Configuration";
     setTitle(_title);
   }, [userForEdit, actionsLoading]);
 
