@@ -2,22 +2,23 @@ import * as requestFromServer from "./formCrud";
 import { payroll_policySlice, callTypes } from "./payroll_policySlice";
 import { toast } from "react-toastify";
 import { format } from 'date-fns';
+
 const { actions } = payroll_policySlice;
 // const { roleActions } = getAllrolesSlice
 
 export const fetchUsers = (queryparm) => async (dispatch) => {
   // console.log("Receive QPsss", queryparm)
   dispatch(actions.startCall({ callType: callTypes.list }));
- 
+
   return requestFromServer.getAll_Payroll_Policy(queryparm)
 
     .then((response) => {
-    
-      console.log("::fetchted::",response)
+
+      console.log("::fetchted::", response)
       dispatch(actions.Payroll_Policy_Fetched(response));
     })
     .catch((error) => {
-      
+
       error.clientMessage = "Can't find records";
       dispatch(actions.catchError({ error, callType: callTypes.list }));
     });
@@ -25,8 +26,11 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
 
 export const fetchUser = (id) => (dispatch) => {
 
-  console.log("User Action id " + id)
-  if (!id) {
+  if (id == '') {
+    return dispatch(actions.Payroll_Policy_FetchedForEdit({ userForEdit: '' }));
+  }
+
+  if (id == null) {
     return dispatch(actions.Payroll_Policy_FetchedForEdit({ userForEdit: undefined }));
   }
 
@@ -36,9 +40,6 @@ export const fetchUser = (id) => (dispatch) => {
     .then((response) => {
       const entities = response.data?.data;
 
-      console.log("response::",response);
-      console.log("User fetched for search " + entities)
-     
       dispatch(actions.Payroll_Policy_FetchedForEdit({ userForEdit: entities }));
     })
     .catch((error) => {
@@ -93,18 +94,18 @@ export const activeUser = (id) => (dispatch) => {
     });
 };
 
-export const create_Payroll_Policy = (Payroll_Policy_ForCreation, emailRecipentList, eobiAllowancesList,bankInfoList,sessiAllowanceList) => (
+export const create_Payroll_Policy = (Payroll_Policy_ForCreation, emailRecipentList, eobiAllowancesList, bankInfoList, sessiAllowanceList) => (
   dispatch
 ) => {
-  console.log("::payroll body::", Payroll_Policy_ForCreation, emailRecipentList, eobiAllowancesList,bankInfoList,sessiAllowanceList);
+
   return requestFromServer
-    .create_Payroll_Policy(Payroll_Policy_ForCreation, emailRecipentList, eobiAllowancesList,bankInfoList,sessiAllowanceList)
+    .create_Payroll_Policy(Payroll_Policy_ForCreation, emailRecipentList, eobiAllowancesList, bankInfoList, sessiAllowanceList)
     .then((res) => {
       dispatch(actions.startCall({ callType: callTypes.action }));
       const user = res.data?.data;
-   
+
       dispatch(actions.Payroll_Policy_Created(user));
-     
+
       toast.success("Successfully Created", {
         position: "top-right",
         autoClose: 5000,
@@ -119,7 +120,7 @@ export const create_Payroll_Policy = (Payroll_Policy_ForCreation, emailRecipentL
     .catch((error) => {
       error.clientMessage = "Can't create user";
       dispatch(actions.catchError({ error, callType: callTypes.action }));
-      
+
       toast.error(error?.response?.data?.message, {
         position: "top-right",
         autoClose: 5000,
@@ -132,14 +133,14 @@ export const create_Payroll_Policy = (Payroll_Policy_ForCreation, emailRecipentL
     });
 };
 
-export const update_Payroll_Policy = (user) => (dispatch) => {
+export const update_Payroll_Policy = (user, emailRecipentList, eobiAllowancesList, bankInfoList, sessiAllowanceList) => (dispatch) => {
   return requestFromServer
-    .update_Payroll_Policy(user)
+    .update_Payroll_Policy(user, emailRecipentList, eobiAllowancesList, bankInfoList, sessiAllowanceList)
     .then((response) => {
-      console.log("my response", response?.config?.data);
-      const updated_Payroll_Policy_ = response?.config?.data; // response.data?.data;
-      console.log("bnkAction Res", response)
-      dispatch(actions.Payroll_Policy_Updated({ updated_Payroll_Policy_ }));
+
+      const payrollUpdatePolicy = response?.config?.data; // response.data?.data;
+
+      dispatch(actions.Payroll_Policy_Updated({ payrollUpdatePolicy }));
       dispatch(actions.startCall({ callType: callTypes.action }));
 
 

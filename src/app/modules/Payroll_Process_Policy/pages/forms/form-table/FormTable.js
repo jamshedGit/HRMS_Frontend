@@ -23,6 +23,10 @@ import { Formik, Field } from "formik";
 import { Form, Modal } from "react-bootstrap";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import { toast } from "react-toastify";
+import * as Yup from "yup";
+
+
+
 
 export function FormTable(user
   , isUserForRead
@@ -117,23 +121,10 @@ export function FormTable(user
 
 
   useEffect(() => {
-
-
-
     if (user.formid) {
-
-      console.log("::ggg", user.formid);
       dispatch(actions.fetchUser(user.formid));
-
-
-
       // setDefaultBankInfoList([...currentState.userForEdit?.tran_payroll_policy_bank_infos]);
-
-
-
     }
-
-
   }, [user.formid]);
 
 
@@ -153,67 +144,6 @@ export function FormTable(user
   }, [dispatch]);
 
 
-  // For Getting sbus
-  // useEffect(() => {
-
-  //   const subsidiaryId = defSubsidiary?.value ? defSubsidiary.value : user.subsidiaryId;
-
-  //   setDefualtSubsidiaryList(
-  //     dashboard.allSubidiaryList &&
-  //     dashboard.allSubidiaryList.filter((item) => {
-  //       return item.value === subsidiaryId;
-  //     })
-  //   );
-
-  // }, [user?.subsidiaryId, dashboard.subsidiaryId]);
-
-
-  useEffect(() => {
-    const payroll_groupId = defPayrollGroupId?.value ? defPayrollGroupId.value : user.payroll_groupId;
-    setDefaultPayrollGroup(
-      dashboard.allChildMenus &&
-      dashboard.allChildMenus.filter((item) => {
-        return item.value === payroll_groupId;
-      })
-    );
-
-  }, [user?.payroll_groupId, dashboard.payroll_groupId]);
-
-
-  useEffect(() => {
-    const basic_pay_accountId = defBasicPayGeneralAccount?.value ? defBasicPayGeneralAccount.value : user.basic_pay_accountId;
-    setDefaultBasicPayAccount(
-      dashboard.allPayrollAccounts &&
-      dashboard.allChildMenus.filter((item) => {
-        return item.value === basic_pay_accountId;
-      })
-    );
-
-  }, [user?.basic_pay_accountId, dashboard.basic_pay_accountId]);
-
-
-  useEffect(() => {
-    const payroll_payable_accountId = defBasicPayGeneralAccount?.value ? defBasicPayGeneralAccount.value : user.payroll_payable_accountId;
-    setDefaultBasicPayAccount(
-      dashboard.allPayrollPayableAccounts &&
-      dashboard.allPayrollPayableAccounts.filter((item) => {
-        return item.value === payroll_payable_accountId;
-      })
-    );
-
-  }, [user?.payroll_payable_accountId, dashboard.payroll_payable_accountId]);
-
-  useEffect(() => {
-    const payroll_approverId = user.payroll_approverId; // defEmployee?.value ? defEmployee.value : user.employeeId;
-
-    setEmployeeDefault(
-      dashboard.allEmployeesSalaryDDL &&
-      dashboard.allEmployeesSalaryDDL.filter((item) => {
-        return item.value === payroll_approverId;
-      })
-    );
-
-  }, [user?.payroll_approverId, dashboard.payroll_approverId]);
 
   useEffect(() => {
 
@@ -296,7 +226,7 @@ export function FormTable(user
 
     setDefaultBankInfoList([...defBankInfoList, { transactionType: element.target.id }])
 
-
+    return false;
   }
 
   const handleCheckboxChangeForLoan = (event) => {
@@ -380,6 +310,81 @@ export function FormTable(user
   ];
 
 
+  const formValidation = Yup.object().shape(
+    {
+      subsidiaryId: Yup.string()
+        .required("Required*"),
+      payroll_templateId: Yup.string()
+        .required("Required*"),
+      employer_uniqueId: Yup.string()
+        .required("Required*"),
+      payroll_approverId: Yup.string()
+        .required("Required*"),
+      payroll_groupId: Yup.string()
+        .required("Required*"),
+
+      journalBankAccountId: Yup.string()
+        .required("Required*"),
+      bankCode: Yup.string()
+        .required("Required*"),
+    },
+
+  );
+
+
+
+  const initialValues = {
+    subsidiaryId: "",
+    companyId: "",
+    payroll_templateId: "",
+    employer_uniqueId: "",
+    payroll_approverId: "",
+    payroll_groupId: "",
+
+    //-- Email Sender ------------
+    sender_emailId: "",
+    employee_email_recipentId: "",
+
+    // -- Accounting Impact ----
+    basic_pay_accountId: "",
+    payroll_payable_accountId: "",
+    isGroupEarningOnAccount: "",
+    isGroupDeduductionOnAccount: "",
+    isAccrueGratuityOnPayroll: "",
+
+    //-- Tax Integration
+    payrollTax_DeductionTypeId: "",
+    arrearTaxDeductionId: "",
+    isTrackDeductionHistory: "",
+
+    // -- Leave / AAtteandance Integraion
+    isEnableAttandanceIntegration: "",
+    isEnableLeaveManagemenent: "",
+    isEnableOverTimeCalc: "",
+    leaveDeductionId: "",
+    lateCountPerDaySalaryDeduction: "",
+    leaveEnchashment_EarningId: "",
+    lateDeductionId: "",
+    overTimeEarningId: "",
+    isEnableSandwichLeavePolicy: "",
+
+    //-- Loan Integration	
+    isEnableLoan: "",
+    loanDeductionId: "",
+
+    // --  EOBI Configuration
+    isEnableEOBI: "",
+    eobi_deductionId: "",
+    eobi_earningId: "",
+    isIncludeBasic: "",
+    eobi_employeer_value_in_percent: "",
+    eobi_employee_value_in_percent: "",
+    bankCode: ""
+    //-- Other
+
+
+  };
+
 
   //Table pagination properties
   const paginationOptions = {
@@ -393,76 +398,76 @@ export function FormTable(user
   const SavePayrollPolicy = async (user, emailRecipentList, eobiAllowances, bankInfoList, sessiAllowanceList) => {
     console.log("::latest::", id, user);
     if (!user.Id) {
-      console.log("crown");
+
       await dispatch(actions.create_Payroll_Policy(user, emailRecipentList, eobiAllowances, bankInfoList, sessiAllowanceList));
       //  const list = await dispatch(actions.fetchUsers(usersUIProps.queryParams));
 
 
     } else {
-      console.log("crown 2");
+
       console.log("getUserStatus", user);
 
       const payrollUpdateObj = {
         Id: user.Id,
-//-- Payroll Configuration ----
-        
-        subsidiaryId : user.subsidiaryId,
-        companyId : user.companyId,
-        payroll_templateId : user.payroll_templateId,
-        employer_uniqueId : user.employer_uniqueId,
-        payroll_approverId : user.payroll_approverId,
-        payroll_groupId : user.payroll_groupId,
-    
-       // -- Email Sender ------------
-        sender_emailId : user.sender_emailId,
-        employee_email_recipentId : user.employee_email_recipentId,
-    
-       // -- Accounting Impact ----
-        basic_pay_accountId : user.basic_pay_accountId,
-        payroll_payable_accountId : user.payroll_payable_accountId,
-        isGroupEarningOnAccount : user.isGroupEarningOnAccount,
-        isGroupDeduductionOnAccount : user.isGroupDeduductionOnAccount,
-        isAccrueGratuityOnPayroll : user.isAccrueGratuityOnPayroll,
-    
-       // -- Tax : user.companyIdegration
-        payrollTax_DeductionTypeId : user.payrollTax_DeductionTypeId,
-        arrearTaxDeductionId : user.arrearTaxDeductionId,
-        isTrackDeductionHistory : user.isTrackDeductionHistory,
-    
+        //-- Payroll Configuration ----
+
+        subsidiaryId: user.subsidiaryId,
+        companyId: user.companyId,
+        payroll_templateId: user.payroll_templateId,
+        employer_uniqueId: user.employer_uniqueId,
+        payroll_approverId: user.payroll_approverId,
+        payroll_groupId: user.payroll_groupId,
+
+        // -- Email Sender ------------
+        sender_emailId: user.sender_emailId,
+        employee_email_recipentId: user.employee_email_recipentId,
+
+        // -- Accounting Impact ----
+        basic_pay_accountId: user.basic_pay_accountId,
+        payroll_payable_accountId: user.payroll_payable_accountId,
+        isGroupEarningOnAccount: user.isGroupEarningOnAccount,
+        isGroupDeduductionOnAccount: user.isGroupDeduductionOnAccount,
+        isAccrueGratuityOnPayroll: user.isAccrueGratuityOnPayroll,
+
+        // -- Tax : user.companyIdegration
+        payrollTax_DeductionTypeId: user.payrollTax_DeductionTypeId,
+        arrearTaxDeductionId: user.arrearTaxDeductionId,
+        isTrackDeductionHistory: user.isTrackDeductionHistory,
+
         //-- Leave / AAtteandance : user.companyIdegraion
-        isEnableAttandance: user.isEnableAttandance ,
-        isEnableLeaveManagemenent : user.isEnableLeaveManagemenent,
-        isEnableOverTimeCalc : user.isEnableOverTimeCalc,
-        leaveDeductionId : user.leaveDeductionId,
-        lateCountPerDaySalaryDeduction : user.lateCountPerDaySalaryDeduction,
-        leaveEnchashment_EarningId : user.leaveEnchashment_EarningId,
-        lateDeductionId : user.lateDeductionId,
-        overTimeEarningId : user.overTimeEarningId,
-        isEnableSandwichLeavePolicy : user.isEnableSandwichLeavePolicy,
-    
-//-- Loan : user.companyIdegration	
-        isEnableLoan : user.isEnableLoan,
-        loanDeductionId : user.loanDeductionId, 
-    
+        isEnableAttandance: user.isEnableAttandance,
+        isEnableLeaveManagemenent: user.isEnableLeaveManagemenent,
+        isEnableOverTimeCalc: user.isEnableOverTimeCalc,
+        leaveDeductionId: user.leaveDeductionId,
+        lateCountPerDaySalaryDeduction: user.lateCountPerDaySalaryDeduction,
+        leaveEnchashment_EarningId: user.leaveEnchashment_EarningId,
+        lateDeductionId: user.lateDeductionId,
+        overTimeEarningId: user.overTimeEarningId,
+        isEnableSandwichLeavePolicy: user.isEnableSandwichLeavePolicy,
+
+        //-- Loan : user.companyIdegration	
+        isEnableLoan: user.isEnableLoan,
+        loanDeductionId: user.loanDeductionId,
+
         //--  EOBI Configuration
-        isEnableEOBI : user.isEnableEOBI,
-        eobi_deductionId : user.eobi_deductionId,
-        eobi_earningId : user.eobi_earningId,
+        isEnableEOBI: user.isEnableEOBI,
+        eobi_deductionId: user.eobi_deductionId,
+        eobi_earningId: user.eobi_earningId,
         //isIncludeBasicisIncludeBasic, user.isIncludeBasicisIncludeBasic,
-        eobi_employeer_value_in_percent : user.eobi_employeer_value_in_percent,
-        eobi_employee_value_in_percent : user.eobi_employee_value_in_percent,
-      
-       // --  SESSI Configuration
-        isEnableSESSI : user.isEnableSESSI,
-        sessi_deductionId : user.sessi_deductionId,
-        sessi_earningId : user.sessi_earningId,
-        sessi_employeer_value_in_percent : user.sessi_employeer_value_in_percent,
-        sessi_employee_value_in_percent : user.sessi_employee_value_in_percent,
+        eobi_employeer_value_in_percent: user.eobi_employeer_value_in_percent,
+        eobi_employee_value_in_percent: user.eobi_employee_value_in_percent,
+
+        // --  SESSI Configuration
+        isEnableSESSI: user.isEnableSESSI,
+        sessi_deductionId: user.sessi_deductionId,
+        sessi_earningId: user.sessi_earningId,
+        sessi_employeer_value_in_percent: user.sessi_employeer_value_in_percent,
+        sessi_employee_value_in_percent: user.sessi_employee_value_in_percent,
       };
 
       console.log("payrollUpdateObj", payrollUpdateObj);
-      await dispatch(actions.update_Payroll_Policy(payrollUpdateObj));
-     // await dispatch(actions.fetchUsers(usersUIProps.queryParams));
+      await dispatch(actions.update_Payroll_Policy(payrollUpdateObj, emailRecipentList, eobiAllowances, bankInfoList, sessiAllowanceList));
+      // await dispatch(actions.fetchUsers(usersUIProps.queryParams));
     }
   };
 
@@ -506,13 +511,22 @@ export function FormTable(user
 
       <Formik
         enableReinitialize={true}
-        initialValues={currentState.userForEdit || user}
-        // validationSchema={formValidation}
+        initialValues={currentState.userForEdit || initialValues}
+        validationSchema={formValidation}
+
         onSubmit={async (values) => {
 
-          // console.log("input time",new Date('09/24/2024'));
+
           console.log("::values::", values);
           SavePayrollPolicy(values, defEmailRecipents, defEOBIAllowances, defBankInfoList, defSESSIAllowances);
+
+          if (user.formid) {
+            dispatch(actions.fetchUser(null));
+          }
+          else {
+            dispatch(actions.fetchUser(''));
+          }
+          user.setid(0);
 
         }}
       >
@@ -528,8 +542,9 @@ export function FormTable(user
         }) => (
           <>  <Form className="form form-label-right">
             <fieldset >
+              <h6>Payroll Configuration</h6>
               <div style={{ height: "250px", zIndex: "1", width: "100%", backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-                <h6>Payroll Configuration</h6>
+
                 <div className="from-group row">
                   <div className="col-12 col-md-4 mt-3">
                     <SearchSelect
@@ -638,9 +653,10 @@ export function FormTable(user
                 </div>
               </div>
               <br></br>
+              <h6>Email Preferences</h6>
               {console.log("obj", defPayrollGroupId)}
               <div style={{ height: "250px", zIndex: "1", width: "100%", backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-                <h6>Email Preferences</h6>
+
 
                 <div className="from-group row">
                   <div className="col-12 col-md-4 mt-3">
@@ -692,8 +708,9 @@ export function FormTable(user
               </div>
 
               <br></br>
+              <h6>Accounting Impact</h6>
               <div style={{ height: "250px", zIndex: "1", width: "100%", backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-                <h6>Accounting Impact</h6>
+
                 <div className="from-group row">
                   <div className="col-12 col-md-4 mt-3">
                     <SearchSelect
@@ -804,8 +821,9 @@ export function FormTable(user
                 </div>
               </div>
               <br></br>
+              <h6>Tax Integration</h6>
               <div style={{ height: "250px", zIndex: "1", width: "100%", backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-                <h6>Tax Integration</h6>
+
                 <div className="from-group row">
 
                   <div className="col-12 col-md-4 mt-3">
@@ -863,8 +881,9 @@ export function FormTable(user
                 </div>
               </div>
               <br></br>
+              <h6>Leave/Attendance Integration </h6>
               <div style={{ height: "350px", zIndex: "1", width: "100%", backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-                <h6>Leave/Attendance Integration </h6>
+
                 <div className="from-group row">
                   <div className="col-12 col-md-4 mt-3">
                     <input style={{ backgroundColor: "#ffffff", padding: "10px", width: "20px" }}
@@ -1015,8 +1034,9 @@ export function FormTable(user
               </div>
               <br>
               </br>
+              <h6>Loan Integration </h6>
               <div style={{ height: "200px", zIndex: "1", width: "100%", backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-                <h6>Loan Integration </h6>
+
                 <div className="from-group row">
 
                   <div className="col-12 col-md-4 mt-3">
@@ -1049,8 +1069,9 @@ export function FormTable(user
                 </div>
               </div>
               <br></br>
+              <h6>EOBI Configuration </h6>
               <div style={{ height: "350px", zIndex: "1", width: "100%", backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-                <h6>EOBI Configuration </h6>
+
                 <div className="from-group row">
                   <div className="col-12 col-md-4 mt-3">
                     <input style={{ backgroundColor: "#ffffff", padding: "10px", width: "30px" }}
@@ -1064,7 +1085,7 @@ export function FormTable(user
                     Enable EOBI
                   </div>
 
-                  <div className="col-12 col-md-4 mt-3">
+                  {/* <div className="col-12 col-md-4 mt-3">
                     <input style={{ backgroundColor: "#ffffff", padding: "10px", width: "30px" }}
                       name="isIncludeBasic"
                       type="checkbox"
@@ -1072,9 +1093,9 @@ export function FormTable(user
                         setFieldValue('isIncludeBasic', e.target.checked)
                       }}
                       checked={values.isIncludeBasic}
-                    />
+                    />kra
                     Include Basic
-                  </div>
+                  </div> */}
                   <div className="col-12 col-md-4 mt-3">
                     {<span> EOBI Deduction<span style={{ color: 'red' }}>*</span></span>}
                     <select className="form-control"
@@ -1140,10 +1161,10 @@ export function FormTable(user
                 </div>
               </div>
               <br></br>
+              <h6>SESSI Configuration </h6>
 
-              <br></br>
               <div style={{ height: "350px", zIndex: "1", width: "100%", backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-                <h6>SESSI Configuration </h6>
+
                 <div className="from-group row">
                   <div className="col-12 col-md-4 mt-3">
                     <input style={{ backgroundColor: "#ffffff", padding: "10px", width: "30px" }}
@@ -1234,9 +1255,10 @@ export function FormTable(user
                   </div>
                 </div>
               </div>
+              <br></br>
+              <br></br> <h6>Other </h6>
+              <div style={{ height: "350px", overflow: "scroll", zIndex: "1", width: "100%", backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
 
-              <div style={{ height: "350px", zIndex: "1", width: "100%", backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-                <h6>Other </h6>
                 <div className="from-group row">
                   <table class="table table table-head-custom table-vertical-center overflow-hidden table-hover">
                     <h7><b>Journal Accounts & Bank Info</b>
@@ -1262,7 +1284,18 @@ export function FormTable(user
                           <option value="3">Journal-TMP-SILK-018-001</option>
                         </select> </td>
 
-                        <td> <input className="form-control" onChange={handleFieldChanged} placeholder="Enter Bank Code" value={obj.bankCode} type="number" id={"bankCode-" + rightindex}></input> </td>
+                        <td>
+                          {/* <Field
+                            name="bankCode"
+                            component={Input}
+                            placeholder="Bank Code"
+                            onChange={handleFieldChanged}
+                            // label={<span> Bank Code<span style={{ color: 'red' }}>*</span></span>}
+                            autoComplete="off"
+                            type="number" id={"bankCode-" + rightindex}
+                          /> */}
+                          <input className="form-control" onChange={handleFieldChanged} placeholder="Enter Bank Code" value={obj.bankCode} type="number" id={"bankCode-" + rightindex}></input>
+                        </td>
 
                         <td><input type="number" className="form-control" placeholder="Enter Bank Account No" value={obj.bankAccountNo} onChange={handleFieldChanged} id={"bankAccountNo-" + rightindex}></input></td>
                         <td>  <input style={{ backgroundColor: "#ffffff", padding: "10px", width: "40px", height: "20px" }}

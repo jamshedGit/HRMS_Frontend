@@ -26,7 +26,7 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 // Validation schema
 const formValidation = Yup.object().shape(
   {
-    startDate: Yup.string()
+    subsidiaryId: Yup.string()
       .required("Required*"),
     endDate: Yup.string()
       .required("Required*"),
@@ -66,7 +66,7 @@ export function MasterEditForm({
         enableReinitialize={true}
         initialValues={user}
 
-        // validationSchema={formValidation}
+       validationSchema={formValidation}
         onSubmit={(values) => {
           // console.log("values12312", values);
           // enableLoading();

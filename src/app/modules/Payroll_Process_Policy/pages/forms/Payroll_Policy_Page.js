@@ -100,7 +100,7 @@ export function Payroll_Policy({ history }) {
           />
         )}
       </Route>
-      <FormCard id={defRecordId} />
+      <FormCard id={defRecordId} setid = {setDefaultRecordId}/>
       <ToastContainer
         position="top-right"
         autoClose={5000}
