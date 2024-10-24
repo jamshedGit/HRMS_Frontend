@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { Modal } from "react-bootstrap";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Input, Select, TextArea } from "../../../../../../_metronic/_partials/controls";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,6 +22,8 @@ import { Link } from "@material-ui/core";
 import { useDesignationUIContext } from "../DesignationUIContext";
 
 export const USERS_URL = process.env.REACT_APP_API_URL;
+const currentDate = new Date();
+const minDate = new Date(currentDate.getFullYear() - 18, currentDate.getMonth(), currentDate.getDate());
 
 // Phone Number Regex
 const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
@@ -69,7 +71,84 @@ const profileValidation = Yup.object().shape(
       .required("Required*"),
 
       dateOfJoining: Yup.date()
-      .required("Required*").min(Yup.ref("dateOfJoining"),"Error")
+      .max(currentDate, 'Date of joining cannot be in the future')
+      .required("Required*"),
+
+       dateOfConfirmation: Yup.date()
+       .required('Date of confirmation is required')
+       .when('dateOfJoining', (dateOfJoining, schema) => {
+         return dateOfJoining && schema.min(dateOfJoining, 'Date of confirmation cannot be earlier than the date of joining');
+       }),
+
+       dateOfConfirmationDue: Yup.date()
+       .required('Date confirmation due is required')
+       .when('dateOfConfirmation', (dateOfConfirmation, schema) => {
+         return dateOfConfirmation && schema.min(dateOfConfirmation, 'Date confirmation due cannot be earlier than date of confirmation');
+       }),
+
+       dateOfConfirmationEnter: Yup.date()
+      .required('Date confirmation extended is required')
+      .when('dateOfConfirmationDue', (dateOfConfirmationDue, schema) => {
+        return dateOfConfirmationDue && schema.min(dateOfConfirmationDue, 'Date confirmation extended cannot be earlier than date confirmation due');
+      }),
+
+      dateOfContractExpiry: Yup.date() .nullable()
+      //.required('Contract expiry date is required')
+      .when('dateOfConfirmationEnter', (dateOfConfirmationEnter, schema) => {
+        return dateOfConfirmationEnter && schema.min(dateOfConfirmationEnter, 'Contract expiry date cannot be earlier than date confirmation extended');
+      }),
+
+      // dateOfRetirement: Yup.date() .nullable()
+      // //.required('Contract expiry date is required')
+      // .when('dateOfBirth', (dateOfBirth, schema) => {
+      //   return dateOfBirth && schema.min(dateOfBirth, 'Contract expiry date cannot be earlier than date confirmation extended');
+      // }),
+
+      dateOfRetirement: Yup.date()
+      .nullable() // Make this field optional
+      .when('dateOfBirth', {
+        is: (dateOfBirth) => dateOfBirth != null, // Check if dateOfBirth is provided
+        then: Yup.date().min(
+          Yup.ref('dateOfBirth'),
+          'Retirement date cannot be earlier than date of birth'
+        ),
+      }),
+
+      nic_no: Yup.string()
+      .matches(/^\d{13}$/, 'ID Card No must be exactly 13 digits and contain only numbers') // Regex to match exactly 14 digits
+      .required('Required'), // Make it required if necessary
+
+      // passportNo: Yup.string()
+      // .matches(/^\d$/, 'ID Card No must be exactly 13 digits and contain only numbers') // Regex to match exactly 14 digits
+      // .required('ID Card No is required'), // Make it required if necessary
+
+      email_official: Yup.string()
+      .email('Invalid email address') // Validates email format
+      .notRequired(), // Optional: make it required
+
+      email_personal: Yup.string()
+      .email('Invalid email address') // Validates email format
+      .notRequired(), // Optional: make it required
+
+     
+
+      phone_cell: Yup.string()
+      .matches(/^\d+$/, 'Phone No must contain only numbers') // Regex to allow only digits
+      .notRequired(), // Optional: make it required
+
+      phone_home: Yup.string()
+      .matches(/^\d+$/, 'Phone Home No must contain only numbers') // Regex to allow only digits
+      .notRequired(), // Optional: make it required
+
+      phone_official: Yup.string()
+      .matches(/^\d+$/, 'Phone Official No must contain only numbers') // Regex to allow only digits
+      .notRequired(), // Optional: make it required
+
+
+      dateOfBirth: Yup.date()
+      .required('Date of birth is required')
+      .max(currentDate, 'Date of birth cannot be in the future')
+      .max(minDate, 'You must be at least 18 years old')
   },
 
 );
@@ -851,6 +930,8 @@ useEffect(() => {
                             setFieldValue("dateOfJoining", date);
                             setJoiningDate(date);
                           }}
+                          showYearDropdown
+                          scrollableMonthYearDropdown
                           timeInputLabel="Time:"
                           dateFormat="dd/MM/yyyy"
                           showTimeInput
@@ -859,15 +940,18 @@ useEffect(() => {
                           disabled={isUserForRead}
                           error={errors.dateOfJoining}
                           touched={touched.dateOfJoining}
-                        // value = {values.dateOfJoining}
-                        />
+                      />
+                      <ErrorMessage style={{color:"red"}} name="dateOfJoining" component="div" />
                       </div>
+                      
                       <div className="col-12 col-md-4 mt-3">
                         <label>Date Of Confirmation</label>
                         <DatePicker
                           className="form-control"
                           placeholder="Enter Date Of Confirmation"
                           selected={confirmationDateSelected}
+                          showYearDropdown
+                          scrollableMonthYearDropdown
                           onChange={(date) => {
                             setFieldValue("dateOfConfirmation", date);
                             setConfirmationDate(date);
@@ -879,6 +963,7 @@ useEffect(() => {
                           disabled={isUserForRead}
                           autoComplete="off"
                         />
+                          <ErrorMessage style={{color:"red"}} name="dateOfConfirmation" component="div" />
                       </div>
                       <div className="col-12 col-md-4 mt-3">
                         <label>Date Confirmation Due </label>
@@ -897,6 +982,7 @@ useEffect(() => {
                           disabled={isUserForRead}
                           autoComplete="off"
                         />
+                        <ErrorMessage style={{color:"red"}} name="dateOfConfirmationDue" component="div" />
                       </div>
                       <div className="col-12 col-md-4 mt-3">
                         <label>Date Confirmation Extended </label>
@@ -915,9 +1001,10 @@ useEffect(() => {
                           disabled={isUserForRead}
                           autoComplete="off"
                         />
+                         <ErrorMessage style={{color:"red"}} name="dateOfConfirmationEnter" component="div" />
                       </div>
                       <div className="col-12 col-md-4 mt-3">
-                        <label>Date Confirmation Enter </label>
+                        <label>Contract Expiry </label>
                         <DatePicker
                           className="form-control"
                           placeholder="Enter Contract Expiry"
@@ -933,6 +1020,7 @@ useEffect(() => {
                           disabled={isUserForRead}
                           autoComplete="off"
                         />
+                          <ErrorMessage style={{color:"red"}} name="dateOfContractExpiry" component="div" />
                       </div>
 
 
@@ -1016,6 +1104,8 @@ useEffect(() => {
                           placeholder="Enter Date Of Birth"
                           selected={DOBDateSelected}
                           value={values.dateOfBirth}
+                          showYearDropdown
+                          scrollableMonthYearDropdown
                           onChange={(date) => {
                             setFieldValue("dateOfBirth", date);
                             setDOBDate(date);
@@ -1026,7 +1116,9 @@ useEffect(() => {
                           name="dateOfBirth"
                           disabled={isUserForRead}
                           autoComplete="off"
+                        
                         />
+                           <ErrorMessage style={{color:"red"}} name="dateOfBirth" component="div" />
                       </div>
 
                       <div className="col-12 col-md-4 mt-3">
@@ -1035,6 +1127,9 @@ useEffect(() => {
                           className="form-control"
                           placeholder="Enter Date Of Retirement"
                           selected={RetirementSelected}
+
+                          showYearDropdown
+                          scrollableMonthYearDropdown
                           onChange={(date) => {
                             setFieldValue("dateOfRetirement", date);
                             setDRetirmentDate(date);
@@ -1046,6 +1141,7 @@ useEffect(() => {
                           disabled={isUserForRead}
                           autoComplete="off"
                         />
+                          <ErrorMessage style={{color:"red"}} name="dateOfRetirement" component="div" />
                       </div>
                     </div>
 
@@ -1058,6 +1154,7 @@ useEffect(() => {
                           label="Enter ID Card No"
                           autoComplete="off"
                         />
+                         {/* <ErrorMessage style={{color:"red"}} name="nic_no" component="div" /> */}
                       </div>
                       <div className="col-12 col-md-4 mt-3">
                         <Field
