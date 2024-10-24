@@ -12,13 +12,11 @@ import {
 } from "../../../../../../_metronic/redux/dashboardActions";
 
 // Define the validation schema for the main form and the policies
-const loanManagementSchema = Yup.object().shape({
+const ReimbursementSchema = Yup.object().shape({
   subsidiaryId: Yup.number().required("Subsidiary is required"),
   payroll_groupId: Yup.number().required("Account is required"),
-  cycle_typeId: Yup.number().required("Human Resource Role is required"),
-  cycle_typeId: Yup.number().required(
-    "Installment Deduction Basis Type is required"
-  ),
+  cycle_typeId: Yup.number().required("required"),
+
 });
 
 export function FormEditForm({
@@ -44,7 +42,7 @@ export function FormEditForm({
       dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsidiaries
       dispatch(fetchAllFormsMenu(127, "allPayrolGroupList")); // For All Accounts
       dispatch(fetchAllFormsMenu(191, "allCycleTypeList"));
-      dispatch(fetchAllFormsMenu(194, "allReimbursementTypeList"));
+      dispatch(fetchAllFormsMenu(195, "allReimbursementTypeList"));
       dispatch(fetchAllFormsMenu(143, "allEmployeeGradeList"));
 
       // reimbursement_typeId
@@ -79,10 +77,10 @@ export function FormEditForm({
     <Formik
       enableReinitialize={true}
       initialValues={user}
-      validationSchema={loanManagementSchema}
+      validationSchema={ReimbursementSchema}
       onSubmit={(values) => {
         console.log("Form Values: updated", values);
-        // enableLoading();
+        enableLoading();
         saveForm(values);
       }}
     >
@@ -224,23 +222,11 @@ export function FormEditForm({
 
                               <td>
                                 <Field
-                                  name={`detail[${index}].reimbursement_typeId`}
+                                  name={`policies[${index}].reimbursement_typeId`}
                                   as="select"
                                   className="form-control"
                                   disabled={isUserForRead}
                                 >
-                                  {/* <option value="">Select Loan Type</option> */}
-                                  {/* {dashboard.allLoanTypeList?.map(
-                                    (loanType) => (
-                                      <option
-                                        key={loanType.value}
-                                        value={loanType.value}
-                                      >
-                                        {loanType.label}
-                                      </option>
-                                    )
-                                  )} */}
-
                                   {dashboard.allReimbursementTypeList?.map(
                                     (x) => {
                                       return (
@@ -278,7 +264,7 @@ export function FormEditForm({
 
                               <td>
                                 <Field
-                                  name={`policies[${index}].max_loan_amount`}
+                                  name={`policies[${index}].max_amount`}
                                   type="number"
                                   className="form-control"
                                   disabled={isUserForRead}
@@ -291,36 +277,16 @@ export function FormEditForm({
                                   )}
                               </td>
 
-                              {/* <td>
-                                <Field
-                                  name={`policies[${index}].attachment_required`}
-                                  type="number"
-                                  className="form-control"
-                                  disabled={isUserForRead}
-                                />
-                                {errors.policies?.[index]
-                                  ?.attachment_required &&
-                                  touched.policies?.[index]
-                                    ?.attachment_required && (
-                                    <div className="text-danger">
-                                      {
-                                        errors.policies[index]
-                                          .attachment_required
-                                      }
-                                    </div>
-                                  )}
-                              </td> */}
-
                               <td>
                                 <div className="">
                                   <Field
-                                    name="attachment_required"
+                                    name={`policies[${index}].attachment_required`}
                                     as="select"
                                     className="form-control"
                                     disabled={isUserForRead}
                                     onChange={(e) => {
                                       setFieldValue(
-                                        "attachment_required",
+                                        `policies[${index}].attachment_required`,
                                         e.target.value
                                       ); // Use the raw value
                                     }}
@@ -345,7 +311,9 @@ export function FormEditForm({
                                 </div>
                               </td>
 
-                              {/* <td
+                       
+
+                              <td
                                 className="bg-white"
                                 style={{
                                   backgroundColor: "#ffffff",
@@ -354,58 +322,61 @@ export function FormEditForm({
                               >
                                 <div
                                   style={{
-                                    maxHeight: "200px", 
-                                    overflowY: "auto", 
-                                    overflowX: "hidden", 
+                                    maxHeight: "200px", // Set maxHeight for scrolling
+                                    overflowY: "auto", // Enable vertical scrolling
+                                    overflowX: "hidden", // Hide horizontal scrolling
                                   }}
                                   className="bg-white m-2"
                                 >
                                   {dashboard.allEmployeeGradeList.map(
                                     (option, i) => (
-                                      <div key={i} className="bg-white p-2">
-                                      
-                                          <input 
-                                            type="checkbox"
-                                         
-                                            className="form-check-input"
-                                          />
+                                      <div
+                                        key={i}
+                                        className="bg-white p-2"
+                                        style={{
+                                          display: "flex",
+                                          alignItems: "center",
+                                        }}
+                                      >
+                                        <input
+                                          className="mr-2"
+                                          type="checkbox"
+                                          checked={values.policies[
+                                            index
+                                          ].grades.includes(option.value)}
+                                          onChange={(e) => {
+                                            const checked = e.target.checked;
+                                            const currentGrades =
+                                            values.policies[index].grades ||
+                                              [];
+                                            if (checked) {
+                                              // Add ID to the array
+                                              setFieldValue(
+                                                `policies[${index}].grades`,
+                                                [...currentGrades, option.value]
+                                              );
+                                            } else {
+                                              // Remove ID from the array
+                                              setFieldValue(
+                                                `policies[${index}].grades`,
+                                                currentGrades.filter(
+                                                  (id) => id !== option.value
+                                                )
+                                              );
+                                            }
+                                          }}
+                                        />
+                                        <label className="form-check-label ms-2">
                                           {option.label}
-                                        
+                                        </label>
                                       </div>
                                     )
                                   )}
+                                 
+
+                         
                                 </div>
-                              </td> */}
-
-<td
-  className="bg-white"
-  style={{
-    backgroundColor: "#ffffff",
-    padding: "10px",
-  }}
->
-  <div
-    style={{
-      maxHeight: "200px", // Set maxHeight for scrolling
-      overflowY: "auto", // Enable vertical scrolling
-      overflowX: "hidden", // Hide horizontal scrolling
-    }}
-    className="bg-white m-2"
-  >
-    {dashboard.allEmployeeGradeList.map((option, i) => (
-      <div key={i} className="bg-white p-2" style={{ display: "flex", alignItems: "center" }}>
-        <input className="mr-2"
-          type="checkbox"
-      
-        />
-        <label className="form-check-label ms-2">
-          {option.label}
-        </label>
-      </div>
-    ))}
-  </div>
-</td>
-
+                              </td>
                             </tr>
                           ))}
                       </tbody>
@@ -430,10 +401,6 @@ export function FormEditForm({
                   </div>
                 )}
               </FieldArray>
-
-
-              
-              
             </Form>
           </Modal.Body>
 

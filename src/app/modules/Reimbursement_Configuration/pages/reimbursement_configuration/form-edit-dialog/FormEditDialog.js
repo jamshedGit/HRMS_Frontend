@@ -74,7 +74,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
  
   const saveForm = async (user) => {
  
-    console.log("loan management conf getUserStatus updated", user.policies);
+    console.log("reimbursement getUserStatus updated save", user);
 
 
        if (user.policies=="") {

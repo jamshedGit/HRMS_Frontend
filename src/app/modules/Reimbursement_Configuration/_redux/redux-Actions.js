@@ -82,7 +82,7 @@ export const createSalarypolicy = (salarypolicyForCreation, disbaleLoading, onHi
       dispatch(actions.startCall({ callType: callTypes.action }));
       const user = res.data?.data;
      
-      console.log(user);
+      console.log("dispatch user",res);
       dispatch(actions.salarypolicyCreated(user));
       disbaleLoading();
       toast.success("Successfully Created", {
