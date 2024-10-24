@@ -74,10 +74,10 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
  
   const saveForm = async (user) => {
  
-    console.log("loan management conf getUserStatus updated", user.details);
+    console.log("loan management conf getUserStatus updated", user.policies);
 
 
-       if (user.details=="") {
+       if (user.policies=="") {
       toast.error("Detail is incomplete.", {
         position: "top-right",
         autoClose: 5000,
@@ -110,7 +110,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         subsidiaryId: user.subsidiaryId,
         payroll_groupId: user.payroll_groupId,
         cycle_typeId: user.cycle_typeId,
-        // details: user.details
+        policies: user.policies
 
       };
 
@@ -123,7 +123,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
  
   return (
     <Modal
-      size="lg"
+      size="xl"
       show={show}
       onHide={onHide}
       aria-labelledby="example-modal-sizes-title-lg"

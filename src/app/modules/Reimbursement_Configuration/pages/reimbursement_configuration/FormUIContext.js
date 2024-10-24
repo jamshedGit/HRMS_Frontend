@@ -49,7 +49,7 @@ export function FormUIProvider({ FormUIEvents, children }) {
         payroll_groupId:"",
         cycle_typeId: "",
  
-        // details:""
+        policies:""
 
   }
 

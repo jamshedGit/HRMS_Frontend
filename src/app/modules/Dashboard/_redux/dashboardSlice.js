@@ -47,7 +47,8 @@ const initialDashboardState = {
   allLoanTypeList: [],
   allContractTypeList:[],
   allPayrolGroupList:[],
-  allCycleTypeList:[]
+  allCycleTypeList:[],
+  allReimbursementTypeList:[]
 };
 
 export const callTypes = {
