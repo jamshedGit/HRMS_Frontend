@@ -295,8 +295,8 @@ export function SalarypolicyEditForm({
 
   const { userAccess, currentMonthList } = useSelector(
     (state) => ({
-      userAccess: state.auth.userAccess.salarypolicy,
-      currentMonthList: state.salarypolicy.currentMonth,
+      userAccess: state.auth.userAccess.salary_policy,
+      currentMonthList: state.salary_policy.currentMonth,
     }),
     shallowEqual
   );
@@ -305,7 +305,7 @@ export function SalarypolicyEditForm({
     <div className="form-group">
       <label>{label}</label>
       <select {...field} className="form-control" onChange={onChange}>
-        <option value="">Select Type</option>
+        <option value="">{user?.type || "Select Type"}</option>
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
@@ -507,8 +507,8 @@ let formattedString;
   <Field
     name="value"
     component={Input}
-    placeholder="Value"
-    label="Value"
+    placeholder="Duration (Days)"
+    label="Duration (Days)"
     type="number"
   
   

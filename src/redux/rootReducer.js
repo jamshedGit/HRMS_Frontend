@@ -110,7 +110,7 @@ export const rootReducer = combineReducers({
   salary_rounding_policy: SalaryRoundingPolicySlice.reducer,
   leave_type: LeaveTypeSlice.reducer,
   final_settlement_policy: FinalSettlementPolicySlice.reducer,
-  salarypolicy: salarypolicySlice.reducer,
+  salary_policy: salarypolicySlice.reducer,
   onetime_earning: OnetimeAllowanceSlice.reducer,
   loan_type: LoanTypeSlice.reducer,
   leave_management_configuration: leaveManagementConfigurationSlice.reducer,

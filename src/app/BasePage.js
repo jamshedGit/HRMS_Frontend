@@ -106,7 +106,7 @@ const ROUTES = {
   salary_rounding_policy: RoundingPolicyModule,
   leave_type: LeaveTypeModule,
   final_settlement_policy :FinalSettlementPolicyModule,
-  salarypolicy:salarypolicyModule,
+  salary_policy:salarypolicyModule,
   onetime_earning: OnetimeAllowance,
   leave_management_configuration: leaveManagementConfiguration,
   loan_type: LoanType,

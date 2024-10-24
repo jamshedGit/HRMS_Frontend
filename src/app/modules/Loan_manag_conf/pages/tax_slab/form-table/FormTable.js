@@ -72,7 +72,7 @@ export function FormTable() {
 
     {
       dataField: "Subsidiary.formName",
-      text: "subsidiaryId",
+      text: "subsidiary",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -85,7 +85,7 @@ export function FormTable() {
  
 {
   dataField: "Account.formName",
-  text: "account Id",
+  text: "Account",
   sort: false,
   sortCaret: sortCaret,
   headerSortingClasses,
@@ -96,20 +96,11 @@ export function FormTable() {
 },
  
  
-    {
-      dataField: "t_role.name",
-      text: "role",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "10px",
-      },
-    },
+   
  
     {
-      dataField: "emp_loan_account",
-      text: "loan accountt",
+      dataField: "EmpLoanAccount.formName",
+      text: "employee loan account",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -129,10 +120,10 @@ export function FormTable() {
         minWidth: "10px",
       },
     },
- 
+
     {
-      dataField: "installment_deduction_basis_type",
-      text: "deduction basis type",
+      dataField: "t_role.name",
+      text: "role",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -140,6 +131,17 @@ export function FormTable() {
         minWidth: "10px",
       },
     },
+ 
+    // {
+    //   dataField: "installment_deduction_basis_type",
+    //   text: "deduction basis type",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "10px",
+    //   },
+    // },
  
    
  

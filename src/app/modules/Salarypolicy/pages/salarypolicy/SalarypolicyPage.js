@@ -19,69 +19,69 @@ export function SalarypolicyPage({ history }) {
     newSalarypolicyButtonClick: () => {
       dispatch(fetchAllCountry());
 
-      history.push("/salarypolicy/read-all-salarypolicy/new");
+      history.push("/salary_policy/read-all-salarypolicy/new");
     },
     openEditSalarypolicyDialog: (id) => {
       dispatch(fetchAllCountry());
 
-      history.push(`/salarypolicy/read-all-salarypolicy/${id}/edit`);
+      history.push(`/salary_policy/read-all-salarypolicy/${id}/edit`);
     },
     openDeleteSalarypolicyDialog: (id, status) => {
-      history.push(`/salarypolicy/read-all-salarypolicy/${id}/${status}/delete`);
+      history.push(`/salary_policy/read-all-salarypolicy/${id}/${status}/delete`);
     },
     openActiveSalarypolicyDialog: (id) => {
-      history.push(`/salarypolicy/read-all-salarypolicy/${id}/active`);
+      history.push(`/salary_policy/read-all-salarypolicy/${id}/active`);
     },
     openReadSalarypolicyDialog: (id, isUserRead) => {
       
       
-      history.push(`/salarypolicy/read-all-salarypolicy/${id}/read`);
+      history.push(`/salary_policy/read-all-salarypolicy/${id}/read`);
     },
   };
   return (
     
     <SalarypolicyUIProvider SalarypolicyUIEvents={SalarypolicyUIEvents}>
-      <Route exact path="/salarypolicy/read-all-salarypolicy/new">
+      <Route exact path="/salary_policy/read-all-salarypolicy/new">
         {({ history, match }) => (
           <SalarypolicyEditDialog
             show={match != null}
             onHide={() => {
-              history.push("/salarypolicy/read-all-salarypolicy");
+              history.push("/salary_policy/read-all-salarypolicy");
             }}
           />
         )}
       </Route>
-      <Route path="/salarypolicy/read-all-salarypolicy/:id/edit">
+      <Route path="/salary_policy/read-all-salarypolicy/:id/edit">
         {({ history, match }) => (
           <SalarypolicyEditDialog
             show={match != null}
             id={match && match.params.id}
             onHide={() => {
-              history.push("/salarypolicy/read-all-salarypolicy");
+              history.push("/salary_policy/read-all-salarypolicy");
             }}
           />
         )}
       </Route>
-      <Route path="/salarypolicy/read-all-salarypolicy/:id/read">
+      <Route path="/salary_policy/read-all-salarypolicy/:id/read">
         {({ history, match }) => (
           <SalarypolicyEditDialog
             show={match != null}
             id={match && match.params.id}
             userForRead={true}
             onHide={() => {
-              history.push("/salarypolicy/read-all-salarypolicy");
+              history.push("/salary_policy/read-all-salarypolicy");
             }}
           />
         )}
       </Route>
-      <Route path="/salarypolicy/read-all-salarypolicy/:id/:status/delete">
+      <Route path="/salary_policy/read-all-salarypolicy/:id/:status/delete">
         {({ history, match }) => (
           <SalarypolicyDeleteDialog
             show={match != null}
             id={match && match.params.id}
             status={match && match.params.status}
             onHide={() => {
-              history.push("/salarypolicy/read-all-salarypolicy");
+              history.push("/salary_policy/read-all-salarypolicy");
             }}
           />
         )}

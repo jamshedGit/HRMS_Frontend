@@ -38,8 +38,8 @@ export function SalarypolicyTable() {
   const { currentState, userAccess } = useSelector(
     (state) => {  console.log("s "); return {
       
-      currentState: state.salarypolicy,
-      userAccess: state?.auth?.userAccess["salarypolicy"],
+      currentState: state.salary_policy,
+      userAccess: state?.auth?.userAccess["salary_policy"],
     }},
     shallowEqual
   );
@@ -78,16 +78,16 @@ export function SalarypolicyTable() {
   
   // Table columns
   const columns = [
-    {
-      dataField: "Id",
-      text: "ID",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "10px",
-      },
-    },
+    // {
+    //   dataField: "Id",
+    //   text: "ID",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "10px",
+    //   },
+    // },
     {
       dataField: "type",
       text: "Type",
@@ -112,7 +112,7 @@ export function SalarypolicyTable() {
 
 {
   dataField: "value",
-  text: "Value",
+  text: "Duration (Days)",
   sort: false,
   sortCaret: sortCaret,
   headerSortingClasses,
