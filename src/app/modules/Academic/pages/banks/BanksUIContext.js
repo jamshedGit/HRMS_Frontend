@@ -32,7 +32,14 @@ export function BanksUIProvider({ BanksUIEvents, children }) {
   }, []);
   const initUser = {
     employeeId: "",
-    gpa:"",
+      degreeId: "",
+      countryId:"",
+      cityId: "",
+      startDate: "",
+      endDate: "",
+      gpa: "",
+      statusId: "",
+      institutionId:""
   };
 
   console.log("acadenuc ui events",BanksUIEvents);
