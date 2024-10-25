@@ -40,8 +40,8 @@ export const LeaveApplicationSlice = createSlice({
             }
         },
         LeaveApplicationFetched: (state, action) => {
-            const entities = action.payload.data?.data.rows;
-            const totalResult = action.payload.data?.data.totalResults;
+            const entities = action.payload.data?.data.rows || [];
+            const totalResult = action.payload.data?.data.totalResults || 0;
             state.listLoading = false;
             state.error = null;
             state.entities = entities;

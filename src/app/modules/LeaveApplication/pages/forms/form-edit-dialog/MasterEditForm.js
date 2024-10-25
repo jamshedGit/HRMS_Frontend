@@ -262,7 +262,7 @@ export function MasterEditForm({
               {/* Cancel button End */}
 
               {/* Save button Start */}
-              {employeeId && <button
+              {employeeId ? <button
                 type="submit"
                 onClick={() => handleSubmit()}
                 className="btn btn-primary btn-elevate"
@@ -271,7 +271,7 @@ export function MasterEditForm({
                 {loading && (
                   <span className="ml-3 mr-3 spinner spinner-white"></span>
                 )}
-              </button>}
+              </button> : <></>}
               {/* Save button End */}
             </Modal.Footer>
           </>

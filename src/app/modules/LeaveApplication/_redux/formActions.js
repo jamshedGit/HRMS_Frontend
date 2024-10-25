@@ -43,6 +43,9 @@ export const fetchLeaveApplication = (queryparm, employeeId) => async (dispatch)
         dispatch(actions.catchError({ error, callType: callTypes.list }));
       });
   }
+  else{
+    dispatch(actions.LeaveApplicationFetched({}));
+  }
 
 };
 

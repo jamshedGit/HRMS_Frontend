@@ -45,8 +45,7 @@ export function FormCard() {
 
   //Get data from server and set on state whenever employee Id is updated
   useEffect(() => {
-    if (formUIProps.employeeId)
-      dispatch(actions.fetchLeaveApplication(formUIProps.queryParamsLeaveApp, formUIProps.employeeId))
+    dispatch(actions.fetchLeaveApplication(formUIProps.queryParamsLeaveApp, formUIProps.employeeId))
 
     if (!dashboard.allEmployees || !dashboard.allEmployees.length)
       dispatch(fetchAllActiveEmployees());
