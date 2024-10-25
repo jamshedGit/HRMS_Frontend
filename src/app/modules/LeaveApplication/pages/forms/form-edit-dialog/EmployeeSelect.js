@@ -2,16 +2,10 @@ import React from "react";
 import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import { Input, Select } from "../../../../../../_metronic/_partials/controls";
+import { Select } from "../../../../../../_metronic/_partials/controls";
 import { useSelector, shallowEqual } from "react-redux"
 import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
 import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLabel";
-
-//Validation for Form
-const formValidation = Yup.object().shape({
-  employeeId: Yup.number().min(1, 'Required').required('Required'),
-});
-
 
 export function EmployeeSelect({
   actionsLoading,
@@ -28,7 +22,6 @@ export function EmployeeSelect({
     <>
       <Formik
         enableReinitialize={true}
-        validationSchema={formValidation}
         initialValues={{}}
       >
         {({
@@ -52,7 +45,7 @@ export function EmployeeSelect({
                       <Field
                         name="employeeId"
                         component={Select}
-                        className={errors.employeeId && !values.employeeId ? 'form-control is-invalid' : 'form-control'}
+                        className={!values.employeeId ? 'form-control is-invalid' : 'form-control'}
                         placeholder=""
                         onBlur={handleBlur}
                         onChange={(e) => {
@@ -71,7 +64,7 @@ export function EmployeeSelect({
                         children={CustomDropdown({ data: allEmployees, firstElement: { label: '--Select--', value: '' } })}
                       />
                       {
-                        errors.employeeId && <CustomErrorLabel touched={true} error={errors.employeeId} />
+                        !values.employeeId && <CustomErrorLabel touched={true} error={'Required'} />
                       }
                     </div>
                   </div>

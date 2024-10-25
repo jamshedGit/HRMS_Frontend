@@ -11,6 +11,7 @@ const initialState = {
     userForEdit: undefined,
     lastError: null,
     userForRead: false,
+    payrollData: null
 };
 
 export const callTypes = {
@@ -48,6 +49,10 @@ export const LeaveApplicationSlice = createSlice({
         },
         LeaveApplicationFetchedForEdit: (state, action) => {
             const entities = action?.payload?.userForEdit;
+            if (entities) {
+                entities.fileName = entities.file;
+                delete entities.file;
+            }
             state.actionsLoading = false;
             state.userForEdit = entities;
             state.error = null;
@@ -76,6 +81,11 @@ export const LeaveApplicationSlice = createSlice({
                 }
                 return el;
             });
+        },
+        PayrollMonthFetched: (state, action) => {
+            const payrollData = action?.payload?.payrollData?.[0];
+            state.error = null;
+            state.payrollData = payrollData;
         }
     },
 });

@@ -3,7 +3,17 @@ import axios from "axios";
 export const USERS_URL = process.env.REACT_APP_API_URL;
 
 /**
- * Create Leave Application
+ * Get Last Payroll Month
+ * 
+ * @param {Object} body 
+ * @returns res
+ */
+export function getPayrollMonth() {
+  return axios.post(`${USERS_URL}/payroll_month/get-payroll-month-previous-date`);
+}
+
+/**
+ * Upload File or Image
  * 
  * @param {Object} body 
  * @returns res

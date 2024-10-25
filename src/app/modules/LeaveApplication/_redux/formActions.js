@@ -10,12 +10,10 @@ const { actions } = LeaveApplicationSlice;
  * @param {Object} queryparm 
  * @returns 
  */
-export const uploadImage = (file) => {
-  console.log('::::file::::::',file);
-  
+export const uploadImage = async (file) => {
   const formData = new FormData()
   formData.append('file', file)
-  return requestFromServer.uploadImage(formData)
+  return await requestFromServer.uploadImage(formData)
     .then((response) => {
       return response;
     })
@@ -83,17 +81,16 @@ export const fetchEditRecord = (id) => (dispatch) => {
  * @param {Function} onHide 
  * @returns 
  */
-export const saveRecord = (data, employeeId, disableLoading) => (dispatch) => {
+export const saveRecord = (data, employeeId, disableLoading, resetForm) => (dispatch) => {
   if (employeeId) {
     if (!data.Id) {
-      return requestFromServer.createLeaveApplicationSetup({...data, employeeId})
+      return requestFromServer.createLeaveApplicationSetup({ ...data, employeeId })
         .then((res) => {
           const LeaveApplicationData = res.data?.data;
-          console.log('::::::LeaveApplicationData::::', LeaveApplicationData);
-
           if (LeaveApplicationData) {
             dispatch(actions.LeaveApplicationCreated(LeaveApplicationData));
             disableLoading();
+            resetForm()
             toast.success("Successfully Created", {
               position: "top-right",
               autoClose: 5000,
@@ -126,6 +123,7 @@ export const saveRecord = (data, employeeId, disableLoading) => (dispatch) => {
           if (LeaveApplicationData) {
             dispatch(actions.LeaveApplicationUpdated(LeaveApplicationData));
             disableLoading();
+            resetForm();
             toast.success("Successfully Updated", {
               position: "top-right",
               autoClose: 5000,
@@ -192,5 +190,17 @@ export const deleteRecord = (id, disableLoading, onHide) => (dispatch) => {
         draggable: true,
         progress: undefined,
       });
+    });
+}
+
+
+export const getPayrollMonth = () => (dispatch) => {
+  return requestFromServer.getPayrollMonth()
+    .then((res) => {
+      const payrollData = res.data?.data;
+      dispatch(actions.PayrollMonthFetched({ payrollData }));
+    })
+    .catch((error) => {
+      error.clientMessage = "Can't Get Payroll Data";
     });
 }

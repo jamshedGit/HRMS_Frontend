@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo, useRef } from "react";
 import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
@@ -7,16 +7,9 @@ import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLab
 import { useSelector, shallowEqual } from "react-redux"
 import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
 import { uploadImage } from "../../../_redux/formActions";
-import { getDateDiffInDays } from "../../../../../utils/common";
+import { formatDates, getDateDiffInDays, getFileName } from "../../../../../utils/common";
 
-//Validation for Form
-const formValidation = Yup.object().shape({
-  from: Yup.date().required('Required'),
-  to: Yup.date().required('Required').min(Yup.ref('from'), 'To date cannot be before From date'),
-  leaveType: Yup.number().required('Required'),
-  days: Yup.number().optional(),
-  remarks: Yup.string().required('Required'),
-});
+
 
 export function MasterEditForm({
   submitForm,
@@ -24,9 +17,12 @@ export function MasterEditForm({
   actionsLoading,
   enableLoading,
   loading,
-  isEdit
+  isEdit,
+  setId,
+  payrollData
 }) {
 
+  const cancelButtonRef = useRef(null);
   const { allLeaveTypes } = useSelector(
     (state) => ({
       allLeaveTypes: state.dashboard.allLeaveTypes
@@ -34,16 +30,39 @@ export function MasterEditForm({
     shallowEqual
   )
 
+  //Validation for Form
+  const formValidation = useMemo(() => {
+    console.log(':::payrollData:::::',payrollData);
+    
+    if (payrollData && payrollData.endDate) {
+      return Yup.object().shape({
+        from: Yup.date().required('Required').min(payrollData.endDate, `Date cannot be before ${formatDates(payrollData.endDate)}`),
+        to: Yup.date().required('Required').min(Yup.ref('from'), 'To date cannot be before From date').min(payrollData.endDate, `Date cannot be before ${formatDates(payrollData.endDate)}`),
+        leaveType: Yup.number().required('Required'),
+        days: Yup.number().optional(),
+        remarks: Yup.string().required('Required'),
+      })
+    }
+    else {
+      Yup.object().shape({
+        from: Yup.date().required('Required'),
+        to: Yup.date().required('Required').min(Yup.ref('from'), 'To date cannot be before From date'),
+        leaveType: Yup.number().required('Required'),
+        days: Yup.number().optional(),
+        remarks: Yup.string().required('Required'),
+      })
+    }
+  }, [payrollData])
+
   return (
     <>
       <Formik
         enableReinitialize={true}
         initialValues={user}
         validationSchema={formValidation}
-        onSubmit={(values) => {
-          console.log(':::on submit:::::', values);
+        onSubmit={(values, { resetForm }) => {
           enableLoading();
-          submitForm(values)
+          submitForm(values, resetForm)
         }}
       >
         {({
@@ -54,6 +73,7 @@ export function MasterEditForm({
           handleBlur,
           handleChange,
           setFieldValue,
+          handleReset
         }) => (
           <>
             <Modal.Body className="overlay overlay-block cursor-default">
@@ -80,9 +100,7 @@ export function MasterEditForm({
                         autoComplete="off"
                       />
                     </div>
-                  </div>
 
-                  <div className="from-group row">
                     <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="to"
@@ -95,6 +113,25 @@ export function MasterEditForm({
                           </span>
                         }
                         autoComplete="off"
+                      />
+                    </div>
+
+                    <div className="col-12 col-md-4 mt-3">
+                      <Field
+                        name="days"
+                        component={Input}
+                        disabled={true}
+                        type="number"
+                        min="0"
+                        className='form-control'
+                        onChange={handleChange}
+                        label={
+                          <span>
+                            {" "}
+                            Days
+                          </span>
+                        }
+                        value={getDateDiffInDays(values.from, values.to)}
                       />
                     </div>
                   </div>
@@ -126,30 +163,7 @@ export function MasterEditForm({
                         errors.leaveType && touched.leaveType && <CustomErrorLabel touched={true} error={errors.leaveType} />
                       }
                     </div>
-                  </div>
 
-                  <div className="from-group row">
-                    <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="days"
-                        component={Input}
-                        disabled={true}
-                        type="number"
-                        min="0"
-                        className='form-control'
-                        onChange={handleChange}
-                        label={
-                          <span>
-                            {" "}
-                            Days
-                          </span>
-                        }
-                        value={getDateDiffInDays(values.from, values.to)}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="from-group row">
                     <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="remarks"
@@ -166,9 +180,6 @@ export function MasterEditForm({
                         value={values.remarks}
                         autoComplete="off"
                       />
-                      {
-                        errors.remarks && touched.remarks && <CustomErrorLabel touched={true} error={errors.remarks} />
-                      }
                     </div>
                   </div>
 
@@ -178,6 +189,7 @@ export function MasterEditForm({
                         name="file"
                         component={Input}
                         type="file"
+                        accept=".jpeg,.jpg,.png,.pdf,.doc,.docx"
                         placeholder=""
                         onChange={(el) => {
                           setFieldValue('fileDetail', el.target.files[0])
@@ -192,12 +204,31 @@ export function MasterEditForm({
                         }
                         autoComplete="off"
                       />
+                      <div>
+                        {!values.fileDetail && values.fileName &&
+                          <>
+                            <label>Existing File:</label>
+                            {<span>{getFileName(values.fileName)}</span>}
+                          </>
+                        }
+                      </div>
                     </div>
                   </div>
                 </fieldset>
               </Form>
             </Modal.Body>
             <Modal.Footer>
+              <button
+                type="reset"
+                ref={cancelButtonRef}
+                onClick={() => {
+                  setId('')
+                  handleReset()
+                }}
+                className="btn btn-primary btn-elevate"
+              >
+                Cancel
+              </button>
               <button
                 type="submit"
                 onClick={() => handleSubmit()}

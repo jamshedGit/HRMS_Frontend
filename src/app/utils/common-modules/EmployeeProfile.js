@@ -100,7 +100,7 @@ const EmployeeProfile = ({ data, employeeId }) => {
     <Accordion defaultActiveKey="">
       <Card>
         <Card.Header>
-          <Accordion.Toggle as={Button} variant="link" eventKey="0">
+          <Accordion.Toggle as={Button} eventKey="0">
             Person Bio Data
           </Accordion.Toggle>
         </Card.Header>
@@ -114,7 +114,7 @@ const EmployeeProfile = ({ data, employeeId }) => {
                   </Col>
 
                 ))}
-              </Row> : <></>
+              </Row> : <>Please Choose an Employee</>
             }
 
           </Card.Body>

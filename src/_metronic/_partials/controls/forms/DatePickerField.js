@@ -32,15 +32,11 @@ export function DatePickerField({ ...props }) {
           setFieldValue(field.name, val);
         }}
       />
-      {errors[field.name] && touched[field.name] ? (
+      {errors[field.name] && touched[field.name] && (
         <div className="invalid-datepicker-feedback">
           {errors[field.name].toString()}
         </div>
-      ) : (
-        <div className="feedback">
-          Please enter in 'mm/dd/yyyy' format
-        </div>
-      )}
+      ) }
     </>
   );
 }

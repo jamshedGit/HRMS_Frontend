@@ -5,9 +5,9 @@ import { useFormUIContext } from "../FormUIContext"
 import { debounce } from "lodash";
 import { useCallback } from "react";
 
-const prepareFilter = (queryParams, values) => {
+const prepareFilter = (queryParamsLeaveApp, values) => {
   const { searchText } = values
-  const newQueryParams = { ...queryParams }
+  const newQueryParams = { ...queryParamsLeaveApp }
   const filter = {}
 
   if (searchText) {
@@ -24,18 +24,18 @@ export function FormFilter() {
 
   const formUIProps = useMemo(() => {
     return {
-      queryParams: FormUIContext.queryParams,
-      setQueryParams: FormUIContext.setQueryParams,
+      queryParamsLeaveApp: FormUIContext.queryParamsLeaveApp,
+      setQueryParamsLeaveApp: FormUIContext.setQueryParamsLeaveApp,
     }
   }, [FormUIContext])
 
-  // queryParams, setQueryParams,
+  // queryParamsLeaveApp, setQueryParamsLeaveApp,
   const applyFilter = (values) => {
-    const newQueryParams = prepareFilter(formUIProps.queryParams, values)
-    if (!isEqual(newQueryParams, formUIProps.queryParams)) {
+    const newQueryParams = prepareFilter(formUIProps.queryParamsLeaveApp, values)
+    if (!isEqual(newQueryParams, formUIProps.queryParamsLeaveApp)) {
       newQueryParams.pageNumber = 1
-      // update list by queryParams
-      formUIProps.setQueryParams(newQueryParams)
+      // update list by queryParamsLeaveApp
+      formUIProps.setQueryParamsLeaveApp(newQueryParams)
     }
   }
 

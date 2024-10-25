@@ -34,8 +34,8 @@ export function FormCard() {
     return {
       employeeId: FormUIContext.employeeId,
       setemployeeId: FormUIContext.setemployeeId,
-      queryParams: FormUIContext.queryParams,
-      id: FormUIContext.id
+      queryParamsLeaveApp: FormUIContext.queryParamsLeaveApp,
+      id: FormUIContext.id,
     }
   }, [FormUIContext])
 
@@ -54,26 +54,31 @@ export function FormCard() {
 
   useEffect(() => {
     if (formUIProps.employeeId)
-      dispatch(actions.fetchLeaveApplication(formUIProps.queryParams, formUIProps.employeeId))
+      dispatch(actions.fetchLeaveApplication(formUIProps.queryParamsLeaveApp, formUIProps.employeeId))
 
     if (!dashboard.allEmployees || !dashboard.allEmployees.length)
       dispatch(fetchAllActiveEmployees());
     if (!dashboard?.allLeaveTypes || !dashboard?.allLeaveTypes?.length)
       dispatch(fetchAllLeaveType("allLeaveTypes"));
-  }, [dispatch, formUIProps.employeeId, formUIProps.queryParams])
+  }, [dispatch, formUIProps.employeeId, formUIProps.queryParamsLeaveApp])
 
 
   return (
     <>
 
       <Card>
-        <CardHeader title={null}></CardHeader>
         <CardBody>
           <EmployeeSelect setemployeeId={formUIProps.setemployeeId} />
           <EmployeeProfile employeeId={formUIProps.employeeId} data={personBio} />
           <FormEditDialog id={formUIProps.id} employeeId={formUIProps.employeeId}/>
+          <br/>
+          <br/>
           <LeaveApplicationTable />
+          <br/>
+          <br/>
           <PendingLeaveTable />
+          <br/>
+          <br/>
           <LeaveBalanceTable />
         </CardBody>
       </Card>

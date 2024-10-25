@@ -15,6 +15,7 @@ import * as uiHelpers from "../FormUIHelpers";
 import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatter";
 import { Pagination } from "../../../../../../_metronic/_partials/controls";
 import { useFormUIContext } from "../FormUIContext";
+import { Accordion, Button, Card } from "react-bootstrap";
 
 export function PendingLeaveTable() {
   //Users UI Context
@@ -22,20 +23,20 @@ export function PendingLeaveTable() {
 
   const FormUIProps = useMemo(() => {
     return {
-      ids: formUIContext.ids,
-      setIds: formUIContext.setIds,
-      queryParams: formUIContext.queryParams,
-      setQueryParams: formUIContext.setQueryParams,
+      id: formUIContext.id,
+      setId: formUIContext.setId,
+      queryParamsLeaveApp: formUIContext.queryParamsLeaveApp,
+      setQueryParamsLeaveApp: formUIContext.setQueryParamsLeaveApp,
       editRecord: formUIContext.editRecord
     };
   }, [formUIContext]);
 
-  const { currentState, userAccess,state } = useSelector(
+  const { currentState, userAccess, state } = useSelector(
     (state) => {
       return {
         currentState: state.leave_application,
         userAccess: state?.auth?.userAccess["Leave_Application"],
-        state:state
+        state: state
       }
     },
     shallowEqual
@@ -119,43 +120,56 @@ export function PendingLeaveTable() {
     custom: true,
     totalSize: totalCount,
     sizePerPageList: uiHelpers.sizePerPageList,
-    sizePerPage: FormUIProps.queryParams.pageSize,
-    page: FormUIProps.queryParams.pageNumber,
+    sizePerPage: FormUIProps.queryParamsLeaveApp.pageSize,
+    page: FormUIProps.queryParamsLeaveApp.pageNumber,
   };
 
   return (
-    <>
-      <PaginationProvider pagination={paginationFactory(paginationOptions)}>
-        {({ paginationProps, paginationTableProps }) => {
-          return (
-            <Pagination
-              isLoading={listLoading}
-              paginationProps={paginationProps}
-            >
-              <BootstrapTable
-                noDataIndication={NoRecordsFoundMessage({ entities: [] })}
-                wrapperClasses="table-responsive"
-                bordered={false}
-                classes="table table-head-custom table-vertical-center overflow-hidden table-hover"
-                bootstrap4
-                remote
-                keyField="Id"
-                data={[]}
-                columns={columns}
-                defaultSorted={uiHelpers.defaultSorted}
-                onTableChange={getHandlerTableChange(
-                  FormUIProps.setQueryParams
-                )}
-                {...paginationTableProps}
-              >
+    <Accordion defaultActiveKey="">
+      <Card>
+        <Card.Header>
+          <Accordion.Toggle as={Button} eventKey="0">
+            Pending Leaves
+          </Accordion.Toggle>
+        </Card.Header>
+        <Accordion.Collapse eventKey="0">
+          <Card.Body>
+            <PaginationProvider pagination={paginationFactory(paginationOptions)}>
+              {({ paginationProps, paginationTableProps }) => {
+                return (
+                  <Pagination
+                    isLoading={listLoading}
+                    paginationProps={paginationProps}
+                  >
+                    <BootstrapTable
+                      noDataIndication={NoRecordsFoundMessage({ entities: [] })}
+                      wrapperClasses="table-responsive"
+                      bordered={false}
+                      classes="table table-head-custom table-vertical-center overflow-hidden table-hover"
+                      bootstrap4
+                      remote
+                      keyField="Id"
+                      data={[]}
+                      columns={columns}
+                      defaultSorted={uiHelpers.defaultSorted}
+                      onTableChange={getHandlerTableChange(
+                        FormUIProps.setQueryParamsLeaveApp
+                      )}
+                      {...paginationTableProps}
+                    >
 
-                <PleaseWaitMessage entities={[]} />
-                <NoRecordsFoundMessage entities={[]} />
-              </BootstrapTable>
-            </Pagination>
-          );
-        }}
-      </PaginationProvider>
-    </>
+                      <PleaseWaitMessage entities={[]} />
+                      <NoRecordsFoundMessage entities={[]} />
+                    </BootstrapTable>
+                  </Pagination>
+                );
+              }}
+            </PaginationProvider>
+          </Card.Body>
+        </Accordion.Collapse>
+      </Card>
+    </Accordion>
+
+
   );
 }

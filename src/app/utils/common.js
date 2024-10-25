@@ -1,6 +1,6 @@
 import moment from "moment";
 import { DateTimeFormats } from "./constants";
-const { differenceInDays } = require('date-fns');
+const { differenceInDays, format } = require('date-fns');
 
 export const getDate = (
   date,
@@ -25,9 +25,9 @@ export const getCurrentTime = () => moment().format("LT");
  * @returns 
  */
 export const getClassName = (error, value) => {
-  if (error && !value ) {
+  if (error && !value) {
     return 'form-control is-invalid';
-  } else if (!error && value ) {
+  } else if (!error && value) {
     return 'form-control is-valid';
   }
   return 'form-control';
@@ -47,4 +47,28 @@ export const getDateDiffInDays = (startDate, endDate) => {
     return differenceInDays(new Date(endDate), new Date(startDate)) + 1;
   }
   return 0;
+}
+
+export const getFileName = (fileName) => {
+  if (fileName) {
+    if (fileName.includes('---')) {
+      return fileName.split('---')[1]?.split('-')?.join(' ')
+    }
+    else {
+      return fileName.split('-')?.join(' ')
+    }
+  }
+  return ''
+}
+
+/**
+ * 
+ * function to return formatted date
+ * 
+ * @param {Date|String} date 
+ * @param {String} dateFormat 
+ * @returns 
+ */
+export const formatDates = (date, dateFormat = null) => {
+  return format(new Date(date), dateFormat || 'MM/dd/yyyy')
 }

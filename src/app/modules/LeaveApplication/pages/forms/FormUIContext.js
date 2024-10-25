@@ -9,11 +9,11 @@ export function useFormUIContext() {
 }
 
 export function FormUIProvider({ children }) {
-  const [queryParams, setQueryParamsBase] = useState(initialFilter);
+  const [queryParamsLeaveApp, setQueryParamsLeaveAppBaseLeaveApp] = useState(initialFilter);
   const [employeeId, setemployeeId] = useState('');
   const [id, setId] = useState('');
-  const setQueryParams = useCallback((nextQueryParams) => {
-    setQueryParamsBase((prevQueryParams) => {
+  const setQueryParamsLeaveApp = useCallback((nextQueryParams) => {
+    setQueryParamsLeaveAppBaseLeaveApp((prevQueryParams) => {
       if (isFunction(nextQueryParams)) {
         nextQueryParams = nextQueryParams(prevQueryParams);
       }
@@ -30,6 +30,10 @@ export function FormUIProvider({ children }) {
     to: '',
     from: '',
     leaveType: '',
+    remarks: '',
+    days: 0,
+    file: '',
+    fileDetail: null
   };
 
   const editRecord = (id) => {
@@ -37,9 +41,9 @@ export function FormUIProvider({ children }) {
   }
 
   const value = {
-    queryParams,
-    setQueryParamsBase,
-    setQueryParams,
+    queryParamsLeaveApp,
+    setQueryParamsLeaveAppBaseLeaveApp,
+    setQueryParamsLeaveApp,
     employeeId,
     setemployeeId,
     id,

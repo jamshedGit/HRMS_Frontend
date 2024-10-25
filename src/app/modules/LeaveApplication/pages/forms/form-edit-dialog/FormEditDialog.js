@@ -16,6 +16,7 @@ export function FormEditDialog({ id, employeeId }) {
   const formUIProps = useMemo(() => {
     return {
       initUser: FormUIContext.initUser,
+      setId: FormUIContext.setId,
     };
   }, [FormUIContext]);
 
@@ -29,24 +30,31 @@ export function FormEditDialog({ id, employeeId }) {
   const dispatch = useDispatch();
   const {
     userForEdit,
+    payrollData
   } = useSelector((state) => ({
     userForEdit: state.leave_application.userForEdit,
+    payrollData: state.leave_application.payrollData
   }
   ));
 
   //Fetch record to edit on dialog load
   useEffect(() => {
     dispatch(actions.fetchEditRecord(id));
+
+    if(!payrollData)
+      dispatch(actions.getPayrollMonth());
   }, [id, dispatch]);
+  
 
   //Create or Update record according to values from dialog
-  const submitForm = async (values) => {
+  const submitForm = (values, resetForm) => {
     if (values.fileDetail) {
-      const file = await actions.uploadImage(values.fileDetail)
-      dispatch(actions.saveRecord({ ...values, file: file.filename }, employeeId, disbaleLoading))
+      actions.uploadImage(values.fileDetail).then((res) => {
+        dispatch(actions.saveRecord({ ...values, file: res.data.filename }, employeeId, disbaleLoading, resetForm))
+      })
     }
     else {
-      dispatch(actions.saveRecord(values, employeeId, disbaleLoading))
+      dispatch(actions.saveRecord(values, employeeId, disbaleLoading, resetForm))
     }
   }
 
@@ -58,7 +66,10 @@ export function FormEditDialog({ id, employeeId }) {
         user={userForEdit || formUIProps.initUser}
         enableLoading={enableLoading}
         loading={loading}
+        employeeId={employeeId}
         isEdit={id ? true : false}
+        setId={formUIProps.setId}
+        payrollData={payrollData}
       />
       <ToastContainer
         position="top-right"
