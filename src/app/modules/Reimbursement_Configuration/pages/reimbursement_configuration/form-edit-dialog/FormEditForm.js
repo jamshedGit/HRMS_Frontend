@@ -32,8 +32,8 @@ export function FormEditForm({
   const { dashboard } = useSelector((state) => state);
   const options = ["Option 1", "Option 2", "Option 3", "Option 4"];
   const basisOptions = [
-    { value: 0, label: "Yes" },
-    { value: 1, label: "No" },
+    { value:true, label: "Yes" },
+    { value:false, label: "No" },
   ];
 
   // Fetch necessary data if not already present
@@ -42,8 +42,9 @@ export function FormEditForm({
       dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsidiaries
       dispatch(fetchAllFormsMenu(127, "allPayrolGroupList")); // For All Accounts
       dispatch(fetchAllFormsMenu(191, "allCycleTypeList"));
-      dispatch(fetchAllFormsMenu(195, "allReimbursementTypeList"));
+      dispatch(fetchAllFormsMenu(194, "allReimbursementTypeList"));
       dispatch(fetchAllFormsMenu(143, "allEmployeeGradeList"));
+      dispatch(fetchAllFormsMenu(45, "allAccountList"));
 
       // reimbursement_typeId
     }
@@ -107,7 +108,7 @@ export function FormEditForm({
                       isDisabled={isUserForRead}
                       onChange={(e) => {
                         setFieldValue("subsidiaryId", e.value || null);
-                        check_Existed_Data(e.value);
+                        // check_Existed_Data(e.value);
                       }}
                       value={
                         dashboard.allSubidiaryList.find(
@@ -391,6 +392,178 @@ export function FormEditForm({
                             max_amount: "",
                             attachment_required: "",
                             grades: "",
+                          })
+                        }
+                        className="btn btn-primary btn-sm"
+                      >
+                        + Add Detail
+                      </button>
+                    )}
+                  </div>
+                )}
+              </FieldArray>
+
+
+              <FieldArray name="accounts">
+                {({ push, remove }) => (
+                  <div
+                    style={{
+                      backgroundColor: "rgb(235 243 255)",
+                      padding: "20px",
+                      borderRadius: "5px",
+                      border: "2px solid #adceff",
+                      marginTop: "20px",
+                    }}
+                  >
+                    <h6>Details</h6>
+                    <table className="table table-head-custom table-vertical-center overflow-hidden table-hover">
+                      <thead>
+                        <tr
+                          style={{ backgroundColor: "#4d5f7a", color: "#fff" }}
+                        >
+                          <th>Action</th>
+                          <th>Reimbursement Type</th>
+                          <th>Expense Account</th>
+                          <th>Bank Account</th>
+                
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {values.accounts &&
+                          values.accounts.length > 0 &&
+                          values.accounts.map((detail, index) => (
+                            <tr key={index}>
+                              <td>
+                                {!isUserForRead && (
+                                  <button
+                                    type="button"
+                                    onClick={() => remove(index)}
+                                    className="btn btn-danger btn-sm"
+                                  >
+                                    Delete
+                                  </button>
+                                )}
+                              </td>
+
+                              <td>
+                                <Field
+                                  name={`accounts[${index}].reimbursement_typeId`}
+                                  as="select"
+                                  className="form-control"
+                                  disabled={isUserForRead}
+                                >
+            
+
+                                  {dashboard.allReimbursementTypeList?.map((x) => {
+                                    return (
+                                      <option
+                                        disabled={
+                                          values.accounts.find(
+                                            (el) => el.reimbursement_typeId == x.value
+                                          )
+                                            ? true
+                                            : false
+                                        }
+                                        value={x.value}
+                                      >
+                                        {" "}
+                                        {x.label}{" "}
+                                      </option>
+                                    );
+                                  })}
+                                </Field>
+                                {errors.accounts?.[index]?.reimbursement_typeId &&
+                                  touched.accounts?.[index]?.reimbursement_typeId && (
+                                    <div className="text-danger">
+                                      {errors.accounts[index].reimbursement_typeId}
+                                    </div>
+                                  )}
+                              </td>
+
+                              <td>
+                                <Field
+                                  name={`accounts[${index}].expense_accountId`}
+                                  as="select"
+                                  className="form-control"
+                                  disabled={isUserForRead}
+                                >
+            
+
+                                  {dashboard.allAccountList?.map((x) => {
+                                    return (
+                                      <option
+                                        disabled={
+                                          values.accounts.find(
+                                            (el) => el.expense_accountId == x.value
+                                          )
+                                            ? true
+                                            : false
+                                        }
+                                        value={x.value}
+                                      >
+                                        {" "}
+                                        {x.label}{" "}
+                                      </option>
+                                    );
+                                  })}
+                                </Field>
+                                {errors.accounts?.[index]?.expense_accountId &&
+                                  touched.accounts?.[index]?.expense_accountId && (
+                                    <div className="text-danger">
+                                      {errors.accounts[index].expense_accountId}
+                                    </div>
+                                  )}
+                              </td>
+
+                              <td>
+                                <Field
+                                  name={`accounts[${index}].bank_accountId`}
+                                  as="select"
+                                  className="form-control"
+                                  disabled={isUserForRead}
+                                >
+            
+
+                                  {dashboard.allAccountList?.map((x) => {
+                                    return (
+                                      <option
+                                        disabled={
+                                          values.accounts.find(
+                                            (el) => el.bank_accountId == x.value
+                                          )
+                                            ? true
+                                            : false
+                                        }
+                                        value={x.value}
+                                      >
+                                        {" "}
+                                        {x.label}{" "}
+                                      </option>
+                                    );
+                                  })}
+                                </Field>
+                                {errors.accounts?.[index]?.bank_accountId &&
+                                  touched.accounts?.[index]?.bank_accountId && (
+                                    <div className="text-danger">
+                                      {errors.accounts[index].bank_accountId}
+                                    </div>
+                                  )}
+                              </td>
+
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+
+                    {!isUserForRead && (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          push({
+                            salary_gradeId: "",
+                            max_loan_amount: "",
+                            basis: "",
+                            salary_count: "",
                           })
                         }
                         className="btn btn-primary btn-sm"

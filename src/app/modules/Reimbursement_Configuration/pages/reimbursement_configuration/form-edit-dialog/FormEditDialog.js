@@ -110,7 +110,8 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         subsidiaryId: user.subsidiaryId,
         payroll_groupId: user.payroll_groupId,
         cycle_typeId: user.cycle_typeId,
-        policies: user.policies
+        policies: user.policies,
+        accounts: user.accounts
 
       };
 
