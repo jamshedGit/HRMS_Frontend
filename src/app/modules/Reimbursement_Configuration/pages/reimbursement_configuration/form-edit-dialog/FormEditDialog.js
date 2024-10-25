@@ -77,7 +77,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     console.log("reimbursement getUserStatus updated save", user);
 
 
-       if (user.policies=="") {
+       if (user.policies=="" ) {
       toast.error("Detail is incomplete.", {
         position: "top-right",
         autoClose: 5000,

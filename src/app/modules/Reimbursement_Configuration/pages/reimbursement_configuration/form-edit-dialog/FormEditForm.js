@@ -17,6 +17,33 @@ const ReimbursementSchema = Yup.object().shape({
   payroll_groupId: Yup.number().required("Account is required"),
   cycle_typeId: Yup.number().required("required"),
 
+  policies: Yup.array().of(
+    Yup.object().shape({
+      reimbursement_typeId: Yup.number().required("required"),
+      max_amount: Yup.number()
+        .min(1, "Must be at least 1")
+        .required("Max  Amount is required"),
+        // attachment_required:required("required"),
+
+    })
+
+
+
+  ),
+  
+
+  // accounts: Yup.array().of(
+  //   Yup.object().shape({
+  //     reimbursement_typeId: Yup.number().required("required"),
+   
+  //        expense_accountId: Yup.number()
+  //       .required("Max  Amount is required"),
+  //       bank_accountId: Yup.number().required("required"),
+
+  //   })
+  // )
+  
+
 });
 
 export function FormEditForm({
@@ -32,10 +59,12 @@ export function FormEditForm({
   const { dashboard } = useSelector((state) => state);
   const options = ["Option 1", "Option 2", "Option 3", "Option 4"];
   const basisOptions = [
-    { value:true, label: "Yes" },
-    { value:false, label: "No" },
+    { value: true, label: "Yes" },
+    { value: false, label: "No" },
   ];
-
+  const checkIds = (id) => {
+    console.log("Ids", id)
+  }
   // Fetch necessary data if not already present
   useEffect(() => {
     if (!user.Id) {
@@ -201,10 +230,11 @@ export function FormEditForm({
                           <th>Reimbursement Type</th>
                           <th>Max Amount Allowed</th>
                           <th>Attachment Required</th>
-                          <th>Salary Grade</th>
+                          <th style={{ padding: "20px" }}>Salary Grade</th>
+
                         </tr>
                       </thead>
-                      <tbody>
+                      <tbody >
                         {values.policies &&
                           values.policies.length > 0 &&
                           values.policies.map((detail, index) => (
@@ -312,13 +342,14 @@ export function FormEditForm({
                                 </div>
                               </td>
 
-                       
+
 
                               <td
                                 className="bg-white"
                                 style={{
-                                  backgroundColor: "#ffffff",
+                                  // backgroundColor: "#ffffff",
                                   padding: "10px",
+                                  marginTop: "20px"
                                 }}
                               >
                                 <div
@@ -326,10 +357,13 @@ export function FormEditForm({
                                     maxHeight: "200px", // Set maxHeight for scrolling
                                     overflowY: "auto", // Enable vertical scrolling
                                     overflowX: "hidden", // Hide horizontal scrolling
+
+                                    marginTop: "20px"
                                   }}
                                   className="bg-white m-2"
                                 >
-                                  {dashboard.allEmployeeGradeList.map(
+
+                                  {/* {dashboard.allEmployeeGradeList.map(
                                     (option, i) => (
                                       <div
                                         key={i}
@@ -346,6 +380,7 @@ export function FormEditForm({
                                             index
                                           ].grades.includes(option.value)}
                                           onChange={(e) => {
+                                            checkIds(e)
                                             const checked = e.target.checked;
                                             const currentGrades =
                                             values.policies[index].grades ||
@@ -372,10 +407,37 @@ export function FormEditForm({
                                         </label>
                                       </div>
                                     )
-                                  )}
-                                 
+                                  )} */}
 
-                         
+                                  {dashboard.allEmployeeGradeList
+                                    .filter(option => option.value !== null) // Filter out the unwanted option
+                                    .map((option, i) => (
+                                      <div
+                                        key={i}
+                                        className="bg-white p-1"
+                                        style={{ display: "flex", alignItems: "center" }}
+                                      >
+                                        <input
+                                          className="mr-2"
+                                          type="checkbox"
+                                          checked={values.policies[index].grades.includes(option.value)}
+                                          onChange={(e) => {
+                                            const checked = e.target.checked;
+                                            const currentGrades = values.policies[index].grades || [];
+
+                                            const newGrades = checked
+                                              ? [...currentGrades, option.value]
+                                              : currentGrades.filter((id) => id !== option.value);
+
+                                            setFieldValue(`policies[${index}].grades`, newGrades);
+                                          }}
+                                        />
+                                        <label className="form-check-label ms-2">{option.label}</label>
+                                      </div>
+                                    ))}
+
+
+
                                 </div>
                               </td>
                             </tr>
@@ -425,7 +487,7 @@ export function FormEditForm({
                           <th>Reimbursement Type</th>
                           <th>Expense Account</th>
                           <th>Bank Account</th>
-                
+
                         </tr>
                       </thead>
                       <tbody>
@@ -452,7 +514,7 @@ export function FormEditForm({
                                   className="form-control"
                                   disabled={isUserForRead}
                                 >
-            
+
 
                                   {dashboard.allReimbursementTypeList?.map((x) => {
                                     return (
@@ -487,7 +549,7 @@ export function FormEditForm({
                                   className="form-control"
                                   disabled={isUserForRead}
                                 >
-            
+
 
                                   {dashboard.allAccountList?.map((x) => {
                                     return (
@@ -522,7 +584,7 @@ export function FormEditForm({
                                   className="form-control"
                                   disabled={isUserForRead}
                                 >
-            
+
 
                                   {dashboard.allAccountList?.map((x) => {
                                     return (
@@ -560,10 +622,9 @@ export function FormEditForm({
                         type="button"
                         onClick={() =>
                           push({
-                            salary_gradeId: "",
-                            max_loan_amount: "",
-                            basis: "",
-                            salary_count: "",
+                            reimbursement_typeId: '',
+                            expense_accountId: '',
+                            bank_accountId: ''
                           })
                         }
                         className="btn btn-primary btn-sm"
@@ -605,7 +666,8 @@ export function FormEditForm({
                 type="submit"
                 onClick={() => handleSubmit()}
                 className="btn btn-primary btn-elevate"
-                disabled={loading}
+                // disabled={loading}
+                disabled={loading || values?.policies?.length === 0 || values?.accounts?.length === 0}
               >
                 Save
                 {loading && (

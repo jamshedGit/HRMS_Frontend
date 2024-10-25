@@ -30,18 +30,7 @@ export function FormUIProvider({ FormUIEvents, children }) {
       return nextQueryParams;
     });
   }, []);
-  // const initUser = {
-  //   Id:"",
-  //   subsidiary: "",
-  //   account: "",
-  //   human_resource_role: "",
-  //   emp_loan_account: "",
-  //   installment_deduction_percentage:"",
-  //   installment_deduction_bases:"",
-  //   loan_type:"",
-  //   max_loan_amount:"",
-  //   salary_count:""
-  // };
+
 
   const initUser={
     Id: "",
@@ -49,7 +38,8 @@ export function FormUIProvider({ FormUIEvents, children }) {
         payroll_groupId:"",
         cycle_typeId: "",
  
-        policies:""
+        policies:"",
+        accounts:""
 
   }
 
