@@ -32,8 +32,6 @@ export function MasterEditForm({
 
   //Validation for Form
   const formValidation = useMemo(() => {
-    console.log(':::payrollData:::::',payrollData);
-    
     if (payrollData && payrollData.endDate) {
       return Yup.object().shape({
         from: Yup.date().required('Required').min(payrollData.endDate, `Date cannot be before ${formatDates(payrollData.endDate)}`),
