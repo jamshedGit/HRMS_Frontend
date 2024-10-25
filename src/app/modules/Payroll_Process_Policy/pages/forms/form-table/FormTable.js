@@ -18,7 +18,7 @@ import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatte
 import { Checkbox, Input, Pagination, Select } from "../../../../../../_metronic/_partials/controls";
 import { useFormUIContext } from "../FormUIContext";
 import { DatetimeColumnFormatter } from "../../../../Dashboard/pages/dashboard/last-trips-vehicles-table/column-formatter/CreatedColumnFormatter";
-import { fetchAllActiveEmployeesSalaryForDDL, fetchAllDeductionList, fetchAllEarningList, fetchAllFormsMenu } from "../../../../../../_metronic/redux/dashboardActions";
+import { fetchAllActiveEmployeesSalaryForDDL, fetchAllBanks, fetchAllDeductionList, fetchAllEarningList, fetchAllFormsMenu } from "../../../../../../_metronic/redux/dashboardActions";
 import { Formik, Field } from "formik";
 import { Form, Modal } from "react-bootstrap";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
@@ -86,7 +86,7 @@ export function FormTable(user
   const [defEmailRecipents, setDefaultEmailRecipents] = useState([]); //  For Email Recipents
   const [defEOBIAllowances, setDefaultEOBIAllowances] = useState([]);
   const [defSESSIAllowances, setDefaultSESSIAllowances] = useState([]);
-
+  const [defBank, setDefaultBanks] = useState({});
   const dispatch = useDispatch();
 
 
@@ -128,10 +128,16 @@ export function FormTable(user
   }, [user.formid]);
 
 
+  useEffect(() => {
+    if (!user.formid) {
+      dispatch(fetchAllBanks(1));
+    }
+  }, [user.journalBankAccountId, dispatch]);
+
 
   useEffect(() => {
 
-    if (!user.deptId) {
+    if (!user.formid) {
 
       dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsisidaries
       dispatch(fetchAllActiveEmployeesSalaryForDDL(null)); // For Getting Salaried Employees
@@ -234,20 +240,22 @@ export function FormTable(user
   };
 
   const handleFieldChanged = (el) => {
-    const index = el.target.id.split('-')[1]
-    const key = el.target.id.split('-')[0]
-    setDefaultBankInfoList([...defBankInfoList.map((val, ind) => {
+    const index = el.target.id.split('-')[1];
+    const key = el.target.id.split('-')[0];
 
-      if (ind == index) {
-
-        val[key] = key == 'bankAccountNo' ? (el.target.value) : (el.target.value)
-
+    const updatedBankInfoList = defBankInfoList.map((val, ind) => {
+      console.log("::111",key);
+      if (ind === parseInt(index, 10)) { 
+        return {
+          ...val, 
+          [key]:  key == "isDefault" ? el.target.checked : el.target.value 
+        };
       }
+      return val; 
+    });
 
-      return val
-    })])
-
-  }
+    setDefaultBankInfoList(updatedBankInfoList); // Update the state
+  };
 
 
 
@@ -322,11 +330,10 @@ export function FormTable(user
         .required("Required*"),
       payroll_groupId: Yup.string()
         .required("Required*"),
-
-      journalBankAccountId: Yup.string()
-        .required("Required*"),
-      bankCode: Yup.string()
-        .required("Required*"),
+      // journalBankAccountId: Yup.string()
+      //   .required("Required*"),
+      // bankCode: Yup.string()
+      //   .required("Required*"),
     },
 
   );
@@ -381,10 +388,7 @@ export function FormTable(user
     eobi_employee_value_in_percent: "",
     bankCode: ""
     //-- Other
-
-
   };
-
 
   //Table pagination properties
   const paginationOptions = {
@@ -573,6 +577,28 @@ export function FormTable(user
                   </div>
 
                   <div className="col-12 col-md-4 mt-3">
+                    <SearchSelect
+                      name="payroll_groupId"
+                      label={<span> Payroll Group<span style={{ color: 'red' }}>*</span></span>}
+                      // isDisabled={isUserForRead}
+                      onBlur={() => {
+                        // handleBlur({ target: { name: "countryId" } });
+                      }}
+                      onChange={(e) => {
+                        setFieldValue("payroll_groupId", e.value || null);
+                        setDefaultPayrollGroup(e);
+                        // dispatch(fetchAllFormsMenu(e.value));
+                      }}
+                      value={(dashboard.allChildMenus.find(
+                        (option) => option.value === values.payroll_groupId
+                      ) || null)}
+                      error={errors.payroll_groupId}
+                      touched={touched.payroll_groupId}
+                      options={dashboard.allChildMenus}
+                    />
+                  </div>
+
+                  <div className="col-12 col-md-4 mt-3">
 
                     <Select
                       className="form-control"
@@ -629,27 +655,7 @@ export function FormTable(user
 
                   </div>
 
-                  <div className="col-12 col-md-4 mt-3">
-                    <SearchSelect
-                      name="payroll_groupId"
-                      label={<span> Payroll Group<span style={{ color: 'red' }}>*</span></span>}
-                      // isDisabled={isUserForRead}
-                      onBlur={() => {
-                        // handleBlur({ target: { name: "countryId" } });
-                      }}
-                      onChange={(e) => {
-                        setFieldValue("payroll_groupId", e.value || null);
-                        setDefaultPayrollGroup(e);
-                        // dispatch(fetchAllFormsMenu(e.value));
-                      }}
-                      value={(dashboard.allChildMenus.find(
-                        (option) => option.value === values.payroll_groupId
-                      ) || null)}
-                      error={errors.payroll_groupId}
-                      touched={touched.payroll_groupId}
-                      options={dashboard.allChildMenus}
-                    />
-                  </div>
+
                 </div>
               </div>
               <br></br>
@@ -1277,12 +1283,42 @@ export function FormTable(user
                       <><tr>
                         <td id={rightindex} >
                           <button id={rightindex} className="btn btn-danger btn-sm" onClick={deleteRowBankInfo}>Delete</button></td>
-                        <td><select value={obj.journalBankAccountId} className="form-control" onChange={handleFieldChanged} id={"journalBankAccountId-" + rightindex}>
-                          <option selected="true" value="-1">--SELECT--</option>
-                          <option value="1">Journal-Natioal-099883311</option>
+                        <td>
+
+                          {console.log("::banks::", dashboard.allBanks)}
+
+                          <select value={obj.journalBankAccountId} className="form-control" onChange={handleFieldChanged} id={"journalBankAccountId-" + rightindex}>
+                            <option value="-1">--SELECT--</option>
+                            {/* <option value="1">Journal-Natioal-099883311</option>
                           <option value="2">Journal-Allied-A88-001</option>
-                          <option value="3">Journal-TMP-SILK-018-001</option>
-                        </select> </td>
+                          <option value="3">Journal-TMP-SILK-018-001</option> */}
+                            {
+                              dashboard.allBanks?.map((x) => {
+                                return <option value={x.value}> {x.label} </option>
+                              })}
+                          </select>
+
+                          {/* <SearchSelect
+                              name="journalBankAccountId"
+                              label={<span> Journal Bank Acc<span style={{ color: 'red' }}>*</span></span>}
+                            //  isDisabled={isUserForRead && true}
+                              onBlur={() => {
+                                // handleBlur({ target: { name: "countryId" } });
+                              }}
+                              onChange={(e) => {
+                                setFieldValue("journalBankAccountId", e.value);
+                                setDefaultBanks(e);
+                                dispatch(fetchAllBanks(e.value));
+                              }}
+                              value={obj.journalBankAccountId}
+                              error={errors.BankId}
+                              touched={touched.BankId}
+                              options={dashboard.allBanks}
+                            /> */}
+
+
+
+                        </td>
 
                         <td>
                           {/* <Field
@@ -1303,7 +1339,7 @@ export function FormTable(user
                           type="checkbox"
                           id={"isDefault-" + rightindex}
                           onChange={handleFieldChanged}
-                          isSelected={obj.isDefault}
+                          checked={obj.isDefault}
 
                         />
                         </td>
