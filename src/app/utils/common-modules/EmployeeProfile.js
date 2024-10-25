@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Accordion, Card, Button, Row, Col } from 'react-bootstrap';
 import { getEmployeeProfileById } from '../../../_metronic/redux/dashboardCrud';
 
+//Field name and keys in order for view
 const VIEW_FIELDS = [
   {
     name: 'Company ',
@@ -77,21 +78,22 @@ const VIEW_FIELDS = [
   }
 ]
 
-const EmployeeProfile = ({ data, employeeId }) => {
-  const [datas, setdatas] = useState({})
+const EmployeeProfile = ({ employeeId }) => {
+  const [data, setdata] = useState({})
 
+  //Use Effect to execute whenever the employee Id is updated. This will fetch employee profile data from view created in Database
   useEffect(() => {
     if (employeeId) {
       getEmployeeProfileById(employeeId).then((res) => {
         if (res?.data?.data) {
-          setdatas(res.data.data)
+          setdata(res.data.data)
         }
       }).catch((err) => {
-        setdatas({})
+        setdata({})
       })
     }
     else {
-      setdatas({})
+      setdata({})
     }
 
   }, [employeeId])
@@ -107,16 +109,14 @@ const EmployeeProfile = ({ data, employeeId }) => {
         <Accordion.Collapse eventKey="0">
           <Card.Body>
             {
-              Object.keys(datas).length ?  <Row>
+              Object.keys(data).length ?  <Row>
                 {VIEW_FIELDS.map((obj, index) => (
                   <Col key={index} md={6}>
-                    <strong>{obj.name}:</strong> {datas[obj.value] || ''}
+                    <strong>{obj.name}:</strong> {data[obj.value] || ''}
                   </Col>
-
                 ))}
               </Row> : <>Please Choose an Employee</>
             }
-
           </Card.Body>
         </Accordion.Collapse>
       </Card>

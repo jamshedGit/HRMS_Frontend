@@ -6,7 +6,6 @@ import { DatePickerField, Input, Select, TextArea } from "../../../../../../_met
 import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLabel";
 import { useSelector, shallowEqual } from "react-redux"
 import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
-import { uploadImage } from "../../../_redux/formActions";
 import { formatDates, getDateDiffInDays, getFileName } from "../../../../../utils/common";
 
 
@@ -23,7 +22,7 @@ export function MasterEditForm({
   employeeId
 }) {
 
-  const cancelButtonRef = useRef(null);
+  //Get all leave types from dashboard global state
   const { allLeaveTypes } = useSelector(
     (state) => ({
       allLeaveTypes: state.dashboard.allLeaveTypes
@@ -31,7 +30,9 @@ export function MasterEditForm({
     shallowEqual
   )
 
-  //Validation for Form
+  //Validation for Form.
+  //If payroll month is available then form should not allow to add date for before payroll month end date.
+  //else just normal validation for form
   const formValidation = useMemo(() => {
     if (payrollData && payrollData.endDate) {
       return Yup.object().shape({
@@ -55,6 +56,7 @@ export function MasterEditForm({
 
   return (
     <>
+      {/* Formik Start */}
       <Formik
         enableReinitialize={true}
         initialValues={user}
@@ -75,16 +77,21 @@ export function MasterEditForm({
           handleReset
         }) => (
           <>
+            {/* Modal Body Start */}
             <Modal.Body className="overlay overlay-block cursor-default">
               {actionsLoading && (
                 <div className="overlay-layer bg-transparent">
                   <div className="spinner spinner-lg spinner-success" />
                 </div>
               )}
+              {/* Form Start */}
               <Form className="form form-label-right">
                 <fieldset>
+
+                  {/* First Row Start */}
                   <div className="from-group row">
 
+                    {/* Date from Field Start */}
                     <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="from"
@@ -99,7 +106,9 @@ export function MasterEditForm({
                         autoComplete="off"
                       />
                     </div>
+                    {/* Date from Field End */}
 
+                    {/* Date to Field Start */}
                     <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="to"
@@ -114,7 +123,9 @@ export function MasterEditForm({
                         autoComplete="off"
                       />
                     </div>
+                    {/* Date to Field End */}
 
+                    {/* Days Field Start */}
                     <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="days"
@@ -133,9 +144,14 @@ export function MasterEditForm({
                         value={getDateDiffInDays(values.from, values.to)}
                       />
                     </div>
+                    {/* Days Field End */}
                   </div>
+                  {/* First Row End */}
 
+                  {/* Second Row Start */}
                   <div className="from-group row">
+
+                    {/* Leave Type Field Start */}
                     <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="leaveType"
@@ -162,7 +178,9 @@ export function MasterEditForm({
                         errors.leaveType && touched.leaveType && <CustomErrorLabel touched={true} error={errors.leaveType} />
                       }
                     </div>
+                    {/* Leave Type Field End */}
 
+                    {/* Remarks Field Start */}
                     <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="remarks"
@@ -180,9 +198,14 @@ export function MasterEditForm({
                         autoComplete="off"
                       />
                     </div>
+                    {/* Remarks Field End */}
                   </div>
+                  {/* Second Row End */}
 
+                  {/* Third Row Start */}
                   <div className="from-group row">
+
+                    {/* File Field Start */}
                     <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="file"
@@ -212,15 +235,21 @@ export function MasterEditForm({
                         }
                       </div>
                     </div>
+                    {/* File Field End */}
                   </div>
+                  {/* Third Row End */}
+
                 </fieldset>
               </Form>
+              {/* Form End */}
             </Modal.Body>
-            <Modal.Footer>
+            {/* Modal Body End */}
 
+
+            <Modal.Footer>
+              {/* Cancel button Start */}
               <button
                 type="reset"
-                ref={cancelButtonRef}
                 onClick={() => {
                   setId('')
                   handleReset()
@@ -229,7 +258,9 @@ export function MasterEditForm({
               >
                 Cancel
               </button>
-              
+              {/* Cancel button End */}
+
+              {/* Save button Start */}
               {employeeId && <button
                 type="submit"
                 onClick={() => handleSubmit()}
@@ -240,11 +271,12 @@ export function MasterEditForm({
                   <span className="ml-3 mr-3 spinner spinner-white"></span>
                 )}
               </button>}
-
+              {/* Save button End */}
             </Modal.Footer>
           </>
         )}
       </Formik >
+      {/* Formik End */}
     </>
   );
 }

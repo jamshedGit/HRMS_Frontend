@@ -17,7 +17,7 @@ export function FormEditDialogHeader() {
   return (
     <>
       {actionsLoading && <ModalProgressBar />}
-      <Modal.Header closeButton>
+      <Modal.Header>
         <Modal.Title id="example-modal-sizes-title-lg">
           Leave Entry
         </Modal.Title>

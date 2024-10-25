@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { MasterEditForm } from "./MasterEditForm";
 import { FormEditDialogHeader } from './FormEditDialogHeader'
-
 import * as actions from "../../../_redux/formActions";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -13,6 +11,7 @@ export function FormEditDialog({ id, employeeId }) {
   const [loading, setLoading] = useState(false);
   const FormUIContext = useFormUIContext();
 
+  //Get values and function from context that is initiated from FormUIContext.js
   const formUIProps = useMemo(() => {
     return {
       initUser: FormUIContext.initUser,
@@ -20,14 +19,19 @@ export function FormEditDialog({ id, employeeId }) {
     };
   }, [FormUIContext]);
 
+  //Start loading function
   const enableLoading = () => {
     setLoading(true);
   };
+
+  //Stop loading function
   const disbaleLoading = () => {
     setLoading(false);
   };
 
   const dispatch = useDispatch();
+
+  //Get data from leave application state
   const {
     userForEdit,
     payrollData
@@ -37,7 +41,7 @@ export function FormEditDialog({ id, employeeId }) {
   }
   ));
 
-  //Fetch record to edit on dialog load
+  //Fetch record to edit when an Id is selected from table
   useEffect(() => {
     dispatch(actions.fetchEditRecord(id));
 
@@ -46,15 +50,16 @@ export function FormEditDialog({ id, employeeId }) {
   }, [id, dispatch]);
   
 
-  //Create or Update record according to values from dialog
+  //Create or Update record on form submit. First if file or image is available then will be uploaded then data is saved in db
   const submitForm = (values, resetForm) => {
     if (values.fileDetail) {
-      actions.uploadImage(values.fileDetail).then((res) => {
-        dispatch(actions.saveRecord({ ...values, file: res.data.filename }, employeeId, disbaleLoading, resetForm))
+      actions.uploadImage(values.fileDetail)
+      .then((res) => {
+        dispatch(actions.saveRecord({ ...values, file: res.data.filename }, employeeId, disbaleLoading, resetForm));
       })
     }
     else {
-      dispatch(actions.saveRecord(values, employeeId, disbaleLoading, resetForm))
+      dispatch(actions.saveRecord(values, employeeId, disbaleLoading, resetForm));
     }
   }
 

@@ -30,6 +30,8 @@ const personBio = {
 export function FormCard() {
   const FormUIContext = useFormUIContext()
   const dispatch = useDispatch();
+
+  //Get EmployeeId functions and values from Context in FormUIContext.js file
   const formUIProps = useMemo(() => {
     return {
       employeeId: FormUIContext.employeeId,
@@ -39,6 +41,7 @@ export function FormCard() {
     }
   }, [FormUIContext])
 
+  //Get data from states
   const { userAccess, dashboard } = useSelector(
     (state) => ({
       userAccess: state.auth.userAccess.Leave_Application,
@@ -52,6 +55,7 @@ export function FormCard() {
     (item) => item.componentName === "CreateLeaveApplication"
   )
 
+  //Get data from server and set on state whenever employee Id is updated
   useEffect(() => {
     if (formUIProps.employeeId)
       dispatch(actions.fetchLeaveApplication(formUIProps.queryParamsLeaveApp, formUIProps.employeeId))
@@ -64,24 +68,48 @@ export function FormCard() {
 
 
   return (
-    <>
+    < Card >
+      {/* Card Starts */}
 
-      <Card>
-        <CardBody>
-          <EmployeeSelect setemployeeId={formUIProps.setemployeeId} />
-          <EmployeeProfile employeeId={formUIProps.employeeId} data={personBio} />
-          <FormEditDialog id={formUIProps.id} employeeId={formUIProps.employeeId}/>
-          <br/>
-          <br/>
-          <LeaveApplicationTable />
-          <br/>
-          <br/>
-          <PendingLeaveTable />
-          <br/>
-          <br/>
-          <LeaveBalanceTable />
-        </CardBody>
-      </Card>
-    </>
+      <CardBody>
+        
+        {/* EmployeeSelect Starts */}
+        <EmployeeSelect setemployeeId={formUIProps.setemployeeId} />
+        {/* EmployeeSelect Ends */}
+
+        {/* EmployeeProfile Starts */}
+        <EmployeeProfile employeeId={formUIProps.employeeId} data={personBio} />
+        {/* EmployeeProfile Ends */}
+
+        {/* FormEditDialog Starts */}
+        <FormEditDialog id={formUIProps.id} employeeId={formUIProps.employeeId} />
+        {/* FormEditDialog Ends */}
+
+        <br />
+        <br />
+
+        {/* LeaveApplicationTable Starts */}
+        <LeaveApplicationTable />
+        {/* LeaveApplicationTable Ends */}
+
+        <br />
+        <br />
+
+        {/* PendingLeaveTable Starts */}
+        <PendingLeaveTable />
+        {/* PendingLeaveTable Ends */}
+
+
+        <br />
+        <br />
+
+        {/* LeaveBalanceTable Starts */}
+        <LeaveBalanceTable />
+        {/* LeaveBalanceTable Ends */}
+
+      </CardBody>
+
+      {/* Card Ends */}
+    </Card >
   )
 }

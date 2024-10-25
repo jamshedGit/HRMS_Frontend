@@ -12,6 +12,7 @@ export function EmployeeSelect({
   setemployeeId
 }) {
 
+  //Get all Employee list from dashboard global state
   const { allEmployees } = useSelector(
     (state) => ({
       allEmployees: state.dashboard.allEmployees
@@ -20,6 +21,7 @@ export function EmployeeSelect({
   )
   return (
     <>
+      {/* Formik Starts */}
       <Formik
         enableReinitialize={true}
         initialValues={{}}
@@ -31,49 +33,54 @@ export function EmployeeSelect({
           setFieldValue,
         }) => (
           <>
-            <Modal.Body className="overlay overlay-block cursor-default">
-              {actionsLoading && (
-                <div className="overlay-layer bg-transparent">
-                  <div className="spinner spinner-lg spinner-success" />
-                </div>
-              )}
-              <Form className="form form-label-right">
-                <fieldset>
-                  <div className="from-group row">
 
-                    <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="employeeId"
-                        component={Select}
-                        className={!values.employeeId ? 'form-control is-invalid' : 'form-control'}
-                        placeholder=""
-                        onBlur={handleBlur}
-                        onChange={(e) => {
-                          const value = e.target.value == '--Select--' ? null : Number(e.target.value)
-                          setFieldValue('employeeId', value)
-                          setemployeeId(value)
-                        }}
-                        label={
-                          <span>
-                            {" "}
-                            Employee<span style={{ color: "red" }}>*</span>
-                          </span>
-                        }
-                        value={values.employeeId}
-                        autoComplete="off"
-                        children={CustomDropdown({ data: allEmployees, firstElement: { label: '--Select--', value: '' } })}
-                      />
-                      {
-                        !values.employeeId && <CustomErrorLabel touched={true} error={'Required'} />
+            {actionsLoading && (
+              <div className="overlay-layer bg-transparent">
+                <div className="spinner spinner-lg spinner-success" />
+              </div>
+            )}
+            {/* Form Starts */}
+            <Form className="form form-label-right">
+              <fieldset>
+                <div className="from-group row">
+
+                  {/* Employee Id Dropdown Starts */}
+                  <div className="col-12 col-md-4 mt-3">
+                    <Field
+                      name="employeeId"
+                      component={Select}
+                      className={!values.employeeId ? 'form-control is-invalid' : 'form-control'}
+                      placeholder=""
+                      onBlur={handleBlur}
+                      onChange={(e) => {
+                        const value = e.target.value == '--Select--' ? null : Number(e.target.value)
+                        setFieldValue('employeeId', value)
+                        setemployeeId(value)
+                      }}
+                      label={
+                        <span>
+                          {" "}
+                          Employee<span style={{ color: "red" }}>*</span>
+                        </span>
                       }
-                    </div>
+                      value={values.employeeId}
+                      autoComplete="off"
+                      children={CustomDropdown({ data: allEmployees, firstElement: { label: '--Select--', value: '' } })}
+                    />
+                    {
+                      !values.employeeId && <CustomErrorLabel touched={true} error={'Required'} />
+                    }
                   </div>
-                </fieldset>
-              </Form>
-            </Modal.Body>
+                  {/* Employee Id Dropdown Ends */}
+                  
+                </div>
+              </fieldset>
+            </Form>
+            {/* Form Ends */}
           </>
         )}
       </Formik>
+      {/* Formik Ends */}
     </>
   );
 }
