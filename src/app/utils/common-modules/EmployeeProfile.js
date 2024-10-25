@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Accordion, Card, Button, Row, Col } from 'react-bootstrap';
 import { getEmployeeProfileById } from '../../../_metronic/redux/dashboardCrud';
+import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
+import './form.css'
+import { formatDates } from '../common';
 
 //Field name and keys in order for view
 const VIEW_FIELDS = [
@@ -70,11 +73,13 @@ const VIEW_FIELDS = [
   },
   {
     name: 'Date of Joining',
-    value: 'dateOfJoining'
+    value: 'dateOfJoining',
+    isDate: true
   },
   {
     name: 'Date of Confirmation',
-    value: 'dateOfConfirmation'
+    value: 'dateOfConfirmation',
+    isDate: true
   }
 ]
 
@@ -102,17 +107,22 @@ const EmployeeProfile = ({ employeeId }) => {
     <Accordion defaultActiveKey="">
       <Card>
         <Card.Header>
-          <Accordion.Toggle as={Button} eventKey="0">
-            Person Bio Data
-          </Accordion.Toggle>
+          <div className='accordion-header-btn'>
+            <Accordion.Toggle as={Button} eventKey="0">
+              Employee Detail
+              <KeyboardArrowDown />
+            </Accordion.Toggle>
+          </div>
         </Card.Header>
         <Accordion.Collapse eventKey="0">
           <Card.Body>
             {
-              Object.keys(data).length ?  <Row>
+              Object.keys(data).length ? <Row>
                 {VIEW_FIELDS.map((obj, index) => (
-                  <Col key={index} md={6}>
-                    <strong>{obj.name}:</strong> {data[obj.value] || ''}
+                  <Col key={index} md={6} style={{ marginBottom: "2%" }}>
+                    {/* If value is present then check if it's date then format date otherwise show value */}
+                    {/* If value is not present then just show empty string */}
+                    <strong>{obj.name}:</strong> {data[obj.value] ? obj.isDate ? formatDates(data[obj.value]) : data[obj.value] : ''} 
                   </Col>
                 ))}
               </Row> : <>Please Choose an Employee</>

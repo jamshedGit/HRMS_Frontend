@@ -2,11 +2,9 @@ import React, { useEffect, useMemo } from "react"
 import {
   Card,
   CardBody,
-  CardHeader,
 } from "../../../../../../_metronic/_partials/controls"
 import { LeaveApplicationTable } from "../form-table/LeaveApplicationTable"
 import { useFormUIContext } from "../FormUIContext"
-import { FormFilter } from "../form-filter/FormFilter"
 import { useSelector, shallowEqual, useDispatch } from "react-redux"
 import EmployeeProfile from "../../../../../utils/common-modules/EmployeeProfile"
 import { EmployeeSelect } from "../form-edit-dialog/EmployeeSelect"
@@ -15,17 +13,7 @@ import * as actions from "../../../_redux/formActions";
 import { FormEditDialog } from "../form-edit-dialog/FormEditDialog"
 import { LeaveBalanceTable } from "../form-table/LeaveBalanceTable"
 import { PendingLeaveTable } from "../form-table/PendingLeaveTable"
-
-const personBio = {
-  Name: 'John Doe',
-  Age: '30',
-  Gender: 'Male',
-  Address: '1234 Elm Street',
-  Occupation: 'Software Engineer',
-  Company: 'TechCorp',
-  Email: 'john.doe@example.com',
-  Phone: '+123456789',
-};
+import '../../../../../utils/common-modules/form.css'
 
 export function FormCard() {
   const FormUIContext = useFormUIContext()
@@ -78,36 +66,35 @@ export function FormCard() {
         {/* EmployeeSelect Ends */}
 
         <br />
-        <br />
+        <hr />
 
         {/* EmployeeProfile Starts */}
-        <EmployeeProfile employeeId={formUIProps.employeeId} data={personBio} />
+        <EmployeeProfile employeeId={formUIProps.employeeId} />
         {/* EmployeeProfile Ends */}
 
         <br />
-        <br />
+        <hr />
 
         {/* FormEditDialog Starts */}
         <FormEditDialog id={formUIProps.id} employeeId={formUIProps.employeeId} />
         {/* FormEditDialog Ends */}
 
         <br />
-        <br />
+        <hr />
 
         {/* LeaveApplicationTable Starts */}
         <LeaveApplicationTable />
         {/* LeaveApplicationTable Ends */}
 
         <br />
-        <br />
+        <hr />
 
         {/* PendingLeaveTable Starts */}
         <PendingLeaveTable />
         {/* PendingLeaveTable Ends */}
 
-
         <br />
-        <br />
+        <hr />
 
         {/* LeaveBalanceTable Starts */}
         <LeaveBalanceTable />

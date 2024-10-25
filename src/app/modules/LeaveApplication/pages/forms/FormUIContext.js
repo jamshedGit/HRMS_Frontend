@@ -36,6 +36,7 @@ export function FormUIProvider({ children }) {
     fileDetail: null
   };
 
+  //Set Id for Edit record
   const editRecord = (id) => {
     setId(id)
   }

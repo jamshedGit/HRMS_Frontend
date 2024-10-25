@@ -33,10 +33,10 @@ export function DatePickerField({ ...props }) {
         }}
       />
       {errors[field.name] && touched[field.name] && (
-        <div className="invalid-datepicker-feedback">
+        <div className="invalid-datepicker-feedback" style={{ color: '#F64E60', 'font-size': '0.9rem' }}>
           {errors[field.name].toString()}
         </div>
-      ) }
+      )}
     </>
   );
 }

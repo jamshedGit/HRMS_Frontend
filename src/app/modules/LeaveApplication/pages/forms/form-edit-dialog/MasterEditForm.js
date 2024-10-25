@@ -210,6 +210,7 @@ export function MasterEditForm({
                       <Field
                         name="file"
                         component={Input}
+                        className='form-control'
                         type="file"
                         accept=".jpeg,.jpg,.png,.pdf,.doc,.docx"
                         placeholder=""
@@ -221,7 +222,7 @@ export function MasterEditForm({
                         label={
                           <span>
                             {" "}
-                            Attachment<span style={{ color: "red" }}>*</span>
+                            Attachment
                           </span>
                         }
                         autoComplete="off"
@@ -254,9 +255,9 @@ export function MasterEditForm({
                   setId('')
                   handleReset()
                 }}
-                className="btn btn-primary btn-elevate"
+                className="btn btn-danger btn-elevate"
               >
-                Cancel
+                Clear
               </button>
               {/* Cancel button End */}
 

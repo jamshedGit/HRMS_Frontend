@@ -16,6 +16,7 @@ import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatte
 import { Pagination } from "../../../../../../_metronic/_partials/controls";
 import { useFormUIContext } from "../FormUIContext";
 import { Accordion, Button, Card } from "react-bootstrap";
+import { KeyboardArrowDown } from "@material-ui/icons";
 
 export function PendingLeaveTable() {
   //Users UI Context
@@ -128,9 +129,12 @@ export function PendingLeaveTable() {
     <Accordion defaultActiveKey="">
       <Card>
         <Card.Header>
+        <div className='accordion-header-btn'>
           <Accordion.Toggle as={Button} eventKey="0">
             Pending Leaves
+            <KeyboardArrowDown />
           </Accordion.Toggle>
+          </div>
         </Card.Header>
         <Accordion.Collapse eventKey="0">
           <Card.Body>
