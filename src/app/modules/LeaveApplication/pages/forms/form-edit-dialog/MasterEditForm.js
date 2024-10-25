@@ -19,7 +19,8 @@ export function MasterEditForm({
   loading,
   isEdit,
   setId,
-  payrollData
+  payrollData,
+  employeeId
 }) {
 
   const cancelButtonRef = useRef(null);
@@ -216,6 +217,7 @@ export function MasterEditForm({
               </Form>
             </Modal.Body>
             <Modal.Footer>
+
               <button
                 type="reset"
                 ref={cancelButtonRef}
@@ -227,7 +229,8 @@ export function MasterEditForm({
               >
                 Cancel
               </button>
-              <button
+              
+              {employeeId && <button
                 type="submit"
                 onClick={() => handleSubmit()}
                 className="btn btn-primary btn-elevate"
@@ -236,7 +239,8 @@ export function MasterEditForm({
                 {loading && (
                   <span className="ml-3 mr-3 spinner spinner-white"></span>
                 )}
-              </button>
+              </button>}
+
             </Modal.Footer>
           </>
         )}
