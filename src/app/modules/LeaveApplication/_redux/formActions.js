@@ -43,7 +43,7 @@ export const fetchLeaveApplication = (queryparm, employeeId) => async (dispatch)
         dispatch(actions.catchError({ error, callType: callTypes.list }));
       });
   }
-  else{
+  else {
     dispatch(actions.LeaveApplicationFetched({}));
   }
 
@@ -120,13 +120,17 @@ export const saveRecord = (data, employeeId, disableLoading, resetForm) => (disp
         });
     }
     else {
-      return requestFromServer.updateLeaveApplicationSetup(data)
+      const body = {...data};
+      if (!body.file) {
+        body.file = body.fileName
+        delete body.fileName;
+      }
+      return requestFromServer.updateLeaveApplicationSetup(body)
         .then((res) => {
           const LeaveApplicationData = res.data?.data;
           if (LeaveApplicationData) {
             dispatch(actions.LeaveApplicationUpdated(LeaveApplicationData));
             disableLoading();
-            resetForm();
             toast.success("Successfully Updated", {
               position: "top-right",
               autoClose: 5000,

@@ -36,8 +36,8 @@ export function MasterEditForm({
   const formValidation = useMemo(() => {
     if (payrollData && payrollData.endDate) {
       return Yup.object().shape({
-        from: Yup.date().required('Required').min(payrollData.endDate, `Date cannot be before ${formatDates(payrollData.endDate)}`),
-        to: Yup.date().required('Required').min(Yup.ref('from'), 'To date cannot be before From date').min(payrollData.endDate, `Date cannot be before ${formatDates(payrollData.endDate)}`),
+        from: Yup.date().required('Required').min(payrollData.startDate, `Date cannot be before ${formatDates(payrollData.startDate)}`),
+        to: Yup.date().required('Required').min(Yup.ref('from'), 'To date cannot be before From date').min(payrollData.startDate, `Date cannot be before ${formatDates(payrollData.startDate)}`),
         leaveType: Yup.number().required('Required'),
         days: Yup.number().optional(),
         remarks: Yup.string().required('Required'),
@@ -97,6 +97,7 @@ export function MasterEditForm({
                         name="from"
                         component={DatePickerField}
                         disabled={isEdit}
+                        dateFormat="dd/MM/yyyy"
                         label={
                           <span>
                             {" "}
@@ -114,6 +115,7 @@ export function MasterEditForm({
                         name="to"
                         component={DatePickerField}
                         disabled={isEdit}
+                        dateFormat="dd/MM/yyyy"
                         label={
                           <span>
                             {" "}
@@ -239,7 +241,6 @@ export function MasterEditForm({
                     {/* File Field End */}
                   </div>
                   {/* Third Row End */}
-
                 </fieldset>
               </Form>
               {/* Form End */}

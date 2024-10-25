@@ -70,5 +70,5 @@ export const getFileName = (fileName) => {
  * @returns 
  */
 export const formatDates = (date, dateFormat = null) => {
-  return format(new Date(date), dateFormat || 'MM/dd/yyyy')
+  return format(new Date(date), dateFormat || 'dd/MM/yyyy')
 }

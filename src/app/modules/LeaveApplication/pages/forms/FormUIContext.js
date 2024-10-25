@@ -32,7 +32,7 @@ export function FormUIProvider({ children }) {
     leaveType: '',
     remarks: '',
     days: 0,
-    file: '',
+    file: null,
     fileDetail: null
   };
 
