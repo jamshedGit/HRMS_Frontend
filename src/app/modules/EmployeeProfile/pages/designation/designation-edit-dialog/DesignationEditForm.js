@@ -505,7 +505,7 @@ useEffect(() => {
         console.log('test contact', id)
         const response = await axios.post(`${USERS_URL}/profile/read-contact`, { Id: id });
         console.log("tall resp", response);
-        setContactList(response?.data?.data?.rows);
+        setContactList(response?.data?.data);
 
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -1354,7 +1354,7 @@ useEffect(() => {
                             <td>
                               {obj.relation_name}
                             </td>
-                            <td>{obj.relation}</td>
+                            <td>{obj.relation_emp}</td>
                             <td>{obj.contactNo}</td>
                           </tr>
                           </>
@@ -1385,6 +1385,7 @@ useEffect(() => {
                             <td>{obj.country}</td>
                             <td>{obj.city}</td>
                             <td>{obj.startDate}</td>
+                            <td>{obj.endDate}</td>
                           </tr>
                           </>
                         ))}

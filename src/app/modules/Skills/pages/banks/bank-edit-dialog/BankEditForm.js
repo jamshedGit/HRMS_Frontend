@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Input, Select, TextArea } from "../../../../../../_metronic/_partials/controls";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,19 +25,26 @@ const formValidation = Yup.object().shape(
   {
     employeeId: Yup.string()
       .required("Required*"),
-    companyName: Yup.string()
+    skill: Yup.string()
       .required("Required*"),
-    positionHeld: Yup.string()
+      description: Yup.string()
       .required("Required*"),
-    countryId: Yup.string()
+
+      ratingScale: Yup.string()
       .required("Required*"),
-    cityId: Yup.string()
+      
+
+    startDate: Yup.date()
       .required("Required*"),
-    startDate: Yup.string()
-      .required("Required*"),
-    endDate: Yup.string()
-      .required("Required*"),
+
+      endDate: Yup.date()
+      .required('Required*')
+      .when('startDate', (startDate, schema) => {
+        return startDate && schema.min(startDate, 'End Date cannot be earlier than start date');
+      }),
   },
+
+  
 
 );
 export function BankEditForm({
@@ -189,7 +196,7 @@ console.log("tree",values)
       <Formik
         enableReinitialize={true}
         initialValues={user}
-        //validationSchema={formValidation}
+        validationSchema={formValidation}
         onSubmit={(values) => {
           console.log("values", values);
           enableLoading();
@@ -291,6 +298,7 @@ console.log("tree",values)
                           disabled={isUserForRead}
                         // value = {values.dateOfJoining}
                         />
+                         <ErrorMessage style={{color:"red"}} name="startDate" component="div" />
                       </div>
                     }
 
@@ -301,6 +309,8 @@ console.log("tree",values)
                           className="form-control"
                           placeholder="Enter End Date"
                           selected={endDate}
+                          showYearDropdown
+                          scrollableMonthYearDropdown
                           onChange={(date) => {
                             setFieldValue("endDate", date);
                             setEndDate(date);
@@ -313,6 +323,7 @@ console.log("tree",values)
                           disabled={isUserForRead}
 
                         />
+                         <ErrorMessage style={{color:"red"}} name="endDate" component="div" />
                       </div>
                     }
 
