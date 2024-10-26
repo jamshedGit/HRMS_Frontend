@@ -28,13 +28,15 @@ export function LeaveApplicationTable() {
       setId: formUIContext.setId,
       queryParamsLeaveApp: formUIContext.queryParamsLeaveApp,
       setQueryParamsLeaveApp: formUIContext.setQueryParamsLeaveApp,
-      editRecord: formUIContext.editRecord
+      editRecord: formUIContext.editRecord,
+      openDeleteFormDialog: formUIContext.openDeleteFormDialog
     };
   }, [formUIContext]);
 
-  const { currentState, userAccess } = useSelector(
+  const { currentState, userAccess, payrollData } = useSelector(
     (state) => {
       return {
+        payrollData: state.leave_application.payrollData,
         currentState: state.leave_application,
         userAccess: state?.auth?.userAccess["Leave_Application"],
       }
@@ -109,6 +111,7 @@ export function LeaveApplicationTable() {
       isDummyField: true,
       formatter: ActionsColumnFormatter,
       formatExtraData: {
+        payrollData: payrollData,
         editRecord: FormUIProps.editRecord,
         openDeleteFormDialog: FormUIProps.openDeleteFormDialog,
         isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,

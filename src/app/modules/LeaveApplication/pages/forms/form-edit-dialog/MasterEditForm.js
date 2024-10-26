@@ -30,6 +30,9 @@ export function MasterEditForm({
     shallowEqual
   )
 
+  //This ref is to get reference of file field. It will be used to clear field when reseting form
+  const inputFile = useRef(null);
+
   //Validation for Form.
   //If payroll month is available then form should not allow to add date for before payroll month end date.
   //else just normal validation for form
@@ -63,7 +66,15 @@ export function MasterEditForm({
         validationSchema={formValidation}
         onSubmit={(values, { resetForm }) => {
           enableLoading();
-          submitForm(values, resetForm)
+          //This clearForm function is created to clear form as well as clear any uploaded file as well.
+          //resetForm function doesn't clear file properly so we use this function
+          const clearForm = () => {
+            resetForm();
+            if (inputFile?.current) {
+              inputFile.current.value = "";
+            }
+          }
+          submitForm(values, clearForm)
         }}
       >
         {({
@@ -97,7 +108,7 @@ export function MasterEditForm({
                         name="from"
                         component={DatePickerField}
                         disabled={isEdit}
-                        dateFormat="dd/MM/yyyy"
+                        dateFormat="dd/MMM/yyyy"
                         label={
                           <span>
                             {" "}
@@ -115,7 +126,7 @@ export function MasterEditForm({
                         name="to"
                         component={DatePickerField}
                         disabled={isEdit}
-                        dateFormat="dd/MM/yyyy"
+                        dateFormat="dd/MMM/yyyy"
                         label={
                           <span>
                             {" "}
@@ -183,7 +194,7 @@ export function MasterEditForm({
                     {/* Leave Type Field End */}
 
                     {/* Remarks Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
+                    <div className="col-12 col-md-8 mt-3">
                       <Field
                         name="remarks"
                         component={TextArea}
@@ -209,30 +220,26 @@ export function MasterEditForm({
 
                     {/* File Field Start */}
                     <div className="col-12 col-md-4 mt-3">
-                      <Field
+                      <label style={{ 'margin-right': '0.5rem' }}>
+                        {" "}
+                        Attachment: {" "}
+                      </label>
+                      <input
                         name="file"
-                        component={Input}
-                        className='form-control'
                         type="file"
                         accept=".jpeg,.jpg,.png,.pdf,.doc,.docx"
-                        placeholder=""
-                        onChange={(el) => {
-                          setFieldValue('fileDetail', el.target.files[0])
-                          handleChange(el)
+                        ref={inputFile}
+                        onChange={(event) => {
+                          // Update Formik's value
+                          const file = event.currentTarget.files[0];
+                          setFieldValue("file", file);
                         }}
-                        onBlur={handleBlur}
-                        label={
-                          <span>
-                            {" "}
-                            Attachment
-                          </span>
-                        }
-                        autoComplete="off"
                       />
                       <div>
-                        {!values.fileDetail && values.fileName &&
+                        <br />
+                        {values.fileName && values.file == values.fileName &&
                           <>
-                            <label>Existing File:</label>
+                            <label><strong>Existing File:</strong></label>
                             {<span>{getFileName(values.fileName)}</span>}
                           </>
                         }
@@ -255,6 +262,9 @@ export function MasterEditForm({
                 onClick={() => {
                   setId('')
                   handleReset()
+                  if (inputFile?.current) {
+                    inputFile.current.value = "";
+                  }
                 }}
                 className="btn btn-danger btn-elevate"
               >

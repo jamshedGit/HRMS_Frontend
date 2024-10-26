@@ -51,7 +51,6 @@ export const LeaveApplicationSlice = createSlice({
             const entities = action?.payload?.userForEdit;
             if (entities) {
                 entities.fileName = entities.file;
-                delete entities.file;
             }
             state.actionsLoading = false;
             state.userForEdit = entities;

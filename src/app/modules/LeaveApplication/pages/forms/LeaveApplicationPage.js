@@ -1,12 +1,30 @@
 import React from "react";
+import { Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FormUIProvider } from "./FormUIContext";
 import { FormCard } from "./form-card/FormCard";
+import { FormDeleteDialog } from "./form-delete-dialog/FormDeleteDialog";
 
-export function LeaveApplicationPage() {
+export function LeaveApplicationPage({ history }) {
+  const FormUIEvents = {
+    openDeleteFormDialog: (id) => {
+      history.push(`/leave_application/read-all-leave-application/${id}/delete`);
+    }
+  };
   return (
-    <FormUIProvider>
+    <FormUIProvider FormUIEvents={FormUIEvents}>
+      <Route path="/leave_application/read-all-leave-application/:id/delete">
+        {({ history, match }) => (
+          <FormDeleteDialog
+            show={match != null}
+            id={match && match.params.id}
+            onHide={() => {
+              history.push("/leave_application/read-all-leave-application");
+            }}
+          />
+        )}
+      </Route>
       <FormCard />
       <ToastContainer
         position="top-right"

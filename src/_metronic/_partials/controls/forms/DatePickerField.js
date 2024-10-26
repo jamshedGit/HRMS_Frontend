@@ -16,7 +16,7 @@ const getFieldCSSClasses = (touched, errors) => {
 };
 
 export function DatePickerField({ ...props }) {
-  const { setFieldValue, errors, touched, values } = useFormikContext();
+  const { setFieldValue, errors, touched } = useFormikContext();
   // const [field] = useField(props);
   const { field } = props
   return (

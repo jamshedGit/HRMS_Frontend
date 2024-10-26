@@ -8,7 +8,7 @@ export function useFormUIContext() {
   return useContext(FormUIContext);
 }
 
-export function FormUIProvider({ children }) {
+export function FormUIProvider({ FormUIEvents, children }) {
   const [queryParamsLeaveApp, setQueryParamsLeaveAppBaseLeaveApp] = useState(initialFilter);
   const [employeeId, setemployeeId] = useState('');
   const [id, setId] = useState('');
@@ -33,7 +33,6 @@ export function FormUIProvider({ children }) {
     remarks: '',
     days: 0,
     file: null,
-    fileDetail: null
   };
 
   //Set Id for Edit record
@@ -50,7 +49,8 @@ export function FormUIProvider({ children }) {
     id,
     setId,
     editRecord,
-    initUser
+    initUser,
+    openDeleteFormDialog: FormUIEvents.openDeleteFormDialog,
   };
   return (
     <FormUIContext.Provider value={value}>{children}</FormUIContext.Provider>

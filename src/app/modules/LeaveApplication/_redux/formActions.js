@@ -120,11 +120,8 @@ export const saveRecord = (data, employeeId, disableLoading, resetForm) => (disp
         });
     }
     else {
-      const body = {...data};
-      if (!body.file) {
-        body.file = body.fileName
-        delete body.fileName;
-      }
+      const body = { ...data };
+      delete body.fileName;
       return requestFromServer.updateLeaveApplicationSetup(body)
         .then((res) => {
           const LeaveApplicationData = res.data?.data;

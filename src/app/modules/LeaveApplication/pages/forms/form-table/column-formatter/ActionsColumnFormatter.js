@@ -8,12 +8,19 @@ export function ActionsColumnFormatter(
   row,
   rowIndex,
   {
+    payrollData,
     editRecord,
     openDeleteFormDialog,
     isAccessForEdit,
     isAccessForDelete,
   }
 ) {
+
+  //Function to check if the date doesn't lie before the payroll month date
+  const checkPayrolMonth = (row, payroll)=> {
+    return payroll && payroll.startDate && new Date(payroll.startDate).getTime() < new Date(row.from).getTime()
+  }
+
   return (
     <>
       {isAccessForEdit && row.isActive && (
@@ -34,11 +41,12 @@ export function ActionsColumnFormatter(
         </OverlayTrigger>
       )}
 
-      {/* {isAccessForDelete && (
+      {isAccessForDelete && checkPayrolMonth(row, payrollData) && 
+      (
         <OverlayTrigger
           overlay={
             <Tooltip id="products-edit-tooltip">
-              {row.isActive ? "Delete" : "Mark Active"}
+              Delete
             </Tooltip>
           }
         >
@@ -47,7 +55,7 @@ export function ActionsColumnFormatter(
             <a
               title=""
               className="btn btn-icon btn-light btn-hover-danger btn-sm mx-3"
-              onClick={() => openDeleteFormDialog(row.Id, row.isActive)}
+              onClick={() => openDeleteFormDialog(row.Id)}
             >
               <span className="svg-icon svg-icon-md svg-icon-danger">
                 <SVG
@@ -60,7 +68,7 @@ export function ActionsColumnFormatter(
           
           }
         </OverlayTrigger>
-      )} */}
+      )}
     </>
   );
 }
