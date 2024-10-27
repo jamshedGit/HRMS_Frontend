@@ -14,36 +14,31 @@ import {
 // Define the validation schema for the main form and the policies
 const ReimbursementSchema = Yup.object().shape({
   subsidiaryId: Yup.number().required("Subsidiary is required"),
-  payroll_groupId: Yup.number().required("Account is required"),
-  cycle_typeId: Yup.number().required("required"),
+  payroll_groupId: Yup.number().required("Payroll group is required"),
+  cycle_typeId: Yup.number().required("Cycle type required"),
 
   policies: Yup.array().of(
     Yup.object().shape({
-      reimbursement_typeId: Yup.number().required("required"),
+      reimbursement_typeId: Yup.number().required(
+        "Reimbursement type required"
+      ),
       max_amount: Yup.number()
         .min(1, "Must be at least 1")
-        .required("Max  Amount is required"),
-        // attachment_required:required("required"),
+        .required("Max  amount is required"),
+      attachment_required: Yup.string().required("Required"),
+      grades: Yup.string().required("Required"),
+    })
+  ),
+
+  accounts: Yup.array().of(
+    Yup.object().shape({
+      reimbursement_typeId: Yup.number().required("required"),
+         expense_accountId: Yup.number()
+        .required("Expense account is required"),
+        bank_accountId: Yup.number().required("bank account required"),
 
     })
-
-
-
-  ),
-  
-
-  // accounts: Yup.array().of(
-  //   Yup.object().shape({
-  //     reimbursement_typeId: Yup.number().required("required"),
-   
-  //        expense_accountId: Yup.number()
-  //       .required("Max  Amount is required"),
-  //       bank_accountId: Yup.number().required("required"),
-
-  //   })
-  // )
-  
-
+  )
 });
 
 export function FormEditForm({
@@ -63,8 +58,8 @@ export function FormEditForm({
     { value: false, label: "No" },
   ];
   const checkIds = (id) => {
-    console.log("Ids", id)
-  }
+    console.log("Ids", id);
+  };
   // Fetch necessary data if not already present
   useEffect(() => {
     if (!user.Id) {
@@ -170,7 +165,7 @@ export function FormEditForm({
                       }
                       // options={dashboard.allAccountList}
                       options={dashboard.allPayrolGroupList.map((option) => ({
-                        label: `${option.mergeLabel}`, // Adding the value to the label
+                        label: `${option.label}`, // Adding the value to the label
                         value: option.value,
                       }))}
                       error={errors.payroll_groupId}
@@ -199,7 +194,7 @@ export function FormEditForm({
                       }
                       // options={dashboard.allAccountList}
                       options={dashboard.allCycleTypeList.map((option) => ({
-                        label: `${option.mergeLabel}`, // Adding the value to the label
+                        label: `${option.label}`, // Adding the value to the label
                         value: option.value,
                       }))}
                       error={errors.cycle_typeId}
@@ -226,15 +221,16 @@ export function FormEditForm({
                         <tr
                           style={{ backgroundColor: "#4d5f7a", color: "#fff" }}
                         >
-                          <th>Action</th>
+                          <th > {!isUserForRead && (
+                               <p> Action</p>
+                                )}</th>
                           <th>Reimbursement Type</th>
                           <th>Max Amount Allowed</th>
                           <th>Attachment Required</th>
                           <th style={{ padding: "20px" }}>Salary Grade</th>
-
                         </tr>
                       </thead>
-                      <tbody >
+                      <tbody>
                         {values.policies &&
                           values.policies.length > 0 &&
                           values.policies.map((detail, index) => (
@@ -333,36 +329,37 @@ export function FormEditForm({
                                     ))}
                                   </Field>
 
-                                  {errors.attachment_required &&
+                                  {/* {errors.attachment_required &&
                                     touched.attachment_required && (
                                       <div className="text-danger">
                                         {errors.attachment_required}
                                       </div>
-                                    )}
+                                    )} */}
+
+{errors.policies?.[index]?.attachment_required &&
+                                  touched.policies?.[index]?.attachment_required && (
+                                    <div className="text-danger">
+                                      {errors.policies[index].attachment_required}
+                                    </div>
+                                  )}
+
+                              
                                 </div>
                               </td>
 
-
-
                               <td
-                                className="bg-white"
-                                style={{
-                                  // backgroundColor: "#ffffff",
-                                  padding: "10px",
-                                  marginTop: "20px"
-                                }}
+                              
                               >
                                 <div
                                   style={{
-                                    maxHeight: "200px", // Set maxHeight for scrolling
+                                    maxHeight: "90px", // Set maxHeight for scrolling
                                     overflowY: "auto", // Enable vertical scrolling
                                     overflowX: "hidden", // Hide horizontal scrolling
-
-                                    marginTop: "20px"
+                                    padding: "10px",
+                                    // marginTop: "10px",
                                   }}
                                   className="bg-white m-2"
                                 >
-
                                   {/* {dashboard.allEmployeeGradeList.map(
                                     (option, i) => (
                                       <div
@@ -410,35 +407,57 @@ export function FormEditForm({
                                   )} */}
 
                                   {dashboard.allEmployeeGradeList
-                                    .filter(option => option.value !== null) // Filter out the unwanted option
+                                    .filter((option) => option.value !== null) // Filter out the unwanted option
                                     .map((option, i) => (
                                       <div
                                         key={i}
                                         className="bg-white p-1"
-                                        style={{ display: "flex", alignItems: "center" }}
+                                        style={{
+                                          display: "flex",
+                                          alignItems: "center",
+                                        }}
                                       >
                                         <input
                                           className="mr-2"
                                           type="checkbox"
-                                          checked={values.policies[index].grades.includes(option.value)}
+                                          checked={values.policies[
+                                            index
+                                          ].grades.includes(option.value)}
                                           onChange={(e) => {
                                             const checked = e.target.checked;
-                                            const currentGrades = values.policies[index].grades || [];
+                                            const currentGrades =
+                                              values.policies[index].grades ||
+                                              [];
 
                                             const newGrades = checked
                                               ? [...currentGrades, option.value]
-                                              : currentGrades.filter((id) => id !== option.value);
+                                              : currentGrades.filter(
+                                                  (id) => id !== option.value
+                                                );
 
-                                            setFieldValue(`policies[${index}].grades`, newGrades);
+                                            setFieldValue(
+                                              `policies[${index}].grades`,
+                                              newGrades
+                                            );
                                           }}
                                         />
-                                        <label className="form-check-label ms-2">{option.label}</label>
+                                        <label className="form-check-label ms-2">
+                                          {option.label}
+                                        </label>
+
+                             
                                       </div>
                                     ))}
 
 
-
+                                    
                                 </div>
+                                {errors.policies?.[index]?.grades &&
+                                  touched.policies?.[index]?.grades && (
+                                    <div className="text-danger">
+                                      {errors.policies[index].grades}
+                                    </div>
+                                  )}
                               </td>
                             </tr>
                           ))}
@@ -465,7 +484,6 @@ export function FormEditForm({
                 )}
               </FieldArray>
 
-
               <FieldArray name="accounts">
                 {({ push, remove }) => (
                   <div
@@ -477,17 +495,18 @@ export function FormEditForm({
                       marginTop: "20px",
                     }}
                   >
-                    <h6>Details</h6>
+                    <h6>Accounts</h6>
                     <table className="table table-head-custom table-vertical-center overflow-hidden table-hover">
                       <thead>
                         <tr
                           style={{ backgroundColor: "#4d5f7a", color: "#fff" }}
                         >
-                          <th>Action</th>
+                           <th > {!isUserForRead && (
+                               <p> Action</p>
+                                )}</th>
                           <th>Reimbursement Type</th>
                           <th>Expense Account</th>
                           <th>Bank Account</th>
-
                         </tr>
                       </thead>
                       <tbody>
@@ -514,30 +533,37 @@ export function FormEditForm({
                                   className="form-control"
                                   disabled={isUserForRead}
                                 >
-
-
-                                  {dashboard.allReimbursementTypeList?.map((x) => {
-                                    return (
-                                      <option
-                                        disabled={
-                                          values.accounts.find(
-                                            (el) => el.reimbursement_typeId == x.value
-                                          )
-                                            ? true
-                                            : false
-                                        }
-                                        value={x.value}
-                                      >
-                                        {" "}
-                                        {x.label}{" "}
-                                      </option>
-                                    );
-                                  })}
+                                  {dashboard.allReimbursementTypeList?.map(
+                                    (x) => {
+                                      return (
+                                        <option
+                                          disabled={
+                                            values.accounts.find(
+                                              (el) =>
+                                                el.reimbursement_typeId ==
+                                                x.value
+                                            )
+                                              ? true
+                                              : false
+                                          }
+                                          value={x.value}
+                                        >
+                                          {" "}
+                                          {x.label}{" "}
+                                        </option>
+                                      );
+                                    }
+                                  )}
                                 </Field>
-                                {errors.accounts?.[index]?.reimbursement_typeId &&
-                                  touched.accounts?.[index]?.reimbursement_typeId && (
+                                {errors.accounts?.[index]
+                                  ?.reimbursement_typeId &&
+                                  touched.accounts?.[index]
+                                    ?.reimbursement_typeId && (
                                     <div className="text-danger">
-                                      {errors.accounts[index].reimbursement_typeId}
+                                      {
+                                        errors.accounts[index]
+                                          .reimbursement_typeId
+                                      }
                                     </div>
                                   )}
                               </td>
@@ -549,14 +575,13 @@ export function FormEditForm({
                                   className="form-control"
                                   disabled={isUserForRead}
                                 >
-
-
                                   {dashboard.allAccountList?.map((x) => {
                                     return (
                                       <option
                                         disabled={
                                           values.accounts.find(
-                                            (el) => el.expense_accountId == x.value
+                                            (el) =>
+                                              el.expense_accountId == x.value
                                           )
                                             ? true
                                             : false
@@ -570,7 +595,8 @@ export function FormEditForm({
                                   })}
                                 </Field>
                                 {errors.accounts?.[index]?.expense_accountId &&
-                                  touched.accounts?.[index]?.expense_accountId && (
+                                  touched.accounts?.[index]
+                                    ?.expense_accountId && (
                                     <div className="text-danger">
                                       {errors.accounts[index].expense_accountId}
                                     </div>
@@ -584,8 +610,6 @@ export function FormEditForm({
                                   className="form-control"
                                   disabled={isUserForRead}
                                 >
-
-
                                   {dashboard.allAccountList?.map((x) => {
                                     return (
                                       <option
@@ -611,7 +635,6 @@ export function FormEditForm({
                                     </div>
                                   )}
                               </td>
-
                             </tr>
                           ))}
                       </tbody>
@@ -622,9 +645,9 @@ export function FormEditForm({
                         type="button"
                         onClick={() =>
                           push({
-                            reimbursement_typeId: '',
-                            expense_accountId: '',
-                            bank_accountId: ''
+                            reimbursement_typeId: "",
+                            expense_accountId: "",
+                            bank_accountId: "",
                           })
                         }
                         className="btn btn-primary btn-sm"
@@ -667,7 +690,11 @@ export function FormEditForm({
                 onClick={() => handleSubmit()}
                 className="btn btn-primary btn-elevate"
                 // disabled={loading}
-                disabled={loading || values?.policies?.length === 0 || values?.accounts?.length === 0}
+                disabled={
+                  loading ||
+                  values?.policies?.length === 0 &&
+                  values?.accounts?.length === 0
+                }
               >
                 Save
                 {loading && (

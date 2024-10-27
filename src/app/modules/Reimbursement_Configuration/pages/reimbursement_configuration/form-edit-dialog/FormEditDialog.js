@@ -77,19 +77,19 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     console.log("reimbursement getUserStatus updated save", user);
 
 
-       if (user.policies=="" ) {
-      toast.error("Detail is incomplete.", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-      return
+    //    if (user.policies=="" ) {
+    //   toast.error("Detail is incomplete.", {
+    //     position: "top-right",
+    //     autoClose: 5000,
+    //     hideProgressBar: false,
+    //     closeOnClick: true,
+    //     pauseOnHover: true,
+    //     draggable: true,
+    //     progress: undefined,
+    //   });
+    //   return
 
-    }
+    // }
  
  
     if (!user.Id) {
