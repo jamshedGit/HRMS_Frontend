@@ -21,8 +21,8 @@ const formValidation = Yup.object().shape({
     Yup.object().shape({
       leaveType: Yup.number().required('Required'),
       gender: Yup.number().nullable(),
-      minExp: Yup.number().min(0, 'Minimum experience should be 0 or more').required('Required'),
-      maxAllowed: Yup.number().min(0, 'Max allowed should be 0 or more').required('Required'),
+      minExp: Yup.number().min(0, 'Min experience should be 0 or more').max(99, 'Maximum two digit number allowed').required('Required'),
+      maxAllowed: Yup.number().min(0, 'Max allowed should be 0 or more').max(999, 'Maximum three digit number allowed').required('Required'),
       attachmentRequired: Yup.boolean(),
       maritalStatus: Yup.number().nullable(),
     })
@@ -30,9 +30,13 @@ const formValidation = Yup.object().shape({
   leaveTypeSalaryDeductionPolicies: Yup.array().of(
     Yup.object().shape({
       leaveType: Yup.number().required('Required'),
-      minLeave: Yup.number().min(0, 'Minimum experience should be 0 or more').required('Required'),
-      maxLeave: Yup.number().min(0, 'Minimum experience should be 0 or more').required('Required'),
-      deduction: Yup.number().min(0, 'Max allowed should be 0 or more').required('Required'),
+      minLeave: Yup.number().min(0, 'Min experience should be 0 or more').max(999, 'Maximum three digit number allowed').required('Required'),
+      maxLeave: Yup.number().min(Yup.ref('minLeave'), 'Max leave should be more than min leave').max(999, 'Maximum three digit number allowed').required('Required'),
+      deduction: Yup.number().min(0, 'Deduction should be 0 or more').max(100, 'Deduction should not be greater than 100').test(
+        'max-decimals',
+        'Deduction should be up to max 3 digits before and max 2 digits after the decimal',
+        (value) => /^\d{1,3}(\.\d{1,2})?$/.test(value?.toString())
+      ).required('Required'),
       leaveStatus: Yup.number().nullable(),
     })
   )
@@ -114,9 +118,6 @@ export function MasterEditForm({
           setFieldValue,
         }) => (
           <>
-          {
-            console.log(':::errors:::::',{errors, touched})
-          }
             <Modal.Body className="overlay overlay-block cursor-default">
               {actionsLoading && (
                 <div className="overlay-layer bg-transparent">

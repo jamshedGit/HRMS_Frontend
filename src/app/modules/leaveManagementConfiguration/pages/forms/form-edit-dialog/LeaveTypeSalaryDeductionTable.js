@@ -50,12 +50,6 @@ function LeaveTypeSalaryDeductionTable({ values, setFieldValue, createDropdown, 
                             value
                           )
                         }}
-                        // label={
-                        //   <span>
-                        //     {" "}
-                        //     leave Type<span style={{ color: "red" }}>*</span>
-                        //   </span>
-                        // }
                         value={row.leaveType}
                         children={createDropdown(dropdownData.allLeaveTypes || [], values?.leaveTypeSalaryDeductionPolicies)}
                       />
@@ -80,12 +74,6 @@ function LeaveTypeSalaryDeductionTable({ values, setFieldValue, createDropdown, 
                             e.target.value
                           )
                         }}
-                        // label={
-                        //   <span>
-                        //     {" "}
-                        //     Min Leave<span style={{ color: "red" }}>*</span>
-                        //   </span>
-                        // }
                         value={row.minLeave}
                       />
                       {errors.leaveTypeSalaryDeductionPolicies?.[index]?.minLeave &&
@@ -109,12 +97,6 @@ function LeaveTypeSalaryDeductionTable({ values, setFieldValue, createDropdown, 
                             e.target.value
                           )
                         }}
-                        // label={
-                        //   <span>
-                        //     {" "}
-                        //     Max Leave<span style={{ color: "red" }}>*</span>
-                        //   </span>
-                        // }
                         value={row.maxLeave}
                       />
                       {errors.leaveTypeSalaryDeductionPolicies?.[index]?.maxLeave &&
@@ -138,12 +120,6 @@ function LeaveTypeSalaryDeductionTable({ values, setFieldValue, createDropdown, 
                             e.target.value
                           )
                         }}
-                        // label={
-                        //   <span>
-                        //     {" "}
-                        //     Deduction<span style={{ color: "red" }}>*</span>
-                        //   </span>
-                        // }
                         value={row.deduction}
                       />
                       {errors.leaveTypeSalaryDeductionPolicies?.[index]?.deduction &&
@@ -166,12 +142,6 @@ function LeaveTypeSalaryDeductionTable({ values, setFieldValue, createDropdown, 
                             value
                           )
                         }}
-                        // label={
-                        //   <span>
-                        //     {" "}
-                        //     Leave Status<span style={{ color: "red" }}>*</span>
-                        //   </span>
-                        // }
                         value={row.leaveStatus}
                         children={createDropdown(dropdownData.allLeaveStatus || [])}
                       />
