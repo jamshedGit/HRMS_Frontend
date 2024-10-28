@@ -54,8 +54,11 @@ export function DesignationUIProvider({ DesignationUIEvents, children }) {
     email:'',
     phone_home: '',
     phone_official: '',
-    phone_cell: ''
-
+    phone_cell: '',
+    dateOfConfirmationEnter: '',
+    dateOfConfirmationDue: '',
+    dateOfConfirmation: '',
+    dateOfContractExpiry: ''
   };
 
   console.log("employee profile ui events",DesignationUIEvents);

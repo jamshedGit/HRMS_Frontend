@@ -26,6 +26,8 @@ const formValidation = Yup.object().shape(
   {
 
     earningCode: Yup.string()
+    .length(6, 'Must be exactly 6 characters long')
+   
       .required("Required*"),
     earningName: Yup.string()
       .required("Required*"),
@@ -36,6 +38,7 @@ const formValidation = Yup.object().shape(
     mappedAllowance: Yup.string()
       .required("Required*"),
     account: Yup.string()
+   
       .required("Required*"),
   },
 
@@ -64,33 +67,33 @@ export function BankEditForm({
 
   //=========== END
 
-  useEffect(() => {
+  // useEffect(() => {
     
-    // Define an async function within useEffect
-    if (!user.Id) {
+  //   // Define an async function within useEffect
+  //   if (!user.Id) {
 
-      const fetchData = async () => {
-        try {
-          console.log("User:", user);
-          if (user.earningCode === '') {
-            // const response = await dispatch(getLatestTableId("t_employee_earning", "E-000"));
+  //     const fetchData = async () => {
+  //       try {
+  //         console.log("User:", user);
+  //         if (user.earningCode === '') {
+  //           // const response = await dispatch(getLatestTableId("t_employee_earning", "E-000"));
 
-            // // Assuming response[0].Id is the correct way to access the ID
-            // console.log("Response:", response[0]?.Id);
-            // setDefaultEarningCode(response[0]?.Id);
-          }
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      };
+  //           // // Assuming response[0].Id is the correct way to access the ID
+  //           // console.log("Response:", response[0]?.Id);
+  //           // setDefaultEarningCode(response[0]?.Id);
+  //         }
+  //       } catch (error) {
+  //         console.error("Error fetching data:", error);
+  //       }
+  //     };
 
-      fetchData(); // Call the async function
-    }
-    else {
+  //     fetchData(); // Call the async function
+  //   }
+  //   else {
 
-      setDefaultEarningCode(user.earningCode);
-    }
-  }, [dispatch, user.earningCode]);
+  //     setDefaultEarningCode(user.earningCode);
+  //   }
+  // }, [dispatch, user.earningCode]);
 
 
   console.log("defEarningCode",defEarningCode)
@@ -98,7 +101,7 @@ export function BankEditForm({
     <>
       <Formik
         enableReinitialize={true}
-        initialValues={user.earningCode ? user : { ...user, earningCode: defEarningCode }}
+        initialValues={user}
         validationSchema={formValidation}
         onSubmit={(values) => {
           console.log("values", values);
@@ -156,13 +159,14 @@ export function BankEditForm({
                         <Field
                           name="earningCode"
                           component={Input}
+                          maxLength={6}
                           onChange={(e) => {
                             setFieldValue("earningCode", e.value || null);
                             setDefaultEarningCode(e.value);
 
                           }}
                           placeholder="Enter Earning Code"
-                          value={defEarningCode}
+                          value={values.earningCode}
                           label={<span> Earning Code<span style={{ color: 'red' }}>*</span></span>}
                           autoComplete="off"
                         />
@@ -182,6 +186,44 @@ export function BankEditForm({
                     }
 
                   </div>
+                 
+
+                  <div className="from-group row">
+                    {
+                      <div className="col-12 col-md-4 mt-3">
+                        <Select
+                          label={<span> Mapped Allowance<span style={{ color: 'red' }}>*</span></span>}
+                          name="mappedAllowance"
+                          value={values.mappedAllowance}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          style={{ display: "block" }}
+                        >
+                          <option value="-1" label="Select" />
+                          <option value="Basic Salary" label="Basic Salary" />
+                          <option value="Bonus" label="Bonus" />
+
+                        </Select>
+                        {errors.mappedAllowance && touched.mappedAllowance && (
+                          <div className="invalid-text">{errors.mappedAllowance}</div>
+                        )}
+                      </div>
+
+                    }
+                    {
+                      <div className="col-12 col-md-4 mt-3">
+                        <Field
+                          name="account"
+                          component={Input}
+                          maxLength={15}
+                          placeholder="Ener Account"
+                          autoComplete="off"
+                          label={<span> Account<span style={{ color: 'red' }}>*</span></span>}
+                        />
+                      </div>
+                    }
+                  </div>
+
                   <div className="from-group row">
                     {
 
@@ -230,43 +272,6 @@ export function BankEditForm({
 
                     }
                   </div>
-
-                  <div className="from-group row">
-                    {
-                      <div className="col-12 col-md-4 mt-3">
-                        <Select
-                          label={<span> Mapped Allowance<span style={{ color: 'red' }}>*</span></span>}
-                          name="mappedAllowance"
-                          value={values.mappedAllowance}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          style={{ display: "block" }}
-                        >
-                          <option value="-1" label="Select" />
-                          <option value="Basic Salary" label="Basic Salary" />
-                          <option value="Bonus" label="Bonus" />
-
-                        </Select>
-                        {errors.mappedAllowance && touched.mappedAllowance && (
-                          <div className="invalid-text">{errors.mappedAllowance}</div>
-                        )}
-                      </div>
-
-                    }
-                    {
-                      <div className="col-12 col-md-4 mt-3">
-                        <Field
-                          name="account"
-                          component={Input}
-                          placeholder="Ener Account"
-                          autoComplete="off"
-                          label={<span> Account<span style={{ color: 'red' }}>*</span></span>}
-                        />
-                      </div>
-                    }
-                  </div>
-
-
                 </fieldset>
               </Form>
             </Modal.Body>
