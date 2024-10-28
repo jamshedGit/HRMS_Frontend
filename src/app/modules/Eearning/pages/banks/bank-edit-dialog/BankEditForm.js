@@ -161,7 +161,7 @@ export function BankEditForm({
                           component={Input}
                           maxLength={6}
                           onChange={(e) => {
-                            setFieldValue("earningCode", e.value || null);
+                            setFieldValue("earningCode", e.target.value || null);
                             setDefaultEarningCode(e.value);
 
                           }}
