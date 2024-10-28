@@ -6,7 +6,7 @@ import { DatePickerField, Input, Select, TextArea } from "../../../../../../_met
 import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLabel";
 import { useSelector, shallowEqual } from "react-redux"
 import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
-import { formatDates, getDateDiffInDays, getFileName } from "../../../../../utils/common";
+import { formatDates, getDateDiffInDays, getFileName, getUploadUrl } from "../../../../../utils/common";
 
 
 
@@ -23,12 +23,24 @@ export function MasterEditForm({
 }) {
 
   //Get all leave types from dashboard global state
-  const { allLeaveTypes } = useSelector(
+  //Get User Access for Edit and Create Save Button
+  const { allLeaveTypes, userAccess } = useSelector(
     (state) => ({
-      allLeaveTypes: state.dashboard.allLeaveTypes
+      allLeaveTypes: state.dashboard.allLeaveTypes,
+      userAccess: state?.auth?.userAccess["Leave_Application"],
     }),
     shallowEqual
   )
+
+  //Check Access for creation and Updation
+  const accessUser = useMemo(() => 
+    userAccess.find(
+      (item) => 
+        item.componentName === "CreateLeaveApplication" || 
+        item.componentName === "UpdateLeaveApplication"
+    ), 
+    [userAccess]
+  );
 
   //This ref is to get reference of file field. It will be used to clear field when reseting form
   const inputFile = useRef(null);
@@ -240,7 +252,7 @@ export function MasterEditForm({
                         {values.fileName && values.file == values.fileName &&
                           <>
                             <label><strong>Existing File:</strong></label>
-                            {<span>{getFileName(values.fileName)}</span>}
+                            {<a href={getUploadUrl(values.fileName)} target="_blank"><span>{getFileName(values.fileName)}</span></a>}
                           </>
                         }
                       </div>
@@ -273,7 +285,7 @@ export function MasterEditForm({
               {/* Cancel button End */}
 
               {/* Save button Start */}
-              {employeeId ? <button
+              {employeeId && accessUser ? <button
                 type="submit"
                 onClick={() => handleSubmit()}
                 className="btn btn-primary btn-elevate"

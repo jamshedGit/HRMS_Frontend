@@ -1,6 +1,7 @@
 import moment from "moment";
 import { DateTimeFormats } from "./constants";
 const { differenceInDays, format } = require('date-fns');
+export const UPLOAD_URL = process.env.REACT_APP_UPLOAD_URL;
 
 export const getDate = (
   date,
@@ -71,4 +72,18 @@ export const getFileName = (fileName) => {
  */
 export const formatDates = (date, dateFormat = null) => {
   return format(new Date(date), dateFormat || 'dd/MMM/yyyy')
+}
+
+/**
+ * 
+ * function to return Uploaded file Url
+ * 
+ * @param {String} fileName 
+ * @returns 
+ */
+export const getUploadUrl = (fileName) => {
+  if(fileName){
+    return UPLOAD_URL + fileName
+  }
+  return '';
 }

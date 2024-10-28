@@ -30,17 +30,11 @@ export function FormCard() {
   }, [FormUIContext])
 
   //Get data from states
-  const { userAccess, dashboard } = useSelector(
+  const { dashboard } = useSelector(
     (state) => ({
-      userAccess: state.auth.userAccess.Leave_Application,
       dashboard: state.dashboard
     }),
     shallowEqual
-  )
-
-  //Check if access to create Leave Application
-  const accessUser = userAccess.find(
-    (item) => item.componentName === "CreateLeaveApplication"
   )
 
   //Get data from server and set on state whenever employee Id is updated
