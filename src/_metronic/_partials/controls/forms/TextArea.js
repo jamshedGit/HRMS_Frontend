@@ -18,6 +18,7 @@ export function TextArea({
   field, // { name, value, onChange, onBlur }
   form: { touched, errors }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
   label,
+ 
   withFeedbackLabel = true,
   customFeedbackLabel,
   type = "text",
@@ -28,6 +29,7 @@ export function TextArea({
       {label && <label>Enter {label}</label>}
       <textarea
         type={type}
+        maxLength={250}
         className={getFieldCSSClasses(touched[field.name], errors[field.name])}
         {...field}
         {...props}

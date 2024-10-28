@@ -32,11 +32,11 @@ const userEditSchema_2 = Yup.object().shape(
     email: Yup.string()
       .email("Invalid email"),
     phone: Yup
-      .number()
-      .nullable()
-      .notRequired()
-      .min(1)
+      .string()
+      .matches(/^\d+$/, 'Only numeric characters are allowed')
+      .min(11)
       .max(15)
+      .required("*Required")
   }
 );
 
@@ -221,6 +221,8 @@ export function BranchEditForm({
                     {
                       <div className="col-12 col-md-4 mt-3">
                         <Field
+                        pattern="\d*"
+                        maxLength={15}
                           name="phone"
                           component={Input}
                           placeholder="Enter Phone No."

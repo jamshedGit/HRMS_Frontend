@@ -32,7 +32,10 @@ export function BanksUIProvider({ BanksUIEvents, children }) {
   }, []);
   const initUser = {
     relation: "",
-    relation_name: ""
+    relation_name: "",
+    contactNo: "",
+    employeeId: ""
+  
   
   };
 

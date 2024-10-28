@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Input, Select, TextArea } from "../../../../../../_metronic/_partials/controls";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,18 +25,16 @@ const formValidation = Yup.object().shape(
   {
     employeeId: Yup.string()
       .required("Required*"),
-    companyName: Yup.string()
+      incidentDetail: Yup.string()
       .required("Required*"),
-    positionHeld: Yup.string()
+      actionTaken: Yup.string()
       .required("Required*"),
-    countryId: Yup.string()
+      date: Yup.date()
       .required("Required*"),
-    cityId: Yup.string()
+      actionTakenBy: Yup.string()
       .required("Required*"),
-    startDate: Yup.string()
-      .required("Required*"),
-    endDate: Yup.string()
-      .required("Required*"),
+
+      
   },
 
 );
@@ -202,7 +200,7 @@ export function BankEditForm({
       <Formik
         enableReinitialize={true}
         initialValues={user}
-        //validationSchema={formValidation}
+        validationSchema={formValidation}
         onSubmit={(values) => {
           console.log("values", values);
           enableLoading();
@@ -304,6 +302,7 @@ export function BankEditForm({
                           disabled={isUserForRead}
                         // value = {values.dateOfJoining}
                         />
+                         <ErrorMessage style={{color:"red"}} name="date" component="div" />
                       </div>
                     }
 

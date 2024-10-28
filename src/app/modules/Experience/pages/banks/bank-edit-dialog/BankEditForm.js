@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Input, Select, TextArea } from "../../../../../../_metronic/_partials/controls";
 import { useDispatch, useSelector } from "react-redux";
@@ -37,6 +37,13 @@ const formValidation = Yup.object().shape(
       .required("Required*"),
     endDate: Yup.string()
       .required("Required*"),
+
+
+      endDate: Yup.date() .nullable()
+      //.required('Contract expiry date is required')
+      .when('startDate', (startDate, schema) => {
+        return startDate && schema.min(startDate, 'End date cannot be earlier than start date');
+      }),
   },
 
 );
@@ -243,6 +250,7 @@ export function BankEditForm({
                           touched={touched.Id}
                           options={dashboard.allEmployees}
                         />
+                          <ErrorMessage style={{color:"red"}} name="employeeId" component="div" />
                       </div>
                     }
 
@@ -361,6 +369,7 @@ export function BankEditForm({
                           disabled={isUserForRead}
 
                         />
+                         <ErrorMessage style={{color:"red"}} name="endDate" component="div" />
                       </div>
                     }
 

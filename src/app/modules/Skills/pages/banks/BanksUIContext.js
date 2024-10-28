@@ -33,9 +33,14 @@ export function BanksUIProvider({ BanksUIEvents, children }) {
   const initUser = {
     employeeId: "",
    
+    description: "",
+    skill: "",
+    ratingScale: "",
+    startDate: "",
+    endDate: "",
   };
 
-  console.log("acadenuc ui events",BanksUIEvents);
+  console.log("acadenuc ui events", BanksUIEvents);
 
   const value = {
     queryParams,

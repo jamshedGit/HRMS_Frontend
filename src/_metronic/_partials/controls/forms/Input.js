@@ -28,6 +28,7 @@ export function Input({
       {label && <label> {label}</label>}
       <input
         type={type}
+        maxLength={50}
         className={getFieldCSSClasses(touched[field.name], errors[field.name])}
         {...field}
         {...props}

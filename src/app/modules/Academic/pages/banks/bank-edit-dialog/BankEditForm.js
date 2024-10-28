@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Input, Select, TextArea } from "../../../../../../_metronic/_partials/controls";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,17 +27,30 @@ const formValidation = Yup.object().shape(
       .required("Required*"),
       degreeId: Yup.string()
       .required("Required*"),
-      countryId: Yup.string().required("Please select Country"),
+      countryId: Yup.string()
+      .required("Required*"),
       cityId: Yup.string()
       .required("Required*"),
-      startDate: Yup.string()
-      .required("Required*"),
-      endDate: Yup.string()
-      .required("Required*"),
+
       gpa: Yup.string()
+      .matches(/^\d+$/, 'Phone No must contain only numbers') // Regex to allow only digits
       .required("Required*"),
+
       statusId: Yup.string()
       .required("Required*"),
+
+      startDate: Yup.date()
+      .required("Required*"),
+
+      institutionId: Yup.string()
+      .required("Required*"),
+      
+
+      endDate: Yup.date()
+      .required('Required*')
+      .when('startDate', (startDate, schema) => {
+        return startDate && schema.min(startDate, 'End Date cannot be earlier than start date');
+      }),
 
   },
 
@@ -248,6 +261,7 @@ export function BankEditForm({
                         touched={touched.Id}
                         options={dashboard.allEmployees}
                       />
+                       <ErrorMessage style={{color:"red"}} name="employeeId" component="div" />
                     </div>
                     }
                     {<div className="col-12 col-md-4 mt-3">
@@ -290,6 +304,7 @@ export function BankEditForm({
                         touched={touched.institutionId}
                         options={dashboard.allInstitution}
                       />
+                      {/* <ErrorMessage style={{color:"red"}} name="institutionId" component="div" /> */}
                       </div>
                     }
                     {<div className="col-12 col-md-4 mt-3">
@@ -342,6 +357,8 @@ export function BankEditForm({
                             setFieldValue("startDate", date);
                             setStartDate(date);
                           }}
+                          showYearDropdown
+                          scrollableMonthYearDropdown
                           timeInputLabel="Time:"
                           dateFormat="dd/MM/yyyy"
                           showTimeInput
@@ -350,6 +367,7 @@ export function BankEditForm({
                           disabled={isUserForRead}
                         // value = {values.dateOfJoining}
                         />
+                        <ErrorMessage style={{color:"red"}} name="startDate" component="div" />
                       </div>
                     }
 
@@ -360,6 +378,8 @@ export function BankEditForm({
                           className="form-control"
                           placeholder="Enter End Date (dd/MM/yyyy)"
                           selected={endDate}
+                          showYearDropdown
+                          scrollableMonthYearDropdown
                           onChange={(date) => {
                             setFieldValue("endDate", date);
                             setEndDate(date);
@@ -372,6 +392,7 @@ export function BankEditForm({
                           disabled={isUserForRead}
 
                         />
+                          <ErrorMessage style={{color:"red"}} name="endDate" component="div" />
                       </div>
                     }
 
