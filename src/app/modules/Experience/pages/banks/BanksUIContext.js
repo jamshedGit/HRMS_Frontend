@@ -31,11 +31,18 @@ export function BanksUIProvider({ BanksUIEvents, children }) {
     });
   }, []);
   const initUser = {
+
     employeeId: "",
-   
+    companyName: "",
+    positionHeld: "",
+    countryId: "",
+    cityId: "",
+    startDate: "",
+    endDate: "",
+
   };
 
-  console.log("acadenuc ui events",BanksUIEvents);
+  console.log("acadenuc ui events", BanksUIEvents);
 
   const value = {
     queryParams,

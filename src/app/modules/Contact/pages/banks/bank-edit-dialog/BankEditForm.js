@@ -24,6 +24,12 @@ const contactValidationSchema = Yup.object().shape(
     contactNo: Yup.string().required("Required*"),
     employeeId: Yup.string().required("Required*"),
 
+    
+    contactNo: Yup.string()
+    .matches(/^\d+$/, 'Contact no must contain only numbers') // Regex to allow only digits
+    .required("Required*")
+
+
   },
 
 );

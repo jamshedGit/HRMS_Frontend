@@ -1,17 +1,18 @@
+
+
 import React from "react";
 import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { Input } from "../../../../../../_metronic/_partials/controls"; // Adjust import as needed
-import { useDispatch, useSelector } from "react-redux";
-
+import { useDispatch, useSelector, shallowEqual } from "react-redux";
 
 
 const salarypolicyEditSchema = Yup.object().shape({
   type: Yup.string().required("Required*"),
   value: Yup.number().when("type", {
     is: "Fixed Days",
-    then: Yup.number().required("Value is required for Ratio of Year"),
+    then: Yup.number().required("Value is required for Fixed Days"),
   }),
   multiplier: Yup.number().when("type", {
     is: "Ratio of Year",
@@ -32,18 +33,29 @@ export function SalarypolicyEditForm({
   enableLoading,
   loading,
 }) {
+
+//   // const [defMonth, setDefaultMonth] = useState(false);
+
+  const { userAccess, currentMonthList } = useSelector(
+    (state) => ({
+      userAccess: state.auth.userAccess.salary_policy,
+      currentMonthList: state.salary_policy.currentMonth,
+    }),
+    shallowEqual
+  );
+
   const options = [
     { value: "Ratio of Year", label: "Ratio of Year" },
     { value: "Month Days", label: "Month Days" },
     { value: "Fixed Days", label: "Fixed Days" },
   ];
 
+
   const Dropdown = ({ field, form, options, label, onChange }) => (
     <div className="form-group">
       <label>{label}</label>
       <select {...field} className="form-control" onChange={onChange}>
-      <option value="">{user?.type || 'Select Type'}</option>
- 
+        <option value="">{user?.type || "Select Type"}</option>
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
@@ -55,7 +67,46 @@ export function SalarypolicyEditForm({
       )}
     </div>
   );
-  console.log("initialValues user.Type", user);
+  
+  
+let formattedString;
+  if (currentMonthList?.length>0) {
+
+    const monthIndex = currentMonthList && currentMonthList[0]?.month - 1; // 9 for September
+    const year = currentMonthList && currentMonthList[0]?.year; // 2024
+  
+    // Format the month
+    const monthNames = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    const monthName = monthNames[monthIndex]; // "Sep"
+  
+    // Get the start and end dates
+    const startDate = new Date(currentMonthList && currentMonthList[0]?.startDate);
+    const endDate = new Date(currentMonthList && currentMonthList[0]?.endDate);
+  
+    const formattedStartDate = `${String(startDate.getUTCDate()).padStart(2, '0')}-${String(startDate.getUTCMonth() + 1).padStart(2, '0')}-${startDate.getUTCFullYear()}`;
+    const formattedEndDate = `${String(endDate.getUTCDate()).padStart(2, '0')}-${String(endDate.getUTCMonth() + 1).padStart(2, '0')}-${endDate.getUTCFullYear()}`;
+  
+    // Create the final formatted string
+    formattedString = `${monthName} ${year} (${formattedStartDate} - ${formattedEndDate})`;
+    console.log("formattedString month set",formattedString)
+  
+  }else{
+    formattedString="Payroll month not available"
+  }
+
   return (
     <Formik
       enableReinitialize={true}
@@ -87,11 +138,18 @@ export function SalarypolicyEditForm({
               <fieldset disabled={isUserForRead}>
                 <div className="form-group row">
                   <div className="col-12 col-md-4 mt-3">
+
+                  <label htmlFor="installment_deduction_basis_type">
+                     Type
+                    </label>
                     <Field
-                      name="Name"
-                      component={Dropdown}
-                      options={options}
-                      label="Type"
+                      name="type"
+                      // component={Dropdown}
+                      // options={options}
+                      as="select"
+                      className="form-control"
+                      disabled={isUserForRead}
+                      // label="Type"
                       onChange={(e) => {
                         setFieldValue("type", e.target.value);
                         // Clear fields based on selection
@@ -110,8 +168,18 @@ export function SalarypolicyEditForm({
                           setFieldValue("divisor", 0);
                           setFieldValue("value", 1);
                         }
-                      }}
-                    />
+                      }}  >
+                      <option value="">Select</option>
+                      {options.map((option) => (
+                        <option
+                          key={option.value}
+                          value={option.label}
+                        >
+                          {option.label}
+                        </option>
+                      ))}
+                       </Field>
+                  
                   </div>
 
                  
@@ -169,6 +237,25 @@ export function SalarypolicyEditForm({
                            </div>
                     )}
              
+                  {values.type === "Month Days" && formattedString && (
+                  <div className="col-6 mt-3">
+                      <Field
+                       name="month_days"
+                       component={Input}
+                         value={formattedString }
+                        placeholder={formattedString }
+                        label="  "
+                         type="number"
+                        disabled
+                        style={{
+                           border: "none",
+                          padding: "5px",
+                          backgroundColor: "transparent",
+                        }}
+                      />
+                    </div>
+                  )}
+             
                 
                     {/* <Field
                       name="value"
@@ -187,8 +274,8 @@ export function SalarypolicyEditForm({
   <Field
     name="value"
     component={Input}
-    placeholder="Value"
-    label="Value"
+    placeholder="Duration (Days)"
+    label="Duration (Days)"
     type="number"
   
   

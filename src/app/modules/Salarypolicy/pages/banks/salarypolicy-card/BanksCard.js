@@ -13,7 +13,7 @@ import { useSelector, shallowEqual } from "react-redux"
 
 export function BanksCard() {
   const banksUIContext = useBanksUIContext()
-  //console.log("banksUIContext", banksUIContext)
+ 
   const BanksUIProps = useMemo(() => {
     return {
       newBankButtonClick: banksUIContext.newBankButtonClick,
@@ -23,13 +23,13 @@ export function BanksCard() {
 
   const { userAccess } = useSelector(
     (state) => ({
-      userAccess: state.auth.userAccess.Bank,
+      userAccess: state.auth.userAccess.salary_policy,
     }),
     shallowEqual
   )
-  console.log("userAccess Temp",userAccess)
+
   const accessUser = userAccess.find(
-    (item) => item.componentName === "CreateBank"
+    (item) => item.componentName === "CreateSalarypolicy"
   )
 
   return (

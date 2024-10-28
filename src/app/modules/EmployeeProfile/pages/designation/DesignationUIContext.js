@@ -47,7 +47,18 @@ export function DesignationUIProvider({ DesignationUIEvents, children }) {
     locationId: '',
     countryId: '',
     cityId: '',
-    dateOfJoining: ''
+    dateOfJoining: '',
+    dateOfBirth: null,
+    nic_no:'',
+    passportNo: '',
+    email:'',
+    phone_home: '',
+    phone_official: '',
+    phone_cell: '',
+    dateOfConfirmationEnter: '',
+    dateOfConfirmationDue: '',
+    dateOfConfirmation: '',
+    dateOfContractExpiry: ''
   };
 
   console.log("employee profile ui events",DesignationUIEvents);

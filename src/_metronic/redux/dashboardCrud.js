@@ -165,3 +165,9 @@ export const getLastDeductionNo = async (bookingNo) => {
 export const getEmployeeProfileById = async (id) => {
   return await axios.get(`${USERS_URL}/profile/read-profile-view/${id}`);
 };
+
+export const getAllHumanResourceRole = async () => {
+  return await axios.get(`${USERS_URL}/settings/read-all-roles-master-data`, {
+  });
+};
+

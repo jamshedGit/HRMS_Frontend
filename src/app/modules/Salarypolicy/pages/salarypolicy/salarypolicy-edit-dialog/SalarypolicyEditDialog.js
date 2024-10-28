@@ -14,7 +14,7 @@ export function SalarypolicyEditDialog({ id, show, onHide, userForRead }) {
   const [loading, setLoading] = useState(false);
   const title = "SalarypolicyEditDialog";
   const SalarypolicyUIContext = useSalarypolicyUIContext();
-console.log("id for salary policy",id)
+
  
   const usersUIProps = useMemo(() => {
     return {
@@ -50,14 +50,13 @@ console.log("id for salary policy",id)
     
     actionsLoading: state.users.actionsLoading,
     user: state.users, // change for users to receipt
-    userForEdit: state.salarypolicy.userForEdit,
+    userForEdit: state.salary_policy.userForEdit,
     roles: state.users.roles,
-    centers: state.users.centers,
     userStatusTypes: state.users.userStatusTypes,
-    isuserForRead: state.salarypolicy.userForRead,
+    isuserForRead: state.salary_policy.userForRead,
   }));
 
-  console.log("for salary policy isuserForRead",userForEdit)
+
 
 
   useEffect(() => {
@@ -80,7 +79,7 @@ console.log("id for salary policy",id)
     } else {
 
      
-      console.log("salary policy getUserStatus", user);
+ 
 
       const salarypolicyUpdatedFields = {
         Id: user.Id,
