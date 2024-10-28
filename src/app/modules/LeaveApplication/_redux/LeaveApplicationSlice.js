@@ -50,7 +50,9 @@ export const LeaveApplicationSlice = createSlice({
         LeaveApplicationFetchedForEdit: (state, action) => {
             const entities = action?.payload?.userForEdit;
             if (entities) {
-                entities.fileName = entities.file;
+                entities.fileName = entities.file;  //This is to show file on UI in form seperately from the field
+                entities.from = entities.from ? new Date(entities.from) : ''; //This is to format date in form format. When we receive date in response it's in string type instead of Date type
+                entities.to = entities.to ? new Date(entities.to) : ''; //This is to format date in form format. When we receive date in response it's in string type instead of Date type
             }
             state.actionsLoading = false;
             state.userForEdit = entities;
