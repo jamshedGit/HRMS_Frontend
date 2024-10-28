@@ -151,6 +151,11 @@ export function BankEditForm({
                           component={Input}
                           maxLength={6}
                           placeholder="Enter Deduction Code"
+                          onChange={(e) => {
+                            setFieldValue("deductionCode", e.target.value || null);
+                            setDefDeductionCode(e.value);
+
+                          }}
                           value={values.deductionCode}
                           label={<span> Deduction Code<span style={{ color: 'red' }}>*</span></span>}
                           autoComplete="off"
