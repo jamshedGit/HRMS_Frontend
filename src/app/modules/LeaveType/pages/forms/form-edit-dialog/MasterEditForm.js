@@ -10,7 +10,7 @@ import { getClassName } from "../../../../../utils/common";
 const formValidation = Yup.object().shape({
   type: Yup.number().required('Please Select a Type'),
   name: Yup.string().required('Please Enter a Name'),
-  code: Yup.string().required('Please Enter a Code').matches(/^[A-Za-z]{1,3}$/, 'Code must contain only letters (A-Z) with a length of 1 to 3 characters'),
+  code: Yup.string().required('Please Enter a Code').matches(/^[A-Za-z]{1,3}$/, 'Code must contain only letters (A-Z)'),
 });
 
 export function MasterEditForm({
@@ -84,6 +84,7 @@ export function MasterEditForm({
                       <Field
                         name="code"
                         component={Input}
+                        maxLength="3"
                         placeholder=""
                         onChange={handleChange}
                         onBlur={handleBlur}

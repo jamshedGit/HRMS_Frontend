@@ -44,7 +44,7 @@ export function FormCard() {
                 className="btn btn-primary"
                 onClick={formUIProps.newFormButtonClick}
               >
-                + Add Leave Type
+                + Add Leave Configuration
               </button>
             )}
           </CardHeaderToolbar>
