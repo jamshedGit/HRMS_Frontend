@@ -45,7 +45,10 @@ const initialDashboardState = {
   allAccountList:[],
   allHumanResourceRoleList:[],
   allLoanTypeList: [],
-  allContractTypeList:[]
+  allContractTypeList:[],
+  allPayrolGroupList:[],
+  allCycleTypeList:[],
+  allReimbursementTypeList:[]
 };
 
 export const callTypes = {
@@ -190,6 +193,9 @@ export const dashboardSlice = createSlice({
       state.allContractTypeList = action.payload;
     },
 
+    AllPayrolGroupListFetch: (state, action) => {
+      state.allPayrolGroupList = action.payload;
+    },
     
 
   },

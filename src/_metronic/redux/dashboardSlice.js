@@ -40,6 +40,9 @@ const initialDashboardState = {
   allLeaveTypes:[],
   allLoanTypeList: [],
   allContractTypeList: [],
+  allPayrolGroupList:[],
+  allCycleTypeList:[],
+  allReimbursementTypeList:[]
 };
 
 export const callTypes = {
@@ -170,6 +173,12 @@ export const dashboardSlice = createSlice({
     AllContractTypeListFetch: (state, action) => {
       state.allContractTypeList = action.payload;
     },
+
+
+    AllPayrolGroupListFetch: (state, action) => {
+      state.allPayrolGroupList = action.payload;
+    },
+
 
 
   },
