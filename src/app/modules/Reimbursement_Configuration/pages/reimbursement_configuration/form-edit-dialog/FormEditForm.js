@@ -419,6 +419,7 @@ export function FormEditForm({
                                       >
                                         <input
                                           className="mr-2"
+                                          disabled={isUserForRead}
                                           type="checkbox"
                                           checked={values.policies[
                                             index
@@ -589,7 +590,7 @@ export function FormEditForm({
                                         value={x.value}
                                       >
                                         {" "}
-                                        {x.label}{" "}
+                                        {x.mergeLabel}{" "}
                                       </option>
                                     );
                                   })}
@@ -623,7 +624,7 @@ export function FormEditForm({
                                         value={x.value}
                                       >
                                         {" "}
-                                        {x.label}{" "}
+                                        {x.mergeLabel}{" "}
                                       </option>
                                     );
                                   })}
