@@ -75,25 +75,25 @@ const profileValidation = Yup.object().shape(
       .required("Required*"),
 
        dateOfConfirmation: Yup.date()
-       .required('Date of confirmation is required')
+       .required('*Required')
        .when('dateOfJoining', (dateOfJoining, schema) => {
          return dateOfJoining && schema.min(dateOfJoining, 'Date of confirmation cannot be earlier than the date of joining');
        }),
 
        dateOfConfirmationDue: Yup.date()
-       .required('Date confirmation due is required')
+       .required('*Required')
        .when('dateOfConfirmation', (dateOfConfirmation, schema) => {
          return dateOfConfirmation && schema.min(dateOfConfirmation, 'Date confirmation due cannot be earlier than date of confirmation');
        }),
 
        dateOfConfirmationEnter: Yup.date()
-      .required('Date confirmation extended is required')
+      .required('*Required')
       .when('dateOfConfirmationDue', (dateOfConfirmationDue, schema) => {
         return dateOfConfirmationDue && schema.min(dateOfConfirmationDue, 'Date confirmation extended cannot be earlier than date confirmation due');
       }),
 
       dateOfContractExpiry: Yup.date() .nullable()
-      //.required('Contract expiry date is required')
+      .required('*Required')
       .when('dateOfConfirmationEnter', (dateOfConfirmationEnter, schema) => {
         return dateOfConfirmationEnter && schema.min(dateOfConfirmationEnter, 'Contract expiry date cannot be earlier than date confirmation extended');
       }),
@@ -146,7 +146,7 @@ const profileValidation = Yup.object().shape(
 
 
       dateOfBirth: Yup.date()
-      .required('Date of birth is required')
+      .required('*Required')
       .max(currentDate, 'Date of birth cannot be in the future')
       .max(minDate, 'You must be at least 18 years old')
   },
@@ -945,7 +945,7 @@ useEffect(() => {
                       </div>
                       
                       <div className="col-12 col-md-4 mt-3">
-                        <label>Date Of Confirmation</label>
+                        <label>Date Of Confirmation<span style={{ color: 'red' }}>*</span></label>
                         <DatePicker
                           className="form-control"
                           placeholder="Enter Date Of Confirmation"
@@ -966,7 +966,7 @@ useEffect(() => {
                           <ErrorMessage style={{color:"red"}} name="dateOfConfirmation" component="div" />
                       </div>
                       <div className="col-12 col-md-4 mt-3">
-                        <label>Date Confirmation Due </label>
+                        <label>Date Confirmation Due<span style={{ color: 'red' }}>*</span> </label>
                         <DatePicker
                           className="form-control"
                           placeholder="Enter Date Of Confirmation Due"
@@ -985,7 +985,7 @@ useEffect(() => {
                         <ErrorMessage style={{color:"red"}} name="dateOfConfirmationDue" component="div" />
                       </div>
                       <div className="col-12 col-md-4 mt-3">
-                        <label>Date Confirmation Extended </label>
+                        <label>Date Confirmation Extended <span style={{ color: 'red' }}>*</span> </label>
                         <DatePicker
                           className="form-control"
                           placeholder="Enter Confirmation Enter Date"
@@ -1004,7 +1004,7 @@ useEffect(() => {
                          <ErrorMessage style={{color:"red"}} name="dateOfConfirmationEnter" component="div" />
                       </div>
                       <div className="col-12 col-md-4 mt-3">
-                        <label>Contract Expiry </label>
+                        <label>Contract Expiry <span style={{ color: 'red' }}>*</span></label>
                         <DatePicker
                           className="form-control"
                           placeholder="Enter Contract Expiry"
@@ -1070,7 +1070,7 @@ useEffect(() => {
                       <div className="col-12 col-md-4 mt-3">
                       <SearchSelect
                         name="reportTo"
-                        label={<span> Report To<span style={{ color: 'red' }}>*</span></span>}
+                        label={<span> Report To</span>}
                         isDisabled={isUserForRead && true}
                         // onBlur={() => {
                         //   handleBlur({ target: { name: "countryId" } });
@@ -1209,7 +1209,7 @@ useEffect(() => {
                       <div className="col-12 col-md-4 mt-3">
                         <SearchSelect
                           name="religionId"
-                          label="Religion*"
+                          label="Religion"
                           isDisabled={isUserForRead && true}
 
                           onBlur={() => {

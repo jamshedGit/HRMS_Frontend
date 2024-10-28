@@ -24,8 +24,10 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 const formValidation = Yup.object().shape(
   {
 
-    // deductionCode: Yup.string()
-    //   .required("Required*"),
+     deductionCode: Yup.string()
+     .length(6, 'Must be exactly 6 characters long')
+
+       .required("Required*"),
     deductionName: Yup.string()
       .required("Required*"),
     linkedAttendance: Yup.string()
@@ -35,6 +37,7 @@ const formValidation = Yup.object().shape(
     mappedDeduction: Yup.string()
       .required("Required*"),
     account: Yup.string()
+      .length(15, 'Must be exactly 15 characters long')
       .required("Required*"),
   },
 
@@ -80,32 +83,32 @@ export function BankEditForm({
 
   }, [user?.employeeId, dashboard.employeeId]);
 
-  useEffect(() => {
-    // Define an async function within useEffect
-    if (!user.Id) {
+  // useEffect(() => {
+  //   // Define an async function within useEffect
+  //   if (!user.Id) {
 
-      const fetchData = async () => {
-        try {
-          console.log("User:", user);
-          if (user.deductionCode === '') {
-            // const response = await dispatch(getLatestTableId("t_employee_deduction", "D-000"));
+  //     const fetchData = async () => {
+  //       try {
+  //         console.log("User:", user);
+  //         if (user.deductionCode === '') {
+  //           const response = await dispatch(getLatestTableId("t_employee_deduction", "D-000"));
 
-            // // Assuming response[0].Id is the correct way to access the ID
-            // console.log("Response:", response[0]?.Id);
-            // setDefDeductionCode(response[0]?.Id);
-          }
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      };
+  //           // Assuming response[0].Id is the correct way to access the ID
+  //           console.log("Response:", response[0]?.Id);
+  //           setDefDeductionCode(response[0]?.Id);
+  //         }
+  //       } catch (error) {
+  //         console.error("Error fetching data:", error);
+  //       }
+  //     };
 
-      fetchData(); // Call the async function
-    }
-    else{
+  //     fetchData(); // Call the async function
+  //   }
+  //   else{
 
-      setDefDeductionCode(user.deductionCode);
-    }
-  }, [dispatch, user.deductionCode]);
+  //     setDefDeductionCode(user.deductionCode);
+  //   }
+  // }, [dispatch, user.deductionCode]);
 
   return (
     <>
@@ -146,9 +149,9 @@ export function BankEditForm({
                         <Field
                           name="deductionCode"
                           component={Input}
-
+                          maxLength={6}
                           placeholder="Enter Deduction Code"
-                          value={defDeductionCode}
+                          value={values.deductionCode}
                           label={<span> Deduction Code<span style={{ color: 'red' }}>*</span></span>}
                           autoComplete="off"
                         />
@@ -167,6 +170,45 @@ export function BankEditForm({
                       </div>
                     }
 
+                  </div>
+               
+
+                  <div className="from-group row">
+                    {
+
+                      <div className="col-12 col-md-4 mt-3">
+                        <Select
+                          label={<span> Mapped Deduction<span style={{ color: 'red' }}>*</span></span>}
+                          name="mappedDeduction"
+                          value={values.mappedDeduction}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          style={{ display: "block" }}
+                        >
+                          <option value="-1" label="Select" />
+                          <option value="Income Tax" label="Income Tax" />
+                          <option value="Leaves" label="Leaves" />
+
+
+                        </Select>
+                        {errors.mappedDeduction && touched.mappedDeduction && (
+                          <div className="invalid-text">{errors.mappedDeduction}</div>
+                        )}
+                      </div>
+
+                    }
+                    {
+                      <div className="col-12 col-md-4 mt-3">
+                        <Field
+                          name="account"
+                          component={Input}
+                          placeholder="Ener Account"
+                          maxLength={15}
+                          autoComplete="off"
+                          label={<span> Account<span style={{ color: 'red' }}>*</span></span>}
+                        />
+                      </div>
+                    }
                   </div>
                   <div className="from-group row">
                     {
@@ -233,44 +275,6 @@ export function BankEditForm({
 
                     } */}
                   </div>
-
-                  <div className="from-group row">
-                    {
-
-                      <div className="col-12 col-md-4 mt-3">
-                        <Select
-                          label={<span> Mapped Deduction<span style={{ color: 'red' }}>*</span></span>}
-                          name="mappedDeduction"
-                          value={values.mappedDeduction}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          style={{ display: "block" }}
-                        >
-                          <option value="-1" label="Select" />
-                          <option value="Income Tax" label="Income Tax" />
-                          <option value="Leaves" label="Leaves" />
-
-
-                        </Select>
-                        {errors.mappedDeduction && touched.mappedDeduction && (
-                          <div className="invalid-text">{errors.mappedDeduction}</div>
-                        )}
-                      </div>
-
-                    }
-                    {
-                      <div className="col-12 col-md-4 mt-3">
-                        <Field
-                          name="account"
-                          component={Input}
-                          placeholder="Ener Account"
-                          autoComplete="off"
-                          label={<span> Account<span style={{ color: 'red' }}>*</span></span>}
-                        />
-                      </div>
-                    }
-                  </div>
-
 
                 </fieldset>
               </Form>
