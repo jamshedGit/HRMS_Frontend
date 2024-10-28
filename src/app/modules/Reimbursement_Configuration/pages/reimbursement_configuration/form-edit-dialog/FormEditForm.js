@@ -419,6 +419,7 @@ export function FormEditForm({
                                       >
                                         <input
                                           className="mr-2"
+                                          disabled={isUserForRead}
                                           type="checkbox"
                                           checked={values.policies[
                                             index
