@@ -305,9 +305,7 @@ export function FormTable(user
         openActiveFormDialog: FormUIProps.openActiveFormDialog,
         openReadFormDialog: FormUIProps.openReadFormDialog,
         isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,
-        isAccessForDelete: isAccessForDelete
-          ? isAccessForDelete.isAccess
-          : false,
+        isAccessForDelete: isAccessForDelete ? isAccessForDelete.isAccess : false,
       },
       classes: "text-right pr-0",
       headerClasses: "text-right pr-3",
@@ -475,7 +473,7 @@ export function FormTable(user
     }
   };
 
-  console.log("::defBankInfoList::", defBankInfoList)
+  console.log("::::::11", userAccess)
 
   return (
     <>

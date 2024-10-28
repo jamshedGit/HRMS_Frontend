@@ -11,9 +11,7 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.list }));
 
   return requestFromServer.getAll_Payroll_Policy(queryparm)
-
     .then((response) => {
-
       console.log("::fetchted::", response)
       dispatch(actions.Payroll_Policy_Fetched(response));
     })
