@@ -589,7 +589,7 @@ export function FormEditForm({
                                         value={x.value}
                                       >
                                         {" "}
-                                        {x.label}{" "}
+                                        {x.mergeLabel}{" "}
                                       </option>
                                     );
                                   })}
@@ -623,7 +623,7 @@ export function FormEditForm({
                                         value={x.value}
                                       >
                                         {" "}
-                                        {x.label}{" "}
+                                        {x.mergeLabel}{" "}
                                       </option>
                                     );
                                   })}
