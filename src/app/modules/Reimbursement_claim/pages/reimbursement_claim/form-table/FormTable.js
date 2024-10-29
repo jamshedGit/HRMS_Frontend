@@ -94,17 +94,17 @@ export function FormTable() {
  
  
  
-{
-  dataField: "Employee.firstName",
-  text: "Employee",
-  sort: false,
-  sortCaret: sortCaret,
-  headerSortingClasses,
-  style: {
-    minWidth: "10px",
-  },
+// {
+//   dataField: "Employee.firstName",
+//   text: "Employee",
+//   sort: false,
+//   sortCaret: sortCaret,
+//   headerSortingClasses,
+//   style: {
+//     minWidth: "10px",
+//   },
  
-},
+// },
  
  
 
@@ -138,11 +138,11 @@ export function FormTable() {
       isDummyField: true,
       formatter: ActionsColumnFormatter,
       formatExtraData: {
-        // openEditFormDialog: formUIProps.openEditFormDialog,
+        openEditFormDialog: formUIProps.openEditFormDialog,
         openDeleteFormDialog: formUIProps.openDeleteFormDialog,
         openActiveFormDialog: formUIProps.openActiveFormDialog,
-        // openReadFormDialog: formUIProps.openReadFormDialog,
-        // isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,
+        openReadFormDialog: formUIProps.openReadFormDialog,
+        isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,
         isAccessForDelete: isAccessForDelete
           ? isAccessForDelete.isAccess
           : false,
