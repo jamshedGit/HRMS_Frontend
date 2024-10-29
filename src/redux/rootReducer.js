@@ -57,9 +57,9 @@ import { OnetimeAllowanceSlice } from "../app/modules/Onetime_Allowance/_redux/O
 import { LoanTypeSlice } from "../app/modules/LoanType/_redux/LoanTypeSlice";
 import { leaveManagementConfigurationSlice } from "../app/modules/leaveManagementConfiguration/_redux/leaveManagementConfigurationSlice";
 import { payroll_policySlice } from "../app/modules/Payroll_Process_Policy/_redux/payroll_policySlice";
+import { LeaveApplicationSlice } from "../app/modules/LeaveApplication/_redux/LeaveApplicationSlice";
 import { taxSetupSlice } from "../app/modules/Tax_Setup/_redux/taxSetupSlice";
 import { loan_manag_confSlice } from "../app/modules/Loan_manag_conf/_redux/redux-Slice"
-
 import {gratuity_configurationSlice} from "../app/modules/Gratuity_Configuration/_redux/redux-Slice"
 import {accrue_gratuity_configurationSlice} from "../app/modules/Accrue_Gratuity_Configuration/_redux/redux-Slice"
 import {reimbursement_configurationSlice} from "../app/modules/Reimbursement_Configuration/_redux/redux-Slice"
@@ -117,6 +117,7 @@ export const rootReducer = combineReducers({
   loan_type: LoanTypeSlice.reducer,
   leave_management_configuration: leaveManagementConfigurationSlice.reducer,
   payroll_process_policy: payroll_policySlice.reducer,
+  leave_application: LeaveApplicationSlice.reducer,
   tax_slab:tax_slabSlice.reducer,
   loan_management_configuration:loan_manag_confSlice.reducer,
   gratuity_configuration:gratuity_configurationSlice.reducer,

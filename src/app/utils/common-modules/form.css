@@ -2,3 +2,8 @@
     margin-top: 6%;
     margin-left: 10%;
 }
+
+.accordion-header-btn > button {
+    width: -webkit-fill-available;
+    background-color: #009241 !important;
+}
