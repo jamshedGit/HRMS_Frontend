@@ -1,0 +1,101 @@
+import React, { useEffect, useMemo } from "react"
+import {
+  Card,
+  CardBody,
+} from "../../../../../../_metronic/_partials/controls"
+import { LeaveApplicationTable } from "../form-table/LeaveApplicationTable"
+import { useFormUIContext } from "../FormUIContext"
+import { useSelector, shallowEqual, useDispatch } from "react-redux"
+import EmployeeProfile from "../../../../../utils/common-modules/EmployeeProfile"
+import { EmployeeSelect } from "../form-edit-dialog/EmployeeSelect"
+import { fetchAllActiveEmployees, fetchAllLeaveType } from "../../../../../../_metronic/redux/dashboardActions"
+import * as actions from "../../../_redux/formActions";
+import { FormEditDialog } from "../form-edit-dialog/FormEditDialog"
+import { LeaveBalanceTable } from "../form-table/LeaveBalanceTable"
+import { PendingLeaveTable } from "../form-table/PendingLeaveTable"
+import '../../../../../utils/common-modules/form.css'
+
+export function FormCard() {
+  const FormUIContext = useFormUIContext()
+  const dispatch = useDispatch();
+
+  //Get EmployeeId functions and values from Context in FormUIContext.js file
+  const formUIProps = useMemo(() => {
+    return {
+      employeeId: FormUIContext.employeeId,
+      setemployeeId: FormUIContext.setemployeeId,
+      queryParamsLeaveApp: FormUIContext.queryParamsLeaveApp,
+      id: FormUIContext.id,
+    }
+  }, [FormUIContext])
+
+  //Get data from states
+  const { dashboard } = useSelector(
+    (state) => ({
+      dashboard: state.dashboard
+    }),
+    shallowEqual
+  )
+
+  //Get data from server and set on state whenever employee Id is updated
+  useEffect(() => {
+    dispatch(actions.fetchLeaveApplication(formUIProps.queryParamsLeaveApp, formUIProps.employeeId))
+
+    if (!dashboard.allEmployees || !dashboard.allEmployees.length)
+      dispatch(fetchAllActiveEmployees());
+    if (!dashboard?.allLeaveTypes || !dashboard?.allLeaveTypes?.length)
+      dispatch(fetchAllLeaveType("allLeaveTypes"));
+  }, [dispatch, formUIProps.employeeId, formUIProps.queryParamsLeaveApp])
+
+
+  return (
+    < Card >
+      {/* Card Starts */}
+
+      <CardBody>
+
+        {/* EmployeeSelect Starts */}
+        <EmployeeSelect setemployeeId={formUIProps.setemployeeId} />
+        {/* EmployeeSelect Ends */}
+
+        <br />
+        <hr />
+
+        {/* EmployeeProfile Starts */}
+        <EmployeeProfile employeeId={formUIProps.employeeId} />
+        {/* EmployeeProfile Ends */}
+
+        <br />
+        <hr />
+
+        {/* FormEditDialog Starts */}
+        <FormEditDialog id={formUIProps.id} employeeId={formUIProps.employeeId} />
+        {/* FormEditDialog Ends */}
+
+        <br />
+        <hr />
+
+        {/* LeaveApplicationTable Starts */}
+        <LeaveApplicationTable />
+        {/* LeaveApplicationTable Ends */}
+
+        <br />
+        <hr />
+
+        {/* PendingLeaveTable Starts */}
+        <PendingLeaveTable />
+        {/* PendingLeaveTable Ends */}
+
+        <br />
+        <hr />
+
+        {/* LeaveBalanceTable Starts */}
+        <LeaveBalanceTable />
+        {/* LeaveBalanceTable Ends */}
+
+      </CardBody>
+
+      {/* Card Ends */}
+    </Card >
+  )
+}

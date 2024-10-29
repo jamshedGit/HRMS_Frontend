@@ -17,7 +17,7 @@ export function DesignationEditDialogHeader({ id }) {
 
   useEffect(() => {
     console.log("User Read Dialog Header")
-    let _title = id ? "" : "New User"
+    let _title = id ? "" : "Add Employee Profile"
     if (userForEdit && id) {
       _title = `Edit user '${userForEdit.firstName} ${userForEdit.lastName}'`
     }
