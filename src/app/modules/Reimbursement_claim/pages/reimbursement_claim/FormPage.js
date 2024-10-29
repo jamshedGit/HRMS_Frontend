@@ -17,65 +17,33 @@ export function FormPage({ history }) {
 
   const dispatch = useDispatch();
   const FormUIEvents = {
-    newFormButtonClick: () => {
-      // dispatch(fetchAllCountry());
+    // newFormButtonClick: () => {
+    //   // dispatch(fetchAllCountry());
 
-      history.push("/reimbursement_claim/read-all-reimbursement-claim/new");
-    },
-    openEditFormDialog: (id) => {
-      // dispatch(fetchAllCountry());
+    //   history.push("/reimbursement_claim/read-all-reimbursement-claim/new");
+    // },
+    // openEditFormDialog: (id) => {
+    //   // dispatch(fetchAllCountry());
 
-      history.push(`/reimbursement_claim/read-all-reimbursement-claim/${id}/edit`);
-    },
+    //   history.push(`/reimbursement_claim/read-all-reimbursement-claim/${id}/edit`);
+    // },
     openDeleteFormDialog: (id, status) => {
       history.push(`/reimbursement_claim/read-all-reimbursement-claim/${id}/${status}/delete`);
     },
-    openActiveFormDialog: (id) => {
-      history.push(`/reimbursement_claim/read-all-reimbursement-claim/${id}/active`);
-    },
-    openReadFormDialog: (id, isUserRead) => {
+    // openActiveFormDialog: (id) => {
+    //   history.push(`/reimbursement_claim/read-all-reimbursement-claim/${id}/active`);
+    // },
+    // openReadFormDialog: (id, isUserRead) => {
       
       
-      history.push(`/reimbursement_claim/read-all-reimbursement-claim/${id}/read`);
-    },
+    //   history.push(`/reimbursement_claim/read-all-reimbursement-claim/${id}/read`);
+    // },
   };
   return (
 
     
     <FormUIProvider FormUIEvents={FormUIEvents}>
-      <Route exact path="/reimbursement_claim/read-all-reimbursement-claim/new">
-        {({ history, match }) => (
-          <FormEditDialog
-            show={match != null}
-            onHide={() => {
-              history.push("/reimbursement_claim/read-all-reimbursement-claim");
-            }}
-          />
-        )}
-      </Route>
-      <Route path="/reimbursement_claim/read-all-reimbursement-claim/:id/edit">
-        {({ history, match }) => (
-          <FormEditDialog
-            show={match != null}
-            id={match && match.params.id}
-            onHide={() => {
-              history.push("/reimbursement_claim/read-all-reimbursement-claim");
-            }}
-          />
-        )}
-      </Route>
-      <Route path="/reimbursement_claim/read-all-reimbursement-claim/:id/read">
-        {({ history, match }) => (
-          <FormEditDialog
-            show={match != null}
-            id={match && match.params.id}
-            userForRead={true}
-            onHide={() => {
-              history.push("/reimbursement_claim/read-all-reimbursement-claim");
-            }}
-          />
-        )}
-      </Route>
+     
       <Route path="/reimbursement_claim/read-all-reimbursement-claim/:id/:status/delete">
         {({ history, match }) => (
           <FormDeleteDialog

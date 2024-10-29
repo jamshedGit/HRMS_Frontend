@@ -138,11 +138,11 @@ export function FormTable() {
       isDummyField: true,
       formatter: ActionsColumnFormatter,
       formatExtraData: {
-        openEditFormDialog: formUIProps.openEditFormDialog,
+        // openEditFormDialog: formUIProps.openEditFormDialog,
         openDeleteFormDialog: formUIProps.openDeleteFormDialog,
         openActiveFormDialog: formUIProps.openActiveFormDialog,
-        openReadFormDialog: formUIProps.openReadFormDialog,
-        isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,
+        // openReadFormDialog: formUIProps.openReadFormDialog,
+        // isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,
         isAccessForDelete: isAccessForDelete
           ? isAccessForDelete.isAccess
           : false,
@@ -175,7 +175,7 @@ export function FormTable() {
         <Card.Header className="d-flex justify-content-center">
         <div className='accordion-header-btn w-100  d-flex justify-content-center'>
           <Accordion.Toggle as={Button} eventKey="0" >
-            Employee Detail
+            Reimbursement Claim Details
             <KeyboardArrowDown />
           </Accordion.Toggle>
           </div>

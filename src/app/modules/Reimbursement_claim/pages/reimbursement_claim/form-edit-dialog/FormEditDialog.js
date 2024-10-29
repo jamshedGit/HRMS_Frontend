@@ -10,7 +10,9 @@ import * as actions from "../../../_redux/redux-Actions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useFormUIContext } from "../FormUIContext";
- 
+import { Accordion, Button, Card } from "react-bootstrap";
+import { KeyboardArrowDown } from "@material-ui/icons";
+
  
 export function FormEditDialog({ id, show, onHide, userForRead }) {
   const [action, setaction] = useState(false);
@@ -74,7 +76,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
  
   const saveForm = async (user) => {
  
-
+    console.log("save user",user)
 
 
     //    if (user.policies=="" ) {
@@ -94,7 +96,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
  
     if (!user.Id) {
  
- 
+ console.log("save user",user)
       const finalObject = { user }
       dispatch(actions.createSalarypolicy(user, disbaleLoading, onHide));
      
@@ -107,15 +109,15 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
  
       const formUpdatedFields = {
         Id: user.Id,
-        subsidiaryId: user.subsidiaryId,
-        payroll_groupId: user.payroll_groupId,
-        cycle_typeId: user.cycle_typeId,
-        policies: user.policies,
-        accounts: user.accounts
+        reimbursement_typeId: user.reimbursement_typeId,
+        employeeId: user.employeeId,
+        details: user.details,
+        date: user.date,
+        amount: user.amount,
+        // reimbursement_configurationId: user.reimbursement_configurationId,
 
       };
 
-  
  
      await dispatch(actions.updateSalarypolicy(formUpdatedFields, disbaleLoading, onHide));
      await dispatch(actions.fetchSalarypolicies(usersUIProps.queryParams));
@@ -123,12 +125,24 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   };
  
   return (
-    <Modal
+    <Accordion defaultActiveKey="">
+    <Card
       size="xl"
       show={show}
       onHide={onHide}
       aria-labelledby="example-modal-sizes-title-lg"
     >
+ <Card.Header className="d-flex justify-content-center">
+        <div className='accordion-header-btn w-100  d-flex justify-content-center'>
+          <Accordion.Toggle as={Button} eventKey="0" >
+            Enter Reimbursement Detail
+            <KeyboardArrowDown />
+          </Accordion.Toggle>
+          </div>
+        </Card.Header>
+        <Accordion.Collapse eventKey="0">
+        <Card.Body>
+
       <FormEditDialogHeader id={id} isUserForRead={userForRead} />
       <FormEditForm
         saveForm={saveForm}
@@ -151,7 +165,10 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         draggable
         pauseOnHover
       />
-    </Modal>
+        </Card.Body>
+        </Accordion.Collapse>
+    </Card>
+    </Accordion>
   );
 }
  

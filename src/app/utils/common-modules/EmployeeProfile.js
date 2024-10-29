@@ -7,6 +7,10 @@ import { formatDates } from '../common';
 
 //Field name and keys in order for view
 const VIEW_FIELDS = [
+  // {
+  //   name: 'Image ',
+  //   value: 'companyName'
+  // },
   {
     name: 'Company ',
     value: 'companyName'
@@ -85,7 +89,7 @@ const VIEW_FIELDS = [
 
 const EmployeeProfile = ({ employeeId }) => {
   const [data, setdata] = useState({})
-
+console.log("employeeId view detail",employeeId)
   //Use Effect to execute whenever the employee Id is updated. This will fetch employee profile data from view created in Database
   useEffect(() => {
     if (employeeId) {

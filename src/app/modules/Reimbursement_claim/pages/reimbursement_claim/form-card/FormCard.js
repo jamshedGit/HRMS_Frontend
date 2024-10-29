@@ -1,5 +1,8 @@
-import React, { useMemo } from "react"
-
+import React, { useMemo ,useEffect} from "react"
+import { EmployeeSelect } from "../form-edit-dialog/EmployeeSelect"
+import EmployeeProfile from "../../../../../utils/common-modules/EmployeeProfile"
+import { FormEditDialog } from "../form-edit-dialog/FormEditDialog"
+import { fetchAllActiveEmployees } from "../../../../../../_metronic/redux/dashboardActions"
 import {
   Card,
   CardBody,
@@ -9,17 +12,25 @@ import {
 import { FormTable } from "../form-table/FormTable"
 import { useFormUIContext } from "../FormUIContext"
 import { FormFIlter } from "../form-filter/FormFIlter"
-import { useSelector, shallowEqual } from "react-redux"
+import { useSelector, shallowEqual, useDispatch } from "react-redux"
 
 export function FormCard() {
   const FormUIContext = useFormUIContext()
- 
+  const dispatch = useDispatch();
   const FormUIProps  = useMemo(() => {
     return {
-      newFormButtonClick: FormUIContext.newFormButtonClick,
-      openEditFormDialog: FormUIContext.openEditFormDialog,
+      employeeId: FormUIContext.employeeId,
+      setemployeeId: FormUIContext.setemployeeId,
+      queryParamsLeaveApp: FormUIContext.queryParamsLeaveApp,
+      id: FormUIContext.id,
     }
   }, [FormUIContext])
+
+  // useEffect(()=>{
+
+  // },[FormUIProps])
+
+
 
   const { userAccess } = useSelector(
    
@@ -43,35 +54,48 @@ export function FormCard() {
     shallowEqual
   );
 
-  // const { currentState } = useSelector();
-  
-  const {entities } = currentState;
+  const { dashboard } = useSelector(
+    (state) => ({
+      dashboard: state.dashboard
+    }),
+    shallowEqual
+  )
 
 
+  useEffect(() => {
+
+
+    if (!dashboard.allEmployees || !dashboard.allEmployees.length)
+      dispatch(fetchAllActiveEmployees());
+
+  }, [dispatch, FormUIProps.employeeId])
+  console.log("employeeId employeeId",FormUIProps.employeeId)
   return (
     <>
 
       <Card>
-        <CardHeader title="">
-          {/* <FormFIlter /> */}
-          <CardHeaderToolbar>
-          {/* {accessUser &&  entities?.length==0 ? ( */}
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={FormUIProps .newFormButtonClick}
-              >
-                + Add Reimbursement Configuration
-              </button>
-            {/* ) : (
-              <></>
-            )} */}
-   
-          </CardHeaderToolbar>
-        </CardHeader>
+      
 
         <CardBody>
+        <EmployeeSelect setemployeeId={FormUIProps.setemployeeId} />
+        <br />
+        <hr />
+        
+        {/* {FormUIProps.employeeId && (
+  <EmployeeProfile employeeId={FormUIProps.employeeId} />
+)} */}
 
+<EmployeeProfile employeeId={FormUIProps.employeeId} />
+        {/* EmployeeProfile Ends */}
+
+        <br />
+        <hr />
+   {/* FormEditDialog Starts */}
+   <FormEditDialog  employeeId={FormUIProps.employeeId} />
+        {/* FormEditDialog Ends */}
+
+        <br />
+        <hr />
           <FormTable />
           
         </CardBody>

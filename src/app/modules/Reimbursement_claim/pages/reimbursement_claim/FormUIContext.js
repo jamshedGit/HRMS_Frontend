@@ -9,13 +9,10 @@ export function useFormUIContext() {
 }
 
 export const ReceiptUIConsumer = FormUIContext.Consumer;
-// const initialFilter = {
-//   sortBy: "name",
-//   limit: 10,
-//   page: 1,
-// }
+
 export function FormUIProvider({ FormUIEvents, children }) {
   const [queryParams, setQueryParamsBase] = useState(initialFilter);
+  const [employeeId, setemployeeId] = useState('');
   const [ids, setIds] = useState([]);
   const setQueryParams = useCallback((nextQueryParams) => {
     setQueryParamsBase((prevQueryParams) => {
@@ -35,11 +32,11 @@ export function FormUIProvider({ FormUIEvents, children }) {
   const initUser={
     Id: "",
     reimbursement_typeId: "",
-    employeeId:"",
+    employeeId:employeeId,
     details: "",
  date:"",
     amount:"",
-    reimbursement_configurationId:""
+    // reimbursement_configurationId:""
 
   }
 
@@ -52,6 +49,8 @@ export function FormUIProvider({ FormUIEvents, children }) {
     ids,
     setIds,
     initUser,
+    setemployeeId,
+    employeeId,
     newFormButtonClick: FormUIEvents.newFormButtonClick,
     openEditFormDialog: FormUIEvents.openEditFormDialog,
     openDeleteFormDialog: FormUIEvents.openDeleteFormDialog,
