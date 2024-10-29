@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import { Modal } from "react-bootstrap";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { Input, Select, TextArea } from "../../../../../../_metronic/_partials/controls";
+import { Input, MaskInput, Select, TextArea } from "../../../../../../_metronic/_partials/controls";
 import { useDispatch, useSelector } from "react-redux";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import {
@@ -20,6 +20,7 @@ import { red } from "@material-ui/core/colors";
 import { toAbsoluteUrl } from "../../../../../../_metronic/_helpers";
 import { Link } from "@material-ui/core";
 import { useDesignationUIContext } from "../DesignationUIContext";
+import MaskedInput from "react-text-mask";
 
 export const USERS_URL = process.env.REACT_APP_API_URL;
 const currentDate = new Date();
@@ -42,70 +43,82 @@ const profileValidation = Yup.object().shape(
       .required("Required*"),
     employeeCode: Yup.string()
       .required("Required*"),
-      title: Yup.string()
+    title: Yup.string()
       .required("Required*"),
-      subsidiaryId: Yup.string()
+    subsidiaryId: Yup.string()
       .required("Required*"),
-      gradeId: Yup.string()
+    gradeId: Yup.string()
       .required("Required*"),
-      designationId: Yup.string()
+    designationId: Yup.string()
       .required("Required*"),
-      departmentId: Yup.string()
+    departmentId: Yup.string()
       .required("Required*"),
-      teamId: Yup.string()
+    teamId: Yup.string()
       .required("Required*"),
-      payrollGroupId: Yup.string()
+    payrollGroupId: Yup.string()
       .required("Required*"),
-      regionId: Yup.string()
+    regionId: Yup.string()
       .required("Required*"),
-      employeeTypeId: Yup.string()
+    maritalStatus: Yup.string()
+      .nullable() // Allows null values
       .required("Required*"),
-
-      locationId: Yup.string()
+    religionId: Yup.string()
       .required("Required*"),
-
-      countryId: Yup.string()
-      .required("Required*"),
-
-      cityId: Yup.string()
+    nationality: Yup.string()
       .required("Required*"),
 
-      dateOfJoining: Yup.date()
+    gender: Yup.string()
+      .required("Required*"),
+
+    employeeTypeId: Yup.string()
+      .required("Required*"),
+
+    locationId: Yup.string()
+      .required("Required*"),
+
+    countryId: Yup.string()
+      .required("Required*"),
+
+    cityId: Yup.string()
+      .required("Required*"),
+
+    dateOfJoining: Yup.date()
       .max(currentDate, 'Date of joining cannot be in the future')
       .required("Required*"),
 
-       dateOfConfirmation: Yup.date()
-       .required('*Required')
-       .when('dateOfJoining', (dateOfJoining, schema) => {
-         return dateOfJoining && schema.min(dateOfJoining, 'Date of confirmation cannot be earlier than the date of joining');
-       }),
+    dateOfConfirmation: Yup.date()
+      .required('*Required')
+      .when('dateOfJoining', (dateOfJoining, schema) => {
+        return dateOfJoining && schema.min(dateOfJoining, 'Date of confirmation cannot be earlier than the date of joining');
+      }),
 
-       dateOfConfirmationDue: Yup.date()
-       .required('*Required')
-       .when('dateOfConfirmation', (dateOfConfirmation, schema) => {
-         return dateOfConfirmation && schema.min(dateOfConfirmation, 'Date confirmation due cannot be earlier than date of confirmation');
-       }),
+    dateOfConfirmationDue: Yup.date()
+      .required('*Required')
+      .when('dateOfConfirmation', (dateOfConfirmation, schema) => {
+        return dateOfConfirmation && schema.min(dateOfConfirmation, 'Date confirmation due cannot be earlier than date of confirmation');
+      }),
 
-       dateOfConfirmationEnter: Yup.date()
+    dateOfConfirmationEnter: Yup.date()
       .required('*Required')
       .when('dateOfConfirmationDue', (dateOfConfirmationDue, schema) => {
         return dateOfConfirmationDue && schema.min(dateOfConfirmationDue, 'Date confirmation extended cannot be earlier than date confirmation due');
       }),
 
-      dateOfContractExpiry: Yup.date() .nullable()
+    dateOfContractExpiry: Yup.date().nullable()
       .required('*Required')
       .when('dateOfConfirmationEnter', (dateOfConfirmationEnter, schema) => {
         return dateOfConfirmationEnter && schema.min(dateOfConfirmationEnter, 'Contract expiry date cannot be earlier than date confirmation extended');
       }),
 
-      // dateOfRetirement: Yup.date() .nullable()
-      // //.required('Contract expiry date is required')
-      // .when('dateOfBirth', (dateOfBirth, schema) => {
-      //   return dateOfBirth && schema.min(dateOfBirth, 'Contract expiry date cannot be earlier than date confirmation extended');
-      // }),
+    // dateOfRetirement: Yup.date() .nullable()
+    // //.required('Contract expiry date is required')
+    // .when('dateOfBirth', (dateOfBirth, schema) => {
+    //   return dateOfBirth && schema.min(dateOfBirth, 'Contract expiry date cannot be earlier than date confirmation extended');
+    // }),
 
-      dateOfRetirement: Yup.date()
-      .nullable() // Make this field optional
+    dateOfRetirement: Yup.date()
+      .nullable()
+      .typeError('Invalid date format')
       .when('dateOfBirth', {
         is: (dateOfBirth) => dateOfBirth != null, // Check if dateOfBirth is provided
         then: Yup.date().min(
@@ -114,38 +127,44 @@ const profileValidation = Yup.object().shape(
         ),
       }),
 
-      nic_no: Yup.string()
-      .matches(/^\d{13}$/, 'ID Card No must be exactly 13 digits and contain only numbers') // Regex to match exactly 14 digits
-      .required('Required'), // Make it required if necessary
+    nic_no: Yup.string()
+      .matches(/^\d{5}-\d{7}-\d{1}$/, 'ID Card No must be in the format 12345-6789012-3')
+      .required('Required'),
+    // passportNo: Yup.string()
+    // .matches(/^\d$/, 'ID Card No must be exactly 13 digits and contain only numbers') // Regex to match exactly 14 digits
+    // .required('ID Card No is required'), // Make it required if necessary
 
-      // passportNo: Yup.string()
-      // .matches(/^\d$/, 'ID Card No must be exactly 13 digits and contain only numbers') // Regex to match exactly 14 digits
-      // .required('ID Card No is required'), // Make it required if necessary
-
-      email_official: Yup.string()
+    email_official: Yup.string()
+      .nullable() // Allows null values
       .email('Invalid email address') // Validates email format
       .notRequired(), // Optional: make it required
 
-      email_personal: Yup.string()
+    email_personal: Yup.string()
+      .nullable() // Allows null values
       .email('Invalid email address') // Validates email format
       .notRequired(), // Optional: make it required
 
-     
-
-      phone_cell: Yup.string()
-      .matches(/^\d+$/, 'Phone No must contain only numbers') // Regex to allow only digits
-      .notRequired(), // Optional: make it required
-
-      phone_home: Yup.string()
-      .matches(/^\d+$/, 'Phone Home No must contain only numbers') // Regex to allow only digits
-      .notRequired(), // Optional: make it required
-
-      phone_official: Yup.string()
-      .matches(/^\d+$/, 'Phone Official No must contain only numbers') // Regex to allow only digits
-      .notRequired(), // Optional: make it required
 
 
-      dateOfBirth: Yup.date()
+    phone_cell: Yup.string()
+      .nullable() // Allows null values
+      .matches(/^[0-9]*$/, 'Phone no must contain only digits') // Optional regex for digits
+      .notRequired(), // Make it optional if you want
+
+    phone_home: Yup.string()
+      .nullable() // Allows null values
+      .matches(/^[0-9]*$/, 'Phone home must contain only digits') // Optional regex for digits
+      .notRequired(), // Make it optional if you want
+
+    phone_official: Yup.string()
+      .nullable() // Allows null values
+      .matches(/^[0-9]*$/, 'Phone official must contain only digits') // Optional regex for digits
+      .notRequired(), // Make it optional if you want
+
+
+    dateOfBirth: Yup.date()
+      .nullable()
+      .typeError('Invalid date format')
       .required('*Required')
       .max(currentDate, 'Date of birth cannot be in the future')
       .max(minDate, 'You must be at least 18 years old')
@@ -193,6 +212,7 @@ export function DesignationEditForm({
   const [defchildReligionMenus = null, setDefaultChildReligionMenus] = useState(null);
   const [defchildEmptypeMenus = null, setDefaultChildEmpTypeMenus] = useState(null);
   const [defchildLocationMenus = null, setDefaultChildLocationMenus] = useState(null);
+  const [defMaritalStatus = null, setDefaultMaritalStatus] = useState(null);
 
   const [defCountry, setDefaultCountry] = useState({});
   const [defCity, setDefaultCity] = useState({});
@@ -214,7 +234,7 @@ export function DesignationEditForm({
   const [defSubsidiary = null, setDefualtSubsidiaryList] = useState(null);
   //==================== END
   const [defEmpDesingaton = null, setDefualtEmpDesignation] = useState(null);
-  
+
   const [mylist, setMyList] = useState('');
 
   const [showChildModal, setShowChildModal] = useState(false);
@@ -222,10 +242,11 @@ export function DesignationEditForm({
   const handleChildModalShow = () => setShowChildModal(true);
   const [defEmployeeReportTo = null, setEmployeeReportToDefault] = useState(null);
   const [defEmployeeGrade = null, setDefualtEmployeeGrade] = useState(null);
+  const [defContactList = null, setDefaultContactList] = useState([]);
   // Department DropDown Load when pageLoad
   useEffect(() => {
-    console.log("ball", id)
-    if (!user.deptId) {
+    console.log("ball", user)
+    if (!user.Id) {
       dispatch(fetchAllDept(1));
       dispatch(fetchAllFormsMenu(143, "allEmployeeGradeList")); // For All Grade Codes
       dispatch(fetchAllFormsMenu(127, "allChildMenus")); // For Payroll Group
@@ -238,7 +259,9 @@ export function DesignationEditForm({
       dispatch(fetchAllActiveEmployees());
       dispatch(fetchAllFormsMenu(158, "allDesignations")); // For All Designations
       dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsisidaries
+      dispatch(fetchAllFormsMenu(190, "allMaritalStatus")); // For All Subsisidaries, "allMaritalStatus")); // For All Marital Status
       // dispatch(fetchAllFormsMenu(87));
+      dispatch(fetchAllFormsMenu(125, "allRelationCodeList"));
     }
   }, [dispatch]);
 
@@ -246,7 +269,7 @@ export function DesignationEditForm({
   useEffect(() => {
 
     const subsidiaryId = defSubsidiary?.value ? defSubsidiary.value : user.subsidiaryId;
-   
+
     setDefualtSubsidiaryList(
       dashboard.allSubidiaryList &&
       dashboard.allSubidiaryList.filter((item) => {
@@ -284,7 +307,7 @@ export function DesignationEditForm({
 
   //=========== END
 
-useEffect(() => {
+  useEffect(() => {
     const designationId = defEmpDesingaton?.value ? defEmpDesingaton.value : user.designationId;
     setDefualtEmpDesignation(
       dashboard.allDesignations &&
@@ -294,6 +317,22 @@ useEffect(() => {
     );
 
   }, [user?.designationId, dashboard.designationId]);
+
+
+  ///
+
+  useEffect(() => {
+    console.log("marital::", user, dashboard.allMaritalStatus);
+    const maritalStatus = defMaritalStatus?.value ? defMaritalStatus.value : user.maritalStatus;
+    setDefaultMaritalStatus(
+
+      dashboard.allMaritalStatus &&
+      dashboard.allMaritalStatus.filter((item) => {
+        return item.value == maritalStatus;
+      })
+    );
+
+  }, [user?.maritalStatus, dashboard.maritalStatus]);
 
   //===== Date Of Confirmation Due
   useEffect(() => {
@@ -565,7 +604,39 @@ useEffect(() => {
     fetchWorkExperienceData();
     fetchContactData();
   }, []);
-  console.log("contactList", mylist)
+
+  const addRowContact = (element) => {
+    console.log("click", element.target.id)
+
+    setDefaultContactList([...defContactList, { transactionType: element.target.id }])
+
+
+  }
+  const handleFieldChangedContact = (el) => {
+    const index = el.target.id.split('-')[1]
+    const key = el.target.id.split('-')[0]
+    setDefaultContactList([...defContactList.map((val, ind) => {
+
+      if (ind == index) {
+
+        val[key] = el.target.value
+
+      }
+
+      return val
+    })])
+
+  }
+
+  const deleteRowContact = (element) => {
+
+    const data = defContactList;
+    data.splice(element.target.id, 1);
+
+    setDefaultContactList([...data])
+  }
+
+  console.log("contactList", defContactList)
   return (
     <>
       <Formik
@@ -584,12 +655,12 @@ useEffect(() => {
               .then((res) => {
                 console.log(res.data, "looos")
                 setImage(res.data.imageUrl)
-                
+
                 saveEmployeeProfile(values, res.data.imageUrl);
               });
           }
           else {
-            console.log("values emp",values)
+            console.log("values emp", values)
             saveEmployeeProfile(values, profile_image);
           }
 
@@ -631,27 +702,27 @@ useEffect(() => {
                     </div>
 
                     <div className="from-group row">
-                    <div className="col-12 col-md-4 mt-3">
-                          <SearchSelect
-                            name="subsidiaryId"
-                            label={<span> Subsidiary<span style={{ color: 'red' }}>*</span></span>}
-                            isDisabled={isUserForRead && true}
-                            onBlur={() => {
-                              // handleBlur({ target: { name: "countryId" } });
-                            }}
-                            onChange={(e) => {
-                              setFieldValue("subsidiaryId", e.value || null);
-                              setDefualtSubsidiaryList(e);
-                              //handlePaymenModeChanged(e)
-                            }}
+                      <div className="col-12 col-md-4 mt-3">
+                        <SearchSelect
+                          name="subsidiaryId"
+                          label={<span> Subsidiary<span style={{ color: 'red' }}>*</span></span>}
+                          isDisabled={isUserForRead && true}
+                          onBlur={() => {
+                            // handleBlur({ target: { name: "countryId" } });
+                          }}
+                          onChange={(e) => {
+                            setFieldValue("subsidiaryId", e.value || null);
+                            setDefualtSubsidiaryList(e);
+                            //handlePaymenModeChanged(e)
+                          }}
 
-                            value={(defSubsidiary || null)}
-                            error={errors.subsidiaryId}
-                            touched={touched.subsidiaryId}
-                            options={dashboard.allSubidiaryList}
-                          />
+                          value={(defSubsidiary || null)}
+                          error={errors.subsidiaryId}
+                          touched={touched.subsidiaryId}
+                          options={dashboard.allSubidiaryList}
+                        />
 
-                        </div>
+                      </div>
                     </div>
                     <div className="from-group row">
                       {
@@ -745,26 +816,26 @@ useEffect(() => {
 
 
                     <div className="form-group row">
-                    <div className="col-12 col-md-4 mt-3">
-                    <SearchSelect
-                      name="designationId"
-                      label={<span> Designation<span style={{ color: 'red' }}>*</span></span>}
-                      isDisabled={isUserForRead && true}
-                      onBlur={() => {
-                        // handleBlur({ target: { name: "countryId" } });
-                      }}
-                      onChange={(e) => {
-                        setFieldValue("designationId", e.value || null);
-                        setDefualtEmpDesignation(e);
-                        // dispatch(fetchAllFormsMenu(e.value));
-                      }}
-                      value={(defEmpDesingaton || null)}
-                      error={errors.designationId}
-                      touched={touched.designationId}
-                      options={dashboard.allDesignations}
-                    />
+                      <div className="col-12 col-md-4 mt-3">
+                        <SearchSelect
+                          name="designationId"
+                          label={<span> Designation<span style={{ color: 'red' }}>*</span></span>}
+                          isDisabled={isUserForRead && true}
+                          onBlur={() => {
+                            // handleBlur({ target: { name: "countryId" } });
+                          }}
+                          onChange={(e) => {
+                            setFieldValue("designationId", e.value || null);
+                            setDefualtEmpDesignation(e);
+                            // dispatch(fetchAllFormsMenu(e.value));
+                          }}
+                          value={(defEmpDesingaton || null)}
+                          error={errors.designationId}
+                          touched={touched.designationId}
+                          options={dashboard.allDesignations}
+                        />
 
-                  </div>
+                      </div>
                       <div className="col-12 col-md-4 mt-3">
                         <SearchSelect
                           name="departmentId"
@@ -912,7 +983,7 @@ useEffect(() => {
                           onChange={(e) => {
                             setFieldValue("cityId", e.value);
                             setDefaultCity(e);
-                      
+
                           }}
                           value={defCity}
                           error={errors.cityId}
@@ -940,10 +1011,10 @@ useEffect(() => {
                           disabled={isUserForRead}
                           error={errors.dateOfJoining}
                           touched={touched.dateOfJoining}
-                      />
-                      <ErrorMessage style={{color:"red"}} name="dateOfJoining" component="div" />
+                        />
+                        <ErrorMessage style={{ color: "red" }} name="dateOfJoining" component="div" />
                       </div>
-                      
+
                       <div className="col-12 col-md-4 mt-3">
                         <label>Date Of Confirmation<span style={{ color: 'red' }}>*</span></label>
                         <DatePicker
@@ -963,7 +1034,7 @@ useEffect(() => {
                           disabled={isUserForRead}
                           autoComplete="off"
                         />
-                          <ErrorMessage style={{color:"red"}} name="dateOfConfirmation" component="div" />
+                        <ErrorMessage style={{ color: "red" }} name="dateOfConfirmation" component="div" />
                       </div>
                       <div className="col-12 col-md-4 mt-3">
                         <label>Date Confirmation Due<span style={{ color: 'red' }}>*</span> </label>
@@ -982,7 +1053,7 @@ useEffect(() => {
                           disabled={isUserForRead}
                           autoComplete="off"
                         />
-                        <ErrorMessage style={{color:"red"}} name="dateOfConfirmationDue" component="div" />
+                        <ErrorMessage style={{ color: "red" }} name="dateOfConfirmationDue" component="div" />
                       </div>
                       <div className="col-12 col-md-4 mt-3">
                         <label>Date Confirmation Extended <span style={{ color: 'red' }}>*</span> </label>
@@ -1001,7 +1072,7 @@ useEffect(() => {
                           disabled={isUserForRead}
                           autoComplete="off"
                         />
-                         <ErrorMessage style={{color:"red"}} name="dateOfConfirmationEnter" component="div" />
+                        <ErrorMessage style={{ color: "red" }} name="dateOfConfirmationEnter" component="div" />
                       </div>
                       <div className="col-12 col-md-4 mt-3">
                         <label>Contract Expiry <span style={{ color: 'red' }}>*</span></label>
@@ -1020,7 +1091,7 @@ useEffect(() => {
                           disabled={isUserForRead}
                           autoComplete="off"
                         />
-                          <ErrorMessage style={{color:"red"}} name="dateOfContractExpiry" component="div" />
+                        <ErrorMessage style={{ color: "red" }} name="dateOfContractExpiry" component="div" />
                       </div>
 
 
@@ -1066,27 +1137,27 @@ useEffect(() => {
                       </div>
                     </div>
                     <div className="from-group row">
-                    {
-                      <div className="col-12 col-md-4 mt-3">
-                      <SearchSelect
-                        name="reportTo"
-                        label={<span> Report To</span>}
-                        isDisabled={isUserForRead && true}
-                        // onBlur={() => {
-                        //   handleBlur({ target: { name: "countryId" } });
-                        // }}
-                        onChange={(e) => {
-                          setFieldValue("reportTo", e.value || null);
-                          setEmployeeReportToDefault(e);
-                          //dispatch(fetchAllActiveEmployees(e.value));
-                        }}
-                        value={(defEmployeeReportTo || null)}
-                        error={errors.reportTo}
-                        touched={touched.reportTo}
-                        options={dashboard.allEmployees}
-                      />
-                    </div>
-                    }
+                      {
+                        <div className="col-12 col-md-4 mt-3">
+                          <SearchSelect
+                            name="reportTo"
+                            label={<span> Report To</span>}
+                            isDisabled={isUserForRead && true}
+                            // onBlur={() => {
+                            //   handleBlur({ target: { name: "countryId" } });
+                            // }}
+                            onChange={(e) => {
+                              setFieldValue("reportTo", e.value || null);
+                              setEmployeeReportToDefault(e);
+                              //dispatch(fetchAllActiveEmployees(e.value));
+                            }}
+                            value={(defEmployeeReportTo || null)}
+                            error={errors.reportTo}
+                            touched={touched.reportTo}
+                            options={dashboard.allEmployees}
+                          />
+                        </div>
+                      }
                     </div>
                     <br></br>
 
@@ -1098,12 +1169,12 @@ useEffect(() => {
 
                     <div className="from-group row">
                       <div className="col-12 col-md-4 mt-3">
-                        <label>Date Of Birth</label>
+                        {<span> Date Of Birth<span style={{ color: 'red' }}>*</span></span>}
                         <DatePicker
                           className="form-control"
                           placeholder="Enter Date Of Birth"
                           selected={DOBDateSelected}
-                          value={values.dateOfBirth}
+                          //value={values.dateOfBirth}
                           showYearDropdown
                           scrollableMonthYearDropdown
                           onChange={(date) => {
@@ -1116,9 +1187,9 @@ useEffect(() => {
                           name="dateOfBirth"
                           disabled={isUserForRead}
                           autoComplete="off"
-                        
+
                         />
-                           <ErrorMessage style={{color:"red"}} name="dateOfBirth" component="div" />
+                        <ErrorMessage style={{ color: "red" }} name="dateOfBirth" component="div" />
                       </div>
 
                       <div className="col-12 col-md-4 mt-3">
@@ -1141,7 +1212,7 @@ useEffect(() => {
                           disabled={isUserForRead}
                           autoComplete="off"
                         />
-                          <ErrorMessage style={{color:"red"}} name="dateOfRetirement" component="div" />
+                        <ErrorMessage style={{ color: "red" }} name="dateOfRetirement" component="div" />
                       </div>
                     </div>
 
@@ -1149,12 +1220,30 @@ useEffect(() => {
                       <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="nic_no"
-                          component={Input}
+                          mask={[
+
+                            /[1-9]/,
+                            /\d/,
+                            /\d/,
+                            /\d/,
+                            /\d/,
+                            "-",
+                            /\d/,
+                            /\d/,
+                            /\d/,
+                            /\d/,
+                            /\d/,
+                            /\d/,
+                            /\d/,
+                            "-",
+                            /\d/,
+                          ]}
+                          component={MaskInput}
                           placeholder="Enter ID Card No"
-                          label="Enter ID Card No"
+                          label={<span> NIC No<span style={{ color: 'red' }}>*</span></span>}
                           autoComplete="off"
                         />
-                         {/* <ErrorMessage style={{color:"red"}} name="nic_no" component="div" /> */}
+                        {/* <ErrorMessage style={{color:"red"}} name="nic_no" component="div" /> */}
                       </div>
                       <div className="col-12 col-md-4 mt-3">
                         <Field
@@ -1170,7 +1259,7 @@ useEffect(() => {
 
                     <div className="from-group row">
                       <div className="col-12 col-md-4 mt-3">
-                        <Select
+                        {/* <Select
                           label="Marital Status"
                           name="maritalStatus"
                           value={values.maritalStatus}
@@ -1183,17 +1272,35 @@ useEffect(() => {
                           <option value="Single" label="Single" />
                           <option value="Married" label="Married" />
 
-                        </Select>
+                        </Select> */}
+                        <SearchSelect
+                          label={<span> Marital Status<span style={{ color: 'red' }}>*</span></span>}
+                          name="maritalStatus"
+                          // value={values.maritalStatus}
+
+                          onBlur={handleBlur}
+                          onChange={(e) => {
+                            setFieldValue("maritalStatus", e.value || null);
+                            setDefaultMaritalStatus(e);
+                            // dispatch(fetchAllFormsMenu(e.value));
+                          }}
+                          value={(defMaritalStatus || null)}
+                          error={errors.maritalStatus}
+                          touched={touched.maritalStatus}
+                          options={dashboard.allMaritalStatus}
+                        />
+                        {/* <ErrorMessage style={{ color: "red" }} name="maritalStatus" component="div" /> */}
                       </div>
                       <div className="col-12 col-md-4 mt-3">
                         <Select
-                          label="Gender"
+                          label={<span> Gender<span style={{ color: 'red' }}>*</span></span>}
                           name="gender"
                           value={values.gender}
                           onChange={handleChange}
                           onBlur={handleBlur}
                           style={{ display: "block" }}
                           autoComplete="off"
+
                         >
                           <option value="-1" label="Select Gender" />
                           <option value="Male" label="Male" />
@@ -1203,13 +1310,14 @@ useEffect(() => {
                         {errors.gender && touched.gender && (
                           <div className="invalid-text">{errors.gender}</div>
                         )}
+
                       </div>
                     </div>
                     <div className="from-group row">
                       <div className="col-12 col-md-4 mt-3">
                         <SearchSelect
                           name="religionId"
-                          label="Religion"
+                          label={<span> Religion<span style={{ color: 'red' }}>*</span></span>}
                           isDisabled={isUserForRead && true}
 
                           onBlur={() => {
@@ -1221,14 +1329,14 @@ useEffect(() => {
                             // dispatch(fetchAllFormsMenu(e.value));
                           }}
                           value={(defchildReligionMenus || null)}
-                          error={errors.Id}
-                          touched={touched.Id}
+                          error={errors.religionId}
+                          touched={touched.religionId}
                           options={dashboard.allReligionChildMenus}
                         />
                       </div>
                       <div className="col-12 col-md-4 mt-3">
                         <Select
-                          label="Nationality"
+                          label={<span> Nationality<span style={{ color: 'red' }}>*</span></span>}
                           name="nationality"
                           value={values.nationality}
                           onChange={handleChange}
@@ -1258,7 +1366,7 @@ useEffect(() => {
                           name="email_official"
                           component={Input}
                           placeholder="Enter Offical Email"
-                          label="Offical Email"
+                          label="Official Email"
                           autoComplete="off"
 
                         />
@@ -1345,22 +1453,49 @@ useEffect(() => {
 
                       <table class="table table table-head-custom table-vertical-center overflow-hidden table-hover">
                         <tr style={{ backgroundColor: '#4d5f7a', color: '#fff' }}>
+                          <td></td>
                           <td>Relation Name</td>
                           <td>Relation</td>
                           <td>Contact No</td>
                         </tr>
-                        {contactList?.map((obj, rightindex) => (
+                        {defContactList?.map((obj, rightindex) => (
                           <><tr>
+                            <td > <button id={rightindex} onClick={deleteRowContact} className="btn btn-danger btn-sm"> Delete</button></td>
                             <td>
-                              {obj.relation_name}
+                              <input className="form-control" type="text" onChange={handleFieldChangedContact}
+                                value={obj.relation_name} id={'relation_name-' + rightindex}></input>
                             </td>
-                            <td>{obj.relation_emp}</td>
-                            <td>{obj.contactNo}</td>
+                            <td>
+                              <select className="form-control" value={obj.relation} onChange={handleFieldChangedContact} id={'relation-' + rightindex} >
+                                {/* <option value="-1"> --Select--</option> */}
+                                {
+                                  dashboard.allRelationCodeList?.map((x) => {
+                                    return <option value={x.value}> {x.label} </option>
+                                  })}
+
+                                {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
+                              </select>
+
+                            </td>
+                            <td>
+                              <input className="form-control" type="text" onChange={handleFieldChangedContact}
+                                value={obj.contactNo} id={'contactNo-' + rightindex}></input>
+                            </td>
+                            {/* <td>{obj.relation_emp}</td>
+                            <td>{obj.contactNo}</td> */}
                           </tr>
                           </>
+
                         ))}
 
                       </table>
+                      {<> <div className="from-group row">
+                        <div className="col-12 col-md-4 mt-3">
+                          <input className="btn btn-success btn-sm" type='button' id="Contact" onClick={addRowContact} value='+Add'></input>
+                        </div>
+
+                      </div>
+                      </>}
                     </div>
                     <br></br>
                     <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
