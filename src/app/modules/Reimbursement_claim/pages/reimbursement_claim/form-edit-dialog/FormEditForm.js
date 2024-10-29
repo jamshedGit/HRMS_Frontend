@@ -89,9 +89,9 @@ export function FormEditForm({
       if (i.subsidiaryId == subsidiaryId) {
         existedId = i.Id;
  
-        dispatch(actions.fetchSalarypolicy(existedId));
+        dispatch(actions.fetchmoduledata(existedId));
       } else {
-        dispatch(actions.fetchSalarypolicy(0));
+        dispatch(actions.fetchmoduledata(0));
       }
     });
   };

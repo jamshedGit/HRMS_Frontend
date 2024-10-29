@@ -6,7 +6,7 @@ import { useSelector, shallowEqual } from "react-redux"
 
 
 
-export default function reimbursement_claimManagement() {
+export default function reimbursement_claim() {
 
   return (
 
@@ -15,9 +15,12 @@ export default function reimbursement_claimManagement() {
     
     <Suspense fallback={<LayoutSplashScreen />}>
       <Switch>
+    
         {<Redirect exact={true} from="/reimbursement_claim" to="/reimbursement_claim/read-all-reimbursement-claim" />}
         <ContentRoute path="/reimbursement_claim/read-all-reimbursement-claim" component={FormPage} />
       </Switch>
-    </Suspense></>
+    </Suspense>
+    
+    </>
   );
 }

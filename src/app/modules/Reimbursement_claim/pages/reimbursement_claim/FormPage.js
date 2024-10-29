@@ -8,7 +8,6 @@ import { FormEditDialog } from "./form-edit-dialog/FormEditDialog";
 import { FormDeleteDialog } from "./form-delete-dialog/FormDeleteDialog";
 
 import { FormCard } from "./form-card/FormCard";
-import { fetchAllCountry } from "../../../../../_metronic/redux/dashboardActions";
 import {} from "../../_redux/redux-Actions";
 
 
@@ -19,12 +18,12 @@ export function FormPage({ history }) {
   const dispatch = useDispatch();
   const FormUIEvents = {
     newFormButtonClick: () => {
-      dispatch(fetchAllCountry());
+      // dispatch(fetchAllCountry());
 
       history.push("/reimbursement_claim/read-all-reimbursement-claim/new");
     },
     openEditFormDialog: (id) => {
-      dispatch(fetchAllCountry());
+      // dispatch(fetchAllCountry());
 
       history.push(`/reimbursement_claim/read-all-reimbursement-claim/${id}/edit`);
     },

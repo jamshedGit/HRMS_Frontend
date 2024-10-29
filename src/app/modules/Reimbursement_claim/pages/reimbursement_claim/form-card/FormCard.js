@@ -73,6 +73,7 @@ export function FormCard() {
         <CardBody>
 
           <FormTable />
+          
         </CardBody>
       </Card>
     </>

@@ -66,9 +66,9 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
  
   useEffect(() => {
    
-    dispatch(actions.fetchSalarypolicy(id));
+    dispatch(actions.fetchmoduledata(id));
  
-    // dispatch(actions.fetchSalarypolicy(formUIProps .queryParams))
+    // dispatch(actions.fetchmoduledata(formUIProps .queryParams))
   }, [id, dispatch,show]);
  
  

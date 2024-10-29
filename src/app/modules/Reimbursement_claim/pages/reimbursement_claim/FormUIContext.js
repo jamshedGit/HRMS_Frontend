@@ -34,12 +34,12 @@ export function FormUIProvider({ FormUIEvents, children }) {
 
   const initUser={
     Id: "",
-        subsidiaryId: "",
-        payroll_groupId:"",
-        cycle_typeId: "",
- 
-        policies:"",
-        accounts:""
+    reimbursement_typeId: "",
+    employeeId:"",
+    details: "",
+ date:"",
+    amount:"",
+    reimbursement_configurationId:""
 
   }
 

@@ -17,6 +17,8 @@ import * as uiHelpers from "../FormUIHelpers";
 import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatter";
 import { Pagination } from "../../../../../../_metronic/_partials/controls";
 import { useFormUIContext } from "../FormUIContext";
+import { Accordion, Button, Card } from "react-bootstrap";
+import { KeyboardArrowDown } from "@material-ui/icons";
 
 export function FormTable() {
   //Users UI Context
@@ -93,7 +95,7 @@ export function FormTable() {
  
  
 {
-  dataField: "Employee.formName",
+  dataField: "Employee.firstName",
   text: "Employee",
   sort: false,
   sortCaret: sortCaret,
@@ -162,10 +164,25 @@ export function FormTable() {
     sizePerPage: formUIProps.queryParams.pageSize,
     page: formUIProps.queryParams.pageNumber,
   };
+
+  
  
     return (
     <>
-      <PaginationProvider pagination={paginationFactory(paginationOptions)}>
+  
+    <Accordion defaultActiveKey="">
+      <Card>
+        <Card.Header className="d-flex justify-content-center">
+        <div className='accordion-header-btn w-100  d-flex justify-content-center'>
+          <Accordion.Toggle as={Button} eventKey="0" >
+            Employee Detail
+            <KeyboardArrowDown />
+          </Accordion.Toggle>
+          </div>
+        </Card.Header>
+        <Accordion.Collapse eventKey="0">
+          <Card.Body>
+          <PaginationProvider pagination={paginationFactory(paginationOptions)}>
         {({ paginationProps, paginationTableProps }) => {
           return (
             <Pagination
@@ -198,6 +215,14 @@ export function FormTable() {
           );
         }}
       </PaginationProvider>
+
+          </Card.Body>
+        </Accordion.Collapse>
+      </Card>
+    </Accordion>
+ 
+
+   
     </>
   );
 }

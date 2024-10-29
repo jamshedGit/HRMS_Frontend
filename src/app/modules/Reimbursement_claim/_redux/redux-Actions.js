@@ -23,7 +23,7 @@ export const fetchSalarypolicies = (queryparm) => async (dispatch) => {
     });
 };
 
-export const fetchSalarypolicy = (id) => (dispatch) => {
+export const fetchmoduledata = (id) => (dispatch) => {
 
 
   if (!id) {
