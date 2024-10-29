@@ -60,6 +60,7 @@ const LoanType = lazy(() => import("./modules/LoanType/pages/index"));
 const TaxSlab = lazy(() => import("./modules/LoanType/pages/index"));
 const leaveManagementConfiguration = lazy(() => import("./modules/leaveManagementConfiguration/pages/index"));
 const PayrollProcessPolicy = lazy(() => import("./modules/Payroll_Process_Policy/pages/index"));
+const LeaveApplication = lazy(() => import("./modules/LeaveApplication/pages/index"));
 const tax_slabModule = lazy(() => import("./modules/Tax_Slab/pages/index"));
 const loan_manag_confModule = lazy(() => import("./modules/Loan_manag_conf/pages/index"));   
 const gratuity_confModule = lazy(() => import("./modules/Gratuity_Configuration/pages/index"));   
@@ -113,6 +114,7 @@ const ROUTES = {
   onetime_earning: OnetimeAllowance,
   leave_management_configuration: leaveManagementConfiguration,
   loan_type: LoanType,
+  leave_application :LeaveApplication,
   payroll_process_policy :PayrollProcessPolicy,
   tax_slab:tax_slabModule,
   loan_management_configuration:loan_manag_confModule,
