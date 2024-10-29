@@ -25,9 +25,11 @@ export function FormTable() {
   const formUIContext = useFormUIContext();
  
   const formUIProps = useMemo(() => {
+    console.log("formUIContext",formUIContext)
     return {
       ids: formUIContext.ids,
       setIds: formUIContext.setIds,
+      employeeId: formUIContext.employeeId,
       queryParams: formUIContext.queryParams,
       setQueryParams: formUIContext.setQueryParams,
       openEditFormDialog: formUIContext.openEditFormDialog,
@@ -56,11 +58,12 @@ export function FormTable() {
   const dispatch = useDispatch();
  
   useEffect(() => {
+    console.log("run fetch data",formUIProps.employeeId)
     formUIProps.setIds([]);
  
  
-    dispatch(actions.fetchSalarypolicies(formUIProps.queryParams));
-  }, [formUIProps.queryParams, dispatch, totalCount]);
+    dispatch(actions.fetchSalarypolicies(formUIProps));
+  }, [formUIProps.queryParams, dispatch, totalCount,formUIProps.employeeId]);
  
   const isAccessForEdit = userAccess?.find(
     (item) => item.componentName === "UpdateReimbursementClaim"

@@ -5,15 +5,16 @@ import { toast } from "react-toastify";
 const { actions } = reimbursement_claimSlice;
 
 
-export const fetchSalarypolicies = (queryparm) => async (dispatch) => {
+export const fetchSalarypolicies = (params) => async (dispatch) => {
+
 
   dispatch(actions.startCall({ callType: callTypes.list }));
 
-  return requestFromServer.getAllSalarypolicy(queryparm)
+  return requestFromServer.getAllSalarypolicy(params)
 
     .then((response) => {
    
-  
+      console.log("response",response)
       dispatch(actions.salarypolicyFetched(response));
     })
     .catch((error) => {
