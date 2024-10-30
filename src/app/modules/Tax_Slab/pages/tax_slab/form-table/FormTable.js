@@ -34,7 +34,10 @@ export function FormTable() {
       openReadFormDialog: formUIContext.openReadFormDialog,
     };
   }, [formUIContext]);
-
+  const formatNumberWithCommas = (number) => {
+    if (number == null) return ''; // Handle null or undefined
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
 
   const { currentState, userAccess } = useSelector(
     (state) => {  console.log("s "); return {
@@ -79,6 +82,7 @@ export function FormTable() {
       style: {
         minWidth: "160px",
       },
+      formatter: (cell) => formatNumberWithCommas(cell), 
     },
 
     // {
@@ -101,6 +105,8 @@ export function FormTable() {
   style: {
     minWidth: "10px",
   },
+  formatter: (cell) => formatNumberWithCommas(cell), 
+
  
 },
 

@@ -87,3 +87,8 @@ export const getUploadUrl = (fileName) => {
   }
   return '';
 }
+
+export const formatNumberWithCommas = (number) => {
+  if (number == null) return ''; // Handle null or undefined
+  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
