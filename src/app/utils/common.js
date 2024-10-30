@@ -92,3 +92,13 @@ export const formatNumberWithCommas = (number) => {
   if (number == null) return ''; // Handle null or undefined
   return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
+
+
+
+export const amountLimit = (value,) => {
+  // Convert the input to a string and check its length
+  if (value.length > 8) {
+    return value.slice(0, 8); // Limit the length
+  }
+  return value; // Return the original value if within limit
+};

@@ -4,7 +4,7 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { Input } from "../../../../../../_metronic/_partials/controls"; // Adjust import as needed
 import { useDispatch, useSelector } from "react-redux";
-
+import {amountLimit, formatNumberWithCommas} from "../../../../../utils/common"
 
 
  // percentage: Yup.string().required("Required*"),
@@ -24,6 +24,7 @@ const tax_slabEditSchema = Yup.object().shape({
   percentage: Yup.number() 
     .min(0, "Must be at least 0") 
     .max(100, "Must be at most 100") 
+    
     .required("Required*"),
 
   // fixed_amount: Yup.string().required("Required*"),
@@ -87,6 +88,9 @@ export function FormEditForm({
                       label="From Amount"
                       type="number"
                       // min={0}
+                      onInput={(e) => {
+                        e.target.value = amountLimit(e.target.value); // Limit to 3 digits
+                      }}
                     />
                   </div>
 
@@ -98,6 +102,9 @@ export function FormEditForm({
                       label="To Amount"
                       type="number"
                       min={0}
+                      onInput={(e) => {
+                        e.target.value = amountLimit(e.target.value); // Limit to 3 digits
+                      }}
                     />
                   </div>
 
@@ -108,8 +115,14 @@ export function FormEditForm({
                       placeholder="Enter Percentage"
                       label="Percentage"
                       type="number"
-                      min={0}
-                      max={100}
+                      // maxLength ="3"
+                      onInput={(e) => {
+                        if (e.target.value.length > 3) {
+                          e.target.value = e.target.value.slice(0, 3);
+                        }
+                      }}
+                      
+             
                     />
                   </div>
                   <div className="col-12 col-md-4 mt-3">
@@ -120,6 +133,9 @@ export function FormEditForm({
                       label="Fixed Amount"
                       type="number"
                       min={0}
+                      onInput={(e) => {
+                        e.target.value = amountLimit(e.target.value); // Limit to 3 digits
+                      }}
                     />
                   </div>
                 </div>
