@@ -6,6 +6,7 @@ import { Select } from "../../../../../../_metronic/_partials/controls";
 import { useSelector, shallowEqual } from "react-redux"
 import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
 import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLabel";
+import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 
 export function EmployeeSelect({
   actionsLoading,
@@ -68,7 +69,7 @@ export function EmployeeSelect({
                       children={CustomDropdown({ data: allEmployees, firstElement: { label: '--Select--', value: '' } })}
                     />
                     {
-                      !values.employeeId && <CustomErrorLabel touched={true} error={'Required'} />
+                      !values.employeeId && <CustomErrorLabel touched={true} error={VALIDATION_MESSAGES.required} />
                     }
                   </div>
                   {/* Employee Id Dropdown Ends */}

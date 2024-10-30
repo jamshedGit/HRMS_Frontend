@@ -17,7 +17,7 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
                   <td>Action</td>
                   <td>Leave Type</td>
                   <td>Gender</td>
-                  <td>Min Experience</td>
+                  <td>Minimum Experience (Years)</td>
                   <td>Max Allowed</td>
                   <td>Attachment Required</td>
                   <td>Marital Status</td>

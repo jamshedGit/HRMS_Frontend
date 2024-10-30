@@ -63,7 +63,8 @@ export function DesignationUIProvider({ DesignationUIEvents, children }) {
     maritalStatus: '',
     religionId: '',
     nationality: '',
-    religionId:''
+    religionId:'',
+    //defContactList: []
     
 
   };

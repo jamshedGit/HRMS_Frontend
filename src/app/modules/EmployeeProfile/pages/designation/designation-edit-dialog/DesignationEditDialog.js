@@ -57,36 +57,21 @@ export function DesignationEditDialog({ id, show, onHide, userForRead }) {
 
   }));
 
-  // useEffect(() => {
-  //   if (actionsLoading) {
-  //     onHide();
-  //   }
-  // }, [actionsLoading === true]);
-
-  //console.log("action", action);
-
+  
   useEffect(() => {
     dispatch(actions.fetchUser(id));
 
     // dispatch(actions.fetchUser(banksUIProps.queryParams))
   }, [id, dispatch]);
 
-  // useEffect(() => {
-  //   console.log("UseEffect call");
-  //   if (actionsLoading === false) {
-  //     console.log("UseEffect call inside function");
-  //     disbaleLoading();
-  //   }
-  // }, [actionsLoading]);
-  //console.log("userForEdit", userForEdit);
 
-  const saveEmployeeProfile = async (user, image) => {
+  const saveEmployeeProfile = async (user, image,contactList,workExperienceList,academicList,skillsList,incidentList) => {
 
     if (!id) {
 
       console.log("emp profile save", user, image);
       const finalObject = { user }
-      await dispatch(actions.createEmpProfile({ ...user, profile_image: image }, disbaleLoading, onHide));
+      await dispatch(actions.createEmpProfile({ ...user,contactList,workExperienceList,academicList,skillsList,incidentList, profile_image: image }, disbaleLoading, onHide));
       await dispatch(actions.fetchUsers(usersUIProps.queryParams));
     } else {
       // const getUserStatus = userStatusTypes.find((item) => {
@@ -140,8 +125,8 @@ export function DesignationEditDialog({ id, show, onHide, userForRead }) {
         dateOfRetirement: user.dateOfRetirement
       };
 
-      console.log("profile emp", EmpProfileUpdatedFields);
-      await dispatch(actions.updateEmpProfile(EmpProfileUpdatedFields, disbaleLoading, onHide));
+      console.log("profile emp::2", EmpProfileUpdatedFields,contactList,workExperienceList,academicList,skillsList,incidentList);
+      await dispatch(actions.updateEmpProfile(EmpProfileUpdatedFields,contactList,workExperienceList,academicList,skillsList,incidentList, disbaleLoading, onHide));
       await dispatch(actions.fetchUsers(usersUIProps.queryParams));
     }
   };

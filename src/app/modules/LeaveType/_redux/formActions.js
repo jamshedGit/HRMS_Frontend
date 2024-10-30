@@ -1,3 +1,4 @@
+import { SERVER_MESSAGES } from "../../../utils/constants";
 import * as requestFromServer from "./formCrud";
 import { LeaveTypeSlice, callTypes } from "./leaveTypeSlice";
 import { toast } from "react-toastify";
@@ -84,7 +85,7 @@ export const saveRecord = (data, id, disableLoading, onHide) => (dispatch) => {
         if (leaveTypeData) {
           dispatch(actions.LeaveTypeCreated(leaveTypeData));
           disableLoading();
-          toast.success("Successfully Created", {
+          toast.success(SERVER_MESSAGES.insertedSuccess, {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -99,7 +100,7 @@ export const saveRecord = (data, id, disableLoading, onHide) => (dispatch) => {
       .catch((error) => {
         disableLoading();
         error.clientMessage = "Can't Create Leave Type";
-        toast.error(error?.response?.data?.message, {
+        toast.error(SERVER_MESSAGES.insertedFail, {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -117,7 +118,7 @@ export const saveRecord = (data, id, disableLoading, onHide) => (dispatch) => {
         if (leaveTypeData) {
           dispatch(actions.LeaveTypeUpdated(leaveTypeData));
           disableLoading();
-          toast.success("Successfully Updated", {
+          toast.success(SERVER_MESSAGES.updatedSuccess, {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -132,7 +133,7 @@ export const saveRecord = (data, id, disableLoading, onHide) => (dispatch) => {
       .catch((error) => {
         disableLoading();
         error.clientMessage = "Can't Update Leave Type";
-        toast.error(error?.response?.data?.message, {
+        toast.error(SERVER_MESSAGES.updatedFail, {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -159,7 +160,7 @@ export const deleteRecord = (id, disableLoading, onHide) => (dispatch) => {
     .then((res) => {
       dispatch(actions.LeaveTypeDeleted({ id }));
       disableLoading();
-      toast.success("Successfully Deleted", {
+      toast.success(SERVER_MESSAGES.deletedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -173,7 +174,7 @@ export const deleteRecord = (id, disableLoading, onHide) => (dispatch) => {
     .catch((error) => {
       disableLoading();
       error.clientMessage = "Can't Delete Leave Type";
-      toast.error(error?.response?.data?.message, {
+      toast.error(SERVER_MESSAGES.deletedFail, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

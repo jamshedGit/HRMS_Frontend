@@ -42,7 +42,8 @@ const profileValidation = Yup.object().shape(
     middleName: Yup.string()
       .required("Required*"),
     employeeCode: Yup.string()
-      .required("Required*"),
+      .required("Required*")
+      .max(10, "Employee code must be at most 10 characters long"),
     title: Yup.string()
       .required("Required*"),
     subsidiaryId: Yup.string()
@@ -167,10 +168,74 @@ const profileValidation = Yup.object().shape(
       .typeError('Invalid date format')
       .required('*Required')
       .max(currentDate, 'Date of birth cannot be in the future')
-      .max(minDate, 'You must be at least 18 years old')
+      .max(minDate, 'You must be at least 18 years old'),
+
+    // defContactList: Yup.array()
+    //   .of(
+    //     Yup.object().shape({
+    //       relation_name: Yup.string()
+    //         .required('Relation Name is required')
+    //         .min(2, 'Must be at least 2 characters long'),
+    //       relation: Yup.string().required('Relation is required'),
+    //       contactNo: Yup.string()
+    //         .required('Contact No is required')
+    //         .matches(/^\d+$/, 'Contact No must be a number')
+    //         .test('is-unique', 'Contact No must be unique', function (value) {
+    //           const contactNumbers = this.parent; // Access the parent array
+    //           const isDuplicate = contactNumbers.some(row => row.contactNo === value);
+    //           return !isDuplicate || this.createError({ message: 'Contact No must be unique' });
+    //         }),
+    //     })
+    //   )
+    //   .min(1, 'At least one contact is required'),
   },
 
-);
+
+
+).test('check-marital-status', 'Invalid marital status for selected title', function (value) {
+  console.log("validate::",value)
+  const { title, maritalStatus, gender } = value;
+
+  // Check conditions based on title // 196 == Single
+  if (title === 'Mrs.' && maritalStatus === '196') {
+    
+    return this.createError({ path: 'maritalStatus', message: 'Mrs. cannot be single.' });
+  }
+
+  if ((title == 'Mrs.' || title == 'Ms.') && gender == 'Male') {
+    return this.createError({ path: 'gender', message: 'Mrs. Ms. cannot be male.' });
+  }
+
+  if ((title === 'Mr.' || title === 'Dr.' || title === 'Professor.' || title === 'Captain') && gender === 'Female') {
+    return this.createError({ path: 'gender', message: 'cannot be female.' });
+  }
+
+  return true; // No error
+});
+
+
+
+
+const ReimbursementSchema = Yup.object().shape({
+  subsidiaryId: Yup.number().required("Subsidiary is required"),
+  payroll_groupId: Yup.number().required("Payroll group is required"),
+  cycle_typeId: Yup.number().required("Cycle type required"),
+
+
+
+  accounts: Yup.array().of(
+    Yup.object().shape({
+      reimbursement_typeId: Yup.number().required("required"),
+      expense_accountId: Yup.number()
+        .required("Expense account is required"),
+      bank_accountId: Yup.number().required("bank account required"),
+
+    })
+  )
+});
+
+
+
 export function DesignationEditForm({
   saveEmployeeProfile,
   user,
@@ -223,10 +288,14 @@ export function DesignationEditForm({
   const [contractExpirtyDateSelected, setContractExpiryDate] = useState(null);
   const [DOBDateSelected, setDOBDate] = useState(null);
   const [RetirementSelected, setDRetirmentDate] = useState(null);
+
+  const [defStartDateForExp, setStartDateForExp] = useState(null);
+  const [defEndDateForExp, setEndDateForExp] = useState(null);
+
   const [profile_image, setImage] = useState(toAbsoluteUrl("/media/logos/defaultImg.png"));
   const [file, setFile] = useState('');
   // ================ Getting list from DB Stored Procedure
-  const [contactList, setContactList] = useState([]);
+
   const [workExperienceList, setworkExperienceList] = useState([]);
   const [academicList, setAcademicList] = useState([]);
   const [skillsList, setSkillList] = useState([]);
@@ -243,6 +312,14 @@ export function DesignationEditForm({
   const [defEmployeeReportTo = null, setEmployeeReportToDefault] = useState(null);
   const [defEmployeeGrade = null, setDefualtEmployeeGrade] = useState(null);
   const [defContactList = null, setDefaultContactList] = useState([]);
+  const [currentDate, setCurrentDate] = useState('');
+
+  useEffect(() => {
+    // Get the current date in YYYY-MM-DD format
+    const today = new Date().toISOString().split('T')[0];
+    setCurrentDate(today);
+  }, []);
+
   // Department DropDown Load when pageLoad
   useEffect(() => {
     console.log("ball", user)
@@ -256,12 +333,15 @@ export function DesignationEditForm({
       dispatch(fetchAllFormsMenu(88, "allEmpTypeChildMenus")); // For EmployeeType
       dispatch(fetchAllFormsMenu(89, "allLocationChildMenus")); // For Location
       dispatch(fetchAllCountry());
+      dispatch(fetchAllCity());
       dispatch(fetchAllActiveEmployees());
       dispatch(fetchAllFormsMenu(158, "allDesignations")); // For All Designations
       dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsisidaries
       dispatch(fetchAllFormsMenu(190, "allMaritalStatus")); // For All Subsisidaries, "allMaritalStatus")); // For All Marital Status
       // dispatch(fetchAllFormsMenu(87));
       dispatch(fetchAllFormsMenu(125, "allRelationCodeList"));
+      dispatch(fetchAllFormsMenu(109, "allInstitution")); // For Institution
+      dispatch(fetchAllFormsMenu(108, "allDegreeTitle")); // For Degree Title
     }
   }, [dispatch]);
 
@@ -317,7 +397,6 @@ export function DesignationEditForm({
     );
 
   }, [user?.designationId, dashboard.designationId]);
-
 
   ///
 
@@ -431,8 +510,6 @@ export function DesignationEditForm({
 
   }, [user?.teamId, dashboard.teamId]);
   //======================= End
-
-
   //======================= Region
 
   useEffect(() => {
@@ -473,7 +550,6 @@ export function DesignationEditForm({
 
   }, [user?.reportTo, dashboard.reportTo]);
 
-  //======================= Employee Type
 
   useEffect(() => {
     const emptypeId = defchildEmptypeMenus?.value ? defchildEmptypeMenus.value : user.employeeTypeId;
@@ -487,9 +563,6 @@ export function DesignationEditForm({
   }, [user?.employeeTypeId, dashboard.employeeTypeId]);
   //======================= End
 
-
-  //======================= Location
-
   useEffect(() => {
     const locationId = defchildLocationMenus?.value ? defchildLocationMenus.value : user.locationId;
     setDefaultChildLocationMenus(
@@ -502,11 +575,11 @@ export function DesignationEditForm({
   }, [user?.locationId, dashboard.locationId]);
   //======================= End
 
-  useEffect(() => {
-    if (!user.countryId) {
-      dispatch(fetchAllCity(1));
-    }
-  }, [user.countryId, dispatch]);
+  // useEffect(() => {
+  //   if (!user.countryId) {
+  //     dispatch(fetchAllCity(1));
+  //   }
+  // }, [user.countryId, dispatch]);
 
 
   useEffect(() => {
@@ -538,14 +611,12 @@ export function DesignationEditForm({
     }
   };
 
+  // For Edit Form
   useEffect(() => {
     const fetchContactData = async () => {
       try {
-        console.log('test contact', id)
         const response = await axios.post(`${USERS_URL}/profile/read-contact`, { Id: id });
-        console.log("tall resp", response);
-        setContactList(response?.data?.data);
-
+        setDefaultContactList(response?.data?.data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -565,7 +636,7 @@ export function DesignationEditForm({
 
     const fetchAcademicData = async () => {
       try {
-        console.log('test exp', id)
+        console.log('test academic', id)
         const response = await axios.post(`${USERS_URL}/academic/read-all-academic_by_empId`, { Id: id });
         console.log("academy resp", response);
         setAcademicList(response?.data?.data);
@@ -605,27 +676,23 @@ export function DesignationEditForm({
     fetchContactData();
   }, []);
 
+
+  // For Add Employee Contact States
+
   const addRowContact = (element) => {
     console.log("click", element.target.id)
-
-    setDefaultContactList([...defContactList, { transactionType: element.target.id }])
-
-
+    setDefaultContactList([...defContactList, { transactionType: element.target.id, employeeId: id }])
   }
+
   const handleFieldChangedContact = (el) => {
     const index = el.target.id.split('-')[1]
     const key = el.target.id.split('-')[0]
     setDefaultContactList([...defContactList.map((val, ind) => {
-
       if (ind == index) {
-
         val[key] = el.target.value
-
       }
-
       return val
     })])
-
   }
 
   const deleteRowContact = (element) => {
@@ -635,8 +702,186 @@ export function DesignationEditForm({
 
     setDefaultContactList([...data])
   }
+  // End Contact Section
 
-  console.log("contactList", defContactList)
+  // Experience Section
+
+  const addRowExprerience = (element) => {
+
+    setworkExperienceList([...workExperienceList, { transactionType: element.target.id, employeeId: id }])
+  }
+
+  const handleDatePicker = (el, key, index, val) => {
+
+    console.log("datepicker::", el, key, index);
+    setworkExperienceList([...workExperienceList.map((val, ind) => {
+      if (ind == index) {
+        val[key] = new Date(el)
+      }
+      return val
+    })])
+
+  }
+
+  const handleFieldChangedExperience = (el) => {
+
+
+    console.log("::go", el);
+    const index = el?.target?.id.split('-')[1]
+    const key = el?.target?.id.split('-')[0]
+
+    if (key == "countryId") {
+      console.log("::el::", el);
+      //  dispatch(fetchAllCity(el.target.value));
+
+    }
+
+    setworkExperienceList([...workExperienceList.map((val, ind) => {
+      if (ind == index) {
+        val[key] = el?.target?.value
+      }
+      return val
+    })])
+  }
+
+  const deleteRowExperience = (element) => {
+
+    const data = workExperienceList;
+    data.splice(element.target.id, 1);
+
+    setworkExperienceList([...data])
+  }
+
+  // End Experience
+
+
+  // Experience Academic Info
+
+  const addRowAcademic = (element) => {
+
+    setAcademicList([...academicList, { transactionType: element.target.id, employeeId: id }])
+  }
+
+  const handleDatePickerAcademic = (el, key, index, val) => {
+
+    console.log("datepicker::", el, key, index);
+    setAcademicList([...academicList.map((val, ind) => {
+      if (ind == index) {
+        val[key] = new Date(el)
+      }
+      return val
+    })])
+
+  }
+
+  const handleFieldChangedAcademic = (el) => {
+    console.log("::go", el);
+    const index = el.target.id.split('-')[1]
+    const key = el.target.id.split('-')[0]
+
+    if (key == "countryId") {
+      console.log("::el::", el);
+      // dispatch(fetchAllCity(el.target.value));
+
+    }
+
+    setAcademicList([...academicList.map((val, ind) => {
+      if (ind == index) {
+        val[key] = el.target.value
+      }
+      return val
+    })])
+  }
+
+  const deleteRowAcademic = (element) => {
+    const data = academicList;
+    data.splice(element.target.id, 1);
+    setAcademicList([...data])
+  }
+
+  // End Academic
+
+
+  // Employee Skills Info
+
+  const addRowSkills = (element) => {
+
+    setSkillList([...skillsList, { transactionType: element.target.id, employeeId: id }])
+  }
+
+  const handleDatePickerSkills = (el, key, index, val) => {
+
+    console.log("datepicker::", el, key, index);
+    setSkillList([...skillsList.map((val, ind) => {
+      if (ind == index) {
+        val[key] = new Date(el)
+      }
+      return val
+    })])
+
+  }
+
+  const handleFieldChangedSkills = (el) => {
+    console.log("::go", el);
+    const index = el?.target.id.split('-')[1]
+    const key = el?.target.id.split('-')[0]
+    setSkillList([...skillsList.map((val, ind) => {
+      if (ind == index) {
+        val[key] = el.target.value
+      }
+      return val
+    })])
+  }
+
+  const deleteRowSkills = (element) => {
+    const data = skillsList;
+    data.splice(element.target.id, 1);
+    setSkillList([...data])
+  }
+
+  // End Academic
+
+
+  // Employee Incident
+
+  const addRowIncident = (element) => {
+
+    setIncidentList([...incidentList, { transactionType: element.target.id, employeeId: id }])
+  }
+
+  const handleDatePickerIncident = (el, key, index, val) => {
+
+    console.log("datepicker::", el, key, index);
+    setIncidentList([...incidentList.map((val, ind) => {
+      if (ind == index) {
+        val[key] = new Date(el)
+      }
+      return val
+    })])
+
+  }
+
+  const handleFieldChangedIncident = (el) => {
+    console.log("::go", el);
+    const index = el?.target.id.split('-')[1]
+    const key = el?.target.id.split('-')[0]
+    setIncidentList([...incidentList.map((val, ind) => {
+      if (ind == index) {
+        val[key] = el.target.value
+      }
+      return val
+    })])
+  }
+
+  const deleteRowIncident = (element) => {
+    const data = incidentList;
+    data.splice(element.target.id, 1);
+    setIncidentList([...data])
+  }
+
+  // End Academic
+
+  console.log("contactList", defContactList, workExperienceList, academicList, incidentList)
   return (
     <>
       <Formik
@@ -656,12 +901,12 @@ export function DesignationEditForm({
                 console.log(res.data, "looos")
                 setImage(res.data.imageUrl)
 
-                saveEmployeeProfile(values, res.data.imageUrl);
+                saveEmployeeProfile(values, res.data.imageUrl, defContactList, workExperienceList, academicList, skillsList, incidentList);
               });
           }
           else {
             console.log("values emp", values)
-            saveEmployeeProfile(values, profile_image);
+            saveEmployeeProfile(values, profile_image, defContactList, workExperienceList, academicList, skillsList, incidentList);
           }
 
         }}
@@ -756,6 +1001,7 @@ export function DesignationEditForm({
                           <Field
                             name="employeeCode"
                             component={Input}
+                            maxLength="10"
                             placeholder="Enter Employee Code"
                             label={<span> Employee Code<span style={{ color: 'red' }}>*</span></span>}
                             autoComplete="off"
@@ -964,7 +1210,8 @@ export function DesignationEditForm({
                           onChange={(e) => {
                             setFieldValue("countryId", e.value);
                             setDefaultCountry(e);
-                            dispatch(fetchAllCity(e.value));
+                            setDefaultCity({});
+                            // dispatch(fetchAllCity(e.value));
                           }}
                           value={defCountry}
                           error={errors.countryId}
@@ -988,11 +1235,11 @@ export function DesignationEditForm({
                           value={defCity}
                           error={errors.cityId}
                           touched={touched.cityId}
-                          options={dashboard.allCity}
+                          options={dashboard.allCity.filter(x => x.code == values.countryId)}
                         />
                       </div>
                       <div className="col-12 col-md-4 mt-3">
-                        <label>Date Of Joining</label>
+                        <label>Date Of Joining<span style={{ color: 'red' }}>*</span></label>
                         <DatePicker
                           className="form-control"
                           placeholder="Enter Date Of Joining"
@@ -1116,7 +1363,98 @@ export function DesignationEditForm({
                           <div className="invalid-text">{errors.defaultShiftId}</div>
                         )}
                       </div>
+
+
+                      
+                 
+                    </div>
+
+                    <div className="from-group row">
                       <div className="col-12 col-md-4 mt-3">
+                       
+                        <SearchSelect
+                          label={<span> Marital Status<span style={{ color: 'red' }}>*</span></span>}
+                          name="maritalStatus"
+                          // value={values.maritalStatus}
+
+                          onBlur={handleBlur}
+                          onChange={(e) => {
+                            setFieldValue("maritalStatus", e.value || null);
+                            setDefaultMaritalStatus(e);
+                            // dispatch(fetchAllFormsMenu(e.value));
+                          }}
+                          value={(defMaritalStatus || null)}
+                          error={errors.maritalStatus}
+                          touched={touched.maritalStatus}
+                          options={dashboard.allMaritalStatus}
+                        />
+                        {/* <ErrorMessage style={{ color: "red" }} name="maritalStatus" component="div" /> */}
+                      </div>
+                      <div className="col-12 col-md-4 mt-3">
+                        <Select
+                          label={<span> Gender<span style={{ color: 'red' }}>*</span></span>}
+                          name="gender"
+                          value={values.gender}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          style={{ display: "block" }}
+                          autoComplete="off"
+
+                        >
+                          <option value="-1" label="Select Gender" />
+                          <option value="Male" label="Male" />
+                          <option value="Female" label="Female" />
+
+                        </Select>
+                        {errors.gender && touched.gender && (
+                          <div className="invalid-text">{errors.gender}</div>
+                        )}
+
+                      </div>
+                    </div>
+                    <div className="from-group row">
+                      <div className="col-12 col-md-4 mt-3">
+                        <SearchSelect
+                          name="religionId"
+                          label={<span> Religion<span style={{ color: 'red' }}>*</span></span>}
+                          isDisabled={isUserForRead && true}
+
+                          onBlur={() => {
+                            // handleBlur({ target: { name: "countryId" } });
+                          }}
+                          onChange={(e) => {
+                            setFieldValue("religionId", e.value || null);
+                            setDefaultChildReligionMenus(e);
+                            // dispatch(fetchAllFormsMenu(e.value));
+                          }}
+                          value={(defchildReligionMenus || null)}
+                          error={errors.religionId}
+                          touched={touched.religionId}
+                          options={dashboard.allReligionChildMenus}
+                        />
+                      </div>
+                      <div className="col-12 col-md-4 mt-3">
+                        <Select
+                          label={<span> Nationality<span style={{ color: 'red' }}>*</span></span>}
+                          name="nationality"
+                          value={values.nationality}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          style={{ display: "block" }}
+                        >
+                          <option value="-1" label="Select Nationality" />
+                          <option value="Pakistani" label="Pakistani" />
+                          <option value="Other" label="Other" />
+
+                        </Select>
+                        {errors.nationality && touched.nationality && (
+                          <div className="invalid-text">{errors.nationality}</div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="from-group row">
+                    <div className="col-12 col-md-4 mt-3">
                         <Select
                           label="Attendance Type"
                           name="attendanceType"
@@ -1135,9 +1473,7 @@ export function DesignationEditForm({
                           <div className="invalid-text">{errors.attendanceType}</div>
                         )}
                       </div>
-                    </div>
-                    <div className="from-group row">
-                      {
+                        
                         <div className="col-12 col-md-4 mt-3">
                           <SearchSelect
                             name="reportTo"
@@ -1154,10 +1490,10 @@ export function DesignationEditForm({
                             value={(defEmployeeReportTo || null)}
                             error={errors.reportTo}
                             touched={touched.reportTo}
-                            options={dashboard.allEmployees}
-                          />
+                            options={dashboard.allEmployees.filter(x=>x.value != values.Id)}
+                          />{console.log("::report::",dashboard.allEmployees,values.Id)}
                         </div>
-                      }
+                      
                     </div>
                     <br></br>
 
@@ -1257,102 +1593,7 @@ export function DesignationEditForm({
                     </div>
 
 
-                    <div className="from-group row">
-                      <div className="col-12 col-md-4 mt-3">
-                        {/* <Select
-                          label="Marital Status"
-                          name="maritalStatus"
-                          value={values.maritalStatus}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          style={{ display: "block" }}
-                          autoComplete="off"
-                        >
-                          <option value="-1" label="Select..." />
-                          <option value="Single" label="Single" />
-                          <option value="Married" label="Married" />
-
-                        </Select> */}
-                        <SearchSelect
-                          label={<span> Marital Status<span style={{ color: 'red' }}>*</span></span>}
-                          name="maritalStatus"
-                          // value={values.maritalStatus}
-
-                          onBlur={handleBlur}
-                          onChange={(e) => {
-                            setFieldValue("maritalStatus", e.value || null);
-                            setDefaultMaritalStatus(e);
-                            // dispatch(fetchAllFormsMenu(e.value));
-                          }}
-                          value={(defMaritalStatus || null)}
-                          error={errors.maritalStatus}
-                          touched={touched.maritalStatus}
-                          options={dashboard.allMaritalStatus}
-                        />
-                        {/* <ErrorMessage style={{ color: "red" }} name="maritalStatus" component="div" /> */}
-                      </div>
-                      <div className="col-12 col-md-4 mt-3">
-                        <Select
-                          label={<span> Gender<span style={{ color: 'red' }}>*</span></span>}
-                          name="gender"
-                          value={values.gender}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          style={{ display: "block" }}
-                          autoComplete="off"
-
-                        >
-                          <option value="-1" label="Select Gender" />
-                          <option value="Male" label="Male" />
-                          <option value="Female" label="Female" />
-
-                        </Select>
-                        {errors.gender && touched.gender && (
-                          <div className="invalid-text">{errors.gender}</div>
-                        )}
-
-                      </div>
-                    </div>
-                    <div className="from-group row">
-                      <div className="col-12 col-md-4 mt-3">
-                        <SearchSelect
-                          name="religionId"
-                          label={<span> Religion<span style={{ color: 'red' }}>*</span></span>}
-                          isDisabled={isUserForRead && true}
-
-                          onBlur={() => {
-                            // handleBlur({ target: { name: "countryId" } });
-                          }}
-                          onChange={(e) => {
-                            setFieldValue("religionId", e.value || null);
-                            setDefaultChildReligionMenus(e);
-                            // dispatch(fetchAllFormsMenu(e.value));
-                          }}
-                          value={(defchildReligionMenus || null)}
-                          error={errors.religionId}
-                          touched={touched.religionId}
-                          options={dashboard.allReligionChildMenus}
-                        />
-                      </div>
-                      <div className="col-12 col-md-4 mt-3">
-                        <Select
-                          label={<span> Nationality<span style={{ color: 'red' }}>*</span></span>}
-                          name="nationality"
-                          value={values.nationality}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          style={{ display: "block" }}
-                        >
-                          <option value="-1" label="Select Nationality" />
-                          <option value="Pakistani" label="Pakistani" />
-                          <option value="Other" label="Other" />
-
-                        </Select>
-                        {errors.nationality && touched.nationality && (
-                          <div className="invalid-text">{errors.nationality}</div>
-                        )}
-                      </div>
-                    </div>
+                    
                   </div>
                   <br></br>
 
@@ -1448,9 +1689,7 @@ export function DesignationEditForm({
                     <hr></hr>
 
                     <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-
-                      {<a onClick={DesignationUIProps.newContactButtonClick} href='javascript:void(0)'>+ Add Contact </a>}
-
+                      <h3>Contact Info</h3>
                       <table class="table table table-head-custom table-vertical-center overflow-hidden table-hover">
                         <tr style={{ backgroundColor: '#4d5f7a', color: '#fff' }}>
                           <td></td>
@@ -1458,12 +1697,20 @@ export function DesignationEditForm({
                           <td>Relation</td>
                           <td>Contact No</td>
                         </tr>
+
                         {defContactList?.map((obj, rightindex) => (
                           <><tr>
                             <td > <button id={rightindex} onClick={deleteRowContact} className="btn btn-danger btn-sm"> Delete</button></td>
                             <td>
-                              <input className="form-control" type="text" onChange={handleFieldChangedContact}
-                                value={obj.relation_name} id={'relation_name-' + rightindex}></input>
+                              <input
+                                className="form-control"
+                                type="text"
+                                onChange={handleFieldChangedContact}
+                                value={obj.relation_name}
+                                name={`defContactList[${rightindex}].relation_name`} // Corrected name syntax
+                                id={`relation_name-${rightindex}`}
+                              />
+                              <ErrorMessage name={`defContactList[${rightindex}].relation_name`} component="div" className="error" />
                             </td>
                             <td>
                               <select className="form-control" value={obj.relation} onChange={handleFieldChangedContact} id={'relation-' + rightindex} >
@@ -1500,10 +1747,10 @@ export function DesignationEditForm({
                     <br></br>
                     <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
 
-                      {<a onClick={DesignationUIProps.newWorkExperienceButtonClick} href='javascript:void(0)'>+ Add Experience </a>}
-
+                      <h3>Work Experience</h3>
                       <table class="table table table-head-custom table-vertical-center overflow-hidden table-hover">
                         <tr style={{ backgroundColor: '#4d5f7a', color: '#fff' }}>
+                          <td></td>
                           <td>Company</td>
                           <td>Position Held</td>
                           <td>Country</td>
@@ -1511,98 +1758,308 @@ export function DesignationEditForm({
                           <td>Start Date</td>
                           <td>End Date</td>
                         </tr>
+                        {console.log("::work::", workExperienceList)}
                         {workExperienceList?.map((obj, rightindex) => (
+
                           <><tr>
+                            <td id={rightindex} onClick={deleteRowExperience}> <span className="btn btn-danger btn-sm"> Delete</span></td>
                             <td>
-                              {obj.companyName}
+                              <input className="form-control" type="text" onChange={handleFieldChangedExperience}
+                                value={obj.companyName} id={'companyName-' + rightindex}></input>
                             </td>
-                            <td>{obj.positionHeld}</td>
-                            <td>{obj.country}</td>
-                            <td>{obj.city}</td>
-                            <td>{obj.startDate}</td>
-                            <td>{obj.endDate}</td>
+                            <td>
+                              <input className="form-control" type="text" onChange={handleFieldChangedExperience}
+                                value={obj.positionHeld} id={'positionHeld-' + rightindex}></input>
+                            </td>
+                            <td>
+                              <select className="form-control" value={obj.countryId} onChange={handleFieldChangedExperience} id={'countryId-' + rightindex} >
+                                <option value="-1"> --Select--</option>
+                                {
+                                  dashboard.allCountry?.map((x) => {
+                                    return <option value={x.value}> {x.label} </option>
+                                  })}
+
+                                {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
+                              </select>
+                            </td>
+                            <td>
+                              <select className="form-control" value={obj.cityId} onChange={handleFieldChangedExperience} id={'cityId-' + rightindex} >
+                                <option value="-1"> --Select--</option>
+                                {
+
+                                  dashboard.allCity?.map((x) => {
+                                    if (x.code == obj.countryId) {
+                                      return <option value={x.value}> {x.label} </option>
+                                    }
+                                  })}
+
+                                {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
+                              </select>
+                            </td>
+
+                            <td>
+                              <DatePicker
+                                className="form-control"
+                                placeholder="Start Date"
+                                selected={new Date(obj.startDate || currentDate)}
+                                showYearDropdown
+                                scrollableMonthYearDropdown
+                                onChange={(el) => handleDatePicker(el, 'startDate', rightindex, '')}
+                                id={"startDate-" + rightindex}
+                                timeInputLabel="Time:"
+                                dateFormat="dd/MM/yyyy"
+                                showTimeInput
+                                name="startDate"
+                                disabled={isUserForRead}
+                                autoComplete="off"
+                              />
+                            </td>
+                            <td>
+                              <DatePicker
+                                className="form-control"
+                                placeholder="End Date"
+                                selected={new Date(obj.endDate || currentDate)}
+                                showYearDropdown
+                                scrollableMonthYearDropdown
+                                onChange={(el) => handleDatePicker(el, 'endDate', rightindex, '')}
+                                id={"endDate-" + rightindex}
+                                timeInputLabel="Time:"
+                                dateFormat="dd/MM/yyyy"
+                                showTimeInput
+                                name="endDate"
+                                disabled={isUserForRead}
+                                autoComplete="off"
+                              />
+                            </td>
                           </tr>
                           </>
                         ))}
 
 
                       </table>
+                      {<> <div className="from-group row">
+                        <div className="col-12 col-md-4 mt-3">
+                          <input className="btn btn-success btn-sm" type='button' id="Experience" onClick={addRowExprerience} value='+Add'></input>
+                        </div>
+
+                      </div>
+                      </>}
                     </div>
                     <br></br>
                     <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-
-                      {<a onClick={DesignationUIProps.newAcademicButtonClick} href='javascript:void(0)'>+ Add Academic Info </a>}
-
+                      <h3>Academic Info</h3>
                       <table class="table table table-head-custom table-vertical-center overflow-hidden table-hover">
                         <tr style={{ backgroundColor: '#4d5f7a', color: '#fff' }}>
-
-                          <td>Employee</td>
-
+                          <td></td>
                           <td>Institution</td>
                           <td>Degree</td>
                           <td>Country</td>
                           <td>City</td>
-                          <td>Status</td>
+                          <td>CGPA</td>
+                          <td>Start Date</td>
+                          <td>End Date</td>
                         </tr>
+                        {console.log("::aca", academicList)}
                         {academicList?.map((obj, rightindex) => (
                           <>
 
                             <tr>
+                              <td id={rightindex} onClick={deleteRowAcademic}> <span className="btn btn-danger btn-sm"> Delete</span></td>
                               <td>
-                                {obj.employee}
+                                <select className="form-control" value={obj.institutionId} onChange={handleFieldChangedAcademic} id={'institutionId-' + rightindex} >
+                                  {
+                                    dashboard.allInstitution?.map((x) => {
+                                      return <option value={x.value}> {x.label} </option>
+                                    })}
+                                  {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
+                                </select>
                               </td>
-                              <td>{obj.institution}</td>
-                              <td>{obj.degree}</td>
-                              <td>{obj.country}</td>
-                              <td>{obj.city}</td>
-                              <td>{obj.status}</td>
+                              <td>
+                                <select className="form-control" value={obj.degreeId} onChange={handleFieldChangedAcademic} id={'degreeId-' + rightindex} >
+                                  {
+                                    dashboard.allDegreeTitle?.map((x) => {
+                                      return <option value={x.value}> {x.label} </option>
+                                    })}
+                                  {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
+                                </select></td>
+                              <td>
+                                <select className="form-control" value={obj.countryId} onChange={handleFieldChangedAcademic} id={'countryId-' + rightindex} >
+                                  <option value="-1">--Select--</option>
+                                  {
+                                    dashboard.allCountry?.map((x) => {
+                                      return <option value={x.value}> {x.label} </option>
+                                    })}
+
+                                  {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
+                                </select>
+                              </td>
+                              <td>
+                                <select className="form-control" value={obj.cityId} onChange={handleFieldChangedAcademic} id={'cityId-' + rightindex} >
+                                  <option value="-1"> --Select--</option>
+
+                                  {
+
+                                    dashboard.allCity?.map((x) => {
+                                      if (x.code == obj.countryId) {
+                                        return <option value={x.value}> {x.label} </option>
+                                      }
+                                    })}
+
+                                  {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
+                                </select>
+                              </td>
+
+                              <td>
+                                <input className="form-control" type="text" onChange={handleFieldChangedAcademic}
+                                  value={obj.gpa} id={'gpa-' + rightindex}></input>
+                              </td>
+                              <td>
+                                <DatePicker
+                                  className="form-control"
+                                  placeholder="Start Date"
+                                  selected={new Date(obj.startDate || currentDate)}
+                                  showYearDropdown
+                                  scrollableMonthYearDropdown
+                                  onChange={(el) => handleDatePickerAcademic(el, 'startDate', rightindex, '')}
+                                  id={"startDate-" + rightindex}
+                                  timeInputLabel="Time:"
+                                  dateFormat="dd/MM/yyyy"
+                                  showTimeInput
+                                  name="startDate"
+                                  disabled={isUserForRead}
+                                  autoComplete="off"
+                                />
+                              </td>
+                              <td>
+                                <DatePicker
+                                  className="form-control"
+                                  placeholder="End Date"
+                                  selected={new Date(obj.endDate || currentDate)}
+                                  showYearDropdown
+                                  scrollableMonthYearDropdown
+                                  onChange={(el) => handleDatePickerAcademic(el, 'endDate', rightindex, '')}
+                                  id={"endDate-" + rightindex}
+                                  timeInputLabel="Time:"
+                                  dateFormat="dd/MM/yyyy"
+                                  showTimeInput
+                                  name="endDate"
+                                  disabled={isUserForRead}
+                                  autoComplete="off"
+                                />
+                              </td>
                             </tr>
                           </>
                         ))}
 
                       </table>
+                      {<> <div className="from-group row">
+                        <div className="col-12 col-md-4 mt-3">
+                          <input className="btn btn-success btn-sm" type='button' id="Academic" onClick={addRowAcademic} value='+Add'></input>
+                        </div>
+
+                      </div>
+                      </>}
                     </div>
                     <br></br>
                     <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
 
-                      {<a onClick={DesignationUIProps.newSkillButtonClick} href='javascript:void(0)'>+ Add Skill </a>}
-
+                      <h3>Employee Skills</h3>
                       <table class="table table table-head-custom table-vertical-center overflow-hidden table-hover">
                         <tr style={{ backgroundColor: '#4d5f7a', color: '#fff' }}>
 
-                          <td>Employee</td>
-
-                          <td>Description</td>
+                          <td></td>
                           <td>Skill</td>
+                          <td>Description</td>
+
                           <td>rating</td>
                           <td>Start Date</td>
                           <td>End Date</td>
                         </tr>
                         {skillsList?.map((obj, rightindex) => (
                           <>
-
                             <tr>
-                              <td>
-                                {obj.employee}
-                              </td>
-                              <td>{obj.description}</td>
-                              <td>{obj.skill}</td>
-                              <td>{obj.ratingScale}</td>
+                              <td id={rightindex} onClick={deleteRowSkills}> <span className="btn btn-danger btn-sm"> Delete</span></td>
 
-                              <td>{obj.startDate}</td>
-                              <td>{obj.endDate}</td>
+                              <td>
+                                <input className="form-control" type="text" onChange={handleFieldChangedSkills}
+                                  value={obj.skill} id={'skill-' + rightindex}></input>
+                              </td>
+                              <td>
+                                <input className="form-control" type="text" onChange={handleFieldChangedSkills}
+                                  value={obj.description} id={'description-' + rightindex}></input>
+                              </td>
+                              <td>  <Select
+                                name="ratingScale"
+                                value={obj.ratingScale}
+                                onChange={handleFieldChangedSkills}
+                                onBlur={handleBlur}
+                                style={{ display: "block" }}
+                                id={'ratingScale-' + rightindex}
+                              >
+                                <option value="-1" label="Select Rating Scale" />
+                                <option value="1" label="1" />
+                                <option value="2" label="2" />
+                                <option value="3" label="3" />
+                                <option value="4" label="4" />
+                                <option value="5" label="5" />
+                                <option value="6" label="6" />
+                                <option value="7" label="7" />
+                                <option value="8" label="8" />
+                                <option value="9" label="9" />
+                                <option value="10" label="10" />
+                              </Select></td>
+                              <td>
+                                <DatePicker
+                                  className="form-control"
+                                  placeholder="Start Date"
+                                  selected={new Date(obj.startDate || currentDate)}
+                                  showYearDropdown
+                                  scrollableMonthYearDropdown
+                                  onChange={(el) => handleDatePickerSkills(el, 'startDate', rightindex, '')}
+                                  id={"startDate-" + rightindex}
+                                  timeInputLabel="Time:"
+                                  dateFormat="dd/MM/yyyy"
+                                  showTimeInput
+                                  name="startDate"
+                                  disabled={isUserForRead}
+                                  autoComplete="off"
+                                />
+                              </td>
+                              <td>
+                                <DatePicker
+                                  className="form-control"
+                                  placeholder="End Date"
+                                  selected={new Date(obj.endDate || currentDate)}
+                                  showYearDropdown
+                                  scrollableMonthYearDropdown
+                                  onChange={(el) => handleDatePickerSkills(el, 'endDate', rightindex, '')}
+                                  id={"endDate-" + rightindex}
+                                  timeInputLabel="Time:"
+                                  dateFormat="dd/MM/yyyy"
+                                  showTimeInput
+                                  name="endDate"
+                                  disabled={isUserForRead}
+                                  autoComplete="off"
+                                />
+                              </td>
                             </tr>
                           </>
                         ))}
 
                       </table>
+                      {<> <div className="from-group row">
+                        <div className="col-12 col-md-4 mt-3">
+                          <input className="btn btn-success btn-sm" type='button' id="Academic" onClick={addRowSkills} value='+Add'></input>
+                        </div>
+
+                      </div>
+                      </>}
                     </div>
 
                     <br></br>
                     <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
 
-                      {<a onClick={DesignationUIProps.newIncidentButtonClick} href='javascript:void(0)'>+ Add Incident Info </a>}
-
+                      <h3>Incident Info</h3>
                       <table class="table table table-head-custom table-vertical-center overflow-hidden table-hover">
                         <tr style={{ backgroundColor: '#4d5f7a', color: '#fff' }}>
 
@@ -1618,20 +2075,59 @@ export function DesignationEditForm({
                           <>
 
                             <tr>
+                              <td id={rightindex} onClick={deleteRowIncident}> <span className="btn btn-danger btn-sm"> Delete</span></td>
                               <td>
-                                {obj.employee}
+                                <input className="form-control" type="text" onChange={handleFieldChangedIncident}
+                                  value={obj.incidentDetail} id={'incidentDetail-' + rightindex}></input>
                               </td>
-                              <td>{obj.incidentDetail}</td>
-                              <td>{obj.actionTaken}</td>
-                              <td>{obj.actionTakenBy}</td>
+                              <td>
+                                <input className="form-control" type="text" onChange={handleFieldChangedIncident}
+                                  value={obj.actionTaken} id={'actionTaken-' + rightindex}></input>
+                              </td>
 
-                              <td>{obj.incidentDate}</td>
+                              <td>
+                                <select className="form-control" value={obj.actionTakenBy} onChange={handleFieldChangedIncident} id={'actionTakenBy-' + rightindex} >
+                                  <option value='-1'>--Select--</option>
+                                  {
+                                    dashboard.allEmployees?.map((x) => {
+                                      return <option value={x.value}> {x.label} </option>
+                                    })}
+
+                                  {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
+                                </select>
+
+                              </td>
+                              <td>
+                                <DatePicker
+                                  className="form-control"
+                                  placeholder="Date"
+                                  selected={new Date(obj.incidentDate || currentDate)}
+                                  showYearDropdown
+                                  scrollableMonthYearDropdown
+                                  onChange={(el) => handleDatePickerIncident(el, 'incidentDate', rightindex, '')}
+                                  id={"incidentDate-" + rightindex}
+                                  timeInputLabel="Time:"
+                                  dateFormat="dd/MM/yyyy"
+                                  showTimeInput
+                                  name="incidentDate"
+                                  disabled={isUserForRead}
+                                  autoComplete="off"
+                                />
+                              </td>
+
 
                             </tr>
                           </>
                         ))}
 
                       </table>
+                      {<> <div className="from-group row">
+                        <div className="col-12 col-md-4 mt-3">
+                          <input className="btn btn-success btn-sm" type='button' id="Incident" onClick={addRowIncident} value='+Add'></input>
+                        </div>
+
+                      </div>
+                      </>}
                     </div>
                   </div>
                   <div className="from-group row">
