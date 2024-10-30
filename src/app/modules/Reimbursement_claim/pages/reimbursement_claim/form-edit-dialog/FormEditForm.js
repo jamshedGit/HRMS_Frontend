@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { Modal } from "react-bootstrap";
 import { Formik, Form, Field, FieldArray } from "formik";
 import * as Yup from "yup";
+import { format } from 'date-fns';
 import {
   DatePickerField,
   Input,
@@ -82,7 +83,7 @@ export function FormEditForm({
     };
   }, shallowEqual);
 
-
+console.log("user",user)
  
 
   return (
@@ -156,6 +157,7 @@ export function FormEditForm({
                       placeholder="Select Date"
                       label="Date"
                       type="date"
+                
                     />
                   </div>
 
@@ -197,17 +199,17 @@ export function FormEditForm({
                     />
                     <div>
                       <br />
-                      {values.fileName && values.file == values.fileName && (
+                      {user.file && (
                         <>
                           <label>
                             <strong>Existing File:</strong>
                           </label>
                           {
                             <a
-                              href={getUploadUrl(values.fileName)}
+                              href={getUploadUrl(user.file)}
                               target="_blank"
                             >
-                              <span>{getFileName(values.fileName)}</span>
+                              <span>{getFileName(user.file)}</span>
                             </a>
                           }
                         </>
@@ -215,30 +217,7 @@ export function FormEditForm({
                     </div>
                   </div>
 
-                  {/* <div className="col-12 col-md-6 mt-3">
-                    <SearchSelect
-                      name="reimbursement_configurationId"
-                      label={
-                        <span>
-                          Reimbursement Configuration
-                          <span style={{ color: "red" }}>*</span>
-                        </span>
-                      }
-                      isDisabled={isUserForRead}
-                      onChange={(e) => {
-                        setFieldValue("reimbursement_configurationId", e.value || null);
-                        // check_Existed_Data(e.value);
-                      }}
-                      value={
-                        dashboard.allReimbursementConfigList.find(
-                          (option) => option.value === values.reimbursement_configurationId
-                        ) || null
-                      }
-                      options={dashboard.allReimbursementConfigList}
-                      error={errors.reimbursement_configurationId}
-                      touched={touched.reimbursement_configurationId}
-                    />
-                  </div> */}
+               
                 </div>
               </fieldset>
             </Form>

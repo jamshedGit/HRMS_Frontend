@@ -60,7 +60,7 @@ export function FormTable() {
  
   useEffect(() => {
     console.log("run fetch data",formUIProps.employeeId)
-    formUIProps.setIds([]);
+    formUIProps.setIds("");
  
  
     dispatch(actions.fetchSalarypolicies(formUIProps));

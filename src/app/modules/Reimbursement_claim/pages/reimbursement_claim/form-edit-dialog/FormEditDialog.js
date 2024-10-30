@@ -156,7 +156,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         enableLoading={enableLoading}
         loading={loading}
         setIds={formUIProps.setIds}
-        // isEdit={id? true : false}
+        isEdit={id? true : false}
       />
       <ToastContainer
         position="top-right"
