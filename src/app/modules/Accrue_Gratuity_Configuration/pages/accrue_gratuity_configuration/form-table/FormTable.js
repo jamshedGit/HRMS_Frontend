@@ -108,7 +108,7 @@ export function FormTable() {
 
     {
       dataField: "BankCashAccount.formName",
-      text: "Bank Cash Account",
+      text: "Bank/Cash Account",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,

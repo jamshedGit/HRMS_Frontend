@@ -117,8 +117,8 @@ export function FormEditForm({
                       type="number"
                       // maxLength ="3"
                       onInput={(e) => {
-                        if (e.target.value.length > 3) {
-                          e.target.value = e.target.value.slice(0, 3);
+                        if (e.target.value.length > 4) {
+                          e.target.value = e.target.value.slice(0,4);
                         }
                       }}
                       
