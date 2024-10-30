@@ -5,11 +5,12 @@ import * as Yup from "yup";
 import { Input, Select } from "../../../../../../_metronic/_partials/controls";
 import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLabel";
 import { getClassName } from "../../../../../utils/common";
+import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 
 //Validation for Form
 const formValidation = Yup.object().shape({
-  paymentMode: Yup.string().required('Please Select a Payment Mode'),
-  amount: Yup.string().required('Please Enter an Amount').matches(/^\d+(\.\d+)?$/, 'Must be a valid number')
+  paymentMode: Yup.string().required(VALIDATION_MESSAGES.required),
+  amount: Yup.string().required(VALIDATION_MESSAGES.required).matches(/^\d+(\.\d+)?$/, VALIDATION_MESSAGES.validNumber)
 });
 
 export function MasterEditForm({

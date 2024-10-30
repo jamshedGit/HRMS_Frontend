@@ -1,6 +1,7 @@
 import * as requestFromServer from "./formCrud";
 import { ArrearSetupSlice, callTypes } from "./arrearPolicySlice";
 import { toast } from "react-toastify";
+import { SERVER_MESSAGES } from "../../../utils/constants";
 const { actions } = ArrearSetupSlice;
 
 /**
@@ -85,7 +86,7 @@ export const saveRecord = (data, id, disableLoading, onHide) => (dispatch) => {
         if (arrearData) {
           dispatch(actions.ArrearsCreated(arrearData));
           disableLoading();
-          toast.success("Successfully Created", {
+          toast.success(SERVER_MESSAGES.insertedSuccess, {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -99,7 +100,7 @@ export const saveRecord = (data, id, disableLoading, onHide) => (dispatch) => {
       })
       .catch((error) => {
         disableLoading();
-        error.clientMessage = "Can't Update Arrear";
+        error.clientMessage = SERVER_MESSAGES.insertedFail;
         toast.error(error?.response?.data?.message, {
           position: "top-right",
           autoClose: 5000,
@@ -118,7 +119,7 @@ export const saveRecord = (data, id, disableLoading, onHide) => (dispatch) => {
         if (arrearData) {
           dispatch(actions.ArrearsUpdated(arrearData));
           disableLoading();
-          toast.success("Successfully Updated", {
+          toast.success(SERVER_MESSAGES.updatedSuccess, {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -133,7 +134,7 @@ export const saveRecord = (data, id, disableLoading, onHide) => (dispatch) => {
       .catch((error) => {
         disableLoading();
         error.clientMessage = "Can't Update Arrear";
-        toast.error(error?.response?.data?.message, {
+        toast.error(SERVER_MESSAGES.updatedFail, {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -160,7 +161,7 @@ export const deleteRecord = (id, disableLoading, onHide) => (dispatch) => {
     .then((res) => {
       dispatch(actions.ArrearsDeleted({ id }));
       disableLoading();
-      toast.success("Successfully Deleted", {
+      toast.success(SERVER_MESSAGES.deletedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -174,7 +175,7 @@ export const deleteRecord = (id, disableLoading, onHide) => (dispatch) => {
     .catch((error) => {
       disableLoading();
       error.clientMessage = "Can't Delete Arrear";
-      toast.error(error?.response?.data?.message, {
+      toast.error(SERVER_MESSAGES.deletedFail, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
