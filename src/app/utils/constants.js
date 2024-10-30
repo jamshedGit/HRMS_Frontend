@@ -342,3 +342,13 @@ export const WEEK_DAYS = [
     value: 7
   }
 ]
+
+export const VALIDATION_MESSAGES = {
+  required: 'Required',
+  validNumber: 'Must be a valid number',
+  maxTwoDigits: 'Maximum two digit number allowed',
+  maxThreeDigit: 'Maximum three digit number allowed',
+  minZeroValue: 'Should not be less than 0',
+  minOneValue: 'Should not be less than 1',
+  maxHundredValue: 'Should not be greater than 100',
+}
