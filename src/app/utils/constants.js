@@ -312,6 +312,7 @@ export const SURVEY = {
   ],
 };
 
+//Week days data
 export const WEEK_DAYS = [
   {
     label: "Monday",
@@ -342,3 +343,24 @@ export const WEEK_DAYS = [
     value: 7
   }
 ]
+
+//Validation Messages for form
+export const VALIDATION_MESSAGES = {
+  required: 'Required',
+  validNumber: 'Must be a valid number',
+  maxTwoDigits: 'Maximum two digit number allowed',
+  maxThreeDigit: 'Maximum three digit number allowed',
+  minZeroValue: 'Should not be less than 0',
+  minOneValue: 'Should not be less than 1',
+  maxHundredValue: 'Should not be greater than 100',
+}
+
+//Server Response Messages
+export const SERVER_MESSAGES = {
+  insertedSuccess: 'Inserted Successfully!',
+  insertedFail: 'Unable to Insert',
+  updatedSuccess: 'Updated Successfully!',
+  updatedFail: 'Unable to Update',
+  deletedSuccess: 'Deleted Successfully',
+  deletedFail: 'Unable to Delete',
+}

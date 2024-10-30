@@ -6,26 +6,27 @@ import { Input, Select } from "../../../../../../_metronic/_partials/controls";
 import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLabel";
 
 import ActivePayrollMonthLabel from "../../../../../utils/common-modules/ActivePayrollMonthLabel";
+import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 
 //Validation for Form
 const formValidation = Yup.object().shape({
-  type: Yup.string().required('Type is required'),
+  type: Yup.string().required(VALIDATION_MESSAGES.required),
   divisor: Yup.string()
     .when('type', {
       is: '2', // if select value is 2
-      then: Yup.string().required('Divisor is required').matches(/^\d+(\.\d+)?$/, 'Must be a valid number'),
+      then: Yup.string().required(VALIDATION_MESSAGES.required).matches(/^\d+(\.\d+)?$/, VALIDATION_MESSAGES.validNumber),
       otherwise: Yup.string().notRequired(),
     }),
   multiplier: Yup.string()
     .when('type', {
       is: '2', // if select value is 2
-      then: Yup.string().required('Multiplier is required').matches(/^\d+(\.\d+)?$/, 'Must be a valid number'),
+      then: Yup.string().required(VALIDATION_MESSAGES.required).matches(/^\d+(\.\d+)?$/, VALIDATION_MESSAGES.validNumber),
       otherwise: Yup.string().notRequired(),
     }),
   days: Yup.string()
     .when('type', {
       is: '3', // if select value is 3
-      then: Yup.string().required('Days are required').matches(/^\d+(\.\d+)?$/, 'Must be a valid number'),
+      then: Yup.string().required(VALIDATION_MESSAGES.required).matches(/^\d+(\.\d+)?$/, VALIDATION_MESSAGES.validNumber),
       otherwise: Yup.string().notRequired(),
     }),
 });

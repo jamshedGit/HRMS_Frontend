@@ -5,12 +5,13 @@ import * as Yup from "yup";
 import { Input, Select } from "../../../../../../_metronic/_partials/controls";
 import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLabel";
 import { getClassName } from "../../../../../utils/common";
+import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 
 //Validation for Form
 const formValidation = Yup.object().shape({
-  type: Yup.number().required('Please Select a Type'),
-  name: Yup.string().required('Please Enter a Name'),
-  code: Yup.string().required('Please Enter a Code').matches(/^[A-Za-z]{1,3}$/, 'Code must contain only letters (A-Z)'),
+  type: Yup.number().required(VALIDATION_MESSAGES.required),
+  name: Yup.string().required(VALIDATION_MESSAGES.required),
+  code: Yup.string().required(VALIDATION_MESSAGES.required).matches(/^[A-Za-z]{1,3}$/, 'Code must contain only letters (A-Z)'),
 });
 
 export function MasterEditForm({
@@ -25,7 +26,7 @@ export function MasterEditForm({
 }) {
 
   const dropdown = (data) => {
-    return [{ value: "", label: "--Select Type--" }, ...data].map((el) => {
+    return [{ value: "", label: "--Select--" }, ...data].map((el) => {
       return (<>
         <option value={el.value}>{el.label}</option>
       </>)
