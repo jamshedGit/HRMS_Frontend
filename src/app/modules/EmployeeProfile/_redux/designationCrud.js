@@ -30,9 +30,9 @@ export function getEmpProfileById(id) {
 }
 
 //Update
-export function updateEmpProfile(religion) {
-   console.log("updateUser 12", religion)
-  return axios.put(`${USERS_URL}/profile/update-profile`, religion);
+export function updateEmpProfile(bodyObj) {
+   console.log("updateUser 12", bodyObj)
+  return axios.put(`${USERS_URL}/profile/update-profile`, bodyObj);
 }
 
 //Delete

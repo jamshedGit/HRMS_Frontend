@@ -80,20 +80,20 @@ export function ContactEditDialog({ id, show, onHide, userForRead }) {
   // }, [actionsLoading]);
   //console.log("userForEdit", userForEdit);
 
-  const saveEmployeeProfile = (user, image) => {
+  const saveEmployeeProfile = (user, image,contactList,workExperienceList) => {
 
     if (!id) {
 
-      console.log("emp profile save", user,image);
+      console.log("emp profile save", user,image,contactList,workExperienceList);
       const finalObject = { user }
-      dispatch(actions.createEmpProfile({...user, profile_image: image}, disbaleLoading, onHide));
+      dispatch(actions.createEmpProfile({...user, profile_image: image,contactList,workExperienceList}, disbaleLoading, onHide));
 
     } else {
       // const getUserStatus = userStatusTypes.find((item) => {
       //   return item.value === +user.status;
       // });
 
-      console.log("getUserStatus", user,image);
+      console.log("getUserStatus", user,image,contactList);
 
       const EmpProfileUpdatedFields = {
         Id: user.Id,
@@ -138,8 +138,8 @@ export function ContactEditDialog({ id, show, onHide, userForRead }) {
         dateOfRetirement: user.dateOfRetirement
       };
 
-      console.log("profile emp", EmpProfileUpdatedFields);
-      dispatch(actions.updateEmpProfile(EmpProfileUpdatedFields, disbaleLoading, onHide));
+      console.log("profile emp1::1", EmpProfileUpdatedFields,contactList);
+      dispatch(actions.updateEmpProfile(EmpProfileUpdatedFields,contactList, disbaleLoading, onHide));
       dispatch(actions.fetchUsers(usersUIProps.queryParams));
     }
   };
