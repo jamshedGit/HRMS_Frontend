@@ -20,7 +20,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   const title = "FormEditDialog";
   const FormUIContext = useFormUIContext();
  
- 
+
   const usersUIProps = useMemo(() => {
     return {
       queryParams: FormUIContext.queryParams,
@@ -31,6 +31,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     return {
       initUser: FormUIContext.initUser,
       queryParams: FormUIContext.queryParams,
+      setIds: FormUIContext.setIds,
     };
   }, [FormUIContext]);
  
@@ -64,85 +65,86 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   }));
  
 
- 
- 
+  console.log("fetchmoduledata",id)
   useEffect(() => {
-   
+   console.log("fetchmoduledata",id)
     dispatch(actions.fetchmoduledata(id));
  
     // dispatch(actions.fetchmoduledata(formUIProps .queryParams))
   }, [id, dispatch,show]);
  
  
-  const saveForm = async (user) => {
+//   const saveForm = async (user) => {
  
-    console.log("save user",user)
+//     console.log("save user",user)
 
 
-    //    if (user.policies=="" ) {
-    //   toast.error("Detail is incomplete.", {
-    //     position: "top-right",
-    //     autoClose: 5000,
-    //     hideProgressBar: false,
-    //     closeOnClick: true,
-    //     pauseOnHover: true,
-    //     draggable: true,
-    //     progress: undefined,
-    //   });
-    //   return
+//     //    if (user.policies=="" ) {
+//     //   toast.error("Detail is incomplete.", {
+//     //     position: "top-right",
+//     //     autoClose: 5000,
+//     //     hideProgressBar: false,
+//     //     closeOnClick: true,
+//     //     pauseOnHover: true,
+//     //     draggable: true,
+//     //     progress: undefined,
+//     //   });
+//     //   return
 
-    // }
+//     // }
  
  
-    if (!user.Id) {
+//     if (!user.Id) {
  
- console.log("save user",user)
-      const finalObject = { user }
-      dispatch(actions.createSalarypolicy(user, disbaleLoading, onHide));
+//  console.log("save user",user)
+//       const finalObject = { user }
+//       dispatch(actions.createSalarypolicy(user, disbaleLoading, onHide));
      
      
  
-    } else {
+//     } else {
  
      
 
  
-      const formUpdatedFields = {
-        Id: user.Id,
-        reimbursement_typeId: user.reimbursement_typeId,
-        employeeId: user.employeeId,
-        details: user.details,
-        date: user.date,
-        amount: user.amount,
-        // reimbursement_configurationId: user.reimbursement_configurationId,
+//       const formUpdatedFields = {
+//         Id: user.Id,
+//         reimbursement_typeId: user.reimbursement_typeId,
+//         employeeId: user.employeeId,
+//         details: user.details,
+//         date: user.date,
+//         amount: user.amount,
+//         // reimbursement_configurationId: user.reimbursement_configurationId,
 
-      };
+//       };
 
  
-     await dispatch(actions.updateSalarypolicy(formUpdatedFields, disbaleLoading, onHide));
-     await dispatch(actions.fetchSalarypolicies(usersUIProps.queryParams));
+//      await dispatch(actions.updateSalarypolicy(formUpdatedFields, disbaleLoading, onHide));
+//      await dispatch(actions.fetchSalarypolicies(usersUIProps.queryParams));
+//     }
+//   };
+
+
+  const saveForm = (data, resetForm) => {
+    console.log("user upload",user)
+    if (data.file && typeof data.file == 'object') { //This is to check if file is uploaded or not. If uploaded then upload the file to server else just save form values
+      actions.uploadImage(data.file)
+      .then((res) => {
+        data.file = res.data.filename;
+        dispatch(actions.createSalarypolicy(data, disbaleLoading, resetForm));
+      })
     }
-  };
- 
-  return (
-    <Accordion defaultActiveKey="">
-    <Card
-      size="xl"
-      show={show}
-      onHide={onHide}
-      aria-labelledby="example-modal-sizes-title-lg"
-    >
- <Card.Header className="d-flex justify-content-center">
-        <div className='accordion-header-btn w-100  d-flex justify-content-center'>
-          <Accordion.Toggle as={Button} eventKey="0" >
-            Enter Reimbursement Detail
-            <KeyboardArrowDown />
-          </Accordion.Toggle>
-          </div>
-        </Card.Header>
-        <Accordion.Collapse eventKey="0">
-        <Card.Body>
+    else {
+      dispatch(actions.createSalarypolicy(data, disbaleLoading, resetForm));
+    }
+  }
 
+ console.log("id id",id)
+  return (
+    <>
+ 
+  
+  
       <FormEditDialogHeader id={id} isUserForRead={userForRead} />
       <FormEditForm
         saveForm={saveForm}
@@ -153,6 +155,8 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         isUserForRead={userForRead}
         enableLoading={enableLoading}
         loading={loading}
+        setIds={formUIProps.setIds}
+        // isEdit={id? true : false}
       />
       <ToastContainer
         position="top-right"
@@ -165,10 +169,8 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         draggable
         pauseOnHover
       />
-        </Card.Body>
-        </Accordion.Collapse>
-    </Card>
-    </Accordion>
+  
+       </>
   );
 }
  

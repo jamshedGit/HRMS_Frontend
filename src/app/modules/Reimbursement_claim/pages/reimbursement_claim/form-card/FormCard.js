@@ -22,13 +22,14 @@ export function FormCard() {
       employeeId: FormUIContext.employeeId,
       setemployeeId: FormUIContext.setemployeeId,
       queryParamsLeaveApp: FormUIContext.queryParamsLeaveApp,
-      id: FormUIContext.id,
+      id: FormUIContext.ids,
     }
   }, [FormUIContext])
 
-  // useEffect(()=>{
+  useEffect(()=>{
+    console.log('FormUIProps',FormUIProps.id)
 
-  // },[FormUIProps])
+  },[FormUIProps])
 
 
 
@@ -69,7 +70,7 @@ export function FormCard() {
       dispatch(fetchAllActiveEmployees());
 
   }, [dispatch, FormUIProps.employeeId])
-  console.log("employeeId employeeId",FormUIProps.employeeId)
+  console.log("employeeId employeeId FormUIProps.id",FormUIProps.id)
   return (
     <>
 
@@ -91,7 +92,7 @@ export function FormCard() {
         <br />
         <hr />
    {/* FormEditDialog Starts */}
-   <FormEditDialog  employeeId={FormUIProps.employeeId} />
+   <FormEditDialog id={FormUIProps.id} employeeId={FormUIProps.employeeId} />
         {/* FormEditDialog Ends */}
 
         <br />

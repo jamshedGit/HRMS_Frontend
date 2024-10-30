@@ -1,11 +1,22 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Modal } from "react-bootstrap";
 import { Formik, Form, Field, FieldArray } from "formik";
 import * as Yup from "yup";
-import { Input } from "../../../../../../_metronic/_partials/controls"; // Adjust import as needed
+import {
+  DatePickerField,
+  Input,
+  Select,
+  TextArea,
+} from "../../../../../../_metronic/_partials/controls";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import * as actions from "../../../_redux/redux-Actions";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
+import {
+  formatDates,
+  getDateDiffInDays,
+  getFileName,
+  getUploadUrl,
+} from "../../../../../utils/common";
 import {
   fetchAllFormsMenu,
   fetchAllReimbursementConfigList,
@@ -47,17 +58,19 @@ export function FormEditForm({
   isUserForRead,
   enableLoading,
   loading,
+  setIds,
+  isEdit
 }) {
   const dispatch = useDispatch();
   const { dashboard } = useSelector((state) => state);
-
+  const inputFile = useRef(null);
 
   // Fetch necessary data if not already present
   useEffect(() => {
     if (!user.Id) {
       dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsidiaries
       dispatch(fetchAllFormsMenu(202, "allReimbursementTypeList"));
-        //  dispatch(fetchAllReimbursementConfigList("allReimbursementConfigList"))
+      //  dispatch(fetchAllReimbursementConfigList("allReimbursementConfigList"))
     }
     //allPayrolGroupList
   }, [dispatch, user.Id]);
@@ -69,24 +82,35 @@ export function FormEditForm({
     };
   }, shallowEqual);
 
-  const { entities } = currentState;
 
-  let existedId = 0;
-const check=(()=>{
-console.log("hit")
-})
+ 
 
   return (
     <Formik
       enableReinitialize={true}
       initialValues={user}
       // validationSchema={ReimbursementSchema}
-      onSubmit={(values) => {
+
+      onSubmit={(values, { resetForm }) => {
         enableLoading();
-        saveForm(values);
+        //This clearForm function is created to clear form as well as clear any uploaded file as well.
+        //resetForm function doesn't clear file properly so we use this function
+        const clearForm = () => {
+          resetForm();
+          if (inputFile?.current) {
+            inputFile.current.value = "";
+          }
+        }
+        saveForm(values, clearForm)
       }}
+
+
+      // onSubmit={(values) => {
+      //   enableLoading();
+      //   saveForm(values);
+      // }}
     >
-      {({ handleSubmit, errors, touched, values, setFieldValue }) => (
+      {({ handleSubmit, errors, touched, values, setFieldValue ,  handleReset}) => (
         <>
           <Modal.Body className="overlay overlay-block cursor-default">
             {actionsLoading && (
@@ -97,7 +121,6 @@ console.log("hit")
             <Form className="form form-label-right" onSubmit={handleSubmit}>
               <fieldset disabled={isUserForRead}>
                 <div className="form-group row">
-                  
                   <div className="col-12 col-md-6 mt-3">
                     <SearchSelect
                       name="reimbursement_typeId"
@@ -114,7 +137,8 @@ console.log("hit")
                       }}
                       value={
                         dashboard.allReimbursementTypeList.find(
-                          (option) => option.value === values.reimbursement_typeId
+                          (option) =>
+                            option.value === values.reimbursement_typeId
                         ) || null
                       }
                       options={dashboard.allReimbursementTypeList}
@@ -123,39 +147,72 @@ console.log("hit")
                     />
                   </div>
 
-      
                   <div className="col-12 col-md-6 mt-3">
                     <Field
                       name="date"
-                      component={Input}
+                      component={DatePickerField}
+                       disabled={isEdit}
+                        dateFormat="dd/MM/yyyy"
                       placeholder="Select Date"
                       label="Date"
                       type="date"
                     />
                   </div>
 
-             
                   <div className="col-12 col-md-6 mt-3">
-                  <Field
+                    <Field
                       name="details"
-                      component={Input}
+                      component={TextArea}
                       placeholder="Enter Details"
                       label="Details"
                       type="text"
                     />
                   </div>
 
-
-
-
                   <div className="col-12 col-md-6 mt-3">
-                  <Field
+                    <Field
                       name="amount"
                       component={Input}
                       placeholder="Enter Details"
                       label="Amount"
                       type="number"
                     />
+                  </div>
+
+                  <div className="col-12 col-md-4 mt-3">
+                    <label style={{ "margin-right": "0.5rem" }}>
+                      {" "}
+                      Attachment:{" "}
+                    </label>
+                    <input
+                      name="file"
+                      type="file"
+                      accept=".jpeg,.jpg,.png,.pdf,.doc,.docx"
+                      ref={inputFile}
+                      onChange={(event) => {
+                        // Update Formik's value
+                        const file = event.currentTarget.files[0];
+                        setFieldValue("file", file);
+                      }}
+                    />
+                    <div>
+                      <br />
+                      {values.fileName && values.file == values.fileName && (
+                        <>
+                          <label>
+                            <strong>Existing File:</strong>
+                          </label>
+                          {
+                            <a
+                              href={getUploadUrl(values.fileName)}
+                              target="_blank"
+                            >
+                              <span>{getFileName(values.fileName)}</span>
+                            </a>
+                          }
+                        </>
+                      )}
+                    </div>
                   </div>
 
                   {/* <div className="col-12 col-md-6 mt-3">
@@ -191,9 +248,18 @@ console.log("hit")
             {/* Cancel / Ok Button */}
             {!isUserForRead ? (
               <button
-                type="button"
-                onClick={onHide}
+                type="reset"
+                // onClick={onHide}
                 // onClick={() => clear_Existed_Data()}
+
+                onClick={() => {
+                  // setId('')
+                  handleReset()
+               
+                  if (inputFile?.current) {
+                    inputFile.current.value = "";
+                  }
+                }}
 
                 className="btn btn-light btn-elevate"
               >
@@ -216,7 +282,6 @@ console.log("hit")
                 onClick={() => handleSubmit()}
                 className="btn btn-primary btn-elevate"
                 disabled={loading}
-             
               >
                 Save
                 {loading && (

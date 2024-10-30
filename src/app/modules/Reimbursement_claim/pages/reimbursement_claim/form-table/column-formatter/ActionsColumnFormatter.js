@@ -16,13 +16,14 @@ export function ActionsColumnFormatter(
     openReadUserDialog,
     isAccessForEdit,
     isAccessForDelete,
-    openReadFormDialog
+    openReadFormDialog,
+    setIds
   }
 ) {
   const isUserRead = false;
   return (
     <>
-      <OverlayTrigger
+      {/* <OverlayTrigger
         overlay={<Tooltip id="products-edit-tooltip">View</Tooltip>}>
         <a
           title=""
@@ -35,7 +36,7 @@ export function ActionsColumnFormatter(
             />
           </span>
         </a>
-      </OverlayTrigger>
+      </OverlayTrigger> */}
       {isAccessForEdit && row.isActive && (
         <OverlayTrigger
           overlay={<Tooltip id="products-edit-tooltip">Edit</Tooltip>}
@@ -43,7 +44,8 @@ export function ActionsColumnFormatter(
           <a
             title=""
             className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
-            onClick={() => openEditFormDialog(row.Id)}
+            onClick={() => setIds(row.Id)}
+            // onClick={() =>console.log("row Id",row.Id)}
           >
             <span className="svg-icon svg-icon-md svg-icon-primary">
               <SVG

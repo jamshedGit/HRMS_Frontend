@@ -2,12 +2,14 @@ import axios from "axios";
 
 export const USERS_URL = process.env.REACT_APP_API_URL;
 
-//Create user
+
+export function uploadImage(body) {
+  return axios.post(`${USERS_URL}/file-upload`, body);
+}
+
+//Create record
 export function createSalarypolicy(body) {
  
-  
-  // body.Name = body.txtsalarypolicyName;
-  // delete body.txtsalarypolicyName
 
   return axios.post(`${USERS_URL}/reimbursement_claim/create-reimbursement-claim`, body);
 

@@ -22,11 +22,11 @@ export function FormPage({ history }) {
 
     //   history.push("/reimbursement_claim/read-all-reimbursement-claim/new");
     // },
-    // openEditFormDialog: (id) => {
-    //   // dispatch(fetchAllCountry());
+    openEditFormDialog: (id) => {
+      // dispatch(fetchAllCountry());
 
-    //   history.push(`/reimbursement_claim/read-all-reimbursement-claim/${id}/edit`);
-    // },
+      history.push(`/reimbursement_claim/read-all-reimbursement-claim/${id}/edit`);
+    },
     openDeleteFormDialog: (id, status) => {
       history.push(`/reimbursement_claim/read-all-reimbursement-claim/${id}/${status}/delete`);
     },
@@ -56,6 +56,7 @@ export function FormPage({ history }) {
           />
         )}
       </Route>
+
     
       <FormCard />
       <ToastContainer

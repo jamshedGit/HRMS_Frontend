@@ -24,7 +24,7 @@ export function FormTable() {
  
   const formUIProps = useMemo(() => {
     return {
-      ids: formUIContext.ids,
+      id: formUIContext.id,
       setIds: formUIContext.setIds,
       queryParams: formUIContext.queryParams,
       setQueryParams: formUIContext.setQueryParams,

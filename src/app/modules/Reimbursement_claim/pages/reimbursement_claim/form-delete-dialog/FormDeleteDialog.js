@@ -9,12 +9,32 @@ export function FormDeleteDialog({ id, status, show, onHide }) {
 
   const [loading, setLoading] = useState(false);
   // Customers UI Context
-  const usersUIContext = useFormUIContext();
-  const usersUIProps = useMemo(() => {
+  // const usersUIContext = useFormUIContext();
+  // const usersUIProps = useMemo(() => {
+  //   return {
+  //     queryParams: usersUIContext.queryParams,
+  //   };
+  // }, [usersUIContext]);
+
+  const formUIContext = useFormUIContext();
+  const formUIProps = useMemo(() => {
+    console.log("formUIContext",formUIContext)
     return {
-      queryParams: usersUIContext.queryParams,
+      ids: formUIContext.ids,
+      setIds: formUIContext.setIds,
+      employeeId: formUIContext.employeeId,
+      queryParams: formUIContext.queryParams,
+      setQueryParams: formUIContext.setQueryParams,
+      openEditFormDialog: formUIContext.openEditFormDialog,
+      openDeleteFormDialog: formUIContext.openDeleteFormDialog,
+      openActiveFormDialog: formUIContext.openActiveFormDialog,
+      openReadFormDialog: formUIContext.openReadFormDialog,
     };
-  }, [usersUIContext]);
+  }, [formUIContext]);
+
+
+
+
 
   // Customers Redux state
   const dispatch = useDispatch();
@@ -48,7 +68,8 @@ export function FormDeleteDialog({ id, status, show, onHide }) {
     dispatch(actions.deleteSalarypolicy(id)).then(() => {
       onHide();
       // refresh list after deletion
-      dispatch(actions.fetchSalarypolicies(usersUIProps.queryParams));
+      console.log("deleted formUIProps",formUIProps)
+      dispatch(actions.fetchSalarypolicies(formUIProps));
    
       disableLoading();
     });

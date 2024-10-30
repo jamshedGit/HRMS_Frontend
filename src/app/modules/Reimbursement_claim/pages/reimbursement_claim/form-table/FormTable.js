@@ -6,6 +6,7 @@ import paginationFactory, {
 } from "react-bootstrap-table2-paginator";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import * as actions from "../../../_redux/redux-Actions";
+import { format } from 'date-fns';
 import {
   getHandlerTableChange,
   NoRecordsFoundMessage,
@@ -113,13 +114,17 @@ export function FormTable() {
 
  
     {
-      dataField: "details",
-      text: "details",
+      dataField: "date",
+      text: "date",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
       style: {
         minWidth: "10px",
+      },
+      formatter: (cell) => {
+        // Format the date without timestamp
+        return format(new Date(cell), 'dd-MMM-yyyy'); // Customize format as needed
       },
     },
 
@@ -141,10 +146,11 @@ export function FormTable() {
       isDummyField: true,
       formatter: ActionsColumnFormatter,
       formatExtraData: {
+        setIds:formUIProps.setIds,
         openEditFormDialog: formUIProps.openEditFormDialog,
         openDeleteFormDialog: formUIProps.openDeleteFormDialog,
-        openActiveFormDialog: formUIProps.openActiveFormDialog,
-        openReadFormDialog: formUIProps.openReadFormDialog,
+        // openActiveFormDialog: formUIProps.openActiveFormDialog,
+        // openReadFormDialog: formUIProps.openReadFormDialog,
         isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,
         isAccessForDelete: isAccessForDelete
           ? isAccessForDelete.isAccess
