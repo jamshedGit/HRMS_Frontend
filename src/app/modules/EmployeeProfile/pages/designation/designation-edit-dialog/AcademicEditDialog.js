@@ -67,33 +67,22 @@ export function AcademicEditDialog({ id, show, onHide, userForRead }) {
 
   useEffect(() => {
     dispatch(actions.fetchUser(id));
-
-    // dispatch(actions.fetchUser(banksUIProps.queryParams))
   }, [id, dispatch]);
 
-  // useEffect(() => {
-  //   console.log("UseEffect call");
-  //   if (actionsLoading === false) {
-  //     console.log("UseEffect call inside function");
-  //     disbaleLoading();
-  //   }
-  // }, [actionsLoading]);
-  //console.log("userForEdit", userForEdit);
-
-  const saveEmployeeProfile = (user, image) => {
+  const saveEmployeeProfile = (user, image,contactList) => {
 
     if (!id) {
 
-      console.log("emp profile save", user, image);
-      const finalObject = { user }
-      dispatch(actions.createEmpProfile({ ...user, profile_image: image }, disbaleLoading, onHide));
+      console.log("emp profile save", user, image,contactList);
+    
+      dispatch(actions.createEmpProfile({ ...user, profile_image: image,contactList }, disbaleLoading, onHide));
 
     } else {
       // const getUserStatus = userStatusTypes.find((item) => {
       //   return item.value === +user.status;
       // });
 
-      console.log("getUserStatus 1", user, image);
+      console.log("getUserStatus::", user, image,contactList);
       console.log("userId des", user.designationId);
       const EmpProfileUpdatedFields = {
         designationId: user.designationId || 0,
@@ -139,8 +128,8 @@ export function AcademicEditDialog({ id, show, onHide, userForRead }) {
         dateOfRetirement: user.dateOfRetirement
       };
 
-      console.log("profile emp", EmpProfileUpdatedFields);
-      dispatch(actions.updateEmpProfile(EmpProfileUpdatedFields, disbaleLoading, onHide));
+      console.log("profile emp::3", EmpProfileUpdatedFields);
+      dispatch(actions.updateEmpProfile(EmpProfileUpdatedFields,contactList, disbaleLoading, onHide));
       dispatch(actions.fetchUsers(usersUIProps.queryParams));
     }
   };

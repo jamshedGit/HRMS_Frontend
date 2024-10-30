@@ -108,15 +108,13 @@ export const activeUser = (id) => (dispatch) => {
     });
 };
 
-export const createEmpProfile = (EmpProfileForCreation, disbaleLoading, onHide) => (
+export const createEmpProfile = (BodyObj, disbaleLoading, onHide) => (
   dispatch
 ) => {
-  // EmpProfileForCreation.phNo = EmpProfileForCreation.phNo.toString();
-  // EmpProfileForCreation.cnic = EmpProfileForCreation.cnic.toString();
-
-  console.log("emp for creation", EmpProfileForCreation);
+ 
+  console.log("BodyObj", BodyObj);
   return requestFromServer
-    .createEmpProfile(EmpProfileForCreation)
+    .createEmpProfile(BodyObj)
     .then((res) => {
       dispatch(actions.startCall({ callType: callTypes.action }));
       const user = res.data?.data;
@@ -151,9 +149,9 @@ export const createEmpProfile = (EmpProfileForCreation, disbaleLoading, onHide) 
     });
 };
 
-export const updateEmpProfile = (user, disbaleLoading, onHide) => (dispatch) => {
+export const updateEmpProfile = (user,contactList,workExperienceList,academicList,skillsList,incidentList, disbaleLoading, onHide) => (dispatch) => {
   return requestFromServer
-    .updateEmpProfile(user)
+    .updateEmpProfile({...user,contactList,workExperienceList,academicList,skillsList,incidentList})
     .then((response) => {
       console.log("my response",response?.config?.data);
       const updatedProfile = response?.config?.data; // response.data?.data;
