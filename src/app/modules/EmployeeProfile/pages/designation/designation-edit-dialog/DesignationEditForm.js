@@ -83,6 +83,8 @@ const profileValidation = Yup.object().shape(
     cityId: Yup.string()
       .required("Required*"),
 
+
+
     dateOfJoining: Yup.date()
       .max(currentDate, 'Date of joining cannot be in the future')
       .required("Required*"),
@@ -128,11 +130,21 @@ const profileValidation = Yup.object().shape(
         ),
       }),
 
+      file: Yup.mixed()
+      .required("File is required")
+      .test("fileFormat", "Unsupported format. Please upload a .jpg or .png file.", (value) => {
+       console.log("img::",value);
+        if (!value) return false; // Validate if file is provided
+        const file = value[0]; // Get the first file
+        return file && (file.type === "image/jpeg" || file.type === "image/png");
+      }),
+
     nic_no: Yup.string()
       .matches(/^\d{5}-\d{7}-\d{1}$/, 'ID Card No must be in the format 12345-6789012-3')
       .required('Required'),
-    // passportNo: Yup.string()
-    // .matches(/^\d$/, 'ID Card No must be exactly 13 digits and contain only numbers') // Regex to match exactly 14 digits
+
+    passportNo: Yup.string()
+    .matches(/^\d$/, 'ID Card No must be exactly 15 digits and contain only numbers'), // Regex to match exactly 14 digits
     // .required('ID Card No is required'), // Make it required if necessary
 
     email_official: Yup.string()
@@ -147,21 +159,23 @@ const profileValidation = Yup.object().shape(
 
 
 
-    phone_cell: Yup.string()
+      phone_cell: Yup.string()
       .nullable() // Allows null values
-      .matches(/^[0-9]*$/, 'Phone no must contain only digits') // Optional regex for digits
+      .matches(/^0[0-9]*$/, 'Phone number must start with 0 and contain only digits') // Must start with 0 and contain only digits
+      .max(15, "Employee code must be at most 15 characters long")
       .notRequired(), // Make it optional if you want
 
     phone_home: Yup.string()
       .nullable() // Allows null values
-      .matches(/^[0-9]*$/, 'Phone home must contain only digits') // Optional regex for digits
+      .matches(/^0[0-9]*$/, 'Phone number must start with 0 and contain only digits') // Must start with 0 and contain only digits
+      .max(15, "Employee code must be at most 15 characters long")
       .notRequired(), // Make it optional if you want
 
     phone_official: Yup.string()
       .nullable() // Allows null values
-      .matches(/^[0-9]*$/, 'Phone official must contain only digits') // Optional regex for digits
+      .matches(/^0[0-9]*$/, 'Phone number must start with 0 and contain only digits') // Must start with 0 and contain only digits
+      .max(15, "Employee code must be at most 15 characters long")
       .notRequired(), // Make it optional if you want
-
 
     dateOfBirth: Yup.date()
       .nullable()
@@ -193,12 +207,12 @@ const profileValidation = Yup.object().shape(
 
 
 ).test('check-marital-status', 'Invalid marital status for selected title', function (value) {
-  console.log("validate::",value)
+  console.log("validate::", value)
   const { title, maritalStatus, gender } = value;
 
   // Check conditions based on title // 196 == Single
   if (title === 'Mrs.' && maritalStatus === '196') {
-    
+
     return this.createError({ path: 'maritalStatus', message: 'Mrs. cannot be single.' });
   }
 
@@ -210,29 +224,12 @@ const profileValidation = Yup.object().shape(
     return this.createError({ path: 'gender', message: 'cannot be female.' });
   }
 
+  
+
   return true; // No error
 });
 
 
-
-
-const ReimbursementSchema = Yup.object().shape({
-  subsidiaryId: Yup.number().required("Subsidiary is required"),
-  payroll_groupId: Yup.number().required("Payroll group is required"),
-  cycle_typeId: Yup.number().required("Cycle type required"),
-
-
-
-  accounts: Yup.array().of(
-    Yup.object().shape({
-      reimbursement_typeId: Yup.number().required("required"),
-      expense_accountId: Yup.number()
-        .required("Expense account is required"),
-      bank_accountId: Yup.number().required("bank account required"),
-
-    })
-  )
-});
 
 
 
@@ -322,7 +319,7 @@ export function DesignationEditForm({
 
   // Department DropDown Load when pageLoad
   useEffect(() => {
-    console.log("ball", user)
+
     if (!user.Id) {
       dispatch(fetchAllDept(1));
       dispatch(fetchAllFormsMenu(143, "allEmployeeGradeList")); // For All Grade Codes
@@ -370,7 +367,7 @@ export function DesignationEditForm({
 
   //===== Date Of Birth
   useEffect(() => {
-    console.log("user DOB", user.dateOfBirth)
+
     if (user.dateOfBirth) {
       setDOBDate(new Date(user.dateOfBirth));
     }
@@ -900,7 +897,6 @@ export function DesignationEditForm({
               .then((res) => {
                 console.log(res.data, "looos")
                 setImage(res.data.imageUrl)
-
                 saveEmployeeProfile(values, res.data.imageUrl, defContactList, workExperienceList, academicList, skillsList, incidentList);
               });
           }
@@ -939,7 +935,8 @@ export function DesignationEditForm({
                             <div>
                               <img name='profile_image' width={120} height={120} src={profile_image} />
                               <h4>Select Image</h4>
-                              <input type="file" name="myImage" onChange={onImageChange} />
+                              <input type="file" name="myImage"   accept=".jpg, .jpeg, .png" onChange={onImageChange} />
+                                <ErrorMessage className="form-feedBack" name="myImage" component="div" />
                             </div>
                           </div>
                         </div>
@@ -1259,7 +1256,7 @@ export function DesignationEditForm({
                           error={errors.dateOfJoining}
                           touched={touched.dateOfJoining}
                         />
-                        <ErrorMessage style={{ color: "red" }} name="dateOfJoining" component="div" />
+                        <ErrorMessage className="form-feedBack"  name="dateOfJoining" component="div" />
                       </div>
 
                       <div className="col-12 col-md-4 mt-3">
@@ -1281,7 +1278,7 @@ export function DesignationEditForm({
                           disabled={isUserForRead}
                           autoComplete="off"
                         />
-                        <ErrorMessage style={{ color: "red" }} name="dateOfConfirmation" component="div" />
+                        <ErrorMessage  className="form-feedBack" name="dateOfConfirmation" component="div" />
                       </div>
                       <div className="col-12 col-md-4 mt-3">
                         <label>Date Confirmation Due<span style={{ color: 'red' }}>*</span> </label>
@@ -1300,7 +1297,7 @@ export function DesignationEditForm({
                           disabled={isUserForRead}
                           autoComplete="off"
                         />
-                        <ErrorMessage style={{ color: "red" }} name="dateOfConfirmationDue" component="div" />
+                        <ErrorMessage  className="form-feedBack" name="dateOfConfirmationDue" component="div" />
                       </div>
                       <div className="col-12 col-md-4 mt-3">
                         <label>Date Confirmation Extended <span style={{ color: 'red' }}>*</span> </label>
@@ -1319,7 +1316,7 @@ export function DesignationEditForm({
                           disabled={isUserForRead}
                           autoComplete="off"
                         />
-                        <ErrorMessage style={{ color: "red" }} name="dateOfConfirmationEnter" component="div" />
+                        <ErrorMessage  className="form-feedBack" name="dateOfConfirmationEnter" component="div" />
                       </div>
                       <div className="col-12 col-md-4 mt-3">
                         <label>Contract Expiry <span style={{ color: 'red' }}>*</span></label>
@@ -1338,7 +1335,7 @@ export function DesignationEditForm({
                           disabled={isUserForRead}
                           autoComplete="off"
                         />
-                        <ErrorMessage style={{ color: "red" }} name="dateOfContractExpiry" component="div" />
+                        <ErrorMessage  className="form-feedBack" name="dateOfContractExpiry" component="div" />
                       </div>
 
 
@@ -1365,13 +1362,13 @@ export function DesignationEditForm({
                       </div>
 
 
-                      
-                 
+
+
                     </div>
 
                     <div className="from-group row">
                       <div className="col-12 col-md-4 mt-3">
-                       
+
                         <SearchSelect
                           label={<span> Marital Status<span style={{ color: 'red' }}>*</span></span>}
                           name="maritalStatus"
@@ -1454,7 +1451,7 @@ export function DesignationEditForm({
                     </div>
 
                     <div className="from-group row">
-                    <div className="col-12 col-md-4 mt-3">
+                      <div className="col-12 col-md-4 mt-3">
                         <Select
                           label="Attendance Type"
                           name="attendanceType"
@@ -1473,27 +1470,27 @@ export function DesignationEditForm({
                           <div className="invalid-text">{errors.attendanceType}</div>
                         )}
                       </div>
-                        
-                        <div className="col-12 col-md-4 mt-3">
-                          <SearchSelect
-                            name="reportTo"
-                            label={<span> Report To</span>}
-                            isDisabled={isUserForRead && true}
-                            // onBlur={() => {
-                            //   handleBlur({ target: { name: "countryId" } });
-                            // }}
-                            onChange={(e) => {
-                              setFieldValue("reportTo", e.value || null);
-                              setEmployeeReportToDefault(e);
-                              //dispatch(fetchAllActiveEmployees(e.value));
-                            }}
-                            value={(defEmployeeReportTo || null)}
-                            error={errors.reportTo}
-                            touched={touched.reportTo}
-                            options={dashboard.allEmployees.filter(x=>x.value != values.Id)}
-                          />{console.log("::report::",dashboard.allEmployees,values.Id)}
-                        </div>
-                      
+
+                      <div className="col-12 col-md-4 mt-3">
+                        <SearchSelect
+                          name="reportTo"
+                          label={<span> Report To</span>}
+                          isDisabled={isUserForRead && true}
+                          // onBlur={() => {
+                          //   handleBlur({ target: { name: "countryId" } });
+                          // }}
+                          onChange={(e) => {
+                            setFieldValue("reportTo", e.value || null);
+                            setEmployeeReportToDefault(e);
+                            //dispatch(fetchAllActiveEmployees(e.value));
+                          }}
+                          value={(defEmployeeReportTo || null)}
+                          error={errors.reportTo}
+                          touched={touched.reportTo}
+                          options={dashboard.allEmployees.filter(x => x.value != values.Id)}
+                        />
+                      </div>
+
                     </div>
                     <br></br>
 
@@ -1525,7 +1522,7 @@ export function DesignationEditForm({
                           autoComplete="off"
 
                         />
-                        <ErrorMessage style={{ color: "red" }} name="dateOfBirth" component="div" />
+                        <ErrorMessage  className="form-feedBack" name="dateOfBirth" component="div" />
                       </div>
 
                       <div className="col-12 col-md-4 mt-3">
@@ -1548,7 +1545,7 @@ export function DesignationEditForm({
                           disabled={isUserForRead}
                           autoComplete="off"
                         />
-                        <ErrorMessage style={{ color: "red" }} name="dateOfRetirement" component="div" />
+                        <ErrorMessage  className="form-feedBack" name="dateOfRetirement" component="div" />
                       </div>
                     </div>
 
@@ -1584,6 +1581,7 @@ export function DesignationEditForm({
                       <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="passportNo"
+                          maxLength="15"
                           component={Input}
                           placeholder="Enter Passport No"
                           label="Enter Passport No"
@@ -1593,7 +1591,7 @@ export function DesignationEditForm({
                     </div>
 
 
-                    
+
                   </div>
                   <br></br>
 
@@ -1630,6 +1628,7 @@ export function DesignationEditForm({
                           component={Input}
                           placeholder="Enter Home Phone"
                           label="Phone Home"
+                          maxLength="15"
                           autoComplete="off"
                         />
                       </div>
@@ -1637,6 +1636,7 @@ export function DesignationEditForm({
                         <Field
                           name="phone_official"
                           component={Input}
+                          maxLength="15"
                           placeholder="Enter Offical Phone"
                           label="Offical Phone"
                           autoComplete="off"
@@ -1646,6 +1646,7 @@ export function DesignationEditForm({
                         <Field
                           name="phone_cell"
                           component={Input}
+                          maxLength="15"
                           placeholder="Enter Mobile Phone"
                           label="Cell No."
                           autoComplete="off"
@@ -1707,10 +1708,9 @@ export function DesignationEditForm({
                                 type="text"
                                 onChange={handleFieldChangedContact}
                                 value={obj.relation_name}
-                                name={`defContactList[${rightindex}].relation_name`} // Corrected name syntax
                                 id={`relation_name-${rightindex}`}
                               />
-                              <ErrorMessage name={`defContactList[${rightindex}].relation_name`} component="div" className="error" />
+                              
                             </td>
                             <td>
                               <select className="form-control" value={obj.relation} onChange={handleFieldChangedContact} id={'relation-' + rightindex} >
@@ -1722,11 +1722,11 @@ export function DesignationEditForm({
 
                                 {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
                               </select>
-
                             </td>
                             <td>
                               <input className="form-control" type="text" onChange={handleFieldChangedContact}
-                                value={obj.contactNo} id={'contactNo-' + rightindex}></input>
+                                value={obj.contactNo} id={'contactNo-' + rightindex} ></input>
+                                
                             </td>
                             {/* <td>{obj.relation_emp}</td>
                             <td>{obj.contactNo}</td> */}
@@ -2063,7 +2063,7 @@ export function DesignationEditForm({
                       <table class="table table table-head-custom table-vertical-center overflow-hidden table-hover">
                         <tr style={{ backgroundColor: '#4d5f7a', color: '#fff' }}>
 
-                          <td>Employee</td>
+                          <td></td>
 
                           <td>Incident</td>
                           <td>Action Taken</td>
@@ -2157,6 +2157,7 @@ export function DesignationEditForm({
               <> </>
               {!isUserForRead && (
                 <button
+                
                   type="submit"
                   onClick={() => handleSubmit()}
                   className="btn btn-primary btn-elevate"
