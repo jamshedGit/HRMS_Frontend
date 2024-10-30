@@ -210,7 +210,44 @@ export const fetchAllLeaveType = (key) => async (dispatch) => {
     .getAllLeaveTypes()
     .then((response) => {
       const entities = [...response.data?.data];
-      console.log("dispatching fetchAllFormsMenu",entities)
+      dispatch(actions.AllChildMenusFetch({ entities, key }));
+    })
+    .catch((error) => {
+      toast.error("Something went wrong");
+    });
+};
+
+/**
+ * 
+ * Get All Subsidiaries Data from Server and set it in state on the key provided in argument
+ * 
+ * @param {String} key 
+ * @returns 
+ */
+export const fetchAllSubsidiaryData = (key) => async (dispatch) => {
+  return await requestFromServer
+    .getAllSubsidiary()
+    .then((response) => {
+      const entities = [...response.data?.data];
+      dispatch(actions.AllChildMenusFetch({ entities, key }));
+    })
+    .catch((error) => {
+      toast.error("Something went wrong");
+    });
+};
+
+/**
+ * 
+ * Get All Subsidiaries Data from Server and set it in state on the key provided in argument
+ * 
+ * @param {String} key 
+ * @returns 
+ */
+export const fetchAllFiscalYearData = (key) => async (dispatch) => {
+  return await requestFromServer
+    .getAllFiscalYear()
+    .then((response) => {
+      const entities = [...response.data?.data];
       dispatch(actions.AllChildMenusFetch({ entities, key }));
     })
     .catch((error) => {

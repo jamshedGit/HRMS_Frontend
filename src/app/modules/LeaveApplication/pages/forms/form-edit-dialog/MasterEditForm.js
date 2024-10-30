@@ -186,7 +186,7 @@ export function MasterEditForm({
                         placeholder=""
                         onBlur={handleBlur}
                         onChange={(e) => {
-                          const value = e.target.value == '--Select--' ? null : Number(e.target.value)
+                          const value = e.target.value == '--Select--' ? '' : Number(e.target.value)
                           setFieldValue('leaveType', value)
                         }}
                         label={

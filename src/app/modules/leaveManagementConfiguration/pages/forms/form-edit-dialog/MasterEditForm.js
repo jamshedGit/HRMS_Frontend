@@ -140,7 +140,7 @@ export function MasterEditForm({
                         placeholder=""
                         onBlur={handleBlur}
                         onChange={(e) => {
-                          const value = e.target.value == '--Select--' ? null : e.target.value
+                          const value = e.target.value == '--Select--' ? '' : e.target.value
                           setFieldValue('subsidiaryId', value)
                           const filter = { subsidiaryId: value, gradeId: values.gradeId, employeeTypeId: values.employeeTypeId }
                           getOldData(filter)
@@ -171,7 +171,7 @@ export function MasterEditForm({
                         placeholder=""
                         onBlur={handleBlur}
                         onChange={(e) => {
-                          const value = e.target.value == '--Select--' ? null : e.target.value
+                          const value = e.target.value == '--Select--' ? '' : e.target.value
                           setFieldValue('gradeId', value)
                           const filter = { subsidiaryId: values.subsidiaryId, gradeId: value, employeeTypeId: values.employeeTypeId }
                           getOldData(filter)
@@ -202,7 +202,7 @@ export function MasterEditForm({
                         placeholder=""
                         onBlur={handleBlur}
                         onChange={(e) => {
-                          const value = e.target.value == '--Select--' ? null : e.target.value
+                          const value = e.target.value == '--Select--' ? '' : e.target.value
                           setFieldValue('employeeTypeId', value)
                           const filter = { subsidiaryId: values.subsidiaryId, gradeId: values.gradeId, employeeTypeId: value }
                           getOldData(filter)

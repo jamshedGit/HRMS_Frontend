@@ -45,7 +45,7 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
                         component={Select}
                         className={errors.leavetypePolicies?.[index]?.leaveType && touched.leavetypePolicies?.[index]?.leaveType ? 'form-control is-invalid' : 'form-control'}
                         onChange={(e) => {
-                          const value = e.target.value == '--Select--' ? null : Number(e.target.value)
+                          const value = e.target.value == '--Select--' ? '' : Number(e.target.value)
                           setFieldValue(
                             `leavetypePolicies[${index}].leaveType`,
                             value

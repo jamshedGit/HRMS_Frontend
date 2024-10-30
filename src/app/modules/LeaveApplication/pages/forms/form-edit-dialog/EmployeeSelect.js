@@ -53,7 +53,7 @@ export function EmployeeSelect({
                       placeholder=""
                       onBlur={handleBlur}
                       onChange={(e) => {
-                        const value = e.target.value == '--Select--' ? null : Number(e.target.value)
+                        const value = e.target.value == '--Select--' ? '' : Number(e.target.value)
                         setFieldValue('employeeId', value)
                         setemployeeId(value)
                       }}

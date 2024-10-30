@@ -93,6 +93,14 @@ export const getAllLeaveTypes = async (Id) => {
   return await axios.get(`${USERS_URL}/settings/read-all-leave-types`);
 };
 
+export const getAllSubsidiary = async (Id) => {
+  return await axios.get(`${USERS_URL}/settings/read-all-subsidiaries`);
+};
+
+export const getAllFiscalYear = async (Id) => {
+  return await axios.get(`${USERS_URL}/settings/read-all-fiscal-year`);
+};
+
 export const getAllParentDepartments = async (Id) => {
   return await axios.get(`${USERS_URL}/settings/read-all-parentDept`, {
     Id: Id,
