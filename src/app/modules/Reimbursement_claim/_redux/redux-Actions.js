@@ -7,7 +7,7 @@ const { actions } = reimbursement_claimSlice;
 
 export const fetchSalarypolicies = (params) => async (dispatch) => {
 
-
+console.log("fetchSalarypolicies",params)
   dispatch(actions.startCall({ callType: callTypes.list }));
 
   return requestFromServer.getAllSalarypolicy(params)

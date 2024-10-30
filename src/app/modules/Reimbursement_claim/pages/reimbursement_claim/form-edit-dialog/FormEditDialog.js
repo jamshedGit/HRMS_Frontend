@@ -32,6 +32,8 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
       initUser: FormUIContext.initUser,
       queryParams: FormUIContext.queryParams,
       setIds: FormUIContext.setIds,
+      employeeId: FormUIContext.employeeId,
+      queryParams: FormUIContext.queryParams,
     };
   }, [FormUIContext]);
  
@@ -123,19 +125,41 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
 //      await dispatch(actions.fetchSalarypolicies(usersUIProps.queryParams));
 //     }
 //   };
+const trigger = () => {
+  dispatch(actions.fetchSalarypolicies(formUIProps));
+};
 
 
-  const saveForm = (data, resetForm) => {
+
+  const saveForm = async(data, resetForm) => {
+    const formUpdatedFields = {
+              Id: user.Id,
+              reimbursement_typeId: user.reimbursement_typeId,
+              employeeId: user.employeeId,
+              details: user.details,
+              date: user.date,
+              amount: user.amount,
+              // reimbursement_configurationId: user.reimbursement_configurationId,
+      
+            };
     console.log("user upload",user)
+
     if (data.file && typeof data.file == 'object') { //This is to check if file is uploaded or not. If uploaded then upload the file to server else just save form values
-      actions.uploadImage(data.file)
+     
+  
+     actions.uploadImage(data.file)
       .then((res) => {
         data.file = res.data.filename;
         dispatch(actions.createSalarypolicy(data, disbaleLoading, resetForm));
+     
       })
+
+      trigger()
     }
     else {
-      dispatch(actions.createSalarypolicy(data, disbaleLoading, resetForm));
+      console.log("if condition")
+     await dispatch(actions.createSalarypolicy(data, disbaleLoading, resetForm));
+     await dispatch(actions.fetchSalarypolicies(formUIProps));
     }
   }
 
