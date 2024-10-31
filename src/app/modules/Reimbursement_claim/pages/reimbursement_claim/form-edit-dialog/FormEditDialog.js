@@ -76,58 +76,6 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   }, [id, dispatch, show]);
 
 
-  //   const saveForm = async (user) => {
-
-  //     console.log("save user",user)
-
-
-  //     //    if (user.policies=="" ) {
-  //     //   toast.error("Detail is incomplete.", {
-  //     //     position: "top-right",
-  //     //     autoClose: 5000,
-  //     //     hideProgressBar: false,
-  //     //     closeOnClick: true,
-  //     //     pauseOnHover: true,
-  //     //     draggable: true,
-  //     //     progress: undefined,
-  //     //   });
-  //     //   return
-
-  //     // }
-
-
-  //     if (!user.Id) {
-
-  //  console.log("save user",user)
-  //       const finalObject = { user }
-  //       dispatch(actions.createSalarypolicy(user, disbaleLoading, onHide));
-
-
-
-  //     } else {
-
-
-
-
-  //       const formUpdatedFields = {
-  //         Id: user.Id,
-  //         reimbursement_typeId: user.reimbursement_typeId,
-  //         employeeId: user.employeeId,
-  //         details: user.details,
-  //         date: user.date,
-  //         amount: user.amount,
-  //         // reimbursement_configurationId: user.reimbursement_configurationId,
-
-  //       };
-
-
-  //      await dispatch(actions.updateSalarypolicy(formUpdatedFields, disbaleLoading, onHide));
-  //      await dispatch(actions.fetchSalarypolicies(usersUIProps.queryParams));
-  //     }
-  //   };
-  // const trigger = () => {
-  //   dispatch(actions.fetchSalarypolicies(formUIProps));
-  // };
 
 
 
@@ -167,8 +115,9 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         details: data.details,
         date: data.date,
         amount: data.amount,
-        file:data?.file || ""
-        // reimbursement_configurationId: user.reimbursement_configurationId,
+        file:data?.file || "",
+        // pay_in_payroll_forId:"", 
+        // pay_slip_refId: "", 
   
       }
       if (data.file && typeof data.file == 'object') { //This is to check if file is uploaded or not. If uploaded then upload the file to server else just save form values

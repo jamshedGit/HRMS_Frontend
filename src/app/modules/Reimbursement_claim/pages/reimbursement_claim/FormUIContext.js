@@ -36,7 +36,10 @@ export function FormUIProvider({ FormUIEvents, children }) {
     details: "",
     date:"",
     amount:"",
-    // reimbursement_configurationId:""
+    file:"",
+    // pay_in_payroll_forId:"", 
+    // pay_slip_refId: "", 
+
 
   }
 

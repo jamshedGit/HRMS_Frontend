@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { Modal } from "react-bootstrap";
 import { Formik, Form, Field, FieldArray } from "formik";
 import * as Yup from "yup";
-import { format } from 'date-fns';
+import { format } from "date-fns";
 import {
   DatePickerField,
   Input,
@@ -23,33 +23,24 @@ import {
   fetchAllReimbursementConfigList,
 } from "../../../../../../_metronic/redux/dashboardActions";
 
-// Define the validation schema for the main form and the policies
-// const ReimbursementSchema = Yup.object().shape({
-//   subsidiaryId: Yup.number().required("Subsidiary is required"),
-//   payroll_groupId: Yup.number().required("Payroll group is required"),
-//   cycle_typeId: Yup.number().required("Cycle type required"),
-
-//   policies: Yup.array().of(
-//     Yup.object().shape({
-//       reimbursement_typeId: Yup.number().required(
-//         "Reimbursement type required"
-//       ),
-//       max_amount: Yup.number()
-//         .min(1, "Must be at least 1")
-//         .required("Max  amount is required"),
-//       attachment_required: Yup.string().required("Required"),
-//       grades: Yup.string().required("Required"),
-//     })
-//   ),
-
-//   accounts: Yup.array().of(
-//     Yup.object().shape({
-//       reimbursement_typeId: Yup.number().required("required"),
-//       expense_accountId: Yup.number().required("Expense account is required"),
-//       bank_accountId: Yup.number().required("bank account required"),
-//     })
-//   ),
-// });
+const ReimbursementSchema = Yup.object().shape({
+  reimbursement_typeId: Yup.number().required("Required"),
+  details: Yup.string().required("Required"),
+  date: Yup.date().required("Required"),
+  amount: Yup.number()
+    .min(0, "Must be at least 0")
+    .max(99999999, "Must be at most 99999999")
+    .required("Required"),
+  file: Yup.mixed()
+    .required("Required")
+    .test(
+      "fileSize",
+      "File is too large (max 5MB)",
+      (value) => !value || (value && value.size <= 5 * 1024 * 1024) // 5 MB limit
+    )
+    .required("Required"),
+  // pay_in_payroll_forId: Yup.number().required("Required"),
+});
 
 export function FormEditForm({
   saveForm,
@@ -60,7 +51,7 @@ export function FormEditForm({
   enableLoading,
   loading,
   setIds,
-  isEdit
+  isEdit,
 }) {
   const dispatch = useDispatch();
   const { dashboard } = useSelector((state) => state);
@@ -83,16 +74,14 @@ export function FormEditForm({
     };
   }, shallowEqual);
 
-console.log("user",user)
- 
+  console.log("user", user);
 
   return (
     <Formik
-    // key={user.Id || "new"}
+      // key={user.Id || "new"}
       enableReinitialize={true}
       initialValues={user}
-      // validationSchema={ReimbursementSchema}
-
+      validationSchema={ReimbursementSchema}
       onSubmit={(values, { resetForm }) => {
         enableLoading();
         //This clearForm function is created to clear form as well as clear any uploaded file as well.
@@ -102,17 +91,23 @@ console.log("user",user)
           if (inputFile?.current) {
             inputFile.current.value = "";
           }
-        }
-        saveForm(values, clearForm)
+        };
+        saveForm(values, clearForm);
       }}
-
 
       // onSubmit={(values) => {
       //   enableLoading();
       //   saveForm(values);
       // }}
     >
-      {({ handleSubmit, errors, touched, values, setFieldValue ,  handleReset}) => (
+      {({
+        handleSubmit,
+        errors,
+        touched,
+        values,
+        setFieldValue,
+        handleReset,
+      }) => (
         <>
           <Modal.Body className="overlay overlay-block cursor-default">
             {actionsLoading && (
@@ -154,15 +149,12 @@ console.log("user",user)
                     <Field
                       name="date"
                       component={DatePickerField}
-                      
-                        dateFormat="dd/MM/yyyy"
+                      dateFormat="dd/MM/yyyy"
                       placeholder="Select Date"
                       label="Date"
                       type="date"
-                
                     />
                   </div>
-
 
                   <div className="col-12 col-md-6 mt-3">
                     <Field
@@ -173,9 +165,9 @@ console.log("user",user)
                       type="number"
                     />
                   </div>
-                  {/* <div className="col-12 col-md-6 mt-3">
+                  <div className="col-12 col-md-6 mt-3">
                     <SearchSelect
-                      name="reimbursement_typeId"
+                      name="pay_in_payroll_forId"
                       label={
                         <span>
                           Pay In Payroll For
@@ -183,78 +175,23 @@ console.log("user",user)
                         </span>
                       }
                       // isDisabled={isUserForRead}
-                      disabled={isEdit}
+                      // disabled={isEdit}
                       onChange={(e) => {
-                        setFieldValue("reimbursement_typeId", e.value || null);
+                        setFieldValue("pay_in_payroll_forId", e.value || null);
                         // check_Existed_Data(e.value);
                       }}
                       value={
                         dashboard.allReimbursementTypeList.find(
                           (option) =>
-                            option.value === values.reimbursement_typeId
+                            option.value === values.pay_in_payroll_forId
                         ) || null
                       }
                       options={dashboard.allReimbursementTypeList}
-                      error={errors.reimbursement_typeId}
-                      touched={touched.reimbursement_typeId}
-                    />
-                  </div> */}
-
-                  {/* <div className="col-12 col-md-6 mt-3">
-                    <SearchSelect
-                      name="reimbursement_typeId"
-                      label={
-                        <span>
-                          Payslip RFE
-                          <span style={{ color: "red" }}>*</span>
-                        </span>
-                      }
-                      // isDisabled={isUserForRead}
-                      disabled={isEdit}
-                      onChange={(e) => {
-                        setFieldValue("reimbursement_typeId", e.value || null);
-                        // check_Existed_Data(e.value);
-                      }}
-                      value={
-                        dashboard.allReimbursementTypeList.find(
-                          (option) =>
-                            option.value === values.reimbursement_typeId
-                        ) || null
-                      }
-                      options={dashboard.allReimbursementTypeList}
-                      error={errors.reimbursement_typeId}
-                      touched={touched.reimbursement_typeId}
-                    />
-                  </div> */}
-{/* 
-                  <div className="col-12 col-md-6 mt-3">
-                    <SearchSelect
-                      name="reimbursement_typeId"
-                      label={
-                        <span>
-                          Reimbursement Configuration
-                          <span style={{ color: "red" }}>*</span>
-                        </span>
-                      }
-                      // isDisabled={isUserForRead}
-                      disabled={isEdit}
-                      onChange={(e) => {
-                        setFieldValue("reimbursement_typeId", e.value || null);
-                        // check_Existed_Data(e.value);
-                      }}
-                      value={
-                        dashboard.allReimbursementTypeList.find(
-                          (option) =>
-                            option.value === values.reimbursement_typeId
-                        ) || null
-                      }
-                      options={dashboard.allReimbursementTypeList}
-                      error={errors.reimbursement_typeId}
-                      touched={touched.reimbursement_typeId}
+                      error={errors.pay_in_payroll_forId}
+                      touched={touched.pay_in_payroll_forId}
                     />
                   </div>
-                   */}
-                  
+
                   <div className="col-12 col-md-6 mt-3">
                     <Field
                       name="details"
@@ -264,6 +201,29 @@ console.log("user",user)
                       type="text"
                     />
                   </div>
+
+                  {/* <div className="col-12 col-md-6 mt-3">
+                    <SearchSelect
+                      name="pay_slip_refId"
+                      label={
+                        <span>
+                          Pay Slip REFID <span style={{ color: "red" }}>*</span>
+                        </span>
+                      }
+                      disabled={isEdit}
+                      // onChange={(e) =>
+                      //   setFieldValue("pay_slip_refId", e.value || null)
+                      // } // This won't be called since it's disabled
+                      // value={
+                      //   dashboard.allPaySlipList.find(
+                      //     (option) => option.value === values.pay_slip_refId
+                      //   ) || null
+                      // }
+                      // options={dashboard.allPaySlipList}
+                      // error={errors.pay_slip_refId}
+                      // touched={touched.pay_slip_refId}
+                    />
+                  </div> */}
 
                   <div className="col-12 col-md-12 mt-3">
                     <label style={{ "margin-right": "0.5rem" }}>
@@ -281,6 +241,12 @@ console.log("user",user)
                         setFieldValue("file", file);
                       }}
                     />
+                    {/* {Formik.errors.file && Formik.touched.file && (
+          <div className="error-message" style={{ color: 'red' }}>
+            {Formik.errors.file}
+          </div>
+        )} */}
+
                     <div>
                       <br />
                       {user.file && (
@@ -289,10 +255,7 @@ console.log("user",user)
                             <strong>Existing File:</strong>
                           </label>
                           {
-                            <a
-                              href={getUploadUrl(user.file)}
-                              target="_blank"
-                            >
+                            <a href={getUploadUrl(user.file)} target="_blank">
                               <span>{getFileName(user.file)}</span>
                             </a>
                           }
@@ -300,8 +263,6 @@ console.log("user",user)
                       )}
                     </div>
                   </div>
-
-               
                 </div>
               </fieldset>
             </Form>
@@ -316,14 +277,13 @@ console.log("user",user)
                 // onClick={() => clear_Existed_Data()}
 
                 onClick={() => {
-                  setIds('')
-                  handleReset()
-               
+                  setIds("");
+                  handleReset();
+
                   if (inputFile?.current) {
                     inputFile.current.value = "";
                   }
                 }}
-
                 className="btn btn-light btn-elevate"
               >
                 Cancel
@@ -345,7 +305,6 @@ console.log("user",user)
                 onClick={() => handleSubmit()}
                 className="btn btn-primary btn-elevate"
                 disabled={loading}
-               
               >
                 Save
                 {loading && (
