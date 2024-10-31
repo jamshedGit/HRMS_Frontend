@@ -84,7 +84,12 @@ const VIEW_FIELDS = [
     name: 'Date of Confirmation',
     value: 'dateOfConfirmation',
     isDate: true
-  }
+  },
+  // {
+  //   name: 'profile_image',
+  //   value: 'profile_image',
+  //   value: true
+  // }
 ]
 
 const EmployeeProfile = ({ employeeId }) => {
@@ -95,6 +100,7 @@ console.log("employeeId view detail",employeeId)
     if (employeeId) {
       getEmployeeProfileById(employeeId).then((res) => {
         if (res?.data?.data) {
+          console.log("employee view detail",res?.data?.data)
           setdata(res.data.data)
         }
       }).catch((err) => {
@@ -120,6 +126,31 @@ console.log("employeeId view detail",employeeId)
         </Card.Header>
         <Accordion.Collapse eventKey="0">
           <Card.Body>
+          <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
+                
+                    <div className="from-group row">
+                      <div className="col-12 col-md-4 mt-3">
+                        <div>
+                          <div>
+                            <div>
+                            <img
+                      name='profile_image'
+                      src={data.profile_image ? `${data.profile_image}` : ''}
+                      alt="Profile"
+                      width={120}
+                      height={120}
+                    />
+                              <br/>
+                              <br/>
+                           
+                              <h4>Profile Image</h4>
+                         
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
             {
               Object.keys(data).length ? <Row>
                 {VIEW_FIELDS.map((obj, index) => (
@@ -131,6 +162,7 @@ console.log("employeeId view detail",employeeId)
                 ))}
               </Row> : <>Please Choose an Employee</>
             }
+            </div>
           </Card.Body>
         </Accordion.Collapse>
       </Card>
