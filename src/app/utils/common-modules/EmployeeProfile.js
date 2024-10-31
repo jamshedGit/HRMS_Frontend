@@ -143,7 +143,7 @@ console.log("employeeId view detail",employeeId)
                               <br/>
                               <br/>
                            
-                              <h4>Profile Image</h4>
+                        
                          
                             </div>
                           </div>

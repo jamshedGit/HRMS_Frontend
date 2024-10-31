@@ -131,7 +131,8 @@ console.log("user",user)
                           <span style={{ color: "red" }}>*</span>
                         </span>
                       }
-                      isDisabled={isUserForRead}
+                      // isDisabled={isUserForRead}
+                      disabled={isEdit}
                       onChange={(e) => {
                         setFieldValue("reimbursement_typeId", e.value || null);
                         // check_Existed_Data(e.value);
@@ -152,7 +153,7 @@ console.log("user",user)
                     <Field
                       name="date"
                       component={DatePickerField}
-                       disabled={isEdit}
+                      
                         dateFormat="dd/MM/yyyy"
                       placeholder="Select Date"
                       label="Date"
@@ -161,15 +162,6 @@ console.log("user",user)
                     />
                   </div>
 
-                  <div className="col-12 col-md-6 mt-3">
-                    <Field
-                      name="details"
-                      component={TextArea}
-                      placeholder="Enter Details"
-                      label="Details"
-                      type="text"
-                    />
-                  </div>
 
                   <div className="col-12 col-md-6 mt-3">
                     <Field
@@ -180,8 +172,99 @@ console.log("user",user)
                       type="number"
                     />
                   </div>
+                  <div className="col-12 col-md-6 mt-3">
+                    <SearchSelect
+                      name="reimbursement_typeId"
+                      label={
+                        <span>
+                          Pay In Payroll For
+                          <span style={{ color: "red" }}>*</span>
+                        </span>
+                      }
+                      // isDisabled={isUserForRead}
+                      disabled={isEdit}
+                      onChange={(e) => {
+                        setFieldValue("reimbursement_typeId", e.value || null);
+                        // check_Existed_Data(e.value);
+                      }}
+                      value={
+                        dashboard.allReimbursementTypeList.find(
+                          (option) =>
+                            option.value === values.reimbursement_typeId
+                        ) || null
+                      }
+                      options={dashboard.allReimbursementTypeList}
+                      error={errors.reimbursement_typeId}
+                      touched={touched.reimbursement_typeId}
+                    />
+                  </div>
 
-                  <div className="col-12 col-md-4 mt-3">
+                  <div className="col-12 col-md-6 mt-3">
+                    <SearchSelect
+                      name="reimbursement_typeId"
+                      label={
+                        <span>
+                          Payslip RFE
+                          <span style={{ color: "red" }}>*</span>
+                        </span>
+                      }
+                      // isDisabled={isUserForRead}
+                      disabled={isEdit}
+                      onChange={(e) => {
+                        setFieldValue("reimbursement_typeId", e.value || null);
+                        // check_Existed_Data(e.value);
+                      }}
+                      value={
+                        dashboard.allReimbursementTypeList.find(
+                          (option) =>
+                            option.value === values.reimbursement_typeId
+                        ) || null
+                      }
+                      options={dashboard.allReimbursementTypeList}
+                      error={errors.reimbursement_typeId}
+                      touched={touched.reimbursement_typeId}
+                    />
+                  </div>
+
+                  <div className="col-12 col-md-6 mt-3">
+                    <SearchSelect
+                      name="reimbursement_typeId"
+                      label={
+                        <span>
+                          Reimbursement Configuration
+                          <span style={{ color: "red" }}>*</span>
+                        </span>
+                      }
+                      // isDisabled={isUserForRead}
+                      disabled={isEdit}
+                      onChange={(e) => {
+                        setFieldValue("reimbursement_typeId", e.value || null);
+                        // check_Existed_Data(e.value);
+                      }}
+                      value={
+                        dashboard.allReimbursementTypeList.find(
+                          (option) =>
+                            option.value === values.reimbursement_typeId
+                        ) || null
+                      }
+                      options={dashboard.allReimbursementTypeList}
+                      error={errors.reimbursement_typeId}
+                      touched={touched.reimbursement_typeId}
+                    />
+                  </div>
+                  
+                  
+                  <div className="col-12 col-md-6 mt-3">
+                    <Field
+                      name="details"
+                      component={TextArea}
+                      placeholder="Enter Details"
+                      label="Details"
+                      type="text"
+                    />
+                  </div>
+
+                  <div className="col-12 col-md-12 mt-3">
                     <label style={{ "margin-right": "0.5rem" }}>
                       {" "}
                       Attachment:{" "}
