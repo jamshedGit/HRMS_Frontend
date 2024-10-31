@@ -4,33 +4,40 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { Input } from "../../../../../../_metronic/_partials/controls"; // Adjust import as needed
 import { useDispatch, useSelector } from "react-redux";
-
-
+import {amountLimit, formatNumberWithCommas} from "../../../../../utils/common"
+import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 
  // percentage: Yup.string().required("Required*"),
 const tax_slabEditSchema = Yup.object().shape({
   // from_amount: Yup.string().required("Required*"),
 
   from_amount: Yup.number() 
-  .min(0, "Must be at least 0") 
-  .required("Required*"),
+  .min(0,VALIDATION_MESSAGES.minZeroValue) 
+  .required(VALIDATION_MESSAGES.required),
 
   // to_amount: Yup.string().required("Required*"),
 
   to_amount: Yup.number() 
-  .min(0, "Must be at least 0") 
-  .required("Required*"),
+  .min(0,VALIDATION_MESSAGES.minZeroValue) 
+  .required(VALIDATION_MESSAGES.required ),
 
-  percentage: Yup.number() 
-    .min(0, "Must be at least 0") 
-    .max(100, "Must be at most 100") 
-    .required("Required*"),
+  // percentage: Yup.number() 
+  //   .min(0,VALIDATION_MESSAGES.minZeroValue) 
+  //   .max(100,VALIDATION_MESSAGES.maxHundredValue) 
+    
+  //   .required(VALIDATION_MESSAGES.required),
+
+  percentage: Yup.number().min(0, VALIDATION_MESSAGES.minZeroValue).max(100, VALIDATION_MESSAGES.maxHundredValue).test(
+    'max-decimals',
+    VALIDATION_MESSAGES.minZeroValue,
+    (value) => /^\d{1,4}(\.\d{1,2})?$/.test(value?.toString())
+  ).required(VALIDATION_MESSAGES.required),
 
   // fixed_amount: Yup.string().required("Required*"),
 
   fixed_amount: Yup.number() 
-  .min(0, "Must be at least 0") 
-  .required("Required*"),
+  .min(0, VALIDATION_MESSAGES.minZeroValue) 
+  .required(VALIDATION_MESSAGES.required),
 });
 
 
@@ -87,6 +94,9 @@ export function FormEditForm({
                       label="From Amount"
                       type="number"
                       // min={0}
+                      onInput={(e) => {
+                        e.target.value = amountLimit(e.target.value); // Limit to 3 digits
+                      }}
                     />
                   </div>
 
@@ -98,6 +108,9 @@ export function FormEditForm({
                       label="To Amount"
                       type="number"
                       min={0}
+                      onInput={(e) => {
+                        e.target.value = amountLimit(e.target.value); // Limit to 3 digits
+                      }}
                     />
                   </div>
 
@@ -108,8 +121,38 @@ export function FormEditForm({
                       placeholder="Enter Percentage"
                       label="Percentage"
                       type="number"
-                      min={0}
-                      max={100}
+                      
+               
+                      onChange={(e) => {
+                        if (Number (e.target.value) <= 100) {
+                          // e.target.value = e.target.value.slice(0,5);
+                          if(/^\d{0,3}(\.\d{1,2})?$/.test(e.target.value?.toString())){
+                            setFieldValue("percentage",e.target.value)
+
+                          }
+                        }
+                      }}
+
+                      // onInput={(e) => {
+                      //   const inputValue = e.target.value;
+                      
+                      //   // Allow the decimal point and check the format
+                      //   const regex = /^(?:100(?:\.0(?:0)?)?|\d{1,2}(?:\.\d{1,2})?)$/;
+                      
+                      //   // If the input matches the regex, accept it
+                      //   if (regex.test(inputValue)) {
+                      //     e.target.value = inputValue;
+                      //   } else {
+                      //     // If it doesn't match, find the last valid input
+                      //     const lastValidMatch = inputValue.match(/^(?:100(?:\.0(?:0)?)?|\d{1,2}(?:\.\d{1,2})?)$/);
+                      //     e.target.value = lastValidMatch ? lastValidMatch[0] : '';
+                      //   }
+                      // }}
+                      
+                      
+                      
+                      
+             
                     />
                   </div>
                   <div className="col-12 col-md-4 mt-3">
@@ -120,6 +163,9 @@ export function FormEditForm({
                       label="Fixed Amount"
                       type="number"
                       min={0}
+                      onInput={(e) => {
+                        e.target.value = amountLimit(e.target.value); // Limit to 3 digits
+                      }}
                     />
                   </div>
                 </div>

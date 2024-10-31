@@ -123,7 +123,7 @@ export const updateSalarypolicy = (user, disbaleLoading, onHide) => (dispatch) =
       dispatch(actions.startCall({ callType: callTypes.action }));
       disbaleLoading();
       onHide();
-      toast.success(response.data.message + " Updated", {
+      toast.success(response.data.message , {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

@@ -17,6 +17,10 @@ import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatte
 import { Pagination } from "../../../../../../_metronic/_partials/controls";
 import { useFormUIContext } from "../FormUIContext";
 import { DatetimeColumnFormatter } from "../../../../Dashboard/pages/dashboard/last-trips-vehicles-table/column-formatter/CreatedColumnFormatter";
+import {formatNumberWithCommas} from "../../../../../utils/common"
+
+
+
 
 export function FormTable() {
   //Users UI Context
@@ -77,20 +81,16 @@ export function FormTable() {
       sortCaret: sortCaret,
       headerSortingClasses,
       style: {
-        minWidth: "160px",
+        minWidth: "10px",
+        textAlign: "center",
       },
+      headerStyle: {
+        textAlign: "center", // Align header text to the left
+      },
+      formatter: (cell) => formatNumberWithCommas(cell), 
     },
 
-    // {
-    //   dataField: "value",
-    //   text: "Value",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    //   headerSortingClasses,
-    //   style: {
-    //     minWidth: "10px",
-    //   },
-    // },
+
 
 {
   dataField: "to_amount",
@@ -100,20 +100,31 @@ export function FormTable() {
   headerSortingClasses,
   style: {
     minWidth: "10px",
+    textAlign: "center",
   },
+  headerStyle: {
+    textAlign: "center", // Align header text to the left
+  },
+  formatter: (cell) => formatNumberWithCommas(cell), 
+
  
 },
 
 
     {
       dataField: "percentage",
-      text: "Percentage (%)",
+      text: "Percentage",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
       style: {
         minWidth: "10px",
+        textAlign: "center",
       },
+      headerStyle: {
+        textAlign: "center", // Center header text
+      },
+     
     },
 
     {
@@ -124,7 +135,12 @@ export function FormTable() {
       headerSortingClasses,
       style: {
         minWidth: "10px",
+        textAlign: "center",
       },
+      headerStyle: {
+        textAlign: "center", // Align header text to the left
+      },
+      formatter: (cell) => formatNumberWithCommas(cell), 
     },
 
 

@@ -186,9 +186,10 @@ export const fetchAllDept = (id) => async (dispatch) => {
  * @param {string} text 
  * @returns 
  */
-export const fetchAllFormsMenu = (id, key, text=null) => async (dispatch) => {
+export const fetchAllFormsMenu = (id, key, text=null,mergeLabel=false) => async (dispatch) => {
+  console.log("key",key)
   return await requestFromServer
-    .getAllFormMenus(id, text)
+    .getAllFormMenus(id, text,mergeLabel)
     .then((response) => {
       const entities = [...response.data?.data];
       dispatch(actions.AllChildMenusFetch({ entities, key }));
