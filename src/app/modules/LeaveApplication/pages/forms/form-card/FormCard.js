@@ -26,6 +26,7 @@ export function FormCard() {
       setemployeeId: FormUIContext.setemployeeId,
       queryParamsLeaveApp: FormUIContext.queryParamsLeaveApp,
       id: FormUIContext.id,
+      setId: FormUIContext.setId
     }
   }, [FormUIContext])
 
@@ -55,7 +56,7 @@ export function FormCard() {
       <CardBody>
 
         {/* EmployeeSelect Starts */}
-        <EmployeeSelect setemployeeId={formUIProps.setemployeeId} />
+        <EmployeeSelect setId={formUIProps.setId} setemployeeId={formUIProps.setemployeeId} />
         {/* EmployeeSelect Ends */}
 
         <br />

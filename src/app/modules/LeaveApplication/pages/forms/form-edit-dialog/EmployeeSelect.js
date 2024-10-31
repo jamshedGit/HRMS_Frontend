@@ -10,7 +10,8 @@ import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 
 export function EmployeeSelect({
   actionsLoading,
-  setemployeeId
+  setemployeeId,
+  setId
 }) {
 
   //Get all Employee list from dashboard global state
@@ -57,6 +58,9 @@ export function EmployeeSelect({
                         const value = e.target.value == '--Select--' ? null : Number(e.target.value)
                         setFieldValue('employeeId', value)
                         setemployeeId(value)
+                        if(!value){
+                          setId('')
+                        }
                       }}
                       label={
                         <span>
