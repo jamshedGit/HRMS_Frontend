@@ -87,3 +87,26 @@ export const getUploadUrl = (fileName) => {
   }
   return '';
 }
+
+export const formatNumberWithCommas = (number) => {
+  if (number == null) return ''; // Handle null or undefined
+  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+
+
+
+export const amountLimit = (value,) => {
+  // Convert the input to a string and check its length
+  if (value.length > 8) {
+    return value.slice(0, 8); // Limit the length
+  }
+  return value; // Return the original value if within limit
+};
+
+
+
+// export const percentageLimit = (value,) => {
+//   // Convert the input to a string and check its length
+//    .matches(/^(100|[1-9]?[0-9])(\.[0-9]{1,2})?$/, 'Must be a valid percentage (0-100) with up to 2 decimal places')
+//   return value; // Return the original value if within limit
+// };

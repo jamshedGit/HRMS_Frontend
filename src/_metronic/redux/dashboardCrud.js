@@ -82,10 +82,11 @@ export const getAllDepartments = async (Id) => {
   });
 };
 
-export const getAllFormMenus = async (Id, text=null) => {
+export const getAllFormMenus = async (Id, text=null,mergeLabel=false) => {
   return await axios.post(`${USERS_URL}/settings/read-all-form`, {
     Id: Id,
-    text: text
+    text: text,
+    mergeLabel:mergeLabel
   });
 };
 
