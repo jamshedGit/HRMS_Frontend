@@ -83,7 +83,7 @@ export const accrue_gratuity_configurationSlice = createSlice({
                 state.entities = [];
             }
         
-            console.log("entities",state.entities)
+          
             const totalResult = action.payload.data?.data.totalResults;
         
             state.listLoading = false;
@@ -148,7 +148,7 @@ export const accrue_gratuity_configurationSlice = createSlice({
             state.entities.unshift(combinedEntity);
         
             // Logging for debugging
-            console.log("entities created", combinedEntity);
+           
         },
         
         
