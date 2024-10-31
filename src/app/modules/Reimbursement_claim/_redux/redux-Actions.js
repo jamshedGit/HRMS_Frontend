@@ -133,12 +133,15 @@ export const updateSalarypolicy = (user, disbaleLoading, onHide) => (dispatch) =
     .then((response) => {
 
       const updatedSalarypolicy = response?.config?.data; // response.data?.data;
+console.log("updatedSalarypolicy",updatedSalarypolicy)
 
+      dispatch(actions.clearUserForEdit());
       dispatch(actions.salarypolicyUpdated({ updatedSalarypolicy }));
+      
       dispatch(actions.startCall({ callType: callTypes.action }));
       disbaleLoading();
       onHide();
-      toast.success(response.data.message + " Updated", {
+      toast.success(response.data.message, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

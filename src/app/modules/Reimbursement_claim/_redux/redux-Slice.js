@@ -1,5 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+
+
+
 const initialSalarypolicyState = {
     listLoading: false,
     actionsLoading: null,
@@ -29,6 +32,10 @@ export const reimbursement_claimSlice = createSlice({
             } else {
                 state.actionsLoading = false;
             }
+        },
+
+        clearUserForEdit : (state) => {
+            state.userForEdit = null;
         },
         startCall: (state, action) => {
             state.error = null;
@@ -83,7 +90,7 @@ export const reimbursement_claimSlice = createSlice({
             // state.entities.push(action.payload)
           
             state.entities = state.entities.map((entity) => {
-                
+                console.log("state.entities",entity)
                 //const payload = { ...action.payload };
                 let payload = JSON.stringify(action.payload)
                 let payloadObj = JSON.parse(payload);
@@ -91,6 +98,7 @@ export const reimbursement_claimSlice = createSlice({
                 if (entity.Id === finalObj.Id) {
                     return finalObj; //action.payload.updatedSalarypolicy;
                 }
+               
                 return entity;
             });
            

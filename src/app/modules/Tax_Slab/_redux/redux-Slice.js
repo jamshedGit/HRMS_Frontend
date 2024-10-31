@@ -92,6 +92,8 @@ export const tax_slabSlice = createSlice({
                 if (entity.Id === finalObj.Id) {
                     return finalObj; //action.payload.updatedSalarypolicy;
                 }
+
+              
                 return entity;
             });
            

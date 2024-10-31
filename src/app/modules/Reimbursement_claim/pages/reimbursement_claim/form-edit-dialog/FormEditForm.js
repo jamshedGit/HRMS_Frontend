@@ -88,6 +88,7 @@ console.log("user",user)
 
   return (
     <Formik
+    // key={user.Id || "new"}
       enableReinitialize={true}
       initialValues={user}
       // validationSchema={ReimbursementSchema}
@@ -172,7 +173,7 @@ console.log("user",user)
                       type="number"
                     />
                   </div>
-                  <div className="col-12 col-md-6 mt-3">
+                  {/* <div className="col-12 col-md-6 mt-3">
                     <SearchSelect
                       name="reimbursement_typeId"
                       label={
@@ -197,9 +198,9 @@ console.log("user",user)
                       error={errors.reimbursement_typeId}
                       touched={touched.reimbursement_typeId}
                     />
-                  </div>
+                  </div> */}
 
-                  <div className="col-12 col-md-6 mt-3">
+                  {/* <div className="col-12 col-md-6 mt-3">
                     <SearchSelect
                       name="reimbursement_typeId"
                       label={
@@ -224,8 +225,8 @@ console.log("user",user)
                       error={errors.reimbursement_typeId}
                       touched={touched.reimbursement_typeId}
                     />
-                  </div>
-
+                  </div> */}
+{/* 
                   <div className="col-12 col-md-6 mt-3">
                     <SearchSelect
                       name="reimbursement_typeId"
@@ -252,7 +253,7 @@ console.log("user",user)
                       touched={touched.reimbursement_typeId}
                     />
                   </div>
-                  
+                   */}
                   
                   <div className="col-12 col-md-6 mt-3">
                     <Field
@@ -315,7 +316,7 @@ console.log("user",user)
                 // onClick={() => clear_Existed_Data()}
 
                 onClick={() => {
-                  // setId('')
+                  setIds('')
                   handleReset()
                
                   if (inputFile?.current) {
@@ -344,6 +345,7 @@ console.log("user",user)
                 onClick={() => handleSubmit()}
                 className="btn btn-primary btn-elevate"
                 disabled={loading}
+               
               >
                 Save
                 {loading && (

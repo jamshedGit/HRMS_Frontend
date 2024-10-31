@@ -34,7 +34,7 @@ export function FormUIProvider({ FormUIEvents, children }) {
     reimbursement_typeId: "",
     employeeId:employeeId,
     details: "",
- date:"",
+    date:"",
     amount:"",
     // reimbursement_configurationId:""
 
