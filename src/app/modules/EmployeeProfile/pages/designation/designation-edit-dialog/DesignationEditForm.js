@@ -130,22 +130,15 @@ const profileValidation = Yup.object().shape(
         ),
       }),
 
-      file: Yup.mixed()
-      .required("File is required")
-      .test("fileFormat", "Unsupported format. Please upload a .jpg or .png file.", (value) => {
-       console.log("img::",value);
-        if (!value) return false; // Validate if file is provided
-        const file = value[0]; // Get the first file
-        return file && (file.type === "image/jpeg" || file.type === "image/png");
-      }),
+
 
     nic_no: Yup.string()
       .matches(/^\d{5}-\d{7}-\d{1}$/, 'ID Card No must be in the format 12345-6789012-3')
       .required('Required'),
 
     passportNo: Yup.string()
-    .matches(/^\d$/, 'ID Card No must be exactly 15 digits and contain only numbers'), // Regex to match exactly 14 digits
-    // .required('ID Card No is required'), // Make it required if necessary
+      .matches(/^\d{15}$/, 'Passport number must be exactly 15 digits long and contain only digits.'),
+    //.required('ID Card No is required'), // Make it required if necessary
 
     email_official: Yup.string()
       .nullable() // Allows null values
@@ -157,9 +150,7 @@ const profileValidation = Yup.object().shape(
       .email('Invalid email address') // Validates email format
       .notRequired(), // Optional: make it required
 
-
-
-      phone_cell: Yup.string()
+    phone_cell: Yup.string()
       .nullable() // Allows null values
       .matches(/^0[0-9]*$/, 'Phone number must start with 0 and contain only digits') // Must start with 0 and contain only digits
       .max(15, "Employee code must be at most 15 characters long")
@@ -184,24 +175,7 @@ const profileValidation = Yup.object().shape(
       .max(currentDate, 'Date of birth cannot be in the future')
       .max(minDate, 'You must be at least 18 years old'),
 
-    // defContactList: Yup.array()
-    //   .of(
-    //     Yup.object().shape({
-    //       relation_name: Yup.string()
-    //         .required('Relation Name is required')
-    //         .min(2, 'Must be at least 2 characters long'),
-    //       relation: Yup.string().required('Relation is required'),
-    //       contactNo: Yup.string()
-    //         .required('Contact No is required')
-    //         .matches(/^\d+$/, 'Contact No must be a number')
-    //         .test('is-unique', 'Contact No must be unique', function (value) {
-    //           const contactNumbers = this.parent; // Access the parent array
-    //           const isDuplicate = contactNumbers.some(row => row.contactNo === value);
-    //           return !isDuplicate || this.createError({ message: 'Contact No must be unique' });
-    //         }),
-    //     })
-    //   )
-    //   .min(1, 'At least one contact is required'),
+
   },
 
 
@@ -224,7 +198,7 @@ const profileValidation = Yup.object().shape(
     return this.createError({ path: 'gender', message: 'cannot be female.' });
   }
 
-  
+
 
   return true; // No error
 });
@@ -308,8 +282,11 @@ export function DesignationEditForm({
   const handleChildModalShow = () => setShowChildModal(true);
   const [defEmployeeReportTo = null, setEmployeeReportToDefault] = useState(null);
   const [defEmployeeGrade = null, setDefualtEmployeeGrade] = useState(null);
-  const [defContactList = null, setDefaultContactList] = useState([]);
+  const [defContactList = null, setDefaultContactList] = useState([{ relation_name: '', relation: '', contactNo: '' }]);
   const [currentDate, setCurrentDate] = useState('');
+  const [deferrors, setErrors] = useState({});
+
+
 
   useEffect(() => {
     // Get the current date in YYYY-MM-DD format
@@ -681,16 +658,12 @@ export function DesignationEditForm({
     setDefaultContactList([...defContactList, { transactionType: element.target.id, employeeId: id }])
   }
 
-  const handleFieldChangedContact = (el) => {
-    const index = el.target.id.split('-')[1]
-    const key = el.target.id.split('-')[0]
-    setDefaultContactList([...defContactList.map((val, ind) => {
-      if (ind == index) {
-        val[key] = el.target.value
-      }
-      return val
-    })])
-  }
+  // Function to handle changes in input fields
+  const handleFieldChangedContact = (index, field, value) => {
+    const newContactList = [...defContactList];
+    newContactList[index][field] = value;
+    setDefaultContactList(newContactList);
+  };
 
   const deleteRowContact = (element) => {
 
@@ -720,26 +693,33 @@ export function DesignationEditForm({
 
   }
 
-  const handleFieldChangedExperience = (el) => {
+  // const handleFieldChangedExperience = (el) => {
 
 
-    console.log("::go", el);
-    const index = el?.target?.id.split('-')[1]
-    const key = el?.target?.id.split('-')[0]
+  //   console.log("::go", el);
+  //   const index = el?.target?.id.split('-')[1]
+  //   const key = el?.target?.id.split('-')[0]
 
-    if (key == "countryId") {
-      console.log("::el::", el);
-      //  dispatch(fetchAllCity(el.target.value));
+  //   if (key == "countryId") {
+  //     console.log("::el::", el);
+  //     //  dispatch(fetchAllCity(el.target.value));
 
-    }
+  //   }
 
-    setworkExperienceList([...workExperienceList.map((val, ind) => {
-      if (ind == index) {
-        val[key] = el?.target?.value
-      }
-      return val
-    })])
-  }
+  //   setworkExperienceList([...workExperienceList.map((val, ind) => {
+  //     if (ind == index) {
+  //       val[key] = el?.target?.value
+  //     }
+  //     return val
+  //   })])
+  // }
+
+  // Function to handle changes in input fields
+  const handleFieldChangedExperience = (index, field, value) => {
+    const newExpList = [...workExperienceList];
+    newExpList[index][field] = value;
+    setworkExperienceList(newExpList);
+  };
 
   const deleteRowExperience = (element) => {
 
@@ -771,24 +751,32 @@ export function DesignationEditForm({
 
   }
 
-  const handleFieldChangedAcademic = (el) => {
-    console.log("::go", el);
-    const index = el.target.id.split('-')[1]
-    const key = el.target.id.split('-')[0]
+  // const handleFieldChangedAcademic = (el) => {
+  //   console.log("::go", el);
+  //   const index = el.target.id.split('-')[1]
+  //   const key = el.target.id.split('-')[0]
 
-    if (key == "countryId") {
-      console.log("::el::", el);
-      // dispatch(fetchAllCity(el.target.value));
+  //   if (key == "countryId") {
+  //     console.log("::el::", el);
+  //     // dispatch(fetchAllCity(el.target.value));
 
-    }
+  //   }
 
-    setAcademicList([...academicList.map((val, ind) => {
-      if (ind == index) {
-        val[key] = el.target.value
-      }
-      return val
-    })])
-  }
+  //   setAcademicList([...academicList.map((val, ind) => {
+  //     if (ind == index) {
+  //       val[key] = el.target.value
+  //     }
+  //     return val
+  //   })])
+  // }
+
+
+  const handleFieldChangedAcademic = (index, field, value) => {
+    const newAcademicList = [...academicList];
+    newAcademicList[index][field] = value;
+    setAcademicList(newAcademicList);
+  };
+
 
   const deleteRowAcademic = (element) => {
     const data = academicList;
@@ -818,17 +806,23 @@ export function DesignationEditForm({
 
   }
 
-  const handleFieldChangedSkills = (el) => {
-    console.log("::go", el);
-    const index = el?.target.id.split('-')[1]
-    const key = el?.target.id.split('-')[0]
-    setSkillList([...skillsList.map((val, ind) => {
-      if (ind == index) {
-        val[key] = el.target.value
-      }
-      return val
-    })])
-  }
+  // const handleFieldChangedSkills = (el) => {
+  //   console.log("::go", el);
+  //   const index = el?.target.id.split('-')[1]
+  //   const key = el?.target.id.split('-')[0]
+  //   setSkillList([...skillsList.map((val, ind) => {
+  //     if (ind == index) {
+  //       val[key] = el.target.value
+  //     }
+  //     return val
+  //   })])
+  // }
+
+  const handleFieldChangedSkills = (index, field, value) => {
+    const newSkillList = [...skillsList];
+    newSkillList[index][field] = value;
+    setSkillList(newSkillList);
+  };
 
   const deleteRowSkills = (element) => {
     const data = skillsList;
@@ -858,17 +852,22 @@ export function DesignationEditForm({
 
   }
 
-  const handleFieldChangedIncident = (el) => {
-    console.log("::go", el);
-    const index = el?.target.id.split('-')[1]
-    const key = el?.target.id.split('-')[0]
-    setIncidentList([...incidentList.map((val, ind) => {
-      if (ind == index) {
-        val[key] = el.target.value
-      }
-      return val
-    })])
-  }
+  const handleFieldChangedIncident = (index, field, value) => {
+    const newIncidentList = [...incidentList];
+    newIncidentList[index][field] = value;
+    setIncidentList(newIncidentList);
+  };
+  // const handleFieldChangedIncident = (el) => {
+  //   console.log("::go", el);
+  //   const index = el?.target.id.split('-')[1]
+  //   const key = el?.target.id.split('-')[0]
+  //   setIncidentList([...incidentList.map((val, ind) => {
+  //     if (ind == index) {
+  //       val[key] = el.target.value
+  //     }
+  //     return val
+  //   })])
+  // }
 
   const deleteRowIncident = (element) => {
     const data = incidentList;
@@ -878,7 +877,158 @@ export function DesignationEditForm({
 
   // End Academic
 
-  console.log("contactList", defContactList, workExperienceList, academicList, incidentList)
+  console.log("workExperienceList", workExperienceList)
+
+  const validate = () => {
+    const newErrors = {};
+    defContactList.forEach((contact, index) => {
+      if (!contact.relation_name) {
+        newErrors[`relation_name-${index}`] = 'Relation Name is required';
+      }
+      if (!contact.relation) {
+        newErrors[`relation-${index}`] = 'Relation is required';
+      }
+      if (!contact.contactNo || !/^\d{11}$/.test(contact.contactNo)) {
+        newErrors[`contactNo-${index}`] = 'Contact No must be exactly 11 digits';
+      }
+    });
+
+    // Validations for Work Experience
+    workExperienceList.forEach((obj, index) => {
+      if (!obj.companyName) {
+        newErrors[`companyName-${index}`] = '*Required';
+      }
+      if (!obj.positionHeld) {
+        newErrors[`positionHeld-${index}`] = '*Required';
+      }
+      if (!obj.countryId) {
+        newErrors[`countryId-${index}`] = '*Required';
+      }
+
+      if (!obj.cityId) {
+        newErrors[`cityId-${index}`] = '*Required';
+      }
+      if (new Date(obj.startDate) > new Date()) {
+        newErrors[`startDate-${index}`] = 'Start Date cannot be a future date';
+      }
+
+      // Validate endDate
+      if (new Date(obj.endDate) < new Date(obj.startDate)) {
+        newErrors[`endDate-${index}`] = 'End Date must be later than Start Date';
+      }
+
+      // Check if startDate and endDate are the same
+      if (new Date(obj.startDate).getTime() === new Date(obj.endDate).getTime()) {
+        newErrors[`endDate-${index}`] = 'End Date cannot be the same as Start Date';
+      }
+
+      // Check for date duplicates across rows
+      const datePairs = workExperienceList.map((obj, index) => ({
+        startDate: new Date(obj.startDate),
+        endDate: new Date(obj.endDate),
+        index,
+      }));
+
+      datePairs.forEach(({ startDate, endDate }, index) => {
+        datePairs.forEach(({ startDate: otherStartDate, endDate: otherEndDate }, otherIndex) => {
+          if (index !== otherIndex) { // Ensure we don't compare the same row
+            if (startDate === otherStartDate || endDate === otherEndDate) {
+              newErrors[`startDate-${index}`].duplicateDates = 'Start and End Dates must be unique across rows';
+            }
+          }
+        });
+      });
+
+    });
+
+    // Validations for Academic
+
+    academicList.forEach((obj, index) => {
+      if (!obj.institutionId) {
+        newErrors[`institutionId-${index}`] = '*Required';
+      }
+      if (!obj.degreeId) {
+        newErrors[`degreeId-${index}`] = '*Required';
+      }
+      if (!obj.countryId) {
+        newErrors[`countryId-${index}`] = '*Required';
+      }
+
+      // GPA Validation
+      if (!obj.gpa) {
+        newErrors[`gpa-${index}`] = '*Required';
+      } else if (isNaN(obj.gpa) || obj.gpa === '') {
+        newErrors[`gpa-${index}`] = 'GPA must be a number';
+      } else if (obj.gpa < 0 || obj.gpa > 5.0) {
+        newErrors[`gpa-${index}`] = 'GPA must be between 0 and 5.0';
+      } else if (!/^\d+(\.\d+)?$/.test(obj.gpa)) {
+        newErrors[`gpa-${index}`] = 'GPA must be a valid digit';
+      }
+      if (!obj.cityId) {
+        newErrors[`cityId-${index}`] = '*Required';
+      }
+      if (new Date(obj.startDate) > new Date()) {
+        newErrors[`startDate-${index}`] = 'Start Date cannot be a future date';
+      }
+
+      // Validate endDate
+      if (new Date(obj.endDate) < new Date(obj.startDate)) {
+        newErrors[`endDate-${index}`] = 'End Date must be later than Start Date';
+      }
+
+    });
+
+    // Validations for Skills
+    skillsList.forEach((obj, index) => {
+      if (!obj.skill) {
+        newErrors[`skill-${index}`] = '*Required';
+      }
+      if (!obj.description) {
+        newErrors[`description-${index}`] = '*Required';
+      }
+
+      if (!obj.ratingScale) {
+        newErrors[`ratingScale-${index}`] = '*Required';
+      }
+
+      if (new Date(obj.startDate) > new Date()) {
+        newErrors[`startDate-${index}`] = 'Start Date cannot be a future date';
+      }
+
+      // Validate endDate
+      if (new Date(obj.endDate) < new Date(obj.startDate)) {
+        newErrors[`endDate-${index}`] = 'End Date must be later than Start Date';
+      }
+
+    });
+
+    // Validations for Incident
+    incidentList.forEach((obj, index) => {
+      if (!obj.skill) {
+        newErrors[`incidentDetail-${index}`] = '*Required';
+      }
+      if (!obj.description) {
+        newErrors[`actionTaken-${index}`] = '*Required';
+      }
+
+      if (!obj.ratingScale) {
+        newErrors[`actionTakenBy-${index}`] = '*Required';
+      }
+
+      if (new Date(obj.incidentDate) > new Date()) {
+        newErrors[`incidentDate-${index}`] = 'incidentDate Date cannot be a future date';
+      }
+
+
+
+    });
+
+    return newErrors;
+  };
+
+
+
+
   return (
     <>
       <Formik
@@ -886,23 +1036,37 @@ export function DesignationEditForm({
         initialValues={user}
         validationSchema={profileValidation}
         onSubmit={async (values) => {
-          enableLoading();
-          //   console.log("values emp", values);
-          //   values.profile_image = profile_image;
-          if (file) {
-            let formData = new FormData();
-            await formData.append('image', file);
-            await axios
-              .post(`${USERS_URL}/profile/image-upload`, formData)
-              .then((res) => {
-                console.log(res.data, "looos")
-                setImage(res.data.imageUrl)
-                saveEmployeeProfile(values, res.data.imageUrl, defContactList, workExperienceList, academicList, skillsList, incidentList);
-              });
-          }
-          else {
-            console.log("values emp", values)
-            saveEmployeeProfile(values, profile_image, defContactList, workExperienceList, academicList, skillsList, incidentList);
+
+
+          //const t =  handleSubmit();
+
+
+          const validationErrors = validate();
+          console.log("::val::", validationErrors)
+          if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+          } else {
+            console.log('Form submitted:', values);
+            // Reset errors on successful submission
+            setErrors({});
+
+            enableLoading();
+
+            if (file) {
+              let formData = new FormData();
+              await formData.append('image', file);
+              await axios
+                .post(`${USERS_URL}/profile/image-upload`, formData)
+                .then((res) => {
+
+                  setImage(res.data.imageUrl)
+                  saveEmployeeProfile(values, res.data.imageUrl, defContactList, workExperienceList, academicList, skillsList, incidentList);
+                });
+            }
+            else {
+              console.log("values emp", values)
+              saveEmployeeProfile(values, profile_image, defContactList, workExperienceList, academicList, skillsList, incidentList);
+            }
           }
 
         }}
@@ -935,8 +1099,8 @@ export function DesignationEditForm({
                             <div>
                               <img name='profile_image' width={120} height={120} src={profile_image} />
                               <h4>Select Image</h4>
-                              <input type="file" name="myImage"   accept=".jpg, .jpeg, .png" onChange={onImageChange} />
-                                <ErrorMessage className="form-feedBack" name="myImage" component="div" />
+                              <input type="file" name="myImage" accept=".jpg, .jpeg, .png" onChange={onImageChange} />
+                              <ErrorMessage className="form-feedBack" name="myImage" component="div" />
                             </div>
                           </div>
                         </div>
@@ -1256,7 +1420,7 @@ export function DesignationEditForm({
                           error={errors.dateOfJoining}
                           touched={touched.dateOfJoining}
                         />
-                        <ErrorMessage className="form-feedBack"  name="dateOfJoining" component="div" />
+                        <ErrorMessage className="form-feedBack" name="dateOfJoining" component="div" />
                       </div>
 
                       <div className="col-12 col-md-4 mt-3">
@@ -1278,7 +1442,7 @@ export function DesignationEditForm({
                           disabled={isUserForRead}
                           autoComplete="off"
                         />
-                        <ErrorMessage  className="form-feedBack" name="dateOfConfirmation" component="div" />
+                        <ErrorMessage className="form-feedBack" name="dateOfConfirmation" component="div" />
                       </div>
                       <div className="col-12 col-md-4 mt-3">
                         <label>Date Confirmation Due<span style={{ color: 'red' }}>*</span> </label>
@@ -1297,7 +1461,7 @@ export function DesignationEditForm({
                           disabled={isUserForRead}
                           autoComplete="off"
                         />
-                        <ErrorMessage  className="form-feedBack" name="dateOfConfirmationDue" component="div" />
+                        <ErrorMessage className="form-feedBack" name="dateOfConfirmationDue" component="div" />
                       </div>
                       <div className="col-12 col-md-4 mt-3">
                         <label>Date Confirmation Extended <span style={{ color: 'red' }}>*</span> </label>
@@ -1316,7 +1480,7 @@ export function DesignationEditForm({
                           disabled={isUserForRead}
                           autoComplete="off"
                         />
-                        <ErrorMessage  className="form-feedBack" name="dateOfConfirmationEnter" component="div" />
+                        <ErrorMessage className="form-feedBack" name="dateOfConfirmationEnter" component="div" />
                       </div>
                       <div className="col-12 col-md-4 mt-3">
                         <label>Contract Expiry <span style={{ color: 'red' }}>*</span></label>
@@ -1335,7 +1499,7 @@ export function DesignationEditForm({
                           disabled={isUserForRead}
                           autoComplete="off"
                         />
-                        <ErrorMessage  className="form-feedBack" name="dateOfContractExpiry" component="div" />
+                        <ErrorMessage className="form-feedBack" name="dateOfContractExpiry" component="div" />
                       </div>
 
 
@@ -1522,7 +1686,7 @@ export function DesignationEditForm({
                           autoComplete="off"
 
                         />
-                        <ErrorMessage  className="form-feedBack" name="dateOfBirth" component="div" />
+                        <ErrorMessage className="form-feedBack" name="dateOfBirth" component="div" />
                       </div>
 
                       <div className="col-12 col-md-4 mt-3">
@@ -1545,7 +1709,7 @@ export function DesignationEditForm({
                           disabled={isUserForRead}
                           autoComplete="off"
                         />
-                        <ErrorMessage  className="form-feedBack" name="dateOfRetirement" component="div" />
+                        <ErrorMessage className="form-feedBack" name="dateOfRetirement" component="div" />
                       </div>
                     </div>
 
@@ -1703,18 +1867,25 @@ export function DesignationEditForm({
                           <><tr>
                             <td > <button id={rightindex} onClick={deleteRowContact} className="btn btn-danger btn-sm"> Delete</button></td>
                             <td>
+
                               <input
                                 className="form-control"
                                 type="text"
-                                onChange={handleFieldChangedContact}
+                                onChange={(e) => {
+                                  handleFieldChangedContact(rightindex, 'relation_name', e.target.value);
+                                  setErrors((prev) => ({ ...prev, [`relation_name-${rightindex}`]: '' })); // Clear error on change
+                                }}
                                 value={obj.relation_name}
-                                id={`relation_name-${rightindex}`}
                               />
-                              
+                              {deferrors[`relation_name-${rightindex}`] && <div className="form-feedBack">{deferrors[`relation_name-${rightindex}`]}</div>}
                             </td>
                             <td>
-                              <select className="form-control" value={obj.relation} onChange={handleFieldChangedContact} id={'relation-' + rightindex} >
-                                {/* <option value="-1"> --Select--</option> */}
+                              <select className="form-control" value={obj.relation}
+                                onChange={(e) => {
+                                  handleFieldChangedContact(rightindex, 'relation', e.target.value);
+                                  setErrors((prev) => ({ ...prev, [`relation-${rightindex}`]: '' })); // Clear error on change
+                                }}
+                                id={'relation-' + rightindex} >
                                 {
                                   dashboard.allRelationCodeList?.map((x) => {
                                     return <option value={x.value}> {x.label} </option>
@@ -1722,11 +1893,17 @@ export function DesignationEditForm({
 
                                 {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
                               </select>
+                              {deferrors[`relation-${rightindex}`] && <div className="form-feedBack">{deferrors[`relation-${rightindex}`]}</div>}
                             </td>
                             <td>
-                              <input className="form-control" type="text" onChange={handleFieldChangedContact}
-                                value={obj.contactNo} id={'contactNo-' + rightindex} ></input>
-                                
+                              <input className="form-control" type="text"
+                                onChange={(e) => {
+                                  handleFieldChangedContact(rightindex, 'contactNo', e.target.value);
+                                  setErrors((prev) => ({ ...prev, [`contactNo-${rightindex}`]: '' })); // Clear error on change
+                                }}
+                                value={obj.contactNo} ></input>
+                              {deferrors[`contactNo-${rightindex}`] && <div className="form-feedBack">{deferrors[`contactNo-${rightindex}`]}</div>}
+
                             </td>
                             {/* <td>{obj.relation_emp}</td>
                             <td>{obj.contactNo}</td> */}
@@ -1758,21 +1935,39 @@ export function DesignationEditForm({
                           <td>Start Date</td>
                           <td>End Date</td>
                         </tr>
-                        {console.log("::work::", workExperienceList)}
+                        {console.log("::work::", deferrors)}
                         {workExperienceList?.map((obj, rightindex) => (
 
                           <><tr>
                             <td id={rightindex} onClick={deleteRowExperience}> <span className="btn btn-danger btn-sm"> Delete</span></td>
                             <td>
-                              <input className="form-control" type="text" onChange={handleFieldChangedExperience}
+                              <input className="form-control" type="text"
+                                onChange={(e) => {
+                                  handleFieldChangedExperience(rightindex, 'companyName', e.target.value);
+                                  setErrors((prev) => ({ ...prev, [`companyName-${rightindex}`]: '' })); // Clear error on change
+                                }}
+
                                 value={obj.companyName} id={'companyName-' + rightindex}></input>
+                              {deferrors[`companyName-${rightindex}`] && <div className="form-feedBack">{deferrors[`companyName-${rightindex}`]}</div>}
+
                             </td>
                             <td>
-                              <input className="form-control" type="text" onChange={handleFieldChangedExperience}
+                              <input className="form-control" type="text"
+                                onChange={(e) => {
+                                  handleFieldChangedExperience(rightindex, 'positionHeld', e.target.value);
+                                  setErrors((prev) => ({ ...prev, [`positionHeld-${rightindex}`]: '' })); // Clear error on change
+                                }}
                                 value={obj.positionHeld} id={'positionHeld-' + rightindex}></input>
+                              {deferrors[`positionHeld-${rightindex}`] && <div className="form-feedBack">{deferrors[`positionHeld-${rightindex}`]}</div>}
                             </td>
                             <td>
-                              <select className="form-control" value={obj.countryId} onChange={handleFieldChangedExperience} id={'countryId-' + rightindex} >
+                              <select className="form-control" value={obj.countryId}
+                                onChange={(e) => {
+                                  handleFieldChangedExperience(rightindex, 'countryId', e.target.value);
+                                  setErrors((prev) => ({ ...prev, [`countryId-${rightindex}`]: '' })); // Clear error on change
+                                }}
+
+                                id={'countryId-' + rightindex} >
                                 <option value="-1"> --Select--</option>
                                 {
                                   dashboard.allCountry?.map((x) => {
@@ -1781,9 +1976,17 @@ export function DesignationEditForm({
 
                                 {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
                               </select>
+                              {deferrors[`countryId-${rightindex}`] && <div className="form-feedBack">{deferrors[`countryId-${rightindex}`]}</div>}
                             </td>
                             <td>
-                              <select className="form-control" value={obj.cityId} onChange={handleFieldChangedExperience} id={'cityId-' + rightindex} >
+                              <select className="form-control" value={obj.cityId}
+
+                                onChange={(e) => {
+                                  handleFieldChangedExperience(rightindex, 'cityId', e.target.value);
+                                  setErrors((prev) => ({ ...prev, [`cityId-${rightindex}`]: '' })); // Clear error on change
+                                }}
+
+                                id={'cityId-' + rightindex} >
                                 <option value="-1"> --Select--</option>
                                 {
 
@@ -1795,6 +1998,7 @@ export function DesignationEditForm({
 
                                 {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
                               </select>
+                              {deferrors[`cityId-${rightindex}`] && <div className="form-feedBack">{deferrors[`cityId-${rightindex}`]}</div>}
                             </td>
 
                             <td>
@@ -1804,7 +2008,11 @@ export function DesignationEditForm({
                                 selected={new Date(obj.startDate || currentDate)}
                                 showYearDropdown
                                 scrollableMonthYearDropdown
-                                onChange={(el) => handleDatePicker(el, 'startDate', rightindex, '')}
+                                onChange={(el) => {
+                                  handleDatePicker(el, 'startDate', rightindex, '');
+                                  setErrors((prev) => ({ ...prev, [`startDate-${rightindex}`]: '' })); // Clear error on change
+                                }
+                                }
                                 id={"startDate-" + rightindex}
                                 timeInputLabel="Time:"
                                 dateFormat="dd/MM/yyyy"
@@ -1813,6 +2021,7 @@ export function DesignationEditForm({
                                 disabled={isUserForRead}
                                 autoComplete="off"
                               />
+                              {deferrors[`startDate-${rightindex}`] && <div className="form-feedBack">{deferrors[`startDate-${rightindex}`]}</div>}
                             </td>
                             <td>
                               <DatePicker
@@ -1821,7 +2030,11 @@ export function DesignationEditForm({
                                 selected={new Date(obj.endDate || currentDate)}
                                 showYearDropdown
                                 scrollableMonthYearDropdown
-                                onChange={(el) => handleDatePicker(el, 'endDate', rightindex, '')}
+                                onChange={(el) => {
+                                  handleDatePicker(el, 'endDate', rightindex, '');
+                                  setErrors((prev) => ({ ...prev, [`endDate-${rightindex}`]: '' })); // Clear error on change
+                                }
+                                }
                                 id={"endDate-" + rightindex}
                                 timeInputLabel="Time:"
                                 dateFormat="dd/MM/yyyy"
@@ -1830,6 +2043,7 @@ export function DesignationEditForm({
                                 disabled={isUserForRead}
                                 autoComplete="off"
                               />
+                              {deferrors[`endDate-${rightindex}`] && <div className="form-feedBack">{deferrors[`endDate-${rightindex}`]}</div>}
                             </td>
                           </tr>
                           </>
@@ -1866,24 +2080,48 @@ export function DesignationEditForm({
                             <tr>
                               <td id={rightindex} onClick={deleteRowAcademic}> <span className="btn btn-danger btn-sm"> Delete</span></td>
                               <td>
-                                <select className="form-control" value={obj.institutionId} onChange={handleFieldChangedAcademic} id={'institutionId-' + rightindex} >
+                                <select className="form-control" value={obj.institutionId}
+
+                                  onChange={(e) => {
+                                    handleFieldChangedAcademic(rightindex, 'institutionId', e.target.value);
+                                    setErrors((prev) => ({ ...prev, [`institutionId-${rightindex}`]: '' })); // Clear error on change
+                                  }}
+
+                                  id={'institutionId-' + rightindex} >
                                   {
                                     dashboard.allInstitution?.map((x) => {
                                       return <option value={x.value}> {x.label} </option>
                                     })}
                                   {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
                                 </select>
+                                {deferrors[`institutionId-${rightindex}`] && <div className="form-feedBack">{deferrors[`institutionId-${rightindex}`]}</div>}
                               </td>
                               <td>
-                                <select className="form-control" value={obj.degreeId} onChange={handleFieldChangedAcademic} id={'degreeId-' + rightindex} >
+                                <select className="form-control" value={obj.degreeId}
+
+                                  onChange={(e) => {
+                                    handleFieldChangedAcademic(rightindex, 'degreeId', e.target.value);
+                                    setErrors((prev) => ({ ...prev, [`degreeId-${rightindex}`]: '' })); // Clear error on change
+                                  }}
+
+                                  id={'degreeId-' + rightindex} >
                                   {
                                     dashboard.allDegreeTitle?.map((x) => {
                                       return <option value={x.value}> {x.label} </option>
                                     })}
                                   {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
-                                </select></td>
+                                </select>
+                                {deferrors[`degreeId-${rightindex}`] && <div className="form-feedBack">{deferrors[`degreeId-${rightindex}`]}</div>}
+                              </td>
                               <td>
-                                <select className="form-control" value={obj.countryId} onChange={handleFieldChangedAcademic} id={'countryId-' + rightindex} >
+                                <select className="form-control" value={obj.countryId}
+
+                                  onChange={(e) => {
+                                    handleFieldChangedAcademic(rightindex, 'countryId', e.target.value);
+                                    setErrors((prev) => ({ ...prev, [`countryId-${rightindex}`]: '' })); // Clear error on change
+                                  }}
+
+                                  id={'countryId-' + rightindex} >
                                   <option value="-1">--Select--</option>
                                   {
                                     dashboard.allCountry?.map((x) => {
@@ -1892,9 +2130,16 @@ export function DesignationEditForm({
 
                                   {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
                                 </select>
+                                {deferrors[`countryId-${rightindex}`] && <div className="form-feedBack">{deferrors[`countryId-${rightindex}`]}</div>}
                               </td>
                               <td>
-                                <select className="form-control" value={obj.cityId} onChange={handleFieldChangedAcademic} id={'cityId-' + rightindex} >
+                                <select className="form-control" value={obj.cityId}
+                                  onChange={(e) => {
+                                    handleFieldChangedAcademic(rightindex, 'cityId', e.target.value);
+                                    setErrors((prev) => ({ ...prev, [`cityId-${rightindex}`]: '' })); // Clear error on change
+                                  }}
+
+                                  id={'cityId-' + rightindex} >
                                   <option value="-1"> --Select--</option>
 
                                   {
@@ -1907,11 +2152,17 @@ export function DesignationEditForm({
 
                                   {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
                                 </select>
+                                {deferrors[`cityId-${rightindex}`] && <div className="form-feedBack">{deferrors[`cityId-${rightindex}`]}</div>}
                               </td>
 
                               <td>
-                                <input className="form-control" type="text" onChange={handleFieldChangedAcademic}
+                                <input className="form-control" type="text"
+                                  onChange={(e) => {
+                                    handleFieldChangedAcademic(rightindex, 'gpa', e.target.value);
+                                    setErrors((prev) => ({ ...prev, [`gpa-${rightindex}`]: '' })); // Clear error on change
+                                  }}
                                   value={obj.gpa} id={'gpa-' + rightindex}></input>
+                                {deferrors[`gpa-${rightindex}`] && <div className="form-feedBack">{deferrors[`gpa-${rightindex}`]}</div>}
                               </td>
                               <td>
                                 <DatePicker
@@ -1929,6 +2180,7 @@ export function DesignationEditForm({
                                   disabled={isUserForRead}
                                   autoComplete="off"
                                 />
+                                {deferrors[`startDate-${rightindex}`] && <div className="form-feedBack">{deferrors[`startDate-${rightindex}`]}</div>}
                               </td>
                               <td>
                                 <DatePicker
@@ -1946,6 +2198,7 @@ export function DesignationEditForm({
                                   disabled={isUserForRead}
                                   autoComplete="off"
                                 />
+                                {deferrors[`endDate-${rightindex}`] && <div className="form-feedBack">{deferrors[`endDate-${rightindex}`]}</div>}
                               </td>
                             </tr>
                           </>
@@ -1971,7 +2224,7 @@ export function DesignationEditForm({
                           <td>Skill</td>
                           <td>Description</td>
 
-                          <td>rating</td>
+                          <td>Rating</td>
                           <td>Start Date</td>
                           <td>End Date</td>
                         </tr>
@@ -1981,17 +2234,31 @@ export function DesignationEditForm({
                               <td id={rightindex} onClick={deleteRowSkills}> <span className="btn btn-danger btn-sm"> Delete</span></td>
 
                               <td>
-                                <input className="form-control" type="text" onChange={handleFieldChangedSkills}
+                                <input className="form-control" type="text"
+                                  onChange={(e) => {
+                                    handleFieldChangedSkills(rightindex, 'skill', e.target.value);
+                                    setErrors((prev) => ({ ...prev, [`skill-${rightindex}`]: '' })); // Clear error on change
+                                  }}
+
                                   value={obj.skill} id={'skill-' + rightindex}></input>
+                                {deferrors[`skill-${rightindex}`] && <div className="form-feedBack">{deferrors[`skill-${rightindex}`]}</div>}
                               </td>
                               <td>
-                                <input className="form-control" type="text" onChange={handleFieldChangedSkills}
+                                <input className="form-control" type="text"
+                                  onChange={(e) => {
+                                    handleFieldChangedSkills(rightindex, 'description', e.target.value);
+                                    setErrors((prev) => ({ ...prev, [`description-${rightindex}`]: '' })); // Clear error on change
+                                  }}
                                   value={obj.description} id={'description-' + rightindex}></input>
+                                {deferrors[`description-${rightindex}`] && <div className="form-feedBack">{deferrors[`description-${rightindex}`]}</div>}
                               </td>
                               <td>  <Select
                                 name="ratingScale"
                                 value={obj.ratingScale}
-                                onChange={handleFieldChangedSkills}
+                                onChange={(e) => {
+                                  handleFieldChangedSkills(rightindex, 'ratingScale', e.target.value);
+                                  setErrors((prev) => ({ ...prev, [`ratingScale-${rightindex}`]: '' })); // Clear error on change
+                                }}
                                 onBlur={handleBlur}
                                 style={{ display: "block" }}
                                 id={'ratingScale-' + rightindex}
@@ -2007,7 +2274,9 @@ export function DesignationEditForm({
                                 <option value="8" label="8" />
                                 <option value="9" label="9" />
                                 <option value="10" label="10" />
-                              </Select></td>
+                              </Select>
+                                {deferrors[`ratingScale-${rightindex}`] && <div className="form-feedBack">{deferrors[`ratingScale-${rightindex}`]}</div>}
+                              </td>
                               <td>
                                 <DatePicker
                                   className="form-control"
@@ -2024,6 +2293,7 @@ export function DesignationEditForm({
                                   disabled={isUserForRead}
                                   autoComplete="off"
                                 />
+                                {deferrors[`startDate-${rightindex}`] && <div className="form-feedBack">{deferrors[`startDate-${rightindex}`]}</div>}
                               </td>
                               <td>
                                 <DatePicker
@@ -2041,6 +2311,7 @@ export function DesignationEditForm({
                                   disabled={isUserForRead}
                                   autoComplete="off"
                                 />
+                                {deferrors[`endDate-${rightindex}`] && <div className="form-feedBack">{deferrors[`endDate-${rightindex}`]}</div>}
                               </td>
                             </tr>
                           </>
@@ -2077,25 +2348,48 @@ export function DesignationEditForm({
                             <tr>
                               <td id={rightindex} onClick={deleteRowIncident}> <span className="btn btn-danger btn-sm"> Delete</span></td>
                               <td>
-                                <input className="form-control" type="text" onChange={handleFieldChangedIncident}
-                                  value={obj.incidentDetail} id={'incidentDetail-' + rightindex}></input>
+                                <input className="form-control" type="text"
+                                  onChange={(e) => {
+                                    handleFieldChangedIncident(rightindex, 'incidentDetail', e.target.value);
+                                    setErrors((prev) => ({ ...prev, [`incidentDetail-${rightindex}`]: '' })); // Clear error on change
+                                  }}
+                                  value={obj.incidentDetail} id={'incidentDetail-' + rightindex}>
+
+                                </input>
+                                {deferrors[`incidentDetail-${rightindex}`] && <div className="form-feedBack">{deferrors[`incidentDetail-${rightindex}`]}</div>}
                               </td>
                               <td>
-                                <input className="form-control" type="text" onChange={handleFieldChangedIncident}
+                                <input className="form-control" type="text"
+
+                                  onChange={(e) => {
+                                    handleFieldChangedIncident(rightindex, 'actionTaken', e.target.value);
+                                    setErrors((prev) => ({ ...prev, [`actionTaken-${rightindex}`]: '' })); // Clear error on change
+                                  }}
                                   value={obj.actionTaken} id={'actionTaken-' + rightindex}></input>
+                                {deferrors[`incidentDetail-${rightindex}`] && <div className="form-feedBack">{deferrors[`actionTaken-${rightindex}`]}</div>}
                               </td>
 
                               <td>
-                                <select className="form-control" value={obj.actionTakenBy} onChange={handleFieldChangedIncident} id={'actionTakenBy-' + rightindex} >
+                                <select className="form-control"
+                                  value={obj.actionTakenBy}
+                                  onChange={(e) => {
+                                    handleFieldChangedIncident(rightindex, 'actionTakenBy', e.target.value);
+                                    setErrors((prev) => ({ ...prev, [`actionTakenBy-${rightindex}`]: '' })); // Clear error on change
+                                  }}
+
+                                  id={'actionTakenBy-' + rightindex} >
                                   <option value='-1'>--Select--</option>
                                   {
-                                    dashboard.allEmployees?.map((x) => {
+                                    dashboard.allEmployees?.filter(x => x.value != values.Id).map((x) => {
                                       return <option value={x.value}> {x.label} </option>
-                                    })}
+                                    })
+
+                                  }
+                                  {/* options={dashboard.allEmployees.filter(x => x.value != values.Id)} */}
 
                                   {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
                                 </select>
-
+                                {deferrors[`actionTakenBy-${rightindex}`] && <div className="form-feedBack">{deferrors[`actionTakenBy-${rightindex}`]}</div>}
                               </td>
                               <td>
                                 <DatePicker
@@ -2113,6 +2407,7 @@ export function DesignationEditForm({
                                   disabled={isUserForRead}
                                   autoComplete="off"
                                 />
+                                {deferrors[`incidentDate-${rightindex}`] && <div className="form-feedBack">{deferrors[`incidentDate-${rightindex}`]}</div>}
                               </td>
 
 
@@ -2157,7 +2452,7 @@ export function DesignationEditForm({
               <> </>
               {!isUserForRead && (
                 <button
-                
+
                   type="submit"
                   onClick={() => handleSubmit()}
                   className="btn btn-primary btn-elevate"
