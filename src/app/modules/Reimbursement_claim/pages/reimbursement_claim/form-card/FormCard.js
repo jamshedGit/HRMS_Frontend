@@ -3,6 +3,8 @@ import { EmployeeSelect } from "../form-edit-dialog/EmployeeSelect"
 import EmployeeProfile from "../../../../../utils/common-modules/EmployeeProfile"
 import { FormEditDialog } from "../form-edit-dialog/FormEditDialog"
 import { fetchAllActiveEmployees } from "../../../../../../_metronic/redux/dashboardActions"
+
+
 import {
   Card,
   CardBody,
@@ -13,6 +15,7 @@ import { FormTable } from "../form-table/FormTable"
 import { useFormUIContext } from "../FormUIContext"
 import { FormFIlter } from "../form-filter/FormFIlter"
 import { useSelector, shallowEqual, useDispatch } from "react-redux"
+import { getAllReimbursementConfigPolicy } from "../../../_redux/redux-Actions"
 
 export function FormCard() {
   const FormUIContext = useFormUIContext()
@@ -70,6 +73,16 @@ export function FormCard() {
       dispatch(fetchAllActiveEmployees());
 
   }, [dispatch, FormUIProps.employeeId])
+
+  
+  useEffect(() => {
+
+
+    if (FormUIProps.employeeId)
+      dispatch(getAllReimbursementConfigPolicy({Id:FormUIProps.employeeId}));
+
+  }, [dispatch, FormUIProps.employeeId])
+
   console.log("employeeId employeeId FormUIProps.id",FormUIProps.id)
   return (
     <>

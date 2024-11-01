@@ -13,6 +13,7 @@ const initialSalarypolicyState = {
     userForEdit: undefined,
     lastError: null,
     userForRead: false,
+    reimbursement_config_policies_permission:null
 };
 
 
@@ -36,7 +37,7 @@ export const reimbursement_claimSlice = createSlice({
 
         clearUserForEdit : (state) => {
             console.log("userForEdit1",state)
-            // state.userForEdit = null;
+            state.userForEdit = null;
         },
         startCall: (state, action) => {
             state.error = null;
@@ -103,6 +104,16 @@ export const reimbursement_claimSlice = createSlice({
                 return entity;
             });
            
+        },
+
+        getReimbursementConfigPolicies: (state, action) => {
+           
+            state.actionsLoading = false;
+            state.error = null;
+            state.reimbursement_config_policies_permission=action.payload;
+
+
+            console.log("policies state.entities", state.reimbursement_config_policies_permission)
         },
 
 

@@ -20,17 +20,15 @@ import {
 } from "../../../../../utils/common";
 import {
   fetchAllFormsMenu,
-  fetchAllPayrollMonthYearList
+  fetchAllPayrollMonthYearList,
 } from "../../../../../../_metronic/redux/dashboardActions";
 
 const ReimbursementSchema = Yup.object().shape({
   reimbursement_typeId: Yup.number().required("Required"),
   details: Yup.string().required("Required"),
   date: Yup.date().required("Required"),
-  amount: Yup.number()
-    .min(0, "Must be at least 0")
-    .max(99999999, "Must be at most 99999999")
-    .required("Required"),
+  // amount: Yup.number() .required("Required"),
+  
   // file: Yup.mixed()
   //   .required("Required")
   //   .test(
@@ -62,9 +60,7 @@ export function FormEditForm({
     if (!user.Id) {
       dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsidiaries
       dispatch(fetchAllFormsMenu(202, "allReimbursementTypeList"));
-       dispatch(fetchAllPayrollMonthYearList("allPayrollMonthYearList"))
-
-      
+      dispatch(fetchAllPayrollMonthYearList("allPayrollMonthYearList"));
     }
     //allPayrolGroupList
   }, [dispatch, user.Id]);
@@ -75,10 +71,22 @@ export function FormEditForm({
       userAccess: state?.auth?.userAccess["reimbursement_claim"],
     };
   }, shallowEqual);
+  console.log(
+    "state data ",
+    currentState?.reimbursement_config_policies_permission?.policies
+  );
 
-  console.log("user", user);
-  console.log("allPayrollMonthYearList ...",dashboard.allPayrollMonthYearList)
-  console.log("allReimbursementTypeList ...",dashboard.allReimbursementTypeList)
+  const filteredOptions = dashboard.allReimbursementTypeList.filter((option) =>
+    currentState?.reimbursement_config_policies_permission?.policies?.some(
+      (item) => item.reimbursement_typeId === option.value
+    )
+  );
+
+  console.log("filteredOptions", filteredOptions);
+  // const handleChangeReimbursement=()=>{
+  //   filteredOptions
+  // }
+
   return (
     <Formik
       // key={user.Id || "new"}
@@ -131,8 +139,7 @@ export function FormEditForm({
                         </span>
                       }
                       // isDisabled={isUserForRead}
-                      disabled={isEdit}          // value={
-                    
+                      disabled={isEdit} // value={
                       onChange={(e) => {
                         setFieldValue("reimbursement_typeId", e.value || null);
                         // check_Existed_Data(e.value);
@@ -143,7 +150,7 @@ export function FormEditForm({
                             option.value === values.reimbursement_typeId
                         ) || null
                       }
-                      options={dashboard.allReimbursementTypeList}
+                      options={filteredOptions}
                       error={errors.reimbursement_typeId}
                       touched={touched.reimbursement_typeId}
                     />
@@ -160,15 +167,63 @@ export function FormEditForm({
                     />
                   </div>
 
+                  {/* <div className="col-12 col-md-6 mt-3">
+                    <Field
+                      name="amount"
+                      component={Input}
+                      // placeholder={currentState?.reimbursement_config_policies_permission?.policies?.some(item => item.reimbursement_typeId === values.reimbursement_typeId)}
+                     
+                      placeholder={
+                        "Enter Amount" // Use max_amount or default placeholder
+                      }
+                     
+                      label={`Amount Limit : ${currentState?.reimbursement_config_policies_permission?.policies?.find(
+                        (item) => item.reimbursement_typeId === values.reimbursement_typeId
+                      )?.max_amount}`}
+
+
+
+
+
+
+                      type="number"
+                    />
+                  </div> */}
+
                   <div className="col-12 col-md-6 mt-3">
                     <Field
                       name="amount"
                       component={Input}
-                      placeholder="Enter Details"
-                      label="Amount"
+                      placeholder="Enter Amount"
+                      label={`Amount Limit: ${
+                        currentState?.reimbursement_config_policies_permission?.policies?.find(
+                          (item) =>
+                            item.reimbursement_typeId ===
+                            values.reimbursement_typeId
+                        )?.max_amount
+                      }`}
                       type="number"
+                      onChange={(e) => {
+                        const maxAmount = currentState?.reimbursement_config_policies_permission?.policies?.find(
+                          (item) =>
+                            item.reimbursement_typeId ===
+                            values.reimbursement_typeId
+                        )?.max_amount;
+
+                        const value = Number(e.target.value);
+
+                        if (maxAmount !== undefined && value > maxAmount) {
+                    
+                          
+                          return; // Prevent setting value above max
+                        }
+
+                        setFieldValue("amount", value);
+                      }}
+                      
                     />
                   </div>
+
                   <div className="col-12 col-md-6 mt-3">
                     <SearchSelect
                       name="pay_in_payroll_forId"
@@ -178,31 +233,22 @@ export function FormEditForm({
                           <span style={{ color: "red" }}>*</span>
                         </span>
                       }
-                 
                       onChange={(e) => {
                         setFieldValue("pay_in_payroll_forId", e.value || null);
-                
                       }}
-
-                      
-
                       value={
                         dashboard?.allPayrollMonthYearList.find(
                           (option) =>
-                          
                             option.value === values.pay_in_payroll_forId
                         ) || null
                       }
-                    //   options={dashboard.allPayrollMonthYearList.map(option => ({
-                    //     value: option.Id,
-                    //     label: option.month
-                    // }))}
-                       options={dashboard.allPayrollMonthYearList }
+                      //   options={dashboard.allPayrollMonthYearList.map(option => ({
+                      //     value: option.Id,
+                      //     label: option.month
+                      // }))}
+                      options={dashboard.allPayrollMonthYearList}
                       error={errors.pay_in_payroll_forId}
                       touched={touched.pay_in_payroll_forId}
-
-                      
-            
                     />
                   </div>
 
@@ -239,7 +285,28 @@ export function FormEditForm({
                     />
                   </div> */}
 
-                  <div className="col-12 col-md-12 mt-3">
+<div className="col-12 col-md-12 mt-3">
+  <label style={{ "margin-right": "0.5rem" }}>
+    Attachment:
+  </label>
+  {currentState?.reimbursement_config_policies_permission?.policies?.find(
+    (item) => item.reimbursement_typeId === values.reimbursement_typeId
+  )?.attachment_required && (
+    <input
+      name="file"
+      type="file"
+      accept=".jpeg,.jpg,.png,.pdf,.doc,.docx"
+      ref={inputFile}
+      onChange={(event) => {
+        const file = event.currentTarget.files[0];
+        setFieldValue("file", file);
+      }}
+    />
+  )}
+</div>
+
+
+                  {/* <div className="col-12 col-md-12 mt-3">
                     <label style={{ "margin-right": "0.5rem" }}>
                       {" "}
                       Attachment:{" "}
@@ -255,11 +322,7 @@ export function FormEditForm({
                         setFieldValue("file", file);
                       }}
                     />
-                    {/* {Formik.errors.file && Formik.touched.file && (
-          <div className="error-message" style={{ color: 'red' }}>
-            {Formik.errors.file}
-          </div>
-        )} */}
+            
 
                     <div>
                       <br />
@@ -276,7 +339,7 @@ export function FormEditForm({
                         </>
                       )}
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </fieldset>
             </Form>

@@ -1,5 +1,5 @@
 import * as requestFromServer from "./redux-Crud";
-import {reimbursement_claimSlice, callTypes } from "./redux-Slice";
+import { reimbursement_claimSlice, callTypes } from "./redux-Slice";
 import { toast } from "react-toastify";
 
 const { actions } = reimbursement_claimSlice;
@@ -7,25 +7,25 @@ const { actions } = reimbursement_claimSlice;
 
 export const fetchSalarypolicies = (params) => async (dispatch) => {
 
-console.log("fetchSalarypolicies",params)
+  console.log("fetchSalarypolicies", params)
   dispatch(actions.startCall({ callType: callTypes.list }));
 
   return requestFromServer.getAllSalarypolicy(params)
 
     .then((response) => {
-   
-      console.log("response",response)
+
+      console.log("response", response)
       dispatch(actions.salarypolicyFetched(response));
     })
     .catch((error) => {
-     
+
       error.clientMessage = "Can't find ";
       dispatch(actions.catchError({ error, callType: callTypes.list }));
     });
 };
 
 export const fetchmoduledata = (id) => (dispatch) => {
-console.log("fetchmoduledata",fetchmoduledata)
+  console.log("fetchmoduledata", fetchmoduledata)
 
   if (!id) {
     return dispatch(actions.SalarypolicyFetchedForEdit({ userForEdit: undefined }));
@@ -51,7 +51,7 @@ export const deleteSalarypolicy = (id) => (dispatch) => {
   return requestFromServer
     .deleteSalarypolicy({ Id: id })
     .then((response) => {
-  
+
       dispatch(actions.SalarypolicyDeleted({ Id: id }));
       toast.success("Successfully Deleted", {
         position: "top-right",
@@ -87,16 +87,13 @@ export const uploadImage = async (file) => {
 export const createSalarypolicy = (salarypolicyForCreation, disbaleLoading, onHide) => (
   dispatch
 ) => {
-  // salarypolicyForCreation.phNo = salarypolicyForCreation.phNo.toString();
-  // salarypolicyForCreation.cnic = salarypolicyForCreation.cnic.toString();
 
-  
   return requestFromServer
     .createSalarypolicy(salarypolicyForCreation)
     .then((res) => {
       dispatch(actions.startCall({ callType: callTypes.action }));
       const user = res.data?.data;
-     
+
 
       dispatch(actions.salarypolicyCreated(user));
       disbaleLoading();
@@ -127,17 +124,61 @@ export const createSalarypolicy = (salarypolicyForCreation, disbaleLoading, onHi
     });
 };
 
+
+export const getAllReimbursementConfigPolicy = (employeeId) => (
+
+  dispatch
+) => {
+
+  return requestFromServer
+    .getAllReimbursementConfigPolicy(employeeId)
+    .then((res) => {
+      // dispatch(actions.startCall({ callType: callTypes.action }));
+      const user = res.data?.data;
+
+console.log("user policy",user)
+      dispatch(actions.getReimbursementConfigPolicies(user));
+
+      // toast.success("Successfully", {
+      //   position: "top-right",
+      //   autoClose: 5000,
+      //   hideProgressBar: false,
+      //   closeOnClick: true,
+      //   pauseOnHover: true,
+      //   draggable: true,
+      //   progress: undefined,
+      // });
+  
+    })
+    .catch((error) => {
+      error.clientMessage = "Can't create user";
+      dispatch(actions.catchError({ error, callType: callTypes.action }));
+
+      toast.error(error?.response?.data?.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    });
+};
+
+
+
 export const updateSalarypolicy = (user, disbaleLoading, onHide) => (dispatch) => {
   return requestFromServer
     .updateSalarypolicy(user)
     .then((response) => {
 
       const updatedSalarypolicy = response?.config?.data; // response.data?.data;
-console.log("updatedSalarypolicy",updatedSalarypolicy)
+      console.log("updatedSalarypolicy", updatedSalarypolicy)
 
       dispatch(actions.clearUserForEdit());
       dispatch(actions.salarypolicyUpdated({ updatedSalarypolicy }));
-      
+
       dispatch(actions.startCall({ callType: callTypes.action }));
       disbaleLoading();
       onHide();
@@ -150,11 +191,11 @@ console.log("updatedSalarypolicy",updatedSalarypolicy)
         draggable: true,
         progress: undefined,
       });
-      
+
 
     })
     .catch((error) => {
-   
+
       dispatch(actions.catchError({ error, callType: callTypes.action }));
       disbaleLoading();
       toast.error(error?.response?.data?.message, {

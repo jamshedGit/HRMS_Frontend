@@ -40,3 +40,11 @@ export function deleteSalarypolicy(body) {
 
   return axios.patch(`${USERS_URL}/reimbursement_claim/delete-reimbursement-claim`, body);
 }
+
+export function getAllReimbursementConfigPolicy(body) {
+ 
+
+  return axios.post(`${USERS_URL}/reimbursement_claim/read-reimbursement-configuration-policies`, body);
+
+  
+}
