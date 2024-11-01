@@ -71,8 +71,6 @@ const profileValidation = Yup.object().shape(
     gender: Yup.string()
       .required("Required*"),
 
-    employeeTypeId: Yup.string()
-      .required("Required*"),
 
     locationId: Yup.string()
       .required("Required*"),
@@ -84,34 +82,37 @@ const profileValidation = Yup.object().shape(
       .required("Required*"),
 
 
+    employeeTypeId: Yup.string()
+      .required("Required*"),
 
     dateOfJoining: Yup.date()
       .max(currentDate, 'Date of joining cannot be in the future')
       .required("Required*"),
 
     dateOfConfirmation: Yup.date()
-      .required('*Required')
+      // .required('*Required')
       .when('dateOfJoining', (dateOfJoining, schema) => {
         return dateOfJoining && schema.min(dateOfJoining, 'Date of confirmation cannot be earlier than the date of joining');
       }),
 
     dateOfConfirmationDue: Yup.date()
-      .required('*Required')
+      // .required('*Required')
       .when('dateOfConfirmation', (dateOfConfirmation, schema) => {
         return dateOfConfirmation && schema.min(dateOfConfirmation, 'Date confirmation due cannot be earlier than date of confirmation');
       }),
 
     dateOfConfirmationEnter: Yup.date()
-      .required('*Required')
+      // .required('*Required')
       .when('dateOfConfirmationDue', (dateOfConfirmationDue, schema) => {
         return dateOfConfirmationDue && schema.min(dateOfConfirmationDue, 'Date confirmation extended cannot be earlier than date confirmation due');
       }),
 
     dateOfContractExpiry: Yup.date().nullable()
-      .required('*Required')
+      // .required('*Required')
       .when('dateOfConfirmationEnter', (dateOfConfirmationEnter, schema) => {
         return dateOfConfirmationEnter && schema.min(dateOfConfirmationEnter, 'Contract expiry date cannot be earlier than date confirmation extended');
       }),
+
 
     // dateOfRetirement: Yup.date() .nullable()
     // //.required('Contract expiry date is required')
@@ -253,10 +254,23 @@ export function DesignationEditForm({
   const [defCountry, setDefaultCountry] = useState({});
   const [defCity, setDefaultCity] = useState({});
   const [joiningDateSelected, setJoiningDate] = useState(null);
+
+
   const [confirmationDateSelected, setConfirmationDate] = useState(null);
+  const [disabledConfirmationDateSelected, setDisabledConfirmationDate] = useState(false);
+
+
   const [confirmationDueDateSelected, setConfirmationDueDate] = useState(null);
+  const [disbaledConfirmationDueDateSelected, setDisbledConfirmationDueDate] = useState(false);
+
+
   const [confirmationEnterDateSelected, setConfirmationEnterDate] = useState(null);
+  const [disbaledConfirmationEnterDateSelected, setDisbledConfirmationEnterDate] = useState(false);
+
   const [contractExpirtyDateSelected, setContractExpiryDate] = useState(null);
+  const [disabledContractExpirtyDateSelected, setDisabledContractExpiryDate] = useState(false);
+
+
   const [DOBDateSelected, setDOBDate] = useState(null);
   const [RetirementSelected, setDRetirmentDate] = useState(null);
 
@@ -416,10 +430,13 @@ export function DesignationEditForm({
 
   //===== Date Of Retirement
   useEffect(() => {
-    if (user.dateOfRetirement) {
-      setDRetirmentDate(new Date(user.dateOfRetirement));
+    if (user.retirementAgeFemale) {
+      const retirementDate = new Date(user.dateOfBirth);
+      retirementDate.setFullYear(retirementDate.getFullYear() + user.retirementAgeFemale);
+
+      setDRetirmentDate(new Date(retirementDate));
     }
-  }, [user.dateOfRetirement]);
+  }, [user.retirementAgeFemale]);
 
   //=========== END
 
@@ -527,6 +544,8 @@ export function DesignationEditForm({
 
   useEffect(() => {
     const emptypeId = defchildEmptypeMenus?.value ? defchildEmptypeMenus.value : user.employeeTypeId;
+
+    console.log("::gree::", emptypeId);
     setDefaultChildEmpTypeMenus(
       dashboard.allEmpTypeChildMenus &&
       dashboard.allEmpTypeChildMenus.filter((item) => {
@@ -1333,6 +1352,32 @@ export function DesignationEditForm({
                           onChange={(e) => {
                             setFieldValue("employeeTypeId", e.value || null);
                             setDefaultChildEmpTypeMenus(e);
+                            setDisbledConfirmationEnterDate(false);
+                            setDisabledConfirmationDate(false);
+                            setDisbledConfirmationDueDate(false);
+                            setDisabledContractExpiryDate(false);
+                            if (e.value == 148) // WHEN Select Permanet value
+                            {
+                              // For Empty Object
+                             
+                              setContractExpiryDate(null);
+                              setConfirmationDate(null);
+                              setConfirmationDueDate(null);
+                              setConfirmationEnterDate(null);
+
+                              // For Disabled Object
+                              setDisbledConfirmationEnterDate(true);
+                              setDisabledConfirmationDate(true);
+                              setDisbledConfirmationDueDate(true);
+                              setDisabledContractExpiryDate(true);
+
+                            }
+
+                            else{
+                                
+                            }
+                            
+
                             // dispatch(fetchAllFormsMenu(e.value));
                           }}
                           value={(defchildEmptypeMenus || null)}
@@ -1424,7 +1469,7 @@ export function DesignationEditForm({
                       </div>
 
                       <div className="col-12 col-md-4 mt-3">
-                        <label>Date Of Confirmation<span style={{ color: 'red' }}>*</span></label>
+                        <label>Date Of Confirmation</label>
                         <DatePicker
                           className="form-control"
                           placeholder="Enter Date Of Confirmation"
@@ -1439,13 +1484,13 @@ export function DesignationEditForm({
                           dateFormat="dd/MM/yyyy"
                           showTimeInput
                           name="dateOfConfirmation"
-                          disabled={isUserForRead}
+                          disabled={disabledConfirmationDateSelected}
                           autoComplete="off"
                         />
                         <ErrorMessage className="form-feedBack" name="dateOfConfirmation" component="div" />
                       </div>
                       <div className="col-12 col-md-4 mt-3">
-                        <label>Date Confirmation Due<span style={{ color: 'red' }}>*</span> </label>
+                        <label>Date Confirmation Due </label>
                         <DatePicker
                           className="form-control"
                           placeholder="Enter Date Of Confirmation Due"
@@ -1458,13 +1503,13 @@ export function DesignationEditForm({
                           dateFormat="dd/MM/yyyy"
                           showTimeInput
                           name="dateOfConfirmationDue"
-                          disabled={isUserForRead}
+                          disabled={disbaledConfirmationDueDateSelected}
                           autoComplete="off"
                         />
                         <ErrorMessage className="form-feedBack" name="dateOfConfirmationDue" component="div" />
                       </div>
                       <div className="col-12 col-md-4 mt-3">
-                        <label>Date Confirmation Extended <span style={{ color: 'red' }}>*</span> </label>
+                        <label>Date Confirmation Extended  </label>
                         <DatePicker
                           className="form-control"
                           placeholder="Enter Confirmation Enter Date"
@@ -1477,13 +1522,13 @@ export function DesignationEditForm({
                           dateFormat="dd/MM/yyyy"
                           showTimeInput
                           name="dateOfConfirmationEnter"
-                          disabled={isUserForRead}
+                          disabled={disbaledConfirmationEnterDateSelected}
                           autoComplete="off"
                         />
                         <ErrorMessage className="form-feedBack" name="dateOfConfirmationEnter" component="div" />
                       </div>
                       <div className="col-12 col-md-4 mt-3">
-                        <label>Contract Expiry <span style={{ color: 'red' }}>*</span></label>
+                        <label>Contract Expiry </label>
                         <DatePicker
                           className="form-control"
                           placeholder="Enter Contract Expiry"
@@ -1496,7 +1541,7 @@ export function DesignationEditForm({
                           dateFormat="dd/MM/yyyy"
                           showTimeInput
                           name="dateOfContractExpiry"
-                          disabled={isUserForRead}
+                          disabled={disabledContractExpirtyDateSelected}
                           autoComplete="off"
                         />
                         <ErrorMessage className="form-feedBack" name="dateOfContractExpiry" component="div" />
@@ -1706,7 +1751,7 @@ export function DesignationEditForm({
                           dateFormat="dd/MM/yyyy"
                           showTimeInput
                           name="dateOfRetirement"
-                          disabled={isUserForRead}
+                          disabled={true}
                           autoComplete="off"
                         />
                         <ErrorMessage className="form-feedBack" name="dateOfRetirement" component="div" />
@@ -1768,7 +1813,7 @@ export function DesignationEditForm({
                         <Field
                           name="email_official"
                           component={Input}
-                          placeholder="Enter Offical Email"
+                          placeholder="example@gmail.com"
                           label="Official Email"
                           autoComplete="off"
 
@@ -1778,7 +1823,7 @@ export function DesignationEditForm({
                         <Field
                           name="email_personal"
                           component={Input}
-                          placeholder="Enter Personal Email"
+                          placeholder="example@gmail.com"
                           label="Personal Email"
                           autoComplete="off"
                         />
@@ -1790,7 +1835,7 @@ export function DesignationEditForm({
                         <Field
                           name="phone_home"
                           component={Input}
-                          placeholder="Enter Home Phone"
+                          placeholder="03151110002"
                           label="Phone Home"
                           maxLength="15"
                           autoComplete="off"
@@ -1801,7 +1846,7 @@ export function DesignationEditForm({
                           name="phone_official"
                           component={Input}
                           maxLength="15"
-                          placeholder="Enter Offical Phone"
+                          placeholder="03151110002"
                           label="Offical Phone"
                           autoComplete="off"
                         />
@@ -1811,7 +1856,7 @@ export function DesignationEditForm({
                           name="phone_cell"
                           component={Input}
                           maxLength="15"
-                          placeholder="Enter Mobile Phone"
+                          placeholder="03151110002"
                           label="Cell No."
                           autoComplete="off"
                         />
