@@ -76,16 +76,7 @@ console.log("designation in")
   );
   // Table columns
   const columns = [
-    {
-      dataField: "Id",
-      text: "ID",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
+   
     {
       dataField: "employeeCode",
       text: "Employee Code",
