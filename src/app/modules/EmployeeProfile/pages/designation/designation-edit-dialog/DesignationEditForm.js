@@ -1023,14 +1023,14 @@ export function DesignationEditForm({
 
     // Validations for Incident
     incidentList.forEach((obj, index) => {
-      if (!obj.skill) {
+      if (!obj.incidentDetail) {
         newErrors[`incidentDetail-${index}`] = '*Required';
       }
-      if (!obj.description) {
+      if (!obj.actionTaken) {
         newErrors[`actionTaken-${index}`] = '*Required';
       }
 
-      if (!obj.ratingScale) {
+      if (!obj.actionTakenBy) {
         newErrors[`actionTakenBy-${index}`] = '*Required';
       }
 
