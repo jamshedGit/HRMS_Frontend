@@ -20,7 +20,7 @@ import {
 } from "../../../../../utils/common";
 import {
   fetchAllFormsMenu,
-  fetchAllReimbursementConfigList,
+  fetchAllPayrollMonthYearList
 } from "../../../../../../_metronic/redux/dashboardActions";
 
 const ReimbursementSchema = Yup.object().shape({
@@ -31,15 +31,15 @@ const ReimbursementSchema = Yup.object().shape({
     .min(0, "Must be at least 0")
     .max(99999999, "Must be at most 99999999")
     .required("Required"),
-  file: Yup.mixed()
-    .required("Required")
-    .test(
-      "fileSize",
-      "File is too large (max 5MB)",
-      (value) => !value || (value && value.size <= 5 * 1024 * 1024) // 5 MB limit
-    )
-    .required("Required"),
-  // pay_in_payroll_forId: Yup.number().required("Required"),
+  // file: Yup.mixed()
+  //   .required("Required")
+  //   .test(
+  //     "fileSize",
+  //     "File is too large (max 5MB)",
+  //     (value) => !value || (value && value.size <= 5 * 1024 * 1024) // 5 MB limit
+  //   )
+  //   .required("Required"),
+  pay_in_payroll_forId: Yup.number().required("Required"),
 });
 
 export function FormEditForm({
@@ -62,7 +62,9 @@ export function FormEditForm({
     if (!user.Id) {
       dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsidiaries
       dispatch(fetchAllFormsMenu(202, "allReimbursementTypeList"));
-      //  dispatch(fetchAllReimbursementConfigList("allReimbursementConfigList"))
+       dispatch(fetchAllPayrollMonthYearList("allPayrollMonthYearList"))
+
+      
     }
     //allPayrolGroupList
   }, [dispatch, user.Id]);
@@ -75,7 +77,8 @@ export function FormEditForm({
   }, shallowEqual);
 
   console.log("user", user);
-
+  console.log("allPayrollMonthYearList ...",dashboard.allPayrollMonthYearList)
+  console.log("allReimbursementTypeList ...",dashboard.allReimbursementTypeList)
   return (
     <Formik
       // key={user.Id || "new"}
@@ -128,7 +131,8 @@ export function FormEditForm({
                         </span>
                       }
                       // isDisabled={isUserForRead}
-                      disabled={isEdit}
+                      disabled={isEdit}          // value={
+                    
                       onChange={(e) => {
                         setFieldValue("reimbursement_typeId", e.value || null);
                         // check_Existed_Data(e.value);
@@ -174,21 +178,31 @@ export function FormEditForm({
                           <span style={{ color: "red" }}>*</span>
                         </span>
                       }
-                      // isDisabled={isUserForRead}
-                      // disabled={isEdit}
+                 
                       onChange={(e) => {
                         setFieldValue("pay_in_payroll_forId", e.value || null);
-                        // check_Existed_Data(e.value);
+                
                       }}
+
+                      
+
                       value={
-                        dashboard.allReimbursementTypeList.find(
+                        dashboard?.allPayrollMonthYearList.find(
                           (option) =>
+                          
                             option.value === values.pay_in_payroll_forId
                         ) || null
                       }
-                      options={dashboard.allReimbursementTypeList}
+                    //   options={dashboard.allPayrollMonthYearList.map(option => ({
+                    //     value: option.Id,
+                    //     label: option.month
+                    // }))}
+                       options={dashboard.allPayrollMonthYearList }
                       error={errors.pay_in_payroll_forId}
                       touched={touched.pay_in_payroll_forId}
+
+                      
+            
                     />
                   </div>
 

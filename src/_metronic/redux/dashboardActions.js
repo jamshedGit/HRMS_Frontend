@@ -418,4 +418,21 @@ export const fetchAllReimbursementConfigList = (key) => async (dispatch) => {
     .catch((error) => {
       toast.error("Something went wrong");
     });
+
+
 };
+
+export const fetchAllPayrollMonthYearList = (key) => async (dispatch) => {
+  return await requestFromServer
+    .getAllPayrollMonthYearList()
+    .then((response) => {
+      const entities = [...response.data?.data];
+
+      dispatch(actions.AllPayrollMonthYearListFetch(entities));
+    })
+    .catch((error) => {
+      toast.error("Something went wrong");
+    });
+
+    
+}

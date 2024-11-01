@@ -35,8 +35,8 @@ export const reimbursement_claimSlice = createSlice({
         },
 
         clearUserForEdit : (state) => {
-            console.log("userForEdit1",state.userForEdit)
-            state.userForEdit = null;
+            console.log("userForEdit1",state)
+            // state.userForEdit = null;
         },
         startCall: (state, action) => {
             state.error = null;

@@ -19,7 +19,7 @@ export function FormEditDialogHeader({ id, isUserForRead }) {
   useEffect(() => {
     let _title = id ? "" : "Add Reimbursement Claim";
     if (id) {
-      _title = `Edit Reimbursement Configuration`;
+      _title = `Edit Reimbursement Claim`;
     } //else if (isUserForRead) {
     //   _title = `Read user '}'`
     // }

@@ -20,6 +20,8 @@ export function ActionsColumnFormatter(
     setIds
   }
 ) {
+
+  console.log("row edit",row)
   const isUserRead = false;
   return (
     <>

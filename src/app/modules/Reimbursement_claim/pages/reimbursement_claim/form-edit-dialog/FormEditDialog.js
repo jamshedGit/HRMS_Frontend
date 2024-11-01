@@ -116,12 +116,12 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         date: data.date,
         amount: data.amount,
         file:data?.file || "",
-        // pay_in_payroll_forId:"", 
+        pay_in_payroll_forId:data.pay_in_payroll_forId || "", 
         // pay_slip_refId: "", 
   
       }
       if (data.file && typeof data.file == 'object') { //This is to check if file is uploaded or not. If uploaded then upload the file to server else just save form values
-
+console.log("if condition")
 
         actions.uploadImage(data.file)
           .then((res) => {
@@ -135,7 +135,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         // trigger()
       }
       else {
-        console.log("if condition")
+        console.log("else condition")
         await dispatch(actions.updateSalarypolicy(formUpdatedFields, disbaleLoading, resetForm));
         await dispatch(actions.fetchSalarypolicies(formUIProps));
 

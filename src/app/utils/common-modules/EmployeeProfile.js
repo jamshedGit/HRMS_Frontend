@@ -601,19 +601,34 @@ const EmployeeProfile = ({ employeeId }) => {
         </Card.Header>
         <Accordion.Collapse eventKey="0">
           <Card.Body>
+            
             <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-              {/* Profile Image Section */}
+     
+              
+
+
+
+              {Object.keys(data).length ? (
               <div className="form-group row">
-                <div className="col-12 col-md-4 mt-3">
-                  <img
-                    name='profile_image'
-                    src={data.profile_image ? `${data.profile_image}` : ''} // Fallback if no image
-                    alt="Profile"
-                    width={120}
-                    height={120}
-                  />
-                </div>
+              <div className="col-12 col-md-4 mt-3">
+                <img
+                  name='profile_image'
+                  src={data.profile_image ? `${data.profile_image}` : ''} // Fallback if no image
+                  alt="Profile"
+                  width={120}
+                  height={120}
+                />
               </div>
+            </div>
+              ) : (
+                <p></p>
+              )}
+
+
+
+
+
+
 
               {/* Employee Information Sections */}
               <h4 style={{ marginBottom: "15px" }}>Employee Information</h4>

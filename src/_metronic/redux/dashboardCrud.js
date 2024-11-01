@@ -177,3 +177,10 @@ export const getAllReimbursementConfigList = async () => {
     }
   );
 };
+
+
+export const getAllPayrollMonthYearList  = async () => {
+  return await axios.get(
+    `${USERS_URL}/reimbursement_claim/read-payroll-month`);
+};
+
