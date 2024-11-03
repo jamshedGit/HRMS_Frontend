@@ -17,7 +17,7 @@ export function ActionsColumnFormatter(
     isAccessForEdit,
     isAccessForDelete,
     openReadFormDialog,
-    setIds
+    setIds,setIsFileReq,
   }
 ) {
 
@@ -46,7 +46,10 @@ export function ActionsColumnFormatter(
           <a
             title=""
             className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
-            onClick={() => setIds(row.Id)}
+            onClick={() =>{
+              setIsFileReq(false)
+              setIds(row.Id)}
+            }
             // onClick={() =>console.log("row Id",row.Id)}
           >
             <span className="svg-icon svg-icon-md svg-icon-primary">

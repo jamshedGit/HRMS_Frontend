@@ -14,6 +14,7 @@ export function FormUIProvider({ FormUIEvents, children }) {
   const [queryParams, setQueryParamsBase] = useState(initialFilter);
   const [employeeId, setemployeeId] = useState('');
   const [ids, setIds] = useState("");
+  const [isFileReq,setIsFileReq]=useState(false)
   const setQueryParams = useCallback((nextQueryParams) => {
     setQueryParamsBase((prevQueryParams) => {
       if (isFunction(nextQueryParams)) {
@@ -51,6 +52,8 @@ export function FormUIProvider({ FormUIEvents, children }) {
     setQueryParams,
     ids,
     setIds,
+    isFileReq,
+    setIsFileReq,
     initUser,
     setemployeeId,
     employeeId,

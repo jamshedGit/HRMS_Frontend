@@ -30,6 +30,7 @@ export function FormTable() {
     return {
       ids: formUIContext.ids,
       setIds: formUIContext.setIds,
+      setIsFileReq:formUIContext.setIsFileReq,
       employeeId: formUIContext.employeeId,
       queryParams: formUIContext.queryParams,
       setQueryParams: formUIContext.setQueryParams,
@@ -147,6 +148,7 @@ export function FormTable() {
       formatter: ActionsColumnFormatter,
       formatExtraData: {
         setIds:formUIProps.setIds,
+        setIsFileReq:formUIProps.setIsFileReq,
         openEditFormDialog: formUIProps.openEditFormDialog,
         openDeleteFormDialog: formUIProps.openDeleteFormDialog,
         // openActiveFormDialog: formUIProps.openActiveFormDialog,

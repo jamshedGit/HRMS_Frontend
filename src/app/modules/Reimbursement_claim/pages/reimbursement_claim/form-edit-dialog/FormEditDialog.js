@@ -1,10 +1,8 @@
-
-
 import React, { useState, useEffect, useMemo } from "react";
 import { Modal } from "react-bootstrap";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { FormEditForm } from "./FormEditForm";
-import { FormEditDialogHeader } from './FormEditDialogHeader'
+import { FormEditDialogHeader } from "./FormEditDialogHeader";
 
 import * as actions from "../../../_redux/redux-Actions";
 import { ToastContainer, toast } from "react-toastify";
@@ -13,13 +11,11 @@ import { useFormUIContext } from "../FormUIContext";
 import { Accordion, Button, Card } from "react-bootstrap";
 import { KeyboardArrowDown } from "@material-ui/icons";
 
-
 export function FormEditDialog({ id, show, onHide, userForRead }) {
   const [action, setaction] = useState(false);
   const [loading, setLoading] = useState(false);
   const title = "FormEditDialog";
   const FormUIContext = useFormUIContext();
-
 
   const usersUIProps = useMemo(() => {
     return {
@@ -34,6 +30,8 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
       setIds: FormUIContext.setIds,
       employeeId: FormUIContext.employeeId,
       queryParams: FormUIContext.queryParams,
+      isFileReq:FormUIContext.isFileReq,
+      setIsFileReq:FormUIContext.setIsFileReq
     };
   }, [FormUIContext]);
 
@@ -54,60 +52,59 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     userStatusTypes,
     isuserForRead,
   } = useSelector((state) => ({
-
-
     actionsLoading: state.users.actionsLoading,
     user: state.users, // change for users to receipt
-    userForEdit: state.reimbursement_claim
-      .userForEdit,
+    userForEdit: state.reimbursement_claim.userForEdit,
     roles: state.users.roles,
     userStatusTypes: state.users.userStatusTypes,
-    isuserForRead: state.reimbursement_claim
-      .userForRead,
+    isuserForRead: state.reimbursement_claim.userForRead,
   }));
 
-
-  console.log("fetchmoduledata", id)
+  console.log("fetchmoduledata", id);
   useEffect(() => {
-    console.log("fetchmoduledata", id)
+    console.log("fetchmoduledata", id);
     dispatch(actions.fetchmoduledata(id));
 
     // dispatch(actions.fetchmoduledata(formUIProps .queryParams))
   }, [id, dispatch, show]);
 
+  const saveForm = async (data, isFileReq, resetForm) => {
+    // enableLoading();
+    console.log("user upload isFileReq", isFileReq, data);
 
-
-
-
-  const saveForm = async (data, resetForm) => {
-    
-    console.log("user upload", data)
-
-    if(!data.Id && data){
-      if (data.file && typeof data.file == 'object') { //This is to check if file is uploaded or not. If uploaded then upload the file to server else just save form values
-
-
-        actions.uploadImage(data.file)
-          .then((res) => {
-            data.file = res.data.filename;
-            dispatch(actions.createSalarypolicy(data, disbaleLoading, resetForm));
-  
-          })
-  
-        // trigger()
-      }
-      else {
-        console.log("if condition")
-        await dispatch(actions.createSalarypolicy(data, disbaleLoading, resetForm));
-        await dispatch(actions.fetchSalarypolicies(formUIProps));
-
-
-      }
-  
+    if (isFileReq && !data.file) {
+      disbaleLoading();
+      toast.error("Attachment is required.", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+ 
+      return;
     }
-    else{
+    formUIProps.setIds("");
 
-      console.log("user upload else", data)
+    if (!data.Id && data) {
+      if (data.file && typeof data.file == "object") {
+        //This is to check if file is uploaded or not. If uploaded then upload the file to server else just save form values
+
+        actions.uploadImage(data.file).then((res) => {
+          data.file = res.data.filename;
+          dispatch(actions.createSalarypolicy(data, disbaleLoading, resetForm));
+        });
+      } else {
+        console.log("if condition");
+        await dispatch(
+          actions.createSalarypolicy(data, disbaleLoading, resetForm)
+        );
+        await dispatch(actions.fetchSalarypolicies(formUIProps));
+      }
+    } else {
+      console.log("user upload else", data);
       const formUpdatedFields = {
         Id: data.Id,
         reimbursement_typeId: data.reimbursement_typeId,
@@ -115,48 +112,45 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         details: data.details,
         date: data.date,
         amount: data.amount,
-        file:data?.file || "",
-        pay_in_payroll_forId:data.pay_in_payroll_forId || "", 
-        // pay_slip_refId: "", 
-  
-      }
-      if (data.file && typeof data.file == 'object') { //This is to check if file is uploaded or not. If uploaded then upload the file to server else just save form values
-console.log("if condition")
+        file: data?.file || "",
+        pay_in_payroll_forId: data.pay_in_payroll_forId || "",
+        // pay_slip_refId: "",
+      };
+      if (data.file && typeof data.file == "object") {
+        //This is to check if file is uploaded or not. If uploaded then upload the file to server else just save form values
+        console.log("if condition");
 
-        actions.uploadImage(data.file)
-          .then((res) => {
-            formUpdatedFields.file = res.data.filename;
-            dispatch(actions.updateSalarypolicy(formUpdatedFields, disbaleLoading, resetForm))
-            .then(() => {
-              dispatch(actions.fetchSalarypolicies(formUIProps)); // Fetch the list after update
-            });
-          })
-      
+        actions.uploadImage(data.file).then((res) => {
+          formUpdatedFields.file = res.data.filename;
+          dispatch(
+            actions.updateSalarypolicy(
+              formUpdatedFields,
+              disbaleLoading,
+              resetForm
+            )
+          ).then(() => {
+            dispatch(actions.fetchSalarypolicies(formUIProps)); // Fetch the list after update
+          });
+        });
+
         // trigger()
-      }
-      else {
-        console.log("else condition")
-        await dispatch(actions.updateSalarypolicy(formUpdatedFields, disbaleLoading, resetForm));
+      } else {
+        console.log("else condition");
+        await dispatch(
+          actions.updateSalarypolicy(
+            formUpdatedFields,
+            disbaleLoading,
+            resetForm
+          )
+        );
         await dispatch(actions.fetchSalarypolicies(formUIProps));
-
       }
-
-
-
-  
     }
+  };
 
- 
-
-
-  }
-
-  console.log("id id", id)
+  console.log("id id", id);
   return (
     <>
-
-
-
       <FormEditDialogHeader id={id} isUserForRead={userForRead} />
       <FormEditForm
         saveForm={saveForm}
@@ -169,6 +163,8 @@ console.log("if condition")
         loading={loading}
         setIds={formUIProps.setIds}
         isEdit={id ? true : false}
+        isFileReq={formUIProps.isFileReq}
+        setIsFileReq={formUIProps.setIsFileReq}
       />
       <ToastContainer
         position="top-right"
@@ -181,7 +177,6 @@ console.log("if condition")
         draggable
         pauseOnHover
       />
-
     </>
   );
 }

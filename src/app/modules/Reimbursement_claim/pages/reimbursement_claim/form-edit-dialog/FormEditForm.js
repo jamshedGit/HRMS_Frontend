@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { Formik, Form, Field, FieldArray } from "formik";
 import * as Yup from "yup";
@@ -28,7 +28,7 @@ const ReimbursementSchema = Yup.object().shape({
   details: Yup.string().required("Required"),
   date: Yup.date().required("Required"),
   // amount: Yup.number() .required("Required"),
-  
+
   // file: Yup.mixed()
   //   .required("Required")
   //   .test(
@@ -50,11 +50,13 @@ export function FormEditForm({
   loading,
   setIds,
   isEdit,
+  isFileReq,
+  setIsFileReq,
 }) {
   const dispatch = useDispatch();
   const { dashboard } = useSelector((state) => state);
   const inputFile = useRef(null);
-
+// const [isFileReq,setIsFileReq]=useState(false)
   // Fetch necessary data if not already present
   useEffect(() => {
     if (!user.Id) {
@@ -71,21 +73,14 @@ export function FormEditForm({
       userAccess: state?.auth?.userAccess["reimbursement_claim"],
     };
   }, shallowEqual);
-  console.log(
-    "state data ",
-    currentState?.reimbursement_config_policies_permission?.policies
-  );
 
-  const filteredOptions = dashboard.allReimbursementTypeList.filter((option) =>
+
+  const filteredOptions = dashboard?.allReimbursementTypeList.filter((option) =>
     currentState?.reimbursement_config_policies_permission?.policies?.some(
       (item) => item.reimbursement_typeId === option.value
     )
   );
 
-  console.log("filteredOptions", filteredOptions);
-  // const handleChangeReimbursement=()=>{
-  //   filteredOptions
-  // }
 
   return (
     <Formik
@@ -103,13 +98,11 @@ export function FormEditForm({
             inputFile.current.value = "";
           }
         };
-        saveForm(values, clearForm);
+        saveForm(values,isFileReq, clearForm);
       }}
 
-      // onSubmit={(values) => {
-      //   enableLoading();
-      //   saveForm(values);
-      // }}
+
+
     >
       {({
         handleSubmit,
@@ -142,7 +135,13 @@ export function FormEditForm({
                       disabled={isEdit} // value={
                       onChange={(e) => {
                         setFieldValue("reimbursement_typeId", e.value || null);
-                        // check_Existed_Data(e.value);
+                      
+                          const policy = currentState?.reimbursement_config_policies_permission?.policies?.find(
+                            (item) => item.reimbursement_typeId == e.value
+                          );
+                          setIsFileReq(policy?.attachment_required &&  !values.file);
+                        
+                    
                       }}
                       value={
                         dashboard.allReimbursementTypeList.find(
@@ -213,14 +212,11 @@ export function FormEditForm({
                         const value = Number(e.target.value);
 
                         if (maxAmount !== undefined && value > maxAmount) {
-                    
-                          
                           return; // Prevent setting value above max
                         }
 
                         setFieldValue("amount", value);
                       }}
-                      
                     />
                   </div>
 
@@ -242,10 +238,7 @@ export function FormEditForm({
                             option.value === values.pay_in_payroll_forId
                         ) || null
                       }
-                      //   options={dashboard.allPayrollMonthYearList.map(option => ({
-                      //     value: option.Id,
-                      //     label: option.month
-                      // }))}
+                  
                       options={dashboard.allPayrollMonthYearList}
                       error={errors.pay_in_payroll_forId}
                       touched={touched.pay_in_payroll_forId}
@@ -285,31 +278,27 @@ export function FormEditForm({
                     />
                   </div> */}
 
-<div className="col-12 col-md-12 mt-3">
-  <label style={{ "margin-right": "0.5rem" }}>
-    Attachment:
-  </label>
-  {currentState?.reimbursement_config_policies_permission?.policies?.find(
-    (item) => item.reimbursement_typeId === values.reimbursement_typeId
-  )?.attachment_required && (
-    <input
-      name="file"
-      type="file"
-      accept=".jpeg,.jpg,.png,.pdf,.doc,.docx"
-      ref={inputFile}
-      onChange={(event) => {
-        const file = event.currentTarget.files[0];
-        setFieldValue("file", file);
-      }}
-    />
-  )}
-</div>
-
-
-                  {/* <div className="col-12 col-md-12 mt-3">
-                    <label style={{ "margin-right": "0.5rem" }}>
+                  <div className="col-12 col-md-12 mt-3 d-flex flex-column ">
+                    <label
+                      style={{
+                        "margin-right": "0.5rem",
+                 
+                      }}
+                    >
                       {" "}
                       Attachment:{" "}
+                      {/* {currentState?.reimbursement_config_policies_permission?.policies?.find(
+                        (item) =>
+                          item.reimbursement_typeId ===
+                          values.reimbursement_typeId
+                      )?.attachment_required && (
+                        // {setIsFileReq(true)}
+                          <span style={{ color: "red" }}>*</span>
+                         
+                  
+                      )} */}
+
+{isFileReq && <span style={{ color: "red" }}>*</span>}
                     </label>
                     <input
                       name="file"
@@ -322,7 +311,6 @@ export function FormEditForm({
                         setFieldValue("file", file);
                       }}
                     />
-            
 
                     <div>
                       <br />
@@ -339,7 +327,7 @@ export function FormEditForm({
                         </>
                       )}
                     </div>
-                  </div> */}
+                  </div>
                 </div>
               </fieldset>
             </Form>
@@ -379,7 +367,11 @@ export function FormEditForm({
             {!isUserForRead && (
               <button
                 type="submit"
-                onClick={() => handleSubmit()}
+                // onClick={() => handleSubmit()}
+                onClick={() => {
+                 
+                  handleSubmit();
+                }}
                 className="btn btn-primary btn-elevate"
                 disabled={loading}
               >
