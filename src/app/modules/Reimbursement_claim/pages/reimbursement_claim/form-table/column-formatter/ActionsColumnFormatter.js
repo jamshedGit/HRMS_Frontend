@@ -25,20 +25,7 @@ export function ActionsColumnFormatter(
   const isUserRead = false;
   return (
     <>
-      {/* <OverlayTrigger
-        overlay={<Tooltip id="products-edit-tooltip">View</Tooltip>}>
-        <a
-          title=""
-          className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
-          onClick={() => openReadFormDialog(row.Id, isUserRead)}
-        >
-          <span className="svg-icon svg-icon-md svg-icon-primary">
-            <SVG
-              src={toAbsoluteUrl("/media/svg/icons/Communication/view.svg")}
-            />
-          </span>
-        </a>
-      </OverlayTrigger> */}
+
       {isAccessForEdit && row.isActive && (
         <OverlayTrigger
           overlay={<Tooltip id="products-edit-tooltip">Edit</Tooltip>}

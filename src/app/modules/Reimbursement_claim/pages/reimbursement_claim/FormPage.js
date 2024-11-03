@@ -17,27 +17,11 @@ export function FormPage({ history }) {
 
   const dispatch = useDispatch();
   const FormUIEvents = {
-    // newFormButtonClick: () => {
-    //   // dispatch(fetchAllCountry());
 
-    //   history.push("/reimbursement_claim/read-all-reimbursement-claim/new");
-    // },
-    // openEditFormDialog: (id) => {
-    //   // dispatch(fetchAllCountry());
-
-    //   history.push(`/reimbursement_claim/read-all-reimbursement-claim/${id}/edit`);
-    // },
     openDeleteFormDialog: (id, status) => {
       history.push(`/reimbursement_claim/read-all-reimbursement-claim/${id}/${status}/delete`);
     },
-    // openActiveFormDialog: (id) => {
-    //   history.push(`/reimbursement_claim/read-all-reimbursement-claim/${id}/active`);
-    // },
-    // openReadFormDialog: (id, isUserRead) => {
-      
-      
-    //   history.push(`/reimbursement_claim/read-all-reimbursement-claim/${id}/read`);
-    // },
+
   };
   return (
 

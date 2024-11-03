@@ -291,16 +291,7 @@ export function FormEditForm({
                     >
                       {" "}
                       Attachment:{" "}
-                      {/* {currentState?.reimbursement_config_policies_permission?.policies?.find(
-                        (item) =>
-                          item.reimbursement_typeId ===
-                          values.reimbursement_typeId
-                      )?.attachment_required && (
-                        // {setIsFileReq(true)}
-                          <span style={{ color: "red" }}>*</span>
-                         
-                  
-                      )} */}
+                 
                       {isFileReq && <span style={{ color: "red" }}>*</span>}
                     </label>
                     <input
@@ -341,8 +332,7 @@ export function FormEditForm({
             {!isUserForRead ? (
               <button
                 type="reset"
-                // onClick={onHide}
-                // onClick={() => clear_Existed_Data()}
+      
 
                 onClick={() => {
                   setIds("");

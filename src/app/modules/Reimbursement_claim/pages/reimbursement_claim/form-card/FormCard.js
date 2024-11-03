@@ -95,9 +95,7 @@ export function FormCard() {
         <br />
         <hr />
         
-        {/* {FormUIProps.employeeId && (
-  <EmployeeProfile employeeId={FormUIProps.employeeId} />
-)} */}
+
 
 <EmployeeProfile employeeId={FormUIProps.employeeId} />
         {/* EmployeeProfile Ends */}
