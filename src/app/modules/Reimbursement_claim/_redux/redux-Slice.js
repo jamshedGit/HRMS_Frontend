@@ -47,7 +47,7 @@ export const reimbursement_claimSlice = createSlice({
                 state.actionsLoading = true;
             }
         },
-        salarypolicyFetched: (state, action) => {
+        reimbursementClaimFetched: (state, action) => {
            
    
             const entities = action.payload.data?.data.rows;
@@ -61,7 +61,7 @@ export const reimbursement_claimSlice = createSlice({
         },
 
          //get User By ID
-         SalarypolicyFetchedForEdit: (state, action) => {
+         ReimbursementClaimFetchedForEdit: (state, action) => {
           
      
             state.actionsLoading = false;
@@ -70,7 +70,7 @@ export const reimbursement_claimSlice = createSlice({
         },
 
       
-        SalarypolicyDeleted: (state, action) => {
+        ReimbursementClaimDeleted: (state, action) => {
 
             state.error = null;
             state.actionsLoading = false;
@@ -80,13 +80,13 @@ export const reimbursement_claimSlice = createSlice({
                 (el) => el.Id !== action.payload.Id
             );
         },
-        salarypolicyCreated: (state, action) => {
+        reimbursementClaimCreated: (state, action) => {
            
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);
         },
-        salarypolicyUpdated: (state, action) => {
+        reimbursementClaimUpdated: (state, action) => {
             state.error = null;
             state.actionsLoading = false;
             // state.entities.push(action.payload)
@@ -96,9 +96,9 @@ export const reimbursement_claimSlice = createSlice({
                 //const payload = { ...action.payload };
                 let payload = JSON.stringify(action.payload)
                 let payloadObj = JSON.parse(payload);
-                let finalObj = JSON.parse(payloadObj.updatedSalarypolicy);
+                let finalObj = JSON.parse(payloadObj.updatedReimbursementClaim);
                 if (entity.Id === finalObj.Id) {
-                    return finalObj; //action.payload.updatedSalarypolicy;
+                    return finalObj; 
                 }
                
                 return entity;

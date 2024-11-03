@@ -8,7 +8,7 @@ export function uploadImage(body) {
 }
 
 //Create record
-export function createSalarypolicy(body) {
+export function createReimbursementClaim(body) {
  
 
   return axios.post(`${USERS_URL}/reimbursement_claim/create-reimbursement-claim`, body);
@@ -18,25 +18,25 @@ export function createSalarypolicy(body) {
 
 
 // Read
-export function getAllSalarypolicy(body) {
+export function getAllReimbursementClaim(body) {
 
 
   return axios.post(`${USERS_URL}/reimbursement_claim/read-all-reimbursement-claim`, body);
 }
 
-export function getSalarypolicyById(id) {
+export function getReimbursementClaimById(id) {
 
   return axios.post(`${USERS_URL}/reimbursement_claim/read-reimbursement-claim`, id);
 }
 
 //Update
-export function updateSalarypolicy(salarypolicy) {
+export function updateReimbursementClaim(reimbursementClaim) {
    
-  return axios.put(`${USERS_URL}/reimbursement_claim/update-reimbursement-claim`, salarypolicy);
+  return axios.put(`${USERS_URL}/reimbursement_claim/update-reimbursement-claim`, reimbursementClaim);
 }
 
 //Delete
-export function deleteSalarypolicy(body) {
+export function deleteReimbursementClaim(body) {
 
   return axios.patch(`${USERS_URL}/reimbursement_claim/delete-reimbursement-claim`, body);
 }

@@ -94,14 +94,14 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
 
         actions.uploadImage(data.file).then((res) => {
           data.file = res.data.filename;
-          dispatch(actions.createSalarypolicy(data, disbaleLoading, resetForm));
+          dispatch(actions.createReimbursementClaim(data, disbaleLoading, resetForm));
         });
       } else {
      
         await dispatch(
-          actions.createSalarypolicy(data, disbaleLoading, resetForm)
+          actions.createReimbursementClaim(data, disbaleLoading, resetForm)
         );
-        await dispatch(actions.fetchSalarypolicies(formUIProps));
+        await dispatch(actions.fetchReimbursementClaim(formUIProps));
       }
     } else {
      
@@ -123,13 +123,13 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         actions.uploadImage(data.file).then((res) => {
           formUpdatedFields.file = res.data.filename;
           dispatch(
-            actions.updateSalarypolicy(
+            actions.updateReimbursementClaim(
               formUpdatedFields,
               disbaleLoading,
               resetForm
             )
           ).then(() => {
-            dispatch(actions.fetchSalarypolicies(formUIProps)); // Fetch the list after update
+            dispatch(actions.fetchReimbursementClaim(formUIProps)); // Fetch the list after update
           });
         });
 
@@ -137,13 +137,13 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
       } else {
      
         await dispatch(
-          actions.updateSalarypolicy(
+          actions.updateReimbursementClaim(
             formUpdatedFields,
             disbaleLoading,
             resetForm
           )
         );
-        await dispatch(actions.fetchSalarypolicies(formUIProps));
+        await dispatch(actions.fetchReimbursementClaim(formUIProps));
       }
     }
   };

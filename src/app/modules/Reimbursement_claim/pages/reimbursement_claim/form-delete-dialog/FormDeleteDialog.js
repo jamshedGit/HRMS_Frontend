@@ -62,14 +62,14 @@ export function FormDeleteDialog({ id, status, show, onHide }) {
   // looking for loading/dispatch
   useEffect(() => {}, [isLoading, dispatch]);
 
-  const deleteSalarypolicy = () => {
+  const deleteReimbursementClaim = () => {
     // server request for deleting customer by id
     enableLoading();
-    dispatch(actions.deleteSalarypolicy(id)).then(() => {
+    dispatch(actions.deleteReimbursementClaim(id)).then(() => {
       onHide();
       // refresh list after deletion
   
-      dispatch(actions.fetchSalarypolicies(formUIProps));
+      dispatch(actions.fetchReimbursementClaim(formUIProps));
    
       disableLoading();
     });
@@ -105,7 +105,7 @@ export function FormDeleteDialog({ id, status, show, onHide }) {
           <> </>
           <button
             type="button"
-            onClick={deleteSalarypolicy}
+            onClick={deleteReimbursementClaim}
             className="btn btn-primary btn-elevate"
           >
             Delete Record

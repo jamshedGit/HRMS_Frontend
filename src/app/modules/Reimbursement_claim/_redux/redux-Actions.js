@@ -5,17 +5,17 @@ import { toast } from "react-toastify";
 const { actions } = reimbursement_claimSlice;
 
 
-export const fetchSalarypolicies = (params) => async (dispatch) => {
+export const fetchReimbursementClaim = (params) => async (dispatch) => {
 
 
-  dispatch(actions.startCall({ callType: callTypes.list }));
+  // dispatch(actions.startCall({ callType: callTypes.list }));
 
-  return requestFromServer.getAllSalarypolicy(params)
+  return requestFromServer.getAllReimbursementClaim(params)
 
     .then((response) => {
 
      
-      dispatch(actions.salarypolicyFetched(response));
+      dispatch(actions.reimbursementClaimFetched(response));
     })
     .catch((error) => {
 
@@ -28,17 +28,17 @@ export const fetchmoduledata = (id) => (dispatch) => {
 
 
   if (!id) {
-    return dispatch(actions.SalarypolicyFetchedForEdit({ userForEdit: undefined }));
+    return dispatch(actions.ReimbursementClaimFetchedForEdit({ userForEdit: undefined }));
   }
 
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
-    .getSalarypolicyById({ Id: id })
+    .getReimbursementClaimById({ Id: id })
     .then((response) => {
       const entities = response.data?.data;
 
 
-      dispatch(actions.SalarypolicyFetchedForEdit({ userForEdit: entities }));
+      dispatch(actions.ReimbursementClaimFetchedForEdit({ userForEdit: entities }));
     })
     .catch((error) => {
       error.clientMessage = "Can't find user";
@@ -46,16 +46,16 @@ export const fetchmoduledata = (id) => (dispatch) => {
     });
 };
 
-export const deleteSalarypolicy = (id) => (dispatch) => {
-  dispatch(actions.startCall({ callType: callTypes.action }));
+export const deleteReimbursementClaim= (id) => (dispatch) => {
+  // dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
-    .deleteSalarypolicy({ Id: id })
+    .deleteReimbursementClaim({ Id: id })
     .then((response) => {
 
-      dispatch(actions.SalarypolicyDeleted({ Id: id }));
+      dispatch(actions.ReimbursementClaimDeleted({ Id: id }));
       toast.success("Successfully Deleted", {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -84,22 +84,22 @@ export const uploadImage = async (file) => {
 };
 
 
-export const createSalarypolicy = (salarypolicyForCreation, disbaleLoading, onHide) => (
+export const createReimbursementClaim = (reimbursementClaimForCreation, disbaleLoading, onHide) => (
   dispatch
 ) => {
 
   return requestFromServer
-    .createSalarypolicy(salarypolicyForCreation)
+    .createReimbursementClaim(reimbursementClaimForCreation)
     .then((res) => {
       dispatch(actions.startCall({ callType: callTypes.action }));
       const user = res.data?.data;
 
 
-      dispatch(actions.salarypolicyCreated(user));
+      dispatch(actions.reimbursementClaimCreated(user));
       disbaleLoading();
       toast.success("Successfully Created", {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -168,16 +168,16 @@ export const getAllReimbursementConfigPolicy = (employeeId) => (
 
 
 
-export const updateSalarypolicy = (user, disbaleLoading, onHide) => (dispatch) => {
+export const updateReimbursementClaim = (user, disbaleLoading, onHide) => (dispatch) => {
   return requestFromServer
-    .updateSalarypolicy(user)
+    .updateReimbursementClaim(user)
     .then((response) => {
 
-      const updatedSalarypolicy = response?.config?.data; // response.data?.data;
+      const updatedReimbursementClaim = response?.config?.data; // response.data?.data;
 
 
       dispatch(actions.clearUserForEdit());
-      dispatch(actions.salarypolicyUpdated({ updatedSalarypolicy }));
+      dispatch(actions.reimbursementClaimUpdated({ updatedReimbursementClaim }));
 
       dispatch(actions.startCall({ callType: callTypes.action }));
       disbaleLoading();
