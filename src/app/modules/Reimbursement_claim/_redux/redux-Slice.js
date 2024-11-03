@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 
 
-const initialSalarypolicyState = {
+const initialReimbursementClaimState = {
     listLoading: false,
     actionsLoading: null,
     totalCount: 0,
@@ -24,7 +24,7 @@ export const callTypes = {
 
 export const reimbursement_claimSlice = createSlice({
     name: "reimbursement_claimSlice",
-    initialState: initialSalarypolicyState,
+    initialState: initialReimbursementClaimState,
     reducers: {
         catchError: (state, action) => {
             state.error = `${action.type}: ${action.payload.error}`;
