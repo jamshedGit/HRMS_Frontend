@@ -19,11 +19,8 @@ export function EmployeeSelect({
     }),
     shallowEqual
   )
-  console.log("selecet allEmployees ",allEmployees)
 
-  // useEffect(()=>{
-  //   console.log("employeeId employeeId",setemployeeId)
-  //     },[allEmployees])
+
 
 
 
@@ -51,7 +48,7 @@ export function EmployeeSelect({
             <Form className="form form-label-right">
               <fieldset>
                 <div className="from-group row">
-{console.log("values",values)}
+
                   {/* Employee Id Dropdown Starts */}
                   <div className="col-12 col-md-4 mt-3">
                     <Field

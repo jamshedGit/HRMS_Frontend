@@ -21,7 +21,7 @@ export function ActionsColumnFormatter(
   }
 ) {
 
-  console.log("row edit",row)
+
   const isUserRead = false;
   return (
     <>
@@ -50,7 +50,7 @@ export function ActionsColumnFormatter(
               setIsFileReq(false)
               setIds(row.Id)}
             }
-            // onClick={() =>console.log("row Id",row.Id)}
+            
           >
             <span className="svg-icon svg-icon-md svg-icon-primary">
               <SVG

@@ -36,7 +36,7 @@ export const reimbursement_claimSlice = createSlice({
         },
 
         clearUserForEdit : (state) => {
-            console.log("userForEdit1",state)
+        
             state.userForEdit = null;
         },
         startCall: (state, action) => {
@@ -92,7 +92,7 @@ export const reimbursement_claimSlice = createSlice({
             // state.entities.push(action.payload)
           
             state.entities = state.entities.map((entity) => {
-                console.log("state.entities",entity)
+               
                 //const payload = { ...action.payload };
                 let payload = JSON.stringify(action.payload)
                 let payloadObj = JSON.parse(payload);
@@ -113,7 +113,7 @@ export const reimbursement_claimSlice = createSlice({
             state.reimbursement_config_policies_permission=action.payload;
 
 
-            console.log("policies state.entities", state.reimbursement_config_policies_permission)
+            
         },
 
 

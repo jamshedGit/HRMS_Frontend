@@ -30,7 +30,7 @@ export function FormCard() {
   }, [FormUIContext])
 
   useEffect(()=>{
-    console.log('FormUIProps',FormUIProps.id)
+
 
   },[FormUIProps])
 
@@ -83,7 +83,7 @@ export function FormCard() {
 
   }, [dispatch, FormUIProps.employeeId])
 
-  console.log("employeeId employeeId FormUIProps.id",FormUIProps.id)
+  
   return (
     <>
 

@@ -19,7 +19,7 @@ export function createSalarypolicy(body) {
 
 // Read
 export function getAllSalarypolicy(body) {
-  console.log("body",body)
+
 
   return axios.post(`${USERS_URL}/reimbursement_claim/read-all-reimbursement-claim`, body);
 }

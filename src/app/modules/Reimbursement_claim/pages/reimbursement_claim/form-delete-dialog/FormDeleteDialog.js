@@ -18,7 +18,7 @@ export function FormDeleteDialog({ id, status, show, onHide }) {
 
   const formUIContext = useFormUIContext();
   const formUIProps = useMemo(() => {
-    console.log("formUIContext",formUIContext)
+ 
     return {
       ids: formUIContext.ids,
       setIds: formUIContext.setIds,
@@ -68,7 +68,7 @@ export function FormDeleteDialog({ id, status, show, onHide }) {
     dispatch(actions.deleteSalarypolicy(id)).then(() => {
       onHide();
       // refresh list after deletion
-      console.log("deleted formUIProps",formUIProps)
+  
       dispatch(actions.fetchSalarypolicies(formUIProps));
    
       disableLoading();

@@ -7,14 +7,14 @@ const { actions } = reimbursement_claimSlice;
 
 export const fetchSalarypolicies = (params) => async (dispatch) => {
 
-  console.log("fetchSalarypolicies", params)
+
   dispatch(actions.startCall({ callType: callTypes.list }));
 
   return requestFromServer.getAllSalarypolicy(params)
 
     .then((response) => {
 
-      console.log("response", response)
+     
       dispatch(actions.salarypolicyFetched(response));
     })
     .catch((error) => {
@@ -25,7 +25,7 @@ export const fetchSalarypolicies = (params) => async (dispatch) => {
 };
 
 export const fetchmoduledata = (id) => (dispatch) => {
-  console.log("fetchmoduledata", fetchmoduledata)
+
 
   if (!id) {
     return dispatch(actions.SalarypolicyFetchedForEdit({ userForEdit: undefined }));
@@ -136,7 +136,7 @@ export const getAllReimbursementConfigPolicy = (employeeId) => (
       // dispatch(actions.startCall({ callType: callTypes.action }));
       const user = res.data?.data;
 
-console.log("user policy",user)
+
       dispatch(actions.getReimbursementConfigPolicies(user));
 
       // toast.success("Successfully", {
@@ -174,7 +174,7 @@ export const updateSalarypolicy = (user, disbaleLoading, onHide) => (dispatch) =
     .then((response) => {
 
       const updatedSalarypolicy = response?.config?.data; // response.data?.data;
-      console.log("updatedSalarypolicy", updatedSalarypolicy)
+
 
       dispatch(actions.clearUserForEdit());
       dispatch(actions.salarypolicyUpdated({ updatedSalarypolicy }));

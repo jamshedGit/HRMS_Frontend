@@ -26,7 +26,7 @@ export function FormTable() {
   const formUIContext = useFormUIContext();
  
   const formUIProps = useMemo(() => {
-    console.log("formUIContext",formUIContext)
+
     return {
       ids: formUIContext.ids,
       setIds: formUIContext.setIds,
@@ -52,7 +52,7 @@ export function FormTable() {
     shallowEqual
   );
 
- console.log("reimbursement claim",userAccess)
+
   const { totalCount, entities, listLoading } = currentState;
  
   //totalCount = 10
@@ -60,7 +60,7 @@ export function FormTable() {
   const dispatch = useDispatch();
  
   useEffect(() => {
-    console.log("run fetch data",formUIProps.employeeId)
+  
     formUIProps.setIds("");
  
  

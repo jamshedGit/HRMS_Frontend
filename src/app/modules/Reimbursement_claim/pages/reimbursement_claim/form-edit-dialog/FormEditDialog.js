@@ -60,9 +60,9 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     isuserForRead: state.reimbursement_claim.userForRead,
   }));
 
-  console.log("fetchmoduledata", id);
+
   useEffect(() => {
-    console.log("fetchmoduledata", id);
+ 
     dispatch(actions.fetchmoduledata(id));
 
     // dispatch(actions.fetchmoduledata(formUIProps .queryParams))
@@ -70,7 +70,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
 
   const saveForm = async (data, isFileReq, resetForm) => {
     // enableLoading();
-    console.log("user upload isFileReq", isFileReq, data);
+ 
 
     if (isFileReq && !data.file) {
       disbaleLoading();
@@ -97,14 +97,14 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
           dispatch(actions.createSalarypolicy(data, disbaleLoading, resetForm));
         });
       } else {
-        console.log("if condition");
+     
         await dispatch(
           actions.createSalarypolicy(data, disbaleLoading, resetForm)
         );
         await dispatch(actions.fetchSalarypolicies(formUIProps));
       }
     } else {
-      console.log("user upload else", data);
+     
       const formUpdatedFields = {
         Id: data.Id,
         reimbursement_typeId: data.reimbursement_typeId,
@@ -118,7 +118,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
       };
       if (data.file && typeof data.file == "object") {
         //This is to check if file is uploaded or not. If uploaded then upload the file to server else just save form values
-        console.log("if condition");
+   
 
         actions.uploadImage(data.file).then((res) => {
           formUpdatedFields.file = res.data.filename;
@@ -135,7 +135,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
 
         // trigger()
       } else {
-        console.log("else condition");
+     
         await dispatch(
           actions.updateSalarypolicy(
             formUpdatedFields,
@@ -148,7 +148,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     }
   };
 
-  console.log("id id", id);
+
   return (
     <>
       <FormEditDialogHeader id={id} isUserForRead={userForRead} />
