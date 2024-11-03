@@ -27,7 +27,7 @@ const ReimbursementSchema = Yup.object().shape({
   reimbursement_typeId: Yup.number().required("Required"),
   details: Yup.string().required("Required"),
   date: Yup.date().required("Required"),
-  // amount: Yup.number() .required("Required"),
+  amount: Yup.number().required("Required"),
 
   // file: Yup.mixed()
   //   .required("Required")
@@ -56,7 +56,7 @@ export function FormEditForm({
   const dispatch = useDispatch();
   const { dashboard } = useSelector((state) => state);
   const inputFile = useRef(null);
-// const [isFileReq,setIsFileReq]=useState(false)
+  // const [isFileReq,setIsFileReq]=useState(false)
   // Fetch necessary data if not already present
   useEffect(() => {
     if (!user.Id) {
@@ -74,13 +74,11 @@ export function FormEditForm({
     };
   }, shallowEqual);
 
-
   const filteredOptions = dashboard?.allReimbursementTypeList.filter((option) =>
     currentState?.reimbursement_config_policies_permission?.policies?.some(
       (item) => item.reimbursement_typeId === option.value
     )
   );
-
 
   return (
     <Formik
@@ -98,11 +96,8 @@ export function FormEditForm({
             inputFile.current.value = "";
           }
         };
-        saveForm(values,isFileReq, clearForm);
+        saveForm(values, isFileReq, clearForm);
       }}
-
-
-
     >
       {({
         handleSubmit,
@@ -135,13 +130,13 @@ export function FormEditForm({
                       disabled={isEdit} // value={
                       onChange={(e) => {
                         setFieldValue("reimbursement_typeId", e.value || null);
-                      
-                          const policy = currentState?.reimbursement_config_policies_permission?.policies?.find(
-                            (item) => item.reimbursement_typeId == e.value
-                          );
-                          setIsFileReq(policy?.attachment_required &&  !values.file);
-                        
-                    
+
+                        const policy = currentState?.reimbursement_config_policies_permission?.policies?.find(
+                          (item) => item.reimbursement_typeId == e.value
+                        );
+                        setIsFileReq(
+                          policy?.attachment_required && !values.file
+                        );
                       }}
                       value={
                         dashboard.allReimbursementTypeList.find(
@@ -156,12 +151,15 @@ export function FormEditForm({
                   </div>
 
                   <div className="col-12 col-md-6 mt-3">
+                    <label>
+                      Date <span style={{ color: "red" }}>*</span>
+                    </label>
                     <Field
                       name="date"
                       component={DatePickerField}
                       dateFormat="dd/MM/yyyy"
                       placeholder="Select Date"
-                      label="Date"
+                      // label="Date"
                       type="date"
                     />
                   </div>
@@ -194,13 +192,17 @@ export function FormEditForm({
                       name="amount"
                       component={Input}
                       placeholder="Enter Amount"
-                      label={`Amount Limit: ${
-                        currentState?.reimbursement_config_policies_permission?.policies?.find(
-                          (item) =>
-                            item.reimbursement_typeId ===
-                            values.reimbursement_typeId
-                        )?.max_amount
-                      }`}
+                      label={
+                        <span>
+                          Amount Limit: $
+                          {currentState?.reimbursement_config_policies_permission?.policies?.find(
+                            (item) =>
+                              item.reimbursement_typeId ===
+                              values.reimbursement_typeId
+                          )?.max_amount || 0}{" "}
+                          <span style={{ color: "red" }}>*</span>
+                        </span>
+                      }
                       type="number"
                       onChange={(e) => {
                         const maxAmount = currentState?.reimbursement_config_policies_permission?.policies?.find(
@@ -238,7 +240,6 @@ export function FormEditForm({
                             option.value === values.pay_in_payroll_forId
                         ) || null
                       }
-                  
                       options={dashboard.allPayrollMonthYearList}
                       error={errors.pay_in_payroll_forId}
                       touched={touched.pay_in_payroll_forId}
@@ -250,7 +251,11 @@ export function FormEditForm({
                       name="details"
                       component={TextArea}
                       placeholder="Enter Details"
-                      label="Details"
+                      label={
+                        <span>
+                          Details <span style={{ color: "red" }}>*</span>
+                        </span>
+                      }
                       type="text"
                     />
                   </div>
@@ -282,7 +287,6 @@ export function FormEditForm({
                     <label
                       style={{
                         "margin-right": "0.5rem",
-                 
                       }}
                     >
                       {" "}
@@ -297,8 +301,7 @@ export function FormEditForm({
                          
                   
                       )} */}
-
-{isFileReq && <span style={{ color: "red" }}>*</span>}
+                      {isFileReq && <span style={{ color: "red" }}>*</span>}
                     </label>
                     <input
                       name="file"
@@ -369,7 +372,6 @@ export function FormEditForm({
                 type="submit"
                 // onClick={() => handleSubmit()}
                 onClick={() => {
-                 
                   handleSubmit();
                 }}
                 className="btn btn-primary btn-elevate"
