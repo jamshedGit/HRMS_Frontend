@@ -126,8 +126,8 @@ export function FormEditForm({
                           <span style={{ color: "red" }}>*</span>
                         </span>
                       }
-                      // isDisabled={isUserForRead}
-                      disabled={isEdit} // value={
+                      isDisabled={isEdit}
+                 
                       onChange={(e) => {
                         setFieldValue("reimbursement_typeId", e.value || null);
 
@@ -164,28 +164,7 @@ export function FormEditForm({
                     />
                   </div>
 
-                  {/* <div className="col-12 col-md-6 mt-3">
-                    <Field
-                      name="amount"
-                      component={Input}
-                      // placeholder={currentState?.reimbursement_config_policies_permission?.policies?.some(item => item.reimbursement_typeId === values.reimbursement_typeId)}
-                     
-                      placeholder={
-                        "Enter Amount" // Use max_amount or default placeholder
-                      }
-                     
-                      label={`Amount Limit : ${currentState?.reimbursement_config_policies_permission?.policies?.find(
-                        (item) => item.reimbursement_typeId === values.reimbursement_typeId
-                      )?.max_amount}`}
-
-
-
-
-
-
-                      type="number"
-                    />
-                  </div> */}
+               
 
                   <div className="col-12 col-md-6 mt-3">
                     <Field
