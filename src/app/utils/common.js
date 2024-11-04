@@ -1,5 +1,7 @@
 import moment from "moment";
 import { DateTimeFormats } from "./constants";
+const { differenceInDays, format } = require('date-fns');
+export const UPLOAD_URL = process.env.REACT_APP_UPLOAD_URL;
 
 export const getDate = (
   date,
@@ -24,10 +26,87 @@ export const getCurrentTime = () => moment().format("LT");
  * @returns 
  */
 export const getClassName = (error, value) => {
-  if (error && !value ) {
+  if (error && !value) {
     return 'form-control is-invalid';
-  } else if (!error && value ) {
+  } else if (!error && value) {
     return 'form-control is-valid';
   }
   return 'form-control';
 }
+
+
+/**
+ * 
+ * Get Diff in days between two provided dates
+ * 
+ * @param {Date|String} startDate 
+ * @param {Date|String} endDate 
+ * @returns 
+ */
+export const getDateDiffInDays = (startDate, endDate) => {
+  if (startDate && endDate) {
+    return differenceInDays(new Date(endDate), new Date(startDate)) + 1;
+  }
+  return 0;
+}
+
+export const getFileName = (fileName) => {
+  if (fileName) {
+    if (fileName.includes('---')) {
+      return fileName.split('---')[1]?.split('-')?.join(' ')
+    }
+    else {
+      return fileName.split('-')?.join(' ')
+    }
+  }
+  return ''
+}
+
+/**
+ * 
+ * function to return formatted date
+ * 
+ * @param {Date|String} date 
+ * @param {String} dateFormat 
+ * @returns 
+ */
+export const formatDates = (date, dateFormat = null) => {
+  return format(new Date(date), dateFormat || 'dd/MMM/yyyy')
+}
+
+/**
+ * 
+ * function to return Uploaded file Url
+ * 
+ * @param {String} fileName 
+ * @returns 
+ */
+export const getUploadUrl = (fileName) => {
+  if(fileName){
+    return UPLOAD_URL + fileName
+  }
+  return '';
+}
+
+export const formatNumberWithCommas = (number) => {
+  if (number == null) return ''; // Handle null or undefined
+  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+
+
+
+export const amountLimit = (value,) => {
+  // Convert the input to a string and check its length
+  if (value.length > 8) {
+    return value.slice(0, 8); // Limit the length
+  }
+  return value; // Return the original value if within limit
+};
+
+
+
+// export const percentageLimit = (value,) => {
+//   // Convert the input to a string and check its length
+//    .matches(/^(100|[1-9]?[0-9])(\.[0-9]{1,2})?$/, 'Must be a valid percentage (0-100) with up to 2 decimal places')
+//   return value; // Return the original value if within limit
+// };

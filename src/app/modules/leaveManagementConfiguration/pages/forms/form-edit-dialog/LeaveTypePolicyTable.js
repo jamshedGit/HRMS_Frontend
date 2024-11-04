@@ -17,7 +17,7 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
                   <td>Action</td>
                   <td>Leave Type</td>
                   <td>Gender</td>
-                  <td>Min Experience</td>
+                  <td>Minimum Experience (Years)</td>
                   <td>Max Allowed</td>
                   <td>Attachment Required</td>
                   <td>Marital Status</td>
@@ -51,12 +51,6 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
                             value
                           )
                         }}
-                        // label={
-                        //   <span>
-                        //     {" "}
-                        //     leave Type<span style={{ color: "red" }}>*</span>
-                        //   </span>
-                        // }
                         value={row.leaveType}
                         children={createDropdown(dropdownData.allLeaveTypes || [], values?.leavetypePolicies)}
                       />
@@ -80,12 +74,6 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
                             value
                           )
                         }}
-                        // label={
-                        //   <span>
-                        //     {" "}
-                        //     Gender<span style={{ color: "red" }}>*</span>
-                        //   </span>
-                        // }
                         value={row.gender}
                         children={createDropdown(dropdownData.allGenderList || [])}
                       />
@@ -110,12 +98,6 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
                             e.target.value
                           )
                         }}
-                        // label={
-                        //   <span>
-                        //     {" "}
-                        //     Min Exp<span style={{ color: "red" }}>*</span>
-                        //   </span>
-                        // }
                         value={row.minExp}
                       />
                       {errors.leavetypePolicies?.[index]?.minExp &&
@@ -139,12 +121,6 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
                             e.target.value
                           )
                         }}
-                        // label={
-                        //   <span>
-                        //     {" "}
-                        //     Max Allowed<span style={{ color: "red" }}>*</span>
-                        //   </span>
-                        // }
                         value={row.maxAllowed}
                       />
                       {errors.leavetypePolicies?.[index]?.maxAllowed &&
@@ -183,12 +159,6 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
                             value
                           )
                         }}
-                        // label={
-                        //   <span>
-                        //     {" "}
-                        //     Marital Status<span style={{ color: "red" }}>*</span>
-                        //   </span>
-                        // }
                         value={row.maritalStatus}
                         children={createDropdown(dropdownData.allMaritalStatus || [])}
                       />

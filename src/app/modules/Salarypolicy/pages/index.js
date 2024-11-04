@@ -8,8 +8,8 @@ export default function SalarypolicyManagement() {
   return (
     <Suspense fallback={<LayoutSplashScreen />}>
       <Switch>
-        {<Redirect exact={true} from="/salarypolicy" to="/salarypolicy/read-all-salarypolicy" />}
-        <ContentRoute path="/salarypolicy/read-all-salarypolicy" component={SalarypolicyPage} />
+        {<Redirect exact={true} from="/salary_policy" to="/salary_policy/read-all-salarypolicy" />}
+        <ContentRoute path="/salary_policy/read-all-salarypolicy" component={SalarypolicyPage} />
       </Switch>
     </Suspense>
   );

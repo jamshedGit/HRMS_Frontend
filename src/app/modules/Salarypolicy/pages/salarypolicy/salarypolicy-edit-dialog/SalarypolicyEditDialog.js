@@ -50,11 +50,10 @@ export function SalarypolicyEditDialog({ id, show, onHide, userForRead }) {
     
     actionsLoading: state.users.actionsLoading,
     user: state.users, // change for users to receipt
-    userForEdit: state.salarypolicy.userForEdit,
+    userForEdit: state.salary_policy.userForEdit,
     roles: state.users.roles,
-    centers: state.users.centers,
     userStatusTypes: state.users.userStatusTypes,
-    isuserForRead: state.salarypolicy.userForRead,
+    isuserForRead: state.salary_policy.userForRead,
   }));
 
 

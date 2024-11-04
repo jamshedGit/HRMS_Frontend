@@ -186,9 +186,10 @@ export const fetchAllDept = (id) => async (dispatch) => {
  * @param {string} text 
  * @returns 
  */
-export const fetchAllFormsMenu = (id, key, text=null) => async (dispatch) => {
+export const fetchAllFormsMenu = (id, key, text=null,mergeLabel=false) => async (dispatch) => {
+  console.log("key",key)
   return await requestFromServer
-    .getAllFormMenus(id, text)
+    .getAllFormMenus(id, text,mergeLabel)
     .then((response) => {
       const entities = [...response.data?.data];
       dispatch(actions.AllChildMenusFetch({ entities, key }));
@@ -405,3 +406,34 @@ export const fetchAllHumanResourceRole = (key) => async (dispatch) => {
 };
 
 
+
+
+export const fetchAllReimbursementConfigList = (key) => async (dispatch) => {
+  return await requestFromServer
+    .getAllReimbursementConfigList()
+    .then((response) => {
+      const entities = [...response.data?.data];
+      console.log("dispatching entitties",entities)
+      dispatch(actions.AllReimbursementConfigListFetch({ entities, key }));
+    })
+    .catch((error) => {
+      toast.error("Something went wrong");
+    });
+
+
+};
+
+export const fetchAllPayrollMonthYearList = (key) => async (dispatch) => {
+  return await requestFromServer
+    .getAllPayrollMonthYearList()
+    .then((response) => {
+      const entities = [...response.data?.data];
+
+      dispatch(actions.AllPayrollMonthYearListFetch(entities));
+    })
+    .catch((error) => {
+      toast.error("Something went wrong");
+    });
+
+    
+}

@@ -138,7 +138,7 @@ export function FormTable() {
 
     {
       dataField: "max_year",
-      text: "Min Year",
+      text: "Max Year",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,

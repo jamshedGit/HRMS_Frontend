@@ -47,8 +47,8 @@ export function FormEditForm({
   const { dashboard } = useSelector((state) => state);
   useEffect(() => {
     if (!user.Id) {
-      dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsidiaries
-      dispatch(fetchAllFormsMenu(45, "allAccountList"));
+      dispatch(fetchAllFormsMenu(133, "allSubidiaryList",null,false)); // For All Subsidiaries
+      dispatch(fetchAllFormsMenu(45, "allAccountList",null,true));
 
     }
   }, [dispatch, user.Id]);
@@ -146,7 +146,7 @@ export function FormEditForm({
                       name="graduity_expense_accountId"
                       label={
                         <span>
-                          Graduity Expense Account<span style={{ color: "red" }}>*</span>
+                          Gratuity Expense Account<span style={{ color: "red" }}>*</span>
                         </span>
                       }
                       isDisabled={isUserForRead}
@@ -173,7 +173,7 @@ export function FormEditForm({
                       name="graduity_payable_accountId"
                       label={
                         <span>
-                          Graduity Payable Account<span style={{ color: "red" }}>*</span>
+                          Gratuity Payable Account<span style={{ color: "red" }}>*</span>
                         </span>
                       }
                       isDisabled={isUserForRead}
@@ -200,7 +200,7 @@ export function FormEditForm({
                       name="bank_cash_accountId"
                       label={
                         <span>
-                          Bank Cash Account<span style={{ color: "red" }}>*</span>
+                          Bank/Cash Account<span style={{ color: "red" }}>*</span>
                         </span>
                       }
                       isDisabled={isUserForRead}

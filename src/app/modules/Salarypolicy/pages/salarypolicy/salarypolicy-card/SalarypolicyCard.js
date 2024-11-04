@@ -25,7 +25,7 @@ export function SalarypolicyCard() {
    
     (state) => ({
       
-      userAccess: state.auth.userAccess.salarypolicy,
+      userAccess: state.auth.userAccess.salary_policy,
     }),
     shallowEqual
   )
@@ -37,8 +37,8 @@ export function SalarypolicyCard() {
   const { currentState } = useSelector(
     (state) => {  console.log("s "); return {
       
-      currentState: state.salarypolicy,
-      userAccess: state?.auth?.userAccess["salarypolicy"],
+      currentState: state.salary_policy,
+      userAccess: state?.auth?.userAccess["salary_policy"],
     }},
     shallowEqual
   );

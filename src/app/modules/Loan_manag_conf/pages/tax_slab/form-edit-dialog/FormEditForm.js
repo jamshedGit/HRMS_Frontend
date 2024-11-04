@@ -18,8 +18,8 @@ const loanManagementSchema = Yup.object().shape({
   human_resource_role: Yup.number().required("Human Resource Role is required"),
   emp_loan_account: Yup.number().required("Employee Loan Account is required"),
   installment_deduction_percentage: Yup.number()
-  .min(0, "Must be at least 0") 
-  .max(100, "Must be at most 100") 
+    .min(0, "Must be at least 0")
+    .max(100, "Must be at most 100")
     .required("Installment Deduction Percentage is required"),
   installment_deduction_basis_type: Yup.number().required(
     "Installment Deduction Basis Type is required"
@@ -28,12 +28,12 @@ const loanManagementSchema = Yup.object().shape({
     Yup.object().shape({
       loan_typeId: Yup.number().required(" Type is required"),
       max_loan_amount: Yup.number()
-      .min(1, "Must be at least 1") 
-      .required("Max  Amount is required"),
+        .min(1, "Must be at least 1")
+        .required("Max  Amount is required"),
       basis: Yup.number().required("Basis is required"),
       salary_count: Yup.number()
-      .min(1, "Must be at least 1")
-      .required("Count is required"),
+        .min(1, "Must be at least 1")
+        .required("Salary Count is required"),
     })
   ),
 });
@@ -67,7 +67,6 @@ export function FormEditForm({
   ];
 
   const { currentState, userAccess } = useSelector((state) => {
-    
     return {
       currentState: state.loan_management_configuration,
       userAccess: state?.auth?.userAccess["loan_management_configuration"],
@@ -81,7 +80,7 @@ export function FormEditForm({
     entities.forEach((i) => {
       if (i.subsidiaryId == subsidiaryId) {
         existedId = i.Id;
-    
+
         dispatch(actions.fetchSalarypolicy(existedId));
       } else {
         dispatch(actions.fetchSalarypolicy(0));
@@ -95,8 +94,7 @@ export function FormEditForm({
       initialValues={user}
       validationSchema={loanManagementSchema}
       onSubmit={(values) => {
-  
-        // enableLoading();
+        enableLoading();
         saveForm(values);
       }}
     >
@@ -234,7 +232,6 @@ export function FormEditForm({
 
                   {/* Installment Deduction Percentage Field */}
                   <div className="col-12 col-md-6 mt-3">
-              
                     <Field
                       name="installment_deduction_percentage"
                       component={Input}
@@ -494,12 +491,26 @@ export function FormEditForm({
             )}
 
             {/* Save Button */}
-            {!isUserForRead && (
+            {/* {!isUserForRead && (
               <button
                 type="submit"
                 onClick={() => handleSubmit()}
                 className="btn btn-primary btn-elevate"
                 disabled={loading}
+              >
+                Save
+                {loading && (
+                  <span className="ml-3 mr-3 spinner spinner-white"></span>
+                )}
+              </button>
+            )} */}
+
+            {!isUserForRead && (
+              <button
+                type="submit"
+                onClick={() => handleSubmit()}
+                className="btn btn-primary btn-elevate"
+                disabled={loading || values?.details?.length === 0} // Disable if loading or no details
               >
                 Save
                 {loading && (

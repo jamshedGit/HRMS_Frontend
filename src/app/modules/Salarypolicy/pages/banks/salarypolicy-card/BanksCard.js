@@ -23,13 +23,13 @@ export function BanksCard() {
 
   const { userAccess } = useSelector(
     (state) => ({
-      userAccess: state.auth.userAccess.Bank,
+      userAccess: state.auth.userAccess.salary_policy,
     }),
     shallowEqual
   )
 
   const accessUser = userAccess.find(
-    (item) => item.componentName === "CreateBank"
+    (item) => item.componentName === "CreateSalarypolicy"
   )
 
   return (
