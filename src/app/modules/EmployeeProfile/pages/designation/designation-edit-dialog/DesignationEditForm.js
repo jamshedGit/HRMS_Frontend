@@ -89,50 +89,35 @@ const profileValidation = Yup.object().shape(
       .max(currentDate, 'Date of joining cannot be in the future')
       .required("Required*"),
 
+
     dateOfConfirmation: Yup.date()
-      // .required('*Required')
-      .when('dateOfJoining', (dateOfJoining, schema) => {
-        return dateOfJoining && schema.min(dateOfJoining, 'Date of confirmation cannot be earlier than the date of joining');
-      }),
-
-    dateOfConfirmationDue: Yup.date()
-      // .required('*Required')
-      .when('dateOfConfirmation', (dateOfConfirmation, schema) => {
-        return dateOfConfirmation && schema.min(dateOfConfirmation, 'Date confirmation due cannot be earlier than date of confirmation');
-      }),
-
-    dateOfConfirmationEnter: Yup.date()
-      // .required('*Required')
-      .when('dateOfConfirmationDue', (dateOfConfirmationDue, schema) => {
-        return dateOfConfirmationDue && schema.min(dateOfConfirmationDue, 'Date confirmation extended cannot be earlier than date confirmation due');
-      }),
-
-    dateOfContractExpiry: Yup.date().nullable()
-      // .required('*Required')
-      .when('dateOfConfirmationEnter', (dateOfConfirmationEnter, schema) => {
-        return dateOfConfirmationEnter && schema.min(dateOfConfirmationEnter, 'Contract expiry date cannot be earlier than date confirmation extended');
-      }),
-
-
-    // dateOfRetirement: Yup.date() .nullable()
-    // //.required('Contract expiry date is required')
-    // .when('dateOfBirth', (dateOfBirth, schema) => {
-    //   return dateOfBirth && schema.min(dateOfBirth, 'Contract expiry date cannot be earlier than date confirmation extended');
-    // }),
-
-    dateOfRetirement: Yup.date()
       .nullable()
-      .typeError('Invalid date format')
-      .when('dateOfBirth', {
-        is: (dateOfBirth) => dateOfBirth != null, // Check if dateOfBirth is provided
-        then: Yup.date().min(
-          Yup.ref('dateOfBirth'),
-          'Retirement date cannot be earlier than date of birth'
-        ),
+      .when('dateOfJoining', (dateOfJoining, schema) => {
+        return dateOfJoining
+          ? schema.min(dateOfJoining, 'Date of confirmation cannot be earlier than the date of joining')
+          : schema;
       }),
-
-
-
+    dateOfConfirmationDue: Yup.date()
+      .nullable()
+      .when('dateOfConfirmation', (dateOfConfirmation, schema) => {
+        return dateOfConfirmation
+          ? schema.min(dateOfConfirmation, 'Date confirmation due cannot be earlier than date confirmation')
+          : schema;
+      }),
+    dateOfConfirmationEnter: Yup.date()
+      .nullable()
+      .when('dateOfConfirmationDue', (dateOfConfirmationDue, schema) => {
+        return dateOfConfirmationDue
+          ? schema.min(dateOfConfirmationDue, 'Date confirmation extended cannot be earlier than date confirmation due')
+          : schema;
+      }),
+    dateOfContractExpiry: Yup.date()
+      .nullable()
+      .when('dateOfConfirmationEnter', (dateOfConfirmationEnter, schema) => {
+        return dateOfConfirmationEnter
+          ? schema.min(dateOfConfirmationEnter, 'Contract expiry date cannot be earlier than date confirmation extended')
+          : schema;
+      }),
     nic_no: Yup.string()
       .matches(/^\d{5}-\d{7}-\d{1}$/, 'ID Card No must be in the format 12345-6789012-3')
       .required('Required'),
@@ -1056,7 +1041,7 @@ export function DesignationEditForm({
         validationSchema={profileValidation}
         onSubmit={async (values) => {
 
-
+          console.log("::ppp::", values);
           //const t =  handleSubmit();
 
 
@@ -1077,7 +1062,6 @@ export function DesignationEditForm({
               await axios
                 .post(`${USERS_URL}/profile/image-upload`, formData)
                 .then((res) => {
-
                   setImage(res.data.imageUrl)
                   saveEmployeeProfile(values, res.data.imageUrl, defContactList, workExperienceList, academicList, skillsList, incidentList);
                 });
@@ -1350,7 +1334,9 @@ export function DesignationEditForm({
                             // handleBlur({ target: { name: "countryId" } });
                           }}
                           onChange={(e) => {
+                            console.log("::dd1", e.value);
                             setFieldValue("employeeTypeId", e.value || null);
+
                             setDefaultChildEmpTypeMenus(e);
                             setDisbledConfirmationEnterDate(false);
                             setDisabledConfirmationDate(false);
@@ -1359,11 +1345,16 @@ export function DesignationEditForm({
                             if (e.value == 148) // WHEN Select Permanet value
                             {
                               // For Empty Object
-                             
-                              setContractExpiryDate(null);
-                              setConfirmationDate(null);
-                              setConfirmationDueDate(null);
-                              setConfirmationEnterDate(null);
+
+                              setContractExpiryDate('');
+                              setConfirmationDate('');
+                              setConfirmationDueDate('');
+                              setConfirmationEnterDate('');
+
+                              setFieldValue("dateOfConfirmation", '');
+                              setFieldValue("dateOfConfirmationDue", '');
+                              setFieldValue("dateOfConfirmationEnter", '');
+                              setFieldValue("dateOfContractExpiry", '');
 
                               // For Disabled Object
                               setDisbledConfirmationEnterDate(true);
@@ -1372,11 +1363,24 @@ export function DesignationEditForm({
                               setDisabledContractExpiryDate(true);
 
                             }
+                            else {
 
-                            else{
-                                
+                              setFieldValue("dateOfContractExpiry", contractExpirtyDateSelected || new Date())
+                              setFieldValue("dateOfConfirmationEnter", confirmationEnterDateSelected || new Date())
+                              setFieldValue("dateOfConfirmationDue", confirmationDueDateSelected || new Date())
+                              setFieldValue("dateOfConfirmation", confirmationDateSelected || new Date())
+                              
+
+                              setContractExpiryDate(new Date());
+                              setConfirmationDate(new Date());
+                              setConfirmationDueDate(new Date());
+                              setConfirmationEnterDate(new Date());
+
+
                             }
-                            
+
+
+
 
                             // dispatch(fetchAllFormsMenu(e.value));
                           }}
@@ -1569,9 +1573,6 @@ export function DesignationEditForm({
                           <div className="invalid-text">{errors.defaultShiftId}</div>
                         )}
                       </div>
-
-
-
 
                     </div>
 
