@@ -6,6 +6,7 @@ import { Select } from "../../../../../../_metronic/_partials/controls";
 import AllocatedListTable from "./AllocatedListTable";
 import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLabel";
 import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
+import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 
 //Validations for Form
 const formValidation = Yup.object().shape({
@@ -15,9 +16,9 @@ const formValidation = Yup.object().shape({
   list: Yup.array().of(
     Yup.object().shape({
       leaveType: Yup.number().required('Required'),
-      leaveCount: Yup.number().min(1).max(999).required('Required'),
+      leaveCount: Yup.number().min(1, VALIDATION_MESSAGES.minOneValue).max(999, VALIDATION_MESSAGES.maxThreeDigit).required(VALIDATION_MESSAGES.required),
       policyType: Yup.number().required('Required'),
-      maxCount: Yup.number().min(1).max(999).required('Required'),
+      maxCount: Yup.number().min(1).max(Yup.ref('leaveCount'), 'Max Count cannot be greater than Leave count').required('Required'),
     }))
     .min(1, 'Allocate Atleast One leave'),
 });
@@ -53,6 +54,7 @@ export function MasterEditForm({
           values,
           handleBlur,
           setFieldValue,
+          dirty
         }) => (
           <>
             <Modal.Body className="overlay overlay-block cursor-default">

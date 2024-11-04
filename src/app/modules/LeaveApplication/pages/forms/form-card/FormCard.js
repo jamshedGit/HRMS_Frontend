@@ -30,9 +30,10 @@ export function FormCard() {
   }, [FormUIContext])
 
   //Get data from states
-  const { dashboard } = useSelector(
+  const { dashboard, entities } = useSelector(
     (state) => ({
-      dashboard: state.dashboard
+      dashboard: state.dashboard,
+      entities: state.leave_application.entities
     }),
     shallowEqual
   )
@@ -46,6 +47,13 @@ export function FormCard() {
     if (!dashboard?.allLeaveTypes || !dashboard?.allLeaveTypes?.length)
       dispatch(fetchAllLeaveType("allLeaveTypes"));
   }, [dispatch, formUIProps.employeeId, formUIProps.queryParamsLeaveApp])
+
+
+  useEffect(() => {
+    dispatch(actions.fetchLeaveBalances(formUIProps.employeeId))
+
+  }, [dispatch, formUIProps.employeeId, entities])
+
 
 
   return (

@@ -32,18 +32,20 @@ export function LeaveBalanceTable() {
     };
   }, [formUIContext]);
 
-  const { currentState, userAccess, state } = useSelector(
+  const { currentState, userAccess } = useSelector(
     (state) => {
       return {
         currentState: state.leave_application,
         userAccess: state?.auth?.userAccess["Leave_Application"],
-        state: state
       }
     },
     shallowEqual
   );
 
-  const { totalCount, entities, listLoading } = currentState;
+  const { totalCount, leaveBalances, listLoading } = currentState;
+
+  console.log(':::::leaveBalances::::',leaveBalances);
+  
 
   const isAccessForEdit = userAccess?.find(
     (item) => item.componentName === "UpdateLeaveApplication"
@@ -55,7 +57,7 @@ export function LeaveBalanceTable() {
   // Table columns
   const columns = [
     {
-      dataField: "name",
+      dataField: "leaveTypeName",
       text: "Leave Type",
       sort: false,
       sortCaret: sortCaret,
@@ -65,8 +67,8 @@ export function LeaveBalanceTable() {
       },
     },
     {
-      dataField: "from",
-      text: "Leave Period",
+      dataField: "yearName",
+      text: "Year",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -75,8 +77,8 @@ export function LeaveBalanceTable() {
       },
     },
     {
-      dataField: "to",
-      text: "Allocated Balance",
+      dataField: "allocatedCount",
+      text: "Allocated Leave Count",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -85,8 +87,8 @@ export function LeaveBalanceTable() {
       },
     },
     {
-      dataField: "days",
-      text: "Leave Availed",
+      dataField: "availedCount",
+      text: "Availed",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -95,8 +97,8 @@ export function LeaveBalanceTable() {
       },
     },
     {
-      dataField: "remarks",
-      text: "Leave Pending for Approval",
+      dataField: "remainingCount",
+      text: "Remaining",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -105,8 +107,28 @@ export function LeaveBalanceTable() {
       },
     },
     {
-      dataField: "remarks",
-      text: "Available Balance",
+      dataField: "carryForwardCount",
+      text: "Carry Forward Leave Count",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
+    {
+      dataField: "lateCount",
+      text: "Late Count",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
+    {
+      dataField: "encashmentCount",
+      text: "Encashment Leaves Count",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -141,19 +163,16 @@ export function LeaveBalanceTable() {
             <PaginationProvider pagination={paginationFactory(paginationOptions)}>
               {({ paginationProps, paginationTableProps }) => {
                 return (
-                  <Pagination
-                    isLoading={listLoading}
-                    paginationProps={paginationProps}
-                  >
+                  
                     <BootstrapTable
-                      noDataIndication={NoRecordsFoundMessage({ entities: [] })}
+                      noDataIndication={NoRecordsFoundMessage({ entities: leaveBalances || [] })}
                       wrapperClasses="table-responsive"
                       bordered={false}
                       classes="table table-head-custom table-vertical-center overflow-hidden table-hover"
                       bootstrap4
                       remote
                       keyField="Id"
-                      data={[]}
+                      data={leaveBalances || []}
                       columns={columns}
                       defaultSorted={uiHelpers.defaultSorted}
                       onTableChange={getHandlerTableChange(
@@ -162,10 +181,9 @@ export function LeaveBalanceTable() {
                       {...paginationTableProps}
                     >
 
-                      <PleaseWaitMessage entities={[]} />
-                      <NoRecordsFoundMessage entities={[]} />
+                      <PleaseWaitMessage entities={leaveBalances || []} />
+                      <NoRecordsFoundMessage entities={leaveBalances || []} />
                     </BootstrapTable>
-                  </Pagination>
                 );
               }}
             </PaginationProvider>

@@ -11,8 +11,6 @@ const initialState = {
     userForEdit: undefined,
     lastError: null,
     userForRead: false,
-    payrollData: null,
-    leaveBalances: []
 };
 
 export const callTypes = {
@@ -20,8 +18,8 @@ export const callTypes = {
     action: "action",
 };
 
-export const LeaveApplicationSlice = createSlice({
-    name: "LeaveApplication",
+export const EmployeeLeaveBalanceSlice = createSlice({
+    name: "EmployeeLeaveBalance",
     initialState: initialState,
     reducers: {
         catchError: (state, action) => {
@@ -40,26 +38,21 @@ export const LeaveApplicationSlice = createSlice({
                 state.actionsLoading = true;
             }
         },
-        LeaveApplicationFetched: (state, action) => {
-            const entities = action.payload.data?.data.rows || [];
-            const totalResult = action.payload.data?.data.totalResults || 0;
+        EmployeeLeaveBalanceFetched: (state, action) => {
+            const entities = action.payload.data?.data.rows;
+            const totalResult = action.payload.data?.data.totalResults;
             state.listLoading = false;
             state.error = null;
             state.entities = entities;
             state.totalCount = totalResult;
         },
-        LeaveApplicationFetchedForEdit: (state, action) => {
-            const entities = action?.payload?.userForEdit;
-            if (entities) {
-                entities.fileName = entities.file;  //This is to show file on UI in form seperately from the field
-                entities.from = entities.from ? new Date(entities.from) : ''; //This is to format date in form format. When we receive date in response it's in string type instead of Date type
-                entities.to = entities.to ? new Date(entities.to) : ''; //This is to format date in form format. When we receive date in response it's in string type instead of Date type
-            }
+        EmployeeLeaveBalanceFetchedForEdit: (state, action) => {
+            const entities = action?.payload;
             state.actionsLoading = false;
             state.userForEdit = entities;
             state.error = null;
         },
-        LeaveApplicationDeleted: (state, action) => {
+        EmployeeLeaveBalanceDeleted: (state, action) => {
             state.error = null;
             state.actionsLoading = false;
             state.entities = state.entities.filter(
@@ -67,13 +60,13 @@ export const LeaveApplicationSlice = createSlice({
             );
             state.totalCount--;
         },
-        LeaveApplicationCreated: (state, action) => {
+        EmployeeLeaveBalanceCreated: (state, action) => {
+            const entities = action?.payload;
             state.actionsLoading = false;
             state.error = null;
-            state.entities.unshift(action.payload);
-            state.totalCount++;
+            state.userForEdit = entities;
         },
-        LeaveApplicationUpdated: (state, action) => {
+        EmployeeLeaveBalanceUpdated: (state, action) => {
             const id = action.payload.Id;
             state.error = null;
             state.actionsLoading = false;
@@ -83,17 +76,6 @@ export const LeaveApplicationSlice = createSlice({
                 }
                 return el;
             });
-        },
-        PayrollMonthFetched: (state, action) => {
-            const payrollData = action?.payload?.payrollData?.[0];
-            state.error = null;
-            state.payrollData = payrollData;
-        },
-        LeaveBalancesFetched: (state, action) => {
-            const leaveBalances = action.payload.data?.data;
-            state.listLoading = false;
-            state.error = null;
-            state.leaveBalances = leaveBalances;
-        },
+        }
     },
 });
