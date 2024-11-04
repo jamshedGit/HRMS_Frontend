@@ -6,6 +6,7 @@ import paginationFactory, {
 } from "react-bootstrap-table2-paginator";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import * as actions from "../../../_redux/redux-Actions";
+import { format } from 'date-fns';
 import {
   getHandlerTableChange,
   NoRecordsFoundMessage,
@@ -17,15 +18,20 @@ import * as uiHelpers from "../FormUIHelpers";
 import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatter";
 import { Pagination } from "../../../../../../_metronic/_partials/controls";
 import { useFormUIContext } from "../FormUIContext";
+import { Accordion, Button, Card } from "react-bootstrap";
+import { KeyboardArrowDown } from "@material-ui/icons";
 
 export function FormTable() {
   //Users UI Context
   const formUIContext = useFormUIContext();
  
   const formUIProps = useMemo(() => {
+
     return {
-      id: formUIContext.id,
+      ids: formUIContext.ids,
       setIds: formUIContext.setIds,
+      setIsFileReq:formUIContext.setIsFileReq,
+      employeeId: formUIContext.employeeId,
       queryParams: formUIContext.queryParams,
       setQueryParams: formUIContext.setQueryParams,
       openEditFormDialog: formUIContext.openEditFormDialog,
@@ -35,18 +41,18 @@ export function FormTable() {
     };
   }, [formUIContext]);
  
-  //console.log("queryparms", usersUIProps.queryparms)
+
   const { currentState, userAccess } = useSelector(
-    (state) => {  console.log("state ",state); return {
+    (state) => {  return {
      
       
-      currentState: state.reimbursement_configuration,
-      userAccess: state?.auth?.userAccess["reimbursement_configuration"],
+      currentState: state.reimbursement_claim,
+      userAccess: state?.auth?.userAccess["reimbursement_claim"],
     }},
     shallowEqual
   );
-  console.log("currentState reimbursement configuration",currentState)
- 
+
+
   const { totalCount, entities, listLoading } = currentState;
  
   //totalCount = 10
@@ -54,18 +60,19 @@ export function FormTable() {
   const dispatch = useDispatch();
  
   useEffect(() => {
-    formUIProps.setIds([]);
+  
+    formUIProps.setIds("");
  
  
-    dispatch(actions.fetchSalarypolicies(formUIProps.queryParams));
-  }, [formUIProps.queryParams, dispatch, totalCount]);
+    dispatch(actions.fetchReimbursementClaim(formUIProps));
+  }, [formUIProps.queryParams, dispatch, totalCount,formUIProps.employeeId]);
  
   const isAccessForEdit = userAccess?.find(
-    (item) => item.componentName === "UpdateReimbursementConfiguration"
+    (item) => item.componentName === "UpdateReimbursementClaim"
   );
  
   const isAccessForDelete = userAccess?.find(
-    (item) => item.componentName === "DeleteReimbursementConfiguration"
+    (item) => item.componentName === "DeleteReimbursementClaim"
   );
   // Table columns
   const columns = [
@@ -80,8 +87,8 @@ export function FormTable() {
     //   },
     // },
     {
-      dataField: "Subsidiary.formName",
-      text: "subsidiary",
+      dataField: "ReimbursementType.formName",
+      text: "Reimbursement Type",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -92,24 +99,39 @@ export function FormTable() {
  
  
  
-{
-  dataField: "PayrollGroup.formName",
-  text: "Payroll Group",
-  sort: false,
-  sortCaret: sortCaret,
-  headerSortingClasses,
-  style: {
-    minWidth: "10px",
-  },
+// {
+//   dataField: "Employee.firstName",
+//   text: "Employee",
+//   sort: false,
+//   sortCaret: sortCaret,
+//   headerSortingClasses,
+//   style: {
+//     minWidth: "10px",
+//   },
  
-},
+// },
  
  
 
  
     {
-      dataField: "CycleType.formName",
-      text: "cycle type",
+      dataField: "date",
+      text: "date",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "10px",
+      },
+      formatter: (cell) => {
+        // Format the date without timestamp
+        return format(new Date(cell), 'dd-MMM-yyyy'); // Customize format as needed
+      },
+    },
+
+    {
+      dataField: "amount",
+      text: "amount",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -118,16 +140,19 @@ export function FormTable() {
       },
     },
  
+ 
        {
       dataField: "action",
       text: "Actions",
       isDummyField: true,
       formatter: ActionsColumnFormatter,
       formatExtraData: {
+        setIds:formUIProps.setIds,
+        setIsFileReq:formUIProps.setIsFileReq,
         openEditFormDialog: formUIProps.openEditFormDialog,
         openDeleteFormDialog: formUIProps.openDeleteFormDialog,
-        openActiveFormDialog: formUIProps.openActiveFormDialog,
-        openReadFormDialog: formUIProps.openReadFormDialog,
+        // openActiveFormDialog: formUIProps.openActiveFormDialog,
+        // openReadFormDialog: formUIProps.openReadFormDialog,
         isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,
         isAccessForDelete: isAccessForDelete
           ? isAccessForDelete.isAccess
@@ -150,10 +175,25 @@ export function FormTable() {
     sizePerPage: formUIProps.queryParams.pageSize,
     page: formUIProps.queryParams.pageNumber,
   };
+
+  
  
     return (
     <>
-      <PaginationProvider pagination={paginationFactory(paginationOptions)}>
+  
+    <Accordion defaultActiveKey="">
+      <Card>
+        <Card.Header className="d-flex justify-content-center">
+        <div className='accordion-header-btn w-100  d-flex justify-content-center'>
+          <Accordion.Toggle as={Button} eventKey="0" >
+            Reimbursement Claim Details
+            <KeyboardArrowDown />
+          </Accordion.Toggle>
+          </div>
+        </Card.Header>
+        <Accordion.Collapse eventKey="0">
+          <Card.Body>
+          <PaginationProvider pagination={paginationFactory(paginationOptions)}>
         {({ paginationProps, paginationTableProps }) => {
           return (
             <Pagination
@@ -186,6 +226,14 @@ export function FormTable() {
           );
         }}
       </PaginationProvider>
+
+          </Card.Body>
+        </Accordion.Collapse>
+      </Card>
+    </Accordion>
+ 
+
+   
     </>
   );
 }

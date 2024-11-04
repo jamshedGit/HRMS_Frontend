@@ -406,3 +406,34 @@ export const fetchAllHumanResourceRole = (key) => async (dispatch) => {
 };
 
 
+
+
+export const fetchAllReimbursementConfigList = (key) => async (dispatch) => {
+  return await requestFromServer
+    .getAllReimbursementConfigList()
+    .then((response) => {
+      const entities = [...response.data?.data];
+      console.log("dispatching entitties",entities)
+      dispatch(actions.AllReimbursementConfigListFetch({ entities, key }));
+    })
+    .catch((error) => {
+      toast.error("Something went wrong");
+    });
+
+
+};
+
+export const fetchAllPayrollMonthYearList = (key) => async (dispatch) => {
+  return await requestFromServer
+    .getAllPayrollMonthYearList()
+    .then((response) => {
+      const entities = [...response.data?.data];
+
+      dispatch(actions.AllPayrollMonthYearListFetch(entities));
+    })
+    .catch((error) => {
+      toast.error("Something went wrong");
+    });
+
+    
+}
