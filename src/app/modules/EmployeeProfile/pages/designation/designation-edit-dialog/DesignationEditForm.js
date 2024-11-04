@@ -89,12 +89,20 @@ const profileValidation = Yup.object().shape(
       .max(currentDate, 'Date of joining cannot be in the future')
       .required("Required*"),
 
-    dateOfConfirmation: Yup.date()
-      // .required('*Required')
-      .when('dateOfJoining', (dateOfJoining, schema) => {
-        return dateOfJoining && schema.min(dateOfJoining, 'Date of confirmation cannot be earlier than the date of joining');
-      }),
+    // dateOfConfirmation: Yup.date()
+    //   // .required('*Required')
+    //   .when('dateOfJoining', (dateOfJoining, schema) => {
+    //     return dateOfJoining && schema.min(dateOfJoining, 'Date of confirmation cannot be earlier than the date of joining');
+    //   }),
 
+    dateOfConfirmation: Yup.date()
+    .nullable() // Allow null or undefined values
+    .when('dateOfJoining', (dateOfJoining, schema) => {
+      // Always return a schema object
+      return dateOfJoining
+        ? schema.min(dateOfJoining, 'Date of confirmation cannot be earlier than the date of joining')
+        : schema; // Return original schema if dateOfJoining is not present
+    }),
     dateOfConfirmationDue: Yup.date()
       // .required('*Required')
       .when('dateOfConfirmation', (dateOfConfirmation, schema) => {
@@ -274,9 +282,12 @@ export function DesignationEditForm({
   const [DOBDateSelected, setDOBDate] = useState(null);
   const [RetirementSelected, setDRetirmentDate] = useState(null);
 
-  const [defStartDateForExp, setStartDateForExp] = useState(null);
-  const [defEndDateForExp, setEndDateForExp] = useState(null);
-
+  const [deflastReviewDate, setlastReviewDate] = useState(null);
+  const [defnextReviewDate, setnextReviewDate] = useState(null);
+  const [defdrivingLicenseExpiry, setdrivingLicenseExpiry] = useState(null);
+  const [defpassportExpiry, setpassportExpiry] = useState(null);
+  const [deflicenseExpiryDate, setlicenseExpiryDate] = useState(null);
+  
   const [profile_image, setImage] = useState(toAbsoluteUrl("/media/logos/defaultImg.png"));
   const [file, setFile] = useState('');
   // ================ Getting list from DB Stored Procedure
@@ -363,6 +374,32 @@ export function DesignationEditForm({
       setDOBDate(new Date(user.dateOfBirth));
     }
   }, [user.dateOfBirth]);
+
+    //===== lastReviewDate
+    useEffect(() => {
+
+      if (user.lastReviewDate) {
+        setlastReviewDate(new Date(user.lastReviewDate));
+      }
+    }, [user.lastReviewDate]);
+
+     //===== lastReviewDate
+     useEffect(() => {
+
+      if (user.nextReviewDate) {
+        setnextReviewDate(new Date(user.nextReviewDate));
+      }
+    }, [user.nextReviewDate]);
+
+
+     //===== lastReviewDate
+     useEffect(() => {
+
+      if (user.nextRdrivingLicenseExpiryeviewDate) {
+        setdrivingLicenseExpiry(new Date(user.drivingLicenseExpiry));
+      }
+    }, [user.drivingLicenseExpiry]);
+
 
   //=========== END
 
@@ -1702,17 +1739,17 @@ export function DesignationEditForm({
 
                     <div className="from-group row">
                       <div className="col-12 col-md-4 mt-3">
-                        {<span> Last Review Date<span style={{ color: 'red' }}>*</span></span>}
+                        {<span> Last Review Date</span>}
                         <DatePicker
                           className="form-control"
                           placeholder="Last Review Date"
-                          selected={DOBDateSelected}
+                          selected={deflastReviewDate}
                           //value={values.dateOfBirth}
                           showYearDropdown
                           scrollableMonthYearDropdown
                           onChange={(date) => {
                             setFieldValue("lastReviewDate", date);
-                            setDOBDate(date);
+                            setlastReviewDate(date);
                           }}
                           timeInputLabel="Time:"
                           dateFormat="dd/MM/yyyy"
@@ -1722,7 +1759,7 @@ export function DesignationEditForm({
                           autoComplete="off"
 
                         />
-                        <ErrorMessage className="form-feedBack" name="lastReviewDate" component="div" />
+                        {/* <ErrorMessage className="form-feedBack" name="lastReviewDate" component="div" /> */}
                       </div>
 
                       <div className="col-12 col-md-4 mt-3">
@@ -1730,19 +1767,19 @@ export function DesignationEditForm({
                         <DatePicker
                           className="form-control"
                           placeholder="Next Review Date"
-                          selected={RetirementSelected}
+                          selected={defnextReviewDate}
 
                           showYearDropdown
                           scrollableMonthYearDropdown
                           onChange={(date) => {
                             setFieldValue("nextReviewDate", date);
-                            setDRetirmentDate(date);
+                            setnextReviewDate(date);
                           }}
                           timeInputLabel="Time:"
                           dateFormat="dd/MM/yyyy"
                           showTimeInput
                           name="nextReviewDate"
-                          disabled={true}
+                         
                           autoComplete="off"
                         />
                         <ErrorMessage className="form-feedBack" name="nextReviewDate" component="div" />
@@ -1769,18 +1806,22 @@ export function DesignationEditForm({
                           onBlur={handleBlur}
                           value={values.salesRep}
                           checked={values.salesRep}
-                        /> Sales Representative
+                           label="Sales Representative"
+                        /> 
+                       <label><span>Sales Representative</span></label> 
                       </div>
 
                       <div className="col-12 col-md-4 mt-3">
                         <input
-                          name="salesSupport"
+                          name="supportRep"
                           type="checkbox"
                           onChange={handleChange}
                           onBlur={handleBlur}
-                          value={values.salesSupport}
-                          checked={values.salesSupport}
-                        /> Sales Support
+                          value={values.supportRep}
+                          checked={values.supportRep}
+                            label="Support Representative"
+                        />
+                         <label><span>Support Representative</span></label>  
                       </div>
 
                     </div>
@@ -1816,31 +1857,6 @@ export function DesignationEditForm({
                         />
                         <ErrorMessage className="form-feedBack" name="dateOfBirth" component="div" />
                       </div>
-
-                      <div className="col-12 col-md-4 mt-3">
-                        <label>Date Of Retirement</label>
-                        <DatePicker
-                          className="form-control"
-                          placeholder="Enter Date Of Retirement"
-                          selected={RetirementSelected}
-
-                          showYearDropdown
-                          scrollableMonthYearDropdown
-                          onChange={(date) => {
-                            setFieldValue("dateOfRetirement", date);
-                            setDRetirmentDate(date);
-                          }}
-                          timeInputLabel="Time:"
-                          dateFormat="dd/MM/yyyy"
-                          showTimeInput
-                          name="dateOfRetirement"
-                          disabled={true}
-                          autoComplete="off"
-                        />
-                        <ErrorMessage className="form-feedBack" name="dateOfRetirement" component="div" />
-                      </div>
-                    </div>
-                    <div className="from-group row">
                       <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="nic_no"
@@ -1869,28 +1885,78 @@ export function DesignationEditForm({
                         />
                         {/* <ErrorMessage style={{color:"red"}} name="nic_no" component="div" /> */}
                       </div>
-                      <div className="col-12 col-md-4 mt-3">
-                        <label>NIC Expiry Date</label>
+                     
+
+
+                    </div>
+                    <div className="from-group row">
+                    <div className="col-12 col-md-4 mt-3">
+                        <label>Date Of Retirement</label>
                         <DatePicker
                           className="form-control"
-                          placeholder="NIC Expiry Date"
+                          placeholder="Enter Date Of Retirement"
                           selected={RetirementSelected}
 
                           showYearDropdown
                           scrollableMonthYearDropdown
                           onChange={(date) => {
-                            setFieldValue("nicExpiryDate", date);
+                            setFieldValue("dateOfRetirement", date);
                             setDRetirmentDate(date);
                           }}
                           timeInputLabel="Time:"
                           dateFormat="dd/MM/yyyy"
                           showTimeInput
-                          name="nicExpiryDate"
+                          name="dateOfRetirement"
+                          disabled={true}
+                          autoComplete="off"
+                        />
+                        <ErrorMessage className="form-feedBack" name="dateOfRetirement" component="div" />
+                      </div>
+                      <div className="col-12 col-md-4 mt-3">
+                        <Field
+                          name="deligation"
+                          maxLength="20"
+                          component={Input}
+                          placeholder="Enter Deligation"
+                          label="Deligation"
+                          autoComplete="off"
+                        />
+                       
+                      </div>
+                      <div className="col-12 col-md-4 mt-14">
+                        <input
+                          name="requireDeligation"
+                          type="checkbox"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          value={values.requireDeligation}
+                          checked={values.requireDeligation}
+                           label="Require Deligation"
+                        /> 
+                         <label>Require Deligation</label>
+                      </div>
+                      {/* <div className="col-12 col-md-4 mt-3">
+                        <label>NIC Expiry Date</label>
+                        <DatePicker
+                          className="form-control"
+                          placeholder="NIC Expiry Date"
+                          selected={defnicExpiry}
+
+                          showYearDropdown
+                          scrollableMonthYearDropdown
+                          onChange={(date) => {
+                            setFieldValue("nicExpiry", date);
+                            setnicExpiry(date);
+                          }}
+                          timeInputLabel="Time:"
+                          dateFormat="dd/MM/yyyy"
+                          showTimeInput
+                          name="nicExpiry"
 
                           autoComplete="off"
                         />
-                        <ErrorMessage className="form-feedBack" name="nicExpiryDate" component="div" />
-                      </div>
+                        <ErrorMessage className="form-feedBack" name="nicExpiry" component="div" />
+                      </div> */}
                     </div>
 
                     <div className="from-group row">
@@ -1910,13 +1976,13 @@ export function DesignationEditForm({
                         <DatePicker
                           className="form-control"
                           placeholder="Passport Expiry Date"
-                          selected={RetirementSelected}
+                          selected={defpassportExpiry}
 
                           showYearDropdown
                           scrollableMonthYearDropdown
                           onChange={(date) => {
                             setFieldValue("passportExpiry", date);
-                            setDRetirmentDate(date);
+                            setpassportExpiry(date);
                           }}
                           timeInputLabel="Time:"
                           dateFormat="dd/MM/yyyy"
@@ -1927,6 +1993,30 @@ export function DesignationEditForm({
                         />
                         <ErrorMessage className="form-feedBack" name="passportExpiry" component="div" />
                       </div>
+
+                      <div className="col-12 col-md-4 mt-3">
+                        <label>Driving License Expiry</label>
+                        <DatePicker
+                          className="form-control"
+                          placeholder="Driving License Expiry Date"
+                          selected={defdrivingLicenseExpiry}
+
+                          showYearDropdown
+                          scrollableMonthYearDropdown
+                          onChange={(date) => {
+                            setFieldValue("drivingLicenseExpiry", date);
+                            setdrivingLicenseExpiry(date);
+                          }}
+                          timeInputLabel="Time:"
+                          dateFormat="dd/MM/yyyy"
+                          showTimeInput
+                          name="drivingLicenseExpiry"
+
+                          autoComplete="off"
+                        />
+                        <ErrorMessage className="form-feedBack" name="passportExpiry" component="div" />
+                      </div>
+
                     </div>
 
                     <div className="from-group row">
@@ -1963,13 +2053,13 @@ export function DesignationEditForm({
                         <DatePicker
                           className="form-control"
                           placeholder="Enter Expiry License Date"
-                          selected={RetirementSelected}
+                          selected={deflicenseExpiryDate}
 
                           showYearDropdown
                           scrollableMonthYearDropdown
                           onChange={(date) => {
                             setFieldValue("licenseExpiryDate", date);
-                            setDRetirmentDate(date);
+                            setlicenseExpiryDate(date);
                           }}
                           timeInputLabel="Time:"
                           dateFormat="dd/MM/yyyy"
@@ -1987,7 +2077,7 @@ export function DesignationEditForm({
                         <Field
                           name="laborCardNo"
 
-                          component={MaskInput}
+                          component={Input}
                           placeholder="Enter "
                           label={<span> Labour Card No</span>}
                           autoComplete="off"
@@ -1998,8 +2088,7 @@ export function DesignationEditForm({
                       <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="emiratesNo"
-
-                          component={MaskInput}
+                          component={Input}
                           placeholder="Enter "
                           label={<span> Emirates Id Number</span>}
                           autoComplete="off"
@@ -2011,7 +2100,7 @@ export function DesignationEditForm({
                         <Field
                           name="emiratesId"
                           maxLength="20"
-                          component={MaskInput}
+                          component={Input}
                           placeholder="Enter "
                           label={<span> Emirates Id</span>}
                           autoComplete="off"

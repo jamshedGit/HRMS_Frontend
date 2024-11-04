@@ -64,6 +64,24 @@ export function DesignationUIProvider({ DesignationUIEvents, children }) {
     religionId: '',
     nationality: '',
     religionId:'',
+    salesRep: '',
+    supportRep: '',
+    sourceOfHire: '',
+    lastReviewDate: '',
+    nextReviewDate: '',
+    laborCardNo: '',
+    drivingLicenseExpiry: '',
+    emiratesId: '',
+    emiratesNo: '',
+    passportExpiry: '',
+    nicExpiry: '',
+    deligation: '',
+    personId: '',
+    routingCode: '',
+    contractType: '',
+    cycleType: '',
+    requireDeligation: '',
+   
     //defContactList: []
     
 
