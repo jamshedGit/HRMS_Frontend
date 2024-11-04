@@ -1166,7 +1166,7 @@ export function DesignationEditForm({
                             name="employeeCode"
                             component={Input}
                             maxLength="10"
-                            placeholder="Enter Employee Code"
+                            placeholder=" Employee Code"
                             label={<span> Employee Code<span style={{ color: 'red' }}>*</span></span>}
                             autoComplete="off"
                           />
@@ -1198,7 +1198,7 @@ export function DesignationEditForm({
                         <Field
                           name="firstName"
                           component={Input}
-                          placeholder="Enter first name"
+                          placeholder=" first name"
                           label={<span> First Name<span style={{ color: 'red' }}>*</span></span>}
                           autoComplete="off"
                         />
@@ -1207,7 +1207,7 @@ export function DesignationEditForm({
                         <Field
                           name="middleName"
                           component={Input}
-                          placeholder="Enter middle name"
+                          placeholder=" middle name"
                           label={<span> Middle Name<span style={{ color: 'red' }}>*</span></span>}
                           autoComplete="off"
                         />
@@ -1216,7 +1216,7 @@ export function DesignationEditForm({
                         <Field
                           name="lastName"
                           component={Input}
-                          placeholder="Enter last name"
+                          placeholder=" last name"
                           label={<span> Last Name<span style={{ color: 'red' }}>*</span></span>}
                           autoComplete="off"
                         />
@@ -1452,7 +1452,7 @@ export function DesignationEditForm({
                         <label>Date Of Joining<span style={{ color: 'red' }}>*</span></label>
                         <DatePicker
                           className="form-control"
-                          placeholder="Enter Date Of Joining"
+                          placeholder=" Date Of Joining"
                           selected={joiningDateSelected}
                           onChange={(date) => {
                             setFieldValue("dateOfJoining", date);
@@ -1476,7 +1476,7 @@ export function DesignationEditForm({
                         <label>Date Of Confirmation</label>
                         <DatePicker
                           className="form-control"
-                          placeholder="Enter Date Of Confirmation"
+                          placeholder=" Date Of Confirmation"
                           selected={confirmationDateSelected}
                           showYearDropdown
                           scrollableMonthYearDropdown
@@ -1497,7 +1497,7 @@ export function DesignationEditForm({
                         <label>Date Confirmation Due </label>
                         <DatePicker
                           className="form-control"
-                          placeholder="Enter Date Of Confirmation Due"
+                          placeholder=" Date Of Confirmation Due"
                           selected={confirmationDueDateSelected}
                           onChange={(date) => {
                             setFieldValue("dateOfConfirmationDue", date);
@@ -1516,7 +1516,7 @@ export function DesignationEditForm({
                         <label>Date Confirmation Extended  </label>
                         <DatePicker
                           className="form-control"
-                          placeholder="Enter Confirmation Enter Date"
+                          placeholder=" Confirmation  Date"
                           selected={confirmationEnterDateSelected}
                           onChange={(date) => {
                             setFieldValue("dateOfConfirmationEnter", date);
@@ -1535,7 +1535,7 @@ export function DesignationEditForm({
                         <label>Contract Expiry </label>
                         <DatePicker
                           className="form-control"
-                          placeholder="Enter Contract Expiry"
+                          placeholder=" Contract Expiry"
                           selected={contractExpirtyDateSelected}
                           onChange={(date) => {
                             setFieldValue("dateOfContractExpiry", date);
@@ -1715,7 +1715,7 @@ export function DesignationEditForm({
                         {<span> Date Of Birth<span style={{ color: 'red' }}>*</span></span>}
                         <DatePicker
                           className="form-control"
-                          placeholder="Enter Date Of Birth"
+                          placeholder=" Date Of Birth"
                           selected={DOBDateSelected}
                           //value={values.dateOfBirth}
                           showYearDropdown
@@ -1739,7 +1739,7 @@ export function DesignationEditForm({
                         <label>Date Of Retirement</label>
                         <DatePicker
                           className="form-control"
-                          placeholder="Enter Date Of Retirement"
+                          placeholder=" Date Of Retirement"
                           selected={RetirementSelected}
 
                           showYearDropdown
@@ -1782,7 +1782,7 @@ export function DesignationEditForm({
                             /\d/,
                           ]}
                           component={MaskInput}
-                          placeholder="Enter ID Card No"
+                          placeholder=" ID Card No"
                           label={<span> NIC No<span style={{ color: 'red' }}>*</span></span>}
                           autoComplete="off"
                         />
@@ -1793,8 +1793,8 @@ export function DesignationEditForm({
                           name="passportNo"
                           maxLength="15"
                           component={Input}
-                          placeholder="Enter Passport No"
-                          label="Enter Passport No"
+                          placeholder=" Passport No"
+                          label=" Passport No"
                           autoComplete="off"
                         />
                       </div>
@@ -1868,7 +1868,7 @@ export function DesignationEditForm({
                         <Field
                           name="professional_summary"
                           component={TextArea}
-                          placeholder="Enter Professional Summary"
+                          placeholder=" Professional Summary"
                           label="Professional Summary"
                           autoComplete="off"
                         />
@@ -1877,7 +1877,7 @@ export function DesignationEditForm({
                         <Field
                           name="additional_summary"
                           component={TextArea}
-                          placeholder="Enter Additional Notes"
+                          placeholder=" Additional Notes"
                           label="Additional Notes"
                           autoComplete="off"
                         />
