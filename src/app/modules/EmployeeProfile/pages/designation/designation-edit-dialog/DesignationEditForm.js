@@ -89,50 +89,35 @@ const profileValidation = Yup.object().shape(
       .max(currentDate, 'Date of joining cannot be in the future')
       .required("Required*"),
 
+
     dateOfConfirmation: Yup.date()
-      // .required('*Required')
-      .when('dateOfJoining', (dateOfJoining, schema) => {
-        return dateOfJoining && schema.min(dateOfJoining, 'Date of confirmation cannot be earlier than the date of joining');
-      }),
-
-    dateOfConfirmationDue: Yup.date()
-      // .required('*Required')
-      .when('dateOfConfirmation', (dateOfConfirmation, schema) => {
-        return dateOfConfirmation && schema.min(dateOfConfirmation, 'Date confirmation due cannot be earlier than date of confirmation');
-      }),
-
-    dateOfConfirmationEnter: Yup.date()
-      // .required('*Required')
-      .when('dateOfConfirmationDue', (dateOfConfirmationDue, schema) => {
-        return dateOfConfirmationDue && schema.min(dateOfConfirmationDue, 'Date confirmation extended cannot be earlier than date confirmation due');
-      }),
-
-    dateOfContractExpiry: Yup.date().nullable()
-      // .required('*Required')
-      .when('dateOfConfirmationEnter', (dateOfConfirmationEnter, schema) => {
-        return dateOfConfirmationEnter && schema.min(dateOfConfirmationEnter, 'Contract expiry date cannot be earlier than date confirmation extended');
-      }),
-
-
-    // dateOfRetirement: Yup.date() .nullable()
-    // //.required('Contract expiry date is required')
-    // .when('dateOfBirth', (dateOfBirth, schema) => {
-    //   return dateOfBirth && schema.min(dateOfBirth, 'Contract expiry date cannot be earlier than date confirmation extended');
-    // }),
-
-    dateOfRetirement: Yup.date()
       .nullable()
-      .typeError('Invalid date format')
-      .when('dateOfBirth', {
-        is: (dateOfBirth) => dateOfBirth != null, // Check if dateOfBirth is provided
-        then: Yup.date().min(
-          Yup.ref('dateOfBirth'),
-          'Retirement date cannot be earlier than date of birth'
-        ),
+      .when('dateOfJoining', (dateOfJoining, schema) => {
+        return dateOfJoining
+          ? schema.min(dateOfJoining, 'Date of confirmation cannot be earlier than the date of joining')
+          : schema;
       }),
-
-
-
+    dateOfConfirmationDue: Yup.date()
+      .nullable()
+      .when('dateOfConfirmation', (dateOfConfirmation, schema) => {
+        return dateOfConfirmation
+          ? schema.min(dateOfConfirmation, 'Date confirmation due cannot be earlier than date confirmation')
+          : schema;
+      }),
+    dateOfConfirmationEnter: Yup.date()
+      .nullable()
+      .when('dateOfConfirmationDue', (dateOfConfirmationDue, schema) => {
+        return dateOfConfirmationDue
+          ? schema.min(dateOfConfirmationDue, 'Date confirmation extended cannot be earlier than date confirmation due')
+          : schema;
+      }),
+    dateOfContractExpiry: Yup.date()
+      .nullable()
+      .when('dateOfConfirmationEnter', (dateOfConfirmationEnter, schema) => {
+        return dateOfConfirmationEnter
+          ? schema.min(dateOfConfirmationEnter, 'Contract expiry date cannot be earlier than date confirmation extended')
+          : schema;
+      }),
     nic_no: Yup.string()
       .matches(/^\d{5}-\d{7}-\d{1}$/, 'ID Card No must be in the format 12345-6789012-3')
       .required('Required'),
@@ -1056,7 +1041,7 @@ export function DesignationEditForm({
         validationSchema={profileValidation}
         onSubmit={async (values) => {
 
-
+          console.log("::ppp::", values);
           //const t =  handleSubmit();
 
 
@@ -1077,7 +1062,6 @@ export function DesignationEditForm({
               await axios
                 .post(`${USERS_URL}/profile/image-upload`, formData)
                 .then((res) => {
-
                   setImage(res.data.imageUrl)
                   saveEmployeeProfile(values, res.data.imageUrl, defContactList, workExperienceList, academicList, skillsList, incidentList);
                 });
@@ -1182,7 +1166,7 @@ export function DesignationEditForm({
                             name="employeeCode"
                             component={Input}
                             maxLength="10"
-                            placeholder="Enter Employee Code"
+                            placeholder=" Employee Code"
                             label={<span> Employee Code<span style={{ color: 'red' }}>*</span></span>}
                             autoComplete="off"
                           />
@@ -1214,7 +1198,7 @@ export function DesignationEditForm({
                         <Field
                           name="firstName"
                           component={Input}
-                          placeholder="Enter first name"
+                          placeholder=" first name"
                           label={<span> First Name<span style={{ color: 'red' }}>*</span></span>}
                           autoComplete="off"
                         />
@@ -1223,7 +1207,7 @@ export function DesignationEditForm({
                         <Field
                           name="middleName"
                           component={Input}
-                          placeholder="Enter middle name"
+                          placeholder=" middle name"
                           label={<span> Middle Name<span style={{ color: 'red' }}>*</span></span>}
                           autoComplete="off"
                         />
@@ -1232,7 +1216,7 @@ export function DesignationEditForm({
                         <Field
                           name="lastName"
                           component={Input}
-                          placeholder="Enter last name"
+                          placeholder=" last name"
                           label={<span> Last Name<span style={{ color: 'red' }}>*</span></span>}
                           autoComplete="off"
                         />
@@ -1350,7 +1334,9 @@ export function DesignationEditForm({
                             // handleBlur({ target: { name: "countryId" } });
                           }}
                           onChange={(e) => {
+                            console.log("::dd1", e.value);
                             setFieldValue("employeeTypeId", e.value || null);
+
                             setDefaultChildEmpTypeMenus(e);
                             setDisbledConfirmationEnterDate(false);
                             setDisabledConfirmationDate(false);
@@ -1359,11 +1345,16 @@ export function DesignationEditForm({
                             if (e.value == 148) // WHEN Select Permanet value
                             {
                               // For Empty Object
-                             
-                              setContractExpiryDate(null);
-                              setConfirmationDate(null);
-                              setConfirmationDueDate(null);
-                              setConfirmationEnterDate(null);
+
+                              setContractExpiryDate('');
+                              setConfirmationDate('');
+                              setConfirmationDueDate('');
+                              setConfirmationEnterDate('');
+
+                              setFieldValue("dateOfConfirmation", '');
+                              setFieldValue("dateOfConfirmationDue", '');
+                              setFieldValue("dateOfConfirmationEnter", '');
+                              setFieldValue("dateOfContractExpiry", '');
 
                               // For Disabled Object
                               setDisbledConfirmationEnterDate(true);
@@ -1372,11 +1363,24 @@ export function DesignationEditForm({
                               setDisabledContractExpiryDate(true);
 
                             }
+                            else {
 
-                            else{
-                                
+                              setFieldValue("dateOfContractExpiry", contractExpirtyDateSelected || new Date())
+                              setFieldValue("dateOfConfirmationEnter", confirmationEnterDateSelected || new Date())
+                              setFieldValue("dateOfConfirmationDue", confirmationDueDateSelected || new Date())
+                              setFieldValue("dateOfConfirmation", confirmationDateSelected || new Date())
+                              
+
+                              setContractExpiryDate(new Date());
+                              setConfirmationDate(new Date());
+                              setConfirmationDueDate(new Date());
+                              setConfirmationEnterDate(new Date());
+
+
                             }
-                            
+
+
+
 
                             // dispatch(fetchAllFormsMenu(e.value));
                           }}
@@ -1448,7 +1452,7 @@ export function DesignationEditForm({
                         <label>Date Of Joining<span style={{ color: 'red' }}>*</span></label>
                         <DatePicker
                           className="form-control"
-                          placeholder="Enter Date Of Joining"
+                          placeholder=" Date Of Joining"
                           selected={joiningDateSelected}
                           onChange={(date) => {
                             setFieldValue("dateOfJoining", date);
@@ -1472,7 +1476,7 @@ export function DesignationEditForm({
                         <label>Date Of Confirmation</label>
                         <DatePicker
                           className="form-control"
-                          placeholder="Enter Date Of Confirmation"
+                          placeholder=" Date Of Confirmation"
                           selected={confirmationDateSelected}
                           showYearDropdown
                           scrollableMonthYearDropdown
@@ -1493,7 +1497,7 @@ export function DesignationEditForm({
                         <label>Date Confirmation Due </label>
                         <DatePicker
                           className="form-control"
-                          placeholder="Enter Date Of Confirmation Due"
+                          placeholder=" Date Of Confirmation Due"
                           selected={confirmationDueDateSelected}
                           onChange={(date) => {
                             setFieldValue("dateOfConfirmationDue", date);
@@ -1512,7 +1516,7 @@ export function DesignationEditForm({
                         <label>Date Confirmation Extended  </label>
                         <DatePicker
                           className="form-control"
-                          placeholder="Enter Confirmation Enter Date"
+                          placeholder=" Confirmation  Date"
                           selected={confirmationEnterDateSelected}
                           onChange={(date) => {
                             setFieldValue("dateOfConfirmationEnter", date);
@@ -1531,7 +1535,7 @@ export function DesignationEditForm({
                         <label>Contract Expiry </label>
                         <DatePicker
                           className="form-control"
-                          placeholder="Enter Contract Expiry"
+                          placeholder=" Contract Expiry"
                           selected={contractExpirtyDateSelected}
                           onChange={(date) => {
                             setFieldValue("dateOfContractExpiry", date);
@@ -1569,9 +1573,6 @@ export function DesignationEditForm({
                           <div className="invalid-text">{errors.defaultShiftId}</div>
                         )}
                       </div>
-
-
-
 
                     </div>
 
@@ -1714,7 +1715,7 @@ export function DesignationEditForm({
                         {<span> Date Of Birth<span style={{ color: 'red' }}>*</span></span>}
                         <DatePicker
                           className="form-control"
-                          placeholder="Enter Date Of Birth"
+                          placeholder=" Date Of Birth"
                           selected={DOBDateSelected}
                           //value={values.dateOfBirth}
                           showYearDropdown
@@ -1738,7 +1739,7 @@ export function DesignationEditForm({
                         <label>Date Of Retirement</label>
                         <DatePicker
                           className="form-control"
-                          placeholder="Enter Date Of Retirement"
+                          placeholder=" Date Of Retirement"
                           selected={RetirementSelected}
 
                           showYearDropdown
@@ -1781,7 +1782,7 @@ export function DesignationEditForm({
                             /\d/,
                           ]}
                           component={MaskInput}
-                          placeholder="Enter ID Card No"
+                          placeholder=" ID Card No"
                           label={<span> NIC No<span style={{ color: 'red' }}>*</span></span>}
                           autoComplete="off"
                         />
@@ -1792,8 +1793,8 @@ export function DesignationEditForm({
                           name="passportNo"
                           maxLength="15"
                           component={Input}
-                          placeholder="Enter Passport No"
-                          label="Enter Passport No"
+                          placeholder=" Passport No"
+                          label=" Passport No"
                           autoComplete="off"
                         />
                       </div>
@@ -1867,7 +1868,7 @@ export function DesignationEditForm({
                         <Field
                           name="professional_summary"
                           component={TextArea}
-                          placeholder="Enter Professional Summary"
+                          placeholder=" Professional Summary"
                           label="Professional Summary"
                           autoComplete="off"
                         />
@@ -1876,7 +1877,7 @@ export function DesignationEditForm({
                         <Field
                           name="additional_summary"
                           component={TextArea}
-                          placeholder="Enter Additional Notes"
+                          placeholder=" Additional Notes"
                           label="Additional Notes"
                           autoComplete="off"
                         />
