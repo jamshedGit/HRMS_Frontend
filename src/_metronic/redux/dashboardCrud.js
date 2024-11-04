@@ -1,7 +1,6 @@
 import axios from "axios";
 export const USERS_URL = process.env.REACT_APP_API_URL;
 
-
 export const getAllSubcenter = async (centerId) => {
   return await axios.post(
     `${USERS_URL}/settings/read-all-subcenters-master-data`,
@@ -15,38 +14,37 @@ export const getAllCountry = async () => {
   );
 };
 
-
 export const getAllEarningDeductionList = async (Id) => {
-  console.log('pakistan', Id)
-  return await axios.post(
-    `${USERS_URL}/stoppage/read-earning-deduction-list`, { flag: Id }
-  );
+  console.log("pakistan", Id);
+  return await axios.post(`${USERS_URL}/stoppage/read-earning-deduction-list`, {
+    flag: Id,
+  });
 };
 
 export const getAllEmp_Compensation_Benefits_DDL = async () => {
-  console.log('getAllEmp_Compensation_Benefits')
-  return await axios.post(`${USERS_URL}/compensation/read-all-compensation-benefits-ddl`);
+  console.log("getAllEmp_Compensation_Benefits");
+  return await axios.post(
+    `${USERS_URL}/compensation/read-all-compensation-benefits-ddl`
+  );
 };
 
 export const getAllActiveEmployees = async () => {
-  return await axios.post(
-    `${USERS_URL}/settings/read-all-profile`
-  );
+  return await axios.post(`${USERS_URL}/settings/read-all-profile`);
 };
 
 export const getAllEmployeeSalaryReviewForDDL = async (employeeId) => {
   return await axios.post(
-    `${USERS_URL}/settings/read-salary-revision-by-employeeId`,{employeeId: employeeId}
+    `${USERS_URL}/settings/read-salary-revision-by-employeeId`,
+    { employeeId: employeeId }
   );
 };
 
-
-
 export const getAllActiveEmployeesSalaryForDDL = async (employeeId) => {
-  console.log("getAllActiveEmployeesSalaryForDDL", employeeId)
+  console.log("getAllActiveEmployeesSalaryForDDL", employeeId);
   return await axios.post(
-    `${USERS_URL}/employee_salary_earning/read-all-employee-salary-ddl`,{
-      employeeId : employeeId
+    `${USERS_URL}/employee_salary_earning/read-all-employee-salary-ddl`,
+    {
+      employeeId: employeeId,
     }
   );
 };
@@ -75,7 +73,6 @@ export const getAllEarningHeads = async (Id) => {
   });
 };
 
-
 export const getAllDepartments = async (Id) => {
   return await axios.get(`${USERS_URL}/settings/read-all-dept`, {
     Id: Id,
@@ -99,9 +96,6 @@ export const getAllParentDepartments = async (Id) => {
     Id: Id,
   });
 };
-
-
-
 
 export const getVehiclesByCenterAndSubcenterId = async (body) => {
   return await axios.post(
@@ -130,7 +124,6 @@ export const getLastTrips = async (body) => {
 };
 
 export const updateTripLog = async (payload) => {
-
   return await axios.put(
     `${USERS_URL}/drivertriplog/update-driver-trip-log`,
     payload
@@ -143,24 +136,23 @@ export const getAlaramTime = async () => {
   );
 };
 
-
 export const getLastBookingNo = async (bookingNo) => {
-  return await axios.post(
-    `${USERS_URL}/settings/get-max-booking-no`, { bookingNo: bookingNo }
-  );
+  return await axios.post(`${USERS_URL}/settings/get-max-booking-no`, {
+    bookingNo: bookingNo,
+  });
 };
 
 export const getLastTableId = async (tableName, prefix) => {
-  return await axios.post(
-    `${USERS_URL}/settings/get-max-tableId`, { tableName: tableName, prefix: prefix }
-  );
+  return await axios.post(`${USERS_URL}/settings/get-max-tableId`, {
+    tableName: tableName,
+    prefix: prefix,
+  });
 };
 
-
 export const getLastDeductionNo = async (bookingNo) => {
-  return await axios.post(
-    `${USERS_URL}/settings/get-max-booking-no`, { bookingNo: bookingNo }
-  );
+  return await axios.post(`${USERS_URL}/settings/get-max-booking-no`, {
+    bookingNo: bookingNo,
+  });
 };
 
 export const getEmployeeProfileById = async (id) => {
@@ -168,7 +160,28 @@ export const getEmployeeProfileById = async (id) => {
 };
 
 export const getAllHumanResourceRole = async () => {
-  return await axios.get(`${USERS_URL}/settings/read-all-roles-master-data`, {
-  });
+  return await axios.get(
+    `${USERS_URL}/settings/read-all-roles-master-data`,
+    {}
+  );
+};
+
+export const getAllReimbursementConfigList = async () => {
+  return await axios.post(
+    `${USERS_URL}/reimbursement_configuration/read-all-reimbursement-configuration`,
+    {
+      filter: {
+        searchQuery: "",
+      },
+      pageSize: 4,
+      pageNumber: 1,
+    }
+  );
+};
+
+
+export const getAllPayrollMonthYearList  = async () => {
+  return await axios.get(
+    `${USERS_URL}/reimbursement_claim/read-payroll-month`);
 };
 

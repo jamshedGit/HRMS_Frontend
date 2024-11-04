@@ -42,7 +42,9 @@ const initialDashboardState = {
   allContractTypeList: [],
   allPayrolGroupList:[],
   allCycleTypeList:[],
-  allReimbursementTypeList:[]
+  allReimbursementTypeList:[],
+  allReimbursementConfigList:[],
+  allPayrollMonthYearList:[]
 };
 
 export const callTypes = {
@@ -179,7 +181,14 @@ export const dashboardSlice = createSlice({
       state.allPayrolGroupList = action.payload;
     },
 
+    
+    AllReimbursementConfigListFetch: (state, action) => {
+      state.allReimbursementConfigList = action.payload;
+    },
 
 
+    AllPayrollMonthYearListFetch: (state, action) => {
+      state.allPayrollMonthYearList = action.payload;
+    },
   },
 });
