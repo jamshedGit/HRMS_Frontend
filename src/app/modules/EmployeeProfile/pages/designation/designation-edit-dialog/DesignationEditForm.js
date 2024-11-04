@@ -42,7 +42,8 @@ const profileValidation = Yup.object().shape(
     middleName: Yup.string()
       .required("Required*"),
     employeeCode: Yup.string()
-      .required("Required*"),
+      .required("Required*")
+      .max(10, "Employee code must be at most 10 characters long"),
     title: Yup.string()
       .required("Required*"),
     subsidiaryId: Yup.string()
@@ -70,8 +71,6 @@ const profileValidation = Yup.object().shape(
     gender: Yup.string()
       .required("Required*"),
 
-    employeeTypeId: Yup.string()
-      .required("Required*"),
 
     locationId: Yup.string()
       .required("Required*"),
@@ -82,57 +81,50 @@ const profileValidation = Yup.object().shape(
     cityId: Yup.string()
       .required("Required*"),
 
+
+    employeeTypeId: Yup.string()
+      .required("Required*"),
+
     dateOfJoining: Yup.date()
       .max(currentDate, 'Date of joining cannot be in the future')
       .required("Required*"),
 
+
     dateOfConfirmation: Yup.date()
-      .required('*Required')
-      .when('dateOfJoining', (dateOfJoining, schema) => {
-        return dateOfJoining && schema.min(dateOfJoining, 'Date of confirmation cannot be earlier than the date of joining');
-      }),
-
-    dateOfConfirmationDue: Yup.date()
-      .required('*Required')
-      .when('dateOfConfirmation', (dateOfConfirmation, schema) => {
-        return dateOfConfirmation && schema.min(dateOfConfirmation, 'Date confirmation due cannot be earlier than date of confirmation');
-      }),
-
-    dateOfConfirmationEnter: Yup.date()
-      .required('*Required')
-      .when('dateOfConfirmationDue', (dateOfConfirmationDue, schema) => {
-        return dateOfConfirmationDue && schema.min(dateOfConfirmationDue, 'Date confirmation extended cannot be earlier than date confirmation due');
-      }),
-
-    dateOfContractExpiry: Yup.date().nullable()
-      .required('*Required')
-      .when('dateOfConfirmationEnter', (dateOfConfirmationEnter, schema) => {
-        return dateOfConfirmationEnter && schema.min(dateOfConfirmationEnter, 'Contract expiry date cannot be earlier than date confirmation extended');
-      }),
-
-    // dateOfRetirement: Yup.date() .nullable()
-    // //.required('Contract expiry date is required')
-    // .when('dateOfBirth', (dateOfBirth, schema) => {
-    //   return dateOfBirth && schema.min(dateOfBirth, 'Contract expiry date cannot be earlier than date confirmation extended');
-    // }),
-
-    dateOfRetirement: Yup.date()
       .nullable()
-      .typeError('Invalid date format')
-      .when('dateOfBirth', {
-        is: (dateOfBirth) => dateOfBirth != null, // Check if dateOfBirth is provided
-        then: Yup.date().min(
-          Yup.ref('dateOfBirth'),
-          'Retirement date cannot be earlier than date of birth'
-        ),
+      .when('dateOfJoining', (dateOfJoining, schema) => {
+        return dateOfJoining
+          ? schema.min(dateOfJoining, 'Date of confirmation cannot be earlier than the date of joining')
+          : schema;
       }),
-
+    dateOfConfirmationDue: Yup.date()
+      .nullable()
+      .when('dateOfConfirmation', (dateOfConfirmation, schema) => {
+        return dateOfConfirmation
+          ? schema.min(dateOfConfirmation, 'Date confirmation due cannot be earlier than date confirmation')
+          : schema;
+      }),
+    dateOfConfirmationEnter: Yup.date()
+      .nullable()
+      .when('dateOfConfirmationDue', (dateOfConfirmationDue, schema) => {
+        return dateOfConfirmationDue
+          ? schema.min(dateOfConfirmationDue, 'Date confirmation extended cannot be earlier than date confirmation due')
+          : schema;
+      }),
+    dateOfContractExpiry: Yup.date()
+      .nullable()
+      .when('dateOfConfirmationEnter', (dateOfConfirmationEnter, schema) => {
+        return dateOfConfirmationEnter
+          ? schema.min(dateOfConfirmationEnter, 'Contract expiry date cannot be earlier than date confirmation extended')
+          : schema;
+      }),
     nic_no: Yup.string()
       .matches(/^\d{5}-\d{7}-\d{1}$/, 'ID Card No must be in the format 12345-6789012-3')
       .required('Required'),
-    // passportNo: Yup.string()
-    // .matches(/^\d$/, 'ID Card No must be exactly 13 digits and contain only numbers') // Regex to match exactly 14 digits
-    // .required('ID Card No is required'), // Make it required if necessary
+
+    passportNo: Yup.string()
+      .matches(/^\d{15}$/, 'Passport number must be exactly 15 digits long and contain only digits.'),
+    //.required('ID Card No is required'), // Make it required if necessary
 
     email_official: Yup.string()
       .nullable() // Allows null values
@@ -144,33 +136,63 @@ const profileValidation = Yup.object().shape(
       .email('Invalid email address') // Validates email format
       .notRequired(), // Optional: make it required
 
-
-
     phone_cell: Yup.string()
       .nullable() // Allows null values
-      .matches(/^[0-9]*$/, 'Phone no must contain only digits') // Optional regex for digits
+      .matches(/^0[0-9]*$/, 'Phone number must start with 0 and contain only digits') // Must start with 0 and contain only digits
+      .max(15, "Employee code must be at most 15 characters long")
       .notRequired(), // Make it optional if you want
 
     phone_home: Yup.string()
       .nullable() // Allows null values
-      .matches(/^[0-9]*$/, 'Phone home must contain only digits') // Optional regex for digits
+      .matches(/^0[0-9]*$/, 'Phone number must start with 0 and contain only digits') // Must start with 0 and contain only digits
+      .max(15, "Employee code must be at most 15 characters long")
       .notRequired(), // Make it optional if you want
 
     phone_official: Yup.string()
       .nullable() // Allows null values
-      .matches(/^[0-9]*$/, 'Phone official must contain only digits') // Optional regex for digits
+      .matches(/^0[0-9]*$/, 'Phone number must start with 0 and contain only digits') // Must start with 0 and contain only digits
+      .max(15, "Employee code must be at most 15 characters long")
       .notRequired(), // Make it optional if you want
-
 
     dateOfBirth: Yup.date()
       .nullable()
       .typeError('Invalid date format')
       .required('*Required')
       .max(currentDate, 'Date of birth cannot be in the future')
-      .max(minDate, 'You must be at least 18 years old')
+      .max(minDate, 'You must be at least 18 years old'),
+
+
   },
 
-);
+
+
+).test('check-marital-status', 'Invalid marital status for selected title', function (value) {
+  console.log("validate::", value)
+  const { title, maritalStatus, gender } = value;
+
+  // Check conditions based on title // 196 == Single
+  if (title === 'Mrs.' && maritalStatus === '196') {
+
+    return this.createError({ path: 'maritalStatus', message: 'Mrs. cannot be single.' });
+  }
+
+  if ((title == 'Mrs.' || title == 'Ms.') && gender == 'Male') {
+    return this.createError({ path: 'gender', message: 'Mrs. Ms. cannot be male.' });
+  }
+
+  if ((title === 'Mr.' || title === 'Dr.' || title === 'Professor.' || title === 'Captain') && gender === 'Female') {
+    return this.createError({ path: 'gender', message: 'cannot be female.' });
+  }
+
+
+
+  return true; // No error
+});
+
+
+
+
+
 export function DesignationEditForm({
   saveEmployeeProfile,
   user,
@@ -217,16 +239,33 @@ export function DesignationEditForm({
   const [defCountry, setDefaultCountry] = useState({});
   const [defCity, setDefaultCity] = useState({});
   const [joiningDateSelected, setJoiningDate] = useState(null);
+
+
   const [confirmationDateSelected, setConfirmationDate] = useState(null);
+  const [disabledConfirmationDateSelected, setDisabledConfirmationDate] = useState(false);
+
+
   const [confirmationDueDateSelected, setConfirmationDueDate] = useState(null);
+  const [disbaledConfirmationDueDateSelected, setDisbledConfirmationDueDate] = useState(false);
+
+
   const [confirmationEnterDateSelected, setConfirmationEnterDate] = useState(null);
+  const [disbaledConfirmationEnterDateSelected, setDisbledConfirmationEnterDate] = useState(false);
+
   const [contractExpirtyDateSelected, setContractExpiryDate] = useState(null);
+  const [disabledContractExpirtyDateSelected, setDisabledContractExpiryDate] = useState(false);
+
+
   const [DOBDateSelected, setDOBDate] = useState(null);
   const [RetirementSelected, setDRetirmentDate] = useState(null);
+
+  const [defStartDateForExp, setStartDateForExp] = useState(null);
+  const [defEndDateForExp, setEndDateForExp] = useState(null);
+
   const [profile_image, setImage] = useState(toAbsoluteUrl("/media/logos/defaultImg.png"));
   const [file, setFile] = useState('');
   // ================ Getting list from DB Stored Procedure
-  const [contactList, setContactList] = useState([]);
+
   const [workExperienceList, setworkExperienceList] = useState([]);
   const [academicList, setAcademicList] = useState([]);
   const [skillsList, setSkillList] = useState([]);
@@ -242,10 +281,21 @@ export function DesignationEditForm({
   const handleChildModalShow = () => setShowChildModal(true);
   const [defEmployeeReportTo = null, setEmployeeReportToDefault] = useState(null);
   const [defEmployeeGrade = null, setDefualtEmployeeGrade] = useState(null);
-  const [defContactList = null, setDefaultContactList] = useState([]);
+  const [defContactList = null, setDefaultContactList] = useState([{ relation_name: '', relation: '', contactNo: '' }]);
+  const [currentDate, setCurrentDate] = useState('');
+  const [deferrors, setErrors] = useState({});
+
+
+
+  useEffect(() => {
+    // Get the current date in YYYY-MM-DD format
+    const today = new Date().toISOString().split('T')[0];
+    setCurrentDate(today);
+  }, []);
+
   // Department DropDown Load when pageLoad
   useEffect(() => {
-    console.log("ball", user)
+
     if (!user.Id) {
       dispatch(fetchAllDept(1));
       dispatch(fetchAllFormsMenu(143, "allEmployeeGradeList")); // For All Grade Codes
@@ -256,12 +306,15 @@ export function DesignationEditForm({
       dispatch(fetchAllFormsMenu(88, "allEmpTypeChildMenus")); // For EmployeeType
       dispatch(fetchAllFormsMenu(89, "allLocationChildMenus")); // For Location
       dispatch(fetchAllCountry());
+      dispatch(fetchAllCity());
       dispatch(fetchAllActiveEmployees());
       dispatch(fetchAllFormsMenu(158, "allDesignations")); // For All Designations
       dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsisidaries
       dispatch(fetchAllFormsMenu(190, "allMaritalStatus")); // For All Subsisidaries, "allMaritalStatus")); // For All Marital Status
       // dispatch(fetchAllFormsMenu(87));
       dispatch(fetchAllFormsMenu(125, "allRelationCodeList"));
+      dispatch(fetchAllFormsMenu(109, "allInstitution")); // For Institution
+      dispatch(fetchAllFormsMenu(108, "allDegreeTitle")); // For Degree Title
     }
   }, [dispatch]);
 
@@ -290,7 +343,7 @@ export function DesignationEditForm({
 
   //===== Date Of Birth
   useEffect(() => {
-    console.log("user DOB", user.dateOfBirth)
+
     if (user.dateOfBirth) {
       setDOBDate(new Date(user.dateOfBirth));
     }
@@ -317,7 +370,6 @@ export function DesignationEditForm({
     );
 
   }, [user?.designationId, dashboard.designationId]);
-
 
   ///
 
@@ -363,10 +415,13 @@ export function DesignationEditForm({
 
   //===== Date Of Retirement
   useEffect(() => {
-    if (user.dateOfRetirement) {
-      setDRetirmentDate(new Date(user.dateOfRetirement));
+    if (user.retirementAgeFemale) {
+      const retirementDate = new Date(user.dateOfBirth);
+      retirementDate.setFullYear(retirementDate.getFullYear() + user.retirementAgeFemale);
+
+      setDRetirmentDate(new Date(retirementDate));
     }
-  }, [user.dateOfRetirement]);
+  }, [user.retirementAgeFemale]);
 
   //=========== END
 
@@ -431,8 +486,6 @@ export function DesignationEditForm({
 
   }, [user?.teamId, dashboard.teamId]);
   //======================= End
-
-
   //======================= Region
 
   useEffect(() => {
@@ -473,10 +526,11 @@ export function DesignationEditForm({
 
   }, [user?.reportTo, dashboard.reportTo]);
 
-  //======================= Employee Type
 
   useEffect(() => {
     const emptypeId = defchildEmptypeMenus?.value ? defchildEmptypeMenus.value : user.employeeTypeId;
+
+    console.log("::gree::", emptypeId);
     setDefaultChildEmpTypeMenus(
       dashboard.allEmpTypeChildMenus &&
       dashboard.allEmpTypeChildMenus.filter((item) => {
@@ -486,9 +540,6 @@ export function DesignationEditForm({
 
   }, [user?.employeeTypeId, dashboard.employeeTypeId]);
   //======================= End
-
-
-  //======================= Location
 
   useEffect(() => {
     const locationId = defchildLocationMenus?.value ? defchildLocationMenus.value : user.locationId;
@@ -502,11 +553,11 @@ export function DesignationEditForm({
   }, [user?.locationId, dashboard.locationId]);
   //======================= End
 
-  useEffect(() => {
-    if (!user.countryId) {
-      dispatch(fetchAllCity(1));
-    }
-  }, [user.countryId, dispatch]);
+  // useEffect(() => {
+  //   if (!user.countryId) {
+  //     dispatch(fetchAllCity(1));
+  //   }
+  // }, [user.countryId, dispatch]);
 
 
   useEffect(() => {
@@ -538,14 +589,12 @@ export function DesignationEditForm({
     }
   };
 
+  // For Edit Form
   useEffect(() => {
     const fetchContactData = async () => {
       try {
-        console.log('test contact', id)
         const response = await axios.post(`${USERS_URL}/profile/read-contact`, { Id: id });
-        console.log("tall resp", response);
-        setContactList(response?.data?.data);
-
+        setDefaultContactList(response?.data?.data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -565,7 +614,7 @@ export function DesignationEditForm({
 
     const fetchAcademicData = async () => {
       try {
-        console.log('test exp', id)
+        console.log('test academic', id)
         const response = await axios.post(`${USERS_URL}/academic/read-all-academic_by_empId`, { Id: id });
         console.log("academy resp", response);
         setAcademicList(response?.data?.data);
@@ -605,28 +654,20 @@ export function DesignationEditForm({
     fetchContactData();
   }, []);
 
+
+  // For Add Employee Contact States
+
   const addRowContact = (element) => {
     console.log("click", element.target.id)
-
-    setDefaultContactList([...defContactList, { transactionType: element.target.id }])
-
-
+    setDefaultContactList([...defContactList, { transactionType: element.target.id, employeeId: id }])
   }
-  const handleFieldChangedContact = (el) => {
-    const index = el.target.id.split('-')[1]
-    const key = el.target.id.split('-')[0]
-    setDefaultContactList([...defContactList.map((val, ind) => {
 
-      if (ind == index) {
-
-        val[key] = el.target.value
-
-      }
-
-      return val
-    })])
-
-  }
+  // Function to handle changes in input fields
+  const handleFieldChangedContact = (index, field, value) => {
+    const newContactList = [...defContactList];
+    newContactList[index][field] = value;
+    setDefaultContactList(newContactList);
+  };
 
   const deleteRowContact = (element) => {
 
@@ -635,8 +676,363 @@ export function DesignationEditForm({
 
     setDefaultContactList([...data])
   }
+  // End Contact Section
 
-  console.log("contactList", defContactList)
+  // Experience Section
+
+  const addRowExprerience = (element) => {
+
+    setworkExperienceList([...workExperienceList, { transactionType: element.target.id, employeeId: id }])
+  }
+
+  const handleDatePicker = (el, key, index, val) => {
+
+    console.log("datepicker::", el, key, index);
+    setworkExperienceList([...workExperienceList.map((val, ind) => {
+      if (ind == index) {
+        val[key] = new Date(el)
+      }
+      return val
+    })])
+
+  }
+
+  // const handleFieldChangedExperience = (el) => {
+
+
+  //   console.log("::go", el);
+  //   const index = el?.target?.id.split('-')[1]
+  //   const key = el?.target?.id.split('-')[0]
+
+  //   if (key == "countryId") {
+  //     console.log("::el::", el);
+  //     //  dispatch(fetchAllCity(el.target.value));
+
+  //   }
+
+  //   setworkExperienceList([...workExperienceList.map((val, ind) => {
+  //     if (ind == index) {
+  //       val[key] = el?.target?.value
+  //     }
+  //     return val
+  //   })])
+  // }
+
+  // Function to handle changes in input fields
+  const handleFieldChangedExperience = (index, field, value) => {
+    const newExpList = [...workExperienceList];
+    newExpList[index][field] = value;
+    setworkExperienceList(newExpList);
+  };
+
+  const deleteRowExperience = (element) => {
+
+    const data = workExperienceList;
+    data.splice(element.target.id, 1);
+
+    setworkExperienceList([...data])
+  }
+
+  // End Experience
+
+
+  // Experience Academic Info
+
+  const addRowAcademic = (element) => {
+
+    setAcademicList([...academicList, { transactionType: element.target.id, employeeId: id }])
+  }
+
+  const handleDatePickerAcademic = (el, key, index, val) => {
+
+    console.log("datepicker::", el, key, index);
+    setAcademicList([...academicList.map((val, ind) => {
+      if (ind == index) {
+        val[key] = new Date(el)
+      }
+      return val
+    })])
+
+  }
+
+  // const handleFieldChangedAcademic = (el) => {
+  //   console.log("::go", el);
+  //   const index = el.target.id.split('-')[1]
+  //   const key = el.target.id.split('-')[0]
+
+  //   if (key == "countryId") {
+  //     console.log("::el::", el);
+  //     // dispatch(fetchAllCity(el.target.value));
+
+  //   }
+
+  //   setAcademicList([...academicList.map((val, ind) => {
+  //     if (ind == index) {
+  //       val[key] = el.target.value
+  //     }
+  //     return val
+  //   })])
+  // }
+
+
+  const handleFieldChangedAcademic = (index, field, value) => {
+    const newAcademicList = [...academicList];
+    newAcademicList[index][field] = value;
+    setAcademicList(newAcademicList);
+  };
+
+
+  const deleteRowAcademic = (element) => {
+    const data = academicList;
+    data.splice(element.target.id, 1);
+    setAcademicList([...data])
+  }
+
+  // End Academic
+
+
+  // Employee Skills Info
+
+  const addRowSkills = (element) => {
+
+    setSkillList([...skillsList, { transactionType: element.target.id, employeeId: id }])
+  }
+
+  const handleDatePickerSkills = (el, key, index, val) => {
+
+    console.log("datepicker::", el, key, index);
+    setSkillList([...skillsList.map((val, ind) => {
+      if (ind == index) {
+        val[key] = new Date(el)
+      }
+      return val
+    })])
+
+  }
+
+  // const handleFieldChangedSkills = (el) => {
+  //   console.log("::go", el);
+  //   const index = el?.target.id.split('-')[1]
+  //   const key = el?.target.id.split('-')[0]
+  //   setSkillList([...skillsList.map((val, ind) => {
+  //     if (ind == index) {
+  //       val[key] = el.target.value
+  //     }
+  //     return val
+  //   })])
+  // }
+
+  const handleFieldChangedSkills = (index, field, value) => {
+    const newSkillList = [...skillsList];
+    newSkillList[index][field] = value;
+    setSkillList(newSkillList);
+  };
+
+  const deleteRowSkills = (element) => {
+    const data = skillsList;
+    data.splice(element.target.id, 1);
+    setSkillList([...data])
+  }
+
+  // End Academic
+
+
+  // Employee Incident
+
+  const addRowIncident = (element) => {
+
+    setIncidentList([...incidentList, { transactionType: element.target.id, employeeId: id }])
+  }
+
+  const handleDatePickerIncident = (el, key, index, val) => {
+
+    console.log("datepicker::", el, key, index);
+    setIncidentList([...incidentList.map((val, ind) => {
+      if (ind == index) {
+        val[key] = new Date(el)
+      }
+      return val
+    })])
+
+  }
+
+  const handleFieldChangedIncident = (index, field, value) => {
+    const newIncidentList = [...incidentList];
+    newIncidentList[index][field] = value;
+    setIncidentList(newIncidentList);
+  };
+  // const handleFieldChangedIncident = (el) => {
+  //   console.log("::go", el);
+  //   const index = el?.target.id.split('-')[1]
+  //   const key = el?.target.id.split('-')[0]
+  //   setIncidentList([...incidentList.map((val, ind) => {
+  //     if (ind == index) {
+  //       val[key] = el.target.value
+  //     }
+  //     return val
+  //   })])
+  // }
+
+  const deleteRowIncident = (element) => {
+    const data = incidentList;
+    data.splice(element.target.id, 1);
+    setIncidentList([...data])
+  }
+
+  // End Academic
+
+  console.log("workExperienceList", workExperienceList)
+
+  const validate = () => {
+    const newErrors = {};
+    defContactList.forEach((contact, index) => {
+      if (!contact.relation_name) {
+        newErrors[`relation_name-${index}`] = 'Relation Name is required';
+      }
+      if (!contact.relation) {
+        newErrors[`relation-${index}`] = 'Relation is required';
+      }
+      if (!contact.contactNo || !/^\d{11}$/.test(contact.contactNo)) {
+        newErrors[`contactNo-${index}`] = 'Contact No must be exactly 11 digits';
+      }
+    });
+
+    // Validations for Work Experience
+    workExperienceList.forEach((obj, index) => {
+      if (!obj.companyName) {
+        newErrors[`companyName-${index}`] = '*Required';
+      }
+      if (!obj.positionHeld) {
+        newErrors[`positionHeld-${index}`] = '*Required';
+      }
+      if (!obj.countryId) {
+        newErrors[`countryId-${index}`] = '*Required';
+      }
+
+      if (!obj.cityId) {
+        newErrors[`cityId-${index}`] = '*Required';
+      }
+      if (new Date(obj.startDate) > new Date()) {
+        newErrors[`startDate-${index}`] = 'Start Date cannot be a future date';
+      }
+
+      // Validate endDate
+      if (new Date(obj.endDate) < new Date(obj.startDate)) {
+        newErrors[`endDate-${index}`] = 'End Date must be later than Start Date';
+      }
+
+      // Check if startDate and endDate are the same
+      if (new Date(obj.startDate).getTime() === new Date(obj.endDate).getTime()) {
+        newErrors[`endDate-${index}`] = 'End Date cannot be the same as Start Date';
+      }
+
+      // Check for date duplicates across rows
+      const datePairs = workExperienceList.map((obj, index) => ({
+        startDate: new Date(obj.startDate),
+        endDate: new Date(obj.endDate),
+        index,
+      }));
+
+      datePairs.forEach(({ startDate, endDate }, index) => {
+        datePairs.forEach(({ startDate: otherStartDate, endDate: otherEndDate }, otherIndex) => {
+          if (index !== otherIndex) { // Ensure we don't compare the same row
+            if (startDate === otherStartDate || endDate === otherEndDate) {
+              newErrors[`startDate-${index}`].duplicateDates = 'Start and End Dates must be unique across rows';
+            }
+          }
+        });
+      });
+
+    });
+
+    // Validations for Academic
+
+    academicList.forEach((obj, index) => {
+      if (!obj.institutionId) {
+        newErrors[`institutionId-${index}`] = '*Required';
+      }
+      if (!obj.degreeId) {
+        newErrors[`degreeId-${index}`] = '*Required';
+      }
+      if (!obj.countryId) {
+        newErrors[`countryId-${index}`] = '*Required';
+      }
+
+      // GPA Validation
+      if (!obj.gpa) {
+        newErrors[`gpa-${index}`] = '*Required';
+      } else if (isNaN(obj.gpa) || obj.gpa === '') {
+        newErrors[`gpa-${index}`] = 'GPA must be a number';
+      } else if (obj.gpa < 0 || obj.gpa > 5.0) {
+        newErrors[`gpa-${index}`] = 'GPA must be between 0 and 5.0';
+      } else if (!/^\d+(\.\d+)?$/.test(obj.gpa)) {
+        newErrors[`gpa-${index}`] = 'GPA must be a valid digit';
+      }
+      if (!obj.cityId) {
+        newErrors[`cityId-${index}`] = '*Required';
+      }
+      if (new Date(obj.startDate) > new Date()) {
+        newErrors[`startDate-${index}`] = 'Start Date cannot be a future date';
+      }
+
+      // Validate endDate
+      if (new Date(obj.endDate) < new Date(obj.startDate)) {
+        newErrors[`endDate-${index}`] = 'End Date must be later than Start Date';
+      }
+
+    });
+
+    // Validations for Skills
+    skillsList.forEach((obj, index) => {
+      if (!obj.skill) {
+        newErrors[`skill-${index}`] = '*Required';
+      }
+      if (!obj.description) {
+        newErrors[`description-${index}`] = '*Required';
+      }
+
+      if (!obj.ratingScale) {
+        newErrors[`ratingScale-${index}`] = '*Required';
+      }
+
+      if (new Date(obj.startDate) > new Date()) {
+        newErrors[`startDate-${index}`] = 'Start Date cannot be a future date';
+      }
+
+      // Validate endDate
+      if (new Date(obj.endDate) < new Date(obj.startDate)) {
+        newErrors[`endDate-${index}`] = 'End Date must be later than Start Date';
+      }
+
+    });
+
+    // Validations for Incident
+    incidentList.forEach((obj, index) => {
+      if (!obj.incidentDetail) {
+        newErrors[`incidentDetail-${index}`] = '*Required';
+      }
+      if (!obj.actionTaken) {
+        newErrors[`actionTaken-${index}`] = '*Required';
+      }
+
+      if (!obj.actionTakenBy) {
+        newErrors[`actionTakenBy-${index}`] = '*Required';
+      }
+
+      if (new Date(obj.incidentDate) > new Date()) {
+        newErrors[`incidentDate-${index}`] = 'incidentDate Date cannot be a future date';
+      }
+
+
+
+    });
+
+    return newErrors;
+  };
+
+
+
+
   return (
     <>
       <Formik
@@ -644,24 +1040,36 @@ export function DesignationEditForm({
         initialValues={user}
         validationSchema={profileValidation}
         onSubmit={async (values) => {
-          enableLoading();
-          //   console.log("values emp", values);
-          //   values.profile_image = profile_image;
-          if (file) {
-            let formData = new FormData();
-            await formData.append('image', file);
-            await axios
-              .post(`${USERS_URL}/profile/image-upload`, formData)
-              .then((res) => {
-                console.log(res.data, "looos")
-                setImage(res.data.imageUrl)
 
-                saveEmployeeProfile(values, res.data.imageUrl);
-              });
-          }
-          else {
-            console.log("values emp", values)
-            saveEmployeeProfile(values, profile_image);
+          console.log("::ppp::", values);
+          //const t =  handleSubmit();
+
+
+          const validationErrors = validate();
+          console.log("::val::", validationErrors)
+          if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+          } else {
+            console.log('Form submitted:', values);
+            // Reset errors on successful submission
+            setErrors({});
+
+            enableLoading();
+
+            if (file) {
+              let formData = new FormData();
+              await formData.append('image', file);
+              await axios
+                .post(`${USERS_URL}/profile/image-upload`, formData)
+                .then((res) => {
+                  setImage(res.data.imageUrl)
+                  saveEmployeeProfile(values, res.data.imageUrl, defContactList, workExperienceList, academicList, skillsList, incidentList);
+                });
+            }
+            else {
+              console.log("values emp", values)
+              saveEmployeeProfile(values, profile_image, defContactList, workExperienceList, academicList, skillsList, incidentList);
+            }
           }
 
         }}
@@ -694,7 +1102,8 @@ export function DesignationEditForm({
                             <div>
                               <img name='profile_image' width={120} height={120} src={profile_image} />
                               <h4>Select Image</h4>
-                              <input type="file" name="myImage" onChange={onImageChange} />
+                              <input type="file" name="myImage" accept=".jpg, .jpeg, .png" onChange={onImageChange} />
+                              <ErrorMessage className="form-feedBack" name="myImage" component="div" />
                             </div>
                           </div>
                         </div>
@@ -756,7 +1165,8 @@ export function DesignationEditForm({
                           <Field
                             name="employeeCode"
                             component={Input}
-                            placeholder="Enter Employee Code"
+                            maxLength="10"
+                            placeholder=" Employee Code"
                             label={<span> Employee Code<span style={{ color: 'red' }}>*</span></span>}
                             autoComplete="off"
                           />
@@ -788,7 +1198,7 @@ export function DesignationEditForm({
                         <Field
                           name="firstName"
                           component={Input}
-                          placeholder="Enter first name"
+                          placeholder=" first name"
                           label={<span> First Name<span style={{ color: 'red' }}>*</span></span>}
                           autoComplete="off"
                         />
@@ -797,7 +1207,7 @@ export function DesignationEditForm({
                         <Field
                           name="middleName"
                           component={Input}
-                          placeholder="Enter middle name"
+                          placeholder=" middle name"
                           label={<span> Middle Name<span style={{ color: 'red' }}>*</span></span>}
                           autoComplete="off"
                         />
@@ -806,7 +1216,7 @@ export function DesignationEditForm({
                         <Field
                           name="lastName"
                           component={Input}
-                          placeholder="Enter last name"
+                          placeholder=" last name"
                           label={<span> Last Name<span style={{ color: 'red' }}>*</span></span>}
                           autoComplete="off"
                         />
@@ -924,8 +1334,54 @@ export function DesignationEditForm({
                             // handleBlur({ target: { name: "countryId" } });
                           }}
                           onChange={(e) => {
+                            console.log("::dd1", e.value);
                             setFieldValue("employeeTypeId", e.value || null);
+
                             setDefaultChildEmpTypeMenus(e);
+                            setDisbledConfirmationEnterDate(false);
+                            setDisabledConfirmationDate(false);
+                            setDisbledConfirmationDueDate(false);
+                            setDisabledContractExpiryDate(false);
+                            if (e.value == 148) // WHEN Select Permanet value
+                            {
+                              // For Empty Object
+
+                              setContractExpiryDate('');
+                              setConfirmationDate('');
+                              setConfirmationDueDate('');
+                              setConfirmationEnterDate('');
+
+                              setFieldValue("dateOfConfirmation", '');
+                              setFieldValue("dateOfConfirmationDue", '');
+                              setFieldValue("dateOfConfirmationEnter", '');
+                              setFieldValue("dateOfContractExpiry", '');
+
+                              // For Disabled Object
+                              setDisbledConfirmationEnterDate(true);
+                              setDisabledConfirmationDate(true);
+                              setDisbledConfirmationDueDate(true);
+                              setDisabledContractExpiryDate(true);
+
+                            }
+                            else {
+
+                              setFieldValue("dateOfContractExpiry", contractExpirtyDateSelected || new Date())
+                              setFieldValue("dateOfConfirmationEnter", confirmationEnterDateSelected || new Date())
+                              setFieldValue("dateOfConfirmationDue", confirmationDueDateSelected || new Date())
+                              setFieldValue("dateOfConfirmation", confirmationDateSelected || new Date())
+                              
+
+                              setContractExpiryDate(new Date());
+                              setConfirmationDate(new Date());
+                              setConfirmationDueDate(new Date());
+                              setConfirmationEnterDate(new Date());
+
+
+                            }
+
+
+
+
                             // dispatch(fetchAllFormsMenu(e.value));
                           }}
                           value={(defchildEmptypeMenus || null)}
@@ -964,7 +1420,8 @@ export function DesignationEditForm({
                           onChange={(e) => {
                             setFieldValue("countryId", e.value);
                             setDefaultCountry(e);
-                            dispatch(fetchAllCity(e.value));
+                            setDefaultCity({});
+                            // dispatch(fetchAllCity(e.value));
                           }}
                           value={defCountry}
                           error={errors.countryId}
@@ -988,14 +1445,14 @@ export function DesignationEditForm({
                           value={defCity}
                           error={errors.cityId}
                           touched={touched.cityId}
-                          options={dashboard.allCity}
+                          options={dashboard.allCity.filter(x => x.code == values.countryId)}
                         />
                       </div>
                       <div className="col-12 col-md-4 mt-3">
-                        <label>Date Of Joining</label>
+                        <label>Date Of Joining<span style={{ color: 'red' }}>*</span></label>
                         <DatePicker
                           className="form-control"
-                          placeholder="Enter Date Of Joining"
+                          placeholder=" Date Of Joining"
                           selected={joiningDateSelected}
                           onChange={(date) => {
                             setFieldValue("dateOfJoining", date);
@@ -1012,14 +1469,14 @@ export function DesignationEditForm({
                           error={errors.dateOfJoining}
                           touched={touched.dateOfJoining}
                         />
-                        <ErrorMessage style={{ color: "red" }} name="dateOfJoining" component="div" />
+                        <ErrorMessage className="form-feedBack" name="dateOfJoining" component="div" />
                       </div>
 
                       <div className="col-12 col-md-4 mt-3">
-                        <label>Date Of Confirmation<span style={{ color: 'red' }}>*</span></label>
+                        <label>Date Of Confirmation</label>
                         <DatePicker
                           className="form-control"
-                          placeholder="Enter Date Of Confirmation"
+                          placeholder=" Date Of Confirmation"
                           selected={confirmationDateSelected}
                           showYearDropdown
                           scrollableMonthYearDropdown
@@ -1031,16 +1488,16 @@ export function DesignationEditForm({
                           dateFormat="dd/MM/yyyy"
                           showTimeInput
                           name="dateOfConfirmation"
-                          disabled={isUserForRead}
+                          disabled={disabledConfirmationDateSelected}
                           autoComplete="off"
                         />
-                        <ErrorMessage style={{ color: "red" }} name="dateOfConfirmation" component="div" />
+                        <ErrorMessage className="form-feedBack" name="dateOfConfirmation" component="div" />
                       </div>
                       <div className="col-12 col-md-4 mt-3">
-                        <label>Date Confirmation Due<span style={{ color: 'red' }}>*</span> </label>
+                        <label>Date Confirmation Due </label>
                         <DatePicker
                           className="form-control"
-                          placeholder="Enter Date Of Confirmation Due"
+                          placeholder=" Date Of Confirmation Due"
                           selected={confirmationDueDateSelected}
                           onChange={(date) => {
                             setFieldValue("dateOfConfirmationDue", date);
@@ -1050,16 +1507,16 @@ export function DesignationEditForm({
                           dateFormat="dd/MM/yyyy"
                           showTimeInput
                           name="dateOfConfirmationDue"
-                          disabled={isUserForRead}
+                          disabled={disbaledConfirmationDueDateSelected}
                           autoComplete="off"
                         />
-                        <ErrorMessage style={{ color: "red" }} name="dateOfConfirmationDue" component="div" />
+                        <ErrorMessage className="form-feedBack" name="dateOfConfirmationDue" component="div" />
                       </div>
                       <div className="col-12 col-md-4 mt-3">
-                        <label>Date Confirmation Extended <span style={{ color: 'red' }}>*</span> </label>
+                        <label>Date Confirmation Extended  </label>
                         <DatePicker
                           className="form-control"
-                          placeholder="Enter Confirmation Enter Date"
+                          placeholder=" Confirmation  Date"
                           selected={confirmationEnterDateSelected}
                           onChange={(date) => {
                             setFieldValue("dateOfConfirmationEnter", date);
@@ -1069,16 +1526,16 @@ export function DesignationEditForm({
                           dateFormat="dd/MM/yyyy"
                           showTimeInput
                           name="dateOfConfirmationEnter"
-                          disabled={isUserForRead}
+                          disabled={disbaledConfirmationEnterDateSelected}
                           autoComplete="off"
                         />
-                        <ErrorMessage style={{ color: "red" }} name="dateOfConfirmationEnter" component="div" />
+                        <ErrorMessage className="form-feedBack" name="dateOfConfirmationEnter" component="div" />
                       </div>
                       <div className="col-12 col-md-4 mt-3">
-                        <label>Contract Expiry <span style={{ color: 'red' }}>*</span></label>
+                        <label>Contract Expiry </label>
                         <DatePicker
                           className="form-control"
-                          placeholder="Enter Contract Expiry"
+                          placeholder=" Contract Expiry"
                           selected={contractExpirtyDateSelected}
                           onChange={(date) => {
                             setFieldValue("dateOfContractExpiry", date);
@@ -1088,10 +1545,10 @@ export function DesignationEditForm({
                           dateFormat="dd/MM/yyyy"
                           showTimeInput
                           name="dateOfContractExpiry"
-                          disabled={isUserForRead}
+                          disabled={disabledContractExpirtyDateSelected}
                           autoComplete="off"
                         />
-                        <ErrorMessage style={{ color: "red" }} name="dateOfContractExpiry" component="div" />
+                        <ErrorMessage className="form-feedBack" name="dateOfContractExpiry" component="div" />
                       </div>
 
 
@@ -1116,163 +1573,12 @@ export function DesignationEditForm({
                           <div className="invalid-text">{errors.defaultShiftId}</div>
                         )}
                       </div>
-                      <div className="col-12 col-md-4 mt-3">
-                        <Select
-                          label="Attendance Type"
-                          name="attendanceType"
-                          value={values.attendanceType}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          style={{ display: "block" }}
-                          autoComplete="off"
-                        >
-                          <option value="-1" label="Select Attendance Type" />
-                          <option value="1" label="Regular Attendance" />
-                          <option value="2" label="Auto Present Attendance" />
 
-                        </Select>
-                        {errors.attendanceType && touched.attendanceType && (
-                          <div className="invalid-text">{errors.attendanceType}</div>
-                        )}
-                      </div>
-                    </div>
-                    <div className="from-group row">
-                      {
-                        <div className="col-12 col-md-4 mt-3">
-                          <SearchSelect
-                            name="reportTo"
-                            label={<span> Report To</span>}
-                            isDisabled={isUserForRead && true}
-                            // onBlur={() => {
-                            //   handleBlur({ target: { name: "countryId" } });
-                            // }}
-                            onChange={(e) => {
-                              setFieldValue("reportTo", e.value || null);
-                              setEmployeeReportToDefault(e);
-                              //dispatch(fetchAllActiveEmployees(e.value));
-                            }}
-                            value={(defEmployeeReportTo || null)}
-                            error={errors.reportTo}
-                            touched={touched.reportTo}
-                            options={dashboard.allEmployees}
-                          />
-                        </div>
-                      }
-                    </div>
-                    <br></br>
-
-                  </div>
-
-                  <br></br>
-                  <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-                    <h6>Personal Information</h6>
-
-                    <div className="from-group row">
-                      <div className="col-12 col-md-4 mt-3">
-                        {<span> Date Of Birth<span style={{ color: 'red' }}>*</span></span>}
-                        <DatePicker
-                          className="form-control"
-                          placeholder="Enter Date Of Birth"
-                          selected={DOBDateSelected}
-                          //value={values.dateOfBirth}
-                          showYearDropdown
-                          scrollableMonthYearDropdown
-                          onChange={(date) => {
-                            setFieldValue("dateOfBirth", date);
-                            setDOBDate(date);
-                          }}
-                          timeInputLabel="Time:"
-                          dateFormat="dd/MM/yyyy"
-                          showTimeInput
-                          name="dateOfBirth"
-                          disabled={isUserForRead}
-                          autoComplete="off"
-
-                        />
-                        <ErrorMessage style={{ color: "red" }} name="dateOfBirth" component="div" />
-                      </div>
-
-                      <div className="col-12 col-md-4 mt-3">
-                        <label>Date Of Retirement</label>
-                        <DatePicker
-                          className="form-control"
-                          placeholder="Enter Date Of Retirement"
-                          selected={RetirementSelected}
-
-                          showYearDropdown
-                          scrollableMonthYearDropdown
-                          onChange={(date) => {
-                            setFieldValue("dateOfRetirement", date);
-                            setDRetirmentDate(date);
-                          }}
-                          timeInputLabel="Time:"
-                          dateFormat="dd/MM/yyyy"
-                          showTimeInput
-                          name="dateOfRetirement"
-                          disabled={isUserForRead}
-                          autoComplete="off"
-                        />
-                        <ErrorMessage style={{ color: "red" }} name="dateOfRetirement" component="div" />
-                      </div>
                     </div>
 
                     <div className="from-group row">
                       <div className="col-12 col-md-4 mt-3">
-                        <Field
-                          name="nic_no"
-                          mask={[
 
-                            /[1-9]/,
-                            /\d/,
-                            /\d/,
-                            /\d/,
-                            /\d/,
-                            "-",
-                            /\d/,
-                            /\d/,
-                            /\d/,
-                            /\d/,
-                            /\d/,
-                            /\d/,
-                            /\d/,
-                            "-",
-                            /\d/,
-                          ]}
-                          component={MaskInput}
-                          placeholder="Enter ID Card No"
-                          label={<span> NIC No<span style={{ color: 'red' }}>*</span></span>}
-                          autoComplete="off"
-                        />
-                        {/* <ErrorMessage style={{color:"red"}} name="nic_no" component="div" /> */}
-                      </div>
-                      <div className="col-12 col-md-4 mt-3">
-                        <Field
-                          name="passportNo"
-                          component={Input}
-                          placeholder="Enter Passport No"
-                          label="Enter Passport No"
-                          autoComplete="off"
-                        />
-                      </div>
-                    </div>
-
-
-                    <div className="from-group row">
-                      <div className="col-12 col-md-4 mt-3">
-                        {/* <Select
-                          label="Marital Status"
-                          name="maritalStatus"
-                          value={values.maritalStatus}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          style={{ display: "block" }}
-                          autoComplete="off"
-                        >
-                          <option value="-1" label="Select..." />
-                          <option value="Single" label="Single" />
-                          <option value="Married" label="Married" />
-
-                        </Select> */}
                         <SearchSelect
                           label={<span> Marital Status<span style={{ color: 'red' }}>*</span></span>}
                           name="maritalStatus"
@@ -1353,6 +1659,149 @@ export function DesignationEditForm({
                         )}
                       </div>
                     </div>
+
+                    <div className="from-group row">
+                      <div className="col-12 col-md-4 mt-3">
+                        <Select
+                          label="Attendance Type"
+                          name="attendanceType"
+                          value={values.attendanceType}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          style={{ display: "block" }}
+                          autoComplete="off"
+                        >
+                          <option value="-1" label="Select Attendance Type" />
+                          <option value="1" label="Regular Attendance" />
+                          <option value="2" label="Auto Present Attendance" />
+
+                        </Select>
+                        {errors.attendanceType && touched.attendanceType && (
+                          <div className="invalid-text">{errors.attendanceType}</div>
+                        )}
+                      </div>
+
+                      <div className="col-12 col-md-4 mt-3">
+                        <SearchSelect
+                          name="reportTo"
+                          label={<span> Report To</span>}
+                          isDisabled={isUserForRead && true}
+                          // onBlur={() => {
+                          //   handleBlur({ target: { name: "countryId" } });
+                          // }}
+                          onChange={(e) => {
+                            setFieldValue("reportTo", e.value || null);
+                            setEmployeeReportToDefault(e);
+                            //dispatch(fetchAllActiveEmployees(e.value));
+                          }}
+                          value={(defEmployeeReportTo || null)}
+                          error={errors.reportTo}
+                          touched={touched.reportTo}
+                          options={dashboard.allEmployees.filter(x => x.value != values.Id)}
+                        />
+                      </div>
+
+                    </div>
+                    <br></br>
+
+                  </div>
+
+                  <br></br>
+                  <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
+                    <h6>Personal Information</h6>
+
+                    <div className="from-group row">
+                      <div className="col-12 col-md-4 mt-3">
+                        {<span> Date Of Birth<span style={{ color: 'red' }}>*</span></span>}
+                        <DatePicker
+                          className="form-control"
+                          placeholder=" Date Of Birth"
+                          selected={DOBDateSelected}
+                          //value={values.dateOfBirth}
+                          showYearDropdown
+                          scrollableMonthYearDropdown
+                          onChange={(date) => {
+                            setFieldValue("dateOfBirth", date);
+                            setDOBDate(date);
+                          }}
+                          timeInputLabel="Time:"
+                          dateFormat="dd/MM/yyyy"
+                          showTimeInput
+                          name="dateOfBirth"
+                          disabled={isUserForRead}
+                          autoComplete="off"
+
+                        />
+                        <ErrorMessage className="form-feedBack" name="dateOfBirth" component="div" />
+                      </div>
+
+                      <div className="col-12 col-md-4 mt-3">
+                        <label>Date Of Retirement</label>
+                        <DatePicker
+                          className="form-control"
+                          placeholder=" Date Of Retirement"
+                          selected={RetirementSelected}
+
+                          showYearDropdown
+                          scrollableMonthYearDropdown
+                          onChange={(date) => {
+                            setFieldValue("dateOfRetirement", date);
+                            setDRetirmentDate(date);
+                          }}
+                          timeInputLabel="Time:"
+                          dateFormat="dd/MM/yyyy"
+                          showTimeInput
+                          name="dateOfRetirement"
+                          disabled={true}
+                          autoComplete="off"
+                        />
+                        <ErrorMessage className="form-feedBack" name="dateOfRetirement" component="div" />
+                      </div>
+                    </div>
+
+                    <div className="from-group row">
+                      <div className="col-12 col-md-4 mt-3">
+                        <Field
+                          name="nic_no"
+                          mask={[
+
+                            /[1-9]/,
+                            /\d/,
+                            /\d/,
+                            /\d/,
+                            /\d/,
+                            "-",
+                            /\d/,
+                            /\d/,
+                            /\d/,
+                            /\d/,
+                            /\d/,
+                            /\d/,
+                            /\d/,
+                            "-",
+                            /\d/,
+                          ]}
+                          component={MaskInput}
+                          placeholder=" ID Card No"
+                          label={<span> NIC No<span style={{ color: 'red' }}>*</span></span>}
+                          autoComplete="off"
+                        />
+                        {/* <ErrorMessage style={{color:"red"}} name="nic_no" component="div" /> */}
+                      </div>
+                      <div className="col-12 col-md-4 mt-3">
+                        <Field
+                          name="passportNo"
+                          maxLength="15"
+                          component={Input}
+                          placeholder=" Passport No"
+                          label=" Passport No"
+                          autoComplete="off"
+                        />
+                      </div>
+                    </div>
+
+
+
                   </div>
                   <br></br>
 
@@ -1365,7 +1814,7 @@ export function DesignationEditForm({
                         <Field
                           name="email_official"
                           component={Input}
-                          placeholder="Enter Offical Email"
+                          placeholder="example@gmail.com"
                           label="Official Email"
                           autoComplete="off"
 
@@ -1375,7 +1824,7 @@ export function DesignationEditForm({
                         <Field
                           name="email_personal"
                           component={Input}
-                          placeholder="Enter Personal Email"
+                          placeholder="example@gmail.com"
                           label="Personal Email"
                           autoComplete="off"
                         />
@@ -1387,8 +1836,9 @@ export function DesignationEditForm({
                         <Field
                           name="phone_home"
                           component={Input}
-                          placeholder="Enter Home Phone"
+                          placeholder="03151110002"
                           label="Phone Home"
+                          maxLength="15"
                           autoComplete="off"
                         />
                       </div>
@@ -1396,7 +1846,8 @@ export function DesignationEditForm({
                         <Field
                           name="phone_official"
                           component={Input}
-                          placeholder="Enter Offical Phone"
+                          maxLength="15"
+                          placeholder="03151110002"
                           label="Offical Phone"
                           autoComplete="off"
                         />
@@ -1405,7 +1856,8 @@ export function DesignationEditForm({
                         <Field
                           name="phone_cell"
                           component={Input}
-                          placeholder="Enter Mobile Phone"
+                          maxLength="15"
+                          placeholder="03151110002"
                           label="Cell No."
                           autoComplete="off"
                         />
@@ -1416,7 +1868,7 @@ export function DesignationEditForm({
                         <Field
                           name="professional_summary"
                           component={TextArea}
-                          placeholder="Enter Professional Summary"
+                          placeholder=" Professional Summary"
                           label="Professional Summary"
                           autoComplete="off"
                         />
@@ -1425,7 +1877,7 @@ export function DesignationEditForm({
                         <Field
                           name="additional_summary"
                           component={TextArea}
-                          placeholder="Enter Additional Notes"
+                          placeholder=" Additional Notes"
                           label="Additional Notes"
                           autoComplete="off"
                         />
@@ -1448,9 +1900,7 @@ export function DesignationEditForm({
                     <hr></hr>
 
                     <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-
-                      {<a onClick={DesignationUIProps.newContactButtonClick} href='javascript:void(0)'>+ Add Contact </a>}
-
+                      <h3>Contact Info</h3>
                       <table class="table table table-head-custom table-vertical-center overflow-hidden table-hover">
                         <tr style={{ backgroundColor: '#4d5f7a', color: '#fff' }}>
                           <td></td>
@@ -1458,16 +1908,30 @@ export function DesignationEditForm({
                           <td>Relation</td>
                           <td>Contact No</td>
                         </tr>
+
                         {defContactList?.map((obj, rightindex) => (
                           <><tr>
                             <td > <button id={rightindex} onClick={deleteRowContact} className="btn btn-danger btn-sm"> Delete</button></td>
                             <td>
-                              <input className="form-control" type="text" onChange={handleFieldChangedContact}
-                                value={obj.relation_name} id={'relation_name-' + rightindex}></input>
+
+                              <input
+                                className="form-control"
+                                type="text"
+                                onChange={(e) => {
+                                  handleFieldChangedContact(rightindex, 'relation_name', e.target.value);
+                                  setErrors((prev) => ({ ...prev, [`relation_name-${rightindex}`]: '' })); // Clear error on change
+                                }}
+                                value={obj.relation_name}
+                              />
+                              {deferrors[`relation_name-${rightindex}`] && <div className="form-feedBack">{deferrors[`relation_name-${rightindex}`]}</div>}
                             </td>
                             <td>
-                              <select className="form-control" value={obj.relation} onChange={handleFieldChangedContact} id={'relation-' + rightindex} >
-                                {/* <option value="-1"> --Select--</option> */}
+                              <select className="form-control" value={obj.relation}
+                                onChange={(e) => {
+                                  handleFieldChangedContact(rightindex, 'relation', e.target.value);
+                                  setErrors((prev) => ({ ...prev, [`relation-${rightindex}`]: '' })); // Clear error on change
+                                }}
+                                id={'relation-' + rightindex} >
                                 {
                                   dashboard.allRelationCodeList?.map((x) => {
                                     return <option value={x.value}> {x.label} </option>
@@ -1475,11 +1939,17 @@ export function DesignationEditForm({
 
                                 {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
                               </select>
-
+                              {deferrors[`relation-${rightindex}`] && <div className="form-feedBack">{deferrors[`relation-${rightindex}`]}</div>}
                             </td>
                             <td>
-                              <input className="form-control" type="text" onChange={handleFieldChangedContact}
-                                value={obj.contactNo} id={'contactNo-' + rightindex}></input>
+                              <input className="form-control" type="text"
+                                onChange={(e) => {
+                                  handleFieldChangedContact(rightindex, 'contactNo', e.target.value);
+                                  setErrors((prev) => ({ ...prev, [`contactNo-${rightindex}`]: '' })); // Clear error on change
+                                }}
+                                value={obj.contactNo} ></input>
+                              {deferrors[`contactNo-${rightindex}`] && <div className="form-feedBack">{deferrors[`contactNo-${rightindex}`]}</div>}
+
                             </td>
                             {/* <td>{obj.relation_emp}</td>
                             <td>{obj.contactNo}</td> */}
@@ -1500,10 +1970,10 @@ export function DesignationEditForm({
                     <br></br>
                     <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
 
-                      {<a onClick={DesignationUIProps.newWorkExperienceButtonClick} href='javascript:void(0)'>+ Add Experience </a>}
-
+                      <h3>Work Experience</h3>
                       <table class="table table table-head-custom table-vertical-center overflow-hidden table-hover">
                         <tr style={{ backgroundColor: '#4d5f7a', color: '#fff' }}>
+                          <td></td>
                           <td>Company</td>
                           <td>Position Held</td>
                           <td>Country</td>
@@ -1511,102 +1981,406 @@ export function DesignationEditForm({
                           <td>Start Date</td>
                           <td>End Date</td>
                         </tr>
+                        {console.log("::work::", deferrors)}
                         {workExperienceList?.map((obj, rightindex) => (
+
                           <><tr>
+                            <td id={rightindex} onClick={deleteRowExperience}> <span className="btn btn-danger btn-sm"> Delete</span></td>
                             <td>
-                              {obj.companyName}
+                              <input className="form-control" type="text"
+                                onChange={(e) => {
+                                  handleFieldChangedExperience(rightindex, 'companyName', e.target.value);
+                                  setErrors((prev) => ({ ...prev, [`companyName-${rightindex}`]: '' })); // Clear error on change
+                                }}
+
+                                value={obj.companyName} id={'companyName-' + rightindex}></input>
+                              {deferrors[`companyName-${rightindex}`] && <div className="form-feedBack">{deferrors[`companyName-${rightindex}`]}</div>}
+
                             </td>
-                            <td>{obj.positionHeld}</td>
-                            <td>{obj.country}</td>
-                            <td>{obj.city}</td>
-                            <td>{obj.startDate}</td>
-                            <td>{obj.endDate}</td>
+                            <td>
+                              <input className="form-control" type="text"
+                                onChange={(e) => {
+                                  handleFieldChangedExperience(rightindex, 'positionHeld', e.target.value);
+                                  setErrors((prev) => ({ ...prev, [`positionHeld-${rightindex}`]: '' })); // Clear error on change
+                                }}
+                                value={obj.positionHeld} id={'positionHeld-' + rightindex}></input>
+                              {deferrors[`positionHeld-${rightindex}`] && <div className="form-feedBack">{deferrors[`positionHeld-${rightindex}`]}</div>}
+                            </td>
+                            <td>
+                              <select className="form-control" value={obj.countryId}
+                                onChange={(e) => {
+                                  handleFieldChangedExperience(rightindex, 'countryId', e.target.value);
+                                  setErrors((prev) => ({ ...prev, [`countryId-${rightindex}`]: '' })); // Clear error on change
+                                }}
+
+                                id={'countryId-' + rightindex} >
+                                <option value="-1"> --Select--</option>
+                                {
+                                  dashboard.allCountry?.map((x) => {
+                                    return <option value={x.value}> {x.label} </option>
+                                  })}
+
+                                {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
+                              </select>
+                              {deferrors[`countryId-${rightindex}`] && <div className="form-feedBack">{deferrors[`countryId-${rightindex}`]}</div>}
+                            </td>
+                            <td>
+                              <select className="form-control" value={obj.cityId}
+
+                                onChange={(e) => {
+                                  handleFieldChangedExperience(rightindex, 'cityId', e.target.value);
+                                  setErrors((prev) => ({ ...prev, [`cityId-${rightindex}`]: '' })); // Clear error on change
+                                }}
+
+                                id={'cityId-' + rightindex} >
+                                <option value="-1"> --Select--</option>
+                                {
+
+                                  dashboard.allCity?.map((x) => {
+                                    if (x.code == obj.countryId) {
+                                      return <option value={x.value}> {x.label} </option>
+                                    }
+                                  })}
+
+                                {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
+                              </select>
+                              {deferrors[`cityId-${rightindex}`] && <div className="form-feedBack">{deferrors[`cityId-${rightindex}`]}</div>}
+                            </td>
+
+                            <td>
+                              <DatePicker
+                                className="form-control"
+                                placeholder="Start Date"
+                                selected={new Date(obj.startDate || currentDate)}
+                                showYearDropdown
+                                scrollableMonthYearDropdown
+                                onChange={(el) => {
+                                  handleDatePicker(el, 'startDate', rightindex, '');
+                                  setErrors((prev) => ({ ...prev, [`startDate-${rightindex}`]: '' })); // Clear error on change
+                                }
+                                }
+                                id={"startDate-" + rightindex}
+                                timeInputLabel="Time:"
+                                dateFormat="dd/MM/yyyy"
+                                showTimeInput
+                                name="startDate"
+                                disabled={isUserForRead}
+                                autoComplete="off"
+                              />
+                              {deferrors[`startDate-${rightindex}`] && <div className="form-feedBack">{deferrors[`startDate-${rightindex}`]}</div>}
+                            </td>
+                            <td>
+                              <DatePicker
+                                className="form-control"
+                                placeholder="End Date"
+                                selected={new Date(obj.endDate || currentDate)}
+                                showYearDropdown
+                                scrollableMonthYearDropdown
+                                onChange={(el) => {
+                                  handleDatePicker(el, 'endDate', rightindex, '');
+                                  setErrors((prev) => ({ ...prev, [`endDate-${rightindex}`]: '' })); // Clear error on change
+                                }
+                                }
+                                id={"endDate-" + rightindex}
+                                timeInputLabel="Time:"
+                                dateFormat="dd/MM/yyyy"
+                                showTimeInput
+                                name="endDate"
+                                disabled={isUserForRead}
+                                autoComplete="off"
+                              />
+                              {deferrors[`endDate-${rightindex}`] && <div className="form-feedBack">{deferrors[`endDate-${rightindex}`]}</div>}
+                            </td>
                           </tr>
                           </>
                         ))}
 
 
                       </table>
+                      {<> <div className="from-group row">
+                        <div className="col-12 col-md-4 mt-3">
+                          <input className="btn btn-success btn-sm" type='button' id="Experience" onClick={addRowExprerience} value='+Add'></input>
+                        </div>
+
+                      </div>
+                      </>}
                     </div>
                     <br></br>
                     <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-
-                      {<a onClick={DesignationUIProps.newAcademicButtonClick} href='javascript:void(0)'>+ Add Academic Info </a>}
-
+                      <h3>Academic Info</h3>
                       <table class="table table table-head-custom table-vertical-center overflow-hidden table-hover">
                         <tr style={{ backgroundColor: '#4d5f7a', color: '#fff' }}>
-
-                          <td>Employee</td>
-
+                          <td></td>
                           <td>Institution</td>
                           <td>Degree</td>
                           <td>Country</td>
                           <td>City</td>
-                          <td>Status</td>
+                          <td>CGPA</td>
+                          <td>Start Date</td>
+                          <td>End Date</td>
                         </tr>
+                        {console.log("::aca", academicList)}
                         {academicList?.map((obj, rightindex) => (
                           <>
 
                             <tr>
+                              <td id={rightindex} onClick={deleteRowAcademic}> <span className="btn btn-danger btn-sm"> Delete</span></td>
                               <td>
-                                {obj.employee}
+                                <select className="form-control" value={obj.institutionId}
+
+                                  onChange={(e) => {
+                                    handleFieldChangedAcademic(rightindex, 'institutionId', e.target.value);
+                                    setErrors((prev) => ({ ...prev, [`institutionId-${rightindex}`]: '' })); // Clear error on change
+                                  }}
+
+                                  id={'institutionId-' + rightindex} >
+                                  {
+                                    dashboard.allInstitution?.map((x) => {
+                                      return <option value={x.value}> {x.label} </option>
+                                    })}
+                                  {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
+                                </select>
+                                {deferrors[`institutionId-${rightindex}`] && <div className="form-feedBack">{deferrors[`institutionId-${rightindex}`]}</div>}
                               </td>
-                              <td>{obj.institution}</td>
-                              <td>{obj.degree}</td>
-                              <td>{obj.country}</td>
-                              <td>{obj.city}</td>
-                              <td>{obj.status}</td>
+                              <td>
+                                <select className="form-control" value={obj.degreeId}
+
+                                  onChange={(e) => {
+                                    handleFieldChangedAcademic(rightindex, 'degreeId', e.target.value);
+                                    setErrors((prev) => ({ ...prev, [`degreeId-${rightindex}`]: '' })); // Clear error on change
+                                  }}
+
+                                  id={'degreeId-' + rightindex} >
+                                  {
+                                    dashboard.allDegreeTitle?.map((x) => {
+                                      return <option value={x.value}> {x.label} </option>
+                                    })}
+                                  {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
+                                </select>
+                                {deferrors[`degreeId-${rightindex}`] && <div className="form-feedBack">{deferrors[`degreeId-${rightindex}`]}</div>}
+                              </td>
+                              <td>
+                                <select className="form-control" value={obj.countryId}
+
+                                  onChange={(e) => {
+                                    handleFieldChangedAcademic(rightindex, 'countryId', e.target.value);
+                                    setErrors((prev) => ({ ...prev, [`countryId-${rightindex}`]: '' })); // Clear error on change
+                                  }}
+
+                                  id={'countryId-' + rightindex} >
+                                  <option value="-1">--Select--</option>
+                                  {
+                                    dashboard.allCountry?.map((x) => {
+                                      return <option value={x.value}> {x.label} </option>
+                                    })}
+
+                                  {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
+                                </select>
+                                {deferrors[`countryId-${rightindex}`] && <div className="form-feedBack">{deferrors[`countryId-${rightindex}`]}</div>}
+                              </td>
+                              <td>
+                                <select className="form-control" value={obj.cityId}
+                                  onChange={(e) => {
+                                    handleFieldChangedAcademic(rightindex, 'cityId', e.target.value);
+                                    setErrors((prev) => ({ ...prev, [`cityId-${rightindex}`]: '' })); // Clear error on change
+                                  }}
+
+                                  id={'cityId-' + rightindex} >
+                                  <option value="-1"> --Select--</option>
+
+                                  {
+
+                                    dashboard.allCity?.map((x) => {
+                                      if (x.code == obj.countryId) {
+                                        return <option value={x.value}> {x.label} </option>
+                                      }
+                                    })}
+
+                                  {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
+                                </select>
+                                {deferrors[`cityId-${rightindex}`] && <div className="form-feedBack">{deferrors[`cityId-${rightindex}`]}</div>}
+                              </td>
+
+                              <td>
+                                <input className="form-control" type="text"
+                                  onChange={(e) => {
+                                    handleFieldChangedAcademic(rightindex, 'gpa', e.target.value);
+                                    setErrors((prev) => ({ ...prev, [`gpa-${rightindex}`]: '' })); // Clear error on change
+                                  }}
+                                  value={obj.gpa} id={'gpa-' + rightindex}></input>
+                                {deferrors[`gpa-${rightindex}`] && <div className="form-feedBack">{deferrors[`gpa-${rightindex}`]}</div>}
+                              </td>
+                              <td>
+                                <DatePicker
+                                  className="form-control"
+                                  placeholder="Start Date"
+                                  selected={new Date(obj.startDate || currentDate)}
+                                  showYearDropdown
+                                  scrollableMonthYearDropdown
+                                  onChange={(el) => handleDatePickerAcademic(el, 'startDate', rightindex, '')}
+                                  id={"startDate-" + rightindex}
+                                  timeInputLabel="Time:"
+                                  dateFormat="dd/MM/yyyy"
+                                  showTimeInput
+                                  name="startDate"
+                                  disabled={isUserForRead}
+                                  autoComplete="off"
+                                />
+                                {deferrors[`startDate-${rightindex}`] && <div className="form-feedBack">{deferrors[`startDate-${rightindex}`]}</div>}
+                              </td>
+                              <td>
+                                <DatePicker
+                                  className="form-control"
+                                  placeholder="End Date"
+                                  selected={new Date(obj.endDate || currentDate)}
+                                  showYearDropdown
+                                  scrollableMonthYearDropdown
+                                  onChange={(el) => handleDatePickerAcademic(el, 'endDate', rightindex, '')}
+                                  id={"endDate-" + rightindex}
+                                  timeInputLabel="Time:"
+                                  dateFormat="dd/MM/yyyy"
+                                  showTimeInput
+                                  name="endDate"
+                                  disabled={isUserForRead}
+                                  autoComplete="off"
+                                />
+                                {deferrors[`endDate-${rightindex}`] && <div className="form-feedBack">{deferrors[`endDate-${rightindex}`]}</div>}
+                              </td>
                             </tr>
                           </>
                         ))}
 
                       </table>
+                      {<> <div className="from-group row">
+                        <div className="col-12 col-md-4 mt-3">
+                          <input className="btn btn-success btn-sm" type='button' id="Academic" onClick={addRowAcademic} value='+Add'></input>
+                        </div>
+
+                      </div>
+                      </>}
                     </div>
                     <br></br>
                     <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
 
-                      {<a onClick={DesignationUIProps.newSkillButtonClick} href='javascript:void(0)'>+ Add Skill </a>}
-
+                      <h3>Employee Skills</h3>
                       <table class="table table table-head-custom table-vertical-center overflow-hidden table-hover">
                         <tr style={{ backgroundColor: '#4d5f7a', color: '#fff' }}>
 
-                          <td>Employee</td>
-
-                          <td>Description</td>
+                          <td></td>
                           <td>Skill</td>
-                          <td>rating</td>
+                          <td>Description</td>
+
+                          <td>Rating</td>
                           <td>Start Date</td>
                           <td>End Date</td>
                         </tr>
                         {skillsList?.map((obj, rightindex) => (
                           <>
-
                             <tr>
-                              <td>
-                                {obj.employee}
-                              </td>
-                              <td>{obj.description}</td>
-                              <td>{obj.skill}</td>
-                              <td>{obj.ratingScale}</td>
+                              <td id={rightindex} onClick={deleteRowSkills}> <span className="btn btn-danger btn-sm"> Delete</span></td>
 
-                              <td>{obj.startDate}</td>
-                              <td>{obj.endDate}</td>
+                              <td>
+                                <input className="form-control" type="text"
+                                  onChange={(e) => {
+                                    handleFieldChangedSkills(rightindex, 'skill', e.target.value);
+                                    setErrors((prev) => ({ ...prev, [`skill-${rightindex}`]: '' })); // Clear error on change
+                                  }}
+
+                                  value={obj.skill} id={'skill-' + rightindex}></input>
+                                {deferrors[`skill-${rightindex}`] && <div className="form-feedBack">{deferrors[`skill-${rightindex}`]}</div>}
+                              </td>
+                              <td>
+                                <input className="form-control" type="text"
+                                  onChange={(e) => {
+                                    handleFieldChangedSkills(rightindex, 'description', e.target.value);
+                                    setErrors((prev) => ({ ...prev, [`description-${rightindex}`]: '' })); // Clear error on change
+                                  }}
+                                  value={obj.description} id={'description-' + rightindex}></input>
+                                {deferrors[`description-${rightindex}`] && <div className="form-feedBack">{deferrors[`description-${rightindex}`]}</div>}
+                              </td>
+                              <td>  <Select
+                                name="ratingScale"
+                                value={obj.ratingScale}
+                                onChange={(e) => {
+                                  handleFieldChangedSkills(rightindex, 'ratingScale', e.target.value);
+                                  setErrors((prev) => ({ ...prev, [`ratingScale-${rightindex}`]: '' })); // Clear error on change
+                                }}
+                                onBlur={handleBlur}
+                                style={{ display: "block" }}
+                                id={'ratingScale-' + rightindex}
+                              >
+                                <option value="-1" label="Select Rating Scale" />
+                                <option value="1" label="1" />
+                                <option value="2" label="2" />
+                                <option value="3" label="3" />
+                                <option value="4" label="4" />
+                                <option value="5" label="5" />
+                                <option value="6" label="6" />
+                                <option value="7" label="7" />
+                                <option value="8" label="8" />
+                                <option value="9" label="9" />
+                                <option value="10" label="10" />
+                              </Select>
+                                {deferrors[`ratingScale-${rightindex}`] && <div className="form-feedBack">{deferrors[`ratingScale-${rightindex}`]}</div>}
+                              </td>
+                              <td>
+                                <DatePicker
+                                  className="form-control"
+                                  placeholder="Start Date"
+                                  selected={new Date(obj.startDate || currentDate)}
+                                  showYearDropdown
+                                  scrollableMonthYearDropdown
+                                  onChange={(el) => handleDatePickerSkills(el, 'startDate', rightindex, '')}
+                                  id={"startDate-" + rightindex}
+                                  timeInputLabel="Time:"
+                                  dateFormat="dd/MM/yyyy"
+                                  showTimeInput
+                                  name="startDate"
+                                  disabled={isUserForRead}
+                                  autoComplete="off"
+                                />
+                                {deferrors[`startDate-${rightindex}`] && <div className="form-feedBack">{deferrors[`startDate-${rightindex}`]}</div>}
+                              </td>
+                              <td>
+                                <DatePicker
+                                  className="form-control"
+                                  placeholder="End Date"
+                                  selected={new Date(obj.endDate || currentDate)}
+                                  showYearDropdown
+                                  scrollableMonthYearDropdown
+                                  onChange={(el) => handleDatePickerSkills(el, 'endDate', rightindex, '')}
+                                  id={"endDate-" + rightindex}
+                                  timeInputLabel="Time:"
+                                  dateFormat="dd/MM/yyyy"
+                                  showTimeInput
+                                  name="endDate"
+                                  disabled={isUserForRead}
+                                  autoComplete="off"
+                                />
+                                {deferrors[`endDate-${rightindex}`] && <div className="form-feedBack">{deferrors[`endDate-${rightindex}`]}</div>}
+                              </td>
                             </tr>
                           </>
                         ))}
 
                       </table>
+                      {<> <div className="from-group row">
+                        <div className="col-12 col-md-4 mt-3">
+                          <input className="btn btn-success btn-sm" type='button' id="Academic" onClick={addRowSkills} value='+Add'></input>
+                        </div>
+
+                      </div>
+                      </>}
                     </div>
 
                     <br></br>
                     <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
 
-                      {<a onClick={DesignationUIProps.newIncidentButtonClick} href='javascript:void(0)'>+ Add Incident Info </a>}
-
+                      <h3>Incident Info</h3>
                       <table class="table table table-head-custom table-vertical-center overflow-hidden table-hover">
                         <tr style={{ backgroundColor: '#4d5f7a', color: '#fff' }}>
 
-                          <td>Employee</td>
+                          <td></td>
 
                           <td>Incident</td>
                           <td>Action Taken</td>
@@ -1618,20 +2392,83 @@ export function DesignationEditForm({
                           <>
 
                             <tr>
+                              <td id={rightindex} onClick={deleteRowIncident}> <span className="btn btn-danger btn-sm"> Delete</span></td>
                               <td>
-                                {obj.employee}
-                              </td>
-                              <td>{obj.incidentDetail}</td>
-                              <td>{obj.actionTaken}</td>
-                              <td>{obj.actionTakenBy}</td>
+                                <input className="form-control" type="text"
+                                  onChange={(e) => {
+                                    handleFieldChangedIncident(rightindex, 'incidentDetail', e.target.value);
+                                    setErrors((prev) => ({ ...prev, [`incidentDetail-${rightindex}`]: '' })); // Clear error on change
+                                  }}
+                                  value={obj.incidentDetail} id={'incidentDetail-' + rightindex}>
 
-                              <td>{obj.incidentDate}</td>
+                                </input>
+                                {deferrors[`incidentDetail-${rightindex}`] && <div className="form-feedBack">{deferrors[`incidentDetail-${rightindex}`]}</div>}
+                              </td>
+                              <td>
+                                <input className="form-control" type="text"
+
+                                  onChange={(e) => {
+                                    handleFieldChangedIncident(rightindex, 'actionTaken', e.target.value);
+                                    setErrors((prev) => ({ ...prev, [`actionTaken-${rightindex}`]: '' })); // Clear error on change
+                                  }}
+                                  value={obj.actionTaken} id={'actionTaken-' + rightindex}></input>
+                                {deferrors[`incidentDetail-${rightindex}`] && <div className="form-feedBack">{deferrors[`actionTaken-${rightindex}`]}</div>}
+                              </td>
+
+                              <td>
+                                <select className="form-control"
+                                  value={obj.actionTakenBy}
+                                  onChange={(e) => {
+                                    handleFieldChangedIncident(rightindex, 'actionTakenBy', e.target.value);
+                                    setErrors((prev) => ({ ...prev, [`actionTakenBy-${rightindex}`]: '' })); // Clear error on change
+                                  }}
+
+                                  id={'actionTakenBy-' + rightindex} >
+                                  <option value='-1'>--Select--</option>
+                                  {
+                                    dashboard.allEmployees?.filter(x => x.value != values.Id).map((x) => {
+                                      return <option value={x.value}> {x.label} </option>
+                                    })
+
+                                  }
+                                  {/* options={dashboard.allEmployees.filter(x => x.value != values.Id)} */}
+
+                                  {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
+                                </select>
+                                {deferrors[`actionTakenBy-${rightindex}`] && <div className="form-feedBack">{deferrors[`actionTakenBy-${rightindex}`]}</div>}
+                              </td>
+                              <td>
+                                <DatePicker
+                                  className="form-control"
+                                  placeholder="Date"
+                                  selected={new Date(obj.incidentDate || currentDate)}
+                                  showYearDropdown
+                                  scrollableMonthYearDropdown
+                                  onChange={(el) => handleDatePickerIncident(el, 'incidentDate', rightindex, '')}
+                                  id={"incidentDate-" + rightindex}
+                                  timeInputLabel="Time:"
+                                  dateFormat="dd/MM/yyyy"
+                                  showTimeInput
+                                  name="incidentDate"
+                                  disabled={isUserForRead}
+                                  autoComplete="off"
+                                />
+                                {deferrors[`incidentDate-${rightindex}`] && <div className="form-feedBack">{deferrors[`incidentDate-${rightindex}`]}</div>}
+                              </td>
+
 
                             </tr>
                           </>
                         ))}
 
                       </table>
+                      {<> <div className="from-group row">
+                        <div className="col-12 col-md-4 mt-3">
+                          <input className="btn btn-success btn-sm" type='button' id="Incident" onClick={addRowIncident} value='+Add'></input>
+                        </div>
+
+                      </div>
+                      </>}
                     </div>
                   </div>
                   <div className="from-group row">
@@ -1661,6 +2498,7 @@ export function DesignationEditForm({
               <> </>
               {!isUserForRead && (
                 <button
+
                   type="submit"
                   onClick={() => handleSubmit()}
                   className="btn btn-primary btn-elevate"

@@ -1,3 +1,4 @@
+import { SERVER_MESSAGES } from "../../../utils/constants";
 import * as requestFromServer from "./formCrud";
 import { leaveManagementConfigurationSlice, callTypes } from "./leaveManagementConfigurationSlice";
 import { toast } from "react-toastify";
@@ -68,7 +69,7 @@ export const saveRecord = (data, disableLoading, onHide) => (dispatch) => {
         if (leaveManagementConfigurationData) {
           disableLoading();
           dispatch(actions.leaveManagementConfigurationCreated(leaveManagementConfigurationData));
-          toast.success("Successfully Created", {
+          toast.success(SERVER_MESSAGES.insertedSuccess, {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -83,7 +84,7 @@ export const saveRecord = (data, disableLoading, onHide) => (dispatch) => {
       .catch((error) => {
         disableLoading();
         error.clientMessage = "Can't Create Leave Configurations";
-        toast.error(error?.response?.data?.message, {
+        toast.error(SERVER_MESSAGES.insertedFail, {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -101,7 +102,7 @@ export const saveRecord = (data, disableLoading, onHide) => (dispatch) => {
         if (leaveManagementConfigurationData) {
           disableLoading();
           dispatch(actions.leaveManagementConfigurationUpdated(leaveManagementConfigurationData));
-          toast.success("Successfully Updated", {
+          toast.success(SERVER_MESSAGES.updatedSuccess, {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -116,7 +117,7 @@ export const saveRecord = (data, disableLoading, onHide) => (dispatch) => {
       .catch((error) => {
         disableLoading();
         error.clientMessage = "Can't Update Leave Configurations";
-        toast.error(error?.response?.data?.message, {
+        toast.error(SERVER_MESSAGES.updatedFail, {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -143,7 +144,7 @@ export const deleteRecord = (id, disableLoading, onHide) => (dispatch) => {
     .then((res) => {
       dispatch(actions.leaveManagementConfigurationDeleted({ id }));
       disableLoading();
-      toast.success("Successfully Deleted", {
+      toast.success(SERVER_MESSAGES.deletedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -157,7 +158,7 @@ export const deleteRecord = (id, disableLoading, onHide) => (dispatch) => {
     .catch((error) => {
       disableLoading();
       error.clientMessage = "Can't Delete Leave Configurations";
-      toast.error(error?.response?.data?.message, {
+      toast.error(SERVER_MESSAGES.deletedFail, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -191,7 +192,7 @@ export const deleteLeaveTypePolicyRecord = (id, remove, index) => (dispatch) => 
     })
     .catch((error) => {
       error.clientMessage = "Can't Delete Leave Type Policy";
-      toast.error(error?.response?.data?.message, {
+      toast.error(SERVER_MESSAGES.deletedFail, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -223,7 +224,7 @@ export const deleteLeaveTypeDeductionPolicyRecord = (id, remove, index) => (disp
       remove(index)
     })
     .catch((error) => {
-      error.clientMessage = "Can't Delete Deduction Policy";
+      error.clientMessage = SERVER_MESSAGES.deletedFail;
       toast.error(error?.response?.data?.message, {
         position: "top-right",
         autoClose: 5000,

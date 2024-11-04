@@ -39,20 +39,60 @@ export const accrue_gratuity_configurationSlice = createSlice({
                 state.actionsLoading = true;
             }
         },
-        salarypolicyFetched: (state, action) => {
+        // salarypolicyFetched: (state, action) => {
         
     
+        //     const entities = action.payload.data?.data.rows;
+        //    console.log("entities",entities)
+        //     const totalResult = action.payload.data?.data.totalResults;
+        
+        //     state.listLoading = false;
+        //     state.error = null;
+        //     state.entities = entities;
+        //     state.totalCount = totalResult;
+        // },
+
+         //get User By ID
+       
+       
+         salarypolicyFetched: (state, action) => {
             const entities = action.payload.data?.data.rows;
-           
+        
+            // Check if entities exist
+            if (entities) {
+                // Map over entities to combine formName and formCode
+                const combinedEntities = entities.map(item => ({
+                    ...item,
+                    bankCashAccount: item.BankCashAccount 
+                        ? `${item.BankCashAccount.formCode} - ${item.BankCashAccount.formName}`
+                        : null,
+                    gratuityExpenseAccount: item.GraduityExpenseAccount 
+                        ? `${item.GraduityExpenseAccount.formCode} - ${item.GraduityExpenseAccount.formName}`
+                        : null,
+                    gratuityPayableAccount: item.GraduityPayableAccount 
+                        ? `${item.GraduityPayableAccount.formCode} - ${item.GraduityPayableAccount.formName}`
+                        : null,
+                    subsidiary: item.Subsidiary 
+                        ? `${item.Subsidiary.formCode} - ${item.Subsidiary.formName}`
+                        : null,
+                }));
+        
+                // Update the state with the combined entities
+                state.entities = combinedEntities;
+            } else {
+                state.entities = [];
+            }
+        
+          
             const totalResult = action.payload.data?.data.totalResults;
         
             state.listLoading = false;
             state.error = null;
-            state.entities = entities;
             state.totalCount = totalResult;
         },
-
-         //get User By ID
+        
+       
+       
          SalarypolicyFetchedForEdit: (state, action) => {
            
  
@@ -72,12 +112,49 @@ export const accrue_gratuity_configurationSlice = createSlice({
                 (el) => el.Id !== action.payload.Id
             );
         },
-        salarypolicyCreated: (state, action) => {
+        // salarypolicyCreated: (state, action) => {
            
+        //     state.actionsLoading = false;
+        //     state.error = null;
+        //     state.entities.unshift(action.payload);
+        //     console.log("entitities created ",action.payload)
+        // },
+      
+        salarypolicyCreated: (state, action) => {
             state.actionsLoading = false;
             state.error = null;
-            state.entities.unshift(action.payload);
+        
+            // Get the new entity from the payload
+            const newEntity = action.payload;
+        
+            // Create combined fields for the new entity
+            const combinedEntity = {
+                ...newEntity,
+                bankCashAccount: newEntity.BankCashAccount 
+                    ? `${newEntity.BankCashAccount.formCode} - ${newEntity.BankCashAccount.formName}`
+                    : null,
+                gratuityExpenseAccount: newEntity.GraduityExpenseAccount 
+                    ? `${newEntity.GraduityExpenseAccount.formCode} - ${newEntity.GraduityExpenseAccount.formName}`
+                    : null,
+                gratuityPayableAccount: newEntity.GraduityPayableAccount 
+                    ? `${newEntity.GraduityPayableAccount.formCode} - ${newEntity.GraduityPayableAccount.formName}`
+                    : null,
+                subsidiary: newEntity.Subsidiary 
+                    ? `${newEntity.Subsidiary.formCode} - ${newEntity.Subsidiary.formName}`
+                    : null,
+            };
+        
+            // Add the combined entity to the beginning of the entities array
+            state.entities.unshift(combinedEntity);
+        
+            // Logging for debugging
+           
         },
+        
+        
+      
+      
+      
         salarypolicyUpdated: (state, action) => {
             state.error = null;
             state.actionsLoading = false;
