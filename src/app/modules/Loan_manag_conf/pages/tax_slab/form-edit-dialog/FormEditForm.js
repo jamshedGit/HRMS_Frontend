@@ -15,7 +15,7 @@ import {
 const loanManagementSchema = Yup.object().shape({
   subsidiaryId: Yup.number().required("Subsidiary is required"),
   accountId: Yup.number().required("Account is required"),
-  human_resource_role: Yup.number().required("Human Resource Role is required"),
+  // human_resource_role: Yup.number().required("Human Resource Role is required"),
   emp_loan_account: Yup.number().required("Employee Loan Account is required"),
   installment_deduction_percentage: Yup.number()
     .min(0, "Must be at least 0")
@@ -26,7 +26,11 @@ const loanManagementSchema = Yup.object().shape({
   ),
   details: Yup.array().of(
     Yup.object().shape({
-      loan_typeId: Yup.number().required(" Type is required"),
+      loan_typeId: Yup.number()
+      .nullable()
+      .required(" Type is required")
+      .notOneOf([''], "Type is required"), 
+
       max_loan_amount: Yup.number()
         .min(1, "Must be at least 1")
         .required("Max  Amount is required"),
@@ -49,13 +53,13 @@ export function FormEditForm({
 }) {
   const dispatch = useDispatch();
   const { dashboard } = useSelector((state) => state);
-
+  // getAllLoanType
   // Fetch necessary data if not already present
   useEffect(() => {
     if (!user.Id) {
       dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsidiaries
       dispatch(fetchAllFormsMenu(45, "allAccountList")); // For All Accounts
-      dispatch(fetchAllFormsMenu(181, "allLoanTypeList")); // For All Loan Types
+      dispatch(actions.getAllLoanType()); // For All Loan Types
       dispatch(fetchAllHumanResourceRole("allHumanResourceRoleList"));
     }
   }, [dispatch, user.Id]);
@@ -73,7 +77,7 @@ export function FormEditForm({
     };
   }, shallowEqual);
 
-  const { entities } = currentState;
+  const { entities,loan_type } = currentState;
 
   let existedId = 0;
   const check_Existed_Data = (subsidiaryId) => {
@@ -167,7 +171,7 @@ export function FormEditForm({
                   </div>
 
                   {/* Human Resource Role Field */}
-                  <div className="col-12 col-md-6 mt-3">
+                  {/* <div className="col-12 col-md-6 mt-3">
                     <SearchSelect
                       name="human_resource_role"
                       label={
@@ -190,7 +194,7 @@ export function FormEditForm({
                       error={errors.human_resource_role}
                       touched={touched.human_resource_role}
                     />
-                  </div>
+                  </div> */}
 
                   {/* Employee Loan Account Field */}
                   <div className="col-12 col-md-6 mt-3">
@@ -361,7 +365,7 @@ export function FormEditForm({
                                     )
                                   )} */}
 
-                                  {dashboard.allLoanTypeList?.map((x) => {
+                                  {loan_type?.map((x) => {
                                     return (
                                       <option
                                         disabled={
@@ -382,7 +386,7 @@ export function FormEditForm({
                                 {errors.details?.[index]?.loan_typeId &&
                                   touched.details?.[index]?.loan_typeId && (
                                     <div className="text-danger">
-                                      {errors.details[index].loan_typeId}
+                                      {errors.details[index]?.loan_typeId}
                                     </div>
                                   )}
                               </td>

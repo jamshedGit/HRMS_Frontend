@@ -107,7 +107,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         Id: user.Id,
         subsidiaryId: user.subsidiaryId,
         accountId: user.accountId,
-        human_resource_role: user.human_resource_role,
+        // human_resource_role: user.human_resource_role,
         emp_loan_account: user.emp_loan_account,
         installment_deduction_percentage: user.installment_deduction_percentage,
         installment_deduction_basis_type: user.installment_deduction_basis_type,

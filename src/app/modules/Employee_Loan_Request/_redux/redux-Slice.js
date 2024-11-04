@@ -1,6 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialSalarypolicyState = {
+
+
+
+const initialEmployeeLoanRequestState = {
     listLoading: false,
     actionsLoading: null,
     totalCount: 0,
@@ -10,7 +13,7 @@ const initialSalarypolicyState = {
     userForEdit: undefined,
     lastError: null,
     userForRead: false,
-    loan_type:null,
+    reimbursement_config_policies_permission:null
 };
 
 
@@ -19,9 +22,9 @@ export const callTypes = {
     action: "action",
 };
 
-export const loan_manag_confSlice = createSlice({
-    name: "loan_manag_confSlice",
-    initialState: initialSalarypolicyState,
+export const employee_loan_requestSlice = createSlice({
+    name: "employee_loan_requestSlice",
+    initialState: initialEmployeeLoanRequestState,
     reducers: {
         catchError: (state, action) => {
             state.error = `${action.type}: ${action.payload.error}`;
@@ -31,6 +34,11 @@ export const loan_manag_confSlice = createSlice({
                 state.actionsLoading = false;
             }
         },
+
+        clearUserForEdit : (state) => {
+        
+            state.userForEdit = null;
+        },
         startCall: (state, action) => {
             state.error = null;
             if (action.payload.callType === callTypes.list) {
@@ -39,13 +47,13 @@ export const loan_manag_confSlice = createSlice({
                 state.actionsLoading = true;
             }
         },
-        salarypolicyFetched: (state, action) => {
-       
-        
+        reimbursementClaimFetched: (state, action) => {
+           
+   
             const entities = action.payload.data?.data.rows;
-        
+
             const totalResult = action.payload.data?.data.totalResults;
-          
+           
             state.listLoading = false;
             state.error = null;
             state.entities = entities;
@@ -53,16 +61,16 @@ export const loan_manag_confSlice = createSlice({
         },
 
          //get User By ID
-         SalarypolicyFetchedForEdit: (state, action) => {
+         ReimbursementClaimFetchedForEdit: (state, action) => {
+          
      
-       
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
         },
 
       
-        SalarypolicyDeleted: (state, action) => {
+        ReimbursementClaimDeleted: (state, action) => {
 
             state.error = null;
             state.actionsLoading = false;
@@ -72,36 +80,37 @@ export const loan_manag_confSlice = createSlice({
                 (el) => el.Id !== action.payload.Id
             );
         },
-        salarypolicyCreated: (state, action) => {
+        reimbursementClaimCreated: (state, action) => {
            
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);
         },
-        salarypolicyUpdated: (state, action) => {
+        reimbursementClaimUpdated: (state, action) => {
             state.error = null;
             state.actionsLoading = false;
             // state.entities.push(action.payload)
           
             state.entities = state.entities.map((entity) => {
-                
+               
                 //const payload = { ...action.payload };
                 let payload = JSON.stringify(action.payload)
                 let payloadObj = JSON.parse(payload);
-                let finalObj = JSON.parse(payloadObj.updatedSalarypolicy);
+                let finalObj = JSON.parse(payloadObj.updatedReimbursementClaim);
                 if (entity.Id === finalObj.Id) {
-                    return finalObj; //action.payload.updatedSalarypolicy;
+                    return finalObj; 
                 }
+               
                 return entity;
             });
            
         },
 
-        getLoanType: (state, action) => {
+        getReimbursementConfigPolicies: (state, action) => {
            
             state.actionsLoading = false;
             state.error = null;
-            state.loan_type=action.payload;
+            state.reimbursement_config_policies_permission=action.payload;
 
 
             
