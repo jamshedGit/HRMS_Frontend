@@ -28,16 +28,6 @@ const ReimbursementSchema = Yup.object().shape({
   details: Yup.string().required("Required"),
   date: Yup.date().required("Required"),
   amount: Yup.number().required("Required"),
-
-  // file: Yup.mixed()
-  //   .required("Required")
-  //   .test(
-  //     "fileSize",
-  //     "File is too large (max 5MB)",
-  //     (value) => !value || (value && value.size <= 5 * 1024 * 1024) // 5 MB limit
-  //   )
-  //   .required("Required"),
-  pay_in_payroll_forId: Yup.number().required("Required"),
 });
 
 export function FormEditForm({
@@ -63,6 +53,7 @@ export function FormEditForm({
       dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsidiaries
       dispatch(fetchAllFormsMenu(202, "allReimbursementTypeList"));
       dispatch(fetchAllPayrollMonthYearList("allPayrollMonthYearList"));
+      dispatch(actions.getAllLoanType());
     }
     //allPayrolGroupList
   }, [dispatch, user.Id]);
@@ -73,6 +64,10 @@ export function FormEditForm({
       userAccess: state?.auth?.userAccess["employee_loan_request"],
     };
   }, shallowEqual);
+
+
+
+  const { loan_type } = currentState;
 
   const filteredOptions = dashboard?.allReimbursementTypeList.filter((option) =>
     currentState?.reimbursement_config_policies_permission?.policies?.some(
@@ -117,7 +112,9 @@ export function FormEditForm({
             <Form className="form form-label-right" onSubmit={handleSubmit}>
               <fieldset disabled={isUserForRead}>
                 <div className="form-group row">
-                  <div className="col-12 col-md-6 mt-3">
+                <div className="col-12 col-md-12  p-0 m-0">
+                  <div className="col-12 col-md-6 ">
+                    
                     <SearchSelect
                       name="reimbursement_typeId"
                       label={
@@ -139,7 +136,7 @@ export function FormEditForm({
                         );
                       }}
                       value={
-                        dashboard.allReimbursementTypeList.find(
+                        loan_type.find(
                           (option) =>
                             option.value === values.reimbursement_typeId
                         ) || null
@@ -149,13 +146,13 @@ export function FormEditForm({
                       touched={touched.reimbursement_typeId}
                     />
                   </div>
-
+                  </div>
                   <div className="col-12 col-md-6 mt-3">
                     <label>
-                      Date <span style={{ color: "red" }}>*</span>
+                    Applied Date <span style={{ color: "red" }}>*</span>
                     </label>
                     <Field
-                      name="date"
+                      name="applied_date"
                       component={DatePickerField}
                       dateFormat="dd/MM/yyyy"
                       placeholder="Select Date"
@@ -164,16 +161,29 @@ export function FormEditForm({
                     />
                   </div>
 
-               
+                  <div className="col-12 col-md-6 mt-3">
+                    <label>
+                    Installment Start Date <span style={{ color: "red" }}>*</span>
+                    </label>
+                    <Field
+                      name="installment_start_date"
+                      component={DatePickerField}
+                      dateFormat="dd/MM/yyyy"
+                      placeholder="Select Date"
+                      // label="Date"
+                      type="date"
+                    />
+                  </div>
+
 
                   <div className="col-12 col-md-6 mt-3">
                     <Field
-                      name="amount"
+                      name="total_loan_amount"
                       component={Input}
-                      placeholder="Enter Amount"
+                      placeholder="Enter monthly installment"
                       label={
                         <span>
-                          Amount Limit: $
+                          Total Loan Amount: $
                           {currentState?.reimbursement_config_policies_permission?.policies?.find(
                             (item) =>
                               item.reimbursement_typeId ===
@@ -201,106 +211,102 @@ export function FormEditForm({
                     />
                   </div>
 
-                  <div className="col-12 col-md-6 mt-3">
-                    <SearchSelect
-                      name="pay_in_payroll_forId"
-                      label={
-                        <span>
-                          Pay In Payroll For
-                          <span style={{ color: "red" }}>*</span>
-                        </span>
-                      }
-                      onChange={(e) => {
-                        setFieldValue("pay_in_payroll_forId", e.value || null);
-                      }}
-                      value={
-                        dashboard?.allPayrollMonthYearList.find(
-                          (option) =>
-                            option.value === values.pay_in_payroll_forId
-                        ) || null
-                      }
-                      options={dashboard.allPayrollMonthYearList}
-                      error={errors.pay_in_payroll_forId}
-                      touched={touched.pay_in_payroll_forId}
-                    />
-                  </div>
 
                   <div className="col-12 col-md-6 mt-3">
                     <Field
-                      name="details"
-                      component={TextArea}
-                      placeholder="Enter Details"
+                      name="total_installment"
+                      component={Input}
+                      placeholder="Enter total installment"
                       label={
                         <span>
-                          Details <span style={{ color: "red" }}>*</span>
+                          Total Installment Limit: $
+                          {currentState?.reimbursement_config_policies_permission?.policies?.find(
+                            (item) =>
+                              item.reimbursement_typeId ===
+                              values.reimbursement_typeId
+                          )?.max_amount || 0}{" "}
+                          <span style={{ color: "red" }}>*</span>
+                        </span>
+                      }
+                      type="number"
+                      onChange={(e) => {
+                        const maxAmount = currentState?.reimbursement_config_policies_permission?.policies?.find(
+                          (item) =>
+                            item.reimbursement_typeId ===
+                            values.reimbursement_typeId
+                        )?.max_amount;
+
+                        const value = Number(e.target.value);
+
+                        if (maxAmount !== undefined && value > maxAmount) {
+                          return; // Prevent setting value above max
+                        }
+
+                        setFieldValue("amount", value);
+                      }}
+                    />
+                  </div>
+
+
+               
+
+             
+
+                  <div className="col-12 col-md-6 mt-3">
+                    <Field
+                      name="monthly_installment"
+                      component={Input}
+                      placeholder="Enter monthly installment"
+                      label={
+                        <span>
+                          Monthly Installment Limit: $
+                          {currentState?.reimbursement_config_policies_permission?.policies?.find(
+                            (item) =>
+                              item.reimbursement_typeId ===
+                              values.reimbursement_typeId
+                          )?.max_amount || 0}{" "}
+                          <span style={{ color: "red" }}>*</span>
+                        </span>
+                      }
+                      type="number"
+                      onChange={(e) => {
+                        const maxAmount = currentState?.reimbursement_config_policies_permission?.policies?.find(
+                          (item) =>
+                            item.reimbursement_typeId ===
+                            values.reimbursement_typeId
+                        )?.max_amount;
+
+                        const value = Number(e.target.value);
+
+                        if (maxAmount !== undefined && value > maxAmount) {
+                          return; // Prevent setting value above max
+                        }
+
+                        setFieldValue("amount", value);
+                      }}
+                    />
+                  </div>
+
+                  
+                
+                
+
+                  <div className="col-12 col-md-6 mt-3">
+                    <Field
+                      name="reason"
+                      component={TextArea}
+                      placeholder="Enter eason"
+                      label={
+                        <span>
+                          Reason <span style={{ color: "red" }}>*</span>
                         </span>
                       }
                       type="text"
                     />
                   </div>
 
-                  {/* <div className="col-12 col-md-6 mt-3">
-                    <SearchSelect
-                      name="pay_slip_refId"
-                      label={
-                        <span>
-                          Pay Slip REFID <span style={{ color: "red" }}>*</span>
-                        </span>
-                      }
-                      disabled={isEdit}
-                      // onChange={(e) =>
-                      //   setFieldValue("pay_slip_refId", e.value || null)
-                      // } // This won't be called since it's disabled
-                      // value={
-                      //   dashboard.allPaySlipList.find(
-                      //     (option) => option.value === values.pay_slip_refId
-                      //   ) || null
-                      // }
-                      // options={dashboard.allPaySlipList}
-                      // error={errors.pay_slip_refId}
-                      // touched={touched.pay_slip_refId}
-                    />
-                  </div> */}
+                  
 
-                  <div className="col-12 col-md-12 mt-3 d-flex flex-column ">
-                    <label
-                      style={{
-                        "margin-right": "0.5rem",
-                      }}
-                    >
-                      {" "}
-                      Attachment:{" "}
-                 
-                      {isFileReq && <span style={{ color: "red" }}>*</span>}
-                    </label>
-                    <input
-                      name="file"
-                      type="file"
-                      accept=".jpeg,.jpg,.png,.pdf,.doc,.docx"
-                      ref={inputFile}
-                      onChange={(event) => {
-                        // Update Formik's value
-                        const file = event.currentTarget.files[0];
-                        setFieldValue("file", file);
-                      }}
-                    />
-
-                    <div>
-                      <br />
-                      {user.file && (
-                        <>
-                          <label>
-                            <strong>Existing File:</strong>
-                          </label>
-                          {
-                            <a href={getUploadUrl(user.file)} target="_blank">
-                              <span>{getFileName(user.file)}</span>
-                            </a>
-                          }
-                        </>
-                      )}
-                    </div>
-                  </div>
                 </div>
               </fieldset>
             </Form>

@@ -48,3 +48,11 @@ export function getAllReimbursementConfigPolicy(body) {
 
   
 }
+
+export function getAllLoanType() {
+
+
+  return axios.get(`${USERS_URL}/loan_management_configuration/get-all-loan-type`);
+
+  
+}

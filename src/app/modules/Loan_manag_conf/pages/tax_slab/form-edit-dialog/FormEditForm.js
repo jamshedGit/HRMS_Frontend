@@ -81,6 +81,7 @@ export function FormEditForm({
 
   let existedId = 0;
   const check_Existed_Data = (subsidiaryId) => {
+    console.log("existedId",entities)
     entities.forEach((i) => {
       if (i.subsidiaryId == subsidiaryId) {
         existedId = i.Id;

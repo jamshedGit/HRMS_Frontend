@@ -209,3 +209,44 @@ export const updateReimbursementClaim = (user, disbaleLoading, onHide) => (dispa
       });
     });
 };
+
+export const getAllLoanType = () => (
+
+  dispatch
+) => {
+
+  return requestFromServer
+    .getAllLoanType()
+    .then((res) => {
+      // dispatch(actions.startCall({ callType: callTypes.action }));
+      const user = res.data?.data;
+
+
+      dispatch(actions.getLoanType(user));
+
+      // toast.success("Successfully", {
+      //   position: "top-right",
+      //   autoClose: 5000,
+      //   hideProgressBar: false,
+      //   closeOnClick: true,
+      //   pauseOnHover: true,
+      //   draggable: true,
+      //   progress: undefined,
+      // });
+  
+    })
+    .catch((error) => {
+      error.clientMessage = "Can't create user";
+      dispatch(actions.catchError({ error, callType: callTypes.action }));
+
+      toast.error(error?.response?.data?.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    });
+};

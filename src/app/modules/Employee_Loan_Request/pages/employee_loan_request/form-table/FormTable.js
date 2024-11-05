@@ -68,11 +68,11 @@ export function FormTable() {
   }, [formUIProps.queryParams, dispatch, totalCount,formUIProps.employeeId]);
  
   const isAccessForEdit = userAccess?.find(
-    (item) => item.componentName === "UpdateReimbursementClaim"
+    (item) => item.componentName === "UpdateEmployeeLoanRequest"
   );
  
   const isAccessForDelete = userAccess?.find(
-    (item) => item.componentName === "DeleteReimbursementClaim"
+    (item) => item.componentName === "DeleteEmployeeLoanRequest"
   );
   // Table columns
   const columns = [

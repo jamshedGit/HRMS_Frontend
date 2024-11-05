@@ -32,14 +32,15 @@ export function FormUIProvider({ FormUIEvents, children }) {
 
   const initUser={
     Id: "",
-    reimbursement_typeId: "",
-    employeeId:employeeId,
-    details: "",
-    date:"",
-    amount:"",
-    file:"",
-    pay_in_payroll_forId:"", 
-    // pay_slip_refId: "", 
+    loan_typeId: "",
+    monthly_installment:"",
+    applied_date: "",
+    installment_start_date:"",
+    total_loan_amount:"",
+    total_installment:"",
+    reason:"", 
+
+
 
 
   }
