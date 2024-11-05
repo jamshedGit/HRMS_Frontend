@@ -46,13 +46,13 @@ export function FormCard() {
   )
  
   const accessUser = userAccess.find(
-    (item) => item.componentName === "CreateReimbursementClaim"
+    (item) => item.componentName === "CreateEmployeeLoanRequest"
   )
 
   const { currentState } = useSelector(
     (state) => {  return {
       
-      currentState: state.reimbursement_claim,
+      currentState: state.employee_loan_request,
       userAccess: state?.auth?.userAccess["employee_loan_request"],
     }},
     shallowEqual

@@ -60,7 +60,7 @@ export function FormEditForm({
 
   const { currentState, userAccess } = useSelector((state) => {
     return {
-      currentState: state.reimbursement_claim,
+      currentState: state.employee_loan_request,
       userAccess: state?.auth?.userAccess["employee_loan_request"],
     };
   }, shallowEqual);
@@ -68,12 +68,12 @@ export function FormEditForm({
 
 
   const { loan_type } = currentState;
-
-  const filteredOptions = dashboard?.allReimbursementTypeList.filter((option) =>
-    currentState?.reimbursement_config_policies_permission?.policies?.some(
-      (item) => item.reimbursement_typeId === option.value
-    )
-  );
+console.log("loan_type",loan_type)
+  // const filteredOptions = loan_type?.filter((option) =>
+  //   currentState?.reimbursement_config_policies_permission?.policies?.some(
+  //     (item) => item.reimbursement_typeId === option.value
+  //   )
+  // );
 
   return (
     <Formik
@@ -116,7 +116,7 @@ export function FormEditForm({
                   <div className="col-12 col-md-6 ">
                     
                     <SearchSelect
-                      name="reimbursement_typeId"
+                      name="loan_typeId"
                       label={
                         <span>
                           Loan Type
@@ -126,24 +126,24 @@ export function FormEditForm({
                       isDisabled={isEdit}
                  
                       onChange={(e) => {
-                        setFieldValue("reimbursement_typeId", e.value || null);
+                        setFieldValue("loan_typeId", e.value || null);
 
-                        const policy = currentState?.reimbursement_config_policies_permission?.policies?.find(
-                          (item) => item.reimbursement_typeId == e.value
-                        );
-                        setIsFileReq(
-                          policy?.attachment_required && !values.file
-                        );
+                        // const policy = currentState?.reimbursement_config_policies_permission?.policies?.find(
+                        //   (item) => item.reimbursement_typeId == e.value
+                        // );
+                        // setIsFileReq(
+                        //   policy?.attachment_required && !values.file
+                        // );
                       }}
                       value={
-                        loan_type.find(
+                        loan_type?.find(
                           (option) =>
-                            option.value === values.reimbursement_typeId
+                            option.value === values.loan_typeId
                         ) || null
                       }
-                      options={filteredOptions}
-                      error={errors.reimbursement_typeId}
-                      touched={touched.reimbursement_typeId}
+                      options={loan_type}
+                      error={errors.loan_typeId}
+                      touched={touched.loan_typeId}
                     />
                   </div>
                   </div>

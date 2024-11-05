@@ -46,7 +46,7 @@ export function FormTable() {
     (state) => {  return {
      
       
-      currentState: state.reimbursement_claim,
+      currentState: state.employee_loan_request,
       userAccess: state?.auth?.userAccess["employee_loan_request"],
     }},
     shallowEqual
@@ -78,8 +78,8 @@ export function FormTable() {
   const columns = [
 
     {
-      dataField: "ReimbursementType.formName",
-      text: "Reimbursement Type",
+      dataField: "loan_typeId",
+      text: "Loan Type",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -87,27 +87,65 @@ export function FormTable() {
         minWidth: "160px",
       },
     },
+
+     
  
+{
+  dataField: "total_loan_amount",
+  text: "total loan amount",
+  sort: false,
+  sortCaret: sortCaret,
+  headerSortingClasses,
+  style: {
+    minWidth: "10px",
+  },
  
+},
+
  
-// {
-//   dataField: "Employee.firstName",
-//   text: "Employee",
-//   sort: false,
-//   sortCaret: sortCaret,
-//   headerSortingClasses,
-//   style: {
-//     minWidth: "10px",
-//   },
+{
+  dataField: "total_loan_amount",
+  text: "total loan amount",
+  sort: false,
+  sortCaret: sortCaret,
+  headerSortingClasses,
+  style: {
+    minWidth: "10px",
+  },
  
-// },
+},
+ 
+{
+  dataField: "total_installment",
+  text: "total installment",
+  sort: false,
+  sortCaret: sortCaret,
+  headerSortingClasses,
+  style: {
+    minWidth: "10px",
+  },
+ 
+},
+
+ 
+{
+  dataField: "monthly_installment",
+  text: "monthly installment",
+  sort: false,
+  sortCaret: sortCaret,
+  headerSortingClasses,
+  style: {
+    minWidth: "10px",
+  },
+ 
+},
  
  
 
  
     {
-      dataField: "date",
-      text: "date",
+      dataField: "applied_date",
+      text: "applied date",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -120,16 +158,7 @@ export function FormTable() {
       },
     },
 
-    {
-      dataField: "amount",
-      text: "amount",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "10px",
-      },
-    },
+
  
  
        {

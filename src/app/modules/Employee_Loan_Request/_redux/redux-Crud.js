@@ -11,7 +11,7 @@ export function uploadImage(body) {
 export function createReimbursementClaim(body) {
  
 
-  return axios.post(`${USERS_URL}/reimbursement_claim/create-reimbursement-claim`, body);
+  return axios.post(`${USERS_URL}/reimbursement_claim/create-employee-loan-request`, body);
 
   
 }
@@ -21,30 +21,30 @@ export function createReimbursementClaim(body) {
 export function getAllReimbursementClaim(body) {
 
 
-  return axios.post(`${USERS_URL}/reimbursement_claim/read-all-reimbursement-claim`, body);
+  return axios.post(`${USERS_URL}/employee_loan_request/read-all-employee-loan-request`, body);
 }
 
 export function getReimbursementClaimById(id) {
 
-  return axios.post(`${USERS_URL}/reimbursement_claim/read-reimbursement-claim`, id);
+  return axios.post(`${USERS_URL}/employee_loan_request/read-employee-loan-request`, id);
 }
 
 //Update
 export function updateReimbursementClaim(reimbursementClaim) {
    
-  return axios.put(`${USERS_URL}/reimbursement_claim/update-reimbursement-claim`, reimbursementClaim);
+  return axios.put(`${USERS_URL}/employee_loan_request/update-employee-loan-request`, reimbursementClaim);
 }
 
 //Delete
 export function deleteReimbursementClaim(body) {
 
-  return axios.patch(`${USERS_URL}/reimbursement_claim/delete-reimbursement-claim`, body);
+  return axios.patch(`${USERS_URL}/employee_loan_request/delete-employee-loan-request`, body);
 }
 
 export function getAllReimbursementConfigPolicy(body) {
  
 
-  return axios.post(`${USERS_URL}/reimbursement_claim/read-reimbursement-configuration-policies`, body);
+  return axios.post(`${USERS_URL}/employee_loan_request/read-reimbursement-configuration-policies`, body);
 
   
 }
