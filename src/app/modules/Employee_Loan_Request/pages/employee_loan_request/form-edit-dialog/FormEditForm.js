@@ -57,7 +57,11 @@ export function FormEditForm({
     }
     //allPayrolGroupList
   }, [dispatch, user.Id]);
-
+  const [changeLoanType, setChangeLoanTpye] = useState();
+  const [maxAmountLimit, setMaxAmountLimit] = useState();
+  const [monthlyInstallment, setMonthlyInstallments] = useState();
+  const [totalInstallments, setTotalInstallments] = useState();
+  const [totalLoanAmount, setTotalLoanAmount] = useState();
   const { currentState, userAccess } = useSelector((state) => {
     return {
       currentState: state.employee_loan_request,
@@ -68,8 +72,32 @@ export function FormEditForm({
   const { loan_type } = currentState;
   console.log(
     "currentState?.loan_config_details_permission?.loanDetails?.details",
-    currentState?.loan_config_details_permission?.loanDetails?.details
+    currentState?.loan_config_details_permission
   );
+
+  useEffect(() => {
+    let loandetails = currentState?.loan_config_details_permission?.loanDetails?.details?.find(
+      (item) => item.loan_typeId === changeLoanType
+    );
+    let employee = currentState?.loan_config_details_permission?.employee;
+    let salary = currentState?.loan_config_details_permission?.salary;
+
+    let salaryAmount =
+      loandetails?.basis == 0
+        ? salary?.gross * loandetails?.salary_count
+        : salary?.basic * loandetails?.salary_count;
+
+    setMaxAmountLimit(Math.min(loandetails?.max_loan_amount, salaryAmount));
+  }, [changeLoanType]);
+
+  useEffect(() => {
+    if (totalLoanAmount && monthlyInstallment) {
+      const calculatedMonths = Math.ceil(totalLoanAmount / monthlyInstallment);
+      setTotalInstallments(calculatedMonths);
+      // setFieldValue('total_installment', calculatedMonths);
+    }
+  }, [totalLoanAmount, monthlyInstallment]);
+
   const filteredOptions = loan_type?.filter((option) =>
     currentState?.loan_config_details_permission?.loanDetails?.details?.some(
       (item) => item.loan_typeId === option.value
@@ -92,7 +120,7 @@ export function FormEditForm({
             inputFile.current.value = "";
           }
         };
-        saveForm(values, isFileReq, clearForm);
+        saveForm(values,totalInstallments,setTotalInstallments, clearForm);
       }}
     >
       {({
@@ -103,6 +131,9 @@ export function FormEditForm({
         setFieldValue,
         handleReset,
       }) => (
+
+
+        
         <>
           <Modal.Body className="overlay overlay-block cursor-default">
             {actionsLoading && (
@@ -126,7 +157,7 @@ export function FormEditForm({
                         isDisabled={isEdit}
                         onChange={(e) => {
                           setFieldValue("loan_typeId", e.value || null);
-
+                          setChangeLoanTpye(e.value);
                           // const policy = currentState?.reimbursement_config_policies_permission?.policies?.find(
                           //   (item) => item.reimbursement_typeId == e.value
                           // );
@@ -178,159 +209,90 @@ export function FormEditForm({
                     <Field
                       name="total_loan_amount"
                       component={Input}
-                      placeholder="Enter monthly installment"
+                      placeholder="Enter total loan amount"
                       label={
                         <span>
-                          <span>
-                            Your Loan Amount: $
-                            {currentState?.loan_config_details_permission
+                          Amount Limit: $
+                          {/* {currentState?.loan_config_details_permission
                               ?.salary?.gross *
                               currentState?.loan_config_details_permission?.loanDetails?.details?.find(
                                 (item) =>
                                   item.loan_typeId === values.loan_typeId
-                              )?.salary_count || 0}{" "}
-                           
-                          </span>
-                          <span>
-                            Total Loan Amount: $
-                            {currentState?.loan_config_details_permission?.loanDetails?.details?.find(
-                          (item) => item.loan_typeId === values.loan_typeId
-                        )?.max_loan_amount   || 0}{" "}
-                        <span style={{ color: "red" }}>*</span>
-                          </span>
+                              )?.salary_count || 0}{" "} */}
+                          {maxAmountLimit}
+                          <span style={{ color: "red" }}>*</span>
                         </span>
                       }
                       type="number"
                       onChange={(e) => {
-                        const maxAmount = currentState?.loan_config_details_permission?.loanDetails?.details?.find(
-                          (item) => item.loan_typeId === values.loan_typeId
-                        )?.max_loan_amount;
-
                         const value = Number(e.target.value);
 
-                        if (maxAmount !== undefined && value > maxAmount) {
+                        if (
+                          maxAmountLimit !== undefined &&
+                          value > maxAmountLimit
+                        ) {
                           return; // Prevent setting value above max
                         }
 
                         setFieldValue("total_loan_amount", value);
+                        setTotalLoanAmount(value)
                       }}
                     />
                   </div>
 
-                  {/* <div className="col-12 col-md-6 mt-3">
-                    <Field
-                      name="total_installment"
-                      component={Input}
-                      placeholder="Enter total installment"
-                      label={
-                        <span>
-                          Total Installment Limit: $
-                          {currentState?.reimbursement_config_policies_permission?.policies?.find(
-                            (item) =>
-                              item.reimbursement_typeId ===
-                              values.reimbursement_typeId
-                          )?.max_amount || 0}{" "}
-                          <span style={{ color: "red" }}>*</span>
-                        </span>
-                      }
-                      type="number"
-                      onChange={(e) => {
-                        const maxAmount = currentState?.reimbursement_config_policies_permission?.policies?.find(
-                          (item) =>
-                            item.reimbursement_typeId ===
-                            values.reimbursement_typeId
-                        )?.max_amount;
+                  
 
-                        const value = Number(e.target.value);
-
-                        if (maxAmount !== undefined && value > maxAmount) {
-                          return; // Prevent setting value above max
-                        }
-
-                        setFieldValue("total_installment", value);
-                      }}
-                    />
-                  </div> */}
-
-                  {/* <div className="col-12 col-md-6 mt-3">
+                  <div className="col-12 col-md-6 mt-3">
                     <Field
                       name="monthly_installment"
                       component={Input}
                       placeholder="Enter monthly installment"
                       label={
                         <span>
-                          Monthly Installment Limit: $
-                          {currentState?.reimbursement_config_policies_permission?.policies?.find(
-                            (item) =>
-                              item.reimbursement_typeId ===
-                              values.reimbursement_typeId
-                          )?.max_amount || 0}{" "}
+                          Monthly Installment
                           <span style={{ color: "red" }}>*</span>
                         </span>
                       }
                       type="number"
                       onChange={(e) => {
-                        const maxAmount = currentState?.reimbursement_config_policies_permission?.policies?.find(
-                          (item) =>
-                            item.reimbursement_typeId ===
-                            values.reimbursement_typeId
-                        )?.max_amount;
-
                         const value = Number(e.target.value);
 
-                        if (maxAmount !== undefined && value > maxAmount) {
+                        if (
+                          maxAmountLimit !== undefined &&
+                          value > maxAmountLimit
+                        ) {
                           return; // Prevent setting value above max
                         }
 
                         setFieldValue("monthly_installment", value);
+                        setMonthlyInstallments(value)
+
+                      
+
+
+                        
                       }}
-                    />
-                  </div> */}
-
-                  {/* <div className="col-12 col-md-6 mt-3">
-                    <Field
-                      name="total_loan_amount"
-                      component={Input}
-                      placeholder="Enter monthly installment"
-                      label={
-                        <span>
-                         total_loan_amount
-                         
-                          <span style={{ color: "red" }}>*</span>
-                        </span>
-                      }
-                      type="number"
-                    
-                    />
-                  </div> */}
-
-                  <div className="col-12 col-md-6 mt-3">
-                    <Field
-                      name="total_installment"
-                      component={Input}
-                      placeholder="Enter monthly installment"
-                      label={
-                        <span>
-                          total installment
-                          <span style={{ color: "red" }}>*</span>
-                        </span>
-                      }
-                      type="number"
                     />
                   </div>
 
                   <div className="col-12 col-md-6 mt-3">
                     <Field
-                      name="monthly_installment"
+                      name="total_installment"
                       component={Input}
-                      placeholder="Enter monthly installment"
+                      placeholder="Total installments"
                       label={
                         <span>
-                          Monthly Installment Limit: $
+                          Total installments
                           <span style={{ color: "red" }}>*</span>
                         </span>
                       }
                       type="number"
+                      value={totalInstallments}
+
+          
+
+              
+                      disabled={true}
                     />
                   </div>
 
@@ -359,6 +321,7 @@ export function FormEditForm({
                 type="reset"
                 onClick={() => {
                   setIds("");
+                  setTotalInstallments("")
                   handleReset();
 
                   if (inputFile?.current) {
@@ -386,9 +349,11 @@ export function FormEditForm({
                 // onClick={() => handleSubmit()}
                 onClick={() => {
                   handleSubmit();
+                 
                 }}
                 className="btn btn-primary btn-elevate"
                 disabled={loading}
+
               >
                 Save
                 {loading && (

@@ -88,19 +88,7 @@ export function FormTable() {
       },
     },
 
-     
- 
-{
-  dataField: "total_loan_amount",
-  text: "total loan amount",
-  sort: false,
-  sortCaret: sortCaret,
-  headerSortingClasses,
-  style: {
-    minWidth: "10px",
-  },
- 
-},
+    
 
  
 {
@@ -115,17 +103,7 @@ export function FormTable() {
  
 },
  
-{
-  dataField: "total_installment",
-  text: "total installment",
-  sort: false,
-  sortCaret: sortCaret,
-  headerSortingClasses,
-  style: {
-    minWidth: "10px",
-  },
- 
-},
+
 
  
 {
@@ -139,7 +117,17 @@ export function FormTable() {
   },
  
 },
+{
+  dataField: "total_installment",
+  text: "total installments",
+  sort: false,
+  sortCaret: sortCaret,
+  headerSortingClasses,
+  style: {
+    minWidth: "10px",
+  },
  
+},
  
 
  

@@ -68,32 +68,19 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     // dispatch(actions.fetchmoduledata(formUIProps .queryParams))
   }, [id, dispatch, show]);
 
-  const saveForm = async (data, isFileReq, resetForm) => {
+  const saveForm = async (data, totalInstallments,setTotalInstallments ,resetForm) => {
     // enableLoading();
- 
 
-    if (isFileReq && !data.file) {
-      disbaleLoading();
-      toast.error("Attachment is required.", {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
- 
-      return;
-    }
     formUIProps.setIds("");
 
     if (!data.Id && data) {
+      data.total_installment=totalInstallments
       
         await dispatch(
           actions.createReimbursementClaim(data, disbaleLoading, resetForm)
         );
         await dispatch(actions.fetchReimbursementClaim(formUIProps));
+        setTotalInstallments("")
     
     } else {
      
@@ -105,9 +92,9 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         applied_date:data.applied_date,
         installment_start_date:data.installment_start_date,
         total_loan_amount:data.total_loan_amount,
-        total_installment:data.total_installment,
+        total_installment:totalInstallments,
         reason:data.reason, 
-    
+     
       };
      
         await dispatch(
@@ -118,6 +105,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
           )
         );
         await dispatch(actions.fetchReimbursementClaim(formUIProps));
+        setTotalInstallments("")
       
     }
   };
