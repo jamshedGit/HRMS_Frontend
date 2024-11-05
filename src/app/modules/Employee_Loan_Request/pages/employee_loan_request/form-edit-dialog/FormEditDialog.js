@@ -54,10 +54,10 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   } = useSelector((state) => ({
     actionsLoading: state.users.actionsLoading,
     user: state.users, // change for users to receipt
-    userForEdit: state.reimbursement_claim.userForEdit,
+    userForEdit: state.employee_loan_request.userForEdit,
     roles: state.users.roles,
     userStatusTypes: state.users.userStatusTypes,
-    isuserForRead: state.reimbursement_claim.userForRead,
+    isuserForRead: state.employee_loan_request.userForRead,
   }));
 
 

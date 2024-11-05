@@ -287,7 +287,7 @@ export function FormEditForm({
                         </span>
                       }
                       type="number"
-                      value={totalInstallments}
+                      value={totalInstallments || values?.total_installment}
 
           
 
