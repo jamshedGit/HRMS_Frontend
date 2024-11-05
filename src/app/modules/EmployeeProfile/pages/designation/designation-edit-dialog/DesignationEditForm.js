@@ -90,43 +90,46 @@ const profileValidation = Yup.object().shape(
       .required("Required*"),
 
 
-      passportExpiry: Yup.date()
-      .min(currentDate, 'Passport expiry must be a future date'), 
+    passportExpiry: Yup.date()
+    .nullable()
+      .min(currentDate, 'Passport expiry must be a future date')
+      .typeError('Passport expiry must be a valid date'),
 
-      drivingLicenseExpiry: Yup.date()
-      .min(currentDate, 'Driving license expiry must be a future date'), 
-
+    drivingLicenseExpiry: Yup.date()
+    .nullable()
+      .min(currentDate, 'Driving license expiry must be a future date')
+      .typeError('Driving License Expiry must be a valid date'),
 
     //   drivingLicenseExpiry: Yup.date()
     //   .min(currentDate, 'Driving license expiry must be a future date') // Ensure it's in the future
     //   .required("Required*"),
 
-  //  laborCardNo: Yup.string()
-  //   .matches(/^\d+$/, 'Labor Card No must contain only digits') // Allow only digits
-  //   .required("Required*"),
-  
-  //   emiratesNo: Yup.string()
-  //   .matches(/^\d+$/, 'EmiratesNo must contain only digits') // Allow only digits
-  //   .required("Required*"),
+    //  laborCardNo: Yup.string()
+    //   .matches(/^\d+$/, 'Labor Card No must contain only digits') // Allow only digits
+    //   .required("Required*"),
 
-  //   emiratesId: Yup.string()
-  //   .matches(/^\d+$/, 'Emirates Id must contain only digits') // Allow only digits
-  //   .required("Required*"),
+    //   emiratesNo: Yup.string()
+    //   .matches(/^\d+$/, 'EmiratesNo must contain only digits') // Allow only digits
+    //   .required("Required*"),
 
-  //   routingCode: Yup.string()
-  //   .matches(/^\d+$/, 'Routing Code Id must contain only digits') // Allow only digits
-  //   .required("Required*"),
+    //   emiratesId: Yup.string()
+    //   .matches(/^\d+$/, 'Emirates Id must contain only digits') // Allow only digits
+    //   .required("Required*"),
 
-    
+    //   routingCode: Yup.string()
+    //   .matches(/^\d+$/, 'Routing Code Id must contain only digits') // Allow only digits
+    //   .required("Required*"),
 
-  // Other fields...
+
+
+    // Other fields...
 
     lastReviewDate: Yup.date()
       .max(currentDate, 'Last review date cannot be in the future')
-      .required("Required*")
+      // .required("Required*")
       .nullable(),
 
-      nextReviewDate: Yup.date()
+    nextReviewDate: Yup.date()
       .min(currentDate, 'Next review date must be in the future') // Ensure it's in the future
       .nullable()
       .when('lastReviewDate', (lastReviewDate, schema) => {
@@ -469,9 +472,9 @@ export function DesignationEditForm({
   }, [user?.cycleType, dashboard.cycleType]);
 
   useEffect(() => {
-    
+
     const contractType = defcontractType?.value ? defcontractType.value : user.contractType;
-    console.log("::tet",dashboard.allContractTypeList,contractType)
+    console.log("::tet", dashboard.allContractTypeList, contractType)
     setcontractType(
       dashboard.allContractTypeList &&
       dashboard.allContractTypeList.filter((item) => {
@@ -2182,7 +2185,7 @@ export function DesignationEditForm({
                       <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="emiratesNo"
-                            maxLength="20"
+                          maxLength="20"
                           component={Input}
                           placeholder="Enter "
                           label={<span> Emirates Id Number</span>}
@@ -2219,7 +2222,7 @@ export function DesignationEditForm({
                         {/* <ErrorMessage style={{color:"red"}} name="nic_no" component="div" /> */}
                       </div>
                       <div className="col-12 col-md-4 mt-3">
-                      <SearchSelect
+                        <SearchSelect
                           name="contractType"
                           label={<span> Contract Type</span>}
                           isDisabled={isUserForRead && true}
@@ -2227,10 +2230,10 @@ export function DesignationEditForm({
                             // handleBlur({ target: { name: "countryId" } });
                           }}
                           onChange={(e) => {
-                           
+
                             setFieldValue("contractType", e.value || null);
                             setcontractType(e);
-                           
+
                             // dispatch(fetchAllFormsMenu(e.value));
                           }}
                           value={(defcontractType || values.contractType)}
@@ -2241,7 +2244,7 @@ export function DesignationEditForm({
                       </div>
 
                       <div className="col-12 col-md-4 mt-3">
-                      <SearchSelect
+                        <SearchSelect
                           name="cycleType"
                           label={<span> Cycle Type</span>}
                           isDisabled={isUserForRead && true}
