@@ -24,10 +24,10 @@ import {
 } from "../../../../../../_metronic/redux/dashboardActions";
 
 const ReimbursementSchema = Yup.object().shape({
-  reimbursement_typeId: Yup.number().required("Required"),
-  details: Yup.string().required("Required"),
-  date: Yup.date().required("Required"),
-  amount: Yup.number().required("Required"),
+  // reimbursement_typeId: Yup.number().required("Required"),
+  // details: Yup.string().required("Required"),
+  // date: Yup.date().required("Required"),
+  // amount: Yup.number().required("Required"),
 });
 
 export function FormEditForm({
@@ -65,15 +65,16 @@ export function FormEditForm({
     };
   }, shallowEqual);
 
-
-
   const { loan_type } = currentState;
-console.log("loan_type",loan_type)
-  // const filteredOptions = loan_type?.filter((option) =>
-  //   currentState?.reimbursement_config_policies_permission?.policies?.some(
-  //     (item) => item.reimbursement_typeId === option.value
-  //   )
-  // );
+  console.log(
+    "currentState?.loan_config_details_permission?.loanDetails?.details",
+    currentState?.loan_config_details_permission?.loanDetails?.details
+  );
+  const filteredOptions = loan_type?.filter((option) =>
+    currentState?.loan_config_details_permission?.loanDetails?.details?.some(
+      (item) => item.loan_typeId === option.value
+    )
+  );
 
   return (
     <Formik
@@ -112,44 +113,41 @@ console.log("loan_type",loan_type)
             <Form className="form form-label-right" onSubmit={handleSubmit}>
               <fieldset disabled={isUserForRead}>
                 <div className="form-group row">
-                <div className="col-12 col-md-12  p-0 m-0">
-                  <div className="col-12 col-md-6 ">
-                    
-                    <SearchSelect
-                      name="loan_typeId"
-                      label={
-                        <span>
-                          Loan Type
-                          <span style={{ color: "red" }}>*</span>
-                        </span>
-                      }
-                      isDisabled={isEdit}
-                 
-                      onChange={(e) => {
-                        setFieldValue("loan_typeId", e.value || null);
+                  <div className="col-12 col-md-12  p-0 m-0">
+                    <div className="col-12 col-md-6 ">
+                      <SearchSelect
+                        name="loan_typeId"
+                        label={
+                          <span>
+                            Loan Type
+                            <span style={{ color: "red" }}>*</span>
+                          </span>
+                        }
+                        isDisabled={isEdit}
+                        onChange={(e) => {
+                          setFieldValue("loan_typeId", e.value || null);
 
-                        // const policy = currentState?.reimbursement_config_policies_permission?.policies?.find(
-                        //   (item) => item.reimbursement_typeId == e.value
-                        // );
-                        // setIsFileReq(
-                        //   policy?.attachment_required && !values.file
-                        // );
-                      }}
-                      value={
-                        loan_type?.find(
-                          (option) =>
-                            option.value === values.loan_typeId
-                        ) || null
-                      }
-                      options={loan_type}
-                      error={errors.loan_typeId}
-                      touched={touched.loan_typeId}
-                    />
-                  </div>
+                          // const policy = currentState?.reimbursement_config_policies_permission?.policies?.find(
+                          //   (item) => item.reimbursement_typeId == e.value
+                          // );
+                          // setIsFileReq(
+                          //   policy?.attachment_required && !values.file
+                          // );
+                        }}
+                        value={
+                          loan_type?.find(
+                            (option) => option.value === values.loan_typeId
+                          ) || null
+                        }
+                        options={filteredOptions}
+                        error={errors.loan_typeId}
+                        touched={touched.loan_typeId}
+                      />
+                    </div>
                   </div>
                   <div className="col-12 col-md-6 mt-3">
                     <label>
-                    Applied Date <span style={{ color: "red" }}>*</span>
+                      Applied Date <span style={{ color: "red" }}>*</span>
                     </label>
                     <Field
                       name="applied_date"
@@ -163,7 +161,8 @@ console.log("loan_type",loan_type)
 
                   <div className="col-12 col-md-6 mt-3">
                     <label>
-                    Installment Start Date <span style={{ color: "red" }}>*</span>
+                      Installment Start Date{" "}
+                      <span style={{ color: "red" }}>*</span>
                     </label>
                     <Field
                       name="installment_start_date"
@@ -175,7 +174,6 @@ console.log("loan_type",loan_type)
                     />
                   </div>
 
-
                   <div className="col-12 col-md-6 mt-3">
                     <Field
                       name="total_loan_amount"
@@ -183,22 +181,30 @@ console.log("loan_type",loan_type)
                       placeholder="Enter monthly installment"
                       label={
                         <span>
-                          Total Loan Amount: $
-                          {currentState?.reimbursement_config_policies_permission?.policies?.find(
-                            (item) =>
-                              item.reimbursement_typeId ===
-                              values.reimbursement_typeId
-                          )?.max_amount || 0}{" "}
-                          <span style={{ color: "red" }}>*</span>
+                          <span>
+                            Your Loan Amount: $
+                            {currentState?.loan_config_details_permission
+                              ?.salary?.gross *
+                              currentState?.loan_config_details_permission?.loanDetails?.details?.find(
+                                (item) =>
+                                  item.loan_typeId === values.loan_typeId
+                              )?.salary_count || 0}{" "}
+                           
+                          </span>
+                          <span>
+                            Total Loan Amount: $
+                            {currentState?.loan_config_details_permission?.loanDetails?.details?.find(
+                          (item) => item.loan_typeId === values.loan_typeId
+                        )?.max_loan_amount   || 0}{" "}
+                        <span style={{ color: "red" }}>*</span>
+                          </span>
                         </span>
                       }
                       type="number"
                       onChange={(e) => {
-                        const maxAmount = currentState?.reimbursement_config_policies_permission?.policies?.find(
-                          (item) =>
-                            item.reimbursement_typeId ===
-                            values.reimbursement_typeId
-                        )?.max_amount;
+                        const maxAmount = currentState?.loan_config_details_permission?.loanDetails?.details?.find(
+                          (item) => item.loan_typeId === values.loan_typeId
+                        )?.max_loan_amount;
 
                         const value = Number(e.target.value);
 
@@ -206,13 +212,12 @@ console.log("loan_type",loan_type)
                           return; // Prevent setting value above max
                         }
 
-                        setFieldValue("amount", value);
+                        setFieldValue("total_loan_amount", value);
                       }}
                     />
                   </div>
 
-
-                  <div className="col-12 col-md-6 mt-3">
+                  {/* <div className="col-12 col-md-6 mt-3">
                     <Field
                       name="total_installment"
                       component={Input}
@@ -242,17 +247,12 @@ console.log("loan_type",loan_type)
                           return; // Prevent setting value above max
                         }
 
-                        setFieldValue("amount", value);
+                        setFieldValue("total_installment", value);
                       }}
                     />
-                  </div>
+                  </div> */}
 
-
-               
-
-             
-
-                  <div className="col-12 col-md-6 mt-3">
+                  {/* <div className="col-12 col-md-6 mt-3">
                     <Field
                       name="monthly_installment"
                       component={Input}
@@ -282,14 +282,57 @@ console.log("loan_type",loan_type)
                           return; // Prevent setting value above max
                         }
 
-                        setFieldValue("amount", value);
+                        setFieldValue("monthly_installment", value);
                       }}
+                    />
+                  </div> */}
+
+                  {/* <div className="col-12 col-md-6 mt-3">
+                    <Field
+                      name="total_loan_amount"
+                      component={Input}
+                      placeholder="Enter monthly installment"
+                      label={
+                        <span>
+                         total_loan_amount
+                         
+                          <span style={{ color: "red" }}>*</span>
+                        </span>
+                      }
+                      type="number"
+                    
+                    />
+                  </div> */}
+
+                  <div className="col-12 col-md-6 mt-3">
+                    <Field
+                      name="total_installment"
+                      component={Input}
+                      placeholder="Enter monthly installment"
+                      label={
+                        <span>
+                          total installment
+                          <span style={{ color: "red" }}>*</span>
+                        </span>
+                      }
+                      type="number"
                     />
                   </div>
 
-                  
-                
-                
+                  <div className="col-12 col-md-6 mt-3">
+                    <Field
+                      name="monthly_installment"
+                      component={Input}
+                      placeholder="Enter monthly installment"
+                      label={
+                        <span>
+                          Monthly Installment Limit: $
+                          <span style={{ color: "red" }}>*</span>
+                        </span>
+                      }
+                      type="number"
+                    />
+                  </div>
 
                   <div className="col-12 col-md-6 mt-3">
                     <Field
@@ -304,9 +347,6 @@ console.log("loan_type",loan_type)
                       type="text"
                     />
                   </div>
-
-                  
-
                 </div>
               </fieldset>
             </Form>
@@ -317,8 +357,6 @@ console.log("loan_type",loan_type)
             {!isUserForRead ? (
               <button
                 type="reset"
-      
-
                 onClick={() => {
                   setIds("");
                   handleReset();

@@ -89,52 +89,26 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     formUIProps.setIds("");
 
     if (!data.Id && data) {
-      if (data.file && typeof data.file == "object") {
-        //This is to check if file is uploaded or not. If uploaded then upload the file to server else just save form values
-
-        actions.uploadImage(data.file).then((res) => {
-          data.file = res.data.filename;
-          dispatch(actions.createReimbursementClaim(data, disbaleLoading, resetForm));
-        });
-      } else {
-     
+      
         await dispatch(
           actions.createReimbursementClaim(data, disbaleLoading, resetForm)
         );
         await dispatch(actions.fetchReimbursementClaim(formUIProps));
-      }
+    
     } else {
      
       const formUpdatedFields = {
         Id: data.Id,
-        reimbursement_typeId: data.reimbursement_typeId,
         employeeId: data.employeeId,
-        details: data.details,
-        date: data.date,
-        amount: data.amount,
-        file: data?.file || "",
-        pay_in_payroll_forId: data.pay_in_payroll_forId || "",
-        // pay_slip_refId: "",
+        loan_typeId:data.loan_typeId,
+        monthly_installment:data.monthly_installment,
+        applied_date:data.applied_date,
+        installment_start_date:data.installment_start_date,
+        total_loan_amount:data.total_loan_amount,
+        total_installment:data.total_installment,
+        reason:data.reason, 
+    
       };
-      if (data.file && typeof data.file == "object") {
-        //This is to check if file is uploaded or not. If uploaded then upload the file to server else just save form values
-   
-
-        actions.uploadImage(data.file).then((res) => {
-          formUpdatedFields.file = res.data.filename;
-          dispatch(
-            actions.updateReimbursementClaim(
-              formUpdatedFields,
-              disbaleLoading,
-              resetForm
-            )
-          ).then(() => {
-            dispatch(actions.fetchReimbursementClaim(formUIProps)); // Fetch the list after update
-          });
-        });
-
-        // trigger()
-      } else {
      
         await dispatch(
           actions.updateReimbursementClaim(
@@ -144,7 +118,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
           )
         );
         await dispatch(actions.fetchReimbursementClaim(formUIProps));
-      }
+      
     }
   };
 

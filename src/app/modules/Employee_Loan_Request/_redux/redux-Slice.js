@@ -13,7 +13,7 @@ const initialEmployeeLoanRequestState = {
     userForEdit: undefined,
     lastError: null,
     userForRead: false,
-    reimbursement_config_policies_permission:null,
+    loan_config_details_permission:null,
     loan_type:null,
 };
 
@@ -107,11 +107,11 @@ export const employee_loan_requestSlice = createSlice({
            
         },
 
-        getReimbursementConfigPolicies: (state, action) => {
+        getLoanConfigDetails: (state, action) => {
            
             state.actionsLoading = false;
             state.error = null;
-            state.reimbursement_config_policies_permission=action.payload;
+            state.loan_config_details_permission=action.payload;
 
 
             

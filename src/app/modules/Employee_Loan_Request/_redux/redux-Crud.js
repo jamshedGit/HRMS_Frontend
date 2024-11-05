@@ -11,7 +11,7 @@ export function uploadImage(body) {
 export function createReimbursementClaim(body) {
  
 
-  return axios.post(`${USERS_URL}/reimbursement_claim/create-employee-loan-request`, body);
+  return axios.post(`${USERS_URL}/employee_loan_request/create-employee-loan-request`, body);
 
   
 }
@@ -41,10 +41,10 @@ export function deleteReimbursementClaim(body) {
   return axios.patch(`${USERS_URL}/employee_loan_request/delete-employee-loan-request`, body);
 }
 
-export function getAllReimbursementConfigPolicy(body) {
+export function getAllLoanConfigDetail(body) {
  
 
-  return axios.post(`${USERS_URL}/employee_loan_request/read-reimbursement-configuration-policies`, body);
+  return axios.post(`${USERS_URL}/employee_loan_request/read-loan-configuration-details`, body);
 
   
 }

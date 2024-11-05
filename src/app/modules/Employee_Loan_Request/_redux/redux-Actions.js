@@ -125,19 +125,19 @@ export const createReimbursementClaim = (reimbursementClaimForCreation, disbaleL
 };
 
 
-export const getAllReimbursementConfigPolicy = (employeeId) => (
+export const getAllLoanConfigDetail = (employeeId) => (
 
   dispatch
 ) => {
 
   return requestFromServer
-    .getAllReimbursementConfigPolicy(employeeId)
+    .getAllLoanConfigDetail(employeeId)
     .then((res) => {
       // dispatch(actions.startCall({ callType: callTypes.action }));
       const user = res.data?.data;
 
 
-      dispatch(actions.getReimbursementConfigPolicies(user));
+      dispatch(actions.getLoanConfigDetails(user));
 
       // toast.success("Successfully", {
       //   position: "top-right",
