@@ -182,7 +182,7 @@ export function MasterEditForm({
                       <Field
                         name="leaveType"
                         component={Select}
-                        disabled={isEdit}
+                        disabled={isEdit || !employeeId}
                         className={errors?.leaveType && touched?.leaveType ? 'form-control is-invalid' : 'form-control'}
                         placeholder=""
                         onBlur={handleBlur}

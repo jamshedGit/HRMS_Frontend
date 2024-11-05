@@ -44,13 +44,12 @@ export function FormCard() {
 
     if (!dashboard.allEmployees || !dashboard.allEmployees.length)
       dispatch(fetchAllActiveEmployees());
-    if (!dashboard?.allLeaveTypes || !dashboard?.allLeaveTypes?.length)
-      dispatch(fetchAllLeaveType("allLeaveTypes"));
   }, [dispatch, formUIProps.employeeId, formUIProps.queryParamsLeaveApp])
 
 
   useEffect(() => {
     dispatch(actions.fetchLeaveBalances(formUIProps.employeeId))
+    dispatch(fetchAllLeaveType("allLeaveTypes", formUIProps.employeeId));
 
   }, [dispatch, formUIProps.employeeId, entities])
 

@@ -16,10 +16,10 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
                 <tr style={{ backgroundColor: "#4d5f7a", color: "#fff" }}>
                   <td>Action</td>
                   <td>Leave Type</td>
-                  <td>Gender</td>
-                  <td>Minimum Experience (Years)</td>
                   <td>Max Allowed</td>
                   <td>Attachment Required</td>
+                  <td>Gender</td>
+                  <td>Minimum Experience (Years)</td>
                   <td>Marital Status</td>
                 </tr>
               </thead>
@@ -60,6 +60,45 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
                       }
                     </td>
                     {/* Leave Type Field Ends */}
+
+                    {/* Max Allowed Field Starts */}
+                    <td>
+                      <Field
+                        name={`leavetypePolicies[${index}].maxAllowed`}
+                        component={Input}
+                        type="number"
+                        min="0"
+                        className={errors.leavetypePolicies?.[index]?.maxAllowed && touched.leavetypePolicies?.[index]?.maxAllowed ? 'form-control is-invalid' : 'form-control'}
+                        onChange={(e) => {
+                          setFieldValue(
+                            `leavetypePolicies[${index}].maxAllowed`,
+                            e.target.value
+                          )
+                        }}
+                        value={row.maxAllowed}
+                      />
+                      {errors.leavetypePolicies?.[index]?.maxAllowed &&
+                        touched.leavetypePolicies?.[index]?.maxAllowed &&
+                        <CustomErrorLabel touched={true} error={errors.leavetypePolicies?.[index]?.maxAllowed} />
+                      }
+                    </td>
+                    {/* Max Allowed Field Ends */}
+
+                    {/* Attachement Required Field Starts */}
+                    <td>
+                      <Field
+                        name={`leavetypePolicies[${index}].attachmentRequired`}
+                        component={Checkbox}
+                        onChange={(e) => {
+                          setFieldValue(
+                            `leavetypePolicies[${index}].attachmentRequired`,
+                            e.target.checked
+                          )
+                        }}
+                        isSelected={row.attachmentRequired}
+                      />
+                    </td>
+                    {/* Attachement Required Field End */}
 
                     {/* Gender Field Starts */}
                     <td>
@@ -106,45 +145,6 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
                       }
                     </td>
                     {/* Min Experience Field Ends */}
-
-                    {/* Max Allowed Field Starts */}
-                    <td>
-                      <Field
-                        name={`leavetypePolicies[${index}].maxAllowed`}
-                        component={Input}
-                        type="number"
-                        min="0"
-                        className={errors.leavetypePolicies?.[index]?.maxAllowed && touched.leavetypePolicies?.[index]?.maxAllowed ? 'form-control is-invalid' : 'form-control'}
-                        onChange={(e) => {
-                          setFieldValue(
-                            `leavetypePolicies[${index}].maxAllowed`,
-                            e.target.value
-                          )
-                        }}
-                        value={row.maxAllowed}
-                      />
-                      {errors.leavetypePolicies?.[index]?.maxAllowed &&
-                        touched.leavetypePolicies?.[index]?.maxAllowed &&
-                        <CustomErrorLabel touched={true} error={errors.leavetypePolicies?.[index]?.maxAllowed} />
-                      }
-                    </td>
-                    {/* Max Allowed Field Ends */}
-
-                    {/* Attachement Required Field Starts */}
-                    <td>
-                      <Field
-                        name={`leavetypePolicies[${index}].attachmentRequired`}
-                        component={Checkbox}
-                        onChange={(e) => {
-                          setFieldValue(
-                            `leavetypePolicies[${index}].attachmentRequired`,
-                            e.target.checked
-                          )
-                        }}
-                        isSelected={row.attachmentRequired}
-                      />
-                    </td>
-                    {/* Attachement Required Field End */}
 
                     {/* Marital Status Field Starts */}
                     <td>

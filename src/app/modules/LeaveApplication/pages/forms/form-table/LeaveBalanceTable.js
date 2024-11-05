@@ -160,9 +160,9 @@ export function LeaveBalanceTable() {
         </Card.Header>
         <Accordion.Collapse eventKey="0">
           <Card.Body>
-            <PaginationProvider pagination={paginationFactory(paginationOptions)}>
-              {({ paginationProps, paginationTableProps }) => {
-                return (
+            {/* <PaginationProvider pagination={paginationFactory(paginationOptions)}>
+              {({ paginationProps, paginationTableProps }) => { */}
+                {/* return ( */}
                   
                     <BootstrapTable
                       noDataIndication={NoRecordsFoundMessage({ entities: leaveBalances || [] })}
@@ -178,15 +178,15 @@ export function LeaveBalanceTable() {
                       onTableChange={getHandlerTableChange(
                         FormUIProps.setQueryParamsLeaveApp
                       )}
-                      {...paginationTableProps}
+                      // {...paginationTableProps}
                     >
 
                       <PleaseWaitMessage entities={leaveBalances || []} />
                       <NoRecordsFoundMessage entities={leaveBalances || []} />
                     </BootstrapTable>
-                );
-              }}
-            </PaginationProvider>
+                {/* ); */}
+              {/* }}
+            </PaginationProvider> */}
 
           </Card.Body>
         </Accordion.Collapse>

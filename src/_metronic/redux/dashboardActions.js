@@ -186,7 +186,7 @@ export const fetchAllDept = (id) => async (dispatch) => {
  * @param {string} text 
  * @returns 
  */
-export const fetchAllFormsMenu = (id, key, text=null) => async (dispatch) => {
+export const fetchAllFormsMenu = (id, key, text = null) => async (dispatch) => {
   return await requestFromServer
     .getAllFormMenus(id, text)
     .then((response) => {
@@ -205,9 +205,9 @@ export const fetchAllFormsMenu = (id, key, text=null) => async (dispatch) => {
  * @param {String} key 
  * @returns 
  */
-export const fetchAllLeaveType = (key) => async (dispatch) => {
+export const fetchAllLeaveType = (key, employeeId = null) => async (dispatch) => {
   return await requestFromServer
-    .getAllLeaveTypes()
+    .getAllLeaveTypes({ employeeId })
     .then((response) => {
       const entities = [...response.data?.data];
       dispatch(actions.AllChildMenusFetch({ entities, key }));
@@ -433,7 +433,7 @@ export const fetchAllHumanResourceRole = (key) => async (dispatch) => {
     .getAllHumanResourceRole()
     .then((response) => {
       const entities = [...response.data?.data];
-      console.log("dispatching entitties",entities)
+      console.log("dispatching entitties", entities)
       dispatch(actions.AllHumanResourceRoleListFetch({ entities, key }));
     })
     .catch((error) => {

@@ -89,8 +89,8 @@ export const getAllFormMenus = async (Id, text=null) => {
   });
 };
 
-export const getAllLeaveTypes = async (Id) => {
-  return await axios.get(`${USERS_URL}/settings/read-all-leave-types`);
+export const getAllLeaveTypes = async (body) => {
+  return await axios.post(`${USERS_URL}/settings/read-all-leave-types`,body);
 };
 
 export const getAllSubsidiary = async (Id) => {

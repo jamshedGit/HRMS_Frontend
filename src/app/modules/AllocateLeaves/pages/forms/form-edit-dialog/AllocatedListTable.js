@@ -15,7 +15,6 @@ function AllocatedListTable({ values, setFieldValue, errors, touched, dropdownDa
             <table className="table table-hover">
               <thead>
                 <tr style={{ backgroundColor: "#4d5f7a", color: "#fff" }}>
-                  <td>Action</td>
                   <td>Leave Type</td>
                   <td>Leave Count</td>
                   <td>CARRY FORWARD/ENCASHMENT</td>
@@ -26,16 +25,6 @@ function AllocatedListTable({ values, setFieldValue, errors, touched, dropdownDa
                 {values.list.map((row, index) => (
                   <tr key={index}>
                     {/* Row Starts */}
-
-                    {/* Delete Button Starts */}
-                    <td>
-                      <button type="button" disabled={true} onClick={() => {
-                        // handleDelete('AllocatedListTable', values?.list?.[index]?.Id, remove, index)
-                      }}>
-                        Delete
-                      </button>
-                    </td>
-                    {/* Delete Button Ends */}
 
                     {/* Leave Type Field Starts */}
                     <td>

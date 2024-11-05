@@ -9,6 +9,7 @@ import LeaveTypePolicyTable from "./LeaveTypePolicyTable";
 import LeaveTypeSalaryDeductionTable from "./LeaveTypeSalaryDeductionTable";
 import * as actions from "../../../_redux/formActions";
 import { VALIDATION_MESSAGES, WEEK_DAYS } from "../../../../../utils/constants";
+import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
 
 //Validations for Form
 const formValidation = Yup.object().shape({
@@ -21,7 +22,7 @@ const formValidation = Yup.object().shape({
     Yup.object().shape({
       leaveType: Yup.number().required(VALIDATION_MESSAGES.required),
       gender: Yup.number().nullable(),
-      minExp: Yup.number().min(0, VALIDATION_MESSAGES.minZeroValue).max(99, VALIDATION_MESSAGES.maxTwoDigits).required(VALIDATION_MESSAGES.required),
+      minExp: Yup.number().min(0, VALIDATION_MESSAGES.minZeroValue).max(99, VALIDATION_MESSAGES.maxTwoDigits).optional(),
       maxAllowed: Yup.number().min(0, VALIDATION_MESSAGES.minZeroValue).max(999, VALIDATION_MESSAGES.maxThreeDigit).required(VALIDATION_MESSAGES.required),
       attachmentRequired: Yup.boolean(),
       maritalStatus: Yup.number().nullable(),
@@ -59,7 +60,7 @@ export function MasterEditForm({
   const {
     allEmployeeGradeList,
     allEmpTypeChildMenus,
-    allSubidiaryList,
+    allSubsidiaryList,
     allGenderList,
     allLeaveStatus,
     allMaritalStatus,
@@ -153,7 +154,7 @@ export function MasterEditForm({
                         }
                         value={values.subsidiaryId}
                         autoComplete="off"
-                        children={createDropdown(allSubidiaryList)}
+                        children={CustomDropdown({ data: allSubsidiaryList, firstElement: { label: '--Select--', value: null } })}
                       />
                       {
                         errors.subsidiaryId && touched.subsidiaryId && <CustomErrorLabel touched={true} error={errors.subsidiaryId} />
