@@ -3,10 +3,11 @@ import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { Input } from "../../../../../../_metronic/_partials/controls";
+import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 
 //Validation for Form
 const formValidation = Yup.object().shape({
-
+  allocatedCount: Yup.number().min(1, VALIDATION_MESSAGES.minOneValue).required(VALIDATION_MESSAGES.required),
 });
 
 export function MasterEditForm({
@@ -18,7 +19,6 @@ export function MasterEditForm({
   enableLoading,
   loading,
 }) {
-  console.log(':::user:::::::',user);
   
   return (
     <>
@@ -78,8 +78,6 @@ export function MasterEditForm({
                         component={Input}
                         type="number"
                         placeholder=""
-                        onChange={handleChange}
-                        onBlur={handleBlur}
                         disabled={true}
                         label={
                           <span>
@@ -100,8 +98,6 @@ export function MasterEditForm({
                         component={Input}
                         type="number"
                         placeholder=""
-                        onChange={handleChange}
-                        onBlur={handleBlur}
                         disabled={true}
                         label={
                           <span>
@@ -122,8 +118,6 @@ export function MasterEditForm({
                         component={Input}
                         type="number"
                         placeholder=""
-                        onChange={handleChange}
-                        onBlur={handleBlur}
                         disabled={true}
                         label={
                           <span>
@@ -144,8 +138,6 @@ export function MasterEditForm({
                         component={Input}
                         type="number"
                         placeholder=""
-                        onChange={handleChange}
-                        onBlur={handleBlur}
                         disabled={true}
                         label={
                           <span>
@@ -166,8 +158,6 @@ export function MasterEditForm({
                         component={Input}
                         type="number"
                         placeholder=""
-                        onChange={handleChange}
-                        onBlur={handleBlur}
                         disabled={true}
                         label={
                           <span>

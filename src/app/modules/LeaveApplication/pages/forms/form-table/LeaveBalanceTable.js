@@ -42,10 +42,7 @@ export function LeaveBalanceTable() {
     shallowEqual
   );
 
-  const { totalCount, leaveBalances, listLoading } = currentState;
-
-  console.log(':::::leaveBalances::::',leaveBalances);
-  
+  const { totalCount, leaveBalances } = currentState;
 
   const isAccessForEdit = userAccess?.find(
     (item) => item.componentName === "UpdateLeaveApplication"

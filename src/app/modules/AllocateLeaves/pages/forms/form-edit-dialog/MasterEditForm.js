@@ -18,7 +18,7 @@ const formValidation = Yup.object().shape({
       leaveType: Yup.number().required('Required'),
       leaveCount: Yup.number().min(1, VALIDATION_MESSAGES.minOneValue).max(999, VALIDATION_MESSAGES.maxThreeDigit).required(VALIDATION_MESSAGES.required),
       policyType: Yup.number().required('Required'),
-      maxCount: Yup.number().min(1).max(Yup.ref('leaveCount'), 'Max Count cannot be greater than Leave count').required('Required'),
+      maxCount: Yup.number().min(1,  VALIDATION_MESSAGES.minOneValue).max(Yup.ref('leaveCount'), 'Max Count cannot be greater than Leave count').required(VALIDATION_MESSAGES.required),
     }))
     .min(1, 'Allocate Atleast One leave'),
 });
