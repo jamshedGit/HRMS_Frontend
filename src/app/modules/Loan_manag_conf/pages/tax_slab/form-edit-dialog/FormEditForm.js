@@ -89,7 +89,7 @@ export function FormEditForm({
 
   let existedId = 0;
   const check_Existed_Data = (subsidiaryId) => {
-    console.log("existedId",entities)
+   
     entities.forEach((i) => {
       if (i.subsidiaryId == subsidiaryId) {
         existedId = i.Id;
@@ -436,7 +436,7 @@ export function FormEditForm({
                                   className="form-control"
                                   disabled={isUserForRead}
                                 >
-                                  <option value="">Select Basis</option>
+                                  <option value="">Select</option>
                                   {basisOptions.map((option) => (
                                     <option
                                       key={option.value}

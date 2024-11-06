@@ -37,7 +37,7 @@ export function FormTable() {
  
 
   const { currentState, userAccess } = useSelector(
-    (state) => {  console.log("s "); return {
+    (state) => {   return {
      
       
       currentState: state.loan_management_configuration,
