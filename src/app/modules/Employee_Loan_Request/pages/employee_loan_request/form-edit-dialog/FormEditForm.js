@@ -128,6 +128,12 @@ export function FormEditForm({
     )
   );
 
+  const statusOptions = [
+    { value: 0, label: "Pending" },
+    { value: 1, label: "Active" },
+    { value:2, label: "Inactive" },
+  ];
+
   return (
     <Formik
       // key={user.Id || "new"}
@@ -363,7 +369,7 @@ export function FormEditForm({
 
                   <div className="col-12 col-md-6 mt-3">
                     <Field
-                      // name="loan_amount_paid"
+                      name="loan_amount_paid"
                       component={Input}
                       placeholder=""
                       label={
@@ -373,14 +379,14 @@ export function FormEditForm({
                         </span>
                       }
                       type="number" 
-                      value={""}
+                      // value={""}
                       disabled={true}
                     />
                   </div>
 
                   <div className="col-12 col-md-6 mt-3">
                     <Field
-                      // name="loan_amount_remaining"
+                      name="loan_amount_remaining"
                       component={Input}
                       placeholder=""
                       label={
@@ -390,8 +396,8 @@ export function FormEditForm({
                         </span>
                       }
                       type="number"    
-                      value={""}
-                      // value={totalLoanAmount}
+                      // value={""}
+                      value={totalLoanAmount}
                       disabled={true}
                     />
                   </div>
@@ -415,8 +421,11 @@ export function FormEditForm({
                   </div>
 
                   <div className="col-12 col-md-6 mt-3">
-                    <Field
-                      // name="statusId"
+                  <label htmlFor="installment_deduction_basis_type">
+                      Status
+                    </label>
+                    {/* <Field
+                      name="statusId"
                       component={Input}
                       placeholder=""
                       label={
@@ -425,10 +434,33 @@ export function FormEditForm({
                        
                         </span>
                       }
-                      value={""}
+                      // value={""}
                       // type="text"    
                       disabled={true}
-                    />
+                      
+                    /> */}
+
+<Field
+                      name="statusId"
+                      as="select"
+                      className="form-control"
+                      disabled={true}
+                      onChange={(e) => {
+                        setFieldValue(
+                          "statusId",
+                          e.target.value
+                        ); 
+                      }}
+
+                   
+                    >
+                      <option value=""></option>
+                      {statusOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </Field>
                   </div>
 
                 </div>

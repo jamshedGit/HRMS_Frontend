@@ -41,6 +41,8 @@ export function FormUIProvider({ FormUIEvents, children }) {
     total_loan_amount:"",
     total_installment:"",
     reason:"", 
+    loan_amount_remaining:"",
+    loan_amount_paid:""
 
 
 

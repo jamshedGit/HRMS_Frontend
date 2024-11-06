@@ -95,6 +95,8 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         total_loan_amount:data.total_loan_amount,
         total_installment:totalInstallments,
         reason:data.reason, 
+        loan_amount_remaining:data.total_loan_amount,
+        loan_amount_paid:0
      
       };
      
