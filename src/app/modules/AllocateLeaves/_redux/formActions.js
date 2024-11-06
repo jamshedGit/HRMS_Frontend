@@ -5,9 +5,9 @@ const { actions } = AllocateLeavesSlice;
 
 /**
  * 
- * Fetch All Allocate Leaves from the server
+ * Fetch All Allocate Leaves Data from the server according to filters provided in body
  * 
- * @param {Object} queryparm 
+ * @param {Object} body 
  * @returns 
  */
 export const fetchAllocateLeaves = (body) => async (dispatch) => {
@@ -45,15 +45,14 @@ export const fetchPolicyData = () => async (dispatch) => {
 
 /**
  * 
- * Save or update Allocate Leaves Record
+ * Save Allocate Leaves Record
  * 
  * @param {Object} data 
- * @param {String|Number|Null} id 
  * @param {Function} disableLoading 
  * @param {Function} onHide 
  * @returns 
  */
-export const saveRecord = (data, id, disableLoading, onHide) => (dispatch) => {
+export const saveRecord = (data, disableLoading, onHide) => (dispatch) => {
   return requestFromServer.createAllocateLeavesSetup(data)
     .then((res) => {
       const AllocateLeavesData = res.data?.data;
@@ -86,16 +85,3 @@ export const saveRecord = (data, id, disableLoading, onHide) => (dispatch) => {
       });
     });
 };
-
-/**
- * 
- * Delete Single Allocate Leaves Record By Id
- * 
- * @param {String|Number} id 
- * @param {Function} disableLoading 
- * @param {Function} onHide 
- * @returns 
- */
-export const deleteRecord = (id, disableLoading, onHide) => (dispatch) => {
-
-}

@@ -52,30 +52,11 @@ export const EmployeeLeaveBalanceSlice = createSlice({
             state.userForEdit = entities;
             state.error = null;
         },
-        EmployeeLeaveBalanceDeleted: (state, action) => {
-            state.error = null;
-            state.actionsLoading = false;
-            state.entities = state.entities.filter(
-                (el) => el.Id != action.payload.id
-            );
-            state.totalCount--;
-        },
         EmployeeLeaveBalanceCreated: (state, action) => {
             const entities = action?.payload;
             state.actionsLoading = false;
             state.error = null;
             state.userForEdit = entities;
-        },
-        EmployeeLeaveBalanceUpdated: (state, action) => {
-            const id = action.payload.Id;
-            state.error = null;
-            state.actionsLoading = false;
-            state.entities = state.entities.map((el) => {
-                if (el.Id == id) {
-                    return action.payload;
-                }
-                return el;
-            });
         }
     },
 });

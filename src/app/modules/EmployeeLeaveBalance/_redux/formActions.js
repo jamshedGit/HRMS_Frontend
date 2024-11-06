@@ -5,7 +5,7 @@ const { actions } = EmployeeLeaveBalanceSlice;
 
 /**
  * 
- * Fetch All Employee Leave Balance Paginated from the server
+ * Fetch All Employee Leave Balance from the server
  * 
  * @param {Object} queryparm 
  * @returns 
@@ -49,12 +49,10 @@ export const fetchEditRecord = (data) => (dispatch) => {
 
 /**
  * 
- * Save or update Employee Leave Balance Record
+ * Save Employee Leave Balance Record
  * 
  * @param {Object} data 
- * @param {String|Number|Null} id 
  * @param {Function} disableLoading 
- * @param {Function} onHide 
  * @returns 
  */
 export const saveRecord = (data, disableLoading) => (dispatch) => {
@@ -89,43 +87,3 @@ export const saveRecord = (data, disableLoading) => (dispatch) => {
         });
       });
 };
-
-/**
- * 
- * Delete Single Employee Leave Balance Record By Id
- * 
- * @param {String|Number} id 
- * @param {Function} disableLoading 
- * @param {Function} onHide 
- * @returns 
- */
-export const deleteRecord = (id, disableLoading, onHide) => (dispatch) => {
-  return requestFromServer.deleteEmployeeLeaveBalanceSetup(id)
-    .then((res) => {
-      dispatch(actions.EmployeeLeaveBalanceDeleted({ id }));
-      disableLoading();
-      toast.success("Successfully Deleted", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-      onHide();
-    })
-    .catch((error) => {
-      disableLoading();
-      error.clientMessage = "Can't Delete Employee Leave Balance";
-      toast.error(error?.response?.data?.message, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    });
-}

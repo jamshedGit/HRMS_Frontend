@@ -6,11 +6,6 @@ import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
 import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLabel";
 import { Modal } from "react-bootstrap";
 
-//Validation for Form
-const formValidation = Yup.object().shape({
-
-});
-
 export function FilterForm({
   filters,
   setfilters,
@@ -22,7 +17,6 @@ export function FilterForm({
       <Formik
         enableReinitialize={true}
         initialValues={filters}
-        validationSchema={formValidation}
       >
         {({
           errors,

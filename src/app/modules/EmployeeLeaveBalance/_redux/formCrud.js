@@ -33,25 +33,3 @@ export async function getAllEmployeeLeaveBalanceSetup(body) {
 export function getEmployeeLeaveBalanceSetupByFilters(body) {
   return axios.post(`${USERS_URL}/employee_leave_balance/read-employee-leave-balance`, body);
 }
-
-/**
- *
- * Update Single Employee Leave Balance By Id
- *  
- * @param {Object} body 
- * @returns 
- */
-export function updateEmployeeLeaveBalanceSetup(body) {
-  return axios.put(`${USERS_URL}/employee_leave_balance/update-employee-leave-balance`, body);
-}
-
-/**
- *
- * Delete Single Employee Leave Balance By Id
- *  
- * @param {Object} body 
- * @returns 
- */
-export function deleteEmployeeLeaveBalanceSetup(id) {
-  return axios.delete(`${USERS_URL}/employee_leave_balance/delete-employee-leave-balance/${id}`);
-}

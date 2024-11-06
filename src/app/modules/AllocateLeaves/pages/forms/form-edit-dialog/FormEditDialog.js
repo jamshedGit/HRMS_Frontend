@@ -8,7 +8,7 @@ import { useFormUIContext } from "../FormUIContext";
 import { fetchAllFiscalYearData, fetchAllFormsMenu, fetchAllLeaveType, fetchAllSubsidiaryData } from "../../../../../../_metronic/redux/dashboardActions";
 import { fetchPolicyData } from "../../../_redux/formActions";
 
-export function FormEditDialog({ id, show, onHide, userForRead }) {
+export function FormEditDialog({ onHide, userForRead }) {
   const [loading, setLoading] = useState(false);
   const FormUIContext = useFormUIContext();
 
@@ -75,7 +75,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
 
   //Create or Update record according to values from dialog
   const submitForm = (values) => {
-    dispatch(actions.saveRecord(values, id, disbaleLoading, onHide))
+    dispatch(actions.saveRecord(values, disbaleLoading, onHide))
   }
 
   return (

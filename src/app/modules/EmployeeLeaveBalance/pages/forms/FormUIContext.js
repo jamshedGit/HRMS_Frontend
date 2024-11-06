@@ -8,7 +8,7 @@ export function useFormUIContext() {
   return useContext(FormUIContext);
 }
 
-export function FormUIProvider({ FormUIEvents, children }) {
+export function FormUIProvider({ children }) {
   const initFilters = {
     employeeId: '',
     leaveType: '',

@@ -52,7 +52,7 @@ export const fetchLeaveApplication = (queryparm, employeeId) => async (dispatch)
 
 /**
  * 
- * Fetch All Leave Application Paginated from the server
+ * Fetch All Leave Application by Employee Id from the server
  * 
  * @param {Object} queryparm 
  * @returns 

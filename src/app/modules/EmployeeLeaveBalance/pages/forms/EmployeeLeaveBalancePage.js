@@ -4,11 +4,9 @@ import "react-toastify/dist/ReactToastify.css";
 import { FormUIProvider } from "./FormUIContext";
 import { FormCard } from "./form-card/FormCard";
 
-export function EmployeeLeaveBalancePage({ history }) {
-  const FormUIEvents = {
-  };
+export function EmployeeLeaveBalancePage() {
   return (
-    <FormUIProvider FormUIEvents={FormUIEvents}>
+    <FormUIProvider>
       <FormCard />
       <ToastContainer
         position="top-right"

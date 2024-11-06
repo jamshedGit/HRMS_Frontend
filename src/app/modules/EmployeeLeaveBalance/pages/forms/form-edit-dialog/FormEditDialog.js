@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { MasterEditForm } from "./MasterEditForm";
-import { FormEditDialogHeader } from './FormEditDialogHeader'
-
 import * as actions from "../../../_redux/formActions";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -15,6 +12,7 @@ export function FormEditDialog() {
   const [loading, setLoading] = useState(false);
   const FormUIContext = useFormUIContext();
 
+  //Get Form init state from Context file (FormUIContext.js)
   const formUIProps = useMemo(() => {
     return {
       initUser: FormUIContext.initUser,
@@ -23,14 +21,19 @@ export function FormEditDialog() {
     };
   }, [FormUIContext]);
 
+  //Start Loading
   const enableLoading = () => {
     setLoading(true);
   };
+
+  //End Loading
   const disbaleLoading = () => {
     setLoading(false);
   };
 
   const dispatch = useDispatch();
+
+  //List data from states
   const {
     userForEdit,
     dashboard
@@ -40,9 +43,8 @@ export function FormEditDialog() {
   }
   ));
 
-  //Fetch record to edit on dialog load
+  //Fetch Dropdowns data on load
   useEffect(() => {
-    // dispatch(actions.fetchEditRecord(id));
     if (!dashboard?.allFiscalYears?.length)
       dispatch(fetchAllFiscalYearData("allFiscalYears"));
     if (!dashboard?.allLeaveTypes?.length)
@@ -51,12 +53,12 @@ export function FormEditDialog() {
       dispatch(fetchAllActiveEmployees());
   }, [dispatch]);
 
-  //Fetch record to edit on dialog load
+  //Fetch record to edit on filters change
   useEffect(() => {
     dispatch(actions.fetchEditRecord(formUIProps.filters));
   }, [formUIProps.filters]);
 
-  //Create or Update record according to values from dialog
+  //Create record according to values from dialog
   const submitForm = (values) => {
     dispatch(actions.saveRecord({...formUIProps.filters, allocatedCount: values.allocatedCount}, disbaleLoading))
   }

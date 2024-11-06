@@ -8,7 +8,7 @@ export function useFormUIContext() {
   return useContext(FormUIContext);
 }
 
-export function FormUIProvider({ FormUIEvents, children }) {
+export function FormUIProvider({ children }) {
   const [queryParams, setQueryParamsBase] = useState(initialFilter);
   const [ids, setIds] = useState([]);
   const setQueryParams = useCallback((nextQueryParams) => {
@@ -40,10 +40,6 @@ export function FormUIProvider({ FormUIEvents, children }) {
     ids,
     setIds,
     initUser,
-    newFormButtonClick: FormUIEvents.newFormButtonClick,
-    openEditFormDialog: FormUIEvents.openEditFormDialog,
-    openDeleteFormDialog: FormUIEvents.openDeleteFormDialog,
-    openReadFormDialog: FormUIEvents.openReadFormDialog,
   };
   return (
     <FormUIContext.Provider value={value}>{children}</FormUIContext.Provider>

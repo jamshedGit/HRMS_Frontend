@@ -15,14 +15,12 @@ export const getAllCountry = async () => {
 };
 
 export const getAllEarningDeductionList = async (Id) => {
-  console.log("pakistan", Id);
   return await axios.post(`${USERS_URL}/stoppage/read-earning-deduction-list`, {
     flag: Id,
   });
 };
 
 export const getAllEmp_Compensation_Benefits_DDL = async () => {
-  console.log("getAllEmp_Compensation_Benefits");
   return await axios.post(
     `${USERS_URL}/compensation/read-all-compensation-benefits-ddl`
   );
@@ -40,7 +38,6 @@ export const getAllEmployeeSalaryReviewForDDL = async (employeeId) => {
 };
 
 export const getAllActiveEmployeesSalaryForDDL = async (employeeId) => {
-  console.log("getAllActiveEmployeesSalaryForDDL", employeeId);
   return await axios.post(
     `${USERS_URL}/employee_salary_earning/read-all-employee-salary-ddl`,
     {
@@ -113,7 +110,6 @@ export const getVehiclesByCenterAndSubcenterId = async (body) => {
 };
 
 export const getDashboardVehicle = async (body) => {
-  // console.log("Dashboard Request body", body);
   return await axios.post(
     `${USERS_URL}/settings/read-all-vehicles-dashboard`,
     body

@@ -47,6 +47,8 @@ export function FormCard() {
   }, [dispatch, formUIProps.employeeId, formUIProps.queryParamsLeaveApp])
 
 
+  //Update Leave Balances whenever employee Id is changed or leave application table is updated
+  //Also update dropdown of leave type when employee is selected
   useEffect(() => {
     dispatch(actions.fetchLeaveBalances(formUIProps.employeeId))
     dispatch(fetchAllLeaveType("allLeaveTypes", formUIProps.employeeId));

@@ -14,7 +14,6 @@ export function MasterEditForm({
   submitForm,
   user,
   actionsLoading,
-  onHide,
   isUserForRead,
   enableLoading,
   loading,
