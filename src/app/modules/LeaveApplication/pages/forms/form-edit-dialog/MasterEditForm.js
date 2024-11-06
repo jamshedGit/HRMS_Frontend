@@ -53,7 +53,7 @@ export function MasterEditForm({
     if (payrollData && payrollData.endDate) {
       return Yup.object().shape({
         from: Yup.date().required(VALIDATION_MESSAGES.required).min(payrollData.startDate, `Date cannot be before ${formatDates(payrollData.startDate)}`),
-        to: Yup.date().required(VALIDATION_MESSAGES.required).min(Yup.ref('from'), 'To date cannot be before From date').min(payrollData.startDate, `Date cannot be before ${formatDates(payrollData.startDate)}`),
+        to: Yup.date().required(VALIDATION_MESSAGES.required).min(Yup.ref('from'), 'To date cannot be before From date'),
         leaveType: Yup.number().required(VALIDATION_MESSAGES.required),
         days: Yup.number().optional(),
         remarks: Yup.string().required(VALIDATION_MESSAGES.required),
