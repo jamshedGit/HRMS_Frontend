@@ -122,7 +122,24 @@ export function DesignationEditDialog({ id, show, onHide, userForRead }) {
         defaultShiftId: user.defaultShiftId,
         attendanceType: user.attendanceType,
         dateOfBirth: user.dateOfBirth,
-        dateOfRetirement: user.dateOfRetirement
+        dateOfRetirement: user.dateOfRetirement,
+        salesRep : user.salesRep,
+        supportRep: user.supportRep,
+        sourceOfHire: user.sourceOfHire,
+        lastReviewDate: user.lastReviewDate,
+        nextReviewDate: user.nextReviewDate,
+        laborCardNo: user.laborCardNo,
+        drivingLicenseExpiry: user.drivingLicenseExpiry,
+        emiratesId: user.emiratesId,
+        emiratesNo: user.emiratesNo,
+        passportExpiry: user.passportExpiry,
+        nicExpiry: user.nicExpiry,
+        deligation: user.deligation,
+        personId: user.personId,
+        routingCode: user.routingCode,
+        contractType: user.contractType,
+        cycleType: user.cycleType,
+        requireDeligation: user.requireDeligation
       };
 
       console.log("profile emp::2", EmpProfileUpdatedFields,contactList,workExperienceList,academicList,skillsList,incidentList);

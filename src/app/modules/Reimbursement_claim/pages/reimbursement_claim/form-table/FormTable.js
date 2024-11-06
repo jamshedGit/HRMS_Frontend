@@ -1,3 +1,4 @@
+
 import React, { useEffect, useMemo } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, {
@@ -5,6 +6,7 @@ import paginationFactory, {
 } from "react-bootstrap-table2-paginator";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import * as actions from "../../../_redux/redux-Actions";
+import { format } from 'date-fns';
 import {
   getHandlerTableChange,
   NoRecordsFoundMessage,
@@ -16,20 +18,20 @@ import * as uiHelpers from "../FormUIHelpers";
 import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatter";
 import { Pagination } from "../../../../../../_metronic/_partials/controls";
 import { useFormUIContext } from "../FormUIContext";
-import { DatetimeColumnFormatter } from "../../../../Dashboard/pages/dashboard/last-trips-vehicles-table/column-formatter/CreatedColumnFormatter";
-import {formatNumberWithCommas} from "../../../../../utils/common"
-
-
-
+import { Accordion, Button, Card } from "react-bootstrap";
+import { KeyboardArrowDown } from "@material-ui/icons";
 
 export function FormTable() {
   //Users UI Context
   const formUIContext = useFormUIContext();
-
+ 
   const formUIProps = useMemo(() => {
+
     return {
       ids: formUIContext.ids,
       setIds: formUIContext.setIds,
+      setIsFileReq:formUIContext.setIsFileReq,
+      employeeId: formUIContext.employeeId,
       queryParams: formUIContext.queryParams,
       setQueryParams: formUIContext.setQueryParams,
       openEditFormDialog: formUIContext.openEditFormDialog,
@@ -38,123 +40,119 @@ export function FormTable() {
       openReadFormDialog: formUIContext.openReadFormDialog,
     };
   }, [formUIContext]);
-
+ 
 
   const { currentState, userAccess } = useSelector(
-    (state) => {  console.log("s "); return {
+    (state) => {  return {
+     
       
-      // currentState: state.salarypolicy,
-      currentState: state.tax_slab,
-      userAccess: state?.auth?.userAccess["tax_slab"],
+      currentState: state.reimbursement_claim,
+      userAccess: state?.auth?.userAccess["reimbursement_claim"],
     }},
     shallowEqual
   );
 
-  
+
   const { totalCount, entities, listLoading } = currentState;
-
+ 
   //totalCount = 10
-
+ 
   const dispatch = useDispatch();
-
+ 
   useEffect(() => {
-    formUIProps.setIds([]);
+  
+    formUIProps.setIds("");
  
  
-    dispatch(actions.fetchSalarypolicies(formUIProps.queryParams));
-  }, [formUIProps.queryParams, dispatch, totalCount]);
-
+    dispatch(actions.fetchReimbursementClaim(formUIProps));
+  }, [formUIProps.queryParams, dispatch, totalCount,formUIProps.employeeId]);
+ 
   const isAccessForEdit = userAccess?.find(
-    (item) => item.componentName === "UpdateTaxSlab"
+    (item) => item.componentName === "UpdateReimbursementClaim"
   );
-
+ 
   const isAccessForDelete = userAccess?.find(
-    (item) => item.componentName === "DeleteTaxSlab"
+    (item) => item.componentName === "DeleteReimbursementClaim"
   );
   // Table columns
   const columns = [
-
+    // {
+    //   dataField: "Id",
+    //   text: "ID",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "10px",
+    //   },
+    // },
     {
-      dataField: "from_amount",
-      text: "From Amount",
+      dataField: "ReimbursementType.formName",
+      text: "Reimbursement Type",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
       style: {
-        minWidth: "10px",
-        textAlign: "center",
+        minWidth: "160px",
       },
-      headerStyle: {
-        textAlign: "center", // Align header text to the left
-      },
-      formatter: (cell) => formatNumberWithCommas(cell), 
     },
-
-
-
-{
-  dataField: "to_amount",
-  text: "To Amount",
-  sort: false,
-  sortCaret: sortCaret,
-  headerSortingClasses,
-  style: {
-    minWidth: "10px",
-    textAlign: "center",
-  },
-  headerStyle: {
-    textAlign: "center", // Align header text to the left
-  },
-  formatter: (cell) => formatNumberWithCommas(cell), 
+ 
+ 
+ 
+// {
+//   dataField: "Employee.firstName",
+//   text: "Employee",
+//   sort: false,
+//   sortCaret: sortCaret,
+//   headerSortingClasses,
+//   style: {
+//     minWidth: "10px",
+//   },
+ 
+// },
+ 
+ 
 
  
-},
-
-
     {
-      dataField: "percentage",
-      text: "Percentage",
+      dataField: "date",
+      text: "date",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
       style: {
         minWidth: "10px",
-        textAlign: "center",
       },
-      headerStyle: {
-        textAlign: "center", // Center header text
+      formatter: (cell) => {
+        // Format the date without timestamp
+        return format(new Date(cell), 'dd-MMM-yyyy'); // Customize format as needed
       },
-     
     },
 
     {
-      dataField: "fixed_amount",
-      text: "Fixed Amount",
+      dataField: "amount",
+      text: "amount",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
       style: {
         minWidth: "10px",
-        textAlign: "center",
       },
-      headerStyle: {
-        textAlign: "center", // Align header text to the left
-      },
-      formatter: (cell) => formatNumberWithCommas(cell), 
     },
-
-
-
+ 
+ 
        {
       dataField: "action",
       text: "Actions",
       isDummyField: true,
       formatter: ActionsColumnFormatter,
       formatExtraData: {
+        setIds:formUIProps.setIds,
+        setIsFileReq:formUIProps.setIsFileReq,
         openEditFormDialog: formUIProps.openEditFormDialog,
         openDeleteFormDialog: formUIProps.openDeleteFormDialog,
-        openActiveFormDialog: formUIProps.openActiveFormDialog,
-        openReadFormDialog: formUIProps.openReadFormDialog,
+        // openActiveFormDialog: formUIProps.openActiveFormDialog,
+        // openReadFormDialog: formUIProps.openReadFormDialog,
         isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,
         isAccessForDelete: isAccessForDelete
           ? isAccessForDelete.isAccess
@@ -164,10 +162,11 @@ export function FormTable() {
       headerClasses: "text-right pr-3",
       style: {
         minWidth: "10px",
+       
       },
     },
   ];
-
+ 
   //Table pagination properties
   const paginationOptions = {
     custom: true,
@@ -177,9 +176,24 @@ export function FormTable() {
     page: formUIProps.queryParams.pageNumber,
   };
 
+  
+ 
     return (
     <>
-      <PaginationProvider pagination={paginationFactory(paginationOptions)}>
+  
+    <Accordion defaultActiveKey="">
+      <Card>
+        <Card.Header className="d-flex justify-content-center">
+        <div className='accordion-header-btn w-100  d-flex justify-content-center'>
+          <Accordion.Toggle as={Button} eventKey="0" >
+            Reimbursement Claim Details
+            <KeyboardArrowDown />
+          </Accordion.Toggle>
+          </div>
+        </Card.Header>
+        <Accordion.Collapse eventKey="0">
+          <Card.Body>
+          <PaginationProvider pagination={paginationFactory(paginationOptions)}>
         {({ paginationProps, paginationTableProps }) => {
           return (
             <Pagination
@@ -201,7 +215,7 @@ export function FormTable() {
                 )}
                 // selectRow={getSelectRow({
                 //   entities,
-
+ 
                 // })}
                 {...paginationTableProps}
               >
@@ -212,6 +226,15 @@ export function FormTable() {
           );
         }}
       </PaginationProvider>
+
+          </Card.Body>
+        </Accordion.Collapse>
+      </Card>
+    </Accordion>
+ 
+
+   
     </>
   );
 }
+ 

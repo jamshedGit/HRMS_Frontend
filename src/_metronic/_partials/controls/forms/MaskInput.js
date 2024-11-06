@@ -26,7 +26,7 @@ export function MaskInput({
 }) {
   return (
     <>
-      {label && <label>Enter {label}</label>}
+      {label && <label> {label}</label>}
       <MaskedInput
         type={type}
         mask={[

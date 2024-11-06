@@ -62,12 +62,13 @@ const leaveManagementConfiguration = lazy(() => import("./modules/leaveManagemen
 const PayrollProcessPolicy = lazy(() => import("./modules/Payroll_Process_Policy/pages/index"));
 const LeaveApplication = lazy(() => import("./modules/LeaveApplication/pages/index"));
 const tax_slabModule = lazy(() => import("./modules/Tax_Slab/pages/index"));
-const loan_manag_confModule = lazy(() => import("./modules/Loan_manag_conf/pages/index"));
-const gratuity_confModule = lazy(() => import("./modules/Gratuity_Configuration/pages/index"));
-const accrue_gratuity_confModule = lazy(() => import("./modules/Accrue_Gratuity_Configuration/pages/index"));
-const reimbursement_configurationModule = lazy(() => import("./modules/Reimbursement_Configuration/pages/index"));
 const allocate_leaves = lazy(() => import("./modules/AllocateLeaves/pages/index"));
 const employee_leave_balance = lazy(() => import("./modules/EmployeeLeaveBalance/pages/index"));
+const loan_manag_confModule = lazy(() => import("./modules/Loan_manag_conf/pages/index"));   
+const gratuity_confModule = lazy(() => import("./modules/Gratuity_Configuration/pages/index"));   
+const accrue_gratuity_confModule = lazy(() => import("./modules/Accrue_Gratuity_Configuration/pages/index"));  
+const reimbursement_configurationModule = lazy(() => import("./modules/Reimbursement_Configuration/pages/index"));  
+const reimbursement_claimModule = lazy(() => import("./modules/Reimbursement_claim/pages/index")); 
 
 const ROUTES = {
   settings: SettingsPage,
@@ -115,15 +116,16 @@ const ROUTES = {
   onetime_earning: OnetimeAllowance,
   leave_management_configuration: leaveManagementConfiguration,
   loan_type: LoanType,
-  leave_application: LeaveApplication,
-  payroll_process_policy: PayrollProcessPolicy,
-  tax_slab: tax_slabModule,
-  loan_management_configuration: loan_manag_confModule,
-  gratuity_configuration: gratuity_confModule,
-  accrue_gratuity_configuration: accrue_gratuity_confModule,
-  reimbursement_configuration: reimbursement_configurationModule,
   allocate_leaves: allocate_leaves,
-  employee_leave_balance: employee_leave_balance
+  employee_leave_balance: employee_leave_balance,
+  leave_application :LeaveApplication,
+  payroll_process_policy :PayrollProcessPolicy,
+  tax_slab:tax_slabModule,
+  loan_management_configuration:loan_manag_confModule,
+  gratuity_configuration :gratuity_confModule,
+  accrue_gratuity_configuration :accrue_gratuity_confModule,
+  reimbursement_configuration:reimbursement_configurationModule,
+  reimbursement_claim:reimbursement_claimModule
 };
 
 export default function BasePage() {

@@ -60,11 +60,12 @@ import { payroll_policySlice } from "../app/modules/Payroll_Process_Policy/_redu
 import { LeaveApplicationSlice } from "../app/modules/LeaveApplication/_redux/LeaveApplicationSlice";
 import { taxSetupSlice } from "../app/modules/Tax_Setup/_redux/taxSetupSlice";
 import { loan_manag_confSlice } from "../app/modules/Loan_manag_conf/_redux/redux-Slice"
+import { AllocateLeavesSlice } from "../app/modules/AllocateLeaves/_redux/AllocateLeavesSlice"
+import { EmployeeLeaveBalanceSlice } from "../app/modules/EmployeeLeaveBalance/_redux/EmployeeLeaveBalanceSlice"
 import { gratuity_configurationSlice } from "../app/modules/Gratuity_Configuration/_redux/redux-Slice"
 import { accrue_gratuity_configurationSlice } from "../app/modules/Accrue_Gratuity_Configuration/_redux/redux-Slice"
 import { reimbursement_configurationSlice } from "../app/modules/Reimbursement_Configuration/_redux/redux-Slice"
-import { AllocateLeavesSlice } from "../app/modules/AllocateLeaves/_redux/AllocateLeavesSlice"
-import { EmployeeLeaveBalanceSlice } from "../app/modules/EmployeeLeaveBalance/_redux/EmployeeLeaveBalanceSlice"
+import { reimbursement_claimSlice } from "../app/modules/Reimbursement_claim/_redux/redux-Slice"
 
 export const rootReducer = combineReducers({
   auth: auth.reducer,
@@ -126,7 +127,8 @@ export const rootReducer = combineReducers({
   reimbursement_configuration: reimbursement_configurationSlice.reducer,
   accrue_gratuity_configuration: accrue_gratuity_configurationSlice.reducer,
   allocate_leaves: AllocateLeavesSlice.reducer,
-  employee_leave_balance: EmployeeLeaveBalanceSlice.reducer
+  employee_leave_balance: EmployeeLeaveBalanceSlice.reducer,
+  reimbursement_claim:reimbursement_claimSlice.reducer
 });
 
 export function* rootSaga() {
