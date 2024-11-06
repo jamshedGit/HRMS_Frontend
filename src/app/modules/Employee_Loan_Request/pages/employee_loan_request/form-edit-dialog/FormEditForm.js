@@ -26,9 +26,12 @@ import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 
 const ReimbursementSchema = Yup.object().shape({
   loan_typeId: Yup.number().required(VALIDATION_MESSAGES.required),
+  employee_loan_accountId: Yup.number().required(VALIDATION_MESSAGES.required),
   applied_date: Yup.date().required(VALIDATION_MESSAGES.required),
   installment_start_date: Yup.date().required(VALIDATION_MESSAGES.required),
+  total_loan_amount:Yup.number().required(VALIDATION_MESSAGES.required),
   monthly_installment: Yup.string().required(VALIDATION_MESSAGES.required),
+  reason:Yup.string().required(VALIDATION_MESSAGES.required),
 });
 
 export function FormEditForm({
@@ -113,7 +116,7 @@ export function FormEditForm({
       payrollDate.setHours(0, 0, 0, 0);
       setPayrollMonth(payrollDate); // Update state with the valid date
     }
-  }, [changeLoanType]);
+  }, [changeLoanType,isEdit]);
 
   useEffect(() => {
     if (totalLoanAmount && monthlyInstallment) {
@@ -121,7 +124,7 @@ export function FormEditForm({
       setTotalInstallments(calculatedMonths);
       // setFieldValue('total_installment', calculatedMonths);
     }
-  }, [totalLoanAmount, monthlyInstallment]);
+  }, [totalLoanAmount, monthlyInstallment,isEdit]);
 
   const filteredOptions = loan_type?.filter((option) =>
     currentState?.loan_config_details_permission?.loanDetails?.details?.some(
@@ -267,14 +270,9 @@ export function FormEditForm({
                       placeholder="Enter total loan amount"
                       label={
                         <span>
-                          Amount Limit:
-                          {/* {currentState?.loan_config_details_permission
-                              ?.salary?.gross *
-                              currentState?.loan_config_details_permission?.loanDetails?.details?.find(
-                                (item) =>
-                                  item.loan_typeId === values.loan_typeId
-                              )?.salary_count || 0}{" "} */}
-                          {maxAmountLimit}
+                          Amount Limit :
+                          
+                          {maxAmountLimit || 0}
                           <span style={{ color: "red" }}>*</span>
                         </span>
                       }
@@ -304,7 +302,7 @@ export function FormEditForm({
                       placeholder="Enter monthly installment"
                       label={
                         <span>
-                          Monthly Installment Suggested : {maxMonthlyAmountSuggest}
+                          Monthly Installment Suggested : {maxMonthlyAmountSuggest ||0}
                           <span style={{ color: "red" }}>*</span>
                         </span>
                       }
@@ -355,7 +353,7 @@ export function FormEditForm({
                     <Field
                       name="reason"
                       component={TextArea}
-                      placeholder="Enter eason"
+                      placeholder="Enter reason"
                       label={
                         <span>
                           Reason <span style={{ color: "red" }}>*</span>
@@ -368,7 +366,7 @@ export function FormEditForm({
 
                   <div className="col-12 col-md-6 mt-3">
                     <Field
-                      name="loan_amount_paid"
+                      // name="loan_amount_paid"
                       component={Input}
                       placeholder=""
                       label={
@@ -378,14 +376,14 @@ export function FormEditForm({
                         </span>
                       }
                       type="number" 
-                      value={0}   
+                      value={""}
                       disabled={true}
                     />
                   </div>
 
                   <div className="col-12 col-md-6 mt-3">
                     <Field
-                      name="loan_amount_remaining"
+                      // name="loan_amount_remaining"
                       component={Input}
                       placeholder=""
                       label={
@@ -395,7 +393,8 @@ export function FormEditForm({
                         </span>
                       }
                       type="number"    
-                      value={totalLoanAmount}
+                      value={""}
+                      // value={totalLoanAmount}
                       disabled={true}
                     />
                   </div>
@@ -403,7 +402,7 @@ export function FormEditForm({
 
                   <div className="col-12 col-md-6 mt-3">
                     <Field
-                      name="approval_statusId"
+                      // name="approval_statusId"
                       component={Input}
                       placeholder=""
                       label={
@@ -412,14 +411,15 @@ export function FormEditForm({
                        
                         </span>
                       }
-                      type="text"    
+                      type="text"   
+                      value={""} 
                       disabled={true}
                     />
                   </div>
 
                   <div className="col-12 col-md-6 mt-3">
                     <Field
-                      name="statusId"
+                      // name="statusId"
                       component={Input}
                       placeholder=""
                       label={
@@ -428,8 +428,8 @@ export function FormEditForm({
                        
                         </span>
                       }
-                      value={"Pending"}
-                      type="text"    
+                      value={""}
+                      // type="text"    
                       disabled={true}
                     />
                   </div>
