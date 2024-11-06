@@ -13,6 +13,7 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import * as actions from "../../../_redux/redux-Actions";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import {
+  amountLimit,
   formatDates,
   getDateDiffInDays,
   getFileName,
@@ -24,7 +25,7 @@ import {
 } from "../../../../../../_metronic/redux/dashboardActions";
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 
-const ReimbursementSchema = Yup.object().shape({
+const EmployeeLoanRequestSchema = Yup.object().shape({
   loan_typeId: Yup.number().required(VALIDATION_MESSAGES.required),
   employee_loan_accountId: Yup.number().required(VALIDATION_MESSAGES.required),
   applied_date: Yup.date().required(VALIDATION_MESSAGES.required),
@@ -54,7 +55,6 @@ export function FormEditForm({
   useEffect(() => {
     if (!user.Id) {
       // dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsidiaries
-      // dispatch(fetchAllFormsMenu(202, "allReimbursementTypeList"));
       // dispatch(fetchAllPayrollMonthYearList("allPayrollMonthYearList"));
       dispatch(actions.getAllLoanType());
       dispatch(fetchAllFormsMenu(45, "allAccountList",null,true));
@@ -78,10 +78,7 @@ export function FormEditForm({
   }, shallowEqual);
 
   const { loan_type } = currentState;
-  console.log(
-    "currentState?.loan_config_details_permission?.loanDetails?.details",
-    currentState?.loan_config_details_permission
-  );
+
 
   useEffect(() => {
     
@@ -101,8 +98,7 @@ export function FormEditForm({
           ? salary?.gross * (parseFloat(currentState?.loan_config_details_permission?.loanDetails?.installment_deduction_percentage))/100
           : salary?.basic * (parseFloat(currentState?.loan_config_details_permission?.loanDetails?.installment_deduction_percentage))/100;
 
-       console.log("monthlySalarySuggest",monthlySalarySuggest
-       )
+ 
     setMaxAmountLimit(Math.min(loandetails?.max_loan_amount, salaryAmount));
     setMaxMonthlyAmountSuggest(monthlySalarySuggest)
     if (employee?.dateOfJoining) {
@@ -137,7 +133,7 @@ export function FormEditForm({
       // key={user.Id || "new"}
       enableReinitialize={true}
       initialValues={user}
-      validationSchema={ReimbursementSchema}
+      validationSchema={EmployeeLoanRequestSchema}
       onSubmit={(values, { resetForm }) => {
         enableLoading();
         //This clearForm function is created to clear form as well as clear any uploaded file as well.
@@ -186,12 +182,7 @@ export function FormEditForm({
                         onChange={(e) => {
                           setFieldValue("loan_typeId", e.value || null);
                           setChangeLoanTpye(e.value);
-                          // const policy = currentState?.reimbursement_config_policies_permission?.policies?.find(
-                          //   (item) => item.reimbursement_typeId == e.value
-                          // );
-                          // setIsFileReq(
-                          //   policy?.attachment_required && !values.file
-                          // );
+                         
                         }}
                         value={
                           loan_type?.find(
@@ -290,6 +281,9 @@ export function FormEditForm({
                         setFieldValue("total_loan_amount", value);
                         setTotalLoanAmount(value)
                       }}
+                      onInput={(e) => {
+                        e.target.value = amountLimit(e.target.value); // Limit to 3 digits
+                      }}
                     />
                   </div>
 
@@ -311,8 +305,8 @@ export function FormEditForm({
                         const value = Number(e.target.value);
 
                         if (
-                          maxAmountLimit !== undefined &&
-                          value > maxAmountLimit
+                          totalLoanAmount !== undefined &&
+                          value > totalLoanAmount
                         ) {
                           return; // Prevent setting value above max
                         }
@@ -324,6 +318,9 @@ export function FormEditForm({
 
 
                         
+                      }}
+                      onInput={(e) => {
+                        e.target.value = amountLimit(e.target.value); // Limit to 3 digits
                       }}
                     />
                   </div>

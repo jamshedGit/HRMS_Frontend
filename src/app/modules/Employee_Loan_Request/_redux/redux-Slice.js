@@ -48,7 +48,7 @@ export const employee_loan_requestSlice = createSlice({
                 state.actionsLoading = true;
             }
         },
-        reimbursementClaimFetched: (state, action) => {
+        employeeLoanRequestFetched: (state, action) => {
            
    
             const entities = action.payload.data?.data.rows;
@@ -62,7 +62,7 @@ export const employee_loan_requestSlice = createSlice({
         },
 
          //get User By ID
-         ReimbursementClaimFetchedForEdit: (state, action) => {
+         EmployeeLoanRequestFetchedForEdit: (state, action) => {
           
      
             state.actionsLoading = false;
@@ -71,7 +71,7 @@ export const employee_loan_requestSlice = createSlice({
         },
 
       
-        ReimbursementClaimDeleted: (state, action) => {
+        EmployeeLoanRequestDeleted: (state, action) => {
 
             state.error = null;
             state.actionsLoading = false;
@@ -81,13 +81,13 @@ export const employee_loan_requestSlice = createSlice({
                 (el) => el.Id !== action.payload.Id
             );
         },
-        reimbursementClaimCreated: (state, action) => {
+        employeeLoanRequestCreated: (state, action) => {
            
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);
         },
-        reimbursementClaimUpdated: (state, action) => {
+        employeeLoanRequestUpdated: (state, action) => {
             state.error = null;
             state.actionsLoading = false;
             // state.entities.push(action.payload)
@@ -97,7 +97,7 @@ export const employee_loan_requestSlice = createSlice({
                 //const payload = { ...action.payload };
                 let payload = JSON.stringify(action.payload)
                 let payloadObj = JSON.parse(payload);
-                let finalObj = JSON.parse(payloadObj.updatedReimbursementClaim);
+                let finalObj = JSON.parse(payloadObj.updatedEmployeeLoanRequest);
                 if (entity.Id === finalObj.Id) {
                     return finalObj; 
                 }

@@ -77,9 +77,9 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
       data.total_installment=totalInstallments
       
         await dispatch(
-          actions.createReimbursementClaim(data, disbaleLoading, resetForm)
+          actions.createEmployeeLoanRequest(data, disbaleLoading, resetForm)
         );
-        await dispatch(actions.fetchReimbursementClaim(formUIProps));
+        await dispatch(actions.fetchEmployeeLoanRequest(formUIProps));
         setTotalInstallments("")
     
     } else {
@@ -99,13 +99,13 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
       };
      
         await dispatch(
-          actions.updateReimbursementClaim(
+          actions.updateEmployeeLoanRequest(
             formUpdatedFields,
             disbaleLoading,
             resetForm
           )
         );
-        await dispatch(actions.fetchReimbursementClaim(formUIProps));
+        await dispatch(actions.fetchEmployeeLoanRequest(formUIProps));
         setTotalInstallments("")
       
     }

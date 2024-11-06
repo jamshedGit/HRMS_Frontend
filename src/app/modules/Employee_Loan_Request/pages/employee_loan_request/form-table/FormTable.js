@@ -64,7 +64,7 @@ export function FormTable() {
     formUIProps.setIds("");
  
  
-    dispatch(actions.fetchReimbursementClaim(formUIProps));
+    dispatch(actions.fetchEmployeeLoanRequest(formUIProps));
   }, [formUIProps.queryParams, dispatch, totalCount,formUIProps.employeeId]);
  
   const isAccessForEdit = userAccess?.find(
@@ -194,7 +194,7 @@ export function FormTable() {
         <Card.Header className="d-flex justify-content-center">
         <div className='accordion-header-btn w-100  d-flex justify-content-center'>
           <Accordion.Toggle as={Button} eventKey="0" >
-            Reimbursement Claim Details
+          Employee Loan Request
             <KeyboardArrowDown />
           </Accordion.Toggle>
           </div>

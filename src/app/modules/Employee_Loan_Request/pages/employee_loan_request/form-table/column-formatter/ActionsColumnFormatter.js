@@ -21,7 +21,7 @@ export function ActionsColumnFormatter(
   }
 ) {
 
-console.log("row id",row)
+
   const isUserRead = false;
   return (
     <>

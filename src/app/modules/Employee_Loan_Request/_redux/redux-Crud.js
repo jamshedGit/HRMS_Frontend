@@ -8,7 +8,7 @@ export function uploadImage(body) {
 }
 
 //Create record
-export function createReimbursementClaim(body) {
+export function createEmployeeLoanRequest(body) {
  
 
   return axios.post(`${USERS_URL}/employee_loan_request/create-employee-loan-request`, body);
@@ -18,25 +18,25 @@ export function createReimbursementClaim(body) {
 
 
 // Read
-export function getAllReimbursementClaim(body) {
+export function getAllEmployeeLoanRequest(body) {
 
 
   return axios.post(`${USERS_URL}/employee_loan_request/read-all-employee-loan-request`, body);
 }
 
-export function getReimbursementClaimById(id) {
+export function getEmployeeLoanRequestById(id) {
 
   return axios.post(`${USERS_URL}/employee_loan_request/read-employee-loan-request`, id);
 }
 
 //Update
-export function updateReimbursementClaim(reimbursementClaim) {
+export function updateEmployeeLoanRequest(employeeLoanRequest) {
    
-  return axios.put(`${USERS_URL}/employee_loan_request/update-employee-loan-request`, reimbursementClaim);
+  return axios.put(`${USERS_URL}/employee_loan_request/update-employee-loan-request`, employeeLoanRequest);
 }
 
 //Delete
-export function deleteReimbursementClaim(body) {
+export function deleteEmployeeLoanRequest(body) {
 
   return axios.patch(`${USERS_URL}/employee_loan_request/delete-employee-loan-request`, body);
 }

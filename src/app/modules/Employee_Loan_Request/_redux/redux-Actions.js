@@ -5,17 +5,13 @@ import { toast } from "react-toastify";
 const { actions } = employee_loan_requestSlice;
 
 
-export const fetchReimbursementClaim = (params) => async (dispatch) => {
-
-
-  // dispatch(actions.startCall({ callType: callTypes.list }));
-
-  return requestFromServer.getAllReimbursementClaim(params)
+export const fetchEmployeeLoanRequest = (params) => async (dispatch) => {
+  return requestFromServer.getAllEmployeeLoanRequest(params)
 
     .then((response) => {
 
      
-      dispatch(actions.reimbursementClaimFetched(response));
+      dispatch(actions.employeeLoanRequestFetched(response));
     })
     .catch((error) => {
 
@@ -28,17 +24,17 @@ export const fetchmoduledata = (id) => (dispatch) => {
 
 
   if (!id) {
-    return dispatch(actions.ReimbursementClaimFetchedForEdit({ userForEdit: undefined }));
+    return dispatch(actions.EmployeeLoanRequestFetchedForEdit({ userForEdit: undefined }));
   }
 
-  dispatch(actions.startCall({ callType: callTypes.action }));
+  // dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
-    .getReimbursementClaimById({ Id: id })
+    .getEmployeeLoanRequestById({ Id: id })
     .then((response) => {
       const entities = response.data?.data;
 
 
-      dispatch(actions.ReimbursementClaimFetchedForEdit({ userForEdit: entities }));
+      dispatch(actions.EmployeeLoanRequestFetchedForEdit({ userForEdit: entities }));
     })
     .catch((error) => {
       error.clientMessage = "Can't find user";
@@ -46,13 +42,13 @@ export const fetchmoduledata = (id) => (dispatch) => {
     });
 };
 
-export const deleteReimbursementClaim= (id) => (dispatch) => {
+export const deleteEmployeeLoanRequest= (id) => (dispatch) => {
   // dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
-    .deleteReimbursementClaim({ Id: id })
+    .deleteEmployeeLoanRequest({ Id: id })
     .then((response) => {
 
-      dispatch(actions.ReimbursementClaimDeleted({ Id: id }));
+      dispatch(actions.EmployeeLoanRequestDeleted({ Id: id }));
       toast.success("Successfully Deleted", {
         position: "top-right",
         autoClose: 2000,
@@ -69,33 +65,20 @@ export const deleteReimbursementClaim= (id) => (dispatch) => {
     });
 };
 
-export const uploadImage = async (file) => {
-  const formData = new FormData()
-  formData.append('file', file)
-  return await requestFromServer.uploadImage(formData)
-    .then((response) => {
-      return response;
-    })
-    .catch((error) => {
-      error.clientMessage = "File not Uploaded";
-      // dispatch(actions.catchError({ error, callType: callTypes.list }));
-    });
-
-};
 
 
-export const createReimbursementClaim = (reimbursementClaimForCreation, disbaleLoading, onHide) => (
+export const createEmployeeLoanRequest = (employeeLoanRequestForCreation, disbaleLoading, onHide) => (
   dispatch
 ) => {
 
   return requestFromServer
-    .createReimbursementClaim(reimbursementClaimForCreation)
+    .createEmployeeLoanRequest(employeeLoanRequestForCreation)
     .then((res) => {
       dispatch(actions.startCall({ callType: callTypes.action }));
       const user = res.data?.data;
 
 
-      dispatch(actions.reimbursementClaimCreated(user));
+      dispatch(actions.employeeLoanRequestCreated(user));
       disbaleLoading();
       toast.success("Successfully Created", {
         position: "top-right",
@@ -168,16 +151,16 @@ export const getAllLoanConfigDetail = (employeeId) => (
 
 
 
-export const updateReimbursementClaim = (user, disbaleLoading, onHide) => (dispatch) => {
+export const updateEmployeeLoanRequest = (user, disbaleLoading, onHide) => (dispatch) => {
   return requestFromServer
-    .updateReimbursementClaim(user)
+    .updateEmployeeLoanRequest(user)
     .then((response) => {
 
-      const updatedReimbursementClaim = response?.config?.data; // response.data?.data;
+      const updatedEmployeeLoanRequest = response?.config?.data; // response.data?.data;
 
 
       dispatch(actions.clearUserForEdit());
-      dispatch(actions.reimbursementClaimUpdated({ updatedReimbursementClaim }));
+      dispatch(actions.employeeLoanRequestUpdated({ updatedEmployeeLoanRequest }));
 
       dispatch(actions.startCall({ callType: callTypes.action }));
       disbaleLoading();
