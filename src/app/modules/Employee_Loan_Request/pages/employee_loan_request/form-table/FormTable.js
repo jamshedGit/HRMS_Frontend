@@ -78,7 +78,7 @@ export function FormTable() {
   const columns = [
 
     {
-      dataField: "loan_typeId",
+      dataField: "LoanType.name",
       text: "Loan Type",
       sort: false,
       sortCaret: sortCaret,

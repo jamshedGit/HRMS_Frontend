@@ -86,6 +86,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
      
       const formUpdatedFields = {
         Id: data.Id,
+        employee_loan_accountId:data.employee_loan_accountId,
         employeeId: data.employeeId,
         loan_typeId:data.loan_typeId,
         monthly_installment:data.monthly_installment,

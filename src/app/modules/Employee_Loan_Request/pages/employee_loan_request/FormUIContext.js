@@ -33,6 +33,7 @@ export function FormUIProvider({ FormUIEvents, children }) {
   const initUser={
     Id: "",
     employeeId:employeeId,
+    employee_loan_accountId:"",
     loan_typeId: "",
     monthly_installment:"",
     applied_date: "",

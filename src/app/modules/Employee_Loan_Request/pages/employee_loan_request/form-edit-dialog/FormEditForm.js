@@ -22,12 +22,13 @@ import {
   fetchAllFormsMenu,
   fetchAllPayrollMonthYearList,
 } from "../../../../../../_metronic/redux/dashboardActions";
+import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 
 const ReimbursementSchema = Yup.object().shape({
-  // reimbursement_typeId: Yup.number().required("Required"),
-  // details: Yup.string().required("Required"),
-  // date: Yup.date().required("Required"),
-  // amount: Yup.number().required("Required"),
+  loan_typeId: Yup.number().required(VALIDATION_MESSAGES.required),
+  applied_date: Yup.date().required(VALIDATION_MESSAGES.required),
+  installment_start_date: Yup.date().required(VALIDATION_MESSAGES.required),
+  monthly_installment: Yup.string().required(VALIDATION_MESSAGES.required),
 });
 
 export function FormEditForm({
@@ -46,22 +47,26 @@ export function FormEditForm({
   const dispatch = useDispatch();
   const { dashboard } = useSelector((state) => state);
   const inputFile = useRef(null);
-  // const [isFileReq,setIsFileReq]=useState(false)
-  // Fetch necessary data if not already present
+  const minDate = new Date(2024, 10, 6);
   useEffect(() => {
     if (!user.Id) {
-      dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsidiaries
-      dispatch(fetchAllFormsMenu(202, "allReimbursementTypeList"));
-      dispatch(fetchAllPayrollMonthYearList("allPayrollMonthYearList"));
+      // dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsidiaries
+      // dispatch(fetchAllFormsMenu(202, "allReimbursementTypeList"));
+      // dispatch(fetchAllPayrollMonthYearList("allPayrollMonthYearList"));
       dispatch(actions.getAllLoanType());
+      dispatch(fetchAllFormsMenu(45, "allAccountList",null,true));
+   
     }
     //allPayrolGroupList
   }, [dispatch, user.Id]);
   const [changeLoanType, setChangeLoanTpye] = useState();
   const [maxAmountLimit, setMaxAmountLimit] = useState();
+  const [maxMonthlyAmountSuggest, setMaxMonthlyAmountSuggest] = useState();
   const [monthlyInstallment, setMonthlyInstallments] = useState();
   const [totalInstallments, setTotalInstallments] = useState();
   const [totalLoanAmount, setTotalLoanAmount] = useState();
+  const [dateOfJoining, setDateOfJoining] = useState();
+  const [payrollMonth, setPayrollMonth] = useState();
   const { currentState, userAccess } = useSelector((state) => {
     return {
       currentState: state.employee_loan_request,
@@ -76,18 +81,38 @@ export function FormEditForm({
   );
 
   useEffect(() => {
+    
     let loandetails = currentState?.loan_config_details_permission?.loanDetails?.details?.find(
       (item) => item.loan_typeId === changeLoanType
     );
     let employee = currentState?.loan_config_details_permission?.employee;
     let salary = currentState?.loan_config_details_permission?.salary;
-
+    let payroll = currentState?.loan_config_details_permission?.payroll;
     let salaryAmount =
       loandetails?.basis == 0
         ? salary?.gross * loandetails?.salary_count
         : salary?.basic * loandetails?.salary_count;
 
+    let monthlySalarySuggest =
+        loandetails?.installment_deduction_basis_type == 0
+          ? salary?.gross * (parseFloat(currentState?.loan_config_details_permission?.loanDetails?.installment_deduction_percentage))/100
+          : salary?.basic * (parseFloat(currentState?.loan_config_details_permission?.loanDetails?.installment_deduction_percentage))/100;
+
+       console.log("monthlySalarySuggest",monthlySalarySuggest
+       )
     setMaxAmountLimit(Math.min(loandetails?.max_loan_amount, salaryAmount));
+    setMaxMonthlyAmountSuggest(monthlySalarySuggest)
+    if (employee?.dateOfJoining) {
+      const joiningDate = new Date(employee?.dateOfJoining);
+      joiningDate.setHours(0, 0, 0, 0);
+      setDateOfJoining(joiningDate); // Update state with the valid date
+    }
+
+    if (payroll?.startDate) {
+      const payrollDate = new Date(payroll?.startDate);
+      payrollDate.setHours(0, 0, 0, 0);
+      setPayrollMonth(payrollDate); // Update state with the valid date
+    }
   }, [changeLoanType]);
 
   useEffect(() => {
@@ -144,7 +169,7 @@ export function FormEditForm({
             <Form className="form form-label-right" onSubmit={handleSubmit}>
               <fieldset disabled={isUserForRead}>
                 <div className="form-group row">
-                  <div className="col-12 col-md-12  p-0 m-0">
+                  {/* <div className="col-12 col-md-12  p-0 m-0"> */}
                     <div className="col-12 col-md-6 ">
                       <SearchSelect
                         name="loan_typeId"
@@ -175,7 +200,36 @@ export function FormEditForm({
                         touched={touched.loan_typeId}
                       />
                     </div>
+                  {/* </div> */}
+
+                  <div className="col-12 col-md-6">
+                    <SearchSelect
+                      name="employee_loan_accountId"
+                      label={
+                        <span>
+                          Employee Loan Account<span style={{ color: "red" }}>*</span>
+                        </span>
+                      }
+                      isDisabled={isUserForRead}
+                      onChange={(e) => {
+                        setFieldValue("employee_loan_accountId", e.value || null);
+                      }}
+                      value={
+                        dashboard.allAccountList.find(
+                          (option) => option.value === values.employee_loan_accountId
+                        ) || null
+                      }
+                      // options={dashboard.allAccountList}
+                      options={dashboard.allAccountList.map((option) => ({
+                        label: `${option.mergeLabel}`, // Adding the value to the label
+                        value: option.value,
+                      }))}
+               
+                      error={errors.employee_loan_accountId}
+                      touched={touched.employee_loan_accountId}
+                    />
                   </div>
+
                   <div className="col-12 col-md-6 mt-3">
                     <label>
                       Applied Date <span style={{ color: "red" }}>*</span>
@@ -185,8 +239,9 @@ export function FormEditForm({
                       component={DatePickerField}
                       dateFormat="dd/MM/yyyy"
                       placeholder="Select Date"
-                      // label="Date"
+                 
                       type="date"
+                      minDate={dateOfJoining} 
                     />
                   </div>
 
@@ -200,8 +255,8 @@ export function FormEditForm({
                       component={DatePickerField}
                       dateFormat="dd/MM/yyyy"
                       placeholder="Select Date"
-                      // label="Date"
                       type="date"
+                      minDate={payrollMonth}
                     />
                   </div>
 
@@ -212,7 +267,7 @@ export function FormEditForm({
                       placeholder="Enter total loan amount"
                       label={
                         <span>
-                          Amount Limit: $
+                          Amount Limit:
                           {/* {currentState?.loan_config_details_permission
                               ?.salary?.gross *
                               currentState?.loan_config_details_permission?.loanDetails?.details?.find(
@@ -249,7 +304,7 @@ export function FormEditForm({
                       placeholder="Enter monthly installment"
                       label={
                         <span>
-                          Monthly Installment
+                          Monthly Installment Suggested : {maxMonthlyAmountSuggest}
                           <span style={{ color: "red" }}>*</span>
                         </span>
                       }
@@ -287,7 +342,7 @@ export function FormEditForm({
                         </span>
                       }
                       type="number"
-                      value={totalInstallments || values?.total_installment}
+                      value={totalInstallments}
 
           
 
@@ -309,6 +364,76 @@ export function FormEditForm({
                       type="text"
                     />
                   </div>
+
+
+                  <div className="col-12 col-md-6 mt-3">
+                    <Field
+                      name="loan_amount_paid"
+                      component={Input}
+                      placeholder=""
+                      label={
+                        <span>
+                          Loan Amount Paid
+                       
+                        </span>
+                      }
+                      type="number" 
+                      value={0}   
+                      disabled={true}
+                    />
+                  </div>
+
+                  <div className="col-12 col-md-6 mt-3">
+                    <Field
+                      name="loan_amount_remaining"
+                      component={Input}
+                      placeholder=""
+                      label={
+                        <span>
+                          Loan Amount Remaining
+                       
+                        </span>
+                      }
+                      type="number"    
+                      value={totalLoanAmount}
+                      disabled={true}
+                    />
+                  </div>
+
+
+                  <div className="col-12 col-md-6 mt-3">
+                    <Field
+                      name="approval_statusId"
+                      component={Input}
+                      placeholder=""
+                      label={
+                        <span>
+                          Approval Status
+                       
+                        </span>
+                      }
+                      type="text"    
+                      disabled={true}
+                    />
+                  </div>
+
+                  <div className="col-12 col-md-6 mt-3">
+                    <Field
+                      name="statusId"
+                      component={Input}
+                      placeholder=""
+                      label={
+                        <span>
+                          Status
+                       
+                        </span>
+                      }
+                      value={"Pending"}
+                      type="text"    
+                      disabled={true}
+                    />
+                  </div>
+
                 </div>
               </fieldset>
             </Form>
