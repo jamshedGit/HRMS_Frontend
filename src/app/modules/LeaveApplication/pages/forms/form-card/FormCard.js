@@ -26,13 +26,15 @@ export function FormCard() {
       setemployeeId: FormUIContext.setemployeeId,
       queryParamsLeaveApp: FormUIContext.queryParamsLeaveApp,
       id: FormUIContext.id,
+      setId: FormUIContext.setId
     }
   }, [FormUIContext])
 
   //Get data from states
-  const { dashboard } = useSelector(
+  const { dashboard, entities } = useSelector(
     (state) => ({
-      dashboard: state.dashboard
+      dashboard: state.dashboard,
+      entities: state.leave_application.entities
     }),
     shallowEqual
   )
@@ -43,9 +45,17 @@ export function FormCard() {
 
     if (!dashboard.allEmployees || !dashboard.allEmployees.length)
       dispatch(fetchAllActiveEmployees());
-    if (!dashboard?.allLeaveTypes || !dashboard?.allLeaveTypes?.length)
-      dispatch(fetchAllLeaveType("allLeaveTypes"));
   }, [dispatch, formUIProps.employeeId, formUIProps.queryParamsLeaveApp])
+
+
+  //Update Leave Balances whenever employee Id is changed or leave application table is updated
+  //Also update dropdown of leave type when employee is selected
+  useEffect(() => {
+    dispatch(actions.fetchLeaveBalances(formUIProps.employeeId))
+    dispatch(fetchAllLeaveType("allLeaveTypes", formUIProps.employeeId));
+
+  }, [dispatch, formUIProps.employeeId, entities])
+
 
 
   return (
@@ -55,7 +65,7 @@ export function FormCard() {
       <CardBody>
 
         {/* EmployeeSelect Starts */}
-        <EmployeeSelect setemployeeId={formUIProps.setemployeeId} />
+        <EmployeeSelect setId={formUIProps.setId} setemployeeId={formUIProps.setemployeeId} />
         {/* EmployeeSelect Ends */}
 
         <br />

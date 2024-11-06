@@ -8,7 +8,7 @@ import * as actions from "../../../_redux/formActions";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useFormUIContext } from "../FormUIContext";
-import { fetchAllFormsMenu, fetchAllLeaveType } from "../../../../../../_metronic/redux/dashboardActions";
+import { fetchAllFormsMenu, fetchAllLeaveType, fetchAllSubsidiaryData } from "../../../../../../_metronic/redux/dashboardActions";
 
 export function FormEditDialog({ id, show, onHide, userForRead, isEdit }) {
   const [loading, setLoading] = useState(false);
@@ -45,8 +45,9 @@ export function FormEditDialog({ id, show, onHide, userForRead, isEdit }) {
       dispatch(fetchAllFormsMenu(143, "allEmployeeGradeList"));
     if (!dashboard?.allEmpTypeChildMenus || !dashboard?.allEmpTypeChildMenus?.length)
       dispatch(fetchAllFormsMenu(88, "allEmpTypeChildMenus"));
-    if (!dashboard?.allSubidiaryList || !dashboard?.allSubidiaryList?.length)
-      dispatch(fetchAllFormsMenu(133, "allSubidiaryList"));
+    if (!dashboard?.allSubsidiaryList?.length)
+      dispatch(fetchAllSubsidiaryData("allSubsidiaryList"));
+
     if (!dashboard?.allGenderList || !dashboard?.allGenderList?.length)
       dispatch(fetchAllFormsMenu(187, "allGenderList", 'All'));
     if (!dashboard?.allLeaveStatus || !dashboard?.allLeaveStatus?.length)

@@ -45,6 +45,17 @@ export async function getAllLeaveApplicationSetup(body) {
 
 /**
  * 
+ * Get All Leave Balances according to employee Id
+ * 
+ * @param {Object} body 
+ * @returns res
+ */
+export async function getAllLeaveBalances(body) {
+  return axios.post(`${USERS_URL}/employee_leave_balance/read-all-employee-leave-balance`, body);
+}
+
+/**
+ * 
  * Get Single Leave Application By Id
  * 
  * @param {String|Number} id 
