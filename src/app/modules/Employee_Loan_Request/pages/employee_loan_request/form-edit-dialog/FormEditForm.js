@@ -79,8 +79,7 @@ export function FormEditForm({
   }, shallowEqual);
 
   const { loan_type,userForEdit } = currentState;
-// console.log("currentState",currentState.userForEdit.total_loan_amount,currentState.userForEdit.monthly_installment)
-console.log("currentState",userForEdit)
+
 
 useEffect(()=>{
   setTotalLoanAmount(userForEdit?.total_loan_amount)
@@ -90,7 +89,7 @@ useEffect(()=>{
 },[userForEdit])
 
   useEffect(() => {
-    console.log("hit",changeLoanType)
+   
 if(changeLoanType){
 
 
@@ -112,7 +111,7 @@ if(changeLoanType){
 
 //  if(!isClear){
   setMaxAmountLimit(Math.min(loandetails?.max_loan_amount, salaryAmount));
-  console.log("set suggest",isClear)
+ 
   setMaxMonthlyAmountSuggest(monthlySalarySuggest)
 //  }
  
@@ -137,7 +136,7 @@ if(changeLoanType){
   }, [changeLoanType,isEdit]);
 
   useEffect(() => {
-    console.log("monthlyInstallment",monthlyInstallment,totalLoanAmount,totalInstallments)
+   
     if (totalLoanAmount && monthlyInstallment) {
       const calculatedMonths = Math.ceil(totalLoanAmount / monthlyInstallment);
       setTotalInstallments(calculatedMonths);
@@ -152,7 +151,7 @@ if(changeLoanType){
   );
 
   const clearCustomeData=()=>{
-    console.log("clearCustomeData")
+
     setMaxAmountLimit("")
     setMaxMonthlyAmountSuggest("")
     setTotalInstallments("")
@@ -163,7 +162,7 @@ if(changeLoanType){
     { value: 1, label: "Active" },
     { value:2, label: "Pending" },
   ];
-console.log("maxMonthlyAmountSuggest",maxMonthlyAmountSuggest)
+
   return (
     <Formik
       // key={user.Id || "new"}

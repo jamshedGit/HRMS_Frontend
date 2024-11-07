@@ -70,12 +70,12 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
 
   const saveForm = async (data, totalInstallments,setTotalInstallments ,setMaxAmountLimit,setMaxMonthlyAmountSuggest,resetForm) => {
     // enableLoading();
-console.log("totalInstallments",totalInstallments)
+
     formUIProps.setIds("");
 
     if (!data.Id && data) {
       data.total_installment=totalInstallments
-      console.log("data.total_installment",data.total_installment)
+    
         await dispatch(
           actions.createEmployeeLoanRequest(data, disbaleLoading, resetForm)
         );
