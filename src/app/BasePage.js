@@ -64,11 +64,12 @@ const LeaveApplication = lazy(() => import("./modules/LeaveApplication/pages/ind
 const tax_slabModule = lazy(() => import("./modules/Tax_Slab/pages/index"));
 const allocate_leaves = lazy(() => import("./modules/AllocateLeaves/pages/index"));
 const employee_leave_balance = lazy(() => import("./modules/EmployeeLeaveBalance/pages/index"));
-const loan_manag_confModule = lazy(() => import("./modules/Loan_manag_conf/pages/index"));   
-const gratuity_confModule = lazy(() => import("./modules/Gratuity_Configuration/pages/index"));   
-const accrue_gratuity_confModule = lazy(() => import("./modules/Accrue_Gratuity_Configuration/pages/index"));  
-const reimbursement_configurationModule = lazy(() => import("./modules/Reimbursement_Configuration/pages/index"));  
-const reimbursement_claimModule = lazy(() => import("./modules/Reimbursement_claim/pages/index")); 
+const loan_manag_confModule = lazy(() => import("./modules/Loan_manag_conf/pages/index"));
+const gratuity_confModule = lazy(() => import("./modules/Gratuity_Configuration/pages/index"));
+const accrue_gratuity_confModule = lazy(() => import("./modules/Accrue_Gratuity_Configuration/pages/index"));
+const reimbursement_configurationModule = lazy(() => import("./modules/Reimbursement_Configuration/pages/index"));
+const reimbursement_claimModule = lazy(() => import("./modules/Reimbursement_claim/pages/index"));
+const LeaveEncashment = lazy(() => import("./modules/LeaveEncashment/pages/index"));
 
 const ROUTES = {
   settings: SettingsPage,
@@ -118,14 +119,15 @@ const ROUTES = {
   loan_type: LoanType,
   allocate_leaves: allocate_leaves,
   employee_leave_balance: employee_leave_balance,
-  leave_application :LeaveApplication,
-  payroll_process_policy :PayrollProcessPolicy,
-  tax_slab:tax_slabModule,
-  loan_management_configuration:loan_manag_confModule,
-  gratuity_configuration :gratuity_confModule,
-  accrue_gratuity_configuration :accrue_gratuity_confModule,
-  reimbursement_configuration:reimbursement_configurationModule,
-  reimbursement_claim:reimbursement_claimModule
+  leave_application: LeaveApplication,
+  payroll_process_policy: PayrollProcessPolicy,
+  tax_slab: tax_slabModule,
+  loan_management_configuration: loan_manag_confModule,
+  gratuity_configuration: gratuity_confModule,
+  accrue_gratuity_configuration: accrue_gratuity_confModule,
+  reimbursement_configuration: reimbursement_configurationModule,
+  reimbursement_claim: reimbursement_claimModule,
+  leave_encashment: LeaveEncashment
 };
 
 export default function BasePage() {
