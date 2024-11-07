@@ -79,7 +79,6 @@ export function MasterEditForm({
       </>)
     })
   }
-  console.log("dss",user);
 
   return (
     <>
@@ -121,6 +120,7 @@ export function MasterEditForm({
                         onChange={(e) => {
                           setFieldValue("subsidiaryId", e.value || null);
                           setDefualtSubsidiaryList(e);
+                          
                           //handlePaymenModeChanged(e)
                         }}
                         error={errors.subsidiaryId}
