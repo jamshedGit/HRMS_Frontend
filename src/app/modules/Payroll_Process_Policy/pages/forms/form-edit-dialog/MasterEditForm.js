@@ -56,10 +56,7 @@ export function MasterEditForm({
   const { auth } = useSelector((state) => state);
   const [defShortFormat, setDefaulShortFormat] = useState(null);
   
-  
 
-
-  console.log("::hq::", user)
   return (
     <>
       <Formik
