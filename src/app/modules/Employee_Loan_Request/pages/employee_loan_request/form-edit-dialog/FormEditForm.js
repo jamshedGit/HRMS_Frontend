@@ -62,7 +62,7 @@ export function FormEditForm({
     }
     //allPayrolGroupList
   }, [dispatch, user.Id]);
-  const [changeLoanType, setChangeLoanTpye] = useState();
+  const [changeLoanType, setChangeLoanType] = useState();
   const [maxAmountLimit, setMaxAmountLimit] = useState();
   const [maxMonthlyAmountSuggest, setMaxMonthlyAmountSuggest] = useState();
   const [monthlyInstallment, setMonthlyInstallments] = useState();
@@ -70,6 +70,7 @@ export function FormEditForm({
   const [totalLoanAmount, setTotalLoanAmount] = useState();
   const [dateOfJoining, setDateOfJoining] = useState();
   const [payrollMonth, setPayrollMonth] = useState();
+  const [isClear, setIsClear] = useState(false);
   const { currentState, userAccess } = useSelector((state) => {
     return {
       currentState: state.employee_loan_request,
@@ -84,10 +85,15 @@ console.log("currentState",userForEdit)
 useEffect(()=>{
   setTotalLoanAmount(userForEdit?.total_loan_amount)
   setMonthlyInstallments(userForEdit?.monthly_installment)
+    setChangeLoanType(userForEdit?.loan_typeId);
+    setIsClear(false)
 },[userForEdit])
 
   useEffect(() => {
-    
+    console.log("hit",changeLoanType)
+if(changeLoanType){
+
+
     let loandetails = currentState?.loan_config_details_permission?.loanDetails?.details?.find(
       (item) => item.loan_typeId === changeLoanType
     );
@@ -104,9 +110,12 @@ useEffect(()=>{
           ? salary?.gross * (parseFloat(currentState?.loan_config_details_permission?.loanDetails?.installment_deduction_percentage))/100
           : salary?.basic * (parseFloat(currentState?.loan_config_details_permission?.loanDetails?.installment_deduction_percentage))/100;
 
+//  if(!isClear){
+  setMaxAmountLimit(Math.min(loandetails?.max_loan_amount, salaryAmount));
+  console.log("set suggest",isClear)
+  setMaxMonthlyAmountSuggest(monthlySalarySuggest)
+//  }
  
-    setMaxAmountLimit(Math.min(loandetails?.max_loan_amount, salaryAmount));
-    setMaxMonthlyAmountSuggest(monthlySalarySuggest)
     if (employee?.dateOfJoining) {
       const joiningDate = new Date(employee?.dateOfJoining);
       joiningDate.setHours(0, 0, 0, 0);
@@ -118,10 +127,17 @@ useEffect(()=>{
       payrollDate.setHours(0, 0, 0, 0);
       setPayrollMonth(payrollDate); // Update state with the valid date
     }
+
+
+  }else{
+    setMaxAmountLimit("")
+    setMaxMonthlyAmountSuggest("")
+    setTotalInstallments("")
+  }
   }, [changeLoanType,isEdit]);
 
   useEffect(() => {
-    console.log("monthlyInstallment",monthlyInstallment,totalLoanAmount)
+    console.log("monthlyInstallment",monthlyInstallment,totalLoanAmount,totalInstallments)
     if (totalLoanAmount && monthlyInstallment) {
       const calculatedMonths = Math.ceil(totalLoanAmount / monthlyInstallment);
       setTotalInstallments(calculatedMonths);
@@ -135,12 +151,19 @@ useEffect(()=>{
     )
   );
 
+  const clearCustomeData=()=>{
+    console.log("clearCustomeData")
+    setMaxAmountLimit("")
+    setMaxMonthlyAmountSuggest("")
+    setTotalInstallments("")
+  }
+
   const statusOptions = [
     { value: 0, label: "Inactive" },
     { value: 1, label: "Active" },
     { value:2, label: "Pending" },
   ];
-
+console.log("maxMonthlyAmountSuggest",maxMonthlyAmountSuggest)
   return (
     <Formik
       // key={user.Id || "new"}
@@ -153,12 +176,12 @@ useEffect(()=>{
         //resetForm function doesn't clear file properly so we use this function
         const clearForm = () => {
           resetForm();
-          if (totalLoanAmount) {
-            setTotalLoanAmount(" ");
-            // values.statusId=""
-          }
+          // if (totalLoanAmount) {
+          //   setTotalLoanAmount(" ");
+          //   // values.statusId=""
+          // }
         };
-        saveForm(values,totalInstallments,setTotalInstallments, clearForm);
+        saveForm(values,totalInstallments,setTotalInstallments,setMaxMonthlyAmountSuggest,setMaxAmountLimit, clearForm);
       }}
     >
       {({
@@ -195,7 +218,7 @@ useEffect(()=>{
                         isDisabled={isEdit}
                         onChange={(e) => {
                           setFieldValue("loan_typeId", e.value || null);
-                          setChangeLoanTpye(e.value);
+                          setChangeLoanType(e.value);
                          
                         }}
                         value={
@@ -218,7 +241,7 @@ useEffect(()=>{
                           Employee Loan Account<span style={{ color: "red" }}>*</span>
                         </span>
                       }
-                      isDisabled={isUserForRead}
+                      // isDisabled={isUserForRead}
                       onChange={(e) => {
                         setFieldValue("employee_loan_accountId", e.value || null);
                       }}
@@ -235,6 +258,7 @@ useEffect(()=>{
                
                       error={errors.employee_loan_accountId}
                       touched={touched.employee_loan_accountId}
+                      isDisabled={userForEdit?.details[0]?.is_deducted }
                     />
                   </div>
 
@@ -250,6 +274,7 @@ useEffect(()=>{
                  
                       type="date"
                       minDate={dateOfJoining} 
+                      disabled={userForEdit?.details[0]?.is_deducted }
                     />
                   </div>
 
@@ -265,6 +290,7 @@ useEffect(()=>{
                       placeholder="Select Date"
                       type="date"
                       minDate={payrollMonth}
+                      disabled={userForEdit?.details[0]?.is_deducted }
                     />
                   </div>
 
@@ -298,6 +324,7 @@ useEffect(()=>{
                       onInput={(e) => {
                         e.target.value = amountLimit(e.target.value); // Limit to 3 digits
                       }}
+                      disabled={userForEdit?.details[0]?.is_deducted }
                     />
                   </div>
 
@@ -310,7 +337,7 @@ useEffect(()=>{
                       placeholder="Enter monthly installment"
                       label={
                         <span>
-                          Monthly Installment Suggested : {maxMonthlyAmountSuggest ||0}
+                          Monthly Installment Suggested : {maxMonthlyAmountSuggest || 0}
                           <span style={{ color: "red" }}>*</span>
                         </span>
                       }
@@ -336,6 +363,7 @@ useEffect(()=>{
                       onInput={(e) => {
                         e.target.value = amountLimit(e.target.value); // Limit to 3 digits
                       }}
+                      disabled={userForEdit?.details[0]?.is_deducted }
                     />
                   </div>
 
@@ -371,6 +399,7 @@ useEffect(()=>{
                         </span>
                       }
                       type="text"
+                      disabled={userForEdit?.details[0]?.is_deducted }
                     />
                   </div>
 
@@ -428,38 +457,7 @@ useEffect(()=>{
                     />
                   </div>
 
-                  {/* <div className="col-12 col-md-6 mt-3">
-                  <label htmlFor="installment_deduction_basis_type">
-                      Status
-                    </label>
-              
-
-<Field
-                      name="statusId"
-                      as="select"
-                      className="form-control"
-                      disabled={true}
-                      onChange={(e) => {
-                        setFieldValue(
-                          "statusId",
-                          e.target.value
-                        ); 
-                      }}
-
-                   
-                    >
-                      <option value=""></option>
-                      {statusOptions.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </Field>
-                  </div> */}
-
-
-
-
+                  
                   
 <div className="col-12 col-md-6 mt-3">
                     <SearchSelect
@@ -493,12 +491,14 @@ useEffect(()=>{
 
           <Modal.Footer>
             {/* Cancel / Ok Button */}
-            {!isUserForRead ? (
+            {/* {!isUserForRead ? ( */}
               <button
                 type="reset"
                 onClick={() => {
                   setIds("");
-                  setTotalInstallments("")
+          
+                  clearCustomeData()
+                 
                   handleReset();
                   
                 }}
@@ -506,7 +506,7 @@ useEffect(()=>{
               >
                 Cancel
               </button>
-            ) : (
+            {/* ) : (
               <button
                 type="button"
                 onClick={onHide}
@@ -514,10 +514,10 @@ useEffect(()=>{
               >
                 Ok
               </button>
-            )}
+            )} */}
 
             {/* Save Button */}
-            {!isUserForRead && (
+            {!userForEdit?.details[0]?.is_deducted && (
               <button
                 type="submit"
                 // onClick={() => handleSubmit()}
@@ -534,7 +534,7 @@ useEffect(()=>{
                   <span className="ml-3 mr-3 spinner spinner-white"></span>
                 )}
               </button>
-            )}
+           )} 
           </Modal.Footer>
         </>
       )}

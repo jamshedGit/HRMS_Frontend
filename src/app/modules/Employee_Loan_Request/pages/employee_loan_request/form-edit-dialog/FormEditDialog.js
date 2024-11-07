@@ -68,7 +68,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     // dispatch(actions.fetchmoduledata(formUIProps .queryParams))
   }, [id, dispatch, show]);
 
-  const saveForm = async (data, totalInstallments,setTotalInstallments ,resetForm) => {
+  const saveForm = async (data, totalInstallments,setTotalInstallments ,setMaxAmountLimit,setMaxMonthlyAmountSuggest,resetForm) => {
     // enableLoading();
 console.log("totalInstallments",totalInstallments)
     formUIProps.setIds("");
@@ -81,7 +81,8 @@ console.log("totalInstallments",totalInstallments)
         );
         await dispatch(actions.fetchEmployeeLoanRequest(formUIProps));
         setTotalInstallments("")
-    
+        setMaxAmountLimit("")
+        setMaxMonthlyAmountSuggest("")
     } else {
      
       const formUpdatedFields = {
