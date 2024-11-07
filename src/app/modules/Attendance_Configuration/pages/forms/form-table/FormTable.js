@@ -61,10 +61,19 @@ export function FormTable() {
   );
   // Table columns
   const columns = [
-
     {
-      dataField: "t_leave_type.name",
-      text: "Name",
+      dataField: "subs.subsName",
+      text: "Subsidiary",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
+    {
+      dataField: "leavetype.leaveTypeName",
+      text: "Leave Type",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,

@@ -6,7 +6,7 @@ import { Input, Select } from "../../../../../../_metronic/_partials/controls";
 import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLabel";
 import { getClassName } from "../../../../../utils/common";
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
-import { fetchAllFormsMenu, fetchAllLeaveType } from "../../../../../../_metronic/redux/dashboardActions";
+import { fetchAllFormsMenu, fetchAllLeaveType, fetchAllSubsidiaryData } from "../../../../../../_metronic/redux/dashboardActions";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState, useMemo } from "react";
@@ -15,9 +15,8 @@ const formValidation = Yup.object().shape({
   subsidiaryId: Yup.number().required(VALIDATION_MESSAGES.required),
   // companyId: Yup.string().required(VALIDATION_MESSAGES.required),
   leave_typeId: Yup.string().required(VALIDATION_MESSAGES.required),
-  late_count_leave_deduction: Yup.string().required(VALIDATION_MESSAGES.required),
-  late_count_leave_deduction: Yup.string()
-  .matches(/^\d{2}$/, 'Leave Count must be exactly 2 digits long and contain only digits.'),
+  late_count_leave_deduction: Yup.string().required(VALIDATION_MESSAGES.required)
+  .matches(/^[0-3]{1,2}$/, 'Leave Count must be between 0 and 3 digits long and contain only digits.')
 });
 
 export function MasterEditForm({
@@ -40,7 +39,8 @@ export function MasterEditForm({
   useEffect(() => {
     if (!user.Id) {
       dispatch(fetchAllLeaveType("allLeaveTypes"))
-      dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsisidaries
+     // dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsisidaries
+     dispatch(fetchAllSubsidiaryData("allSubsidiaryList"));
     }
   }, [dispatch]);
 
@@ -125,7 +125,7 @@ export function MasterEditForm({
                         }}
                         error={errors.subsidiaryId}
                         value={(defSubsidiary || null)}
-                        options={dashboard.allSubidiaryList}
+                        options={dashboard?.allSubsidiaryList}
                       />
                       <ErrorMessage className="form-feedBack" name="subsidiaryId" component="div" />
                      
