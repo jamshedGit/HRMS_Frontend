@@ -50,8 +50,8 @@ export function MasterEditForm({
     const subsidiaryId = defSubsidiary?.value ? defSubsidiary.value : user.subsidiaryId;
 
     setDefualtSubsidiaryList(
-      dashboard.allSubidiaryList &&
-      dashboard.allSubidiaryList.filter((item) => {
+      dashboard.allSubsidiaryList &&
+      dashboard.allSubsidiaryList.filter((item) => {
         return item.value === subsidiaryId;
       })
     );

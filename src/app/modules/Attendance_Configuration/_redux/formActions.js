@@ -40,7 +40,7 @@ export const fetchEditRecord = (id) => (dispatch) => {
   return requestFromServer
     .getAttendanceConfigurationSetupById(id)
     .then((response) => {
-
+      console.log(":zzz:",response,id);
       const entities = response.data?.data;
       dispatch(actions.AttendanceConfigurationFetchedForEdit({ userForEdit: entities }));
     })
