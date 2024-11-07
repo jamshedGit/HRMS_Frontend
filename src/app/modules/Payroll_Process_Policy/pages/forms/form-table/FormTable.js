@@ -228,7 +228,7 @@ export function FormTable(user
 
 
   const addRowBankInfo = (element) => {
-    console.log("click", element.target.id)
+    
 
     setDefaultBankInfoList([...defBankInfoList, { transactionType: element.target.id }])
 
@@ -244,7 +244,7 @@ export function FormTable(user
     const key = el.target.id.split('-')[0];
 
     const updatedBankInfoList = defBankInfoList.map((val, ind) => {
-      console.log("::111",key);
+     
       if (ind === parseInt(index, 10)) { 
         return {
           ...val, 
@@ -398,7 +398,7 @@ export function FormTable(user
   };
 
   const SavePayrollPolicy = async (user, emailRecipentList, eobiAllowances, bankInfoList, sessiAllowanceList) => {
-    console.log("::latest::", id, user);
+    
     if (!user.Id) {
 
       await dispatch(actions.create_Payroll_Policy(user, emailRecipentList, eobiAllowances, bankInfoList, sessiAllowanceList));
@@ -407,7 +407,7 @@ export function FormTable(user
 
     } else {
 
-      console.log("getUserStatus", user);
+    
 
       const payrollUpdateObj = {
         Id: user.Id,
