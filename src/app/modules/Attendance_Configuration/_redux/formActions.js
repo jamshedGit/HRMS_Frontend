@@ -12,12 +12,26 @@ const { actions } = AttendanceConfigurationSlice;
  * @returns 
  */
 export const fetchAttendanceConfiguration = (queryparm) => async (dispatch) => {
-  console.log("te::",queryparm);
+ 
   dispatch(actions.startCall({ callType: callTypes.list }));
   return requestFromServer.getAllAttendanceConfigurationSetup(queryparm)
     .then((response) => {
-      console.log("::y",response);
-      dispatch(actions.AttendanceConfigurationFetched(response));
+        // Transform the response rows here
+    const transformedRows = response?.data?.data?.rows.map(item => ({
+      ...item,
+      isEnable_att_integration: item.isEnable_att_integration ? 'Yes' : 'No'  // Transform the value
+    }));
+    
+    // Update the response with transformed rows
+    const updatedResponse = {
+      ...response,
+      data: {
+        ...response.data,
+        rows: transformedRows
+      }
+    };
+    
+    dispatch(actions.AttendanceConfigurationFetched(updatedResponse));
     })
     .catch((error) => {
       error.clientMessage = "Can't find Leave Types";
@@ -40,7 +54,7 @@ export const fetchEditRecord = (id) => (dispatch) => {
   return requestFromServer
     .getAttendanceConfigurationSetupById(id)
     .then((response) => {
-      console.log(":zzz:",response,id);
+     
       const entities = response.data?.data;
       dispatch(actions.AttendanceConfigurationFetchedForEdit({ userForEdit: entities }));
     })
@@ -80,7 +94,7 @@ export const fetchEditRecord = (id) => (dispatch) => {
  * @returns 
  */
 export const saveRecord = (data, id, disableLoading, onHide) => (dispatch) => {
-console.log("dst",id);
+
   if (!id) {
     return requestFromServer.createAttendanceConfigurationSetup(data)
       .then((res) => {

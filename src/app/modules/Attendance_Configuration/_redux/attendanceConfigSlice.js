@@ -39,7 +39,8 @@ export const AttendanceConfigurationSlice = createSlice({
             }
         },
         AttendanceConfigurationFetched: (state, action) => {
-            const entities = action.payload.data?.data.rows;
+            
+            const entities = action.payload.data?.rows;
             const totalResult = action.payload.data?.data.totalResults;
             state.listLoading = false;
             state.error = null;
@@ -65,7 +66,7 @@ export const AttendanceConfigurationSlice = createSlice({
             state.totalCount--;
         },
         AttendanceConfigurationCreated: (state, action) => {
-            console.log("ent::",state.entities,action.payload);
+          
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);
