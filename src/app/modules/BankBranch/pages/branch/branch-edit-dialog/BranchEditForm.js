@@ -27,7 +27,9 @@ const userEditSchema_2 = Yup.object().shape(
     countryId: Yup.string().required("*Required"),
     cityId: Yup.string().required("*Required"),
     branchCode: Yup.string().required("*Required"),
-    Name: Yup.string().required("*Required"),
+    Name: Yup.string()
+    .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.')
+    .required('Required*'),
     BankId: Yup.string().required("*Required"),
     email: Yup.string()
       .email("Invalid email"),
@@ -36,8 +38,24 @@ const userEditSchema_2 = Yup.object().shape(
       .matches(/^\d+$/, 'Only numeric characters are allowed')
       .min(11)
       .max(15)
-      .required("*Required")
+      .required("*Required"),
+
+      contactPerson: Yup
+      .string()
+      .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.'),
+      
+
+      accNoForSalary: Yup.string()
+      .matches(/^\d+$/, 'Only numeric characters are allowed'),
+
+      accNoForPF: Yup.string()
+      .matches(/^\d+$/, 'Only numeric characters are allowed'),
+
+      accNoForGrad: Yup.string()
+      .matches(/^\d+$/, 'Only numeric characters are allowed')
+  
   }
+  
 );
 
 
@@ -79,6 +97,7 @@ export function BranchEditForm({
   }, [user.accOpeningDate]);
 
   useEffect(() => {
+    
     const countryId = defCountry?.value ? defCountry.value : user.countryId;
     setDefaultCountry(
       dashboard.allCountry &&
@@ -140,7 +159,7 @@ export function BranchEditForm({
                     {<div className="col-12 col-md-4 mt-3">
                       <SearchSelect
                         name="BankId"
-                        label={<span> Bank<span style={{ color: 'red' }}>*</span></span>}
+                        label={<span> Bank Name<span style={{ color: 'red' }}>*</span></span>}
                         isDisabled={isUserForRead && true}
                         onBlur={() => {
                           // handleBlur({ target: { name: "countryId" } });
@@ -163,6 +182,7 @@ export function BranchEditForm({
                       <Field
                         name="branchCode"
                         component={Input}
+                        maxLength={6}
                         placeholder="Enter Branch Code"
                         label={<span> Branch Code<span style={{ color: 'red' }}>*</span></span>}
                       />
@@ -173,6 +193,7 @@ export function BranchEditForm({
                       <Field
                         name="Name"
                         component={Input}
+                        maxLength={30}
                         placeholder="Enter Branch Name"
                         label={<span> Branch Name<span style={{ color: 'red' }}>*</span></span>}
                       />
@@ -246,6 +267,7 @@ export function BranchEditForm({
                         <Field
                           name="fax"
                           component={Input}
+                          maxLength={15}
                           placeholder="Enter Fax No."
                           label="Fax"
                         />
@@ -295,6 +317,7 @@ export function BranchEditForm({
                       <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="accNoForSalary"
+                          maxLength={15}
                           component={Input}
                           placeholder="Enter Account No For Salary"
                           label="Account No (Salary)"
@@ -305,6 +328,7 @@ export function BranchEditForm({
                       <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="accNoForPF"
+                          maxLength={15}
                           component={Input}
                           placeholder="Enter Provident Fund"
                           label="Account No (Provident Fund)"
@@ -316,6 +340,7 @@ export function BranchEditForm({
                         <Field
                           name="accNoForGrad"
                           component={Input}
+                          maxLength={15}
                           placeholder="Enter Account No For Gratuity"
                           label="Account No (Gratuity)"
                         />
