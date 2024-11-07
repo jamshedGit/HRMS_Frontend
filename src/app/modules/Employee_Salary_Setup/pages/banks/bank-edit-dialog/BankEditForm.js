@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Input, Select, TextArea } from "../../../../../../_metronic/_partials/controls";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,6 +22,7 @@ import {
 } from "../../../../../../_metronic/redux/dashboardActions";
 import DatePicker from "react-datepicker";
 import axios from 'axios';
+import { amountLimit } from "../../../../../utils/common";
 export const USERS_URL = process.env.REACT_APP_API_URL;
 
 // Phone Number Regex
@@ -39,9 +40,33 @@ const formValidation = Yup.object().shape(
     currencyId: Yup.string()
       .required("Required*"),
     grossSalary: Yup.string()
-      .required("Required*"),
+      .required("Required*")
+      .matches(/^\d+$/, "Must contain only digits"), // Only digits validation
+
     basicSalary: Yup.string()
-      .required("Required*"),
+      .required("Required*")
+      .matches(/^\d+$/, "Must contain only digits"), // Only digits validation
+
+    eobi_accNo: Yup.string()
+      .matches(/^\d+$/, "Must contain only digits"), // Only digits validation
+
+    pf_accNo: Yup.string()
+      .matches(/^\d+$/, "Must contain only digits"), // Only digits validation
+
+    social_security_accNo: Yup.string()
+      .matches(/^\d+$/, "Must contain only digits"), // Only digits validation
+
+    pension_accNo: Yup.string()
+      .matches(/^\d+$/, "Must contain only digits"), // Only digits validation
+
+    company_from_accNo: Yup.string()
+      .matches(/^\d+$/, "Must contain only digits"), // Only digits validation
+
+    emp_bank_accNo: Yup.string()
+      .matches(/^\d+$/, "Must contain only digits"), // Only digits validation
+
+
+
 
   },
 
@@ -89,6 +114,7 @@ export function BankEditForm({
   const [defBasicSalary, setBasicSalary] = useState(0);
   const [defGrossSalaryDB, setGrossSalaryDB] = useState(0);
   const [defBasicSalaryDB, setBasicSalaryDB] = useState(0);
+  const [deferrors, setErrors] = useState({});
 
   useEffect(() => {
     if (!user.Id) {
@@ -301,16 +327,13 @@ export function BankEditForm({
     const index = el.target.id.split('-')[1]
     const key = el.target.id.split('-')[0]
     setDefaultMapEarningDeductionList([...defMapEarningDeductionList.map((val, ind) => {
-
       if (ind == index) {
         if (!(key == "factorValue" && Number(el.target.value) > 100)) {
           val[key] = key == 'calculation_type' ? (el.target.value) : Number(el.target.value)
         }
       }
-
       return val
     })])
-
   }
 
   const addRow = (element) => {
@@ -374,7 +397,33 @@ export function BankEditForm({
     return curr.transactionType == 'Deduction' ? prev + curr.amount : prev
   }, 0) || 0;
 
-  console.log("my user", user)
+
+  const validate = () => {
+    const newErrors = {};
+    defMapEarningDeductionList.forEach((objValidate, index) => {
+      if (!objValidate.earning_deduction_id) {
+        newErrors[`earning_deduction_id-${index}`] = 'Required*';
+      }
+      if (!objValidate.calculation_type) {
+        newErrors[`calculation_type-${index}`] = 'Required*';
+      }
+      console.log("amount::", objValidate.amount)
+      // Check if factorValue is required
+      if (!objValidate.factorValue && objValidate.amount <= 0) {
+        newErrors[`factorValue-${index}`] = 'Required*';
+      }
+
+      // Check if amount is required
+      if (!objValidate.amount && objValidate.factorValue <= 0) {
+        newErrors[`amount-${index}`] = 'Required*';
+      }
+    });
+
+
+
+    return newErrors;
+  };
+
   return (
     <>
       <Formik
@@ -383,9 +432,15 @@ export function BankEditForm({
         validationSchema={formValidation}
         onSubmit={(values) => {
           console.log("values 1 ", values);
-          enableLoading();
 
-          saveEarningDeductionTran(values, defMapEarningDeductionList);
+          const validationErrors = validate();
+          console.log("ppp", validationErrors)
+          if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+          } else {
+            enableLoading();
+            saveEarningDeductionTran(values, defMapEarningDeductionList);
+          }
         }}
       >
         {({
@@ -426,8 +481,8 @@ export function BankEditForm({
                           dashboard.allEmployeesSalaryDDL.filter((item) => {
                             return item.value === user.employeeId;
                           })) || defEmployee || null)}
-                        error={errors.Id}
-                        touched={touched.Id}
+                        error={errors.employeeId}
+                        touched={touched.employeeId}
                         options={dashboard.allEmployeesSalaryDDL}
                       />
                     </div>
@@ -458,6 +513,11 @@ export function BankEditForm({
                     <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="grossSalary"
+                        type="number"
+                        maxLength={8}
+                        onInput={(e) => {
+                          e.target.value = amountLimit(e.target.value); // Limit to 3 digits
+                        }}
                         onChange={(e) => {
 
                           setGrossSalaryDB(e.target.value);
@@ -474,6 +534,10 @@ export function BankEditForm({
                     <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="basicSalary"
+                        type="number"
+                        onInput={(e) => {
+                          e.target.value = amountLimit(e.target.value); // Limit to 3 digits
+                        }}
                         onChange={(e) => {
                           setBasicSalary(e.target.value);
                           setFieldValue("basicSalary", e.target.value);
@@ -488,6 +552,11 @@ export function BankEditForm({
                     <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="basicSalaryFactor"
+                        type="number"
+                        onInput={(e) => {
+                          e.target.value = amountLimit(e.target.value); // Limit to 3 digits
+                        }}
+                        maxLength={10}
                         value={defBasicSalaryFactor}
                         component={Input}
                         placeholder="Enter Basic Salary"
@@ -521,30 +590,70 @@ export function BankEditForm({
                         <><tr>
                           <td id={rightindex} onClick={deleteRow}> Delete</td>
                           <td>
-                            <select onChange={handleFieldChanged} id={'earning_deduction_id-' + rightindex} value={obj.earning_deduction_id}>
+                            <select
+
+                              onChange={(e) => {
+                                handleFieldChanged(e);
+                                setErrors((prev) => ({ ...prev, [`earning_deduction_id-${rightindex}`]: '' })); // Clear error on change
+
+                              }}
+
+                              id={'earning_deduction_id-' + rightindex} value={obj.earning_deduction_id}>
                               <option value="-1"> --Select--</option>
                               {
                                 dashboard.allEarnings?.map((x) => {
                                   return <option disabled={defMapEarningDeductionList.find(el => el.earning_deduction_id == x.value) ? true : false} value={x.value}> {x.label} </option>
                                 })}
                             </select>
+                            {deferrors[`earning_deduction_id-${rightindex}`] && <div className="form-feedBack">{deferrors[`earning_deduction_id-${rightindex}`]}</div>}
                           </td>
                           <td>
-                            <select value={obj.calculation_type} onChange={handleFieldChanged} id={'calculation_type-' + rightindex} >
+                            <select value={obj.calculation_type}
+
+                              onChange={(e) => {
+                                handleFieldChanged(e);
+                                setErrors((prev) => ({ ...prev, [`calculation_type-${rightindex}`]: '' })); // Clear error on change
+
+                                if (e.target.value == "Fixed Amount") { obj.factorValue = 0 }
+                                else {
+                                  obj.amount = 0
+                                }
+
+                              }}
+
+                              id={'calculation_type-' + rightindex} >
+
                               <option value="-1">--Select--</option>
                               <option value="% Of Basic">% Of Basic</option>
                               <option value="Fixed Amount">Fixed Amount</option>
                             </select>
-
+                            {deferrors[`calculation_type-${rightindex}`] && <div className="form-feedBack">{deferrors[`calculation_type-${rightindex}`]}</div>}
                           </td>
                           {/* <td>{obj.transactionType}</td> */}
                           <td>
-                            <input disabled={obj.calculation_type == 'Fixed Amount'} style={{ width: "100px" }} type="number" onChange={handleFieldChanged}
+
+                            <input disabled={obj.calculation_type == 'Fixed Amount'} style={{ width: "100px" }} type="number"
+                              onChange={(e) => {
+                                handleFieldChanged(e);
+                                setErrors((prev) => ({ ...prev, [`factorValue-${rightindex}`]: '' })); // Clear error on change
+                              }}
                               value={obj.factorValue} id={'factorValue-' + rightindex}></input>
+                            {deferrors[`factorValue-${rightindex}`] && <div className="form-feedBack">{deferrors[`factorValue-${rightindex}`]}</div>}
                           </td>
                           <td>
-                            <input disabled={obj.calculation_type == '% Of Basic'} style={{ width: "100px" }} type="number" onChange={handleFieldChanged}
-                              value={obj.amount} id={'amount-' + rightindex}></input> </td>
+                            <input
+                              maxLength={8}
+                              disabled={obj.calculation_type == '% Of Basic'}
+                              style={{ width: "100px" }}
+
+                              onChange={(e) => {
+                                handleFieldChanged(e);
+                                setErrors((prev) => ({ ...prev, [`amount-${rightindex}`]: '' })); // Clear error on change
+                              }}
+                              value={obj.amount} id={'amount-' + rightindex}></input>
+                            {deferrors[`amount-${rightindex}`] && <div className="form-feedBack">{deferrors[`amount-${rightindex}`]}</div>}
+                          </td>
+
                         </tr>
 
                         </>
@@ -583,31 +692,60 @@ export function BankEditForm({
                         <><tr>
                           <td id={rightindex} onClick={deleteRow}> Delete</td>
                           <td>
-                            <select onChange={handleFieldChanged} id={'earning_deduction_id-' + rightindex} value={obj.earning_deduction_id}>
+                            <select
+                              onChange={(e) => {
+                                handleFieldChanged(e);
+                                setErrors((prev) => ({ ...prev, [`earning_deduction_id-${rightindex}`]: '' })); // Clear error on change
+                              }}
+                              // onChange={handleFieldChanged}
+
+                              id={'earning_deduction_id-' + rightindex} value={obj.earning_deduction_id}>
                               <option value="-1"> --Select--</option>
                               {
                                 dashboard.allEarnings?.map((x) => {
                                   return <option disabled={defMapEarningDeductionList.find(el => el.earning_deduction_id == x.value) ? true : false} value={x.value}> {x.label} </option>
                                 })}
                             </select>
+                            {deferrors[`earning_deduction_id-${rightindex}`] && <div className="form-feedBack">{deferrors[`earning_deduction_id-${rightindex}`]}</div>}
                           </td>
                           <td>
-                            <select value={obj.calculation_type} onChange={handleFieldChanged} id={'calculation_type-' + rightindex} >
+                            <select value={obj.calculation_type}
+                              onChange={(e) => {
+                                handleFieldChanged(e);
+                                setErrors((prev) => ({ ...prev, [`calculation_type-${rightindex}`]: '' })); // Clear error on change
+
+                                if (e.target.value == "Fixed Amount") { obj.factorValue = 0 }
+                                else {
+                                  obj.amount = 0
+                                }
+                              }}
+
+                              id={'calculation_type-' + rightindex} >
                               <option value="-1">--Select--</option>
                               <option value="% Of Basic">% Of Basic</option>
                               <option value="Fixed Amount">Fixed Amount</option>
                             </select>
+                            {deferrors[`calculation_type-${rightindex}`] && <div className="form-feedBack">{deferrors[`calculation_type-${rightindex}`]}</div>}
 
                           </td>
                           {/* <td>{obj.transactionType}</td> */}
                           <td>
-                            <input disabled={obj.calculation_type == 'Fixed Amount'} style={{ width: "100px" }} type="number" onChange={handleFieldChanged}
+                            <input disabled={obj.calculation_type == 'Fixed Amount'} style={{ width: "100px" }} type="number"
+
+                              onChange={(e) => {
+                                handleFieldChanged(e);
+                                setErrors((prev) => ({ ...prev, [`factorValue-${rightindex}`]: '' })); // Clear error on change
+                              }}
                               value={obj.factorValue} id={'factorValue-' + rightindex}></input>
+                            {deferrors[`factorValue-${rightindex}`] && <div className="form-feedBack">{deferrors[`factorValue-${rightindex}`]}</div>}
                           </td>
 
                           <td>
-                            <input disabled={obj.calculation_type == '% Of Basic'} style={{ width: "100px" }} type="number" onChange={handleFieldChanged}
-                              value={obj.amount} id={'amount-' + rightindex}></input> </td>
+                            <input maxLength="10" disabled={obj.calculation_type == '% Of Basic'} style={{ width: "100px" }} type="number" onChange={handleFieldChanged}
+                              value={obj.amount} id={'amount-' + rightindex}></input>
+                            {deferrors[`amount-${rightindex}`] && <div className="form-feedBack">{deferrors[`amount-${rightindex}`]}</div>}
+                          </td>
+
                         </tr>
 
                         </>
@@ -648,25 +786,59 @@ export function BankEditForm({
                         obj.transactionType == 'Deduction' &&
                         <><tr>
                           <td id={rightindex} onClick={deleteRow}> Delete</td>
-                          <td>  <select onChange={handleFieldChanged} id={'earning_deduction_id-' + rightindex} value={obj.earning_deduction_id}>
-                            <option value="-1"> --Select--</option>
-                            {
-                              dashboard.allDeductions?.map((x) => {
-                                return <option disabled={defMapEarningDeductionList.find(el => el.earning_deduction_id == x.value) ? true : false} value={x.value}> {x.label} </option>
-                              })}
-                          </select></td>
+                          <td>
+                            <select
+                              onChange={(e) => {
+                                handleFieldChanged(e);
+                                setErrors((prev) => ({ ...prev, [`earning_deduction_id-${rightindex}`]: '' })); // Clear error on change
+                              }}
+
+                              id={'earning_deduction_id-' + rightindex} value={obj.earning_deduction_id}>
+                              <option value="-1"> --Select--</option>
+                              {
+                                dashboard.allDeductions?.map((x) => {
+                                  return <option disabled={defMapEarningDeductionList.find(el => el.earning_deduction_id == x.value) ? true : false} value={x.value}> {x.label} </option>
+                                })}
+                            </select>
+                            {deferrors[`earning_deduction_id-${rightindex}`] && <div className="form-feedBack">{deferrors[`earning_deduction_id-${rightindex}`]}</div>}
+                          </td>
                           <td>
                             <td>
-                              <select value={obj.calculation_type} onChange={handleFieldChanged} id={'calculation_type-' + rightindex} >
+                              <select value={obj.calculation_type}
+
+                                onChange={(e) => {
+                                  handleFieldChanged(e);
+                                  setErrors((prev) => ({ ...prev, [`calculation_type-${rightindex}`]: '' })); // Clear error on change
+                                }}
+
+                                id={'calculation_type-' + rightindex} >
                                 <option value="-1">--Select--</option>
                                 <option value="% Of Basic">% Of Basic</option>
                                 <option value="Fixed Amount">Fixed Amount</option>
                               </select>
+                              {deferrors[`calculation_type-${rightindex}`] && <div className="form-feedBack">{deferrors[`calculation_type-${rightindex}`]}</div>}
                             </td></td>
                           {/* <td>{obj.transactionType}</td> */}
-                          <td> <input disabled={obj.calculation_type == 'Fixed Amount'} style={{ width: "100px" }} type="number" onChange={handleFieldChanged} value={obj.factorValue} id={'factorValue-' + rightindex}></input></td>
-                          <td><input disabled={obj.calculation_type == '% Of Basic'} style={{ width: "100px" }} type="number"
-                            onChange={handleFieldChanged} value={obj.amount} id={'amount-' + rightindex}></input> </td>
+                          <td>
+
+                            <input disabled={obj.calculation_type == 'Fixed Amount'} style={{ width: "100px" }} type="number"
+                              onChange={(e) => {
+                                handleFieldChanged(e);
+                                setErrors((prev) => ({ ...prev, [`factorValue-${rightindex}`]: '' })); // Clear error on change
+                              }}
+                              value={obj.factorValue} id={'factorValue-' + rightindex}></input>
+                            {deferrors[`factorValue-${rightindex}`] && <div className="form-feedBack">{deferrors[`factorValue-${rightindex}`]}</div>}
+                          </td>
+                          <td>
+                            <input disabled={obj.calculation_type == '% Of Basic'} style={{ width: "100px" }} type="number"
+                              onChange={(e) => {
+                                handleFieldChanged(e);
+                                setErrors((prev) => ({ ...prev, [`amount-${rightindex}`]: '' })); // Clear error on change
+                              }}
+                              value={obj.amount} id={'amount-' + rightindex} >
+                            </input>
+                            {deferrors[`amount-${rightindex}`] && <div className="form-feedBack">{deferrors[`amount-${rightindex}`]}</div>}
+                          </td>
                         </tr>
                         </>
                       ))}
@@ -675,7 +847,8 @@ export function BankEditForm({
 
                     <div className="from-group row">
                       <div className="col-12 col-md-4 mt-3">
-                        <input type='button' id="Deduction" onClick={addRow} value='+Add'></input>
+                        <input type='button' id="Deduction"
+                          onClick={addRow} value='+Add'></input>
                       </div>
                       <div className="col-12 col-md-4 mt-3">
                       </div>
@@ -744,7 +917,7 @@ export function BankEditForm({
 
                       <div className="col-12 col-md-4 mt-3">
 
-                        {<span> Date Of Registration<span style={{ color: 'red' }}>*</span></span>}
+                        {<span> Date Of Registration</span>}
                         <DatePicker
                           className="form-control"
                           placeholder="Enter Gratuity Reg Date"
@@ -829,7 +1002,7 @@ export function BankEditForm({
 
                       </div>
                       <div className="col-12 col-md-4 mt-5">
-                        {<span> Date Of Registration<span style={{ color: 'red' }}>*</span></span>}
+                        {<span> Date Of Registration</span>}
 
                         <DatePicker
                           className="form-control"
@@ -856,8 +1029,9 @@ export function BankEditForm({
                           name="eobi_accNo"
                           component={Input}
 
+                          maxLength={15}
                           placeholder="Enter EOBI Acc No"
-                          label={<span> EOBI Acc No<span style={{ color: 'red' }}>*</span></span>}
+                          label={<span> EOBI Acc No</span>}
                           autoComplete="off"
                           disabled={!values.eobi_member}
                         />
@@ -879,7 +1053,7 @@ export function BankEditForm({
                       </div>
 
                       <div className="col-12 col-md-4 mt-5">
-                        {<span> Date Of Registration<span style={{ color: 'red' }}>*</span></span>}
+                        {<span> Date Of Registration</span>}
                         <DatePicker
                           className="form-control"
                           placeholder="Enter PF Reg Date"
@@ -905,7 +1079,7 @@ export function BankEditForm({
                           name="pf_accNo"
                           component={Input}
                           placeholder="Enter PF Acc No"
-                          label={<span> PF AccNo<span style={{ color: 'red' }}>*</span></span>}
+                          label={<span> PF AccNo</span>}
                           autoComplete="off"
                           disabled={!values.pf_member}
                         />
@@ -938,7 +1112,7 @@ export function BankEditForm({
 
                       </div>
                       <div className="col-12 col-md-4 mt-5">
-                        {<span> Date Of Registration<span style={{ color: 'red' }}>*</span></span>}
+                        {<span> Date Of Registration</span>}
                         <DatePicker
                           className="form-control"
                           placeholder="Enter Social Security Reg Date"
@@ -963,7 +1137,7 @@ export function BankEditForm({
                           name="social_security_accNo"
                           component={Input}
                           placeholder="Enter Social Security AccNo"
-                          label={<span> Social Security Acc No<span style={{ color: 'red' }}>*</span></span>}
+                          label={<span> Social Security Acc No</span>}
                           autoComplete="off"
                           disabled={!values.social_security_member}
                         />
@@ -982,7 +1156,7 @@ export function BankEditForm({
                         /> Pension Member
                       </div>
                       <div className="col-12 col-md-4 mt-5">
-                        {<span> Pension Reg Date<span style={{ color: 'red' }}>*</span></span>}
+                        {<span> Pension Reg Date</span>}
                         <DatePicker
                           className="form-control"
                           placeholder="Enter Pension Reg Date"
@@ -1022,7 +1196,7 @@ export function BankEditForm({
                       <div className="col-12 col-md-4 mt-3">
                         <SearchSelect
                           name="payment_mode_Id"
-                          label={<span> Payment Mode<span style={{ color: 'red' }}>*</span></span>}
+                          label={<span> Payment Mode</span>}
                           isDisabled={isUserForRead && true}
                           onBlur={() => {
                             // handleBlur({ target: { name: "countryId" } });
@@ -1044,7 +1218,7 @@ export function BankEditForm({
                       {<div className="col-12 col-md-4 mt-3">
                         <SearchSelect
                           name="emp_bankId"
-                          label={<span> Employee Bank<span style={{ color: 'red' }}>*</span></span>}
+                          label={<span> Employee Bank</span>}
                           isDisabled={isDropdownDisabled}
                           onBlur={() => {
                             // handleBlur({ target: { name: "countryId" } });
@@ -1071,7 +1245,7 @@ export function BankEditForm({
                       {<div className="col-12 col-md-4 mt-3">
                         <SearchSelect
                           name="company_bankId"
-                          label={<span> Company Bank<span style={{ color: 'red' }}>*</span></span>}
+                          label={<span> Company Bank</span>}
                           isDisabled={isDropdownDisabled}
                           onBlur={() => {
                             // handleBlur({ target: { name: "countryId" } });
@@ -1095,7 +1269,7 @@ export function BankEditForm({
                       {<div className="col-12 col-md-4 mt-3">
                         <SearchSelect
                           name="emp_bank_branchId"
-                          label={<span>Employee Bank Branch<span style={{ color: 'red' }}>*</span></span>}
+                          label={<span>Employee Bank Branch</span>}
                           isDisabled={isDropdownDisabled}
                           onBlur={() => {
                             // handleBlur({ target: { name: "countryId" } });
@@ -1120,7 +1294,7 @@ export function BankEditForm({
                       {<div className="col-12 col-md-4 mt-3">
                         <SearchSelect
                           name="company_branchId"
-                          label={<span>Company Bank Branch<span style={{ color: 'red' }}>*</span></span>}
+                          label={<span>Company Bank Branch</span>}
                           isDisabled={isDropdownDisabled}
                           onBlur={() => {
                             // handleBlur({ target: { name: "countryId" } });
@@ -1149,7 +1323,7 @@ export function BankEditForm({
                           onChange={(e) => setBankAccTitleClearField(e.target.value)}
                           component={Input}
                           placeholder="Enter Bank Account Title"
-                          label={<span> Bank Account Title<span style={{ color: 'red' }}>*</span></span>}
+                          label={<span> Bank Account Title</span>}
                           autoComplete="off"
                         />
                       </div>
@@ -1160,15 +1334,17 @@ export function BankEditForm({
                       <div className="col-12 col-md-4 mt-3">
 
                         <Field
-                          isDisabled={isDropdownDisabled}
+                          maxLength={20}
+                        
                           disabled={isDropdownDisabled}
                           name="company_from_accNo"
                           component={Input}
-                          value={clearComBankAccField}
-                          onChange={(e) => setComBankAccClearField(e.target.value)}
+                          // value={clearComBankAccField}
+                          // onChange={(e) => setComBankAccClearField(e.target.value)}
                           placeholder="Enter Bank Account No"
-                          label={<span>Company Bank Account No<span style={{ color: 'red' }}>*</span></span>}
+                          label={<span>Company Bank Account No</span>}
                           autoComplete="off"
+                       
                         />
                       </div>
                     </div>
@@ -1176,16 +1352,19 @@ export function BankEditForm({
                       <div className="col-12 col-md-4 mt-3">
 
                         <Field
-                          isDisabled={isDropdownDisabled}
+                          maxLength={20}
+                        
                           disabled={isDropdownDisabled}
                           name="emp_bank_accNo"
                           component={Input}
-                          value={clearEmpBankAccField}
-                          onChange={(e) => setEmpBankAccClearField(e.target.value)}
+                         // value={clearEmpBankAccField}
+                          //onChange={(e) => setEmpBankAccClearField(e.target.value)}
                           placeholder="Enter Bank Account No"
-                          label={<span>Bank Account No<span style={{ color: 'red' }}>*</span></span>}
+                          label={<span>Bank Account No</span>}
                           autoComplete="off"
+                         
                         />
+                          {/* <ErrorMessage className="form-feedBack" name="emp_bank_accNo" component="div" /> */}
                       </div>
                     </div>
                   </div>
