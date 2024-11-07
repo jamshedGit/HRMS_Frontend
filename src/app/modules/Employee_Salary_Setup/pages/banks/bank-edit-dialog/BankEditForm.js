@@ -188,8 +188,7 @@ export function BankEditForm({
 
   useEffect(() => {
     const employeeId = user.employeeId; // defEmployee?.value ? defEmployee.value : user.employeeId;
-    console.log("employeeId 1231", employeeId);
-
+   
     dispatch(fetchAllActiveEmployeesSalaryForDDL(employeeId));
     console.log("test", dashboard.allEmployeesSalaryDDL);
     setEmployeeDefault(
@@ -204,9 +203,9 @@ export function BankEditForm({
 
 
   useEffect(() => {
-    console.log("google", user);
+   
     const currencyId = defCurrencyCodeList?.value ? defCurrencyCodeList.value : user.currencyId;
-    console.log("currencyId", currencyId);
+  
     setDefualtCurrencyCodeList(
       dashboard.allCurrencyCodeList &&
       dashboard.allCurrencyCodeList.filter((item) => {

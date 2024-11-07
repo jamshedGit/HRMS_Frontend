@@ -17,6 +17,7 @@ const initialDashboardState = {
   allEarnings:[],
   allDeductions:[],
   allChildMenus:[],
+  allPayrollPayableAccounts: [],
   allDegreeTitle: [],
   allStatus: [],
   allInstitution: [],
@@ -41,6 +42,8 @@ const initialDashboardState = {
   lastTrips: [],
   alarmTime: [],
   incidentTypes: [],
+  allPayrollAccounts: [],
+  allCompensationBenefitsList:[],
   allCompensationBenefitsList:[],
   allAccountList:[],
   allHumanResourceRoleList:[],
@@ -62,7 +65,9 @@ export const dashboardSlice = createSlice({
   name: "dashboard",
   initialState: initialDashboardState,
   reducers: {
-
+    AllPayrollPayableAccounts: (state, action) => {
+      state.allPayrollPayableAccounts = action.payload;
+    },
     AllBankBranchFetch: (state, action) => {
       state.allBankBranch = action.payload;
     },
@@ -92,7 +97,10 @@ export const dashboardSlice = createSlice({
     AllEmpSalaryReviewDate: (state, action) => {
       state.allSalaryReviewDateByEmpIdForDDL = action.payload;
     },
-
+    
+    allPayrollAccounts: (state, action) => {
+      state.allPayrollAccounts = action .payload;
+    },
 
     AllActiveEmployeeSalaryDDL: (state, action) => {
       state.allEmployeesSalaryDDL = action.payload;
