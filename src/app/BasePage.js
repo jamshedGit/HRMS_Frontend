@@ -62,20 +62,24 @@ const leaveManagementConfiguration = lazy(() => import("./modules/leaveManagemen
 const PayrollProcessPolicy = lazy(() => import("./modules/Payroll_Process_Policy/pages/index"));
 const LeaveApplication = lazy(() => import("./modules/LeaveApplication/pages/index"));
 const tax_slabModule = lazy(() => import("./modules/Tax_Slab/pages/index"));
+const allocate_leaves = lazy(() => import("./modules/AllocateLeaves/pages/index"));
+const employee_leave_balance = lazy(() => import("./modules/EmployeeLeaveBalance/pages/index"));
 const loan_manag_confModule = lazy(() => import("./modules/Loan_manag_conf/pages/index"));   
 const gratuity_confModule = lazy(() => import("./modules/Gratuity_Configuration/pages/index"));   
 const accrue_gratuity_confModule = lazy(() => import("./modules/Accrue_Gratuity_Configuration/pages/index"));  
 const reimbursement_configurationModule = lazy(() => import("./modules/Reimbursement_Configuration/pages/index"));  
 const reimbursement_claimModule = lazy(() => import("./modules/Reimbursement_claim/pages/index")); 
 const employee_loan_requestModule = lazy(() => import("./modules/Employee_Loan_Request/pages/index")); 
+const AttendanceConfigurationManagement = lazy(() => import("./modules/Attendance_Configuration/pages/index")); 
+
 
 const ROUTES = {
   settings: SettingsPage,
   users: UserManagment,
 
   bank: BankModule,
-  branch:BranchModule,
-  department:DepartmenModule,
+  branch: BranchModule,
+  department: DepartmenModule,
   emptype: EmployeeTypeModule,
   religion: ReligionModule,
   region: RegionModule,
@@ -87,7 +91,7 @@ const ROUTES = {
   profile: EmplpyeeProfileModule,
   contact: ContactModule,
   academic: AcademicModule,
-  experience: ExperienceModule ,
+  experience: ExperienceModule,
   skills: SkillsModule,
   incident: IncidentModule,
   earning: EarningModule,
@@ -95,11 +99,11 @@ const ROUTES = {
   stoppage: StoppageAllowanceModule,
   exchange: ExchangeRateModule,
   compensation: CompensationBenefitsModule,
-  earning_transaction:EarningDeductionTranModule,
+  earning_transaction: EarningDeductionTranModule,
   deduction_transaction: DeductionTranModule,
-  employee_salary_earning : EmployeeSalaryEarningModule,
+  employee_salary_earning: EmployeeSalaryEarningModule,
   employee_salary_deduction: EmployeeSalaryDeductionModule,
-  employee_salary : EmployeeSalaryModule,
+  employee_salary: EmployeeSalaryModule,
   salary_expatriate: EmployeeSalaryExpModule,
   compensation_expatriate: CompensationExpModule,
   employee_transfer: EmployeeTransferModule,
@@ -110,11 +114,13 @@ const ROUTES = {
   arrear_policy: ArrearPolicyModule,
   salary_rounding_policy: RoundingPolicyModule,
   leave_type: LeaveTypeModule,
-  final_settlement_policy :FinalSettlementPolicyModule,
-  salary_policy:salarypolicyModule,
+  final_settlement_policy: FinalSettlementPolicyModule,
+  salary_policy: salarypolicyModule,
   onetime_earning: OnetimeAllowance,
   leave_management_configuration: leaveManagementConfiguration,
   loan_type: LoanType,
+  allocate_leaves: allocate_leaves,
+  employee_leave_balance: employee_leave_balance,
   leave_application :LeaveApplication,
   payroll_process_policy :PayrollProcessPolicy,
   tax_slab:tax_slabModule,
@@ -123,13 +129,14 @@ const ROUTES = {
   accrue_gratuity_configuration :accrue_gratuity_confModule,
   reimbursement_configuration:reimbursement_configurationModule,
   reimbursement_claim:reimbursement_claimModule,
-  employee_loan_request:employee_loan_requestModule
+  employee_loan_request:employee_loan_requestModule,
+  attendance_configuration: AttendanceConfigurationManagement,
 };
 
 export default function BasePage() {
   const dispatch = useDispatch();
   dispatch(fetchAllCountry());
-  
+
   const auth = useSelector(({ auth }) => auth, shallowEqual);
   const UserAccess = auth?.userAccess;
   const SettingsAccess = auth?.userAccess?.Settings;
@@ -146,8 +153,7 @@ export default function BasePage() {
             .split(" ")
             .join("-")
             .toLowerCase();
-            if (ROUTES[accessName])
-            {
+          if (ROUTES[accessName]) {
             return (
               <Route
                 key={key}
@@ -158,10 +164,10 @@ export default function BasePage() {
           }
         })}
 
-<>
-            {<Redirect exact from="/" to="/dashboard" />}
-            <ContentRoute path="/dashboard" component={Dashboard} />
-          </>
+        <>
+          {<Redirect exact from="/" to="/dashboard" />}
+          <ContentRoute path="/dashboard" component={Dashboard} />
+        </>
 
         <Redirect to="error/error-v1" />
       </Switch>

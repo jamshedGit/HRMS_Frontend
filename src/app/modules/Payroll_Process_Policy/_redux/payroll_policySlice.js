@@ -19,7 +19,7 @@ export const callTypes = {
 };
 
 export const payroll_policySlice = createSlice({
-    name: "Payroll_Policy_",
+    name: "Payroll_Policy",
     initialState: initialTaxState,
     reducers: {
         catchError: (state, action) => {
@@ -39,10 +39,10 @@ export const payroll_policySlice = createSlice({
             }
         },
         Payroll_Policy_Fetched: (state, action) => {
-            // console.log(action)
+          
             console.log("user slice",action.payload)
             const entities = action.payload.data?.data.rows;
-            console.log("ent Payroll_Policy_",entities)
+            
             const totalResult = action.payload.data?.data.totalResults;
             console.log(entities);
             state.listLoading = false;
@@ -79,7 +79,7 @@ export const payroll_policySlice = createSlice({
             );
         },
         Payroll_Policy_Created: (state, action) => {
-             console.log("action payload for Payroll_Policy_", action.payload);
+            
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);
@@ -94,9 +94,9 @@ export const payroll_policySlice = createSlice({
                 //const payload = { ...action.payload };
                 let payload = JSON.stringify(action.payload)
                 let payloadObj = JSON.parse(payload);
-                let finalObj = JSON.parse(payloadObj.updatedPayroll_Policy_);
+                let finalObj = JSON.parse(payloadObj.payrollUpdatePolicy);
                 if (entity.Id === finalObj.Id) {
-                    return finalObj; //action.payload.updatedPayroll_Policy_;
+                    return finalObj; 
                 }
                 return entity;
             });
@@ -128,33 +128,3 @@ export const payroll_policySlice = createSlice({
         },
     },
 });
-
-// export const RoleSlice = createSlice({
-//   name: "getAllRole",
-//   initialState: initialRolesState,
-//   reducers: {
-//     catchError: (state, action) => {
-//       state.error = `${action.type}: ${action.payload.error}`
-//       if (action.payload.callType === callTypes.list) {
-//         state.listLoading = false
-//       } else {
-//         state.actionsLoading = false
-//       }
-//     },
-//     startCall: (state, action) => {
-//       state.error = null
-//       if (action.payload.callType === callTypes.list) {
-//         state.listLoading = true
-//       } else {
-//         state.actionsLoading = true
-//       }
-//     },
-//     dataFetched: (state, action) => {
-//       const entities = action.payload
-//       state.listLoading = false
-//       state.error = null
-//       state.entities = entities
-//       state.totalCount = entities.length
-//     },
-//   },
-// })

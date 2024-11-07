@@ -15,14 +15,12 @@ export const getAllCountry = async () => {
 };
 
 export const getAllEarningDeductionList = async (Id) => {
-  console.log("pakistan", Id);
   return await axios.post(`${USERS_URL}/stoppage/read-earning-deduction-list`, {
     flag: Id,
   });
 };
 
 export const getAllEmp_Compensation_Benefits_DDL = async () => {
-  console.log("getAllEmp_Compensation_Benefits");
   return await axios.post(
     `${USERS_URL}/compensation/read-all-compensation-benefits-ddl`
   );
@@ -40,7 +38,6 @@ export const getAllEmployeeSalaryReviewForDDL = async (employeeId) => {
 };
 
 export const getAllActiveEmployeesSalaryForDDL = async (employeeId) => {
-  console.log("getAllActiveEmployeesSalaryForDDL", employeeId);
   return await axios.post(
     `${USERS_URL}/employee_salary_earning/read-all-employee-salary-ddl`,
     {
@@ -87,8 +84,16 @@ export const getAllFormMenus = async (Id, text=null,mergeLabel=false) => {
   });
 };
 
-export const getAllLeaveTypes = async (Id) => {
-  return await axios.get(`${USERS_URL}/settings/read-all-leave-types`);
+export const getAllLeaveTypes = async (body) => {
+  return await axios.post(`${USERS_URL}/settings/read-all-leave-types`,body);
+};
+
+export const getAllSubsidiary = async (Id) => {
+  return await axios.get(`${USERS_URL}/settings/read-all-subsidiaries`);
+};
+
+export const getAllFiscalYear = async (Id) => {
+  return await axios.get(`${USERS_URL}/settings/read-all-fiscal-year`);
 };
 
 export const getAllParentDepartments = async (Id) => {
@@ -105,7 +110,6 @@ export const getVehiclesByCenterAndSubcenterId = async (body) => {
 };
 
 export const getDashboardVehicle = async (body) => {
-  // console.log("Dashboard Request body", body);
   return await axios.post(
     `${USERS_URL}/settings/read-all-vehicles-dashboard`,
     body

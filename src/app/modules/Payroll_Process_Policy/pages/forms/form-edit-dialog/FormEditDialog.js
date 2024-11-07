@@ -68,7 +68,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     dispatch(actions.fetchUser(id));
 
     // dispatch(actions.fetchUser(FormUIProps.queryParams))
-  }, [id, dispatch]);
+  }, [id, dispatch,show]);
 
   // useEffect(() => {
   //   console.log("UseEffect call");
@@ -79,12 +79,10 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   // }, [actionsLoading]);
   //console.log("userForEdit", userForEdit);
 
-  const SavePayrollMonthSetup = async (user) => {
+  const SavePayrollPolicy = async (user) => {
 
     if (!id) {
 
-
-      const finalObject = { user }
       await dispatch(actions.create_Payroll_Policy(user, disbaleLoading, onHide));
       await dispatch(actions.fetchUsers(usersUIProps.queryParams));
 
@@ -113,35 +111,36 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   };
 
   return (
-    <Modal
-      size="lg"
-      show={show}
-      onHide={onHide}
-      aria-labelledby="example-modal-sizes-title-lg"
-    >
-      <FormEditDialogHeader id={id} isUserForRead={userForRead} />
-      <MasterEditForm
-        SavePayrollMonthSetup={SavePayrollMonthSetup}
-        user={userForEdit || formUIProps.initUser}
-        onHide={onHide}
-        roles={roles}
-        centers={centers}
-        userStatusTypes={userStatusTypes}
-        isUserForRead={userForRead}
-        enableLoading={enableLoading}
-        loading={loading}
-      />
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
-    </Modal>
+    // <Modal
+    //   size="lg"
+    //   show={show}
+    //   onHide={onHide}
+    //   aria-labelledby="example-modal-sizes-title-lg"
+    // >
+    //   <FormEditDialogHeader id={id} isUserForRead={userForRead} />
+    //   <MasterEditForm
+    //     SavePayrollPolicy={SavePayrollPolicy}
+    //     user={userForEdit || formUIProps.initUser}
+    //     onHide={onHide}
+    //     roles={roles}
+    //     centers={centers}
+    //     userStatusTypes={userStatusTypes}
+    //     isUserForRead={userForRead}
+    //     enableLoading={enableLoading}
+    //     loading={loading}
+    //   />
+    //   <ToastContainer
+    //     position="top-right"
+    //     autoClose={5000}
+    //     hideProgressBar={false}
+    //     newestOnTop={false}
+    //     closeOnClick
+    //     rtl={false}
+    //     pauseOnFocusLoss
+    //     draggable
+    //     pauseOnHover
+    //   />
+    // </Modal>
+    <></>
   );
 }

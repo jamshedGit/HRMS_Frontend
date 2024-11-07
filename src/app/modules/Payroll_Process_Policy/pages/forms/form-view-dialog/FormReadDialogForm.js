@@ -33,7 +33,7 @@ const FormEditSchema = Yup.object().shape({
 })
 
 export function FormReadForm({
-  SavePayrollMonthSetup,
+  SavePayrollPolicy,
   user,
   actionsLoading,
   onHide,
@@ -51,7 +51,7 @@ export function FormReadForm({
         validationSchema={FormEditSchema}
         onSubmit={(values) => {
           console.log("Form form Values", values)
-          SavePayrollMonthSetup(values)
+          SavePayrollPolicy(values)
         }}
       >
         {({ handleSubmit }) => (

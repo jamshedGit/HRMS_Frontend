@@ -26,7 +26,7 @@ export function TextArea({
 }) {
   return (
     <>
-      {label && <label>{label}</label>}
+      {label && <label> {label}</label>}
       <textarea
         type={type}
         maxLength={250}
