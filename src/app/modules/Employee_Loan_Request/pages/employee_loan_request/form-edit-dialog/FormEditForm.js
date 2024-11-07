@@ -77,8 +77,14 @@ export function FormEditForm({
     };
   }, shallowEqual);
 
-  const { loan_type } = currentState;
+  const { loan_type,userForEdit } = currentState;
+// console.log("currentState",currentState.userForEdit.total_loan_amount,currentState.userForEdit.monthly_installment)
+console.log("currentState",userForEdit)
 
+useEffect(()=>{
+  setTotalLoanAmount(userForEdit?.total_loan_amount)
+  setMonthlyInstallments(userForEdit?.monthly_installment)
+},[userForEdit])
 
   useEffect(() => {
     
@@ -115,10 +121,11 @@ export function FormEditForm({
   }, [changeLoanType,isEdit]);
 
   useEffect(() => {
+    console.log("monthlyInstallment",monthlyInstallment,totalLoanAmount)
     if (totalLoanAmount && monthlyInstallment) {
       const calculatedMonths = Math.ceil(totalLoanAmount / monthlyInstallment);
       setTotalInstallments(calculatedMonths);
-      // setFieldValue('total_installment', calculatedMonths);
+   
     }
   }, [totalLoanAmount, monthlyInstallment,isEdit]);
 
@@ -129,9 +136,9 @@ export function FormEditForm({
   );
 
   const statusOptions = [
-    { value: 0, label: "Pending" },
+    { value: 0, label: "Inactive" },
     { value: 1, label: "Active" },
-    { value:2, label: "Inactive" },
+    { value:2, label: "Pending" },
   ];
 
   return (
@@ -146,8 +153,9 @@ export function FormEditForm({
         //resetForm function doesn't clear file properly so we use this function
         const clearForm = () => {
           resetForm();
-          if (inputFile?.current) {
-            inputFile.current.value = "";
+          if (totalLoanAmount) {
+            setTotalLoanAmount(" ");
+            // values.statusId=""
           }
         };
         saveForm(values,totalInstallments,setTotalInstallments, clearForm);
@@ -397,7 +405,7 @@ export function FormEditForm({
                       }
                       type="number"    
                       // value={""}
-                      value={totalLoanAmount}
+                      // value={totalLoanAmount}
                       disabled={true}
                     />
                   </div>
@@ -420,25 +428,11 @@ export function FormEditForm({
                     />
                   </div>
 
-                  <div className="col-12 col-md-6 mt-3">
+                  {/* <div className="col-12 col-md-6 mt-3">
                   <label htmlFor="installment_deduction_basis_type">
                       Status
                     </label>
-                    {/* <Field
-                      name="statusId"
-                      component={Input}
-                      placeholder=""
-                      label={
-                        <span>
-                          Status
-                       
-                        </span>
-                      }
-                      // value={""}
-                      // type="text"    
-                      disabled={true}
-                      
-                    /> */}
+              
 
 <Field
                       name="statusId"
@@ -461,6 +455,35 @@ export function FormEditForm({
                         </option>
                       ))}
                     </Field>
+                  </div> */}
+
+
+
+
+                  
+<div className="col-12 col-md-6 mt-3">
+                    <SearchSelect
+                      name="statusId"
+                      label={
+                        <span>
+                         Status
+                        
+                        </span>
+                      }
+                      onChange={(e) => {
+                        setFieldValue("statusId", e.value || null);
+                      }}
+                      value={
+                        statusOptions?.find(
+                          (option) =>
+                            option.value === values.statusId
+                        ) || null
+                      }
+                      // options={dashboard.allPayrollMonthYearList}
+                      isDisabled={true}
+                      error={errors.statusId}
+                      touched={touched.statusId}
+                    />
                   </div>
 
                 </div>
@@ -477,10 +500,7 @@ export function FormEditForm({
                   setIds("");
                   setTotalInstallments("")
                   handleReset();
-
-                  if (inputFile?.current) {
-                    inputFile.current.value = "";
-                  }
+                  
                 }}
                 className="btn btn-light btn-elevate"
               >
