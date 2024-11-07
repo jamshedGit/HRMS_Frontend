@@ -60,10 +60,12 @@ import { payroll_policySlice } from "../app/modules/Payroll_Process_Policy/_redu
 import { LeaveApplicationSlice } from "../app/modules/LeaveApplication/_redux/LeaveApplicationSlice";
 import { taxSetupSlice } from "../app/modules/Tax_Setup/_redux/taxSetupSlice";
 import { loan_manag_confSlice } from "../app/modules/Loan_manag_conf/_redux/redux-Slice"
-import {gratuity_configurationSlice} from "../app/modules/Gratuity_Configuration/_redux/redux-Slice"
-import {accrue_gratuity_configurationSlice} from "../app/modules/Accrue_Gratuity_Configuration/_redux/redux-Slice"
-import {reimbursement_configurationSlice} from "../app/modules/Reimbursement_Configuration/_redux/redux-Slice"
-import {reimbursement_claimSlice} from "../app/modules/Reimbursement_claim/_redux/redux-Slice"
+import { AllocateLeavesSlice } from "../app/modules/AllocateLeaves/_redux/AllocateLeavesSlice"
+import { EmployeeLeaveBalanceSlice } from "../app/modules/EmployeeLeaveBalance/_redux/EmployeeLeaveBalanceSlice"
+import { gratuity_configurationSlice } from "../app/modules/Gratuity_Configuration/_redux/redux-Slice"
+import { accrue_gratuity_configurationSlice } from "../app/modules/Accrue_Gratuity_Configuration/_redux/redux-Slice"
+import { reimbursement_configurationSlice } from "../app/modules/Reimbursement_Configuration/_redux/redux-Slice"
+import { reimbursement_claimSlice } from "../app/modules/Reimbursement_claim/_redux/redux-Slice"
 import {AttendanceConfigurationSlice} from "../app/modules/Attendance_Configuration/_redux/attendanceConfigSlice"
 
 export const rootReducer = combineReducers({
@@ -82,7 +84,7 @@ export const rootReducer = combineReducers({
   empType: empTypeSlice.reducer,
   religion: religionSlice.reducer,
   region: regionSlice.reducer,
-  designation:designationSlice.reducer,
+  designation: designationSlice.reducer,
   form: formSlice.reducer,
   formDetails: formDetailsSlice.reducer,
   emppolicy: empPolicySlice.reducer,
@@ -94,14 +96,14 @@ export const rootReducer = combineReducers({
   skills: skillslice.reducer,
   incident: incidentSlice.reducer,
   earning: earningSlice.reducer,
-  deduction:deductionSlice.reducer,
+  deduction: deductionSlice.reducer,
   stoppage: stoppageAllowanceSlice.reducer,
   exchange: exchangeRateSlice.reducer,
   compensation: compensationBenefitsSlice.reducer,
-  earning_transaction:earning_transactionSlice.reducer,
-  deduction_transaction:deduction_transactionSlice.reducer,
+  earning_transaction: earning_transactionSlice.reducer,
+  deduction_transaction: deduction_transactionSlice.reducer,
   employee_salary_earning: employeeSalaryEarningSlice.reducer,
-  employee_salary_deduction:employeeSalary_DeductionSlice.reducer,
+  employee_salary_deduction: employeeSalary_DeductionSlice.reducer,
   employee_salary: employeeSalarySlice.reducer,
   salary_expatriate: employeeSalaryExpSlice.reducer,
   compensation_expatriate: compensationExpSlice.reducer,
@@ -109,7 +111,7 @@ export const rootReducer = combineReducers({
   salary_revision: SalaryRevisionSlice.reducer,
   tax_setup: taxSetupSlice.reducer,
   fiscal_setup: fiscalSetupSlice.reducer,
-  payroll_month:PayrollMonthSlice.reducer,
+  payroll_month: PayrollMonthSlice.reducer,
   arrear_policy: ArrearSetupSlice.reducer,
   salary_rounding_policy: SalaryRoundingPolicySlice.reducer,
   leave_type: LeaveTypeSlice.reducer,
@@ -120,11 +122,13 @@ export const rootReducer = combineReducers({
   leave_management_configuration: leaveManagementConfigurationSlice.reducer,
   payroll_process_policy: payroll_policySlice.reducer,
   leave_application: LeaveApplicationSlice.reducer,
-  tax_slab:tax_slabSlice.reducer,
-  loan_management_configuration:loan_manag_confSlice.reducer,
-  gratuity_configuration:gratuity_configurationSlice.reducer,
-  reimbursement_configuration:reimbursement_configurationSlice.reducer,
-  accrue_gratuity_configuration:accrue_gratuity_configurationSlice.reducer,
+  tax_slab: tax_slabSlice.reducer,
+  loan_management_configuration: loan_manag_confSlice.reducer,
+  gratuity_configuration: gratuity_configurationSlice.reducer,
+  reimbursement_configuration: reimbursement_configurationSlice.reducer,
+  accrue_gratuity_configuration: accrue_gratuity_configurationSlice.reducer,
+  allocate_leaves: AllocateLeavesSlice.reducer,
+  employee_leave_balance: EmployeeLeaveBalanceSlice.reducer,
   reimbursement_claim:reimbursement_claimSlice.reducer,
   attendance_configuration:AttendanceConfigurationSlice.reducer
 });

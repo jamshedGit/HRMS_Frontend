@@ -10,7 +10,8 @@ import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 
 export function EmployeeSelect({
   actionsLoading,
-  setemployeeId
+  setemployeeId,
+  setId
 }) {
 
   //Get all Employee list from dashboard global state
@@ -54,9 +55,10 @@ export function EmployeeSelect({
                       placeholder=""
                       onBlur={handleBlur}
                       onChange={(e) => {
-                        const value = e.target.value == '--Select--' ? null : Number(e.target.value)
+                        const value = e.target.value == '--Select--' ? '' : Number(e.target.value)
                         setFieldValue('employeeId', value)
-                        setemployeeId(value)
+                        setemployeeId(value) //Set Employee Id in context for server
+                        setId(''); //Clear Edit values on Employee Change
                       }}
                       label={
                         <span>

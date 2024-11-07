@@ -52,6 +52,31 @@ export const fetchLeaveApplication = (queryparm, employeeId) => async (dispatch)
 
 /**
  * 
+ * Fetch All Leave Application by Employee Id from the server
+ * 
+ * @param {Object} queryparm 
+ * @returns 
+ */
+export const fetchLeaveBalances = (employeeId) => async (dispatch) => {
+  dispatch(actions.startCall({ callType: callTypes.list }));
+  if (employeeId) {
+    return requestFromServer.getAllLeaveBalances({ employeeId })
+      .then((response) => {
+        dispatch(actions.LeaveBalancesFetched(response));
+      })
+      .catch((error) => {
+        error.clientMessage = "Can't find Leave Balances";
+        dispatch(actions.catchError({ error, callType: callTypes.list }));
+      });
+  }
+  else {
+    dispatch(actions.LeaveBalancesFetched([]));
+  }
+
+};
+
+/**
+ * 
  * Fetch Single Leave Application Record by Id
  * 
  * @param {string|number} id 
@@ -109,7 +134,7 @@ export const saveRecord = (data, employeeId, disableLoading, resetForm) => (disp
         .catch((error) => {
           disableLoading();
           error.clientMessage = "Can't Create Leave Application";
-          toast.error(SERVER_MESSAGES.insertedFail, {
+          toast.error(error?.response?.data?.message, {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,

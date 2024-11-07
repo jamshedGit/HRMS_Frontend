@@ -18,7 +18,7 @@ export function ActionsColumnFormatter(
 
   //Function to check if the date doesn't lie before the payroll month date
   const checkPayrolMonth = (row, payroll)=> {
-    return payroll && payroll.startDate && new Date(payroll.startDate).getTime() < new Date(row.from).getTime()
+    return payroll && payroll.startDate && new Date(payroll.startDate).getTime() <= new Date(row.from).getTime();
   }
 
   return (
