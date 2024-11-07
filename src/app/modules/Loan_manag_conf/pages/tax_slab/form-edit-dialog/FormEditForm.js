@@ -10,30 +10,42 @@ import {
   fetchAllFormsMenu,
   fetchAllHumanResourceRole,
 } from "../../../../../../_metronic/redux/dashboardActions";
+import { amountLimit } from "../../../../../utils/common";
+import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 
 // Define the validation schema for the main form and the details
 const loanManagementSchema = Yup.object().shape({
-  subsidiaryId: Yup.number().required("Subsidiary is required"),
-  accountId: Yup.number().required("Account is required"),
-  human_resource_role: Yup.number().required("Human Resource Role is required"),
-  emp_loan_account: Yup.number().required("Employee Loan Account is required"),
-  installment_deduction_percentage: Yup.number()
-    .min(0, "Must be at least 0")
-    .max(100, "Must be at most 100")
-    .required("Installment Deduction Percentage is required"),
-  installment_deduction_basis_type: Yup.number().required(
-    "Installment Deduction Basis Type is required"
-  ),
+  subsidiaryId: Yup.number().required(VALIDATION_MESSAGES.required),
+  accountId: Yup.number().required(VALIDATION_MESSAGES.required),
+  // human_resource_role: Yup.number().required("Human Resource Role is required"),
+  emp_loan_account: Yup.number().required(VALIDATION_MESSAGES.required),
+  // installment_deduction_percentage: Yup.number()
+  //   .min(0, "Must be at least 0")
+  //   .max(100, "Must be at most 100")
+  //   .required("Installment Deduction Percentage is required"),
+
+  installment_deduction_percentage: Yup.number().min(0, VALIDATION_MESSAGES.minZeroValue).max(100, VALIDATION_MESSAGES.maxHundredValue).test(
+    'max-decimals',
+    VALIDATION_MESSAGES.minZeroValue,
+    (value) => /^\d{1,4}(\.\d{1,2})?$/.test(value?.toString())
+  ).required(VALIDATION_MESSAGES.required),
+
+
+  installment_deduction_basis_type: Yup.number().required(VALIDATION_MESSAGES.required),
   details: Yup.array().of(
     Yup.object().shape({
-      loan_typeId: Yup.number().required(" Type is required"),
+      loan_typeId: Yup.number()
+      .nullable()
+      .required(VALIDATION_MESSAGES.required)
+      .notOneOf([''], "Type is required"), 
+
       max_loan_amount: Yup.number()
         .min(1, "Must be at least 1")
-        .required("Max  Amount is required"),
-      basis: Yup.number().required("Basis is required"),
+        .required(VALIDATION_MESSAGES.required),
+      basis: Yup.number().required(VALIDATION_MESSAGES.required),
       salary_count: Yup.number()
         .min(1, "Must be at least 1")
-        .required("Salary Count is required"),
+        .required(VALIDATION_MESSAGES.required),
     })
   ),
 });
@@ -49,13 +61,13 @@ export function FormEditForm({
 }) {
   const dispatch = useDispatch();
   const { dashboard } = useSelector((state) => state);
-
+  // getAllLoanType
   // Fetch necessary data if not already present
   useEffect(() => {
     if (!user.Id) {
       dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsidiaries
       dispatch(fetchAllFormsMenu(45, "allAccountList")); // For All Accounts
-      dispatch(fetchAllFormsMenu(181, "allLoanTypeList")); // For All Loan Types
+      dispatch(actions.getAllLoanType()); // For All Loan Types
       dispatch(fetchAllHumanResourceRole("allHumanResourceRoleList"));
     }
   }, [dispatch, user.Id]);
@@ -73,10 +85,11 @@ export function FormEditForm({
     };
   }, shallowEqual);
 
-  const { entities } = currentState;
+  const { entities,loan_type } = currentState;
 
   let existedId = 0;
   const check_Existed_Data = (subsidiaryId) => {
+   
     entities.forEach((i) => {
       if (i.subsidiaryId == subsidiaryId) {
         existedId = i.Id;
@@ -167,7 +180,7 @@ export function FormEditForm({
                   </div>
 
                   {/* Human Resource Role Field */}
-                  <div className="col-12 col-md-6 mt-3">
+                  {/* <div className="col-12 col-md-6 mt-3">
                     <SearchSelect
                       name="human_resource_role"
                       label={
@@ -190,7 +203,7 @@ export function FormEditForm({
                       error={errors.human_resource_role}
                       touched={touched.human_resource_role}
                     />
-                  </div>
+                  </div> */}
 
                   {/* Employee Loan Account Field */}
                   <div className="col-12 col-md-6 mt-3">
@@ -239,6 +252,15 @@ export function FormEditForm({
                       label="Installment Deduction (%)"
                       type="number"
                       disabled={isUserForRead}
+                      onChange={(e) => {
+                        if (Number (e.target.value) <= 100) {
+                          // e.target.value = e.target.value.slice(0,5);
+                          if(/^\d{0,3}(\.\d{1,2})?$/.test(e.target.value?.toString())){
+                            setFieldValue("installment_deduction_percentage",e.target.value)
+
+                          }
+                        }
+                      }}
                     />
                     {/* {errors.installment_deduction_percentage && touched.installment_deduction_percentage && (
                       <div className="text-danger">{errors.installment_deduction_percentage}</div>
@@ -280,10 +302,12 @@ export function FormEditForm({
                         setFieldValue(
                           "installment_deduction_basis_type",
                           e.target.value
-                        ); // Use the raw value
+                        ); 
                       }}
+
+                   
                     >
-                      <option value="">Select Deduction Basis Type</option>
+                      <option value="">Select</option>
                       {basisOptions.map((option) => (
                         <option key={option.value} value={option.value}>
                           {option.label}
@@ -361,7 +385,7 @@ export function FormEditForm({
                                     )
                                   )} */}
 
-                                  {dashboard.allLoanTypeList?.map((x) => {
+                                  {loan_type?.map((x) => {
                                     return (
                                       <option
                                         disabled={
@@ -382,7 +406,7 @@ export function FormEditForm({
                                 {errors.details?.[index]?.loan_typeId &&
                                   touched.details?.[index]?.loan_typeId && (
                                     <div className="text-danger">
-                                      {errors.details[index].loan_typeId}
+                                      {errors.details[index]?.loan_typeId}
                                     </div>
                                   )}
                               </td>
@@ -393,6 +417,9 @@ export function FormEditForm({
                                   type="number"
                                   className="form-control"
                                   disabled={isUserForRead}
+                                  onInput={(e) => {
+                                    e.target.value = amountLimit(e.target.value); // Limit to 3 digits
+                                  }}
                                 />
                                 {errors.details?.[index]?.max_loan_amount &&
                                   touched.details?.[index]?.max_loan_amount && (
@@ -409,7 +436,7 @@ export function FormEditForm({
                                   className="form-control"
                                   disabled={isUserForRead}
                                 >
-                                  <option value="">Select Basis</option>
+                                  <option value="">Select</option>
                                   {basisOptions.map((option) => (
                                     <option
                                       key={option.value}

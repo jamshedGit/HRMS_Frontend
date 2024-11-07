@@ -9,14 +9,12 @@ export function useFormUIContext() {
 }
 
 export const ReceiptUIConsumer = FormUIContext.Consumer;
-// const initialFilter = {
-//   sortBy: "name",
-//   limit: 10,
-//   page: 1,
-// }
+
 export function FormUIProvider({ FormUIEvents, children }) {
   const [queryParams, setQueryParamsBase] = useState(initialFilter);
-  const [ids, setIds] = useState([]);
+  const [employeeId, setemployeeId] = useState('');
+  const [ids, setIds] = useState("");
+  const [isFileReq,setIsFileReq]=useState(false)
   const setQueryParams = useCallback((nextQueryParams) => {
     setQueryParamsBase((prevQueryParams) => {
       if (isFunction(nextQueryParams)) {
@@ -30,31 +28,25 @@ export function FormUIProvider({ FormUIEvents, children }) {
       return nextQueryParams;
     });
   }, []);
-  // const initUser = {
-  //   Id:"",
-  //   subsidiary: "",
-  //   account: "",
-  //   human_resource_role: "",
-  //   emp_loan_account: "",
-  //   installment_deduction_percentage:"",
-  //   installment_deduction_bases:"",
-  //   loan_type:"",
-  //   max_loan_amount:"",
-  //   salary_count:""
-  // };
+
 
   const initUser={
     Id: "",
-        subsidiaryId: "",
-        accountId:"",
-        // human_resource_role: "",
-        emp_loan_account: "",
-        installment_deduction_percentage: "",
-        installment_deduction_basis_type:"",
-        details:""
-        // loan_type: user.loan_type,
-        // max_loan_amount: user.max_loan_amount,
-        // salary_count: user.salary_count,
+    employeeId:employeeId,
+    employee_loan_accountId:"",
+    loan_typeId: "",
+    monthly_installment:"",
+    applied_date: "",
+    installment_start_date:"",
+    total_loan_amount:"",
+    total_installment:"",
+    reason:"", 
+    loan_amount_remaining:"",
+    loan_amount_paid:""
+
+
+
+
   }
 
 
@@ -65,7 +57,11 @@ export function FormUIProvider({ FormUIEvents, children }) {
     setQueryParams,
     ids,
     setIds,
+    isFileReq,
+    setIsFileReq,
     initUser,
+    setemployeeId,
+    employeeId,
     newFormButtonClick: FormUIEvents.newFormButtonClick,
     openEditFormDialog: FormUIEvents.openEditFormDialog,
     openDeleteFormDialog: FormUIEvents.openDeleteFormDialog,

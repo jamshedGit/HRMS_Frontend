@@ -1,43 +1,40 @@
 import * as requestFromServer from "./redux-Crud";
-import {loan_manag_confSlice, callTypes } from "./redux-Slice";
+import { employee_loan_requestSlice, callTypes } from "./redux-Slice";
 import { toast } from "react-toastify";
 
-const { actions } = loan_manag_confSlice;
+const { actions } = employee_loan_requestSlice;
 
 
-export const fetchSalarypolicies = (queryparm) => async (dispatch) => {
-
-  dispatch(actions.startCall({ callType: callTypes.list }));
-
-  return requestFromServer.getAllSalarypolicy(queryparm)
+export const fetchEmployeeLoanRequest = (params) => async (dispatch) => {
+  return requestFromServer.getAllEmployeeLoanRequest(params)
 
     .then((response) => {
-   
-  
-      dispatch(actions.salarypolicyFetched(response));
+
+     
+      dispatch(actions.employeeLoanRequestFetched(response));
     })
     .catch((error) => {
-  
+
       error.clientMessage = "Can't find ";
       dispatch(actions.catchError({ error, callType: callTypes.list }));
     });
 };
 
-export const fetchSalarypolicy = (id) => (dispatch) => {
+export const fetchmoduledata = (id) => (dispatch) => {
 
 
   if (!id) {
-    return dispatch(actions.SalarypolicyFetchedForEdit({ userForEdit: undefined }));
+    return dispatch(actions.EmployeeLoanRequestFetchedForEdit({ userForEdit: undefined }));
   }
 
-  dispatch(actions.startCall({ callType: callTypes.action }));
+  // dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
-    .getSalarypolicyById({ Id: id })
+    .getEmployeeLoanRequestById({ Id: id })
     .then((response) => {
       const entities = response.data?.data;
 
-  
-      dispatch(actions.SalarypolicyFetchedForEdit({ userForEdit: entities }));
+
+      dispatch(actions.EmployeeLoanRequestFetchedForEdit({ userForEdit: entities }));
     })
     .catch((error) => {
       error.clientMessage = "Can't find user";
@@ -45,16 +42,16 @@ export const fetchSalarypolicy = (id) => (dispatch) => {
     });
 };
 
-export const deleteSalarypolicy = (id) => (dispatch) => {
-  dispatch(actions.startCall({ callType: callTypes.action }));
+export const deleteEmployeeLoanRequest= (id) => (dispatch) => {
+  // dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
-    .deleteSalarypolicy({ Id: id })
+    .deleteEmployeeLoanRequest({ Id: id })
     .then((response) => {
-   
-      dispatch(actions.SalarypolicyDeleted({ Id: id }));
+
+      dispatch(actions.EmployeeLoanRequestDeleted({ Id: id }));
       toast.success("Successfully Deleted", {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -69,25 +66,23 @@ export const deleteSalarypolicy = (id) => (dispatch) => {
 };
 
 
-export const createSalarypolicy = (salarypolicyForCreation, disbaleLoading, onHide) => (
+
+export const createEmployeeLoanRequest = (employeeLoanRequestForCreation, disbaleLoading, onHide) => (
   dispatch
 ) => {
-  // salarypolicyForCreation.phNo = salarypolicyForCreation.phNo.toString();
-  // salarypolicyForCreation.cnic = salarypolicyForCreation.cnic.toString();
 
-  
   return requestFromServer
-    .createSalarypolicy(salarypolicyForCreation)
+    .createEmployeeLoanRequest(employeeLoanRequestForCreation)
     .then((res) => {
       dispatch(actions.startCall({ callType: callTypes.action }));
       const user = res.data?.data;
-     
 
-      dispatch(actions.salarypolicyCreated(user));
+
+      dispatch(actions.employeeLoanRequestCreated(user));
       disbaleLoading();
       toast.success("Successfully Created", {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -112,18 +107,37 @@ export const createSalarypolicy = (salarypolicyForCreation, disbaleLoading, onHi
     });
 };
 
-export const updateSalarypolicy = (user, disbaleLoading, onHide) => (dispatch) => {
+
+export const getAllLoanConfigDetail = (employeeId) => (
+
+  dispatch
+) => {
+
   return requestFromServer
-    .updateSalarypolicy(user)
-    .then((response) => {
-     
-      const updatedSalarypolicy = response?.config?.data; // response.data?.data;
-    
-      dispatch(actions.salarypolicyUpdated({ updatedSalarypolicy }));
-      dispatch(actions.startCall({ callType: callTypes.action }));
-      disbaleLoading();
-      onHide();
-      toast.success(response.data.message + " Updated", {
+    .getAllLoanConfigDetail(employeeId)
+    .then((res) => {
+      // dispatch(actions.startCall({ callType: callTypes.action }));
+      const user = res.data?.data;
+
+
+      dispatch(actions.getLoanConfigDetails(user));
+
+      // toast.success("Successfully", {
+      //   position: "top-right",
+      //   autoClose: 5000,
+      //   hideProgressBar: false,
+      //   closeOnClick: true,
+      //   pauseOnHover: true,
+      //   draggable: true,
+      //   progress: undefined,
+      // });
+  
+    })
+    .catch((error) => {
+      error.clientMessage = "Can't create user";
+      dispatch(actions.catchError({ error, callType: callTypes.action }));
+
+      toast.error(error?.response?.data?.message, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -132,12 +146,39 @@ export const updateSalarypolicy = (user, disbaleLoading, onHide) => (dispatch) =
         draggable: true,
         progress: undefined,
       });
-      
+    });
+};
+
+
+
+export const updateEmployeeLoanRequest = (user, disbaleLoading, onHide) => (dispatch) => {
+  return requestFromServer
+    .updateEmployeeLoanRequest(user)
+    .then((response) => {
+
+      const updatedEmployeeLoanRequest = response?.config?.data; // response.data?.data;
+
+
+      dispatch(actions.clearUserForEdit());
+      dispatch(actions.employeeLoanRequestUpdated({ updatedEmployeeLoanRequest }));
+
+      dispatch(actions.startCall({ callType: callTypes.action }));
+      disbaleLoading();
+      onHide();
+      toast.success(response.data.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+
 
     })
     .catch((error) => {
-    
-      //error.clientMessage = "Can't update User"
+
       dispatch(actions.catchError({ error, callType: callTypes.action }));
       disbaleLoading();
       toast.error(error?.response?.data?.message, {
