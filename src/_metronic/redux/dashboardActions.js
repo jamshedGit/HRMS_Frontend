@@ -192,6 +192,7 @@ export const fetchAllSubsidiaryData = (key) => async (dispatch) => {
   return await requestFromServer
     .getAllSubsidiary()
     .then((response) => {
+   
       const entities = [...response.data?.data];
       dispatch(actions.AllChildMenusFetch({ entities, key }));
     })

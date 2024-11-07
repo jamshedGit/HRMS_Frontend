@@ -69,6 +69,7 @@ const gratuity_confModule = lazy(() => import("./modules/Gratuity_Configuration/
 const accrue_gratuity_confModule = lazy(() => import("./modules/Accrue_Gratuity_Configuration/pages/index"));  
 const reimbursement_configurationModule = lazy(() => import("./modules/Reimbursement_Configuration/pages/index"));  
 const reimbursement_claimModule = lazy(() => import("./modules/Reimbursement_claim/pages/index")); 
+const AttendanceConfigurationManagement = lazy(() => import("./modules/Attendance_Configuration/pages/index")); 
 
 const ROUTES = {
   settings: SettingsPage,
@@ -125,7 +126,8 @@ const ROUTES = {
   gratuity_configuration :gratuity_confModule,
   accrue_gratuity_configuration :accrue_gratuity_confModule,
   reimbursement_configuration:reimbursement_configurationModule,
-  reimbursement_claim:reimbursement_claimModule
+  reimbursement_claim:reimbursement_claimModule,
+  attendance_configuration: AttendanceConfigurationManagement
 };
 
 export default function BasePage() {
