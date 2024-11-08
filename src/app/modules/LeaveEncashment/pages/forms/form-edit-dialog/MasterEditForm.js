@@ -144,6 +144,10 @@ export function MasterEditForm({
                   </div>
                   {/* First Row End */}
 
+                  {/* Label to Show Max Count */}
+                  <b>{!readOnly && getLabel(allLeaveTypes, values.leaveType)}</b>
+                  {/* Label to Show Max Count */}
+                  
                   {/* Second Row Start */}
                   <div className="from-group row">
 
@@ -158,7 +162,7 @@ export function MasterEditForm({
                         label={
                           <span>
                             {" "}
-                            Days<span style={{ color: "red" }}>*</span> <b>{getLabel(allLeaveTypes, values.leaveType)}</b>
+                            Days<span style={{ color: "red" }}>*</span>
                           </span>
                         }
                       />
