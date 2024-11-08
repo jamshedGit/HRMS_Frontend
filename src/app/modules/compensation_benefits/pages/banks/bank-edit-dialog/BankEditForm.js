@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { Modal } from "react-bootstrap";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Input, Select, TextArea, Checkbox } from "../../../../../../_metronic/_partials/controls";
 import { useDispatch, useSelector } from "react-redux";
@@ -35,12 +35,25 @@ const formValidation = Yup.object().shape(
   {
 
     subsidiaryId: Yup.string()
+      .nullable()
       .required("Required*"),
     gradeId: Yup.string()
+      .nullable()
       .required("Required*"),
     employeeTypeId: Yup.string()
+      .nullable()
       .required("Required*"),
     currencyId: Yup.string()
+      .nullable()
+      .required("Required*"),
+
+    // salaryMethod: Yup.string()
+    //   .nullable()
+    //   .required("Required*"),
+
+    basicFactor: Yup.string()
+      .nullable()
+      .matches(/^\d+(\.\d+)?$/, 'Must be a valid number (digits with optional decimal)')
       .required("Required*"),
 
     // basicFactorEarn: Yup.number()
@@ -82,6 +95,7 @@ export function BankEditForm({
   const [defEarningList = null, setDefaultEarningList] = useState([]);
   const [defDeductionList = null, setDefaultDeductionList] = useState([]);
   const [defSubsidiary = null, setDefualtSubsidiaryList] = useState(null);
+  const [deferrors, setErrors] = useState({});
 
   useEffect(() => {
     if (!user.Id) {
@@ -107,45 +121,9 @@ export function BankEditForm({
     }
   }
 
-  // useEffect(() => {
-
-
-  //   const fetchEarning_CompensationList = async () => {
-  //     try {
-  //       if (id != undefined) {
-  //         console.log('test contact', id)
-  //         const response = await axios.post(`${USERS_URL}/compensation/read-all-earning-deduction`, { Id: id, transactionType: 'Earning' });
-  //         console.log("tall resp", response);
-  //         setDefaultEarningList(response?.data?.data);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error fetching data:', error);
-  //     }
-  //   }
-
-
-  //   const fetchEDeduction_CompensationList = async () => {
-  //     try {
-  //       if (id != undefined) {
-  //         console.log('test contact', id)
-  //         const response = await axios.post(`${USERS_URL}/compensation/read-all-earning-deduction`, { Id: id, transactionType: 'Deduction' });
-  //         console.log("tall resp", response);
-  //         setDefaultDeductionList(response?.data?.data);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error fetching data:', error);
-  //     }
-  //   }
-
-  //   // fetchEDeduction_CompensationList();
-  //   //  fetchEarning_CompensationList();
-
-  // }, []);
-
-  //======================= Employee Type
 
   useEffect(() => {
-    const emptypeId = defchildEmptypeMenus?.value ? defchildEmptypeMenus.value : user.employeeTypeId || 148;
+    const emptypeId = defchildEmptypeMenus?.value ? defchildEmptypeMenus.value : user.employeeTypeId;
     setDefaultChildEmpTypeMenus(
       dashboard.allEmpTypeChildMenus &&
       dashboard.allEmpTypeChildMenus.filter((item) => {
@@ -159,7 +137,7 @@ export function BankEditForm({
   console.log("dashboard.allSubidiaryList", dashboard.allSubidiaryList)
   useEffect(() => {
 
-    const subsidiaryId = defSubsidiary?.value ? defSubsidiary.value : user.subsidiaryId || 134;
+    const subsidiaryId = defSubsidiary?.value ? defSubsidiary.value : user.subsidiaryId;
     console.log("subsidiaryId123", user);
 
     setDefualtSubsidiaryList(
@@ -172,7 +150,7 @@ export function BankEditForm({
   }, [user?.subsidiaryId, dashboard.subsidiaryId]);
 
   useEffect(() => {
-    const gradeId = defEmployeeGrade?.value ? defEmployeeGrade.value : user.gradeId || 144;
+    const gradeId = defEmployeeGrade?.value ? defEmployeeGrade.value : user.gradeId;
     setDefualtEmployeeGrade(
       dashboard.allEmployeeGradeList &&
       dashboard.allEmployeeGradeList.filter((item) => {
@@ -183,7 +161,7 @@ export function BankEditForm({
   }, [user?.gradeId, dashboard.gradeId]);
 
   useEffect(() => {
-    const currencyId = defCurrencyCodeList?.value ? defCurrencyCodeList.value : user.currencyId || 130;
+    const currencyId = defCurrencyCodeList?.value ? defCurrencyCodeList.value : user.currencyId;
     setDefualtCurrencyCodeList(
       dashboard.allCurrencyCodeList &&
       dashboard.allCurrencyCodeList.filter((item) => {
@@ -273,18 +251,55 @@ export function BankEditForm({
   }
 
 
-  console.log("user control", user)
-  
+
+  const validate = () => {
+    const newErrors = {};
+
+    defEarningList.forEach((objValidate, index) => {
+
+      if (!objValidate.earning_deduction_id) {
+        newErrors[`earning_deduction_id-${index}`] = 'Required*';
+      }
+      if (!objValidate.calculation_type) {
+        newErrors[`calculation_type-${index}`] = 'Required*';
+      }
+      console.log("amount::", objValidate.amount)
+      // Check if factorValue is required
+      if (!objValidate.factorValue && objValidate.amount <= 0) {
+        newErrors[`factorValue-${index}`] = 'Required*';
+      }
+
+      // Check if amount is required
+      if (!objValidate.amount && objValidate.factorValue <= 0) {
+        newErrors[`amount-${index}`] = 'Required*';
+      }
+    });
+
+
+
+    return newErrors;
+  };
+
   return (
     <>
       <Formik
         enableReinitialize={true}
-        initialValues={user.subsidiaryId ? user : {  subsidiaryId: 134, gradeId: 144, currencyId: 130 }}
+        initialValues={user.subsidiaryId ? user : { subsidiaryId: 134, gradeId: 144, currencyId: 130 }}
         validationSchema={formValidation}
         onSubmit={(values) => {
           console.log("values", values);
-          enableLoading();
-          saveCompensationBenefits(values, defEarningList);
+
+
+          const validationErrors = validate();
+          console.log("ppp", validationErrors)
+          if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+          } else {
+            enableLoading();
+            saveCompensationBenefits(values, defEarningList);
+          }
+
+
 
         }}
       >
@@ -324,7 +339,7 @@ export function BankEditForm({
                             //handlePaymenModeChanged(e)
 
                           }}
-                          
+
                           value={(defSubsidiary || null)}
                           error={errors.subsidiaryId}
                           touched={touched.subsidiaryId}
@@ -368,10 +383,11 @@ export function BankEditForm({
                           // dispatch(fetchAllFormsMenu(e.value));
                         }}
                         value={(defchildEmptypeMenus || null)}
-                        error={errors.Id}
-                        touched={touched.Id}
+                        error={errors.employeeTypeId}
+                        touched={touched.employeeTypeId}
                         options={dashboard.allEmpTypeChildMenus}
                       />
+
                     </div>
                   </div>
 
@@ -409,7 +425,8 @@ export function BankEditForm({
                             setFieldValue("basicFactor", "")
                           }
                         }}
-
+                        error={errors.salaryMethod}
+                        touched={touched.salaryMethod}
                         onBlur={handleBlur}
                         style={{ display: "block" }}
                         autoComplete="off">
@@ -423,11 +440,14 @@ export function BankEditForm({
                       <Field
                         name="basicFactor"
                         component={Input}
-
+                        maxLength={10}
                         placeholder="Enter Basic Factor" disabled={values.salaryMethod == "Basic to Gross"}
                         label={<span> Basic Factor<span style={{ color: 'red' }}>*</span></span>}
                         autoComplete="off"
+                        error={errors.currencyId}
+                        touched={touched.currencyId}
                       />
+                      {/* <ErrorMessage className="form-feedBack" name="basicFactor" component="div" /> */}
                     </div>
                   </div>
 
@@ -565,46 +585,74 @@ export function BankEditForm({
                         <><tr>
                           <td id={rightindex} onClick={deleteRow}> Delete</td>
                           <td>
-                            <select onChange={handleFieldChanged} id={'earning_deduction_id-' + rightindex} value={obj.earning_deduction_id}>
+                            <select
+
+                              onChange={(e) => {
+                                handleFieldChanged(e);
+                                setErrors((prev) => ({ ...prev, [`earning_deduction_id-${rightindex}`]: '' })); // Clear error on change
+
+                              }}
+
+                              id={'earning_deduction_id-' + rightindex} value={obj.earning_deduction_id}>
                               <option value="-1"> --Select--</option>
                               {
                                 dashboard.allEarnings?.map((x) => {
                                   return <option disabled={defEarningList.find(el => el.earning_deduction_id == x.value) ? true : false} value={x.value}> {x.label} </option>
                                 })}
-
                             </select>
+                            {deferrors[`earning_deduction_id-${rightindex}`] && <div className="form-feedBack">{deferrors[`earning_deduction_id-${rightindex}`]}</div>}
                           </td>
                           {/* <td>
                             {obj.earningName}
                           </td> */}
                           <td>
-                            <select value={obj.calculation_type} onChange={handleFieldChanged} id={'calculation_type-' + rightindex} >
+                            <select
+                              value={obj.calculation_type}
+                              onChange={(e) => {
+                                handleFieldChanged(e);
+                                setErrors((prev) => ({ ...prev, [`calculation_type-${rightindex}`]: '' })); // Clear error on change
+                                if (e.target.value == "Fixed Amount") { obj.factorValue = 0 }
+                                else {
+                                  obj.amount = 0
+                                }
+                              }}
+
+                              id={'calculation_type-' + rightindex} >
                               <option value="-1">--Select--</option>
                               <option value="% Of Basic">% Of Basic</option>
                               <option value="Fixed Amount">Fixed Amount</option>
                             </select>
-
+                            {deferrors[`calculation_type-${rightindex}`] && <div className="form-feedBack">{deferrors[`calculation_type-${rightindex}`]}</div>}
                           </td>
                           {/* <td>{obj.calculation_type}</td> */}
                           <td>
-                            {/* <Field
-                        name="basicFactorEarn"
-                        component={Input}
-                        value={obj.factorValue} id={'factorValue-' + rightindex}
-                        disabled={obj.calculation_type == "Fixed Amount"}
-                        placeholder="Enter Basic Factor" 
-                        onChange={handleFieldChanged}
-                        label={<span> Basic Factor<span style={{ color: 'red' }}>*</span></span>}
-                        autoComplete="off"
-                      /> */}
+                            {<input
+                              name='basicFactorEarn'
+                              disabled={obj.calculation_type == "Fixed Amount"}
+                              style={{ width: "80px" }} type="number"
+                              onChange={(e) => {
+                                handleFieldChanged(e);
+                                setErrors((prev) => ({ ...prev, [`factorValue-${rightindex}`]: '' })); // Clear error on change
 
-                            {<input name='basicFactorEarn' disabled={obj.calculation_type == "Fixed Amount"} style={{ width: "80px" }} type="number" onChange={handleFieldChanged}
+
+                              }}
                               value={obj.factorValue} id={'factorValue-' + rightindex}></input>}
+                            {deferrors[`factorValue-${rightindex}`] && <div className="form-feedBack">{deferrors[`factorValue-${rightindex}`]}</div>}
                           </td>
 
                           <td>
-                            <input disabled={obj.calculation_type == "% Of Basic"} style={{ width: "80px" }} type="number" onChange={handleFieldChanged}
+                            <input
+                              disabled={obj.calculation_type == "% Of Basic"}
+                              style={{ width: "80px" }} type="number"
+                              onChange={(e) => {
+                                handleFieldChanged(e);
+                                setErrors((prev) => ({ ...prev, [`amount-${rightindex}`]: '' })); // Clear error on change
+
+
+
+                              }}
                               value={obj.amount} id={'amount-' + rightindex}></input>
+                            {deferrors[`amount-${rightindex}`] && <div className="form-feedBack">{deferrors[`amount-${rightindex}`]}</div>}
                           </td>
                           <td>
                             <select value={obj.isPartOfGrossSalary} onChange={handleFieldChanged} id={'isPartOfGrossSalary-' + rightindex} >
@@ -649,27 +697,44 @@ export function BankEditForm({
                               })}
 
 
-                          </select></td>
+                          </select>
+                            {deferrors[`earning_deduction_id-${rightindex}`] && <div className="form-feedBack">{deferrors[`earning_deduction_id-${rightindex}`]}</div>}
+                          </td>
 
                           <td>
-                            <select value={obj.calculation_type} onChange={handleFieldChanged} id={'calculation_type-' + rightindex} >
+                            <select
+                              value={obj.calculation_type}
+                              onChange={(e) => {
+                                handleFieldChanged(e);
+                                setErrors((prev) => ({ ...prev, [`calculation_type-${rightindex}`]: '' })); // Clear error on change
+
+                                if (e.target.value == "Fixed Amount") { obj.factorValue = 0 }
+                                else {
+                                  obj.amount = 0
+                                }
+
+                              }}
+                              id={'calculation_type-' + rightindex} >
                               <option value="-1">--Select--</option>
                               <option value="% Of Basic">% Of Basic</option>
                               <option value="Fixed Amount">Fixed Amount</option>
                             </select>
+                            {deferrors[`calculation_type-${rightindex}`] && <div className="form-feedBack">{deferrors[`calculation_type-${rightindex}`]}</div>}
                           </td>
 
-                          <td> <input style={{ width: "80px" }} type="number" onChange={handleFieldChanged} disabled={obj.calculation_type == "Fixed Amount"} value={obj.factorValue} id={'factorValue-' + rightindex}></input></td>
+                          <td>
+                            <input style={{ width: "80px" }}
+                              type="number"
+                              onChange={handleFieldChanged}
+                              disabled={obj.calculation_type == "Fixed Amount"}
+                              value={obj.factorValue} id={'factorValue-' + rightindex}>
+                            </input>
+                            {deferrors[`factorValue-${rightindex}`] && <div className="form-feedBack">{deferrors[`factorValue-${rightindex}`]}</div>}
+                          </td>
                           <td><input disabled={obj.calculation_type == "% Of Basic"} style={{ width: "80px" }} type="number"
                             onChange={handleFieldChanged} value={obj.amount} id={'amount-' + rightindex}></input>
                           </td>
-                          {/* <td>
-                            <select value={obj.isPartOfGrossSalary} onChange={handleFieldChanged} id={'isPartOfGrossSalary-' + rightindex} >
-                              <option value="-1">--Select--</option>
-                              <option value="1">Yes</option>
-                              <option value="0">No</option>
-                            </select>
-                          </td> */}
+                          {deferrors[`amount-${rightindex}`] && <div className="form-feedBack">{deferrors[`amount-${rightindex}`]}</div>}
                         </tr>
                         </>
                       ))}

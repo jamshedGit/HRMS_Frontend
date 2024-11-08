@@ -22,7 +22,8 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 const bankEditSchema = Yup.object().shape(
   {
     Name: Yup.string()
-      .required("Required*"),
+    .matches(/^[A-Za-z]+$/, 'Name must only contain letters.')
+    .required('Required*')
    
   },
   
@@ -81,6 +82,7 @@ export function BankEditForm({
                     <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="Name"
+                        MaxLength = {40}
                         component={Input}
                         placeholder="Bank Name"
                         label={<span> Bank<span style={{ color: 'red' }}>*</span></span>}

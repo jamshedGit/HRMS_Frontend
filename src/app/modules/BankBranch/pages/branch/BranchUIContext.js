@@ -35,8 +35,16 @@ export function BranchUIProvider({ BranchUIEvents, children }) {
     countryId: "",
     cityId:"",
     branchCode: "",
-    BankId: ""
-  
+    BankId: "",
+    phone:"",
+    fax: "",
+    email: "",
+    contactPerson: "",
+    address:"",
+    accOpeningDate:"",
+    accNoForSalary: "",
+    accNoForGrad:"",
+    accNoForPF: "",
   };
 
   console.log("bank ui events",BranchUIEvents);

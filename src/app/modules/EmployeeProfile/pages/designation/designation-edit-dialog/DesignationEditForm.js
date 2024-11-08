@@ -100,28 +100,6 @@ const profileValidation = Yup.object().shape(
       .min(currentDate, 'Driving license expiry must be a future date')
       .typeError('Driving License Expiry must be a valid date'),
 
-    //   drivingLicenseExpiry: Yup.date()
-    //   .min(currentDate, 'Driving license expiry must be a future date') // Ensure it's in the future
-    //   .required("Required*"),
-
-    //  laborCardNo: Yup.string()
-    //   .matches(/^\d+$/, 'Labor Card No must contain only digits') // Allow only digits
-    //   .required("Required*"),
-
-    //   emiratesNo: Yup.string()
-    //   .matches(/^\d+$/, 'EmiratesNo must contain only digits') // Allow only digits
-    //   .required("Required*"),
-
-    //   emiratesId: Yup.string()
-    //   .matches(/^\d+$/, 'Emirates Id must contain only digits') // Allow only digits
-    //   .required("Required*"),
-
-    //   routingCode: Yup.string()
-    //   .matches(/^\d+$/, 'Routing Code Id must contain only digits') // Allow only digits
-    //   .required("Required*"),
-
-
-
     // Other fields...
 
     lastReviewDate: Yup.date()
@@ -1156,8 +1134,6 @@ export function DesignationEditForm({
 
           console.log("::ppp::", values);
           //const t =  handleSubmit();
-
-
           const validationErrors = validate();
           console.log("::val::", validationErrors)
           if (Object.keys(validationErrors).length > 0) {
