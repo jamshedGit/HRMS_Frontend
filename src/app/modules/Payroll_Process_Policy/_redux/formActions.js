@@ -13,7 +13,25 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
   return requestFromServer.getAll_Payroll_Policy(queryparm)
     .then((response) => {
       console.log("::fetchted::", response)
-      dispatch(actions.Payroll_Policy_Fetched(response));
+
+         // Transform the response rows here
+    const transformedRows = response?.data?.data?.rows.map(item => ({
+      ...item,
+      isActive: item.isActive ? 'Yes' : 'No'  // Transform the value
+    }));
+
+    // Update the response with transformed rows
+    const updatedResponse = {
+      ...response,
+      data: {
+        ...response.data,
+        rows: transformedRows
+      }
+    };
+
+    // Dispatch the updated response
+    dispatch(actions.Payroll_Policy_Fetched(updatedResponse));
+    
     })
     .catch((error) => {
 

@@ -41,7 +41,7 @@ export const payroll_policySlice = createSlice({
         Payroll_Policy_Fetched: (state, action) => {
           
             console.log("user slice",action.payload)
-            const entities = action.payload.data?.data.rows;
+            const entities = action.payload?.data.rows;
             
             const totalResult = action.payload.data?.data.totalResults;
             console.log(entities);
