@@ -19,7 +19,7 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
     // })
     .then((response) => {
       //  console.log("user action receipt fetched 321")
-      // console.log("response", response)
+       console.log("response", response)
       dispatch(actions.branchFetched(response));
     })
     .catch((error) => {
@@ -41,7 +41,7 @@ export const fetchUser = (id) => (dispatch) => {
     .getBranchById({ Id: id })
     .then((response) => {
       const entities = response.data?.data;
-
+      console.log("forEdit::",response);
       // console.log("User fetched for search " + id)
       dispatch(actions.branchFetchedForEdit({ userForEdit: entities }));
     })

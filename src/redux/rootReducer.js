@@ -60,6 +60,7 @@ import { payroll_policySlice } from "../app/modules/Payroll_Process_Policy/_redu
 import { LeaveApplicationSlice } from "../app/modules/LeaveApplication/_redux/LeaveApplicationSlice";
 import { taxSetupSlice } from "../app/modules/Tax_Setup/_redux/taxSetupSlice";
 import { loan_manag_confSlice } from "../app/modules/Loan_manag_conf/_redux/redux-Slice"
+import {employee_loan_requestSlice} from "../app/modules/Employee_Loan_Request/_redux/redux-Slice"
 import { AllocateLeavesSlice } from "../app/modules/AllocateLeaves/_redux/AllocateLeavesSlice"
 import { EmployeeLeaveBalanceSlice } from "../app/modules/EmployeeLeaveBalance/_redux/EmployeeLeaveBalanceSlice"
 import { gratuity_configurationSlice } from "../app/modules/Gratuity_Configuration/_redux/redux-Slice"
@@ -67,6 +68,7 @@ import { accrue_gratuity_configurationSlice } from "../app/modules/Accrue_Gratui
 import { reimbursement_configurationSlice } from "../app/modules/Reimbursement_Configuration/_redux/redux-Slice"
 import { reimbursement_claimSlice } from "../app/modules/Reimbursement_claim/_redux/redux-Slice"
 import { LeaveEncashmentSlice } from "../app/modules/LeaveEncashment/_redux/LeaveEncashmentSlice";
+import {AttendanceConfigurationSlice} from "../app/modules/Attendance_Configuration/_redux/attendanceConfigSlice"
 
 export const rootReducer = combineReducers({
   auth: auth.reducer,
@@ -122,15 +124,18 @@ export const rootReducer = combineReducers({
   leave_management_configuration: leaveManagementConfigurationSlice.reducer,
   payroll_process_policy: payroll_policySlice.reducer,
   leave_application: LeaveApplicationSlice.reducer,
-  tax_slab: tax_slabSlice.reducer,
-  loan_management_configuration: loan_manag_confSlice.reducer,
-  gratuity_configuration: gratuity_configurationSlice.reducer,
-  reimbursement_configuration: reimbursement_configurationSlice.reducer,
-  accrue_gratuity_configuration: accrue_gratuity_configurationSlice.reducer,
+  tax_slab:tax_slabSlice.reducer,
+  loan_management_configuration:loan_manag_confSlice.reducer,
+  gratuity_configuration:gratuity_configurationSlice.reducer,
+  reimbursement_configuration:reimbursement_configurationSlice.reducer,
+  accrue_gratuity_configuration:accrue_gratuity_configurationSlice.reducer,
+  reimbursement_claim:reimbursement_claimSlice.reducer,
+  employee_loan_request:employee_loan_requestSlice.reducer,
   allocate_leaves: AllocateLeavesSlice.reducer,
   employee_leave_balance: EmployeeLeaveBalanceSlice.reducer,
   reimbursement_claim:reimbursement_claimSlice.reducer,
-  leave_encashment: LeaveEncashmentSlice.reducer
+  leave_encashment: LeaveEncashmentSlice.reducer,
+  attendance_configuration:AttendanceConfigurationSlice.reducer
 });
 
 export function* rootSaga() {

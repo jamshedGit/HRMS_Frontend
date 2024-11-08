@@ -31,12 +31,55 @@ export function FormUIProvider({ FormUIEvents, children }) {
     });
   }, []);
   const initUser = {
-    startDate: "",
-    endDate: "",
-    month: "",
-    month_days: "",
-    shortFormat: "",
-    year:""
+    subsidiaryId : "",
+    companyId  : "",
+    payroll_templateId : "",
+    employer_uniqueId : "",
+    payroll_approverId : "",
+    payroll_groupId : "",
+
+    //-- Email Sender ------------
+    sender_emailId : "",
+    employee_email_recipentId : "",
+
+   // -- Accounting Impact ----
+    basic_pay_accountId : "",
+    payroll_payable_accountId : "",
+    isGroupEarningOnAccount :"",
+    isGroupDeduductionOnAccount :"",
+    isAccrueGratuityOnPayroll :"",
+
+    //-- Tax Integration
+    payrollTax_DeductionTypeId :"",
+    arrearTaxDeductionId :"",
+    isTrackDeductionHistory :"",
+
+   // -- Leave / AAtteandance Integraion
+    isEnableAttandanceIntegration :"",
+    isEnableLeaveManagemenent :"",
+    isEnableOverTimeCalc :"",
+    leaveDeductionId :"",
+    lateCountPerDaySalaryDeduction :"",
+    leaveEnchashment_EarningId :"",
+    lateDeductionId :"",
+    overTimeEarningId :"",
+    isEnableSandwichLeavePolicy :"",
+
+    //-- Loan Integration	
+    isEnableLoan :"",
+    loanDeductionId :"", 
+
+   // --  EOBI Configuration
+    isEnableEOBI :"",
+    eobi_deductionId :"",
+    eobi_earningId :"",
+    isIncludeBasic :"",
+    eobi_employeer_value_in_percent :"",
+    eobi_employee_value_in_percent :"",
+
+    //-- Other
+
+    
   };
 
   

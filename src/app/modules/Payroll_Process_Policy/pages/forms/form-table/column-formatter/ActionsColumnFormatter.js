@@ -36,7 +36,7 @@ export function ActionsColumnFormatter(
           </span>
         </a>
       </OverlayTrigger>
-      {isAccessForEdit && row.isActive == "Yes" && (
+      {isAccessForEdit && (
         <OverlayTrigger
           overlay={<Tooltip id="products-edit-tooltip">Edit</Tooltip>}
         >
@@ -55,7 +55,7 @@ export function ActionsColumnFormatter(
       )}
 
       <> </>
-
+     
       {isAccessForDelete && (
         <OverlayTrigger
           overlay={
@@ -65,19 +65,18 @@ export function ActionsColumnFormatter(
           }
         >
           {row.isActive ? (
-            // <a
-            //   title=""
-            //   className="btn btn-icon btn-light btn-hover-danger btn-sm mx-3"
-            //   onClick={() => openDeleteFormDialog(row.Id, row.isActive)}
-            // >
-            //   <span className="svg-icon svg-icon-md svg-icon-danger">
-            //     <SVG
-            //       src={toAbsoluteUrl("/media/svg/icons/General/disable.svg")}
-            //       title=""
-            //     />
-            //   </span>
-            // </a>
-            <></>
+            <a
+              title=""
+              className="btn btn-icon btn-light btn-hover-danger btn-sm mx-3"
+              onClick={() => openDeleteFormDialog(row.Id, row.isActive)}
+            >
+              <span className="svg-icon svg-icon-md svg-icon-danger">
+                <SVG
+                  src={toAbsoluteUrl("/media/svg/icons/General/disable.svg")}
+                  title=""
+                />
+              </span>
+            </a>
           ) : (
             <a
               title=""

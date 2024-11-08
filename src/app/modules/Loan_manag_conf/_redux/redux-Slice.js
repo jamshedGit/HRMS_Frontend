@@ -10,6 +10,7 @@ const initialSalarypolicyState = {
     userForEdit: undefined,
     lastError: null,
     userForRead: false,
+    loan_type:null,
 };
 
 
@@ -94,6 +95,16 @@ export const loan_manag_confSlice = createSlice({
                 return entity;
             });
            
+        },
+
+        getLoanType: (state, action) => {
+           
+            state.actionsLoading = false;
+            state.error = null;
+            state.loan_type=action.payload;
+
+
+            
         },
 
 

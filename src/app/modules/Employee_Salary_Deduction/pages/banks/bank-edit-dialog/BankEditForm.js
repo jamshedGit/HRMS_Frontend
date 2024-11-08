@@ -82,7 +82,7 @@ export function BankEditForm({
     const fetchEmployeeSalaryDeductionList = async () => {
       try {
        
-          const response = await axios.post(`${USERS_URL}/employee_salary_earning/read-all-emp-earning_byId`, { id: 26, transactionType: 'Deduction' });
+          const response = await axios.post(`${USERS_URL}/employee_salary_earning/read-all-emp-earning_byId`, { id: user.employeeId, transactionType: 'Deduction' });
           console.log('emp salary deduction', user.employeeId,response);
           setDefaultMapDeductionList(response?.data?.data);
         

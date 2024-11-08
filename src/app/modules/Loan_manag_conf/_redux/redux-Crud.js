@@ -37,3 +37,10 @@ export function deleteSalarypolicy(body) {
 
   return axios.patch(`${USERS_URL}/loan_management_configuration/delete-loan-management-configuration`, body);
 }
+export function getAllLoanType() {
+
+
+  return axios.get(`${USERS_URL}/loan_management_configuration/get-all-loan-type`);
+
+  
+}

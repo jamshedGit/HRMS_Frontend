@@ -37,7 +37,7 @@ export function FormTable() {
  
 
   const { currentState, userAccess } = useSelector(
-    (state) => {  console.log("s "); return {
+    (state) => {   return {
      
       
       currentState: state.loan_management_configuration,
@@ -121,16 +121,16 @@ export function FormTable() {
       },
     },
 
-    {
-      dataField: "t_role.name",
-      text: "role",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "10px",
-      },
-    },
+    // {
+    //   dataField: "t_role.name",
+    //   text: "role",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "10px",
+    //   },
+    // },
  
     // {
     //   dataField: "installment_deduction_basis_type",
