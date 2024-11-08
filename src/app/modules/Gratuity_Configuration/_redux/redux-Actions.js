@@ -7,7 +7,7 @@ const { actions } = gratuity_configurationSlice;
 
 export const fetchSalarypolicies = (queryparm) => async (dispatch) => {
 
-  dispatch(actions.startCall({ callType: callTypes.list }));
+  // dispatch(actions.startCall({ callType: callTypes.list }));
   
   return requestFromServer.getAllSalarypolicy(queryparm)
    
@@ -30,7 +30,7 @@ export const fetchSalarypolicy = (id) => (dispatch) => {
     return dispatch(actions.SalarypolicyFetchedForEdit({ userForEdit: undefined }));
   }
 
-  dispatch(actions.startCall({ callType: callTypes.action }));
+  // dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
     .getSalarypolicyById({ Id: id })
     .then((response) => {
@@ -46,7 +46,7 @@ export const fetchSalarypolicy = (id) => (dispatch) => {
 };
 
 export const deleteSalarypolicy = (id) => (dispatch) => {
-  dispatch(actions.startCall({ callType: callTypes.action }));
+  // dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
     .deleteSalarypolicy({ Id: id })
     .then((response) => {
@@ -79,7 +79,7 @@ export const createSalarypolicy = (salarypolicyForCreation, disbaleLoading, onHi
   return requestFromServer
     .createSalarypolicy(salarypolicyForCreation)
     .then((res) => {
-      dispatch(actions.startCall({ callType: callTypes.action }));
+      // dispatch(actions.startCall({ callType: callTypes.action }));
       const user = res.data?.data;
      
   
@@ -120,7 +120,7 @@ export const updateSalarypolicy = (user, disbaleLoading, onHide) => (dispatch) =
       const updatedSalarypolicy = response?.config?.data; // response.data?.data;
    
       dispatch(actions.salarypolicyUpdated({ updatedSalarypolicy }));
-      dispatch(actions.startCall({ callType: callTypes.action }));
+      // dispatch(actions.startCall({ callType: callTypes.action }));
       disbaleLoading();
       onHide();
       toast.success(response.data.message + " Updated", {
