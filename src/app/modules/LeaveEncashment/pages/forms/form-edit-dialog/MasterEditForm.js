@@ -23,28 +23,36 @@ export function MasterEditForm({
   loading,
   setId,
   employeeId,
-  readOnly
+  readOnly,
+  yearId
 }) {
 
   //Get all leave types from dashboard global state
   //Get User Access for Edit and Create Save Button
-  const { allLeaveTypes, userAccess } = useSelector(
+  const { allLeaveTypes, userAccess, leaveBalances } = useSelector(
     (state) => ({
       allLeaveTypes: state.dashboard.allLeaveTypes,
       userAccess: state?.auth?.userAccess["Leave_Encashment"],
+      leaveBalances: state.leave_encashment.leaveBalances,
     }),
     shallowEqual
   )
 
   //Check Access for creation and Updation
-  const accessUser = useMemo(() => 
+  const accessUser = useMemo(() =>
     userAccess.find(
-      (item) => 
-        item.componentName === "CreateLeaveEncashment" || 
+      (item) =>
+        item.componentName === "CreateLeaveEncashment" ||
         item.componentName === "UpdateLeaveEncashment"
-    ), 
+    ),
     [userAccess]
   );
+
+  const getLabel = (leaveTypeArr, leaveType) => {
+    const balance = leaveType && leaveBalances?.find(el => el.leaveType == leaveType)?.encashmentCount;
+    const limit = leaveType && leaveTypeArr.find(el => el.value == leaveType)?.limit;
+    return limit && balance != null ? `(Max : ${limit - balance})` : ''
+  }
 
   return (
     <>
@@ -90,7 +98,7 @@ export function MasterEditForm({
                       <Field
                         name="leaveType"
                         component={Select}
-                        disabled={!employeeId}
+                        disabled={!employeeId || !yearId}
                         className={errors?.leaveType && touched?.leaveType ? 'form-control is-invalid' : 'form-control'}
                         placeholder=""
                         onBlur={handleBlur}
@@ -150,7 +158,7 @@ export function MasterEditForm({
                         label={
                           <span>
                             {" "}
-                            Days
+                            Days<span style={{ color: "red" }}>*</span> <b>{getLabel(allLeaveTypes, values.leaveType)}</b>
                           </span>
                         }
                       />
@@ -180,7 +188,7 @@ export function MasterEditForm({
               {/* Cancel button End */}
 
               {/* Save button Start */}
-              {employeeId && accessUser && !readOnly ? <button
+              {employeeId && yearId && accessUser && !readOnly ? <button
                 type="submit"
                 onClick={() => handleSubmit()}
                 className="btn btn-primary btn-elevate"

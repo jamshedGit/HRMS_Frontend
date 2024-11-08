@@ -64,6 +64,7 @@ export function FormEditDialog({ id, employeeId, yearId }) {
         enableLoading={enableLoading}
         loading={loading}
         employeeId={employeeId}
+        yearId={yearId}
         setId={formUIProps.setId}
         readOnly={id ? true : false}
       />

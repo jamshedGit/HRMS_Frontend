@@ -8,7 +8,7 @@ import { useFormUIContext } from "../FormUIContext"
 import { useSelector, shallowEqual, useDispatch } from "react-redux"
 import EmployeeProfile from "../../../../../utils/common-modules/EmployeeProfile"
 import { EmployeeSelect } from "../form-edit-dialog/EmployeeSelect"
-import { fetchAllActiveEmployees, fetchAllFiscalYearData, fetchAllLeaveType } from "../../../../../../_metronic/redux/dashboardActions"
+import { fetchAllActiveEmployees, fetchAllFiscalYearData, fetchAllLeaveType, fetchEncashmentLeaveType } from "../../../../../../_metronic/redux/dashboardActions"
 import * as actions from "../../../_redux/formActions";
 import { FormEditDialog } from "../form-edit-dialog/FormEditDialog"
 import { LeaveBalanceTable } from "../form-table/LeaveBalanceTable"
@@ -56,9 +56,9 @@ export function FormCard() {
   //Also update dropdown of leave type when employee is selected
   useEffect(() => {
     dispatch(actions.fetchLeaveBalances(formUIProps.employeeId))
-    dispatch(fetchAllLeaveType("allLeaveTypes", formUIProps.employeeId));
+    dispatch(fetchEncashmentLeaveType("allLeaveTypes", formUIProps.employeeId, formUIProps.yearId));
 
-  }, [dispatch, formUIProps.employeeId, entities])
+  }, [dispatch, formUIProps.employeeId, formUIProps.yearId, entities])
 
 
 
