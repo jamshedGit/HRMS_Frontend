@@ -71,7 +71,7 @@ export function FormTable() {
   const columns = [
 
     {
-      dataField: "Subsidiary.formName",
+      dataField: "Subsidiary.name",
       text: "subsidiary",
       sort: false,
       sortCaret: sortCaret,
@@ -84,7 +84,7 @@ export function FormTable() {
  
  
 {
-  dataField: "Account.formName",
+  dataField: "account",
   text: "Account",
   sort: false,
   sortCaret: sortCaret,
@@ -99,7 +99,7 @@ export function FormTable() {
    
  
     {
-      dataField: "EmpLoanAccount.formName",
+      dataField: "empLoanAccount",
       text: "employee loan account",
       sort: false,
       sortCaret: sortCaret,

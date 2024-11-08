@@ -39,20 +39,42 @@ export const loan_manag_confSlice = createSlice({
                 state.actionsLoading = true;
             }
         },
-        salarypolicyFetched: (state, action) => {
-       
-        
+
+         salarypolicyFetched: (state, action) => {
             const entities = action.payload.data?.data.rows;
+            console.log("entities fetch", entities);
+        
+            if (entities) {
+                // Map over entities to combine formName and formCode
+                const combinedEntities = entities.map(item => ({
+                    ...item,
+                    account: item.Account 
+                        ? `${item.Account.formCode}-${item.Account.formName}` 
+                        : null,
+
+                        empLoanAccount: item.EmpLoanAccount 
+                        ? `${item.EmpLoanAccount.formCode}-${item.EmpLoanAccount.formName}` 
+                        : null,   
+                }));
+        
+                // Update the state with the combined entities
+                state.entities = combinedEntities;
+            } else {
+                state.entities = [];
+            }
+        
+            console.log("state.entities", state.entities);  // Log the entities to verify
         
             const totalResult = action.payload.data?.data.totalResults;
-          
             state.listLoading = false;
             state.error = null;
-            state.entities = entities;
             state.totalCount = totalResult;
-        },
-
-         //get User By ID
+        }
+,        
+        
+        
+        
+        
          SalarypolicyFetchedForEdit: (state, action) => {
      
        
@@ -73,10 +95,32 @@ export const loan_manag_confSlice = createSlice({
             );
         },
         salarypolicyCreated: (state, action) => {
+            
+
+
+
            
             state.actionsLoading = false;
             state.error = null;
-            state.entities.unshift(action.payload);
+
+            const newEntity = action.payload;
+        
+            // Create combined fields for the new entity
+            const combinedEntity = {
+                ...newEntity,
+                account: newEntity.Account 
+                ? `${newEntity.Account.formCode}-${newEntity.Account.formName}` 
+                : null,
+
+                empLoanAccount: newEntity.EmpLoanAccount 
+                ? `${newEntity.EmpLoanAccount.formCode}-${newEntity.EmpLoanAccount.formName}` 
+                : null,   
+               
+            };
+        
+            // Add the combined entity to the beginning of the entities array
+            state.entities.unshift(combinedEntity);
+          
         },
         salarypolicyUpdated: (state, action) => {
             state.error = null;

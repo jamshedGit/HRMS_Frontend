@@ -9,6 +9,7 @@ import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect"
 import {
   fetchAllFormsMenu,
   fetchAllHumanResourceRole,
+  fetchAllSubsidiaryData,
 } from "../../../../../../_metronic/redux/dashboardActions";
 import { amountLimit } from "../../../../../utils/common";
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
@@ -43,9 +44,15 @@ const loanManagementSchema = Yup.object().shape({
         .min(1, "Must be at least 1")
         .required(VALIDATION_MESSAGES.required),
       basis: Yup.number().required(VALIDATION_MESSAGES.required),
-      salary_count: Yup.number()
-        .min(1, "Must be at least 1")
-        .required(VALIDATION_MESSAGES.required),
+      // salary_count: Yup.number()
+      //   .min(1, "Must be at least 1")
+      //   .required(VALIDATION_MESSAGES.required),
+
+      
+        salary_count: Yup.number()
+  .min(1, VALIDATION_MESSAGES.minOneValue)
+  .max(99, "Must be at most 99")
+  .required(VALIDATION_MESSAGES.required),
     })
   ),
 });
@@ -65,8 +72,9 @@ export function FormEditForm({
   // Fetch necessary data if not already present
   useEffect(() => {
     if (!user.Id) {
-      dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsidiaries
-      dispatch(fetchAllFormsMenu(45, "allAccountList")); // For All Accounts
+      dispatch(fetchAllSubsidiaryData("allSubsidiaryList"));
+      // dispatch(fetchAllFormsMenu(45, "allAccountList")); // For All Accounts
+      dispatch(fetchAllFormsMenu(45, "allAccountList",null,true));
       dispatch(actions.getAllLoanType()); // For All Loan Types
       dispatch(fetchAllHumanResourceRole("allHumanResourceRoleList"));
     }
@@ -137,11 +145,11 @@ export function FormEditForm({
                         check_Existed_Data(e.value);
                       }}
                       value={
-                        dashboard.allSubidiaryList.find(
+                        dashboard?.allSubsidiaryList?.find(
                           (option) => option.value === values.subsidiaryId
                         ) || null
                       }
-                      options={dashboard.allSubidiaryList}
+                      options={dashboard?.allSubsidiaryList}
                       // options={dashboard.allSubidiaryList.map(option => ({
                       //   label: `${option.label} (${option.value})`, // Adding the value to the label
                       //   value: option.value,
@@ -460,6 +468,11 @@ export function FormEditForm({
                                   type="number"
                                   className="form-control"
                                   disabled={isUserForRead}
+                                  onInput={(e) => {
+                                    if (e.target.value.length > 2) {
+                                      e.target.value = e.target.value.slice(0, 2); // Restrict to 2 digits
+                                    }
+                                  }}
                                 />
                                 {errors.details?.[index]?.salary_count &&
                                   touched.details?.[index]?.salary_count && (
