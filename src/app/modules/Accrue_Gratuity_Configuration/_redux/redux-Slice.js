@@ -31,14 +31,7 @@ export const accrue_gratuity_configurationSlice = createSlice({
                 state.actionsLoading = false;
             }
         },
-        startCall: (state, action) => {
-            state.error = null;
-            if (action.payload.callType === callTypes.list) {
-                state.listLoading = true;
-            } else {
-                state.actionsLoading = true;
-            }
-        },
+   
         // accrueGratuityConfigFetched: (state, action) => {
         
     

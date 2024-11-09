@@ -11,27 +11,28 @@ import {
   fetchAllHumanResourceRole,
   fetchAllSubsidiaryData,
 } from "../../../../../../_metronic/redux/dashboardActions";
+import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 
 // percentage: Yup.string().required("Required*"),
 const accrue_gratuity_configurationEditSchema = Yup.object().shape({
   // from_amount: Yup.string().required("Required*"),
 
   subsidiaryId: Yup.number()
-    .required("Required*"),
+    .required(VALIDATION_MESSAGES.required),
 
   // to_amount: Yup.string().required("Required*"),
 
   graduity_expense_accountId: Yup.number()
-    .required("Required*"),
+  .required(VALIDATION_MESSAGES.required),
 
     graduity_payable_accountId: Yup.number()
-    .required("Required*"),
+    .required(VALIDATION_MESSAGES.required),
 
   // fixed_amount: Yup.string().required("Required*"),
 
   bank_cash_accountId: Yup.number()
    
-    .required("Required*"),
+    .required(VALIDATION_MESSAGES.required),
 
 });
 
