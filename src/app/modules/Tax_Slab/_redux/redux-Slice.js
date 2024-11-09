@@ -31,15 +31,8 @@ export const tax_slabSlice = createSlice({
                 state.actionsLoading = false;
             }
         },
-        startCall: (state, action) => {
-            state.error = null;
-            if (action.payload.callType === callTypes.list) {
-                state.listLoading = true;
-            } else {
-                state.actionsLoading = true;
-            }
-        },
-        salarypolicyFetched: (state, action) => {
+      
+        incomeTaxSlabFetched: (state, action) => {
        
     
             const entities = action.payload.data?.data.rows;
@@ -53,7 +46,7 @@ export const tax_slabSlice = createSlice({
         },
 
          //get User By ID
-         SalarypolicyFetchedForEdit: (state, action) => {
+         IncomeTaxSlabFetchedForEdit: (state, action) => {
            
    
             state.actionsLoading = false;

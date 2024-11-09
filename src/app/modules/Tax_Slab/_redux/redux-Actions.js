@@ -5,16 +5,15 @@ import { toast } from "react-toastify";
 const { actions } = tax_slabSlice;
 
 
-export const fetchSalarypolicies = (queryparm) => async (dispatch) => {
+export const fetchIncomeTaxSlabs = (queryparm) => async (dispatch) => {
 
-  dispatch(actions.startCall({ callType: callTypes.list }));
   
-  return requestFromServer.getAllSalarypolicy(queryparm)
+  return requestFromServer.getAllIncomeTaxSlab(queryparm)
    
     .then((response) => {
     
 
-      dispatch(actions.salarypolicyFetched(response));
+      dispatch(actions.incomeTaxSlabFetched(response));
     })
     .catch((error) => {
    
@@ -23,21 +22,20 @@ export const fetchSalarypolicies = (queryparm) => async (dispatch) => {
     });
 };
 
-export const fetchSalarypolicy = (id) => (dispatch) => {
+export const fetchIncomeTaxSlab = (id) => (dispatch) => {
 
 
   if (!id) {
-    return dispatch(actions.SalarypolicyFetchedForEdit({ userForEdit: undefined }));
+    return dispatch(actions.IncomeTaxSlabFetchedForEdit({ userForEdit: undefined }));
   }
 
-  dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
-    .getSalarypolicyById({ Id: id })
+    .getIncomeTaxSlabById({ Id: id })
     .then((response) => {
       const entities = response.data?.data;
 
   
-      dispatch(actions.SalarypolicyFetchedForEdit({ userForEdit: entities }));
+      dispatch(actions.IncomeTaxSlabFetchedForEdit({ userForEdit: entities }));
     })
     .catch((error) => {
       error.clientMessage = "Can't find user";
@@ -45,10 +43,9 @@ export const fetchSalarypolicy = (id) => (dispatch) => {
     });
 };
 
-export const deleteSalarypolicy = (id) => (dispatch) => {
-  dispatch(actions.startCall({ callType: callTypes.action }));
+export const deleteIncomeTaxSlab = (id) => (dispatch) => {
   return requestFromServer
-    .deleteSalarypolicy({ Id: id })
+    .deleteIncomeTaxSlab({ Id: id })
     .then((response) => {
     
       dispatch(actions.SalarypolicyDeleted({ Id: id }));
@@ -79,7 +76,6 @@ export const createSalarypolicy = (salarypolicyForCreation, disbaleLoading, onHi
   return requestFromServer
     .createSalarypolicy(salarypolicyForCreation)
     .then((res) => {
-      dispatch(actions.startCall({ callType: callTypes.action }));
       const user = res.data?.data;
      
 
@@ -120,7 +116,7 @@ export const updateSalarypolicy = (user, disbaleLoading, onHide) => (dispatch) =
       const updatedSalarypolicy = response?.config?.data; // response.data?.data;
     
       dispatch(actions.salarypolicyUpdated({ updatedSalarypolicy }));
-      dispatch(actions.startCall({ callType: callTypes.action }));
+    
       disbaleLoading();
       onHide();
       toast.success(response.data.message + " Updated", {

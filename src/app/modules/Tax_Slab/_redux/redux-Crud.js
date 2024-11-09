@@ -15,12 +15,12 @@ export function createSalarypolicy(body) {
 
 
 // Read
-export function getAllSalarypolicy(body) {
+export function getAllIncomeTaxSlab(body) {
  
   return axios.post(`${USERS_URL}/tax_slab/read-all-tax-slab`, body);
 }
 
-export function getSalarypolicyById(id) {
+export function getIncomeTaxSlabById(id) {
  
   return axios.post(`${USERS_URL}/tax_slab/read-tax-slab`, id);
 }
@@ -32,7 +32,7 @@ export function updateSalarypolicy(salarypolicy) {
 }
 
 //Delete
-export function deleteSalarypolicy(body) {
+export function deleteIncomeTaxSlab(body) {
 
   return axios.patch(`${USERS_URL}/tax_slab/delete-tax-slab`, body);
 }

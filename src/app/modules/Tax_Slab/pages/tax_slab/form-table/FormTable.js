@@ -41,7 +41,7 @@ export function FormTable() {
 
 
   const { currentState, userAccess } = useSelector(
-    (state) => {  console.log("s "); return {
+    (state) => { return {
       
       // currentState: state.salarypolicy,
       currentState: state.tax_slab,
@@ -61,7 +61,7 @@ export function FormTable() {
     formUIProps.setIds([]);
  
  
-    dispatch(actions.fetchSalarypolicies(formUIProps.queryParams));
+    dispatch(actions.fetchIncomeTaxSlabs(formUIProps.queryParams));
   }, [formUIProps.queryParams, dispatch, totalCount]);
 
   const isAccessForEdit = userAccess?.find(

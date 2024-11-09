@@ -61,9 +61,9 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
 
 
   useEffect(() => {
-    dispatch(actions.fetchSalarypolicy(id));
+    dispatch(actions.fetchIncomeTaxSlab(id));
 
-    // dispatch(actions.fetchSalarypolicy(formUIProps .queryParams))
+    // dispatch(actions.fetchIncomeTaxSlab(formUIProps .queryParams))
   }, [id, dispatch]);
 
 
@@ -95,7 +95,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
       
 
      await dispatch(actions.updateSalarypolicy(formUpdatedFields, disbaleLoading, onHide));
-     await dispatch(actions.fetchSalarypolicies(usersUIProps.queryParams));
+     await dispatch(actions.fetchIncomeTaxSlabs(usersUIProps.queryParams));
     }
   };
 
