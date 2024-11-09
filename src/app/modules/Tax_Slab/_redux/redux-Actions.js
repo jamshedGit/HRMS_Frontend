@@ -48,7 +48,7 @@ export const deleteIncomeTaxSlab = (id) => (dispatch) => {
     .deleteIncomeTaxSlab({ Id: id })
     .then((response) => {
     
-      dispatch(actions.SalarypolicyDeleted({ Id: id }));
+      dispatch(actions.IncomeTaxSlabDeleted({ Id: id }));
       toast.success("Successfully Deleted", {
         position: "top-right",
         autoClose: 5000,
@@ -66,20 +66,18 @@ export const deleteIncomeTaxSlab = (id) => (dispatch) => {
 };
 
 
-export const createSalarypolicy = (salarypolicyForCreation, disbaleLoading, onHide) => (
+export const createIncomeTaxSlab = (incomeTaxSlabForCreation, disbaleLoading, onHide) => (
   dispatch
 ) => {
-  // salarypolicyForCreation.phNo = salarypolicyForCreation.phNo.toString();
-  // salarypolicyForCreation.cnic = salarypolicyForCreation.cnic.toString();
 
   
   return requestFromServer
-    .createSalarypolicy(salarypolicyForCreation)
+    .createIncomeTaxSlab(incomeTaxSlabForCreation)
     .then((res) => {
       const user = res.data?.data;
      
 
-      dispatch(actions.salarypolicyCreated(user));
+      dispatch(actions.incomeTaxSlabCreated(user));
       disbaleLoading();
       toast.success("Successfully Created", {
         position: "top-right",
@@ -108,14 +106,14 @@ export const createSalarypolicy = (salarypolicyForCreation, disbaleLoading, onHi
     });
 };
 
-export const updateSalarypolicy = (user, disbaleLoading, onHide) => (dispatch) => {
+export const updateIncomeTaxSlab = (user, disbaleLoading, onHide) => (dispatch) => {
   return requestFromServer
-    .updateSalarypolicy(user)
+    .updateIncomeTaxSlab(user)
     .then((response) => {
    
-      const updatedSalarypolicy = response?.config?.data; // response.data?.data;
+      const updatedIncomeTaxSlab = response?.config?.data; // response.data?.data;
     
-      dispatch(actions.salarypolicyUpdated({ updatedSalarypolicy }));
+      dispatch(actions.incomeTaxSlabUpdated({ updatedIncomeTaxSlab }));
     
       disbaleLoading();
       onHide();
