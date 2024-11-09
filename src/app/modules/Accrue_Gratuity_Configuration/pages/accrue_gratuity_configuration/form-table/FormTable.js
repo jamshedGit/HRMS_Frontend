@@ -36,7 +36,7 @@ export function FormTable() {
 
  
   const { currentState, userAccess } = useSelector(
-    (state) => {  console.log("a "); return {
+    (state) => { return {
       
       // currentState: state.salarypolicy,
       currentState: state.accrue_gratuity_configuration,
@@ -56,7 +56,7 @@ export function FormTable() {
     formUIProps.setIds([]);
  
  
-    dispatch(actions.fetchSalarypolicies(formUIProps.queryParams));
+    dispatch(actions.fetchAccrueGratuityConfigs(formUIProps.queryParams));
   }, [formUIProps.queryParams, dispatch, totalCount]);
 
   const isAccessForEdit = userAccess?.find(
@@ -71,7 +71,7 @@ export function FormTable() {
     
 
     {
-      dataField: "Subsidiary.formName",
+      dataField: "Subsidiary.name",
       text: "Subsidiary",
       sort: false,
       sortCaret: sortCaret,

@@ -35,7 +35,7 @@ export function FormCard() {
   )
 
   const { currentState } = useSelector(
-    (state) => {  console.log("s"); return {
+    (state) => { return {
       
       currentState: state.accrue_gratuity_configuration,
       userAccess: state?.auth?.userAccess["accrue_gratuity_configuration"],

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialSalarypolicyState = {
+const initialAccrueGratuityConfigState = {
     listLoading: false,
     actionsLoading: null,
     totalCount: 0,
@@ -21,7 +21,7 @@ export const callTypes = {
 
 export const accrue_gratuity_configurationSlice = createSlice({
     name: "accrue_gratuity_configuration",
-    initialState: initialSalarypolicyState,
+    initialState: initialAccrueGratuityConfigState,
     reducers: {
         catchError: (state, action) => {
             state.error = `${action.type}: ${action.payload.error}`;
@@ -39,11 +39,11 @@ export const accrue_gratuity_configurationSlice = createSlice({
                 state.actionsLoading = true;
             }
         },
-        // salarypolicyFetched: (state, action) => {
+        // accrueGratuityConfigFetched: (state, action) => {
         
     
         //     const entities = action.payload.data?.data.rows;
-        //    console.log("entities",entities)
+      
         //     const totalResult = action.payload.data?.data.totalResults;
         
         //     state.listLoading = false;
@@ -55,7 +55,7 @@ export const accrue_gratuity_configurationSlice = createSlice({
          //get User By ID
        
        
-         salarypolicyFetched: (state, action) => {
+         accrueGratuityConfigFetched: (state, action) => {
             const entities = action.payload.data?.data.rows;
         
             // Check if entities exist
@@ -93,7 +93,7 @@ export const accrue_gratuity_configurationSlice = createSlice({
         
        
        
-         SalarypolicyFetchedForEdit: (state, action) => {
+         AccrueGratuityConfigFetchedForEdit: (state, action) => {
            
  
             state.actionsLoading = false;
@@ -102,7 +102,7 @@ export const accrue_gratuity_configurationSlice = createSlice({
         },
 
       
-        SalarypolicyDeleted: (state, action) => {
+        AccrueGratuityConfigDeleted: (state, action) => {
 
             state.error = null;
             state.actionsLoading = false;
@@ -112,15 +112,15 @@ export const accrue_gratuity_configurationSlice = createSlice({
                 (el) => el.Id !== action.payload.Id
             );
         },
-        // salarypolicyCreated: (state, action) => {
+        // accrueGratuityConfigCreated: (state, action) => {
            
         //     state.actionsLoading = false;
         //     state.error = null;
         //     state.entities.unshift(action.payload);
-        //     console.log("entitities created ",action.payload)
+      
         // },
       
-        salarypolicyCreated: (state, action) => {
+        accrueGratuityConfigCreated: (state, action) => {
             state.actionsLoading = false;
             state.error = null;
         
@@ -155,7 +155,7 @@ export const accrue_gratuity_configurationSlice = createSlice({
       
       
       
-        salarypolicyUpdated: (state, action) => {
+        accrueGratuityConfigUpdated: (state, action) => {
             state.error = null;
             state.actionsLoading = false;
             // state.entities.push(action.payload)
@@ -165,9 +165,9 @@ export const accrue_gratuity_configurationSlice = createSlice({
                 //const payload = { ...action.payload };
                 let payload = JSON.stringify(action.payload)
                 let payloadObj = JSON.parse(payload);
-                let finalObj = JSON.parse(payloadObj.updatedSalarypolicy);
+                let finalObj = JSON.parse(payloadObj.updatedAccrueGratuityConfig);
                 if (entity.Id === finalObj.Id) {
-                    return finalObj; //action.payload.updatedSalarypolicy;
+                    return finalObj; //action.payload.updatedAccrueGratuityConfig;
                 }
                 return entity;
             });

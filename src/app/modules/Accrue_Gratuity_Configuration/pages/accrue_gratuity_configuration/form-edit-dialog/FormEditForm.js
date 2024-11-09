@@ -9,6 +9,7 @@ import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect"
 import {
   fetchAllFormsMenu,
   fetchAllHumanResourceRole,
+  fetchAllSubsidiaryData,
 } from "../../../../../../_metronic/redux/dashboardActions";
 
 // percentage: Yup.string().required("Required*"),
@@ -47,7 +48,8 @@ export function FormEditForm({
   const { dashboard } = useSelector((state) => state);
   useEffect(() => {
     if (!user.Id) {
-      dispatch(fetchAllFormsMenu(133, "allSubidiaryList",null,false)); // For All Subsidiaries
+      // dispatch(fetchAllFormsMenu(133, "allSubidiaryList",null,false)); // For All Subsidiaries
+      dispatch(fetchAllSubsidiaryData("allSubsidiaryList"));
       dispatch(fetchAllFormsMenu(45, "allAccountList",null,true));
 
     }
@@ -71,9 +73,9 @@ export function FormEditForm({
       if (i.subsidiaryId == subsidiaryId) {
         existedId = i.Id;
  
-        dispatch(actions.fetchSalarypolicy(existedId));
+        dispatch(actions.fetchAccrueGratuityConfig(existedId));
       } else {
-        dispatch(actions.fetchSalarypolicy(0));
+        dispatch(actions.fetchAccrueGratuityConfig(0));
       }
     });
   };
@@ -125,11 +127,11 @@ export function FormEditForm({
                         check_Existed_Data(e.value);
                       }}
                       value={
-                        dashboard.allSubidiaryList.find(
-                          (option) => option.value === values.subsidiaryId
+                        dashboard?.allSubsidiaryList?.find(
+                          (option) => option?.value === values?.subsidiaryId
                         ) || null
                       }
-                      options={dashboard.allSubidiaryList}
+                      options={dashboard?.allSubsidiaryList}
                       // options={dashboard.allAccountList.map((option) => ({
                       //   label: `${option.mergeLabel}`, // Adding the value to the label
                       //   value: option.value,
