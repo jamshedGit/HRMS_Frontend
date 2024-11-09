@@ -5,16 +5,16 @@ import { toast } from "react-toastify";
 const { actions } = gratuity_configurationSlice;
 
 
-export const fetchSalarypolicies = (queryparm) => async (dispatch) => {
+export const fetchGratuityConfigs = (queryparm) => async (dispatch) => {
 
-  // dispatch(actions.startCall({ callType: callTypes.list }));
+
   
-  return requestFromServer.getAllSalarypolicy(queryparm)
+  return requestFromServer.getAllGratuityConfig(queryparm)
    
     .then((response) => {
     
 
-      dispatch(actions.salarypolicyFetched(response));
+      dispatch(actions.gratuityConfigFetched(response));
     })
     .catch((error) => {
     
@@ -23,21 +23,20 @@ export const fetchSalarypolicies = (queryparm) => async (dispatch) => {
     });
 };
 
-export const fetchSalarypolicy = (id) => (dispatch) => {
+export const fetchGratuityConfig = (id) => (dispatch) => {
 
 
   if (!id) {
-    return dispatch(actions.SalarypolicyFetchedForEdit({ userForEdit: undefined }));
+    return dispatch(actions.GratuityConfigFetchedForEdit({ userForEdit: undefined }));
   }
 
-  // dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
-    .getSalarypolicyById({ Id: id })
+    .getGratuityConfigById({ Id: id })
     .then((response) => {
       const entities = response.data?.data;
 
    
-      dispatch(actions.SalarypolicyFetchedForEdit({ userForEdit: entities }));
+      dispatch(actions.GratuityConfigFetchedForEdit({ userForEdit: entities }));
     })
     .catch((error) => {
       error.clientMessage = "Can't find user";
@@ -45,13 +44,13 @@ export const fetchSalarypolicy = (id) => (dispatch) => {
     });
 };
 
-export const deleteSalarypolicy = (id) => (dispatch) => {
-  // dispatch(actions.startCall({ callType: callTypes.action }));
+export const deleteGratuityConfig = (id) => (dispatch) => {
+
   return requestFromServer
-    .deleteSalarypolicy({ Id: id })
+    .deleteGratuityConfig({ Id: id })
     .then((response) => {
     
-      dispatch(actions.SalarypolicyDeleted({ Id: id }));
+      dispatch(actions.GratuityConfigDeleted({ Id: id }));
       toast.success("Successfully Deleted", {
         position: "top-right",
         autoClose: 5000,
@@ -69,21 +68,19 @@ export const deleteSalarypolicy = (id) => (dispatch) => {
 };
 
 
-export const createSalarypolicy = (salarypolicyForCreation, disbaleLoading, onHide) => (
+export const createGratuityConfig = (gratuityConfigForCreation, disbaleLoading, onHide) => (
   dispatch
 ) => {
-  // salarypolicyForCreation.phNo = salarypolicyForCreation.phNo.toString();
-  // salarypolicyForCreation.cnic = salarypolicyForCreation.cnic.toString();
 
   
   return requestFromServer
-    .createSalarypolicy(salarypolicyForCreation)
+    .createGratuityConfig(gratuityConfigForCreation)
     .then((res) => {
-      // dispatch(actions.startCall({ callType: callTypes.action }));
+   
       const user = res.data?.data;
      
   
-      dispatch(actions.salarypolicyCreated(user));
+      dispatch(actions.gratuityConfigCreated(user));
       disbaleLoading();
       toast.success("Successfully Created", {
         position: "top-right",
@@ -112,15 +109,15 @@ export const createSalarypolicy = (salarypolicyForCreation, disbaleLoading, onHi
     });
 };
 
-export const updateSalarypolicy = (user, disbaleLoading, onHide) => (dispatch) => {
+export const updateGratuityConfig = (user, disbaleLoading, onHide) => (dispatch) => {
   return requestFromServer
-    .updateSalarypolicy(user)
+    .updateGratuityConfig(user)
     .then((response) => {
   
-      const updatedSalarypolicy = response?.config?.data; // response.data?.data;
+      const updatedGratuityConfig = response?.config?.data; // response.data?.data;
    
-      dispatch(actions.salarypolicyUpdated({ updatedSalarypolicy }));
-      // dispatch(actions.startCall({ callType: callTypes.action }));
+      dispatch(actions.gratuityConfigUpdated({ updatedGratuityConfig }));
+    
       disbaleLoading();
       onHide();
       toast.success(response.data.message + " Updated", {
