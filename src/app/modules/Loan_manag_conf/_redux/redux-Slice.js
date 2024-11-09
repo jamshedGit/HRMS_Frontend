@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialSalarypolicyState = {
+const initialLoanManagConfigState = {
     listLoading: false,
     actionsLoading: null,
     totalCount: 0,
@@ -14,6 +14,7 @@ const initialSalarypolicyState = {
 };
 
 
+
 export const callTypes = {
     list: "list",
     action: "action",
@@ -21,7 +22,7 @@ export const callTypes = {
 
 export const loan_manag_confSlice = createSlice({
     name: "loan_manag_confSlice",
-    initialState: initialSalarypolicyState,
+    initialState: initialLoanManagConfigState,
     reducers: {
         catchError: (state, action) => {
             state.error = `${action.type}: ${action.payload.error}`;
@@ -31,18 +32,11 @@ export const loan_manag_confSlice = createSlice({
                 state.actionsLoading = false;
             }
         },
-        startCall: (state, action) => {
-            state.error = null;
-            if (action.payload.callType === callTypes.list) {
-                state.listLoading = true;
-            } else {
-                state.actionsLoading = true;
-            }
-        },
+       
 
-         salarypolicyFetched: (state, action) => {
+         loanManagConfigFetched: (state, action) => {
             const entities = action.payload.data?.data.rows;
-            console.log("entities fetch", entities);
+      
         
             if (entities) {
                 // Map over entities to combine formName and formCode
@@ -63,7 +57,7 @@ export const loan_manag_confSlice = createSlice({
                 state.entities = [];
             }
         
-            console.log("state.entities", state.entities);  // Log the entities to verify
+         
         
             const totalResult = action.payload.data?.data.totalResults;
             state.listLoading = false;
@@ -75,7 +69,7 @@ export const loan_manag_confSlice = createSlice({
         
         
         
-         SalarypolicyFetchedForEdit: (state, action) => {
+         LoanManagConfigForEdit: (state, action) => {
      
        
             state.actionsLoading = false;
@@ -84,7 +78,7 @@ export const loan_manag_confSlice = createSlice({
         },
 
       
-        SalarypolicyDeleted: (state, action) => {
+        LoanManagConfigDeleted: (state, action) => {
 
             state.error = null;
             state.actionsLoading = false;
@@ -94,7 +88,7 @@ export const loan_manag_confSlice = createSlice({
                 (el) => el.Id !== action.payload.Id
             );
         },
-        salarypolicyCreated: (state, action) => {
+        loanManagConfigCreated: (state, action) => {
             
 
 
@@ -122,7 +116,7 @@ export const loan_manag_confSlice = createSlice({
             state.entities.unshift(combinedEntity);
           
         },
-        salarypolicyUpdated: (state, action) => {
+        loanManagConfigUpdated: (state, action) => {
             state.error = null;
             state.actionsLoading = false;
             // state.entities.push(action.payload)
@@ -132,9 +126,9 @@ export const loan_manag_confSlice = createSlice({
                 //const payload = { ...action.payload };
                 let payload = JSON.stringify(action.payload)
                 let payloadObj = JSON.parse(payload);
-                let finalObj = JSON.parse(payloadObj.updatedSalarypolicy);
+                let finalObj = JSON.parse(payloadObj.updatedLoanManagConfig);
                 if (entity.Id === finalObj.Id) {
-                    return finalObj; //action.payload.updatedSalarypolicy;
+                    return finalObj; //action.payload.updatedLoanManagConfig;
                 }
                 return entity;
             });

@@ -3,11 +3,10 @@ import axios from "axios";
 export const USERS_URL = process.env.REACT_APP_API_URL;
 
 //Create user
-export function createSalarypolicy(body) {
+export function createLoanManagConfig(body) {
 
   
-  // body.Name = body.txtsalarypolicyName;
-  // delete body.txtsalarypolicyName
+
 
   return axios.post(`${USERS_URL}/loan_management_configuration/create-loan-management-configuration`, body);
 
@@ -16,24 +15,24 @@ export function createSalarypolicy(body) {
 
 
 // Read
-export function getAllSalarypolicy(body) {
+export function getAllLoanManagConfig(body) {
 
   return axios.post(`${USERS_URL}/loan_management_configuration/read-all-loan-management-configuration`, body);
 }
 
-export function getSalarypolicyById(id) {
+export function getLoanManagConfigById(id) {
 
   return axios.post(`${USERS_URL}/loan_management_configuration/read-loan-management-configuration`, id);
 }
 
 //Update
-export function updateSalarypolicy(salarypolicy) {
+export function updateLoanManagConfig(body) {
    
-  return axios.put(`${USERS_URL}/loan_management_configuration/update-loan-management-configuration`, salarypolicy);
+  return axios.put(`${USERS_URL}/loan_management_configuration/update-loan-management-configuration`, body);
 }
 
 //Delete
-export function deleteSalarypolicy(body) {
+export function deleteLoanManagConfig(body) {
 
   return axios.patch(`${USERS_URL}/loan_management_configuration/delete-loan-management-configuration`, body);
 }

@@ -102,9 +102,9 @@ export function FormEditForm({
       if (i.subsidiaryId == subsidiaryId) {
         existedId = i.Id;
 
-        dispatch(actions.fetchSalarypolicy(existedId));
+        dispatch(actions.fetchLoanManagConfig(existedId));
       } else {
-        dispatch(actions.fetchSalarypolicy(0));
+        dispatch(actions.fetchLoanManagConfig(0));
       }
     });
   };
@@ -131,7 +131,8 @@ export function FormEditForm({
               <fieldset disabled={isUserForRead}>
                 <div className="form-group row">
                   {/* Subsidiary Field */}
-                  <div className="col-12 col-md-6 mt-3">
+                  <div className="col-12 col-md-12  p-0 m-0">
+                  <div className="col-12 col-md-6">
                     <SearchSelect
                       name="subsidiaryId"
                       label={
@@ -146,7 +147,7 @@ export function FormEditForm({
                       }}
                       value={
                         dashboard?.allSubsidiaryList?.find(
-                          (option) => option.value === values.subsidiaryId
+                          (option) => option?.value === values?.subsidiaryId
                         ) || null
                       }
                       options={dashboard?.allSubsidiaryList}
@@ -157,6 +158,7 @@ export function FormEditForm({
                       error={errors.subsidiaryId}
                       touched={touched.subsidiaryId}
                     />
+                  </div>
                   </div>
 
                   {/* Account Field */}
@@ -173,13 +175,13 @@ export function FormEditForm({
                         setFieldValue("accountId", e.value || null);
                       }}
                       value={
-                        dashboard.allAccountList.find(
-                          (option) => option.value === values.accountId
+                        dashboard?.allAccountList?.find(
+                          (option) => option?.value === values?.accountId
                         ) || null
                       }
                       // options={dashboard.allAccountList}
-                      options={dashboard.allAccountList.map((option) => ({
-                        label: `${option.mergeLabel}`, // Adding the value to the label
+                      options={dashboard?.allAccountList?.map((option) => ({
+                        label: `${option?.mergeLabel}`, // Adding the value to the label
                         value: option.value,
                       }))}
                       error={errors.accountId}
@@ -237,14 +239,14 @@ export function FormEditForm({
                         setFieldValue("emp_loan_account", e.value || null);
                       }}
                       value={
-                        dashboard.allAccountList.find(
-                          (option) => option.value === values.emp_loan_account
+                        dashboard?.allAccountList?.find(
+                          (option) => option?.value === values?.emp_loan_account
                         ) || null
                       }
                       // options={dashboard.allAccountList}
-                      options={dashboard.allAccountList.map((option) => ({
-                        label: `${option.mergeLabel}`, // Adding the value to the label
-                        value: option.value,
+                      options={dashboard?.allAccountList?.map((option) => ({
+                        label: `${option?.mergeLabel}`, // Adding the value to the label
+                        value: option?.value,
                       }))}
                       error={errors.accountId}
                       touched={touched.accountId}
@@ -257,7 +259,12 @@ export function FormEditForm({
                       name="installment_deduction_percentage"
                       component={Input}
                       placeholder="Enter installment deduction percentage"
-                      label="Installment Deduction (%)"
+                      label={
+                      <span>
+                      Installment Deduction (%)
+                      <span style={{ color: "red" }}>*</span>
+                    </span>
+                      }
                       type="number"
                       disabled={isUserForRead}
                       onChange={(e) => {
@@ -279,6 +286,7 @@ export function FormEditForm({
                   <div className="col-12 col-md-6 mt-3">
                     <label htmlFor="installment_deduction_basis_type">
                       Installment Deduction Basis Type
+                      <span style={{ color: "red" }}>*</span>
                     </label>
                     {/* <Field
                       name="installment_deduction_basis_type"
@@ -351,6 +359,8 @@ export function FormEditForm({
                           style={{ backgroundColor: "#4d5f7a", color: "#fff" }}
                         >
                           <th>Action</th>
+
+                          
                           <th>Loan Type</th>
                           <th>Max Loan Amount</th>
                           <th>Basis</th>
