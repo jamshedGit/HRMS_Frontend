@@ -134,6 +134,7 @@ export const getAllLoanConfigDetail = (employeeId) => (
     })
     .catch((error) => {
       error.clientMessage = "Can't create user";
+      dispatch(actions.getLoanConfigDetails(null));
       dispatch(actions.catchError({ error, callType: callTypes.action }));
 
       toast.error(error?.response?.data?.message, {
