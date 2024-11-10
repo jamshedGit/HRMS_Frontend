@@ -24,6 +24,7 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 const FormEditSchema = Yup.object().shape(
   {
     formName: Yup.string()
+    .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.')
       .required("Required*"),
       formCode: Yup.string()
       .required("Required*"),
@@ -109,46 +110,47 @@ export function FormEditForm({
                 <fieldset disabled={isUserForRead}>
                   <div className="from-group row">
                   {
-                      <div className="col-12 col-md-4 mt-3">
-                        <SearchSelect
-                          name="  "
-                          label="Select Parent Form*"
-                          isDisabled={isUserForRead && true}
-                          onBlur={() => {
-                            // handleBlur({ target: { name: "countryId" } });
-                          }}
-                          onChange={(e) => {
-                            setFieldValue("parentFormID", e.value || null);
-                            setDefaultParentFormMenu(e);
-                            dispatch(fetchAllFormsMenu(e.value));
-                          }}
-                          value={(defFormMenu || null)}
-                          error={errors.Id}
-                          touched={touched.Id}
-                          options={dashboard.allDept}
-                        />
-                        {/* isParent &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-                         <Field
-                          type="checkbox"
-                          id="chkParent"
-                          name="chkParent"
-                          className="form-check-input"
-                          checked={values.chkParent}
-                          defaultChecked = {false}
-                          onChange={(e) => { setFieldValue('chkParent', e.target.checked)
-                            if(e.target.checked)
-                              {
-                                console.log("t")
-                              }
+                      // <div className="col-12 col-md-4 mt-3">
+                      //   <SearchSelect
+                      //     name="  "
+                      //     label="Select Parent Form*"
+                      //     isDisabled={isUserForRead && true}
+                      //     onBlur={() => {
+                      //       // handleBlur({ target: { name: "countryId" } });
+                      //     }}
+                      //     onChange={(e) => {
+                      //       setFieldValue("parentFormID", e.value || null);
+                      //       setDefaultParentFormMenu(e);
+                      //       dispatch(fetchAllFormsMenu(e.value));
+                      //     }}
+                      //     value={(defFormMenu || null)}
+                      //     error={errors.Id}
+                      //     touched={touched.Id}
+                      //     options={dashboard.allDept}
+                      //   />
+                      //   {/* isParent &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                      //    <Field
+                      //     type="checkbox"
+                      //     id="chkParent"
+                      //     name="chkParent"
+                      //     className="form-check-input"
+                      //     checked={values.chkParent}
+                      //     defaultChecked = {false}
+                      //     onChange={(e) => { setFieldValue('chkParent', e.target.checked)
+                      //       if(e.target.checked)
+                      //         {
+                      //           console.log("t")
+                      //         }
 
-                           }}
-                        /> */}
-                      </div>
+                      //      }}
+                      //   /> */}
+                      // </div>
 
                     }
                    { <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="formName"
+                        maxLength={30}
                         component={Input}
                         placeholder="Enter Form Name"
                         label="Form Name"
@@ -158,6 +160,7 @@ export function FormEditForm({
                    { <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="formCode"
+                        maxLength={6}
                         component={Input}
                         placeholder="Enter Form Code"
                         label="Form Code"

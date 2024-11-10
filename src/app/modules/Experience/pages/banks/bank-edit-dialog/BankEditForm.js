@@ -13,6 +13,7 @@ import {
 
 } from "../../../../../../_metronic/redux/dashboardActions";
 import DatePicker from "react-datepicker";
+import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 
 // Phone Number Regex
 const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
@@ -24,19 +25,19 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 const formValidation = Yup.object().shape(
   {
     employeeId: Yup.string()
-      .required("Required*"),
+       .required(VALIDATION_MESSAGES.required),
     companyName: Yup.string()
-      .required("Required*"),
+       .required(VALIDATION_MESSAGES.required),
     positionHeld: Yup.string()
-      .required("Required*"),
+       .required(VALIDATION_MESSAGES.required),
     countryId: Yup.string()
-      .required("Required*"),
+       .required(VALIDATION_MESSAGES.required),
     cityId: Yup.string()
-      .required("Required*"),
+       .required(VALIDATION_MESSAGES.required),
     startDate: Yup.string()
-      .required("Required*"),
+    .required(VALIDATION_MESSAGES.required),
     endDate: Yup.string()
-      .required("Required*"),
+       .required(VALIDATION_MESSAGES.required),
 
 
       endDate: Yup.date() .nullable()

@@ -13,6 +13,7 @@ import {
   getLatestTableId
 } from "../../../../../../_metronic/redux/dashboardActions";
 import DatePicker from "react-datepicker";
+import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 
 // Phone Number Regex
 const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
@@ -23,22 +24,21 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 // Validation schema
 const formValidation = Yup.object().shape(
   {
-
-     deductionCode: Yup.string()
-     .length(6, 'Must be exactly 6 characters long')
-
-       .required("Required*"),
+    deductionCode: Yup.string()
+      .nullable()
+      .required(VALIDATION_MESSAGES.required),
     deductionName: Yup.string()
-      .required("Required*"),
+      .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.')
+      .required(VALIDATION_MESSAGES.required),
     linkedAttendance: Yup.string()
-      .required("Required*"),
+      .required(VALIDATION_MESSAGES.required),
     // loan: Yup.string()
-    //   .required("Required*"),
+    //   .required(VALIDATION_MESSAGES.required),
     mappedDeduction: Yup.string()
-      .required("Required*"),
+      .required(VALIDATION_MESSAGES.required),
     account: Yup.string()
-      .length(15, 'Must be exactly 15 characters long')
-      .required("Required*"),
+    .matches(/^\d+$/, "Must contain only digits")
+      .required(VALIDATION_MESSAGES.required),
   },
 
 );
@@ -167,6 +167,7 @@ export function BankEditForm({
                       <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="deductionName"
+                          maxLength={30}
                           component={Input}
                           placeholder="Enter Deduction Name"
                           autoComplete="off"
@@ -176,7 +177,7 @@ export function BankEditForm({
                     }
 
                   </div>
-               
+
 
                   <div className="from-group row">
                     {

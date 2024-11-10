@@ -27,7 +27,7 @@ export function BanksCard() {
     }),
     shallowEqual
   )
-  console.log("userAccess Temp",userAccess)
+  
   const accessUser = userAccess.find(
     (item) => item.componentName === "CreateDeduction"
   )
@@ -45,7 +45,7 @@ export function BanksCard() {
                 className="btn btn-primary"
                 onClick={BanksUIProps.newBankButtonClick}
               >
-                + Add Deduction Allowance
+                + Add Deduction
               </button>
             ) : (
               <></>
