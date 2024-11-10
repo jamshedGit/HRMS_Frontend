@@ -57,7 +57,7 @@ export function FormTable() {
     formUIProps.setIds([]);
  
  
-    dispatch(actions.fetchSalarypolicies(formUIProps.queryParams));
+    dispatch(actions.fetchLoanManagConfigs(formUIProps.queryParams));
   }, [formUIProps.queryParams, dispatch, totalCount]);
  
   const isAccessForEdit = userAccess?.find(
@@ -71,7 +71,7 @@ export function FormTable() {
   const columns = [
 
     {
-      dataField: "Subsidiary.formName",
+      dataField: "Subsidiary.name",
       text: "subsidiary",
       sort: false,
       sortCaret: sortCaret,
@@ -84,7 +84,7 @@ export function FormTable() {
  
  
 {
-  dataField: "Account.formName",
+  dataField: "account",
   text: "Account",
   sort: false,
   sortCaret: sortCaret,
@@ -99,7 +99,7 @@ export function FormTable() {
    
  
     {
-      dataField: "EmpLoanAccount.formName",
+      dataField: "empLoanAccount",
       text: "employee loan account",
       sort: false,
       sortCaret: sortCaret,
@@ -118,6 +118,10 @@ export function FormTable() {
       headerSortingClasses,
       style: {
         minWidth: "10px",
+        textAlign: "center",
+      },
+      headerStyle: {
+        textAlign: "center", // Align header text to the left
       },
     },
 

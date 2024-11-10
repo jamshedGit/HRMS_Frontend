@@ -66,9 +66,9 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
  
   useEffect(() => {
    
-    dispatch(actions.fetchSalarypolicy(id));
+    dispatch(actions.fetchLoanManagConfig(id));
  
-    // dispatch(actions.fetchSalarypolicy(formUIProps .queryParams))
+    // dispatch(actions.fetchLoanManagConfig(formUIProps .queryParams))
   }, [id, dispatch,show]);
  
  
@@ -94,7 +94,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
  
  
       const finalObject = { user }
-      dispatch(actions.createSalarypolicy(user, disbaleLoading, onHide));
+      dispatch(actions.createLoanManagConfig(user, disbaleLoading, onHide));
      
      
  
@@ -119,8 +119,8 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
 
   
  
-     await dispatch(actions.updateSalarypolicy(formUpdatedFields, disbaleLoading, onHide));
-     await dispatch(actions.fetchSalarypolicies(usersUIProps.queryParams));
+     await dispatch(actions.updateLoanManagConfig(formUpdatedFields, disbaleLoading, onHide));
+     await dispatch(actions.fetchLoanManagConfigs(usersUIProps.queryParams));
     }
   };
  

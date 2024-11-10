@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import { Redirect, Switch } from "react-router-dom";
 import { LayoutSplashScreen, ContentRoute } from "../../../../_metronic/layout";
-import { FormPage } from "./tax_slab/FormPage";
+import { FormPage } from "./loan_manag_conf/FormPage";
 
 export default function loan_manag_confManagement() {
 
