@@ -138,8 +138,13 @@ export function FormTable() {
       headerSortingClasses,
       style: {
         minWidth: "10px",
+        textAlign: "center",
+      },
+      headerStyle: {
+        textAlign: "center", // Align header text to the left
       },
       formatter: (cell) => formatNumberWithCommas(cell), 
+    
     },
  
  
