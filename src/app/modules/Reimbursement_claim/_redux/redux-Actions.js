@@ -152,7 +152,7 @@ export const getAllReimbursementConfigPolicy = (employeeId) => (
     .catch((error) => {
       error.clientMessage = "Can't create user";
       dispatch(actions.catchError({ error, callType: callTypes.action }));
-
+      dispatch(actions.getReimbursementConfigPolicies(null));
       toast.error(error?.response?.data?.message, {
         position: "top-right",
         autoClose: 5000,

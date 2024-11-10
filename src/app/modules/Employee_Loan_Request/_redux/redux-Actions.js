@@ -94,6 +94,7 @@ export const createEmployeeLoanRequest = (employeeLoanRequestForCreation, disbal
       error.clientMessage = "Can't create user";
       dispatch(actions.catchError({ error, callType: callTypes.action }));
       disbaleLoading();
+      onHide();
       toast.error(error?.response?.data?.message, {
         position: "top-right",
         autoClose: 5000,

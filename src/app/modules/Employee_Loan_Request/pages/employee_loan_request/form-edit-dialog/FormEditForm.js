@@ -37,8 +37,12 @@ const EmployeeLoanRequestSchema = Yup.object().shape({
       "Installment start date cannot be earlier than applied date"
     )
     .required(VALIDATION_MESSAGES.required),
-  total_loan_amount:Yup.number().required(VALIDATION_MESSAGES.required),
-  monthly_installment: Yup.string().required(VALIDATION_MESSAGES.required),
+  total_loan_amount:Yup.number()
+  .min(1,VALIDATION_MESSAGES.minOneValue)
+  .required(VALIDATION_MESSAGES.required),
+  monthly_installment: Yup.number()
+  .min(1,VALIDATION_MESSAGES.minOneValue)
+  .required(VALIDATION_MESSAGES.required),
   reason:Yup.string().required(VALIDATION_MESSAGES.required),
 });
 
