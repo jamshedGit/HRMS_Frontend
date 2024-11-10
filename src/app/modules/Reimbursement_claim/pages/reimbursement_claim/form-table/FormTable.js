@@ -20,6 +20,7 @@ import { Pagination } from "../../../../../../_metronic/_partials/controls";
 import { useFormUIContext } from "../FormUIContext";
 import { Accordion, Button, Card } from "react-bootstrap";
 import { KeyboardArrowDown } from "@material-ui/icons";
+import { formatNumberWithCommas } from "../../../../../utils/common";
 
 export function FormTable() {
   //Users UI Context
@@ -138,6 +139,7 @@ export function FormTable() {
       style: {
         minWidth: "10px",
       },
+      formatter: (cell) => formatNumberWithCommas(cell), 
     },
  
  
