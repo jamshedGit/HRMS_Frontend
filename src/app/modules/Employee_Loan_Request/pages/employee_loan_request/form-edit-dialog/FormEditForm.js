@@ -187,7 +187,7 @@ if(changeLoanType){
           //   // values.statusId=""
           // }
         };
-        saveForm(values,totalInstallments,setTotalInstallments,setMaxMonthlyAmountSuggest,setMaxAmountLimit, clearForm);
+        saveForm(values,totalInstallments,maxAmountLimit,setTotalInstallments,setMaxMonthlyAmountSuggest,setMaxAmountLimit, clearForm);
       }}
     >
       {({
