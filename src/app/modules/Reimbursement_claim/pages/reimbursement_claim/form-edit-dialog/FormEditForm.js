@@ -13,6 +13,7 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import * as actions from "../../../_redux/redux-Actions";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import {
+  amountLimit,
   formatDates,
   getDateDiffInDays,
   getFileName,
@@ -22,12 +23,13 @@ import {
   fetchAllFormsMenu,
   fetchAllPayrollMonthYearList,
 } from "../../../../../../_metronic/redux/dashboardActions";
+import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 
 const ReimbursementSchema = Yup.object().shape({
-  reimbursement_typeId: Yup.number().required("Required"),
-  details: Yup.string().required("Required"),
-  date: Yup.date().required("Required"),
-  amount: Yup.number().required("Required"),
+  reimbursement_typeId: Yup.number().required(VALIDATION_MESSAGES.required),
+  details: Yup.string().required(VALIDATION_MESSAGES.required),
+  date: Yup.date().required(VALIDATION_MESSAGES.required),
+  amount: Yup.number().required(VALIDATION_MESSAGES.required),
 
   // file: Yup.mixed()
   //   .required("Required")
@@ -37,7 +39,7 @@ const ReimbursementSchema = Yup.object().shape({
   //     (value) => !value || (value && value.size <= 5 * 1024 * 1024) // 5 MB limit
   //   )
   //   .required("Required"),
-  pay_in_payroll_forId: Yup.number().required("Required"),
+  pay_in_payroll_forId: Yup.number().required(VALIDATION_MESSAGES.required),
 });
 
 export function FormEditForm({
@@ -60,7 +62,6 @@ export function FormEditForm({
   // Fetch necessary data if not already present
   useEffect(() => {
     if (!user.Id) {
-      dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsidiaries
       dispatch(fetchAllFormsMenu(202, "allReimbursementTypeList"));
       dispatch(fetchAllPayrollMonthYearList("allPayrollMonthYearList"));
     }
@@ -173,7 +174,7 @@ export function FormEditForm({
                       placeholder="Enter Amount"
                       label={
                         <span>
-                          Amount Limit: $
+                          Amount Limit:
                           {currentState?.reimbursement_config_policies_permission?.policies?.find(
                             (item) =>
                               item.reimbursement_typeId ===
@@ -183,6 +184,9 @@ export function FormEditForm({
                         </span>
                       }
                       type="number"
+                      onInput={(e) => {
+                        e.target.value = amountLimit(e.target.value); // Limit to 3 digits
+                      }}
                       onChange={(e) => {
                         const maxAmount = currentState?.reimbursement_config_policies_permission?.policies?.find(
                           (item) =>

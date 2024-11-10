@@ -20,6 +20,7 @@ import { Pagination } from "../../../../../../_metronic/_partials/controls";
 import { useFormUIContext } from "../FormUIContext";
 import { Accordion, Button, Card } from "react-bootstrap";
 import { KeyboardArrowDown } from "@material-ui/icons";
+import { formatNumberWithCommas } from "../../../../../utils/common";
 
 export function FormTable() {
   //Users UI Context
@@ -137,7 +138,13 @@ export function FormTable() {
       headerSortingClasses,
       style: {
         minWidth: "10px",
+        textAlign: "center",
       },
+      headerStyle: {
+        textAlign: "center", // Align header text to the left
+      },
+      formatter: (cell) => formatNumberWithCommas(cell), 
+    
     },
  
  
