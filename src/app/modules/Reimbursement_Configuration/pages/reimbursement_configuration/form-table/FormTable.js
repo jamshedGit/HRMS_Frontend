@@ -35,9 +35,9 @@ export function FormTable() {
     };
   }, [formUIContext]);
  
-  //console.log("queryparms", usersUIProps.queryparms)
+
   const { currentState, userAccess } = useSelector(
-    (state) => {  console.log("state ",state); return {
+    (state) => {  return {
      
       
       currentState: state.reimbursement_configuration,
@@ -45,7 +45,7 @@ export function FormTable() {
     }},
     shallowEqual
   );
-  console.log("currentState reimbursement configuration",currentState)
+
  
   const { totalCount, entities, listLoading } = currentState;
  
@@ -57,7 +57,7 @@ export function FormTable() {
     formUIProps.setIds([]);
  
  
-    dispatch(actions.fetchSalarypolicies(formUIProps.queryParams));
+    dispatch(actions.fetchReimbursementConfigs(formUIProps.queryParams));
   }, [formUIProps.queryParams, dispatch, totalCount]);
  
   const isAccessForEdit = userAccess?.find(
@@ -80,7 +80,7 @@ export function FormTable() {
     //   },
     // },
     {
-      dataField: "Subsidiary.formName",
+      dataField: "Subsidiary.name",
       text: "subsidiary",
       sort: false,
       sortCaret: sortCaret,
@@ -136,7 +136,7 @@ export function FormTable() {
       classes: "text-right pr-0",
       headerClasses: "text-right pr-3",
       style: {
-        minWidth: "10px",
+        minWidth: "20px",
        
       },
     },
