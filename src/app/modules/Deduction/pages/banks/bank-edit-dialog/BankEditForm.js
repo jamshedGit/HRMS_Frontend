@@ -118,7 +118,9 @@ export function BankEditForm({
         validationSchema={formValidation}
         onSubmit={(values) => {
           console.log("values", values);
-          values.deductionCode = defDeductionCode;
+         // values.deductionCode = defDeductionCode;
+         
+         
           enableLoading();
           saveIncident(values);
         }}
