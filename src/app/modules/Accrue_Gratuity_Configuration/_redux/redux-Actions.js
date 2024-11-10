@@ -5,16 +5,14 @@ import { toast } from "react-toastify";
 const { actions } = accrue_gratuity_configurationSlice;
 
 
-export const fetchSalarypolicies = (queryparm) => async (dispatch) => {
-
-  dispatch(actions.startCall({ callType: callTypes.list }));
+export const fetchAccrueGratuityConfigs = (queryparm) => async (dispatch) => {
   
-  return requestFromServer.getAllSalarypolicy(queryparm)
+  return requestFromServer.getAllAccrueGratuityConfig(queryparm)
    
     .then((response) => {
     
    
-      dispatch(actions.salarypolicyFetched(response));
+      dispatch(actions.accrueGratuityConfigFetched(response));
     })
     .catch((error) => {
       
@@ -23,21 +21,20 @@ export const fetchSalarypolicies = (queryparm) => async (dispatch) => {
     });
 };
 
-export const fetchSalarypolicy = (id) => (dispatch) => {
+export const fetchAccrueGratuityConfig = (id) => (dispatch) => {
 
 
   if (!id) {
-    return dispatch(actions.SalarypolicyFetchedForEdit({ userForEdit: undefined }));
+    return dispatch(actions.AccrueGratuityConfigFetchedForEdit({ userForEdit: undefined }));
   }
 
-  dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
-    .getSalarypolicyById({ Id: id })
+    .getAccrueGratuityConfigById({ Id: id })
     .then((response) => {
       const entities = response.data?.data;
 
     
-      dispatch(actions.SalarypolicyFetchedForEdit({ userForEdit: entities }));
+      dispatch(actions.AccrueGratuityConfigFetchedForEdit({ userForEdit: entities }));
     })
     .catch((error) => {
       error.clientMessage = "Can't find user";
@@ -45,13 +42,12 @@ export const fetchSalarypolicy = (id) => (dispatch) => {
     });
 };
 
-export const deleteSalarypolicy = (id) => (dispatch) => {
-  dispatch(actions.startCall({ callType: callTypes.action }));
+export const deleteAccrueGratuityConfig = (id) => (dispatch) => {
   return requestFromServer
-    .deleteSalarypolicy({ Id: id })
+    .deleteAccrueGratuityConfig({ Id: id })
     .then((response) => {
 
-      dispatch(actions.SalarypolicyDeleted({ Id: id }));
+      dispatch(actions.AccrueGratuityConfigDeleted({ Id: id }));
       toast.success("Successfully Deleted", {
         position: "top-right",
         autoClose: 5000,
@@ -69,21 +65,18 @@ export const deleteSalarypolicy = (id) => (dispatch) => {
 };
 
 
-export const createSalarypolicy = (salarypolicyForCreation, disbaleLoading, onHide) => (
+export const createAccrueGratuityConfig = (accrueGratuityConfigForCreation, disbaleLoading, onHide) => (
   dispatch
 ) => {
-  // salarypolicyForCreation.phNo = salarypolicyForCreation.phNo.toString();
-  // salarypolicyForCreation.cnic = salarypolicyForCreation.cnic.toString();
 
-  
   return requestFromServer
-    .createSalarypolicy(salarypolicyForCreation)
+    .createAccrueGratuityConfig(accrueGratuityConfigForCreation)
     .then((res) => {
-      dispatch(actions.startCall({ callType: callTypes.action }));
+      
       const user = res.data?.data;
      
 
-      dispatch(actions.salarypolicyCreated(user));
+      dispatch(actions.accrueGratuityConfigCreated(user));
       disbaleLoading();
       toast.success("Successfully Created", {
         position: "top-right",
@@ -112,15 +105,15 @@ export const createSalarypolicy = (salarypolicyForCreation, disbaleLoading, onHi
     });
 };
 
-export const updateSalarypolicy = (user, disbaleLoading, onHide) => (dispatch) => {
+export const updateAccrueGratuityConfig = (user, disbaleLoading, onHide) => (dispatch) => {
   return requestFromServer
-    .updateSalarypolicy(user)
+    .updateAccrueGratuityConfig(user)
     .then((response) => {
   
-      const updatedSalarypolicy = response?.config?.data; // response.data?.data;
+      const updatedAccrueGratuityConfig = response?.config?.data; // response.data?.data;
     
-      dispatch(actions.salarypolicyUpdated({ updatedSalarypolicy }));
-      dispatch(actions.startCall({ callType: callTypes.action }));
+      dispatch(actions.accrueGratuityConfigUpdated({ updatedAccrueGratuityConfig }));
+    
       disbaleLoading();
       onHide();
       toast.success(response.data.message , {
