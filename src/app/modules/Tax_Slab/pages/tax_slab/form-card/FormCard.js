@@ -35,7 +35,7 @@ export function FormCard() {
   )
 
   const { currentState } = useSelector(
-    (state) => {  console.log("s",state); return {
+    (state) => { ; return {
       
       currentState: state.tax_slab,
       userAccess: state?.auth?.userAccess["tax_slab"],
@@ -43,7 +43,7 @@ export function FormCard() {
     shallowEqual
   );
 
-console.log("currentState",currentState)
+
   
   const {entities } = currentState;
 

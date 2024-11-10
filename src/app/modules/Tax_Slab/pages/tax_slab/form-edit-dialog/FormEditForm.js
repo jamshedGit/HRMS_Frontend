@@ -87,11 +87,15 @@ export function FormEditForm({
               <fieldset disabled={isUserForRead}>
                 <div className="form-group row">
                   <div className="col-12 col-md-4 mt-3">
+                  <label>
+                  From Amount{" "}
+                      <span style={{ color: "red" }}>*</span>
+                    </label>
                     <Field
                       name="from_amount"
                       component={Input}
                       placeholder="Enter From Amount"
-                      label="From Amount"
+                      // label="From Amount"
                       type="number"
                       // min={0}
                       onInput={(e) => {
@@ -101,11 +105,15 @@ export function FormEditForm({
                   </div>
 
                   <div className="col-12 col-md-4 mt-3">
+                  <label>
+                  To Amount{" "}
+                      <span style={{ color: "red" }}>*</span>
+                    </label>
                     <Field
                       name="to_amount"
                       component={Input}
                       placeholder="Enter To Amount"
-                      label="To Amount"
+                      // label="To Amount"
                       type="number"
                       min={0}
                       onInput={(e) => {
@@ -115,11 +123,15 @@ export function FormEditForm({
                   </div>
 
                   <div className="col-12 col-md-4 mt-3">
+                  <label>
+                  Percentage{" "}
+                      <span style={{ color: "red" }}>*</span>
+                    </label>
                     <Field
                       name="percentage"
                       component={Input}
                       placeholder="Enter Percentage"
-                      label="Percentage"
+                      // label="Percentage"
                       type="number"
                       
                
@@ -156,11 +168,15 @@ export function FormEditForm({
                     />
                   </div>
                   <div className="col-12 col-md-4 mt-3">
+                  <label>
+                  Fixed Amount{" "}
+                      <span style={{ color: "red" }}>*</span>
+                    </label>
                     <Field
                       name="fixed_amount"
                       component={Input}
                       placeholder="Enter Fixed Amount"
-                      label="Fixed Amount"
+                      // label="Fixed Amount"
                       type="number"
                       min={0}
                       onInput={(e) => {
@@ -191,16 +207,7 @@ export function FormEditForm({
               </button>
             )}
 
-            {/* <button
-                type="submit"
-                onClick={() => handleSubmit()}
-                className="btn btn-primary btn-elevate"
-              >
-                Save
-                {loading && (
-                  <span className="ml-3 mr-3 spinner spinner-white"></span>
-                )}
-              </button> */}
+      
 
             {!isUserForRead && (
               <button
