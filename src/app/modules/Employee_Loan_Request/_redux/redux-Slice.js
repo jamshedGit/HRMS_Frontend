@@ -40,14 +40,7 @@ export const employee_loan_requestSlice = createSlice({
         
             state.userForEdit = null;
         },
-        startCall: (state, action) => {
-            state.error = null;
-            if (action.payload.callType === callTypes.list) {
-                state.listLoading = true;
-            } else {
-                state.actionsLoading = true;
-            }
-        },
+
         employeeLoanRequestFetched: (state, action) => {
            
    
