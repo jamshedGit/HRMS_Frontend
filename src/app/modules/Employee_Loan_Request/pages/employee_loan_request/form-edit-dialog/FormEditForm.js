@@ -28,8 +28,15 @@ import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 const EmployeeLoanRequestSchema = Yup.object().shape({
   loan_typeId: Yup.number().required(VALIDATION_MESSAGES.required),
   employee_loan_accountId: Yup.number().required(VALIDATION_MESSAGES.required),
+  // applied_date: Yup.date().required(VALIDATION_MESSAGES.required),
+  // installment_start_date: Yup.date().required(VALIDATION_MESSAGES.required),
   applied_date: Yup.date().required(VALIDATION_MESSAGES.required),
-  installment_start_date: Yup.date().required(VALIDATION_MESSAGES.required),
+  installment_start_date: Yup.date()
+    .min(
+      Yup.ref('applied_date'), 
+      "Installment start date cannot be earlier than applied date"
+    )
+    .required(VALIDATION_MESSAGES.required),
   total_loan_amount:Yup.number().required(VALIDATION_MESSAGES.required),
   monthly_installment: Yup.string().required(VALIDATION_MESSAGES.required),
   reason:Yup.string().required(VALIDATION_MESSAGES.required),
