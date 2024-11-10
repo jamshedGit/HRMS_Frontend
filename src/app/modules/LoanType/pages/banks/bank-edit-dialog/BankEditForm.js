@@ -13,6 +13,7 @@ import {
   getLatestTableId
 } from "../../../../../../_metronic/redux/dashboardActions";
 import DatePicker from "react-datepicker";
+import { amountLimit } from "../../../../../utils/common";
 
 // Phone Number Regex
 const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
@@ -27,7 +28,9 @@ const formValidation = Yup.object().shape(
     code: Yup.string()
       .required("Required*"),
     name: Yup.string()
-      .required("Required*"),
+      .required("Required*")
+      .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.'),
+      
     linkedAttendance: Yup.string()
       .required("Required*"),
     // loan: Yup.string()
@@ -35,7 +38,8 @@ const formValidation = Yup.object().shape(
     mapped: Yup.string()
       .required("Required*"),
     account: Yup.string()
-      .required("Required*"),
+    .matches(/^\d+(\.\d+)?$/, 'Must be a valid number (digits with optional decimal)')
+      .required("Required*")
   },
 
 );
@@ -58,15 +62,6 @@ export function BankEditForm({
   const [isDisabled, setIsDisabled] = useState(false);
   const dispatch = useDispatch();
 
-
-  //   useEffect(() => {
-
-  //     const response = dispatch(getLatestTableId("t_employee_deduction", "ED-")) // For Getting Last ID For Code
-  //     console.log("dish",response[0].Id);
-  //     setDefDeductionCode(response[0].Id)
-
-  // }, [dispatch]);
-  // EMployee Dropdown Binding
   useEffect(() => {
 
     const employeeId = defEmployee?.value ? defEmployee.value : user.employeeId;
@@ -80,37 +75,7 @@ export function BankEditForm({
 
   }, [user?.employeeId, dashboard.employeeId]);
 
-  useEffect(() => {
-    // Define an async function within useEffect
-    if (!user.Id) {
-
-      const fetchData = async () => {
-        try {
-          console.log("get_auto_prefix", user);
-          if (user.code === '') {
-            const response = await dispatch(getLatestTableId("t_loan_type_setup", "000"));
-            console.log("::be", response[0]?.Id);
-            if (response[0]?.Id != null) {
-              // Assuming response[0].Id is the correct way to access the ID
-              console.log("Response:", response[0]?.Id);
-              setDefDeductionCode(response[0]?.Id);
-            }
-            else {
-              setDefDeductionCode("LNT-001");
-            }
-          }
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      };
-
-      fetchData(); // Call the async function
-    }
-    else {
-
-      setDefDeductionCode(user.code);
-    }
-  }, [dispatch, user.code]);
+ 
 
   return (
     <>
@@ -120,7 +85,7 @@ export function BankEditForm({
         validationSchema={formValidation}
         onSubmit={(values) => {
           console.log("values", values);
-           values.code = defDeductionCode;
+           
           enableLoading();
           saveLoanType(values);
         }}
@@ -151,9 +116,9 @@ export function BankEditForm({
                         <Field
                           name="code"
                           component={Input}
-
+                          maxLength={6}
                           placeholder="Enter Deduction Code"
-                          value={defDeductionCode}
+                         
                           label={<span> Code<span style={{ color: 'red' }}>*</span></span>}
                           autoComplete="off"
                         />
@@ -164,6 +129,7 @@ export function BankEditForm({
                       <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="name"
+                          maxLength={30}
                           component={Input}
                           placeholder="Enter Deduction Name"
                           autoComplete="off"
@@ -270,6 +236,10 @@ export function BankEditForm({
                       <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="account"
+                          onInput={(e) => {
+                            e.target.value = amountLimit(e.target.value); // Limit to 3 digits
+                          }}
+                          maxLength={15}
                           component={Input}
                           placeholder="Ener Account"
                           autoComplete="off"

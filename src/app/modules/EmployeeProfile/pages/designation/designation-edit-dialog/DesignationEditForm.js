@@ -12,7 +12,8 @@ import {
   getLatestBookingNo,
   fetchAllDept,
   fetchAllFormsMenu,
-  fetchAllActiveEmployees
+  fetchAllActiveEmployees,
+  fetchAllSubsidiaryData
 } from "../../../../../../_metronic/redux/dashboardActions";
 import DatePicker from "react-datepicker";
 import axios from 'axios';
@@ -91,12 +92,12 @@ const profileValidation = Yup.object().shape(
 
 
     passportExpiry: Yup.date()
-    .nullable()
+      .nullable()
       .min(currentDate, 'Passport expiry must be a future date')
       .typeError('Passport expiry must be a valid date'),
 
     drivingLicenseExpiry: Yup.date()
-    .nullable()
+      .nullable()
       .min(currentDate, 'Driving license expiry must be a future date')
       .typeError('Driving License Expiry must be a valid date'),
 
@@ -340,7 +341,9 @@ export function DesignationEditForm({
       dispatch(fetchAllCity());
       dispatch(fetchAllActiveEmployees());
       dispatch(fetchAllFormsMenu(158, "allDesignations")); // For All Designations
-      dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsisidaries
+      //   dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsisidaries
+
+      dispatch(fetchAllSubsidiaryData("allSubsidiaryList"))
       dispatch(fetchAllFormsMenu(190, "allMaritalStatus")); // For All Subsisidaries, "allMaritalStatus")); // For All Marital Status
       // dispatch(fetchAllFormsMenu(87));
       dispatch(fetchAllFormsMenu(125, "allRelationCodeList"));
@@ -357,8 +360,8 @@ export function DesignationEditForm({
     const subsidiaryId = defSubsidiary?.value ? defSubsidiary.value : user.subsidiaryId;
 
     setDefualtSubsidiaryList(
-      dashboard.allSubidiaryList &&
-      dashboard.allSubidiaryList.filter((item) => {
+      dashboard.allSubsidiaryList &&
+      dashboard.allSubsidiaryList.filter((item) => {
         return item.value === subsidiaryId;
       })
     );
@@ -1217,7 +1220,7 @@ export function DesignationEditForm({
                           value={(defSubsidiary || null)}
                           error={errors.subsidiaryId}
                           touched={touched.subsidiaryId}
-                          options={dashboard.allSubidiaryList}
+                          options={dashboard.allSubsidiaryList}
                         />
 
                       </div>

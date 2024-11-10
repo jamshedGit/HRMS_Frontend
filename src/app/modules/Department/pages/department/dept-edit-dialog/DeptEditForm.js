@@ -24,8 +24,8 @@ const userEditSchema_2 = Yup.object().shape(
   {
     // parentDept: Yup.string().required("Please select parent department"),
     deptCode: Yup.string().required("*Required"),
-    deptName: Yup.string().required("*Required"),
-    budgetStrength: Yup.string().required("*Required"),
+    deptName: Yup.string() .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.').required("*Required"),
+    budgetStrength: Yup.string()  .matches(/^\d+$/, "Must contain only digits").required("*Required"),
     subsidiary: Yup.string().required("*Required"),
   }
 );
@@ -151,6 +151,7 @@ export function DeptEditForm({
                     <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="deptName"
+                        maxLength={30}
                         component={Input}
                         placeholder="Enter Department Name"
                         label={<span> Department<span style={{ color: 'red' }}>*</span></span>}
@@ -160,6 +161,7 @@ export function DeptEditForm({
                       <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="deptCode"
+                          maxLength={6}
                           component={Input}
                           placeholder="Enter Department Code"
                           label={<span> Code<span style={{ color: 'red' }}>*</span></span>}
@@ -219,6 +221,7 @@ export function DeptEditForm({
                       <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="budgetStrength"
+                          maxLength={6}
                           component={Input}
                           placeholder="Enter budgetStrength"
                           label={<span> Bugdet Strength<span style={{ color: 'red' }}>*</span></span>}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Input, Select, TextArea } from "../../../../../../_metronic/_partials/controls";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,14 +21,17 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 // Validation schema
 const formValidation = Yup.object().shape(
   {
-    startDate: Yup.date()
-      .required('*Required')
-      .nullable(),
-    endDate:Yup.date()
-    .required('*Required')
-    .nullable(),
-
-
+    
+      startDate: Yup.date()
+      .nullable()
+      .required("Start date is required")
+      .max(Yup.ref('endDate'), 'Start date cannot be later than end date'), // Use Yup.ref to reference endDate
+       
+      endDate: Yup.date()
+      .nullable()
+      .required("End date is required")
+      .min(Yup.ref('startDate'), 'End date cannot be earlier than start date'), // Use Yup.ref to reference startDate
+     
   },
 
 );
@@ -113,11 +116,8 @@ export function MasterEditForm({
                         name="startDate"
                         disabled={isUserForRead}
                         autoComplete="off"
-                    
                       />
-                      {errors.startDate && touched.startDate && (
-                        <div className="error" style={{color:"red"}}>{errors.startDate}</div>
-                      )}
+                    <ErrorMessage className="form-feedBack" name="startDate" component="div" />
                     </div>
 
                     <div className="col-12 col-md-4 mt-3">
@@ -139,9 +139,7 @@ export function MasterEditForm({
                         autoComplete="off"
                       // value = {values.dateOfJoining}
                       />
-                     {errors.endDate && touched.endDate && (
-                        <div className="error" style={{color:"red"}}>{errors.endDate}</div>
-                      )}
+                     <ErrorMessage className="form-feedBack" name="endDate" component="div" />
                     </div>
                   </div>
 

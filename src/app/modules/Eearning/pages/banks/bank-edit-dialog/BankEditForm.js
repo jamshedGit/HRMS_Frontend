@@ -14,6 +14,7 @@ import {
 
 } from "../../../../../../_metronic/redux/dashboardActions";
 import DatePicker from "react-datepicker";
+import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 
 // Phone Number Regex
 const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
@@ -22,24 +23,27 @@ const cnicRegExp = /^[0-9]{5}-[0-9]{7}-[0-9]$/;
 // Password Regex
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 // Validation schema
+
 const formValidation = Yup.object().shape(
   {
 
     earningCode: Yup.string()
-    .length(6, 'Must be exactly 6 characters long')
-   
-      .required("Required*"),
+    .nullable()
+      .required(VALIDATION_MESSAGES.required),
     earningName: Yup.string()
-      .required("Required*"),
+    .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.')
+      .required(VALIDATION_MESSAGES.required),
     linkedAttendance: Yup.string()
-      .required("Required*"),
+      .required(VALIDATION_MESSAGES.required),
     isTaxable: Yup.string()
-      .required("Required*"),
+      .required(VALIDATION_MESSAGES.required),
     mappedAllowance: Yup.string()
-      .required("Required*"),
+      .required(VALIDATION_MESSAGES.required),
     account: Yup.string()
-   
-      .required("Required*"),
+    .matches(/^\d+$/, "Must contain only digits")
+      .required(VALIDATION_MESSAGES.required),
+
+      
   },
 
 );
@@ -178,6 +182,7 @@ export function BankEditForm({
                         <Field
                           name="earningName"
                           component={Input}
+                          maxLength={30}
                           placeholder="Ener Earning Name"
                           autoComplete="off"
                           label={<span> Earning Name<span style={{ color: 'red' }}>*</span></span>}

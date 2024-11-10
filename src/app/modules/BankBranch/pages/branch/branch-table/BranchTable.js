@@ -67,19 +67,19 @@ export function BranchTable() {
   );
   // Table columns
   const columns = [
-    {
-      dataField: "Id",
-      text: "ID",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
+    // {
+    //   dataField: "Id",
+    //   text: "ID",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "160px",
+    //   },
+    // },
     {
       dataField: "bank.Name",
-      text: "Bank",
+      text: "Bank Name",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -89,7 +89,7 @@ export function BranchTable() {
     },
     {
       dataField: "Name",
-      text: "Branch",
+      text: "Branch Name",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -99,7 +99,7 @@ export function BranchTable() {
     },
     {
       dataField: "branchCode",
-      text: "Br.Code",
+      text: "Branch Code",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,

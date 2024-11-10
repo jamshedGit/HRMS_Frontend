@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Input, Select, TextArea } from "../../../../../../_metronic/_partials/controls";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,6 +15,7 @@ import {
 } from "../../../../../../_metronic/redux/dashboardActions";
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
+import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 
 
 // Phone Number Regex
@@ -24,20 +25,42 @@ const cnicRegExp = /^[0-9]{5}-[0-9]{7}-[0-9]$/;
 // Password Regex
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 // Validation schema
+
+const currentDate = new Date();
 const formValidation = Yup.object().shape(
   {
 
     subsidiaryId: Yup.string()
-      .required("Required*"),
+     .required(VALIDATION_MESSAGES.required),
     base_currency_id: Yup.string()
-      .required("Required*"),
+     .required(VALIDATION_MESSAGES.required)
+     .test(
+      "not-same-as-convert-currency",
+      "Base Currency and Currency To Convert must not be the same.",
+      function(value) {
+        const { currency_to_convert_id } = this.parent; // Access other values in the same object
+        return value !== currency_to_convert_id; // Check if they are different
+      }
+    ),
+
     currency_to_convert_id: Yup.string()
-      .required("Required*"),
+     .required(VALIDATION_MESSAGES.required)
+     .test(
+      "not-same-as-base-currency",
+      "Currency To Convert and Base Currency must not be the same.",
+      function(value) {
+        const { base_currency_id } = this.parent; // Access other values in the same object
+        return value !== base_currency_id; // Check if they are different
+      }
+    ),
     exchange_rate: Yup.string()
-      .required("Required*"),
+     .required(VALIDATION_MESSAGES.required)
+     .matches(/^\d+(\.\d+)?$/, "Must contain only digits"),
     effective_date: Yup.date()
-      .required('Date is required')
-      .min(new Date(), 'Date cannot be in the past')
+    .nullable()
+    .min(currentDate, 'Effective date must be a future date')
+    .required(VALIDATION_MESSAGES.required)
+      
   },
 
 );
@@ -212,6 +235,7 @@ export function BankEditForm({
                       <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="exchange_rate"
+                          maxLength={6}
                           component={Input}
                           placeholder="Enter Exchange Rate"
                           label={<span> Exchange Rate<span style={{ color: 'red' }}>*</span></span>}
@@ -240,10 +264,11 @@ export function BankEditForm({
                           disabled={isUserForRead}
                           error={errors.effective_date}
                           touched={touched.effective_date}
-
+                          
                         // value = {values.dateOfJoining}
+
                         />
-                       
+                        <ErrorMessage className="form-feedBack" name="effective_date" component="div" />
                       </div>
                     }
 
