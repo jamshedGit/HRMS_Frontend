@@ -6,7 +6,7 @@ import * as actions from "../../../_redux/redux-Actions";
 import { useFormUIContext } from "../FormUIContext";
 
 export function FormDeleteDialog({ id, status, show, onHide }) {
-  // console.log("Status", status);
+
   const [loading, setLoading] = useState(false);
   // Customers UI Context
   const usersUIContext = useFormUIContext();
@@ -42,18 +42,18 @@ export function FormDeleteDialog({ id, status, show, onHide }) {
   // looking for loading/dispatch
   useEffect(() => {}, [isLoading, dispatch]);
 
-  const deleteSalarypolicy = () => {
+  const deleteReimbursementConfig = () => {
     // server request for deleting customer by id
     enableLoading();
-    dispatch(actions.deleteSalarypolicy(id)).then(() => {
+    dispatch(actions.deleteReimbursementConfig(id)).then(() => {
       onHide();
       // refresh list after deletion
-      dispatch(actions.fetchSalarypolicies(usersUIProps.queryParams));
+      dispatch(actions.fetchReimbursementConfigs(usersUIProps.queryParams));
    
       disableLoading();
     });
   };
-  //console.log("status", status, id);
+
   return (
     <Modal
       show={show}
@@ -84,7 +84,7 @@ export function FormDeleteDialog({ id, status, show, onHide }) {
           <> </>
           <button
             type="button"
-            onClick={deleteSalarypolicy}
+            onClick={deleteReimbursementConfig}
             className="btn btn-primary btn-elevate"
           >
             Delete Record
