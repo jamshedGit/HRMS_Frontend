@@ -3,7 +3,7 @@ import axios from "axios";
 export const USERS_URL = process.env.REACT_APP_API_URL;
 
 //Create user
-export function createSalarypolicy(body) {
+export function createGratuityConfig(body) {
 
   return axios.post(`${USERS_URL}/gratuity_configuration/create-gratuity-configuration`, body);
   
@@ -11,24 +11,24 @@ export function createSalarypolicy(body) {
 
 
 // Read
-export function getAllSalarypolicy(body) {
+export function getAllGratuityConfig(body) {
 
   return axios.post(`${USERS_URL}/gratuity_configuration/read-all-gratuity-configuration`, body);
 }
 
-export function getSalarypolicyById(id) {
+export function getGratuityConfigById(id) {
 
   return axios.post(`${USERS_URL}/gratuity_configuration/read-gratuity-configuration`, id);
 }
 
 //Update
-export function updateSalarypolicy(salarypolicy) {
+export function updateGratuityConfig(body) {
    
-  return axios.put(`${USERS_URL}/gratuity_configuration/update-gratuity-configuration`, salarypolicy);
+  return axios.put(`${USERS_URL}/gratuity_configuration/update-gratuity-configuration`, body);
 }
 
 //Delete
-export function deleteSalarypolicy(body) {
+export function deleteGratuityConfig(body) {
 
   return axios.patch(`${USERS_URL}/gratuity_configuration/delete-gratuity-configuration`, body);
 }

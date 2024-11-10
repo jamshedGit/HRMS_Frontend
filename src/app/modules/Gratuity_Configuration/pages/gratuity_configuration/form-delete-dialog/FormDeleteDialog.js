@@ -42,13 +42,13 @@ export function FormDeleteDialog({ id, status, show, onHide }) {
   // looking for loading/dispatch
   useEffect(() => {}, [isLoading, dispatch]);
 
-  const deleteSalarypolicy = () => {
+  const deleteGratuityConfig = () => {
     // server request for deleting customer by id
     enableLoading();
-    dispatch(actions.deleteSalarypolicy(id)).then(() => {
+    dispatch(actions.deleteGratuityConfig(id)).then(() => {
       onHide();
       // refresh list after deletion
-      dispatch(actions.fetchSalarypolicies(usersUIProps.queryParams));
+      dispatch(actions.fetchGratuityConfigs(usersUIProps.queryParams));
    
       disableLoading();
     });
@@ -84,7 +84,7 @@ export function FormDeleteDialog({ id, status, show, onHide }) {
           <> </>
           <button
             type="button"
-            onClick={deleteSalarypolicy}
+            onClick={deleteGratuityConfig}
             className="btn btn-primary btn-elevate"
           >
             Delete Record

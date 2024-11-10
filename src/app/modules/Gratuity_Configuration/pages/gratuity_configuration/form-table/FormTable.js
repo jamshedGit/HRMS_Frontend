@@ -36,9 +36,9 @@ export function FormTable() {
 
 
   const { currentState, userAccess } = useSelector(
-    (state) => {  console.log("s "); return {
+    (state) => { return {
       
-      // currentState: state.salarypolicy,
+    
       currentState: state.gratuity_configuration,
       userAccess: state?.auth?.userAccess["gratuity_configuration"],
     }},
@@ -56,7 +56,7 @@ export function FormTable() {
     formUIProps.setIds([]);
  
  
-    dispatch(actions.fetchSalarypolicies(formUIProps.queryParams));
+    dispatch(actions.fetchGratuityConfigs(formUIProps.queryParams));
   }, [formUIProps.queryParams, dispatch, totalCount]);
 
   const isAccessForEdit = userAccess?.find(
@@ -70,7 +70,7 @@ export function FormTable() {
   const columns = [
 
     {
-      dataField: "Subsidiary.formName",
+      dataField: "Subsidiary.name",
       text: "Subsidiary",
       sort: false,
       sortCaret: sortCaret,
@@ -105,25 +105,20 @@ export function FormTable() {
     // },
 
     {
-      dataField: "num_of_days",
-      text: "Number of Days",
+      dataField: "basis_of_gratuity",
+      text: "Basis of gratuity",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
-      style: {
-        minWidth: "10px",
-      },
+      // style: {
+      //   minWidth: "10px",
+      //   textAlign: "center",
+      // },
+      // headerStyle: {
+      //   textAlign: "center", // Align header text to the left
+      // },
     },
-    // {
-    //   dataField: "gratuity_fraction",
-    //   text: "Gratuity Fraction",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    //   headerSortingClasses,
-    //   style: {
-    //     minWidth: "10px",
-    //   },
-    // },
+
 
     {
       dataField: "min_year",
@@ -133,6 +128,10 @@ export function FormTable() {
       headerSortingClasses,
       style: {
         minWidth: "10px",
+        textAlign: "center",
+      },
+      headerStyle: {
+        textAlign: "center", // Align header text to the left
       },
     },
 
@@ -144,6 +143,10 @@ export function FormTable() {
       headerSortingClasses,
       style: {
         minWidth: "10px",
+        textAlign: "center",
+      },
+      headerStyle: {
+        textAlign: "center", // Align header text to the left
       },
     },
 
