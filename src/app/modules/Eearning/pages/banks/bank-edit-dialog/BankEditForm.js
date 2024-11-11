@@ -76,7 +76,7 @@ export function BankEditForm({
       dispatch(fetchAllFormsMenu(45, "allAccountList")); // For All Grade Codes
     }
   }, [dispatch]);
-  
+
   return (
     <>
       <Formik
@@ -207,7 +207,7 @@ export function BankEditForm({
                           }}
                           value={
                             dashboard.allAccountList.find(
-                              (option) => option.value === values.account
+                              (option) => option.value == values.account
                             ) || null
                           }
                           // options={dashboard.allAccountList}

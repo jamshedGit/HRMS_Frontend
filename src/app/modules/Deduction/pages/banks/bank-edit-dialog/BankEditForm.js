@@ -63,7 +63,7 @@ export function BankEditForm({
 
   useEffect(() => {
 
-    
+
     if (!user.Id) {
       dispatch(fetchAllFormsMenu(45, "allAccountList")); // For All Grade Codes
     }
@@ -218,7 +218,7 @@ export function BankEditForm({
                           }}
                           value={
                             dashboard.allAccountList.find(
-                              (option) => option.value === values.account
+                              (option) => option.value == values.account
                             ) || null
                           }
                           // options={dashboard.allAccountList}
