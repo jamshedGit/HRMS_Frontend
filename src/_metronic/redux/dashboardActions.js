@@ -183,6 +183,26 @@ export const fetchAllLeaveType = (key, employeeId = null) => async (dispatch) =>
 
 /**
  * 
+ * Get All leave Types Data from Server and set it in state on the key provided in argument
+ * It will only get Leave Type Data that are of Encashable for current year
+ * 
+ * @param {String} key 
+ * @returns 
+ */
+export const fetchEncashmentLeaveType = (key, employeeId = null, yearId = null) => async (dispatch) => {
+  return await requestFromServer
+    .getAllEncashmentLeaveTypes({ employeeId, yearId })
+    .then((response) => {
+      const entities = [...response.data?.data];
+      dispatch(actions.AllChildMenusFetch({ entities, key }));
+    })
+    .catch((error) => {
+      toast.error("Something went wrong");
+    });
+};
+
+/**
+ * 
  * Get All Subsidiaries Data from Server and set it in state on the key provided in argument
  * 
  * @param {String} key 
