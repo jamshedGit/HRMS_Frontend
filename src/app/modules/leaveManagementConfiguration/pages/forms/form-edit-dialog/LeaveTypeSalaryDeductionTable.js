@@ -2,6 +2,7 @@ import { Field, FieldArray } from 'formik'
 import React from 'react'
 import { Input, Select } from '../../../../../../_metronic/_partials/controls'
 import CustomErrorLabel from '../../../../../utils/common-modules/CustomErrorLabel';
+import CustomDropdown from '../../../../../utils/common-modules/CustomDropdown';
 
 function LeaveTypeSalaryDeductionTable({ values, setFieldValue, createDropdown, errors, touched, dropdownData, handleDelete }) {
   return (
@@ -143,7 +144,7 @@ function LeaveTypeSalaryDeductionTable({ values, setFieldValue, createDropdown, 
                           )
                         }}
                         value={row.leaveStatus}
-                        children={createDropdown(dropdownData.allLeaveStatus || [])}
+                        children={CustomDropdown({ data: dropdownData.allLeaveStatus, firstElement: { label: 'All', value: null } })}
                       />
                       {errors.leaveTypeSalaryDeductionPolicies?.[index]?.leaveStatus &&
                         touched.leaveTypeSalaryDeductionPolicies?.[index]?.leaveStatus &&
