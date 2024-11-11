@@ -29,7 +29,9 @@ const ReimbursementSchema = Yup.object().shape({
   reimbursement_typeId: Yup.number().required(VALIDATION_MESSAGES.required),
   details: Yup.string().required(VALIDATION_MESSAGES.required),
   date: Yup.date().required(VALIDATION_MESSAGES.required),
-  amount: Yup.number().required(VALIDATION_MESSAGES.required),
+  amount: Yup.number()
+  .min(1,VALIDATION_MESSAGES.minOneValue)
+  .required(VALIDATION_MESSAGES.required),
 
   // file: Yup.mixed()
   //   .required("Required")
@@ -89,15 +91,16 @@ export function FormEditForm({
       validationSchema={ReimbursementSchema}
       onSubmit={(values, { resetForm }) => {
         enableLoading();
-        //This clearForm function is created to clear form as well as clear any uploaded file as well.
-        //resetForm function doesn't clear file properly so we use this function
+        const maxAmount = currentState?.reimbursement_config_policies_permission?.policies?.find(
+          (item) => item.reimbursement_typeId === values.reimbursement_typeId
+        )?.max_amount;
         const clearForm = () => {
           resetForm();
           if (inputFile?.current) {
             inputFile.current.value = "";
           }
         };
-        saveForm(values, isFileReq, clearForm);
+        saveForm(values,maxAmount, isFileReq, clearForm);
       }}
     >
       {({

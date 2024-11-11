@@ -30,8 +30,8 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
       setIds: FormUIContext.setIds,
       employeeId: FormUIContext.employeeId,
       queryParams: FormUIContext.queryParams,
-      isFileReq:FormUIContext.isFileReq,
-      setIsFileReq:FormUIContext.setIsFileReq
+      isFileReq: FormUIContext.isFileReq,
+      setIsFileReq: FormUIContext.setIsFileReq,
     };
   }, [FormUIContext]);
 
@@ -60,60 +60,73 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     isuserForRead: state.employee_loan_request.userForRead,
   }));
 
-
   useEffect(() => {
- 
     dispatch(actions.fetchmoduledata(id));
 
     // dispatch(actions.fetchmoduledata(formUIProps .queryParams))
   }, [id, dispatch, show]);
 
-  const saveForm = async (data, totalInstallments,setTotalInstallments ,setMaxAmountLimit,setMaxMonthlyAmountSuggest,resetForm) => {
+  const saveForm = async (
+    data,
+    totalInstallments,
+    maxAmountLimit,
+    setTotalInstallments,
+    setMaxAmountLimit,
+    setMaxMonthlyAmountSuggest,
+    resetForm
+  ) => {
     // enableLoading();
 
-    formUIProps.setIds("");
+    if (maxAmountLimit < data.total_loan_amount) {
+      disbaleLoading();
+      toast.error("Loan amount exceeds the limit.", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } else if (!data.Id && data) {
+      formUIProps.setIds("");
+      data.total_installment = totalInstallments;
 
-    if (!data.Id && data) {
-      data.total_installment=totalInstallments
-    
-        await dispatch(
-          actions.createEmployeeLoanRequest(data, disbaleLoading, resetForm)
-        );
-        await dispatch(actions.fetchEmployeeLoanRequest(formUIProps));
-        setTotalInstallments("")
-        setMaxAmountLimit("")
-        setMaxMonthlyAmountSuggest("")
+      await dispatch(
+        actions.createEmployeeLoanRequest(data, disbaleLoading, resetForm)
+      );
+      await dispatch(actions.fetchEmployeeLoanRequest(formUIProps));
+      setTotalInstallments("");
+      setMaxAmountLimit("");
+      setMaxMonthlyAmountSuggest("");
     } else {
-     
+      formUIProps.setIds("");
       const formUpdatedFields = {
         Id: data.Id,
-        employee_loan_accountId:data.employee_loan_accountId,
+        employee_loan_accountId: data.employee_loan_accountId,
         employeeId: data.employeeId,
-        loan_typeId:data.loan_typeId,
-        monthly_installment:data.monthly_installment,
-        applied_date:data.applied_date,
-        installment_start_date:data.installment_start_date,
-        total_loan_amount:data.total_loan_amount,
-        total_installment:totalInstallments,
-        reason:data.reason, 
-        loan_amount_remaining:data.total_loan_amount,
-        loan_amount_paid:0
-     
+        loan_typeId: data.loan_typeId,
+        monthly_installment: data.monthly_installment,
+        applied_date: data.applied_date,
+        installment_start_date: data.installment_start_date,
+        total_loan_amount: data.total_loan_amount,
+        total_installment: totalInstallments,
+        reason: data.reason,
+        loan_amount_remaining: data.total_loan_amount,
+        loan_amount_paid: 0,
       };
-     
-        await dispatch(
-          actions.updateEmployeeLoanRequest(
-            formUpdatedFields,
-            disbaleLoading,
-            resetForm
-          )
-        );
-        await dispatch(actions.fetchEmployeeLoanRequest(formUIProps));
-        setTotalInstallments("")
-      
+
+      await dispatch(
+        actions.updateEmployeeLoanRequest(
+          formUpdatedFields,
+          disbaleLoading,
+          resetForm
+        )
+      );
+      await dispatch(actions.fetchEmployeeLoanRequest(formUIProps));
+      setTotalInstallments("");
     }
   };
-
 
   return (
     <>
