@@ -68,6 +68,7 @@ import { accrue_gratuity_configurationSlice } from "../app/modules/Accrue_Gratui
 import { reimbursement_configurationSlice } from "../app/modules/Reimbursement_Configuration/_redux/redux-Slice"
 import { reimbursement_claimSlice } from "../app/modules/Reimbursement_claim/_redux/redux-Slice"
 import {AttendanceConfigurationSlice} from "../app/modules/Attendance_Configuration/_redux/attendanceConfigSlice"
+import {HolidaysSlice} from "../app/modules/Holidays/_redux/redux-Slice"
 
 export const rootReducer = combineReducers({
   auth: auth.reducer,
@@ -132,7 +133,8 @@ export const rootReducer = combineReducers({
   employee_loan_request:employee_loan_requestSlice.reducer,
   allocate_leaves: AllocateLeavesSlice.reducer,
   employee_leave_balance: EmployeeLeaveBalanceSlice.reducer,
-  attendance_configuration:AttendanceConfigurationSlice.reducer
+  attendance_configuration:AttendanceConfigurationSlice.reducer,
+  holidays:HolidaysSlice.reducer,
 });
 
 export function* rootSaga() {
