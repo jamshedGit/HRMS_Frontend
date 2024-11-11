@@ -28,10 +28,10 @@ const formValidation = Yup.object().shape(
   {
 
     earningCode: Yup.string()
-    .nullable()
+      .nullable()
       .required(VALIDATION_MESSAGES.required),
     earningName: Yup.string()
-    .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.')
+      .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.')
       .required(VALIDATION_MESSAGES.required),
     linkedAttendance: Yup.string()
       .required(VALIDATION_MESSAGES.required),
@@ -40,10 +40,10 @@ const formValidation = Yup.object().shape(
     mappedAllowance: Yup.string()
       .required(VALIDATION_MESSAGES.required),
     account: Yup.string()
-    .matches(/^\d+$/, "Must contain only digits")
+      .matches(/^\d+$/, "Must contain only digits")
       .required(VALIDATION_MESSAGES.required),
 
-      
+
   },
 
 );
@@ -70,37 +70,13 @@ export function BankEditForm({
 
 
   //=========== END
+  useEffect(() => {
 
-  // useEffect(() => {
-    
-  //   // Define an async function within useEffect
-  //   if (!user.Id) {
-
-  //     const fetchData = async () => {
-  //       try {
-  //         console.log("User:", user);
-  //         if (user.earningCode === '') {
-  //           // const response = await dispatch(getLatestTableId("t_employee_earning", "E-000"));
-
-  //           // // Assuming response[0].Id is the correct way to access the ID
-  //           // console.log("Response:", response[0]?.Id);
-  //           // setDefaultEarningCode(response[0]?.Id);
-  //         }
-  //       } catch (error) {
-  //         console.error("Error fetching data:", error);
-  //       }
-  //     };
-
-  //     fetchData(); // Call the async function
-  //   }
-  //   else {
-
-  //     setDefaultEarningCode(user.earningCode);
-  //   }
-  // }, [dispatch, user.earningCode]);
-
-
-  console.log("defEarningCode",defEarningCode)
+    if (!user.Id) {
+      dispatch(fetchAllFormsMenu(45, "allAccountList")); // For All Grade Codes
+    }
+  }, [dispatch]);
+  
   return (
     <>
       <Formik
@@ -191,7 +167,7 @@ export function BankEditForm({
                     }
 
                   </div>
-                 
+
 
                   <div className="from-group row">
                     {
@@ -217,14 +193,41 @@ export function BankEditForm({
                     }
                     {
                       <div className="col-12 col-md-4 mt-3">
-                        <Field
+
+                        <SearchSelect
+                          name="account"
+                          label={
+                            <span>
+                              Account<span style={{ color: "red" }}>*</span>
+                            </span>
+                          }
+                          isDisabled={isUserForRead}
+                          onChange={(e) => {
+                            setFieldValue("account", e.value || null);
+                          }}
+                          value={
+                            dashboard.allAccountList.find(
+                              (option) => option.value === values.account
+                            ) || null
+                          }
+                          // options={dashboard.allAccountList}
+                          options={dashboard.allAccountList.map((option) => ({
+                            label: `${option.mergeLabel}`, // Adding the value to the label
+                            value: option.value,
+                          }))}
+
+                          error={errors.account}
+                          touched={touched.account}
+                        />
+
+                        {/* <Field
                           name="account"
                           component={Input}
                           maxLength={15}
                           placeholder="Ener Account"
                           autoComplete="off"
                           label={<span> Account<span style={{ color: 'red' }}>*</span></span>}
-                        />
+                        /> */}
                       </div>
                     }
                   </div>
