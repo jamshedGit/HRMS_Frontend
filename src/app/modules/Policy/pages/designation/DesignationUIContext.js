@@ -31,13 +31,16 @@ export function DesignationUIProvider({ DesignationUIEvents, children }) {
     });
   }, []);
   const initUser = {
+    policyName: "",
     currencyId: "",
     subsdiaryId:"",
+    retirementAgeMale :"",
     isEmployeeCodeGenerationAuto: "",
-    retirementAgeMale : 0,
-    retirementAgeFemale: 0,
-    minimumAge: 0,
-    maximumAge: 0,
+
+    retirementAgeFemale :"",
+  
+    minimumAge: "",
+    maximumAge: "",
     pictureSizeLimit: "",
     pictureFilesSupport: "",
     documentSizeLimit: "",
