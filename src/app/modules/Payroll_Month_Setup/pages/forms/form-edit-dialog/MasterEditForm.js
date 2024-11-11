@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Input, Select, TextArea } from "../../../../../../_metronic/_partials/controls";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,6 +17,7 @@ import {
 import DatePicker from "react-datepicker";
 import axios from "axios";
 import { USERS_URL } from "../../../_redux/formCrud";
+import { formatDates, formatDatesGlobal, getDateDiffInDays } from "../../../../../utils/common";
 // Phone Number Regex
 const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
 // CNIC Regex
@@ -26,12 +27,15 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 // Validation schema
 const formValidation = Yup.object().shape(
   {
-    startDate: Yup.string()
-      .required("Required*"),
-    endDate: Yup.string()
-      .required("Required*"),
+    startDate: Yup.date()
+      .nullable()
+      .required("Start date is required")
+      .max(Yup.ref('endDate'), 'Start date cannot be later than end date'), // Use Yup.ref to reference endDate
 
-
+    endDate: Yup.date()
+      .nullable()
+      .required("End date is required")
+      .min(Yup.ref('startDate'), 'End date cannot be earlier than start date'), // Use Yup.ref to reference startDate
   },
 
 );
@@ -42,11 +46,7 @@ export function MasterEditForm({
   user,
   actionsLoading,
   onHide,
-  roles,
-  centers,
-  userStatusTypes,
   isUserForRead,
-  values,
   enableLoading,
   loading,
 }) {
@@ -102,22 +102,23 @@ export function MasterEditForm({
 
       const setDaysInDate = addDays(addOneMonth(response?.data?.data[0]?.startDate), getDaysInCurrentMonth());
 
-      setDefaultStartDate(addOneMonth(response?.data?.data[0]?.startDate))
+      setDefaultStartDate(get_startDate)
+
       setDefaultEndDate(setDaysInDate);
       setDefaultYear(setDaysInDate.getFullYear());
 
 
-      console.log("prv month", response?.data?.data[0]?.month)
+
       const pmonth_db = response?.data?.data[0]?.month || 0;
-      console.log("pmonth_db", pmonth_db)
+
       if (pmonth_db == 12) {
         setDefaulMonth(1)
-        console.log("step2")
+
         const defaultStartDate = "01" + "" + setDaysInDate.getFullYear().toString().substring(2, 4)
         setDefaulShortFormat(defaultStartDate)
       }
       else {
-        console.log("step1")
+       
         if (pmonth_db <= 9)
 
           setDefaulShortFormat((pmonth_db + 1) + "" + setDaysInDate.getFullYear().toString().substring(2, 4))
@@ -149,33 +150,61 @@ export function MasterEditForm({
     const year = shortFormatGlobal || new Date().getFullYear().toString().substring(2, 4); // Use the provided year or the current year
     const daysInMonth = await getDaysInMonth(month - 1, year);
     console.log("daysInMonth", daysInMonth)
-    
-  };
-
-  const daysDiff = (startDate, endDate) => {
-
-    console.log("startDate", startDate)
-    console.log("endDate", endDate)
-    var date1 = new Date(startDate);
-    var date2 = new Date(endDate);
-    var diff = Math.abs(date1.getTime() - date2.getTime());
-    var diffDays = Math.ceil(diff / (1000 * 3600 * 24));
-    setDefaultDays(diffDays + 1);
-    console.log("Diff in Days: " + diffDays);
-  }
-
-
-  const handleChanged = (e, setFieldValue) => {
-    const newValue = e.target.value;
-    setDefaulMonth(newValue);
-    console.log('Selected value:', newValue);
 
   };
+
+
+  // const daysDiff = (startDate) => {
+  //   // Ensure that the input dates are in a valid string format (YYYY-MM-DD)
+  //   console.log("input startDate", startDate)
+  //   console.log("ttt", defstartDate, defendDate);
+
+  //   const startDate_F = defstartDate.getDate()
+  //   const endDate_F = defendDate.getDate()
+
+
+  //   console.log("fff", startDate_F, endDate_F)
+
+  //   const start = new Date(defstartDate);  // Convert startDate to a Date object
+  //   const end = new Date(defendDate);      // Convert endDate to a Date object
+
+  //   // Check if the dates are valid
+  //   if (isNaN(start) || isNaN(end)) {
+  //     console.error("Invalid date input");
+  //     return null;  // Return null if either of the dates is invalid
+  //   }
+
+  //   console.log("Start Date:", start);
+  //   console.log("End Date:", end);
+
+  //   // Calculate the difference in time (milliseconds)
+  //   const timeDiff = end - start;
+  //   console.log("Time difference in milliseconds:", timeDiff);
+
+  //   // Convert time difference from milliseconds to days
+  //   const diffInDays = timeDiff / (1000 * 60 * 60 * 24);
+  //   console.log("Days Difference final:", diffInDays);
+  //   // Log and return the absolute value of the difference, rounded to the nearest whole number
+  //   const roundedDiffInDays = Math.abs(Math.round(diffInDays));  // Absolute value to ensure non-negative days
+  //   console.log("Days Difference (rounded):", roundedDiffInDays);
+
+  //   // Return the result
+  //   return roundedDiffInDays;
+  // };
+
+
+
 
   useEffect(() => {
-    daysDiff(defstartDate, defendDate);
+
     getActivePreviousPayrollMonth();
   }, []);
+
+  useEffect(() => {
+
+    setDefaultDays(getDateDiffInDays(defstartDate, defendDate))
+
+  }, [defstartDate, defendDate]);
 
   useEffect(() => {
     if (user.startDate) {
@@ -209,14 +238,14 @@ export function MasterEditForm({
       setDefaultYear(defYear);
     }
   }, [user.year]);
-  console.log("test", user)
+ 
   return (
     <>
       <Formik
         enableReinitialize={true}
         initialValues={{ Id: user.Id, shortFormat: defShortFormat, month: defMonth, month_days: defDays, year: defYear, startDate: defstartDate, endDate: defendDate }}
 
-        // validationSchema={formValidation}
+        validationSchema={formValidation}
         onSubmit={(values) => {
           console.log("values", values);
           enableLoading();
@@ -320,11 +349,9 @@ export function MasterEditForm({
                         placeholder="Enter Start Date"
                         selected={defstartDate}
 
-                        onChange={(date) => {
-                          setFieldValue("startDate", date);
-                          setDefaultStartDate(date);
-                          daysDiff(date, defendDate)
-
+                        onChange={(e) => {
+                          setFieldValue("startDate", e);
+                          setDefaultStartDate(e);
                         }}
                         timeInputLabel="Time:"
                         dateFormat="dd/MM/yyyy"
@@ -334,6 +361,7 @@ export function MasterEditForm({
                         autoComplete="off"
                       // value = {values.dateOfJoining}
                       />
+                      <ErrorMessage className="form-feedBack" name="startDate" component="div" />
                     </div>
 
                     <div className="col-12 col-md-4 mt-3">
@@ -345,10 +373,10 @@ export function MasterEditForm({
                         onChange={(date) => {
                           setFieldValue("endDate", date);
                           setDefaultEndDate(date);
-                          console.log("my end date", date)
-                          setFieldValue("startDate", defstartDate);
-                          setDefaultStartDate(defstartDate);
-                          daysDiff(defstartDate, date)
+                          //  console.log("my end date", date)
+                          //  setFieldValue("startDate", defstartDate);
+                          // setDefaultStartDate(defstartDate);
+                          // daysDiff()
                         }}
 
                         timeInputLabel="Time:"
@@ -360,6 +388,7 @@ export function MasterEditForm({
 
                       // value = {values.dateOfJoining}
                       />
+                      <ErrorMessage className="form-feedBack" name="endDate" component="div" />
                     </div>
                   </div>
 
