@@ -8,10 +8,14 @@ import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect"
 import {
   fetchAllCity,
 
+  fetchAllFormsMenu,
+
   fetchAllSubCenter,
+  fetchAllSubsidiaryData,
   getLatestBookingNo,
 } from "../../../../../../_metronic/redux/dashboardActions";
 import { Radio } from "@material-ui/core";
+import { amountLimit, amountLimitDynamic } from "../../../../../utils/common";
 
 // Phone Number Regex
 const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
@@ -20,13 +24,56 @@ const cnicRegExp = /^[0-9]{5}-[0-9]{7}-[0-9]$/;
 // Password Regex
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 // Validation schema
-const ReligionEditSchema = Yup.object().shape(
+const formValidationSchema = Yup.object().shape(
   {
-    designationName: Yup.string()
+    policyName: Yup.string()
+      .matches(/^[A-Za-z]+$/, 'Only characters are allowed')
       .required("Required*"),
-    designationCode: Yup.string()
+    subsdiaryId: Yup.string()
+      .required("Required*"),
+    currencyId: Yup.string()
+      .required("Required*"),
+      retirementAgeMale: Yup.string()
       .required("Required*"),
 
+      retirementAgeFemale: Yup.string()
+      .required("Required*"),
+
+      minimumAge: Yup.string()
+      .required("Required*"),
+
+      maximumAge: Yup.string()
+      .required("Required*"),
+
+      pictureSizeLimit: Yup.string()
+      .required("Required*"),
+
+
+      pictureFilesSupport: Yup.string()
+      .required("Required*"),
+      
+      documentSizeLimit: Yup.string()
+      .required("Required*"),
+
+      documentFilesSupport: Yup.string()
+      .required("Required*"),
+
+      
+
+      
+      contractualPolicyInMonth: Yup.number()
+      .typeError('Please enter a valid number')  // Ensure it's a number
+      .max(12, 'Value should not be greater than 12')  // Ensure the number is <= 12
+      .required("Required*"),
+
+
+      probationPolicyInMonth: Yup.number()
+      .typeError('Please enter a valid number')  // Ensure it's a number
+      .max(12, 'Value should not be greater than 12')  // Ensure the number is <= 12
+      .required('Required*'),  // Field is required
+
+      
+      
   },
 
 );
@@ -44,51 +91,42 @@ export function DesignationEditForm({
   loading,
 }) {
 
+  const dispatch = useDispatch();
   const { dashboard } = useSelector((state) => state);
   // Get User Details
   const { auth } = useSelector((state) => state);
 
-  const initialValues = {
+  const [defSubsidiary = null, setDefualtSubsidiaryList] = useState(null);
+  const [defCurrencyCodeList = null, setDefualtCurrencyCodeList] = useState(null);
 
-    subsdiaryId: '',
-    currencyId: '',
-    rdlEmpCode: '',
-    retirementAgeMale: '50',
-    retirementAgeFemale: '55',
-    minimumAge: '18',
-    maximumAge: '60',
-    pictureSizeLimit: '10',
-    //pictureFilesSupport: '.jpg,.png,.gif',
-    documentSizeLimit: '100',
-    documentFilesSupport: '.docx,.pdf,.xls,.txt',
-    profileMandatory: '',
-    isEmployeeCodeGenerationAuto: ''
+  useEffect(() => {
 
-  };
+    if (!user.subsdiaryId) {
 
+      dispatch(fetchAllSubsidiaryData("allSubsidiaryList"))
+      dispatch(fetchAllFormsMenu(126, "allCurrencyCodeList"));
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
+    const currencyId = defCurrencyCodeList?.value ? defCurrencyCodeList.value : user.currencyId;
+    setDefualtCurrencyCodeList(
+      dashboard.allCurrencyCodeList &&
+      dashboard.allCurrencyCodeList.filter((item) => {
+        return item.value === currencyId;
+      })
+    );
+  },[user.subsdiaryId])
+
+ 
   return (
     <>
       <Formik
         enableReinitialize={true}
         initialValues={user}
-        // validationSchema={ReligionEditSchema}
+        validationSchema={formValidationSchema}
         onSubmit={(obj) => {
-          // obj.retirementAgeMale = "50";
-          // obj.retirementAgeFemale = "55";
-          // obj.minimumAge = "18";
-          // obj.maximumAge = "60";
-          // obj.pictureSizeLimit = "10";
-          // //obj.pictureFilesSupport = ".jpg,.png,.gif1";
-          // obj.documentSizeLimit = "100";
-          // obj.documentFilesSupport = ".docx,.pdf,.xls,.txt";
-          // obj.isEmployeeCodeGenerationAuto = obj.isEmployeeCodeGenerationAuto; // Employee Code Generation
-          // //  obj.empPictureIsMandatory = obj.empPictureIsMandatory
-          // obj.probationPolicyInMonth = "6"
-          // obj.contractualPolicyInMonth = "12";
-           console.log("values employee policy obj", obj);
-          // console.log("ee:", user);
-
-
+          console.log("values employee policy obj", obj);
           enableLoading();
           saveEmpPolicy(obj);
         }}
@@ -146,45 +184,48 @@ export function DesignationEditForm({
                   <div className="from-group row">
                     {
                       <><div className="col-12 col-md-4 mt-3">
-                        <Select
-                          label="Subsidiary"
+                        <SearchSelect
                           name="subsdiaryId"
-                          value={values.subsdiaryId}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          style={{ display: "block" }}
-                        >
-                          <option value="-1" label="Select Subsidiary" />
-                          <option value="1" label="Pakistan" />
-                          <option value="2" label="Dubai" />
-                          <option value="3" label="Australia" />
+                          label={<span> Subsidiary<span style={{ color: 'red' }}>*</span></span>}
+                          isDisabled={isUserForRead && true}
+                          onBlur={() => {
+                            // handleBlur({ target: { name: "countryId" } });
+                          }}
+                          onChange={(e) => {
+                            setFieldValue("subsdiaryId", e.value || null);
+                            setDefualtSubsidiaryList(e);
+                            //handlePaymenModeChanged(e)
+                          }}
 
-                        </Select>
-                        {errors.fuelType && touched.fuelType && (
-                          <div className="invalid-text">{errors.subsdiaryId}</div>
-                        )}
+                          value={(defSubsidiary || null)}
+                          error={errors.subsdiaryId}
+                          touched={touched.subsdiaryId}
+                          options={dashboard.allSubsidiaryList}
+                        />
+
+
                       </div></>
 
                     }
                     {
                       <><div className="col-12 col-md-4 mt-3">
-                        <Select
-                          label="Currency"
-                          name="currencyId"
-                          value={values.currencyId}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          style={{ display: "block" }}
-                        >
-                          <option value="-1" label="Select Currency" />
-                          <option value="1" label="PKR" />
-                          <option value="2" label="AED" />
-                          <option value="3" label="AUS" />
-
-                        </Select>
-                        {errors.fuelType && touched.fuelType && (
-                          <div className="invalid-text">{errors.currencyId}</div>
-                        )}
+                        <SearchSelect
+                        name="currencyId"
+                        label={<span> Currency<span style={{ color: 'red' }}>*</span></span>}
+                        isDisabled={isUserForRead && true}
+                        onBlur={() => {
+                          // handleBlur({ target: { name: "countryId" } });
+                        }}
+                        onChange={(e) => {
+                          setFieldValue("currencyId", e.value || null);
+                          setDefualtCurrencyCodeList(e);
+                        
+                        }}
+                        value={(defCurrencyCodeList || null)}
+                        error={errors.currencyId}
+                        touched={touched.currencyId}
+                        options={dashboard.allCurrencyCodeList}
+                      />
                       </div></>
 
                     }
@@ -214,17 +255,25 @@ export function DesignationEditForm({
                     {
                       <div className="col-12 col-md-4 mt-3">
                         <Field
+                          type="number"
+                          onInput={(e) => {
+                            e.target.value = amountLimitDynamic(e.target.value, 3); // Limit to 3 digits
+                          }}
                           name="retirementAgeMale"
                           component={Input}
                           placeholder="Enter retirement age"
                           label="Retirement Age (Male)"
-                          //value="50"
+                        //value="50"
                         />
                       </div>
                     }
                     {
                       <div className="col-12 col-md-4 mt-3">
                         <Field
+                          type="number"
+                          onInput={(e) => {
+                            e.target.value = amountLimitDynamic(e.target.value, 3); // Limit to 3 digits
+                          }}
                           name="retirementAgeFemale"
                           component={Input}
                           placeholder="Enter Retirement Age (Female)"
@@ -244,6 +293,10 @@ export function DesignationEditForm({
                     {
                       <div className="col-12 col-md-4 mt-3">
                         <Field
+                          type="number"
+                          onInput={(e) => {
+                            e.target.value = amountLimitDynamic(e.target.value, 3); // Limit to 3 digits
+                          }}
                           name="minimumAge"
                           component={Input}
                           placeholder="Enter minimum age"
@@ -257,12 +310,15 @@ export function DesignationEditForm({
                     {
                       <div className="col-12 col-md-4 mt-3">
                         <Field
-
+                          type="number"
+                          onInput={(e) => {
+                            e.target.value = amountLimitDynamic(e.target.value, 3); // Limit to 3 digits
+                          }}
                           name="maximumAge"
                           component={Input}
                           placeholder="60"
                           label="Enter maximum Age"
-                         // value="60"
+                        // value="60"
                         />
                       </div>
                     }
@@ -275,12 +331,16 @@ export function DesignationEditForm({
                     {
                       <div className="col-12 col-md-4 mt-3">
                         <Field
+                         type="number"
+                         onInput={(e) => {
+                           e.target.value = amountLimitDynamic(e.target.value,2); // Limit to 3 digits
+                         }}
                           name="pictureSizeLimit"
                           component={Input}
-                          placeholder="Picture size limit in MB"
+                          placeholder="5MB"
                           label="Picture Size Limit (MB)"
-                         // value="10"
-                       
+                        // value="10"
+
                         />
                       </div>
                     }
@@ -290,9 +350,10 @@ export function DesignationEditForm({
                         <Field
                           name="pictureFilesSupport"
                           component={Input}
-                          placeholder="Enter File Extensions with comma seprated"
+                          
+                           placeholder=".jpg, .png"
                           label="File Support Extension"
-                         // value=".jpg,.png,.gif"
+                        // value=".jpg,.png,.gif"
 
                         />eg: .jpg,.png,.gif
                       </div>
@@ -305,9 +366,13 @@ export function DesignationEditForm({
                     {
                       <div className="col-12 col-md-4 mt-3">
                         <Field
+                         type="number"
+                         onInput={(e) => {
+                           e.target.value = amountLimitDynamic(e.target.value,3); // Limit to 3 digits
+                         }}
                           name="documentSizeLimit"
                           component={Input}
-                          placeholder="Picture size limit in MB"
+                          placeholder="5MB"
                           label="Document Size Limit (MB)"
                         //  value="100"
                         // 
@@ -321,9 +386,10 @@ export function DesignationEditForm({
 
                           name="documentFilesSupport"
                           component={Input}
-                          placeholder="Enter File Extensions"
+                         
+                          placeholder=".jpg, .png"
                           label="File Support Extension"
-                         // value=".docx,.pdf,.xls,.txt"
+                        // value=".docx,.pdf,.xls,.txt"
                         />
                       </div>
                     }
@@ -362,11 +428,15 @@ export function DesignationEditForm({
                     {
                       <div className="col-12 col-md-4 mt-3">
                         <Field
+                         type="number"
+                         onInput={(e) => {
+                           e.target.value = amountLimitDynamic(e.target.value,2); // Limit to 3 digits
+                         }}
                           name="probationPolicyInMonth"
                           component={Input}
-                          placeholder="18"
+                          placeholder="12"
                           label="Enter Probation in Months"
-                        
+
                         // 
                         />
                       </div>
@@ -376,11 +446,16 @@ export function DesignationEditForm({
                       <div className="col-12 col-md-4 mt-3">
                         <Field
                           // 
+                          type="number"
+                          onInput={(e) => {
+                            e.target.value = amountLimitDynamic(e.target.value,2); // Limit to 3 digits
+                          }}
                           name="contractualPolicyInMonth"
                           component={Input}
-                          placeholder="Enter Contractual in Months"
+                          
+                         placeholder="12"
                           label="Enter Contractual in Months"
-                         
+
                         />
                       </div>
                     }

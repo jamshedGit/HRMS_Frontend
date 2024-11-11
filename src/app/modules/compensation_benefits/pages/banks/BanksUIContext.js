@@ -35,6 +35,7 @@ export function BanksUIProvider({ BanksUIEvents, children }) {
     subsidiaryId: "",
     gradeId: "",
     employeeTypeId: "",
+   
     currencyId: "",
     salaryMethod: "",
     basicFactor: "",

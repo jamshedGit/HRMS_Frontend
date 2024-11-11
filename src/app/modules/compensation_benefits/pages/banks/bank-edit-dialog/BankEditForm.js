@@ -15,7 +15,8 @@ import {
   fetchAllEarningDeductionList,
   fetchAllEarningHeads,
   fetchAllDeductionList,
-  fetchAllEarningList
+  fetchAllEarningList,
+  fetchAllSubsidiaryData
 
 } from "../../../../../../_metronic/redux/dashboardActions";
 import DatePicker from "react-datepicker";
@@ -47,18 +48,16 @@ const formValidation = Yup.object().shape(
       .nullable()
       .required("Required*"),
 
-    // salaryMethod: Yup.string()
-    //   .nullable()
-    //   .required("Required*"),
+    //   salaryMethod: Yup.string()
+    //   .required('Required*') // Make it required
+    // .notOneOf(['-1'], 'Please select a valid salary method'),
 
-    basicFactor: Yup.string()
-      .nullable()
-      .matches(/^\d+(\.\d+)?$/, 'Must be a valid number (digits with optional decimal)')
-      .required("Required*"),
-
-    // basicFactorEarn: Yup.number()
-    //   .max(100, 'Value cannot be greater than 100')
-    //   .required('basic Factor is required')
+    basicFactor: 
+       Yup.string()
+      .matches(/^\d{15}$/, 'Basic factor must be exactly 15 digits long and contain only digits.')
+      .max(100, 'Value cannot be greater than 100')
+     
+      .required('Required*')
 
   },
 
@@ -99,12 +98,13 @@ export function BankEditForm({
 
   useEffect(() => {
     if (!user.Id) {
+      dispatch(fetchAllSubsidiaryData("allSubsidiaryList"))
       dispatch(fetchAllFormsMenu(126, "allCurrencyCodeList")); // For All currecy Codes
       dispatch(fetchAllFormsMenu(143, "allEmployeeGradeList")); // For All Grade Codes
       dispatch(fetchAllFormsMenu(88, "allEmpTypeChildMenus")); // For EmployeeType
       dispatch(fetchAllEarningList(1)); // For Earning
       dispatch(fetchAllDeductionList(2)); // For deduction
-      dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsisidaries
+      // dispatch(fetchAllFormsMenu(133, "allSubsidiaryList")); // For All Subsisidaries
     }
   }, [dispatch]);
 
@@ -134,15 +134,15 @@ export function BankEditForm({
   }, [user?.employeeTypeId, dashboard.employeeTypeId]);
   //======================= End
 
-  console.log("dashboard.allSubidiaryList", dashboard.allSubidiaryList)
+  console.log("dashboard.allSubsidiaryList", dashboard.allSubsidiaryList)
   useEffect(() => {
 
     const subsidiaryId = defSubsidiary?.value ? defSubsidiary.value : user.subsidiaryId;
-    console.log("subsidiaryId123", user);
+
 
     setDefualtSubsidiaryList(
-      dashboard.allSubidiaryList &&
-      dashboard.allSubidiaryList.filter((item) => {
+      dashboard.allSubsidiaryList &&
+      dashboard.allSubsidiaryList.filter((item) => {
         return item.value === subsidiaryId;
       })
     );
@@ -174,7 +174,7 @@ export function BankEditForm({
 
   const handleChanged = (e) => {
     const newValue = e.value;
-    console.log('Selected value:', newValue);
+
     fetchCompensationEarningDeductionList(50);
   };
 
@@ -187,11 +187,11 @@ export function BankEditForm({
   }, [user.effective_date]);
 
   //=========== END
-  console.log("dashboar111", dashboard, user)
+
 
   const addRow = (element) => {
     setDefaultEarningList([...defEarningList, { transactionType: element.target.id }])
-    console.log("defEarningList", defEarningList)
+
   }
 
   // const addRowDeduction = (element) => {
@@ -209,7 +209,7 @@ export function BankEditForm({
   const handleFieldChanged = (el) => {
     const index = el.target.id.split('-')[1]
     const key = el.target.id.split('-')[0]
-    console.log("key1", key);
+
     setDefaultEarningList([...defEarningList.map((val, ind) => {
 
       if (ind == index) {
@@ -284,7 +284,7 @@ export function BankEditForm({
     <>
       <Formik
         enableReinitialize={true}
-        initialValues={user.subsidiaryId ? user : { subsidiaryId: 134, gradeId: 144, currencyId: 130 }}
+        initialValues={user}
         validationSchema={formValidation}
         onSubmit={(values) => {
           console.log("values", values);
@@ -343,9 +343,9 @@ export function BankEditForm({
                           value={(defSubsidiary || null)}
                           error={errors.subsidiaryId}
                           touched={touched.subsidiaryId}
-                          options={dashboard.allSubidiaryList}
+                          options={dashboard.allSubsidiaryList}
                         />
-
+                        {/* <ErrorMessage className="form-feedBack" name="subsidiaryId" component="div" /> */}
                       </div></>
 
                     }

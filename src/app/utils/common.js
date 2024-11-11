@@ -103,6 +103,13 @@ export const amountLimit = (value,) => {
   return value; // Return the original value if within limit
 };
 
+export const amountLimitDynamic = (value,limitVal) => {
+  // Convert the input to a string and check its length
+  if (value.length > limitVal) {
+    return value.slice(0, limitVal); // Limit the length
+  }
+  return value; // Return the original value if within limit
+};
 
 
 // export const percentageLimit = (value,) => {
