@@ -52,8 +52,10 @@ const userEditSchema_2 = Yup.object().shape(
       .matches(/^\d+$/, 'Only numeric characters are allowed'),
 
       accNoForGrad: Yup.string()
-      .matches(/^\d+$/, 'Only numeric characters are allowed')
-  
+      .matches(/^\d+$/, 'Only numeric characters are allowed'),
+      fax: 
+      Yup.string()
+      .matches(/^\d+$/, 'Only numeric characters are allowed'),
   }
   
 );
