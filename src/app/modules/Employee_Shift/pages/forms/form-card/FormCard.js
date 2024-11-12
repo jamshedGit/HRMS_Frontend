@@ -44,7 +44,7 @@ console.log("card here")
                 className="btn btn-primary"
                 onClick={formUIProps.newFormButtonClick}
               >
-                + Add
+                + Add Employee Shift
               </button>
             )}
           </CardHeaderToolbar>
