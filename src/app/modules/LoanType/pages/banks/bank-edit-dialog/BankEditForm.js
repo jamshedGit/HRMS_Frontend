@@ -35,8 +35,8 @@ const formValidation = Yup.object().shape(
       .required("Required*"),
     // loan: Yup.string()
     //   .required("Required*"),
-    mapped: Yup.string()
-      .required("Required*"),
+    // mapped: Yup.string()
+    //   .required("Required*"),
     account: Yup.string()
     .matches(/^\d+(\.\d+)?$/, 'Must be a valid number (digits with optional decimal)')
       .required("Required*")
@@ -172,7 +172,7 @@ export function BankEditForm({
 
                     }
 
-                    <div className="col-12 col-md-4 mt-3">
+                    {/* <div className="col-12 col-md-4 mt-3">
                       <Select
                         label={<span> Mapped<span style={{ color: 'red' }}>*</span></span>}
                         name="mapped"
@@ -190,7 +190,7 @@ export function BankEditForm({
                       {errors.mapped && touched.mapped && (
                         <div className="invalid-text">{errors.mapped}</div>
                       )}
-                    </div>
+                    </div> */}
 
                     {/* {
 
