@@ -170,7 +170,7 @@ export function DeptEditForm({
                         maxLength={30}
                         component={Input}
                         placeholder="Enter Department Name"
-                        label={<span> Department<span style={{ color: 'red' }}>*</span></span>}
+                        label={<span> Department Name<span style={{ color: 'red' }}>*</span></span>}
                       />
                     </div>
                     {
@@ -180,7 +180,7 @@ export function DeptEditForm({
                           maxLength={6}
                           component={Input}
                           placeholder="Enter Department Code"
-                          label={<span> Code<span style={{ color: 'red' }}>*</span></span>}
+                          label={<span> Department Code<span style={{ color: 'red' }}>*</span></span>}
                         />
                       </div>
                     }
