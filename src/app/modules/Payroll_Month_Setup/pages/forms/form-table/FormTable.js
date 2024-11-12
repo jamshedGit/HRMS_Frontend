@@ -67,16 +67,16 @@ export function FormTable() {
   );
   // Table columns
   const columns = [
-    {
-      dataField: "Id",
-      text: "ID",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
+    // {
+    //   dataField: "Id",
+    //   text: "ID",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "160px",
+    //   },
+    // },
 
     {
       dataField: "startDate",
@@ -99,16 +99,16 @@ export function FormTable() {
         minWidth: "160px",
       },
     },
-    {
-      dataField: "month",
-      text: "Month",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
+    // {
+    //   dataField: "month",
+    //   text: "Month",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "160px",
+    //   },
+    // },
     {
       dataField: "month_days",
       text: "Days",
