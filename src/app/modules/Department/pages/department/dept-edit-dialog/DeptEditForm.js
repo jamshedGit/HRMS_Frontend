@@ -8,6 +8,7 @@ import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect"
 
 import {
   fetchAllDept,
+  fetchAllSubsidiaryData,
 
 } from "../../../../../../_metronic/redux/dashboardActions";
 import DeptManagement from "../..";
@@ -27,6 +28,7 @@ const userEditSchema_2 = Yup.object().shape(
     deptName: Yup.string() .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.').required("*Required"),
     budgetStrength: Yup.string()  .matches(/^\d+$/, "Must contain only digits").required("*Required"),
     subsidiary: Yup.string().required("*Required"),
+    parentDept: Yup.string().required("*Required"),
   }
 );
 
@@ -52,17 +54,17 @@ export function DeptEditForm({
   const [defCity, setDefaultCity] = useState({});
   // Get User Details
   const { auth } = useSelector((state) => state);
-  const [defBank, setDefaultBanks] = useState({});
+ 
   const [defDept = null, setDefaultDept] = useState(null);
 
-  const [accOpeningDateSelected, setAccountOpeningDate] = useState(null);
-
+  const [defSubsidiary = null, setDefualtSubsidiaryList] = useState(null);
 
 
   // Department DropDown Load when pageLoad
   useEffect(() => {
     if (!user.deptId) {
       dispatch(fetchAllDept(1));
+      dispatch(fetchAllSubsidiaryData("allSubsidiaryList"))
     }
   }, [dispatch]);
 
@@ -115,6 +117,20 @@ export function DeptEditForm({
     subsidiary: '',
   };
 
+  
+  useEffect(() => {
+
+    const subsidiaryId = defSubsidiary?.value ? defSubsidiary.value : user.subsidiary;
+
+    setDefualtSubsidiaryList(
+      dashboard.allSubsidiaryList &&
+      dashboard.allSubsidiaryList.filter((item) => {
+        return item.value === subsidiaryId;
+      })
+    );
+
+  }, [user?.subsidiary, dashboard.subsidiary]);
+
   return (
     <>
       <Formik
@@ -154,7 +170,7 @@ export function DeptEditForm({
                         maxLength={30}
                         component={Input}
                         placeholder="Enter Department Name"
-                        label={<span> Department<span style={{ color: 'red' }}>*</span></span>}
+                        label={<span> Department Name<span style={{ color: 'red' }}>*</span></span>}
                       />
                     </div>
                     {
@@ -164,14 +180,14 @@ export function DeptEditForm({
                           maxLength={6}
                           component={Input}
                           placeholder="Enter Department Code"
-                          label={<span> Code<span style={{ color: 'red' }}>*</span></span>}
+                          label={<span> Department Code<span style={{ color: 'red' }}>*</span></span>}
                         />
                       </div>
                     }
                     {
                       <div className="col-12 col-md-4 mt-3">
                         <SearchSelect
-                          name="  "
+                          name="parentDept"
                           label={<span> Parent Dept<span style={{ color: 'red' }}>*</span></span>}
                           isDisabled={isUserForRead && true}
                           onBlur={() => {
@@ -187,32 +203,7 @@ export function DeptEditForm({
                           touched={touched.parentDept}
                           options={dashboard.allDept}
                         />
-                        {/* isParent &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-                         <Field
-                          type="checkbox"
-                          id="chkParent"
-                          name="chkParent"
-                          className="form-check-input"
-                          checked={values.chkParent}
-                          defaultChecked = {false}
-                          onChange={(e) => { setFieldValue('chkParent', e.target.checked)
-
-                            if(e.target.checked)
-                              {
-                                console.log("t")
-                              }
-
-                           }}
-                        /> */}
-                        {/* <input
-                          type="checkbox"
-                          className="form-check-input"
-                          id="chkParent"
-                          name="chkParent"
-                          label="isParent"
-                        // defaultChecked={right.isAccess}
-                         onChange={onCheckboxChange}
-                        /> */}
+                        
 
                       </div>
 
@@ -231,25 +222,28 @@ export function DeptEditForm({
                     }
                   
                     {
-                      <><div className="col-12 col-md-4 mt-3">
-                        <Select
-                         
+                      <>
+                       <div className="col-12 col-md-4 mt-3">
+                        <SearchSelect
                           name="subsidiary"
                           label={<span> Subsidiary<span style={{ color: 'red' }}>*</span></span>}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          style={{ display: "block" }}
-                        >
-                          <option value="-1" label="Select Subsidiary" />
-                          <option value="1" label="Pakistan" />
-                          <option value="2" label="Dubai" />
-                          <option value="3" label="Australia" />
+                          isDisabled={isUserForRead && true}
+                          onBlur={() => {
+                            // handleBlur({ target: { name: "countryId" } });
+                          }}
+                          onChange={(e) => {
+                            setFieldValue("subsidiary", e.value || null);
+                            setDefualtSubsidiaryList(e);
+                            //handlePaymenModeChanged(e)
+                          }}
 
-                        </Select>
-                        {errors.subsidiary && touched.subsidiary && (
-                          <div className="invalid-text">{errors.subsidiary}</div>
-                        )}
-                      </div></>
+                          value={(defSubsidiary || null)}
+                          error={errors.subsidiary}
+                          touched={touched.subsidiary}
+                          options={dashboard.allSubsidiaryList}
+                        />
+                        </div>
+                        </>
 
                     }
 

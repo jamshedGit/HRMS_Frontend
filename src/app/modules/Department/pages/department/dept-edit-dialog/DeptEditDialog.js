@@ -122,7 +122,7 @@ export function DeptEditDialog({ id, show, onHide, userForRead }) {
       onHide={onHide}
       aria-labelledby="example-modal-sizes-title-lg"
     >
-      <DeptEditDialogHeader deptId={id} isUserForRead={userForRead} />
+      <DeptEditDialogHeader id={id} isUserForRead={userForRead} />
       <DeptEditForm
         saveDept={saveDept}
         user={userForEdit || DeptUIProps.initUser}

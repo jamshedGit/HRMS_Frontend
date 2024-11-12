@@ -70,7 +70,7 @@ export function DeptTable() {
     
     {
       dataField: "deptName",
-      text: "Department",
+      text: "Department Name",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -80,7 +80,7 @@ export function DeptTable() {
     },
     {
       dataField: "deptCode",
-      text: "Code",
+      text: "Department Code",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
