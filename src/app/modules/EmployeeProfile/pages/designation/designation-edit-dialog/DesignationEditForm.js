@@ -349,7 +349,7 @@ export function DesignationEditForm({
       dispatch(fetchAllFormsMenu(125, "allRelationCodeList"));
       dispatch(fetchAllFormsMenu(109, "allInstitution")); // For Institution
       dispatch(fetchAllFormsMenu(108, "allDegreeTitle")); // For Degree Title
-      dispatch(fetchAllFormsMenu(198, "allCycleTypeList")); // For Degree Title
+      dispatch(fetchAllFormsMenu(205, "allCycleTypeList")); // For Degree Title
       dispatch(fetchAllFormsMenu(184, "allContractTypeList")); // For Degree Title
     }
   }, [dispatch]);
