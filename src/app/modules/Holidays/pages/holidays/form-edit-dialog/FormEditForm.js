@@ -88,7 +88,7 @@ export function FormEditForm({
 
     if (start_date && end_date) {
       setDiffInDate(getDateDiffInDays(start_date, end_date))
-      console.log("getDateDiffInDays(start_date,end_date)", getDateDiffInDays(start_date, end_date))
+  
     }
 
   }, [start_date, end_date]);
@@ -169,7 +169,7 @@ export function FormEditForm({
                 
                       onChange={(e) => {
                         setFieldValue("to_date", e);
-                        console.log("trigger")
+                   
                         setStart_date(e)
                       }}
                       // minDate={dateOfJoining} 
@@ -188,7 +188,7 @@ export function FormEditForm({
                       placeholder="Select Date"
                       type="date"
                       onChange={(e) => {
-                        console.log("trigger");
+                 
                       
                         setFieldValue("from_date", e);
                         setStart_date(e);

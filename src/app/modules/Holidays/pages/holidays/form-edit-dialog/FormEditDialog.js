@@ -69,7 +69,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
 
   const saveForm = async (user,diffInDate) => {
 
-console.log("user",user)
+
 
     if (!id) {
  
@@ -81,7 +81,7 @@ console.log("user",user)
 
     } else {
 
-      console.log("user else",user)
+  
   
       // user.number_of_days=
       const formUpdatedFields = {
