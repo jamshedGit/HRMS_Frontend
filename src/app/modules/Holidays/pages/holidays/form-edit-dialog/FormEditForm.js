@@ -39,7 +39,7 @@ const holidaysEditSchema = Yup.object().shape({
   holiday_typeId: Yup.number()
     .required(VALIDATION_MESSAGES.required),
 
-  religionId: Yup.number()
+  religionId: Yup.string()
     .required(VALIDATION_MESSAGES.required),
 
 });
@@ -96,7 +96,7 @@ export function FormEditForm({
       onSubmit={(values) => {
 
         enableLoading();
-        saveForm(values);
+        saveForm(values,diffInDate);
       }}
     >
       {({ handleSubmit, errors, touched, values, setFieldValue }) => (
@@ -234,6 +234,7 @@ export function FormEditForm({
                       disabled={true}
                       type="number"
                       value={diffInDate || 0}
+                     
 
 
                     />

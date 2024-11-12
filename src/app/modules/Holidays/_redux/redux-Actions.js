@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 const { actions } = HolidaysSlice;
 
 
-export const fetchGratuityConfigs = (queryparm) => async (dispatch) => {
+export const fetchHolidays = (queryparm) => async (dispatch) => {
 
 
   

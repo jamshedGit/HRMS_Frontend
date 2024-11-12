@@ -33,7 +33,7 @@ export function FormUIProvider({ FormUIEvents, children }) {
     religionId: "",
     from_date: "",
     to_date:"",
-    number_of_days:"" || 0,
+    number_of_days:"",
     holiday_typeId:""
   
   };

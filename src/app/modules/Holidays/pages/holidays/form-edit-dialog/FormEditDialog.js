@@ -67,13 +67,13 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   }, [id, dispatch]);
 
 
-  const saveForm = async (user) => {
+  const saveForm = async (user,diffInDate) => {
 
 console.log("user",user)
 
     if (!id) {
  
-  
+      user.number_of_days=diffInDate
       const finalObject = { user }
       dispatch(actions.createGratuityConfig(user, disbaleLoading, onHide));
       
@@ -83,7 +83,7 @@ console.log("user",user)
 
      
   
-
+      user.number_of_days=diffInDate
       const formUpdatedFields = {
         Id: user.Id,
         subsidiaryId: user.subsidiaryId,
@@ -99,7 +99,7 @@ console.log("user",user)
       
 
      await dispatch(actions.updateGratuityConfig(formUpdatedFields, disbaleLoading, onHide));
-     await dispatch(actions.fetchGratuityConfigs(usersUIProps.queryParams));
+     await dispatch(actions.fetchHolidays(usersUIProps.queryParams));
     }
   };
 

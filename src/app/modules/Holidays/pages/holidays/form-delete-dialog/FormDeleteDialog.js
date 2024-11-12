@@ -48,7 +48,7 @@ export function FormDeleteDialog({ id, status, show, onHide }) {
     dispatch(actions.deleteGratuityConfig(id)).then(() => {
       onHide();
       // refresh list after deletion
-      dispatch(actions.fetchGratuityConfigs(usersUIProps.queryParams));
+      dispatch(actions.fetchHolidays(usersUIProps.queryParams));
    
       disableLoading();
     });
