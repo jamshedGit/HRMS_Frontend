@@ -123,16 +123,16 @@ export function BanksTable() {
     //     minWidth: "160px",
     //   },
     // },
-    {
-      dataField: "mapped",
-      text: "Mapped",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
+    // {
+    //   dataField: "mapped",
+    //   text: "Mapped",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "160px",
+    //   },
+    // },
     {
       dataField: "account",
       text: "Account",
