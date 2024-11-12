@@ -61,9 +61,9 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
 
 
   useEffect(() => {
-    dispatch(actions.fetchGratuityConfig(id));
+    dispatch(actions.fetchHoliday(id));
 
-    // dispatch(actions.fetchGratuityConfig(formUIProps .queryParams))
+    // dispatch(actions.fetchHoliday(formUIProps .queryParams))
   }, [id, dispatch]);
 
 
@@ -75,15 +75,15 @@ console.log("user",user)
  
       user.number_of_days=diffInDate
       const finalObject = { user }
-      dispatch(actions.createGratuityConfig(user, disbaleLoading, onHide));
+      dispatch(actions.createHoliday(user, disbaleLoading, onHide));
       
       
 
     } else {
 
-     
+      console.log("user else",user)
   
-      user.number_of_days=diffInDate
+      // user.number_of_days=
       const formUpdatedFields = {
         Id: user.Id,
         subsidiaryId: user.subsidiaryId,
@@ -91,14 +91,14 @@ console.log("user",user)
         religionId: user.religionId,
         from_date: user.from_date,
         to_date: user.to_date,
-        number_of_days: user.number_of_days,
+        number_of_days: diffInDate,
         holiday_typeId: user.holiday_typeId,
      
       };
 
       
 
-     await dispatch(actions.updateGratuityConfig(formUpdatedFields, disbaleLoading, onHide));
+     await dispatch(actions.updateHoliday(formUpdatedFields, disbaleLoading, onHide));
      await dispatch(actions.fetchHolidays(usersUIProps.queryParams));
     }
   };

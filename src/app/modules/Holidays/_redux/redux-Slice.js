@@ -32,32 +32,32 @@ export const HolidaysSlice = createSlice({
             }
         },
 
-        gratuityConfigFetched: (state, action) => {
+        holidayFetched: (state, action) => {
         
   
             const entities = action.payload.data?.data.rows;
            
             const totalResult = action.payload.data?.data.totalResults;
-            const updatedEntities = entities.map(entity => {
-                // Check the basis_of_gratuityId and assign 'Gross' or 'Basis'
-                const basis_of_gratuity = entity.basis_of_gratuityId === 0 ? 'Gross' : 'Basis';
+            // const updatedEntities = entities.map(entity => {
+             
+            //     const basis_of_gratuity = entity.basis_of_gratuityId === 0 ? 'Gross' : 'Basis';
                 
             
-                return {
-                    ...entity,
-                    basis_of_gratuity // Add the new field to the entity
-                };
-            });
+            //     return {
+            //         ...entity,
+            //         basis_of_gratuity // Add the new field to the entity
+            //     };
+            // });
           
             state.listLoading = false;
             state.error = null;
-            state.entities = updatedEntities;
+            state.entities = entities;
             state.totalCount = totalResult;
            
         },
 
          //get User By ID
-         GratuityConfigFetchedForEdit: (state, action) => {
+         HolidayFetchedForEdit: (state, action) => {
            
    
             state.actionsLoading = false;
@@ -66,7 +66,7 @@ export const HolidaysSlice = createSlice({
         },
 
       
-        GratuityConfigDeleted: (state, action) => {
+        HolidayDeleted: (state, action) => {
 
             state.error = null;
             state.actionsLoading = false;
@@ -81,7 +81,7 @@ export const HolidaysSlice = createSlice({
 
 
 
-        // gratuityConfigCreated: (state, action) => {
+        // holidayCreated: (state, action) => {
            
         //     state.actionsLoading = false;
         //     state.error = null;
@@ -89,31 +89,31 @@ export const HolidaysSlice = createSlice({
         // },
 
 
-        gratuityConfigCreated: (state, action) => {
+        holidayCreated: (state, action) => {
             state.actionsLoading = false;
             state.error = null;
         
             // Clone the payload to avoid direct mutation
-            let payload = JSON.stringify(action.payload);
-            let payloadObj = JSON.parse(payload);
+            // let payload = JSON.stringify(action.payload);
+            // let payloadObj = JSON.parse(payload);
         
-            // If basis_of_gratuityId is 0, set "Gross", if 1, set "Basis"
-            if (payloadObj.basis_of_gratuityId == 0) {
+            // // If basis_of_gratuityId is 0, set "Gross", if 1, set "Basis"
+            // if (payloadObj.basis_of_gratuityId == 0) {
              
-                payloadObj.basis_of_gratuity = "Gross";
-            } else if (payloadObj.basis_of_gratuityId == 1) {
+            //     payloadObj.basis_of_gratuity = "Gross";
+            // } else if (payloadObj.basis_of_gratuityId == 1) {
           
-                payloadObj.basis_of_gratuity = "Basis";
-            }
+            //     payloadObj.basis_of_gratuity = "Basis";
+            // }
         
             // Add the modified payload to the beginning of the entities list
-            state.entities.unshift(payloadObj);
+            state.entities.unshift(action.payload);
         },
         
 
 
 
-        gratuityConfigUpdated: (state, action) => {
+        holidayUpdated: (state, action) => {
             state.error = null;
             state.actionsLoading = false;
             // state.entities.push(action.payload)
@@ -124,9 +124,9 @@ export const HolidaysSlice = createSlice({
                 //const payload = { ...action.payload };
                 let payload = JSON.stringify(action.payload)
                 let payloadObj = JSON.parse(payload);
-                let finalObj = JSON.parse(payloadObj.updatedGratuityConfig);
+                let finalObj = JSON.parse(payloadObj.updatedHoliday);
                 if (entity.Id === finalObj.Id) {
-                    return finalObj; //action.payload.updatedGratuityConfig;
+                    return finalObj; //action.payload.updatedHoliday;
                 }
                 return entity;
             });

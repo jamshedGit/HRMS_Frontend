@@ -9,12 +9,12 @@ export const fetchHolidays = (queryparm) => async (dispatch) => {
 
 
   
-  return requestFromServer.getAllGratuityConfig(queryparm)
+  return requestFromServer.getAllHoliday(queryparm)
    
     .then((response) => {
     
 
-      dispatch(actions.gratuityConfigFetched(response));
+      dispatch(actions.holidayFetched(response));
     })
     .catch((error) => {
     
@@ -23,20 +23,20 @@ export const fetchHolidays = (queryparm) => async (dispatch) => {
     });
 };
 
-export const fetchGratuityConfig = (id) => (dispatch) => {
+export const fetchHoliday = (id) => (dispatch) => {
 
 
   if (!id) {
-    return dispatch(actions.GratuityConfigFetchedForEdit({ userForEdit: undefined }));
+    return dispatch(actions.HolidayFetchedForEdit({ userForEdit: undefined }));
   }
 
   return requestFromServer
-    .getGratuityConfigById({ Id: id })
+    .getHolidayById({ Id: id })
     .then((response) => {
       const entities = response.data?.data;
 
    
-      dispatch(actions.GratuityConfigFetchedForEdit({ userForEdit: entities }));
+      dispatch(actions.HolidayFetchedForEdit({ userForEdit: entities }));
     })
     .catch((error) => {
       error.clientMessage = "Can't find user";
@@ -44,13 +44,13 @@ export const fetchGratuityConfig = (id) => (dispatch) => {
     });
 };
 
-export const deleteGratuityConfig = (id) => (dispatch) => {
+export const deleteHoliday = (id) => (dispatch) => {
 
   return requestFromServer
-    .deleteGratuityConfig({ Id: id })
+    .deleteHoliday({ Id: id })
     .then((response) => {
     
-      dispatch(actions.GratuityConfigDeleted({ Id: id }));
+      dispatch(actions.HolidayDeleted({ Id: id }));
       toast.success("Successfully Deleted", {
         position: "top-right",
         autoClose: 5000,
@@ -68,19 +68,19 @@ export const deleteGratuityConfig = (id) => (dispatch) => {
 };
 
 
-export const createGratuityConfig = (gratuityConfigForCreation, disbaleLoading, onHide) => (
+export const createHoliday = (holidayForCreation, disbaleLoading, onHide) => (
   dispatch
 ) => {
 
   
   return requestFromServer
-    .createGratuityConfig(gratuityConfigForCreation)
+    .createHoliday(holidayForCreation)
     .then((res) => {
    
       const user = res.data?.data;
      
   
-      dispatch(actions.gratuityConfigCreated(user));
+      dispatch(actions.holidayCreated(user));
       disbaleLoading();
       toast.success("Successfully Created", {
         position: "top-right",
@@ -109,18 +109,18 @@ export const createGratuityConfig = (gratuityConfigForCreation, disbaleLoading, 
     });
 };
 
-export const updateGratuityConfig = (user, disbaleLoading, onHide) => (dispatch) => {
+export const updateHoliday = (user, disbaleLoading, onHide) => (dispatch) => {
   return requestFromServer
-    .updateGratuityConfig(user)
+    .updateHoliday(user)
     .then((response) => {
   
-      const updatedGratuityConfig = response?.config?.data; // response.data?.data;
+      const updatedHoliday = response?.config?.data; // response.data?.data;
    
-      dispatch(actions.gratuityConfigUpdated({ updatedGratuityConfig }));
+      dispatch(actions.holidayUpdated({ updatedHoliday }));
     
       disbaleLoading();
       onHide();
-      toast.success(response.data.message + " Updated", {
+      toast.success(response.data.message , {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

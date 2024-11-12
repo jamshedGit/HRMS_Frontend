@@ -3,7 +3,7 @@ import axios from "axios";
 export const USERS_URL = process.env.REACT_APP_API_URL;
 
 //Create user
-export function createGratuityConfig(body) {
+export function createHoliday(body) {
 
   return axios.post(`${USERS_URL}/holidays/create-holidays`, body);
   
@@ -11,24 +11,24 @@ export function createGratuityConfig(body) {
 
 
 // Read
-export function getAllGratuityConfig(body) {
+export function getAllHoliday(body) {
 
   return axios.post(`${USERS_URL}/holidays/read-all-holidays`, body);
 }
 
-export function getGratuityConfigById(id) {
+export function getHolidayById(id) {
 
   return axios.post(`${USERS_URL}/holidays/read-holidays`, id);
 }
 
 //Update
-export function updateGratuityConfig(body) {
+export function updateHoliday(body) {
    
   return axios.put(`${USERS_URL}/holidays/update-holidays`, body);
 }
 
 //Delete
-export function deleteGratuityConfig(body) {
+export function deleteHoliday(body) {
 
   return axios.patch(`${USERS_URL}/holidays/delete-holidays`, body);
 }

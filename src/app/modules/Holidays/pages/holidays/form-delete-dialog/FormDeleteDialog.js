@@ -42,10 +42,10 @@ export function FormDeleteDialog({ id, status, show, onHide }) {
   // looking for loading/dispatch
   useEffect(() => {}, [isLoading, dispatch]);
 
-  const deleteGratuityConfig = () => {
+  const deleteHoliday = () => {
     // server request for deleting customer by id
     enableLoading();
-    dispatch(actions.deleteGratuityConfig(id)).then(() => {
+    dispatch(actions.deleteHoliday(id)).then(() => {
       onHide();
       // refresh list after deletion
       dispatch(actions.fetchHolidays(usersUIProps.queryParams));
@@ -84,7 +84,7 @@ export function FormDeleteDialog({ id, status, show, onHide }) {
           <> </>
           <button
             type="button"
-            onClick={deleteGratuityConfig}
+            onClick={deleteHoliday}
             className="btn btn-primary btn-elevate"
           >
             Delete Record
