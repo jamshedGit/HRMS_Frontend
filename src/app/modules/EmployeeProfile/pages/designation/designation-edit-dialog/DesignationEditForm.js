@@ -442,7 +442,7 @@ export function DesignationEditForm({
   }, [user?.designationId, dashboard.designationId]);
 
   useEffect(() => {
-    const cycleType = defcycleType?.value ? defcycleType.value : user.cycleType;
+    const cycleType = defcycleType?.value ? defcycleType.value : user.cycleTypeId;
     setcycleType(
       dashboard.allCycleTypeList &&
       dashboard.allCycleTypeList.filter((item) => {
@@ -450,11 +450,11 @@ export function DesignationEditForm({
       })
     );
 
-  }, [user?.cycleType, dashboard.cycleType]);
+  }, [user?.cycleTypeId, dashboard.cycleTypeId]);
 
   useEffect(() => {
 
-    const contractType = defcontractType?.value ? defcontractType.value : user.contractType;
+    const contractType = defcontractType?.value ? defcontractType.value : user.contractTypeId;
     console.log("::tet", dashboard.allContractTypeList, contractType)
     setcontractType(
       dashboard.allContractTypeList &&
@@ -463,7 +463,7 @@ export function DesignationEditForm({
       })
     );
 
-  }, [user?.contractType, dashboard.contractType]);
+  }, [user?.contractTypeId, dashboard.contractTypeId]);
 
   ///
 
@@ -2202,7 +2202,7 @@ export function DesignationEditForm({
                       </div>
                       <div className="col-12 col-md-4 mt-3">
                         <SearchSelect
-                          name="contractType"
+                          name="contractTypeId"
                           label={<span> Contract Type</span>}
                           isDisabled={isUserForRead && true}
                           onBlur={() => {
@@ -2210,34 +2210,34 @@ export function DesignationEditForm({
                           }}
                           onChange={(e) => {
 
-                            setFieldValue("contractType", e.value || null);
+                            setFieldValue("contractTypeId", e.value || null);
                             setcontractType(e);
 
                             // dispatch(fetchAllFormsMenu(e.value));
                           }}
-                          value={(defcontractType || values.contractType)}
-                          error={errors.contractType}
-                          touched={touched.contractType}
+                          value={(defcontractType || values.contractTypeId)}
+                          error={errors.contractTypeId}
+                          touched={touched.contractTypeId}
                           options={dashboard.allContractTypeList}
                         />
                       </div>
 
                       <div className="col-12 col-md-4 mt-3">
                         <SearchSelect
-                          name="cycleType"
+                          name="cycleTypeId"
                           label={<span> Cycle Type</span>}
                           isDisabled={isUserForRead && true}
                           onBlur={() => {
                             // handleBlur({ target: { name: "countryId" } });
                           }}
                           onChange={(e) => {
-                            setFieldValue("cycleType", e.value || null);
+                            setFieldValue("cycleTypeId", e.value || null);
                             setcycleType(e);
                             // dispatch(fetchAllFormsMenu(e.value));
                           }}
                           value={(defcycleType || null)}
-                          error={errors.cycleType}
-                          touched={touched.cycleType}
+                          error={errors.cycleTypeId}
+                          touched={touched.cycleTypeId}
                           options={dashboard.allCycleTypeList}
                         />
                       </div>
