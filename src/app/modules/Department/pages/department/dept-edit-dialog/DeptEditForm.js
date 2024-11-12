@@ -120,7 +120,7 @@ export function DeptEditForm({
   
   useEffect(() => {
 
-    const subsidiaryId = defSubsidiary?.value ? defSubsidiary.value : user.subsidiaryId;
+    const subsidiaryId = defSubsidiary?.value ? defSubsidiary.value : user.subsidiary;
 
     setDefualtSubsidiaryList(
       dashboard.allSubsidiaryList &&
