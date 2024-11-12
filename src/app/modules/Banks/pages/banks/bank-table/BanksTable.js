@@ -79,7 +79,7 @@ export function BanksTable() {
     // },
     {
       dataField: "Name",
-      text: "Bank",
+      text: "Bank Name",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,

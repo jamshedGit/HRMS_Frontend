@@ -85,7 +85,7 @@ export function BankEditForm({
                         MaxLength = {40}
                         component={Input}
                         placeholder="Bank Name"
-                        label={<span> Bank<span style={{ color: 'red' }}>*</span></span>}
+                        label={<span> Bank Name<span style={{ color: 'red' }}>*</span></span>}
                         
                       />
                     </div>
