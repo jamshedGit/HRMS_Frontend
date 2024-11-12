@@ -69,28 +69,39 @@ export function DeptTable() {
   const columns = [
     
     {
-      dataField: "deptName",
-      text: "Department Name",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
-    {
-      dataField: "deptCode",
-      text: "Department Code",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
-    {
-      dataField: "parentDept",
+      dataField: "ParentName",
       text: "Parent Name",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
+    {
+      dataField: "department",
+      text: "Department",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
+    {
+      dataField: "subsidiary",
+      text: "Subsidiary",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
+
+    {
+      dataField: "budgetStrength",
+      text: "Budget Strength",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
