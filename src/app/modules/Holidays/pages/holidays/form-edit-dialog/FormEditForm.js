@@ -3,7 +3,7 @@ import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { DatePickerField, Input } from "../../../../../../_metronic/_partials/controls"; // Adjust import as needed
-import { useDispatch, useSelector } from "react-redux";
+import {shallowEqual, useDispatch, useSelector } from "react-redux";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import {
   fetchAllFormsMenu,
@@ -71,8 +71,21 @@ export function FormEditForm({
   }, [dispatch, user.Id]);
 
 
+  const { currentState, userAccess } = useSelector((state) => {
+    return {
+      currentState: state.holidays,
+      userAccess: state?.auth?.userAccess["holidays"],
+    };
+  }, shallowEqual);
+
+  const { userForEdit } = currentState;
+
+  useEffect(()=>{
+    setStart_date(userForEdit?.from_date)
+    setEnd_date(userForEdit?.to_date)
+  },[userForEdit])
   useEffect(() => {
-    console.log("git")
+
     if (start_date && end_date) {
       setDiffInDate(getDateDiffInDays(start_date, end_date))
       console.log("getDateDiffInDays(start_date,end_date)", getDateDiffInDays(start_date, end_date))
@@ -233,7 +246,7 @@ export function FormEditForm({
                       // placeholder="Enter number_of_days"
                       disabled={true}
                       type="number"
-                      value={diffInDate || 0}
+                      value={diffInDate}
                      
 
 
