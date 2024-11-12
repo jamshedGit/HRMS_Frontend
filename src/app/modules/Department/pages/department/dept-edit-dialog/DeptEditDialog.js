@@ -103,7 +103,7 @@ export function DeptEditDialog({ id, show, onHide, userForRead }) {
         deptId: dept.deptId,
         deptName: dept.deptName,
         deptCode: dept.deptCode,
-        parentDept: dept.parentDept,
+        //parentDept: dept.parentDept,
         subsidiary: dept.subsidiary,
         budgetStrength: dept.budgetStrength,
         chkParent: dept.parentDept == null ? true : false
