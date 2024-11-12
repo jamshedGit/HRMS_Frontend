@@ -44,15 +44,22 @@ const loanManagementSchema = Yup.object().shape({
         .min(1, "Must be at least 1")
         .required(VALIDATION_MESSAGES.required),
       basis: Yup.number().required(VALIDATION_MESSAGES.required),
-      // salary_count: Yup.number()
-      //   .min(1, "Must be at least 1")
-      //   .required(VALIDATION_MESSAGES.required),
-
       
         salary_count: Yup.number()
   .min(1, VALIDATION_MESSAGES.minOneValue)
   .max(99, "Must be at most 99")
-  .required(VALIDATION_MESSAGES.required),
+  .required(VALIDATION_MESSAGES.required)
+  .test(
+    "salary-count-ge-max-loan-amount", // Name of the test
+    "Can't be greater", // Error message
+    function (value) {
+      const { max_loan_amount } = this.parent; // Accessing max_loan_amount from the parent object
+      if (value > max_loan_amount) {
+        return false; // Validation fails
+      }
+      return true; // Validation passes
+    }
+  ),
     })
   ),
 });
