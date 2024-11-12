@@ -129,7 +129,7 @@ export function DeptEditForm({
       })
     );
 
-  }, [user?.subsidiaryId, dashboard.subsidiaryId]);
+  }, [user?.subsidiary, dashboard.subsidiary]);
 
   return (
     <>
