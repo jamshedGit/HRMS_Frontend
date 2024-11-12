@@ -74,6 +74,7 @@ const AttendanceConfigurationManagement = lazy(() => import("./modules/Attendanc
 const HolidaysModule = lazy(() => import("./modules/Holidays/pages/index")); 
 
 
+const LeaveEncashment = lazy(() => import("./modules/LeaveEncashment/pages/index"));
 
 const ROUTES = {
   settings: SettingsPage,
@@ -134,6 +135,7 @@ const ROUTES = {
   employee_loan_request:employee_loan_requestModule,
   attendance_configuration: AttendanceConfigurationManagement,
   holidays:HolidaysModule,
+  leave_encashment: LeaveEncashment
 };
 
 export default function BasePage() {

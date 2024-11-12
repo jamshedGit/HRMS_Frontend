@@ -9,11 +9,12 @@ export function useFormUIContext() {
 }
 
 export function FormUIProvider({ FormUIEvents, children }) {
-  const [queryParamsLeaveApp, setQueryParamsLeaveAppBaseLeaveApp] = useState(initialFilter);
+  const [queryParamsLeaveEnc, setQueryParamsLeaveEncBaseLeaveEnc] = useState(initialFilter);
   const [employeeId, setemployeeId] = useState('');
+  const [yearId, setyearId] = useState('');
   const [id, setId] = useState('');
-  const setQueryParamsLeaveApp = useCallback((nextQueryParams) => {
-    setQueryParamsLeaveAppBaseLeaveApp((prevQueryParams) => {
+  const setQueryParamsLeaveEnc = useCallback((nextQueryParams) => {
+    setQueryParamsLeaveEncBaseLeaveEnc((prevQueryParams) => {
       if (isFunction(nextQueryParams)) {
         nextQueryParams = nextQueryParams(prevQueryParams);
       }
@@ -27,12 +28,9 @@ export function FormUIProvider({ FormUIEvents, children }) {
   }, []);
 
   const initUser = {
-    to: '',
-    from: '',
     leaveType: '',
-    remarks: '',
+    reason: '',
     days: '',
-    file: null,
   };
 
   //Set Id for Edit record
@@ -41,11 +39,13 @@ export function FormUIProvider({ FormUIEvents, children }) {
   }
 
   const value = {
-    queryParamsLeaveApp,
-    setQueryParamsLeaveAppBaseLeaveApp,
-    setQueryParamsLeaveApp,
+    queryParamsLeaveEnc,
+    setQueryParamsLeaveEncBaseLeaveEnc,
+    setQueryParamsLeaveEnc,
     employeeId,
     setemployeeId,
+    yearId,
+    setyearId,
     id,
     setId,
     editRecord,

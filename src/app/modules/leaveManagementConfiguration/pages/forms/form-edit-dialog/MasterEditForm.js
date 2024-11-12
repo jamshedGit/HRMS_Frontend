@@ -185,7 +185,7 @@ export function MasterEditForm({
                         }
                         value={values.gradeId}
                         autoComplete="off"
-                        children={createDropdown(allEmployeeGradeList)}
+                        children={CustomDropdown({ data: allEmployeeGradeList, firstElement: { label: '--Select--', value: null } })}
                       />
                       {
                         errors.gradeId && touched.gradeId && <CustomErrorLabel touched={true} error={errors.gradeId} />
@@ -211,7 +211,7 @@ export function MasterEditForm({
                         label={<span>{" "}Employee Type<span style={{ color: "red" }}>*</span></span>}
                         value={values.employeeTypeId}
                         autoComplete="off"
-                        children={createDropdown(allEmpTypeChildMenus)}
+                        children={CustomDropdown({ data: allEmpTypeChildMenus, firstElement: { label: '--Select--', value: null } })}
                       />
                       {
                         errors.employeeTypeId && touched.employeeTypeId && <CustomErrorLabel touched={true} error={errors.employeeTypeId} />

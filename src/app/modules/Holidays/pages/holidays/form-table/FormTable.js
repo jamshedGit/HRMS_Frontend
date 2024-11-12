@@ -60,11 +60,11 @@ export function FormTable() {
   }, [formUIProps.queryParams, dispatch, totalCount]);
 
   const isAccessForEdit = userAccess?.find(
-    (item) => item.componentName === "UpdateGratuityConfiguration"
+    (item) => item.componentName === "UpdateHolidays"
   );
 
   const isAccessForDelete = userAccess?.find(
-    (item) => item.componentName === "DeleteGratuityConfiguration"
+    (item) => item.componentName === "DeleteHolidays"
   );
   // Table columns
   const columns = [
@@ -81,7 +81,7 @@ export function FormTable() {
     },
 
 {
-  dataField: "religionId.formName",
+  dataField: "Religion.formName",
   text: "religion",
   sort: false,
   sortCaret: sortCaret,
@@ -136,7 +136,7 @@ export function FormTable() {
     },
 
     {
-      dataField: "holiday_typeId.formName",
+      dataField: "Holiday_type.formName",
       text: "holiday type",
       sort: false,
       sortCaret: sortCaret,
