@@ -21,17 +21,37 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 // Validation schema
 const formValidation = Yup.object().shape(
   {
-    
-      startDate: Yup.date()
-      .nullable()
-      .required("Start date is required")
-      .max(Yup.ref('endDate'), 'Start date cannot be later than end date'), // Use Yup.ref to reference endDate
-       
-      endDate: Yup.date()
-      .nullable()
-      .required("End date is required")
-      .min(Yup.ref('startDate'), 'End date cannot be earlier than start date'), // Use Yup.ref to reference startDate
-     
+    startDate: Yup.date()
+    .nullable()
+    .required('Start date is required')
+    .max(Yup.ref('endDate'), 'Start date cannot be the same or later than end date') // Ensure startDate is not later than endDate
+    .test('not-equal', 'Start date and End date cannot be the same', function(value) {
+      const { endDate } = this.parent; // Access the endDate from the parent object
+      return value && endDate ? value.getTime() !== new Date(endDate).getTime() : true; // Ensure startDate is not equal to endDate
+    })
+    .test('start-end-date-difference', 'Start date should be at least 11 months before the end date', function(value) {
+      const { endDate } = this.parent; // Access the endDate from the parent object
+      if (value && endDate) {
+        // Calculate the difference in months
+        const start = new Date(value);
+        const end = new Date(endDate);
+
+        const monthDiff = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+        
+        // Check if the difference is at least 11 months
+        return monthDiff >= 11;
+      }
+      return true; // If no endDate or startDate, don't apply the check
+    }),
+
+  endDate: Yup.date()
+    .nullable()
+    .required('End date is required')
+    .min(Yup.ref('startDate'), 'End date cannot be same or earlier than start date') // Ensure endDate is not earlier than startDate
+    .test('not-equal', 'Start date and End date cannot be the same', function(value) {
+      const { startDate } = this.parent; // Access the startDate from the parent object
+      return value && startDate ? value.getTime() !== new Date(startDate).getTime() : true; // Ensure endDate is not equal to startDate
+    }),
   },
 
 );
@@ -58,14 +78,19 @@ export function MasterEditForm({
   useEffect(() => {
     if (user.startDate) {
       setDefaultStartDate(new Date(user.startDate));
+
+      // const endDate = new Date(user.startDate);
+      // endDate.setMonth(user.startDate.getMonth() + 13); // Adds 11 months
+      // setDefaultEndDate(endDate);
     }
   }, [user.startDate]);
 
   useEffect(() => {
     if (user.endDate) {
-      setDefaultEndDate(new Date(user.endDate));
+     setDefaultEndDate(new Date(user.endDate));
     }
   }, [user.endDate]);
+
 
   return (
     <>
@@ -110,6 +135,7 @@ export function MasterEditForm({
                           setFieldValue("startDate", date);
                           setDefaultStartDate(date);
                         }}
+                      
                         timeInputLabel="Time:"
                         dateFormat="dd/MM/yyyy"
                         showTimeInput
