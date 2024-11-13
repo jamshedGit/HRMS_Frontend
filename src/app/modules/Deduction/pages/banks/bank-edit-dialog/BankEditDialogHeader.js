@@ -17,7 +17,7 @@ export function BankEditDialogHeader({ id, isUserForRead }) {
   );
 
   useEffect(() => {
-    let _title = id ? "" : "Add Deduction Allowance";
+    let _title = id ? "" : "Add Deduction";
     if (id) {
       _title = `Edit Deduction`;
     } //else if (isUserForRead) {

@@ -103,7 +103,7 @@ export function DeptEditDialog({ id, show, onHide, userForRead }) {
         deptId: dept.deptId,
         deptName: dept.deptName,
         deptCode: dept.deptCode,
-        parentDept: dept.parentDept,
+        //parentDept: dept.parentDept,
         subsidiary: dept.subsidiary,
         budgetStrength: dept.budgetStrength,
         chkParent: dept.parentDept == null ? true : false
@@ -122,7 +122,7 @@ export function DeptEditDialog({ id, show, onHide, userForRead }) {
       onHide={onHide}
       aria-labelledby="example-modal-sizes-title-lg"
     >
-      <DeptEditDialogHeader deptId={id} isUserForRead={userForRead} />
+      <DeptEditDialogHeader id={id} isUserForRead={userForRead} />
       <DeptEditForm
         saveDept={saveDept}
         user={userForEdit || DeptUIProps.initUser}

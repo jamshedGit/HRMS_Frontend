@@ -26,7 +26,9 @@ const cnicRegExp = /^[0-9]{5}-[0-9]{7}-[0-9]$/;
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 // Validation schema
 
-const currentDate = new Date();
+const currentDate = new Date(); 
+currentDate.setHours(0, 0, 0, 0); // Reset time to 00:00:00 for comparison purposes
+
 const formValidation = Yup.object().shape(
   {
 

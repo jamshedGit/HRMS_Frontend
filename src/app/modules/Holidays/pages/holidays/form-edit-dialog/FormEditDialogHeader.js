@@ -3,24 +3,23 @@ import { shallowEqual, useSelector } from "react-redux";
 import { Modal } from "react-bootstrap";
 import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls";
 
-export function DeptEditDialogHeader({ id, isUserForRead }) {
+export function FormEditDialogHeader({ id, isUserForRead }) {
   //const userForEdit = false
   const [title, setTitle] = useState("");
  
   const { userForEdit, actionsLoading } = useSelector(
     
     (state) => ({
-      userForEdit: state.dept.userForEdit,
+      userForEdit: state.holidays.userForEdit,
       actionsLoading: state.users.actionsLoading,
     }),
     shallowEqual
   );
 
   useEffect(() => {
-    console.log("test",id)
-    let _title = id ? " " : "Add Department";
+    let _title = id ? "" : "Add Holidays";
     if (id) {
-      _title = `Edit Department`;
+      _title = `Edit Holidays`;
     } //else if (isUserForRead) {
     //   _title = `Read user '}'`
     // }
@@ -32,7 +31,7 @@ export function DeptEditDialogHeader({ id, isUserForRead }) {
       {actionsLoading && <ModalProgressBar />}
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-lg">
-          {!isUserForRead ? title : "View Department"}
+          {!isUserForRead ? title : "View Holidays"}
         </Modal.Title>
       </Modal.Header>
     </>

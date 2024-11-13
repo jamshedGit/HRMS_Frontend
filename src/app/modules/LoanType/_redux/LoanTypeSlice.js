@@ -42,7 +42,7 @@ export const LoanTypeSlice = createSlice({
             // console.log(action)
             console.log("user slice",action.payload)
             
-            const entities = action.payload.data?.data.rows;
+            const entities = action.payload.data?.rows;
             console.log("ent loan_type_",entities)
             const totalResult = action.payload.data?.data.totalResults;
             console.log(entities);

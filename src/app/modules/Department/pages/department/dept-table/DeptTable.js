@@ -67,9 +67,19 @@ export function DeptTable() {
   );
   // Table columns
   const columns = [
-    
     {
-      dataField: "deptName",
+      dataField: "deptCode",
+      text: "Department Code",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
+   
+    {
+      dataField: "department",
       text: "Department",
       sort: false,
       sortCaret: sortCaret,
@@ -79,8 +89,8 @@ export function DeptTable() {
       },
     },
     {
-      dataField: "deptCode",
-      text: "Code",
+      dataField: "ParentName",
+      text: "Parent Name",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -88,16 +98,28 @@ export function DeptTable() {
         minWidth: "160px",
       },
     },
-    // {
-    //   dataField: "parentDept",
-    //   text: "Parent Dept",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    //   headerSortingClasses,
-    //   style: {
-    //     minWidth: "160px",
-    //   },
-    // },
+   
+    {
+      dataField: "subsidiary",
+      text: "Subsidiary",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
+
+    {
+      dataField: "budgetStrength",
+      text: "Budget Strength",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
    
    
        {

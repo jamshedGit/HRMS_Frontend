@@ -4,7 +4,7 @@ import paginationFactory, {
   PaginationProvider,
 } from "react-bootstrap-table2-paginator";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import * as actions from "../../../_redux/bankActions";
+import * as actions from "../../../_redux/redux-Actions";
 import {
   getHandlerTableChange,
   NoRecordsFoundMessage,
@@ -12,39 +12,39 @@ import {
   sortCaret,
   headerSortingClasses,
 } from "../../../../../../_metronic/_helpers";
-import * as uiHelpers from "../BanksUIHelpers";
+import * as uiHelpers from "../FormUIHelpers";
 import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatter";
 import { Pagination } from "../../../../../../_metronic/_partials/controls";
-import { useBanksUIContext } from "../BanksUIContext";
-import { DatetimeColumnFormatter } from "../../../../Dashboard/pages/dashboard/last-trips-vehicles-table/column-formatter/CreatedColumnFormatter";
+import { useFormUIContext } from "../FormUIContext";
 
-export function BanksTable() {
+export function FormTable() {
   //Users UI Context
-  const bankUIContext = useBanksUIContext();
+  const formUIContext = useFormUIContext();
 
-  const bankUIProps = useMemo(() => {
+  const formUIProps = useMemo(() => {
     return {
-      ids: bankUIContext.ids,
-      setIds: bankUIContext.setIds,
-      queryParams: bankUIContext.queryParams,
-      setQueryParams: bankUIContext.setQueryParams,
-      openEditBankDialog: bankUIContext.openEditBankDialog,
-      openDeleteBankDialog: bankUIContext.openDeleteBankDialog,
-      openActiveBankDialog: bankUIContext.openActiveBankDialog,
-      openReadBankDialog: bankUIContext.openReadBankDialog,
+      ids: formUIContext.ids,
+      setIds: formUIContext.setIds,
+      queryParams: formUIContext.queryParams,
+      setQueryParams: formUIContext.setQueryParams,
+      openEditFormDialog: formUIContext.openEditFormDialog,
+      openDeleteFormDialog: formUIContext.openDeleteFormDialog,
+      openActiveFormDialog: formUIContext.openActiveFormDialog,
+      openReadFormDialog: formUIContext.openReadFormDialog,
     };
-  }, [bankUIContext]);
+  }, [formUIContext]);
 
-  //console.log("queryparms", usersUIProps.queryparms)
+
   const { currentState, userAccess } = useSelector(
-    (state) => {  console.log("state ",state); return {
+    (state) => { return {
       
-      currentState: state.bank,
-      userAccess: state?.auth?.userAccess["Bank"],
+    
+      currentState: state.holidays,
+      userAccess: state?.auth?.userAccess["holidays"],
     }},
     shallowEqual
   );
-  console.log("currentState", currentState);
+
   
   const { totalCount, entities, listLoading } = currentState;
 
@@ -53,33 +53,25 @@ export function BanksTable() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    bankUIProps.setIds([]);
-    console.log("test 2",bankUIProps.queryParams)
-    dispatch(actions.fetchUsers(bankUIProps.queryParams));
-  }, [bankUIProps.queryParams, dispatch, totalCount]);
+    formUIProps.setIds([]);
+ 
+ 
+    dispatch(actions.fetchHolidays(formUIProps.queryParams));
+  }, [formUIProps.queryParams, dispatch, totalCount]);
 
   const isAccessForEdit = userAccess?.find(
-    (item) => item.componentName === "UpdateBank"
+    (item) => item.componentName === "UpdateHolidays"
   );
 
   const isAccessForDelete = userAccess?.find(
-    (item) => item.componentName === "DeleteBank"
+    (item) => item.componentName === "DeleteHolidays"
   );
   // Table columns
   const columns = [
-    // {
-    //   dataField: "Id",
-    //   text: "ID",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    //   headerSortingClasses,
-    //   style: {
-    //     minWidth: "160px",
-    //   },
-    // },
+
     {
-      dataField: "Name",
-      text: "Bank Name",
+      dataField: "Subsidiary.name",
+      text: "Subsidiary",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -87,16 +79,85 @@ export function BanksTable() {
         minWidth: "160px",
       },
     },
+
+{
+  dataField: "Religion.formName",
+  text: "religion",
+  sort: false,
+  sortCaret: sortCaret,
+  headerSortingClasses,
+  style: {
+    minWidth: "10px",
+  },
+ 
+},
+
+
+    {
+      dataField: "from_date",
+      text: "from date",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      // style: {
+      //   minWidth: "10px",
+      //   textAlign: "center",
+      // },
+      // headerStyle: {
+      //   textAlign: "center", // Align header text to the left
+      // },
+    },
+
+
+    {
+      dataField: "to_date",
+      text: "to date",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "10px",
+      },
+    },
+
+    {
+      dataField: "number_of_days",
+      text: "number of days",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "10px",
+        textAlign: "center",
+      },
+      headerStyle: {
+        textAlign: "center", // Align header text to the left
+      },
+    },
+
+    {
+      dataField: "Holiday_type.formName",
+      text: "holiday type",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "10px",
+      },
+     
+    },
+    
+
        {
       dataField: "action",
       text: "Actions",
       isDummyField: true,
       formatter: ActionsColumnFormatter,
       formatExtraData: {
-        openEditBankDialog: bankUIProps.openEditBankDialog,
-        openDeleteBankDialog: bankUIProps.openDeleteBankDialog,
-        openActiveBankDialog: bankUIProps.openActiveBankDialog,
-        openReadBankDialog: bankUIProps.openReadBankDialog,
+        openEditFormDialog: formUIProps.openEditFormDialog,
+        openDeleteFormDialog: formUIProps.openDeleteFormDialog,
+        openActiveFormDialog: formUIProps.openActiveFormDialog,
+        openReadFormDialog: formUIProps.openReadFormDialog,
         isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,
         isAccessForDelete: isAccessForDelete
           ? isAccessForDelete.isAccess
@@ -105,7 +166,7 @@ export function BanksTable() {
       classes: "text-right pr-0",
       headerClasses: "text-right pr-3",
       style: {
-        minWidth: "170px",
+        minWidth: "10px",
       },
     },
   ];
@@ -115,8 +176,8 @@ export function BanksTable() {
     custom: true,
     totalSize: totalCount,
     sizePerPageList: uiHelpers.sizePerPageList,
-    sizePerPage: bankUIProps.queryParams.pageSize,
-    page: bankUIProps.queryParams.pageNumber,
+    sizePerPage: formUIProps.queryParams.pageSize,
+    page: formUIProps.queryParams.pageNumber,
   };
 
     return (
@@ -139,7 +200,7 @@ export function BanksTable() {
                 columns={columns}
                 defaultSorted={uiHelpers.defaultSorted}
                 onTableChange={getHandlerTableChange(
-                  bankUIProps.setQueryParams
+                  formUIProps.setQueryParams
                 )}
                 // selectRow={getSelectRow({
                 //   entities,

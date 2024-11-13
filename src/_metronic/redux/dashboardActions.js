@@ -128,6 +128,7 @@ export const fetchAllDept = (id) => async (dispatch) => {
     .getAllDepartments(id)
     .then((response) => {
       const entities = response.data?.data;
+      console.log("free",entities);
       dispatch(actions.AllDeptFetch(entities));
     })
     .catch((error) => {

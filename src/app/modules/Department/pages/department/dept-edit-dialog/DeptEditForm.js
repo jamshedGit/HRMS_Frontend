@@ -25,10 +25,10 @@ const userEditSchema_2 = Yup.object().shape(
   {
     // parentDept: Yup.string().required("Please select parent department"),
     deptCode: Yup.string().required("*Required"),
-    deptName: Yup.string() .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.').required("*Required"),
+    deptName: Yup.string() .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.'),
     budgetStrength: Yup.string()  .matches(/^\d+$/, "Must contain only digits").required("*Required"),
     subsidiary: Yup.string().required("*Required"),
-    parentDept: Yup.string().required("*Required"),
+    // parentDept: Yup.string().nullable().required("*Required"),
   }
 );
 
@@ -71,14 +71,14 @@ export function DeptEditForm({
 
   // This method is used for when edit record and get selected dept where id save in DB
   useEffect(() => {
-    const deptId = defDept?.value ? defDept.value : user.parentDept;
+    const deptId = defDept?.value ? defDept.value : user.deptId;
     setDefaultDept(
       dashboard.allDept &&
       dashboard.allDept.filter((item) => {
         return item.value === deptId;
       })
     );
-  }, [user?.deptId, dashboard.parentDept]);
+  }, [user?.deptId, dashboard.deptId]);
 
   const onCheckboxChange = async (event) => {
     const target = event.currentTarget;
@@ -87,35 +87,9 @@ export function DeptEditForm({
     const checked = target.checked;
 
     console.log("checked", checked, id, name, target)
-    // console.log("Access Right", {
-    //   roleId: name,
-    //   resourceId: id,
-    //   isAccess: checked,
-    // })
-
-    // openRoleAccessPage(row.id)
-    // await dispatch(
-    //   actions.updateAccessRightByRoleAndResourceId({
-    //     roleId: name,
-    //     resourceId: id,
-    //     isAccess: checked,
-    //   })
-    // );
-
-    // setIsChecked({
-    //   ...isChecked,
-    //   [id]: checked, // using "id" seems to not work here.
-    // });
+    
   };
 
-  const initialValues = {
-    deptName: '',
-    deptCode: '',
-    parentDept: '',
-    chkParent: false, // Initialize checkbox value
-    budgetStrength: '',
-    subsidiary: '',
-  };
 
   
   useEffect(() => {
@@ -129,7 +103,9 @@ export function DeptEditForm({
       })
     );
 
-  }, [user?.subsidiaryId, dashboard.subsidiaryId]);
+  }, [user?.subsidiary, dashboard.subsidiary]);
+
+console.log("pep", dashboard.allDept)
 
   return (
     <>
@@ -170,7 +146,7 @@ export function DeptEditForm({
                         maxLength={30}
                         component={Input}
                         placeholder="Enter Department Name"
-                        label={<span> Department<span style={{ color: 'red' }}>*</span></span>}
+                        label={<span> Department Name<span style={{ color: 'red' }}>*</span></span>}
                       />
                     </div>
                     {
@@ -180,7 +156,7 @@ export function DeptEditForm({
                           maxLength={6}
                           component={Input}
                           placeholder="Enter Department Code"
-                          label={<span> Code<span style={{ color: 'red' }}>*</span></span>}
+                          label={<span> Department Code<span style={{ color: 'red' }}>*</span></span>}
                         />
                       </div>
                     }

@@ -78,8 +78,8 @@ export function DesignationUIProvider({ DesignationUIEvents, children }) {
     deligation: '',
     personId: '',
     routingCode: '',
-    contractType: '',
-    cycleType: '',
+    contractTypeId: '',
+    cycleTypeId: '',
     requireDeligation: '',
    
     //defContactList: []
