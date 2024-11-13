@@ -10,18 +10,28 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.list }));
   console.log("test query param", queryparm)
   return requestFromServer.getAll_LoanType({...queryparm,id:'null'})
-    // .getAllReceipts({
-    //   filter: {
-    //     searchQuery: ""
-    //   },
-    //   sortBy: "receiptNo",
-    //   limit: 10,
-    //   page: 1
-    // })
+   
+
+
+
     .then((response) => {
+
+      const transformedRows = response?.data?.data?.rows.map(item => ({
+        ...item,
+        linkedAttendance: item.linkedAttendance ? 'Yes' : 'No'  // Transform the value
+      }));
+      
+      // Update the response with transformed rows
+      const updatedResponse = {
+        ...response,
+        data: {
+          ...response.data,
+          rows: transformedRows
+        }
+      };
       //  console.log("user action receipt fetched 321")
-      console.log("response", response)
-      dispatch(actions.loan_type_Fetched(response));
+      console.log("response", updatedResponse)
+      dispatch(actions.loan_type_Fetched(updatedResponse));
     })
     .catch((error) => {
       //console.log("Can't find user", error)
