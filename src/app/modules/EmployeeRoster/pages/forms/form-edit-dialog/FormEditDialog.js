@@ -39,7 +39,7 @@ export function FormEditDialog() {
   }
   ));
 
-  //Fetch record to edit on dialog load
+  //Fetch record to edit on load and on change in Id
   useEffect(() => {
     dispatch(actions.fetchEditRecord(formUIProps.id));
 

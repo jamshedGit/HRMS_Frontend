@@ -5,6 +5,7 @@ import { SearchSelect } from '../../../../../../_metronic/_helpers/SearchSelect'
 
 function EmployeeListTable({ values, setFieldValue, errors, touched, dropdownData, handleDelete, isEdit }) {
 
+  //Set All Employees List in Map so we can get data faster in the field
   const allEmployees = useMemo(() => {
     return new Map(dropdownData.allEmployees?.map(item => [item.value, item]));
   }, [dropdownData.allEmployees]);

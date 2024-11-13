@@ -14,14 +14,13 @@ export function MasterEditForm({
   submitForm,
   user,
   actionsLoading,
-  onHide,
-  isUserForRead,
   enableLoading,
   loading,
   isEdit,
   setId
 }) {
 
+  //Get Data from states
   const { allEmployeeShifts, allEmployees, payrollData } = useSelector(
     (state) => ({
       payrollData: state.dashboard.payrollData,
@@ -36,6 +35,7 @@ export function MasterEditForm({
     return payroll && payroll.startDate && values.from && new Date(payroll.startDate).getTime() > new Date(values.from).getTime();
   }
 
+  //Form Validation according to Payroll Month and without it as well
   const formValidation = useMemo(() => {
     if (payrollData && payrollData.startDate) {
       return Yup.object().shape({
@@ -92,7 +92,7 @@ export function MasterEditForm({
                 </div>
               )}
               <Form className="form form-label-right">
-                <fieldset disabled={isUserForRead}>
+                <fieldset>
                   <div className="from-group row">
 
                     {/* Date from Field Start */}

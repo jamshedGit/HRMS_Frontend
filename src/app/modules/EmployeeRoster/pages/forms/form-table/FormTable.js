@@ -16,6 +16,8 @@ import * as uiHelpers from "../FormUIHelpers";
 import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatter";
 import { Pagination } from "../../../../../../_metronic/_partials/controls";
 import { useFormUIContext } from "../FormUIContext";
+import { Accordion, Button, Card } from "react-bootstrap";
+import { KeyboardArrowDown } from "@material-ui/icons";
 
 export function FormTable() {
   //Users UI Context
@@ -131,42 +133,56 @@ export function FormTable() {
   };
 
   return (
-    <>
-      <PaginationProvider pagination={paginationFactory(paginationOptions)}>
-        {({ paginationProps, paginationTableProps }) => {
-          return (
-            <Pagination
-              isLoading={listLoading}
-              paginationProps={paginationProps}
-            >
-              <BootstrapTable
-                noDataIndication={NoRecordsFoundMessage({ entities })}
-                wrapperClasses="table-responsive"
-                bordered={false}
-                classes="table table-head-custom table-vertical-center overflow-hidden table-hover"
-                bootstrap4
-                remote
-                keyField="Id"
-                data={entities === null ? [] : entities}
-                columns={columns}
-                defaultSorted={uiHelpers.defaultSorted}
-                onTableChange={getHandlerTableChange(
-                  FormUIProps.setQueryParams
-                )}
-                // selectRow={getSelectRow({
-                //   entities,
+    <Accordion defaultActiveKey="">
+      <Card>
+        <Card.Header>
+          <div className='accordion-header-btn'>
+            <Accordion.Toggle as={Button} eventKey="0">
+              Employee Rosters
+              <KeyboardArrowDown />
+            </Accordion.Toggle>
+          </div>
+        </Card.Header>
+        <Accordion.Collapse eventKey="0">
+          <Card.Body>
+            <PaginationProvider pagination={paginationFactory(paginationOptions)}>
+              {({ paginationProps, paginationTableProps }) => {
+                return (
+                  <Pagination
+                    isLoading={listLoading}
+                    paginationProps={paginationProps}
+                  >
+                    <BootstrapTable
+                      noDataIndication={NoRecordsFoundMessage({ entities })}
+                      wrapperClasses="table-responsive"
+                      bordered={false}
+                      classes="table table-head-custom table-vertical-center overflow-hidden table-hover"
+                      bootstrap4
+                      remote
+                      keyField="Id"
+                      data={entities === null ? [] : entities}
+                      columns={columns}
+                      defaultSorted={uiHelpers.defaultSorted}
+                      onTableChange={getHandlerTableChange(
+                        FormUIProps.setQueryParams
+                      )}
+                      // selectRow={getSelectRow({
+                      //   entities,
 
-                // })}
-                {...paginationTableProps}
-              >
+                      // })}
+                      {...paginationTableProps}
+                    >
 
-                <PleaseWaitMessage entities={entities} />
-                <NoRecordsFoundMessage entities={entities} />
-              </BootstrapTable>
-            </Pagination>
-          );
-        }}
-      </PaginationProvider>
-    </>
+                      <PleaseWaitMessage entities={entities} />
+                      <NoRecordsFoundMessage entities={entities} />
+                    </BootstrapTable>
+                  </Pagination>
+                );
+              }}
+            </PaginationProvider>
+          </Card.Body>
+        </Accordion.Collapse>
+      </Card>
+    </Accordion>
   );
 }

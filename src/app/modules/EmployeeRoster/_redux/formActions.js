@@ -54,7 +54,7 @@ export const fetchEditRecord = (id) => (dispatch) => {
  * @param {Object} data 
  * @param {String|Number|Null} id 
  * @param {Function} disableLoading 
- * @param {Function} onHide 
+ * @param {Function} resetForm 
  * @returns 
  */
 export const saveRecord = (data, id, disableLoading, resetForm) => (dispatch) => {
