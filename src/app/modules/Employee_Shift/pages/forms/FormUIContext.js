@@ -26,11 +26,25 @@ export function FormUIProvider({ FormUIEvents, children }) {
   }, []);
 
   const initUser = {
-    subsidiaryId :"",
-    companyId :"1",
-    leave_typeId :"",
-    late_count_leave_deduction :"",
-    isEnable_att_integration : "",
+    subsidiaryId: "",
+    companyId: "",
+    name: "",
+    shiftCode: "",
+    shiftType: "Morning",
+    startTime: "",
+    endTime: "",
+    workingdays: "",
+    earlyIn: "",
+    earlyOut: "",
+    halfDayStart: "",
+    halfDayEnd: "",
+    breakTimeStart: "",
+    breakTimeEnd: "",
+    isOverTime: "",
+    overTimeStart: "",
+    interShiftGap: "",
+    isIncludeInterShifGap: "",
+    companyId: "1",
   };
 
 

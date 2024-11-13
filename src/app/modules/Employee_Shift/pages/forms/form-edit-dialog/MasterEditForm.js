@@ -2,7 +2,7 @@ import React from "react";
 import { Modal } from "react-bootstrap";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { Input, Select } from "../../../../../../_metronic/_partials/controls";
+import { DatePickerField, Input, Select } from "../../../../../../_metronic/_partials/controls";
 import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLabel";
 import { getClassName } from "../../../../../utils/common";
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
@@ -16,7 +16,7 @@ const formValidation = Yup.object().shape({
   // companyId: Yup.string().required(VALIDATION_MESSAGES.required),
   leave_typeId: Yup.string().required(VALIDATION_MESSAGES.required),
   late_count_leave_deduction: Yup.string().required(VALIDATION_MESSAGES.required)
-  .matches(/^[0-3]{1,2}$/, 'Leave Count must be between 0 and 3 digits long and contain only digits.')
+    .matches(/^[0-3]{1,2}$/, 'Leave Count must be between 0 and 3 digits long and contain only digits.')
 });
 
 export function MasterEditForm({
@@ -30,17 +30,30 @@ export function MasterEditForm({
   loading,
 }) {
 
-  
+
   const dispatch = useDispatch();
   const { dashboard } = useSelector((state) => state);
   const [defSubsidiary = null, setDefualtSubsidiaryList] = useState(null);
   const [defLeaveType = null, setDefualtLeaveType] = useState(null);
+  const [defWeekDays, setDefaultWeekDays] = useState([]); //  For Email Recipents
+
+
+  const WeekDays = Object.freeze({
+    SUNDAY: 'Sunday',
+    MONDAY: 'Monday',
+    TUESDAY: 'Tuesday',
+    WEDNESDAY: 'Wednesday',
+    THURSDAY: 'Thursday',
+    FRIDAY: 'Friday',
+    SATURDAY: 'Saturday',
+  });
+
 
   useEffect(() => {
     if (!user.Id) {
       dispatch(fetchAllLeaveType("allLeaveTypes"))
-     // dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsisidaries
-     dispatch(fetchAllSubsidiaryData("allSubsidiaryList"));
+      // dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsisidaries
+      dispatch(fetchAllSubsidiaryData("allSubsidiaryList"));
     }
   }, [dispatch]);
 
@@ -58,7 +71,7 @@ export function MasterEditForm({
 
   }, [user?.subsidiaryId, dashboard.subsidiaryId]);
 
-  
+
   useEffect(() => {
 
     const leaveTypeId = defLeaveType?.value ? defLeaveType.value : user.leave_typeId;
@@ -72,23 +85,29 @@ export function MasterEditForm({
 
   }, [user?.leave_typeId, dashboard.leave_typeId]);
 
-  const dropdown = (data) => {
-    return [{ value: "", label: "--Select--" }, ...data].map((el) => {
-      return (<>
-        <option value={el.value}>{el.label}</option>
-      </>)
-    })
-  }
+
+  const handleCheckboxChangeFor_WeekDays = (option) => {
+    setDefaultWeekDays((prevState) =>
+      prevState.includes(option)
+        ? prevState.filter(item => item !== option)
+        : [...prevState, option]
+    );
+  };
+
+
 
   return (
     <>
       <Formik
         enableReinitialize={true}
-        initialValues={user}
-        validationSchema={formValidation}
+        initialValues={{ ...user, overTimeStart: "" }}
+        //  validationSchema={formValidation}
         onSubmit={(values) => {
+          const listOfValues = {...values,workingdays: defWeekDays.join(',')}
+          
+          console.log("values",listOfValues)
           enableLoading();
-          submitForm(values)
+         // submitForm(listOfValues)
         }}
       >
         {({
@@ -109,6 +128,45 @@ export function MasterEditForm({
               <Form className="form form-label-right">
                 <fieldset disabled={isUserForRead}>
                   <div className="from-group row">
+
+                    <div className="col-12 col-md-4 mt-3">
+                      <Field
+                        name="name"
+                        component={Input}
+                        placeholder="Enter shift name"
+                        maxLength={30}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        label={
+                          <span>
+                            {" "}
+                            Shift Name<span style={{ color: "red" }}>*</span>
+                          </span>
+                        }
+                        value={values.name}
+                        autoComplete="off"
+                      />
+                    </div>
+
+                    <div className="col-12 col-md-4 mt-3">
+                      <Field
+                        name="shiftCode"
+                        component={Input}
+                        placeholder="Enter shift code"
+                        maxLength={6}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        label={
+                          <span>
+                            {" "}
+                            Shift Code<span style={{ color: "red" }}>*</span>
+                          </span>
+                        }
+                        value={values.shiftCode}
+                        autoComplete="off"
+                      />
+                    </div>
+
                     <div className="col-12 col-md-4 mt-3">
                       <SearchSelect
                         name="subsidiaryId"
@@ -120,7 +178,7 @@ export function MasterEditForm({
                         onChange={(e) => {
                           setFieldValue("subsidiaryId", e.value || null);
                           setDefualtSubsidiaryList(e);
-                          
+
                           //handlePaymenModeChanged(e)
                         }}
                         error={errors.subsidiaryId}
@@ -128,11 +186,11 @@ export function MasterEditForm({
                         options={dashboard?.allSubsidiaryList}
                       />
                       <ErrorMessage className="form-feedBack" name="subsidiaryId" component="div" />
-                     
+
 
                     </div>
 
-                    <div className="col-12 col-md-4 mt-3">
+                    {/* <div className="col-12 col-md-4 mt-3">
                       <SearchSelect
                         name="leave_typeId"
                         label={<span> Leave Type<span style={{ color: 'red' }}>*</span></span>}
@@ -181,9 +239,309 @@ export function MasterEditForm({
                           label="Enable Employee Shift"
                         />
                         <label>&nbsp;<span>Enable Employee Shift</span></label>
-                      </div>
+                      </div> */}
 
-                    
+                  </div>
+                  <div className="from-group row">
+
+                    <div className="col-12 col-md-4 mt-3">
+                      <label>
+                        Start Time <span style={{ color: "red" }}>*</span>
+                      </label>
+                      <Field
+                        name="startTime"
+                        component={DatePickerField}
+                        showTimeSelect
+                        showTimeSelectOnly
+                        timeFormat="HH:mm aa"
+                        timeIntervals={15} // Optional: set interval for time selection (e.g., every 15 minutes)
+                        dateFormat="HHmm"
+                        placeholder="Select Time"
+                        type="time"
+                        minDate={values.startTime}
+
+                      />
+                    </div>
+
+                    <div className="col-12 col-md-4 mt-3">
+                      <label>
+                        End Time <span style={{ color: "red" }}>*</span>
+                      </label>
+                      <Field
+                        name="endTime"
+                        component={DatePickerField}
+                        showTimeSelect
+                        showTimeSelectOnly
+                        timeFormat="HH:mm"
+                        timeIntervals={15} // Optional: set interval for time selection (e.g., every 15 minutes)
+                        dateFormat="HHmm"
+                        placeholder="Select Time"
+                        type="time"
+                        minDate={values.endTime}
+
+                      />
+                    </div>
+
+
+
+                  </div>
+
+                  <div className="from-group row">
+                    <div className="col-12 col-md-4 mt-3">
+                      <label>
+                        Early Time (In) <span style={{ color: "red" }}>*</span>
+                      </label>
+                      <Field
+                        name="earlyIn"
+                        component={DatePickerField}
+                        showTimeSelect
+                        showTimeSelectOnly
+                        timeFormat="HH:mm aa"
+                        timeIntervals={15} // Optional: set interval for time selection (e.g., every 15 minutes)
+                        dateFormat="HHmm"
+                        placeholder="Select Time"
+                        type="time"
+                        minDate={values.earlyIn}
+                        value={values.earlyIn}
+                        error={errors.earlyIn}
+                        autoComplete="off"
+                      />
+                    </div>
+
+                    <div className="col-12 col-md-4 mt-3">
+                      <label>
+                        Early Time (Out) <span style={{ color: "red" }}>*</span>
+                      </label>
+                      <Field
+                        name="earlyOut"
+                        component={DatePickerField}
+                        showTimeSelect
+                        showTimeSelectOnly
+                        timeFormat="HH:mm aa"
+                        timeIntervals={15} // Optional: set interval for time selection (e.g., every 15 minutes)
+                        dateFormat="HHmm"
+                        placeholder="Select Time"
+                        type="time"
+                        minDate={values.earlyOut}
+                        value={values.earlyOut}
+                        error={errors.earlyOut}
+                        autoComplete="off"
+                      />
+                    </div>
+
+                  </div>
+
+                  <div className="from-group row">
+                    <div className="col-12 col-md-4 mt-3">
+                      <label>
+                        Half Day Start <span style={{ color: "red" }}>*</span>
+                      </label>
+                      <Field
+                        name="halfDayStart"
+                        component={DatePickerField}
+                        showTimeSelect
+                        showTimeSelectOnly
+                        timeFormat="HH:mm aa"
+                        timeIntervals={15} // Optional: set interval for time selection (e.g., every 15 minutes)
+                        dateFormat="HHmm"
+                        placeholder="Select Time"
+                        type="time"
+                        minDate={values.halfDayStart}
+                        value={values.halfDayStart}
+                        error={errors.halfDayStart}
+                        autoComplete="off"
+                      />
+                    </div>
+
+                    <div className="col-12 col-md-4 mt-3">
+                      <label>
+                        Early Time (Out) <span style={{ color: "red" }}>*</span>
+                      </label>
+                      <Field
+                        name="halfDayEnd"
+                        component={DatePickerField}
+                        showTimeSelect
+                        showTimeSelectOnly
+                        timeFormat="HH:mm aa"
+                        timeIntervals={15} // Optional: set interval for time selection (e.g., every 15 minutes)
+                        dateFormat="HHmm"
+                        placeholder="Select Time"
+                        type="time"
+                        minDate={values.halfDayEnd}
+                        value={values.halfDayEnd}
+                        error={errors.halfDayEnd}
+                        autoComplete="off"
+                      />
+                    </div>
+
+                  </div>
+
+                  <div className="from-group row">
+                    <div className="col-12 col-md-4 mt-3">
+                      <label>
+                        Break Time Start <span style={{ color: "red" }}>*</span>
+                      </label>
+                      <Field
+                        name="breakTimeStart"
+                        component={DatePickerField}
+                        showTimeSelect
+                        showTimeSelectOnly
+                        timeFormat="HH:mm aa"
+                        timeIntervals={15} // Optional: set interval for time selection (e.g., every 15 minutes)
+                        dateFormat="HHmm"
+                        placeholder="Select Time"
+                        type="time"
+                        minDate={values.breakTimeStart}
+                        value={values.breakTimeStart}
+                        error={errors.breakTimeStart}
+                        autoComplete="off"
+                      />
+                    </div>
+
+                    <div className="col-12 col-md-4 mt-3">
+                      <label>
+                        Break Time End <span style={{ color: "red" }}>*</span>
+                      </label>
+                      <Field
+                        name="breakTimeEnd"
+                        component={DatePickerField}
+                        showTimeSelect
+                        showTimeSelectOnly
+                        timeFormat="HH:mm aa"
+                        timeIntervals={15} // Optional: set interval for time selection (e.g., every 15 minutes)
+                        dateFormat="HHmm"
+                        placeholder="Select Time"
+                        type="time"
+                        minDate={values.breakTimeEnd}
+                        value={values.breakTimeEnd}
+                        error={errors.breakTimeEnd}
+                        autoComplete="off"
+                      />
+                    </div>
+                  
+                  </div>
+                  <div className="from-group row">
+                      <div className="col-12 col-md-4 mt-3">
+                        Weekdays
+                        <div style={{ backgroundColor: "#ffffff", height: "170px", padding: "10px", overflow: "scroll" }}>
+
+                          <div className="multi-select">
+
+                            <div className="dropdown-label"></div>
+                            <div className="dropdown-options" style={{ fontSize: "12px", fontWeight: "bold", padding: "5px" }}>
+                              {Object.values(WeekDays).map((day) => (
+                                <div key={day} className="dropdown-option">
+                                  <input style={{ width: "25px" }}
+                                    name="employee_email_recipentId"
+                                    type="checkbox"
+                                    checked={defWeekDays?.includes(day)}
+                                    onChange={() => handleCheckboxChangeFor_WeekDays(day)}
+                                  />
+                                  {day}
+                                </div>
+                              ))}
+                              {console.log("pak::", defWeekDays)}
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  <hr></hr>
+                  <label>
+                    <h3>Over Time</h3>
+                  </label>
+
+                  <div className="from-group row">
+
+                    <div className="col-12 col-md-4 mt-12">
+                      <input
+                        name="isOverTime"
+                        type="checkbox"
+                        onChange={(e) => {
+                          // Update the checkbox value using Formik's handleChange
+                          handleChange(e);
+                          const { checked } = e.target;
+
+                          // If unchecked, clear the overTimeStart field
+                          if (!checked) {
+                            setFieldValue("overTimeStart", ""); // Clear the time field when Overtime is disabled
+                          }
+                        }}
+                        onBlur={handleBlur}
+                        value={values.isOverTime}
+                        checked={values.isOverTime}
+                        label="IsOverTime"
+
+                      />
+                      <label>&nbsp;<span>Enable OverTime</span></label>
+                    </div>
+
+                    <div className="col-12 col-md-4 mt-3">
+                      <label>
+                        Over Time Start <span style={{ color: "red" }}>*</span>
+                      </label>
+                      <Field
+                        name="overTimeStart"
+                        component={DatePickerField}
+                        showTimeSelect
+                        showTimeSelectOnly
+                        timeFormat="HH:mm aa"
+                        timeIntervals={15} // Optional: set interval for time selection (e.g., every 15 minutes)
+                        dateFormat="HHmm"
+                        placeholder="Select Time"
+                        type="time"
+                        minDate={values.overTimeStart}
+                        value={values.overTimeStart}
+                        error={errors.overTimeStart}
+                        disabled={!values.isOverTime}
+
+                      />
+                    </div>
+
+                  </div>
+                  <div className="from-group row">
+                    <div className="col-12 col-md-4 mt-12">
+                      <input
+                        name="isIncludeInterShifGap"
+                        type="checkbox"
+                        onChange={(e) => {
+                          // Update the checkbox value using Formik's handleChange
+                          handleChange(e);
+                          const { checked } = e.target;
+
+                          // If unchecked, clear the overTimeStart field
+                          if (!checked) {
+                            setFieldValue("interShiftGap", ""); // Clear the time field when Overtime is disabled
+                          }
+                        }}
+                        onBlur={handleBlur}
+                        value={values.isIncludeInterShifGap}
+                        checked={values.isIncludeInterShifGap}
+                        label="IsInclude Intershift Gap"
+
+                      />
+                      <label>&nbsp;<span>IsInclude InterShift Gap</span></label>
+                    </div>
+                    <div className="col-12 col-md-4 mt-3">
+                      <Field
+                        name="interShiftGap"
+                        component={Input}
+                        placeholder="Enter shift gap time"
+                        maxLength={6}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        label={
+                          <span>
+                            {" "}
+                            InterShift Gap Time<span style={{ color: "red" }}>*</span>
+                          </span>
+                        }
+                        value={values.interShiftGap}
+                        autoComplete="off"
+                        disabled={!values.isIncludeInterShifGap}
+                      />
+                    </div>
 
                   </div>
                 </fieldset>

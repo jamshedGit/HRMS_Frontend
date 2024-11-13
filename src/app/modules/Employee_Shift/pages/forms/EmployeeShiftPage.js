@@ -12,63 +12,63 @@ export function EmployeeShiftPage({ history }) {
     newFormButtonClick: () => {
       history.push("/employee_shift/read-all-employee-shift/new");
     },
-    // openEditFormDialog: (id) => {
-    //   history.push(`/employee_shift/read-all-employee-shift/${id}/edit`);
-    // },
-    // openDeleteFormDialog: (id, status) => {
-    //   history.push(`/employee_shift/read-all-employee-shift/${id}/${status}/delete`);
-    // },
-    // openReadFormDialog: (id, isUserRead) => {
-    //   history.push(`/employee_shift/read-all-employee-shift/${id}/read`);
-    // },
+    openEditFormDialog: (id) => {
+      history.push(`/employee_shift/read-all-employee-shift/${id}/edit`);
+    },
+    openDeleteFormDialog: (id, status) => {
+      history.push(`/employee_shift/read-all-employee-shift/${id}/${status}/delete`);
+    },
+    openReadFormDialog: (id, isUserRead) => {
+      history.push(`/employee_shift/read-all-employee-shift/${id}/read`);
+    },
   };
   return (
 
     <FormUIProvider FormUIEvents={FormUIEvents}>
-      <Route exact path="/employee_shift/read-all-employee_shift/new">
+      <Route exact path="/employee_shift/read-all-employee-shift/new">
         {({ history, match }) => (
           <FormEditDialog
             show={match != null}
             onHide={() => {
-              history.push("/employee_shift/read-all-employee_shift");
+              history.push("/employee_shift/read-all-employee-shift");
             }}
           />
         )}
       </Route>
-      {/* <Route path="/employee_shift/read-all-employee_shift/:id/edit">
+      <Route path="/employee_shift/read-all-employee-shift/:id/edit">
         {({ history, match }) => (
           <FormEditDialog
             show={match != null}
             id={match && match.params.id}
             onHide={() => {
-              history.push("/employee_shift/read-all-employee_shift");
+              history.push("/employee_shift/read-all-employee-shift");
             }}
           />
         )}
       </Route>
-      <Route path="/employee_shift/read-all-employee_shift/:id/read">
+      <Route path="/employee_shift/read-all-employee-shift/:id/read">
         {({ history, match }) => (
           <FormEditDialog
             show={match != null}
             id={match && match.params.id}
             userForRead={true}
             onHide={() => {
-              history.push("/employee_shift/read-all-employee_shift");
+              history.push("/employee_shift/read-all-employee-shift");
             }}
           />
         )}
       </Route>
-      <Route path="/employee_shift/read-all-employee_shift/:id/:status/delete">
+      <Route path="/employee_shift/read-all-employee-shift/:id/:status/delete">
         {({ history, match }) => (
           <FormDeleteDialog
             show={match != null}
             id={match && match.params.id}
             onHide={() => {
-              history.push("/employee_shift/read-all-employee_shift");
+              history.push("/employee_shift/read-all-employee-shift");
             }}
           />
         )}
-      </Route> */}
+      </Route>
       <FormCard />
       <ToastContainer
         position="top-right"
