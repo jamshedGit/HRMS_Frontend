@@ -54,7 +54,7 @@ const formValidation = Yup.object().shape(
 
     basicFactor: 
        Yup.string()
-      .matches(/^\d{15}$/, 'Basic factor must be exactly 15 digits long and contain only digits.')
+     // .matches(/^\d{15}$/, 'Basic factor must be exactly 15 digits long and contain only digits.')
       .max(100, 'Value cannot be greater than 100')
      
       .required('Required*')
