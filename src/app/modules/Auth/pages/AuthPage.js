@@ -52,7 +52,7 @@ export function AuthPage() {
 
           {/* left side */}
 
-          <div className="login-left-container">
+          <div className="login-left-container d-none d-lg-block">
             <div
               className="login-left-container-inner"
               style={{
