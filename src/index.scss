@@ -133,7 +133,7 @@
 /* Custom Button Styles */
 .custom-button {
   width: 100%; 
-  background-color: #007bff; /* Background color */
+  background-color: #3f83cc; /* Background color */
   color: white; /* Text color */
   font-size: 16px; /* Text size */
   font-weight: bold; /* Bold text */
@@ -259,4 +259,9 @@ body {
 .login-footer{
   margin-top: auto;
   background-color: hsl(188, 88%, 93%);
+}
+
+.mycolor{
+  background-color: hsl(188, 88%, 93%) !important; 
+  border: none;
 }

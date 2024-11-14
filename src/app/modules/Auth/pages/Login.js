@@ -105,10 +105,10 @@ function Login(props) {
   });
 
   return (
-    <div className="d-flex flex-column">
+    <div className="d-flex flex-column mt-5">
     <div className=" login-signin" id="kt_login_signin_form"
       style={{
-        height: "73vh",  // Full height of the viewport
+        height: "72vh",  // Full height of the viewport
         width: "30vw",  // Make the form take full width
         justifyContent: "center",  // Center horizontally
         alignItems: "center",  // Center vertically
@@ -116,6 +116,7 @@ function Login(props) {
         backgroundSize: "cover",  // Ensures the gradient covers the entire area
         backgroundPosition: "center",  // Ensures the background is centered
         padding: "60px",  // Padding inside the form
+     
       }}
 
     >
@@ -168,18 +169,14 @@ function Login(props) {
 
 
 
-        <div className="form-group fv-plugins-icon-container">
+        <div className="form-group fv-plugins-icon-container ">
           <input
-            style={{
-              backgroundColor: "white", // Custom background color
-
-
-            }}
+    
             placeholder="Email"
             type="text"
             className={`form-control form-control-solid h-auto py-5 px-6  ${getInputClasses(
               "email"
-            )}`}
+            )} mycolor`}
             name="emails"
             {...formik.getFieldProps("email")}
           />
@@ -198,7 +195,7 @@ function Login(props) {
             type="password"
             className={`form-control form-control-solid h-auto py-5 px-6 ${getInputClasses(
               "password"
-            )}`}
+            )} mycolor`}
             name="password"
             {...formik.getFieldProps("password")}
           />
@@ -240,7 +237,7 @@ function Login(props) {
         <br />
         <div className="d-flex align-items-center  ">
 
-          <span className="ml-3" style={{ fontSize: '15px', color: "#007bff" }}>Forgot Password?</span>
+          <span className="ml-2" style={{ fontSize: '15px', color: "#007bff" }}>Forgot Password?</span>
         </div>
 
 
@@ -261,7 +258,7 @@ function Login(props) {
         </div>
     </footer> */}
     </div>
-         <footer className="d-flex gap-4  login-footer  p-5 ">
+         <footer className="d-flex gap-4  login-footer  p-4 ">
          <div>
          </div>
          <div>
