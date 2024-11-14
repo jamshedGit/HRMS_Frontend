@@ -105,9 +105,10 @@ function Login(props) {
   });
 
   return (
+    <div className="d-flex flex-column">
     <div className=" login-signin" id="kt_login_signin_form"
       style={{
-        height: "80vh",  // Full height of the viewport
+        height: "73vh",  // Full height of the viewport
         width: "30vw",  // Make the form take full width
         justifyContent: "center",  // Center horizontally
         alignItems: "center",  // Center vertically
@@ -137,11 +138,10 @@ function Login(props) {
       </div>
 
       <div>
-        <h1 className="">
-          Login
+        <h1 className="fw-bold"  style={{ color: "#07d4f7", fontSize: "2rem" }} >
+          Log In
         </h1>
       </div>
-      <br />
       <br />
       {/* end::Head */}
 
@@ -261,6 +261,22 @@ function Login(props) {
         </div>
     </footer> */}
     </div>
+         <footer className="d-flex gap-4  login-footer  p-5 ">
+         <div>
+         </div>
+         <div>
+           <p className="ml-5 mt-4">Privacy Policy</p>
+         </div>
+         <div>
+           <p className="ml-5 mt-4">Legal</p>
+         </div>
+         <div>
+           <p className="ml-5 mt-4">Contact Us</p>
+         </div>
+
+
+       </footer>
+       </div>
   );
 }
 
