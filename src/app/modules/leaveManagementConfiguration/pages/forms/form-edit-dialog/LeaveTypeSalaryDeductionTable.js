@@ -161,7 +161,7 @@ function LeaveTypeSalaryDeductionTable({ values, setFieldValue, createDropdown, 
             {/* Table Ends */}
 
             {/* Add Button Field Starts */}
-            {values.subsidiaryId && values.gradeId && values.employeeTypeId && <button
+            {values.subsidiaryId /*&& values.gradeId && values.employeeTypeId*/ && <button
               type="button"
               onClick={() =>
                 push({
