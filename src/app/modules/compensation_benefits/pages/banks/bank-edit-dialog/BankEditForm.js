@@ -23,6 +23,7 @@ import DatePicker from "react-datepicker";
 import { useBanksUIContext } from "../BanksUIContext";
 // // import { CheckBox } from "@material-ui/icons";
 import axios from 'axios';
+import { amountLimit, amountLimitDynamic } from "../../../../../utils/common";
 export const USERS_URL = process.env.REACT_APP_API_URL;
 
 // Phone Number Regex
@@ -45,6 +46,9 @@ const formValidation = Yup.object().shape(
       .nullable()
       .required("Required*"),
     currencyId: Yup.string()
+      .nullable()
+      .required("Required*"),
+      salaryMethod: Yup.string()
       .nullable()
       .required("Required*"),
 
@@ -633,8 +637,6 @@ export function BankEditForm({
                               onChange={(e) => {
                                 handleFieldChanged(e);
                                 setErrors((prev) => ({ ...prev, [`factorValue-${rightindex}`]: '' })); // Clear error on change
-
-
                               }}
                               value={obj.factorValue} id={'factorValue-' + rightindex}></input>}
                             {deferrors[`factorValue-${rightindex}`] && <div className="form-feedBack">{deferrors[`factorValue-${rightindex}`]}</div>}
@@ -647,11 +649,11 @@ export function BankEditForm({
                               onChange={(e) => {
                                 handleFieldChanged(e);
                                 setErrors((prev) => ({ ...prev, [`amount-${rightindex}`]: '' })); // Clear error on change
-
-
-
                               }}
-                              value={obj.amount} id={'amount-' + rightindex}></input>
+                              onInput={(e) => {
+                                e.target.value = amountLimit(e.target.value); // Limit to 3 digits
+                              }}
+                             maxLength={8}  value={obj.amount} id={'amount-' + rightindex}></input>
                             {deferrors[`amount-${rightindex}`] && <div className="form-feedBack">{deferrors[`amount-${rightindex}`]}</div>}
                           </td>
                           <td>
@@ -723,7 +725,9 @@ export function BankEditForm({
                           </td>
 
                           <td>
-                            <input style={{ width: "80px" }}
+                            <input
+                            
+                            style={{ width: "80px" }}
                               type="number"
                               onChange={handleFieldChanged}
                               disabled={obj.calculation_type == "Fixed Amount"}
@@ -731,7 +735,12 @@ export function BankEditForm({
                             </input>
                             {deferrors[`factorValue-${rightindex}`] && <div className="form-feedBack">{deferrors[`factorValue-${rightindex}`]}</div>}
                           </td>
-                          <td><input disabled={obj.calculation_type == "% Of Basic"} style={{ width: "80px" }} type="number"
+                          <td><input maxLength={8}
+                            type="number"
+                            onInput={(e) => {
+                              e.target.value = amountLimit(e.target.value); // Limit to 3 digits
+                            }}
+                           disabled={obj.calculation_type == "% Of Basic"} style={{ width: "80px" }}
                             onChange={handleFieldChanged} value={obj.amount} id={'amount-' + rightindex}></input>
                           </td>
                           {deferrors[`amount-${rightindex}`] && <div className="form-feedBack">{deferrors[`amount-${rightindex}`]}</div>}
