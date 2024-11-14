@@ -37,7 +37,7 @@ export function FormTable() {
     (state) => {
       return {
         currentState: state.employee_shift,
-        userAccess: state?.auth?.userAccess["Employee_Shift"],
+        userAccess: state?.auth?.userAccess["employee_shift"],
       }
     },
     shallowEqual
@@ -47,10 +47,10 @@ export function FormTable() {
 
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   FormUIProps.setIds([]);
-  //   dispatch(actions.fetchEmployeeShift(FormUIProps.queryParams));
-  // }, [FormUIProps.queryParams, dispatch, totalCount]);
+  useEffect(() => {
+    FormUIProps.setIds([]);
+    dispatch(actions.fetchEmployeeShift(FormUIProps.queryParams));
+  }, [FormUIProps.queryParams, dispatch, totalCount]);
 
   const isAccessForEdit = userAccess?.find(
     (item) => item.componentName === "UpdateEmployeeShift"
@@ -62,8 +62,8 @@ export function FormTable() {
   // Table columns
   const columns = [
     {
-      dataField: "subs.subsName",
-      text: "Subsidiary",
+      dataField: "name",
+      text: "Shift Name",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -71,9 +71,10 @@ export function FormTable() {
         minWidth: "160px",
       },
     },
+
     {
-      dataField: "leavetype.leaveTypeName",
-      text: "Leave Type",
+      dataField: "shiftCode",
+      text: "Shift Code",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -81,9 +82,10 @@ export function FormTable() {
         minWidth: "160px",
       },
     },
+
     {
-      dataField: "late_count_leave_deduction",
-      text: "Late Count(Limit)",
+      dataField: "shiftType",
+      text: "Shift Type",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -91,16 +93,7 @@ export function FormTable() {
         minWidth: "160px",
       },
     },
-    {
-      dataField: "isEnable_att_integration",
-      text: "Enable Integration",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
+    
     
     {
       dataField: "action",
@@ -132,6 +125,9 @@ export function FormTable() {
     sizePerPage: FormUIProps.queryParams.pageSize,
     page: FormUIProps.queryParams.pageNumber,
   };
+
+ 
+
 
   return (
     <>

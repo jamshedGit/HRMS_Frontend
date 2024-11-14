@@ -16,22 +16,23 @@ export const fetchEmployeeShift = (queryparm) => async (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.list }));
   return requestFromServer.getAllEmployeeShiftSetup(queryparm)
     .then((response) => {
+      console.log("shift_res:",response)
         // Transform the response rows here
-    const transformedRows = response?.data?.data?.rows.map(item => ({
-      ...item,
-      isEnable_att_integration: item.isEnable_att_integration ? 'Yes' : 'No'  // Transform the value
-    }));
+    // const transformedRows = response?.data?.data?.rows.map(item => ({
+    //   ...item,
+    //   isEnable_att_integration: item.isEnable_att_integration ? 'Yes' : 'No'  // Transform the value
+    // }));
     
-    // Update the response with transformed rows
-    const updatedResponse = {
-      ...response,
-      data: {
-        ...response.data,
-        rows: transformedRows
-      }
-    };
+    // // Update the response with transformed rows
+    // const updatedResponse = {
+    //   ...response,
+    //   data: {
+    //     ...response.data,
+    //     rows: transformedRows
+    //   }
+    // };
     
-    dispatch(actions.EmployeeshiftFetched(updatedResponse));
+    dispatch(actions.EmployeeshiftFetched(response));
     })
     .catch((error) => {
       error.clientMessage = "Can't find Leave Types";
