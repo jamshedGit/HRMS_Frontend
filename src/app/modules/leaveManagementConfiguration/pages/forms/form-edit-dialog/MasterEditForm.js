@@ -220,9 +220,6 @@ export function MasterEditForm({
                       }
                     </div> */}
                     {/* Employee Type Field End */}
-                    </div>
-
-                    <div className="from-group row">
 
                     {/* Weekends Field Start */}
                     <div className="col-12 col-md-4 mt-3">
