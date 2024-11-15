@@ -88,7 +88,7 @@ export const CardHeader = forwardRef(
     return (
       <div
         ref={ref}
-        className="card-header pt-4"
+        className="card-header"
         style={
           !sticky
             ? undefined

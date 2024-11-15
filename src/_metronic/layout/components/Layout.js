@@ -89,6 +89,9 @@ export function Layout({ children }) {
               {/*end::Entry*/}
             </div>
             {/*end::Content*/}
+            <br/>
+            <br/>
+            <br/>
             <Footer />
           </div>
           {/*end::Wrapper*/}

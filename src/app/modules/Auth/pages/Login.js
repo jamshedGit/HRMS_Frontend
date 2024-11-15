@@ -125,8 +125,9 @@ function Login(props) {
       <div
         className="text-center mb-10 mb-lg-20"
         style={{
-          width: "70%",  // Make the form take full width
-          height: "7vh",  // 10% of the viewport height (can be adjusted)
+          // width: "70%",  // Make the form take full width
+        width:"20vw",
+          height: "8vh",  // 10% of the viewport height (can be adjusted)
           backgroundImage: `url(${toAbsoluteUrl("/media/bg/login-logo.png")})`,  // Add image as background
           backgroundSize: "cover",  // Ensure the image covers the entire container
           backgroundPosition: "center",  // Center the image inside the container
@@ -150,6 +151,7 @@ function Login(props) {
       <form
         onSubmit={formik.handleSubmit}
         className="form fv-plugins-bootstrap fv-plugins-framework"
+            // className="login-form"
       >
         {formik.status ? (
           <div className="mb-10 alert alert-custom alert-light-danger alert-dismissible">
@@ -187,7 +189,6 @@ function Login(props) {
           ) : null}
         </div>
 
-        <br />
 
         <div className="form-group fv-plugins-icon-container">
           <input
@@ -205,7 +206,7 @@ function Login(props) {
             </div>
           ) : null}
         </div>
-        <br />
+
 
         <div className="d-flex align-items-center  ">
           <input

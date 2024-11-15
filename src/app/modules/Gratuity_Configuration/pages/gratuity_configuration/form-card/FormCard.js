@@ -52,21 +52,27 @@ export function FormCard() {
 
       <Card>
         <CardHeader title="">
-          {/* <FormFIlter /> */}
-          <CardHeaderToolbar>
-          {/* {accessUser &&  entities?.length==0 ? ( */}
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={FormUIProps .newFormButtonClick}
-              >
-                + Add Gratuity Configuration
-              </button>
-            {/* ) : (
-              <></>
-            )} */}
-   
-          </CardHeaderToolbar>
+          <div className="d-flex justify-content-between align-items-center gap-3 m-4">
+
+      <div className="pt-5">
+      <FormFIlter />
+      </div>
+      <div className=" p-2">
+      <CardHeaderToolbar>
+    
+    <button
+      type="button"
+      className="btn btn-primary "
+      onClick={FormUIProps .newFormButtonClick}
+    >
+      + Add Gratuity Configuration
+    </button>
+  
+
+</CardHeaderToolbar>
+      </div>
+       
+          </div>
         </CardHeader>
 
         <CardBody>

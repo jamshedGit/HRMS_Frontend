@@ -89,7 +89,7 @@ export function AuthPage() {
 
                 <div className="login-left-container-inner-bottom-img2">
                   <div className="login-left-container-inner-bottom-img2-heading">
-                    <h1>Our Technology Partners</h1>
+                    <h1  style={{ fontSize: '1.5vw' }}>Our Technology Partners</h1>
                   </div>
 
 

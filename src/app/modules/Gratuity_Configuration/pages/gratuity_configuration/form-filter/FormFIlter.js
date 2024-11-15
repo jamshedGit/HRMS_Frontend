@@ -106,7 +106,7 @@ export function FormFIlter({ listLoading,user }) {
           <form onSubmit={handleSubmit} className="form form-label-right">
             <div className="row">
 
-              <div className="col-12 col-md-12">
+              <div className="col-12 col-md-12 ">
                 <input
                   type="text"
                   className="form-control"
