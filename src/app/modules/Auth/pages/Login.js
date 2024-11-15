@@ -139,7 +139,7 @@ function Login(props) {
       </div>
 
       <div>
-        <h1 className="fw-bold"  style={{ color: "#07d4f7", fontSize: "2rem" }} >
+        <h1 className="fw-bold"  style={{ color: "#2490CF", fontSize: "2rem" }} >
           Log In
         </h1>
       </div>
@@ -176,7 +176,7 @@ function Login(props) {
             type="text"
             className={`form-control form-control-solid h-auto py-5 px-6  ${getInputClasses(
               "email"
-            )} mycolor`}
+            )} inputcolor`}
             name="emails"
             {...formik.getFieldProps("email")}
           />
@@ -195,7 +195,7 @@ function Login(props) {
             type="password"
             className={`form-control form-control-solid h-auto py-5 px-6 ${getInputClasses(
               "password"
-            )} mycolor`}
+            )} inputcolor`}
             name="password"
             {...formik.getFieldProps("password")}
           />
@@ -229,7 +229,7 @@ function Login(props) {
             disabled={formik.isSubmitting}
             className="custom-button"
           >
-            <span>Sign In</span>
+            <span>Log In</span>
             {loading && <span className="ml-3 spinner spinner-white"></span>}
           </button>
         </div>
@@ -237,7 +237,7 @@ function Login(props) {
         <br />
         <div className="d-flex align-items-center  ">
 
-          <span className="ml-2" style={{ fontSize: '15px', color: "#007bff" }}>Forgot Password?</span>
+          <span className="ml-1" style={{ fontSize: '15px', color: "#007bff" }}>Forgot Password?</span>
         </div>
 
 

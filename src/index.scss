@@ -133,7 +133,7 @@
 /* Custom Button Styles */
 .custom-button {
   width: 100%; 
-  background-color: #3f83cc; /* Background color */
+  background-color: #2490CF; /* Background color */
   color: white; /* Text color */
   font-size: 16px; /* Text size */
   font-weight: bold; /* Bold text */
@@ -145,20 +145,15 @@
 }
 
 .custom-button:hover {
-  background-color: #0056b3; /* Darker background on hover */
+  background-color: #000000; /* Darker background on hover */
   transform: translateY(-2px); /* Slightly move the button upwards on hover */
 }
 
 .custom-button:active {
-  background-color: #003d80; /* Even darker background when the button is pressed */
+  background-color: #000000; /* Even darker background when the button is pressed */
   transform: translateY(0); /* Reset the movement when clicked */
 }
 
-.custom-button:disabled {
-  background-color: #cccccc; /* Disable background */
-  color: #666666; /* Disable text color */
-  cursor: not-allowed; /* Disable cursor */
-}
 
 
 
@@ -259,9 +254,16 @@ body {
 .login-footer{
   margin-top: auto;
   background-color: hsl(188, 88%, 93%);
+  padding-left: 8% !important;
 }
 
-.mycolor{
+.inputcolor{
   background-color: hsl(188, 88%, 93%) !important; 
   border: none;
+}
+
+.login-left-footer{
+  margin-top: auto;
+  background-color: hsl(188, 88%, 93%);
+  padding-left: 2% !important;
 }

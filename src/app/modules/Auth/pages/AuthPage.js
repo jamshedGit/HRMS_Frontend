@@ -132,14 +132,14 @@ export function AuthPage() {
 
             </div>
 
-            <footer className="d-flex gap-4  login-footer justify-content-between p-4 ">
+            <footer className="d-flex gap-4  login-left-footer justify-content-between p-4 pl-0">
               <div>
-               <div className="mt-5">
+               <div className="mt-4">
                <img
                       src="/media/bg/facebook-logo.png"
                       alt="Partner Logo"
                       // className="partner-image"
-                      className="ml-4" 
+                      className="ml-0" 
 
                     />
                     <img
@@ -163,7 +163,7 @@ export function AuthPage() {
                </div>
               </div>
               <div>
-                <p className="mt-5">&copy;Copyright © 2024, Powered by Dynasoft Cloud</p>
+                <p className="mt-5 pr-2">&copy;Copyright © 2024, Powered by Dynasoft Cloud</p>
               </div>
 
 
