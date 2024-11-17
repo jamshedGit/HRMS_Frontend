@@ -17,9 +17,9 @@ export function FormEditDialogHeader({ id, isUserForRead }) {
   );
 
   useEffect(() => {
-    let _title = id ? "" : "Add Onetime Allowance";
+    let _title = id ? "" : "Add Onetime Earning & Deduction";
     if (id) {
-      _title = `Edit Onetime Allowance`;
+      _title = `Edit Onetime Earning & Deduction`;
     } //else if (isUserForRead) {
     //   _title = `Read user '}'`
     // }
@@ -31,7 +31,7 @@ export function FormEditDialogHeader({ id, isUserForRead }) {
       {actionsLoading && <ModalProgressBar />}
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-lg">
-          {!isUserForRead ? title : "View"}
+          {!isUserForRead ? title : "View Onetime Earning & Deduction"}
         </Modal.Title>
       </Modal.Header>
     </>

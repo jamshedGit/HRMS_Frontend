@@ -33,8 +33,8 @@ export function DeptEditDialog({ id, show, onHide }) {
   useEffect(() => {
     console.log("user read dialog.js",id)
     dispatch(actions.fetchUser(id))
-    dispatch(actions.fetchRoles())
-    dispatch(actions.fetchCenters())
+    // dispatch(actions.fetchRoles())
+    // dispatch(actions.fetchCenters())
     // dispatch(actions.fetchUser(usersUIProps.queryParams))
   }, [id, dispatch])
   console.log("userForEdit", userForEdit)

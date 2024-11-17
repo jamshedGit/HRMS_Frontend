@@ -53,8 +53,7 @@ export const OnetimeAllowanceSlice = createSlice({
 
          //get User By ID
          ontimeAllowanceFetchedForEdit: (state, action) => {
-            console.log("get user detail from receipt slice")
-            console.log(action);
+         
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
@@ -62,7 +61,7 @@ export const OnetimeAllowanceSlice = createSlice({
 
         //get User By ID
         userFetched: (state, action) => {
-            console.log("get user detail from receipt slice")
+         
             console.log(action);
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
