@@ -31,7 +31,7 @@ export function BankEditDialogHeader({ id, isUserForRead }) {
       {actionsLoading && <ModalProgressBar />}
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-lg">
-          {!isUserForRead ? title : "View Earning"}
+          {!isUserForRead ? title : "View Employee Salary"}
         </Modal.Title>
       </Modal.Header>
     </>
