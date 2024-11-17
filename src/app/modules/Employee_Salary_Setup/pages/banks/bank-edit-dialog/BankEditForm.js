@@ -772,7 +772,8 @@ export function BankEditForm({
                               e.target.value = amountLimit(e.target.value); // Limit to 3 digits
                             }}
 
-                            disabled={obj.calculation_type == '% Of Basic'} style={{ width: "100px" }} type="number" onChange={handleFieldChanged}
+                            disabled={obj.calculation_type == '% Of Basic'} style={{ width: "100px" }} 
+                            onChange={handleFieldChanged}
                               value={obj.amount} id={'amount-' + rightindex}></input>
                             {deferrors[`amount-${rightindex}`] && <div className="form-feedBack">{deferrors[`amount-${rightindex}`]}</div>}
                           </td>
