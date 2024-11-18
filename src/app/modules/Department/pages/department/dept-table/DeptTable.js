@@ -79,7 +79,7 @@ export function DeptTable() {
     },
    
     {
-      dataField: "department",
+      dataField: "Hierarchy",
       text: "Department",
       sort: false,
       sortCaret: sortCaret,
@@ -89,7 +89,7 @@ export function DeptTable() {
       },
     },
     {
-      dataField: "ParentName",
+      dataField: "ParentDeptName",
       text: "Parent Name",
       sort: false,
       sortCaret: sortCaret,
