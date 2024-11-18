@@ -28,7 +28,7 @@ const userEditSchema_2 = Yup.object().shape(
     deptName: Yup.string() .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.').required("*Required"),
     budgetStrength: Yup.string()  .matches(/^\d+$/, "Must contain only digits").required("*Required"),
     subsidiary: Yup.string().required("*Required"),
-    parentDept: Yup.string().required("*Required"),
+    // parentDept: Yup.string().required("*Required"),
     // parentDept: Yup.string().nullable().required("*Required"),
   }
 );
@@ -157,7 +157,7 @@ console.log("pep", dashboard.allDept)
                       <div className="col-12 col-md-4 mt-3">
                         <SearchSelect
                           name="parentDept"
-                          label={<span> Parent Dept<span style={{ color: 'red' }}>*</span></span>}
+                          label={<span> Parent Dept</span>}
                           isDisabled={isUserForRead && true}
                           onBlur={() => {
                             // handleBlur({ target: { name: "countryId" } });
