@@ -1,13 +1,11 @@
 import React, { useMemo } from "react"
 import {
   Card,
-  CardBody,
-  CardHeader,
-  CardHeaderToolbar,
 } from "../../../../../../_metronic/_partials/controls"
 import { useFormUIContext } from "../FormUIContext"
 import { useSelector, shallowEqual } from "react-redux"
 import { FormEditDialog } from "../form-edit-dialog/FormEditDialog"
+import '../../../../../utils/common-modules/form.css'
 
 export function FormCard() {
   const FormUIContext = useFormUIContext()

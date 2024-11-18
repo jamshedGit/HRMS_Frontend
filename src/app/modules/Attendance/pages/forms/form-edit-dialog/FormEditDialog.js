@@ -40,11 +40,8 @@ export function FormEditDialog({ onHide, userForRead }) {
 
   //Fetch record to edit on dialog load
   useEffect(() => {
-    // dispatch(actions.fetchEditRecord(id));
     if (!dashboard.allEmployees || !dashboard.allEmployees.length)
       dispatch(fetchAllActiveEmployees());
-    if (!dashboard?.allSubsidiaryList?.length)
-      dispatch(fetchAllSubsidiaryData("allSubsidiaryList"));
   }, [dispatch]);
 
   //Create or Update record according to values from dialog

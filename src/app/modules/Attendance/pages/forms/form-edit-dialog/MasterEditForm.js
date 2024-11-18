@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Modal } from "react-bootstrap";
+import { Accordion, Button, Card, Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { Checkbox, DatePickerField, Input, Select, TextArea } from "../../../../../../_metronic/_partials/controls";
@@ -8,6 +8,8 @@ import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLab
 import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
+import EmployeeProfile from "../../../../../utils/common-modules/EmployeeProfile";
+import { KeyboardArrowDown } from "@material-ui/icons";
 
 //Validations for Form
 const formValidation = Yup.object().shape({
@@ -35,10 +37,9 @@ export function MasterEditForm({
   setfilters
 }) {
 
-  const { allEmployees, allSubsidiaryList, allEmployeeShifts } = useSelector(
+  const { allEmployees, allEmployeeShifts } = useSelector(
     (state) => ({
       allEmployees: state.dashboard.allEmployees,
-      allSubsidiaryList: state.dashboard.allSubsidiaryList,
       allEmployeeShifts: state.dashboard.allEmployeeShifts
     }),
     shallowEqual
@@ -110,44 +111,19 @@ export function MasterEditForm({
                       }
                     </div>
                     {/* Employee Field End */}
+                  </div>
 
-                    {/* Employee Code Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="employeeCode"
-                        component={Input}
-                        className='form-control'
-                        disabled
-                        label={
-                          <span>
-                            {" "}
-                            Employee Code
-                          </span>
-                        }
-                        autoComplete="off"
-                      />
-                    </div>
-                    {/* Employee Code Field End */}
+                  <br />
+                  <hr />
 
-                    {/* Subsidiary Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="subsidiaryId"
-                        component={Select}
-                        className='form-control'
-                        disabled
-                        label={
-                          <span>
-                            {" "}
-                            Subsidiary
-                          </span>
-                        }
-                        value={values.subsidiaryId}
-                        autoComplete="off"
-                        children={CustomDropdown({ data: allSubsidiaryList, firstElement: { label: '', value: null } })}
-                      />
-                    </div>
-                    {/* Subsidiary Field End */}
+                  {/* EmployeeProfile Starts */}
+                  <EmployeeProfile employeeId={values.employeeId} />
+                  {/* EmployeeProfile Ends */}
+
+                  <hr />
+                  <br />
+
+                  <div className="from-group row">
 
                     {/* Date In Field Start */}
                     <div className="col-12 col-md-4 mt-3">
@@ -243,281 +219,300 @@ export function MasterEditForm({
                       />
                     </div>
                     {/* Comments Field End */}
-
-                    {/* Shift Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="shiftId"
-                        component={Select}
-                        className='form-control'
-                        disabled
-                        label={
-                          <span>
-                            {" "}
-                            Employee Shift
-                          </span>
-                        }
-                        value={values.shiftId}
-                        autoComplete="off"
-                        children={CustomDropdown({ data: allEmployeeShifts, firstElement: { label: '', value: null } })}
-                      />
-                    </div>
-                    {/* Shift Field End */}
-
-                    {/* inter Shift Gap Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="interShifGap"
-                        component={Input}
-                        className='form-control'
-                        disabled
-                        label={
-                          <span>
-                            {" "}
-                            inter Shift Gap
-                          </span>
-                        }
-                        autoComplete="off"
-                      />
-                    </div>
-                    {/* inter Shift Gap Field End */}
-
-                    {/* Shift Start Time Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="shiftStartTime"
-                        component={Input}
-                        className='form-control'
-                        disabled
-                        label={
-                          <span>
-                            {" "}
-                            Shift Start Time
-                          </span>
-                        }
-                        autoComplete="off"
-                      />
-                    </div>
-                    {/* Shift Start Time Field End */}
-
-                    {/* Shift End Time Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="shiftEndTime"
-                        component={Input}
-                        className='form-control'
-                        disabled
-                        label={
-                          <span>
-                            {" "}
-                            Shift End Time
-                          </span>
-                        }
-                        autoComplete="off"
-                      />
-                    </div>
-                    {/* Shift End Time Field End */}
-
-                    {/* Shift Hours Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="shiftWorkingHours"
-                        component={Input}
-                        className='form-control'
-                        disabled
-                        label={
-                          <span>
-                            {" "}
-                            Shift Hours
-                          </span>
-                        }
-                        autoComplete="off"
-                      />
-                    </div>
-                    {/* Shift Hours Field End */}
-
-                    {/* Late In Time Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="shiftLateIn"
-                        component={Input}
-                        disabled
-                        className='form-control'
-                        label={
-                          <span>
-                            {" "}
-                            Late In Time
-                          </span>
-                        }
-                        autoComplete="off"
-                      />
-                    </div>
-                    {/* Late In Time Field End */}
-
-                    {/* Early Out Time Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="shiftEarlyOut"
-                        component={Input}
-                        className='form-control'
-                        disabled
-                        label={
-                          <span>
-                            {" "}
-                            Early Out Time
-                          </span>
-                        }
-                        autoComplete="off"
-                      />
-                    </div>
-                    {/* Early Out Time Field End */}
-
-                    {/* Half day Start Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="shiftHalfDayStart"
-                        component={Input}
-                        className='form-control'
-                        disabled
-                        label={
-                          <span>
-                            {" "}
-                            Half day Start
-                          </span>
-                        }
-                        autoComplete="off"
-                      />
-                    </div>
-                    {/* Half day Start Field End */}
-
-                    {/* Half Day End Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="shiftHalfDayEnd"
-                        component={Input}
-                        className='form-control'
-                        disabled
-                        label={
-                          <span>
-                            {" "}
-                            Half Day End
-                          </span>
-                        }
-                        autoComplete="off"
-                      />
-                    </div>
-                    {/* Half Day End Field End */}
-
-                    {/* Allow OverTime Field Starts */}
-                    <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name={`isOverTime`}
-                        component={Checkbox}
-                        disabled
-                        onChange={(e) => {
-                          setFieldValue(
-                            `isOverTime`,
-                            e.target.checked
-                          )
-                        }}
-                        isSelected={values.isOverTime}
-                      />
-                      <span>Allow OverTime</span>
-                    </div>
-                    {/* Allow OverTime Field End */}
-
-                    {/* Include Inter-Shift Gap Field Starts */}
-                    <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name={`isIncludeInterShifGap`}
-                        component={Checkbox}
-                        onChange={(e) => {
-                          setFieldValue(
-                            `isIncludeInterShifGap`,
-                            e.target.checked
-                          )
-                        }}
-                        disabled
-                        isSelected={values.isIncludeInterShifGap}
-                      />
-                      <span>Include Inter-Shift Gap</span>
-                    </div>
-                    {/* Include Inter-Shift Gap Field End */}
-
-                    {/* Late By Hours Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="lateInHours"
-                        component={Input}
-                        className='form-control'
-                        label={
-                          <span>
-                            {" "}
-                            Late By Hours
-                          </span>
-                        }
-                        disabled
-                        autoComplete="off"
-                      />
-                    </div>
-                    {/* Late By Hours Field End */}
-
-                    {/* Overtime Start Time Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="overtimeStart"
-                        component={Input}
-                        className='form-control'
-                        label={
-                          <span>
-                            {" "}
-                            Overtime Start Time
-                          </span>
-                        }
-                        disabled
-                        autoComplete="off"
-                      />
-                    </div>
-                    {/* Overtime Start Time Field End */}
-
-                    {/* Overtime Hours Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="interShifGap"
-                        component={Input}
-                        className='form-control'
-                        label={
-                          <span>
-                            {" "}
-                            Overtime Hours
-                          </span>
-                        }
-                        disabled
-                        autoComplete="off"
-                      />
-                    </div>
-                    {/* Overtime Hours Field End */}
-
-                    {/* Actual Overtime Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="interShifGap"
-                        component={Input}
-                        className='form-control'
-                        label={
-                          <span>
-                            {" "}
-                            Actual Overtime
-                          </span>
-                        }
-                        disabled
-                        autoComplete="off"
-                      />
-                    </div>
-                    {/* Actual Overtime Field End */}
-
-
                   </div>
+
+                  <br />
+                  <hr />
+                  <Accordion defaultActiveKey="">
+                    <Card>
+                      <Card.Header>
+                        <div className='accordion-header-btn'>
+                          <Accordion.Toggle as={Button} eventKey="0">
+                            Shift Details
+                            <KeyboardArrowDown />
+                          </Accordion.Toggle>
+                        </div>
+                      </Card.Header>
+                      <Accordion.Collapse eventKey="0">
+                        <Card.Body>
+
+                          <div className="from-group row">
+                            {/* Shift Field Start */}
+                            <div className="col-12 col-md-4 mt-3">
+                              <Field
+                                name="shiftId"
+                                component={Select}
+                                className='form-control'
+                                disabled
+                                label={
+                                  <span>
+                                    {" "}
+                                    Employee Shift
+                                  </span>
+                                }
+                                value={values.shiftId}
+                                autoComplete="off"
+                                children={CustomDropdown({ data: allEmployeeShifts, firstElement: { label: '', value: null } })}
+                              />
+                            </div>
+                            {/* Shift Field End */}
+
+                            {/* inter Shift Gap Field Start */}
+                            <div className="col-12 col-md-4 mt-3">
+                              <Field
+                                name="interShifGap"
+                                component={Input}
+                                className='form-control'
+                                disabled
+                                label={
+                                  <span>
+                                    {" "}
+                                    inter Shift Gap
+                                  </span>
+                                }
+                                autoComplete="off"
+                              />
+                            </div>
+                            {/* inter Shift Gap Field End */}
+
+                            {/* Shift Start Time Field Start */}
+                            <div className="col-12 col-md-4 mt-3">
+                              <Field
+                                name="shiftStartTime"
+                                component={Input}
+                                className='form-control'
+                                disabled
+                                label={
+                                  <span>
+                                    {" "}
+                                    Shift Start Time
+                                  </span>
+                                }
+                                autoComplete="off"
+                              />
+                            </div>
+                            {/* Shift Start Time Field End */}
+
+                            {/* Shift End Time Field Start */}
+                            <div className="col-12 col-md-4 mt-3">
+                              <Field
+                                name="shiftEndTime"
+                                component={Input}
+                                className='form-control'
+                                disabled
+                                label={
+                                  <span>
+                                    {" "}
+                                    Shift End Time
+                                  </span>
+                                }
+                                autoComplete="off"
+                              />
+                            </div>
+                            {/* Shift End Time Field End */}
+
+                            {/* Shift Hours Field Start */}
+                            <div className="col-12 col-md-4 mt-3">
+                              <Field
+                                name="shiftWorkingHours"
+                                component={Input}
+                                className='form-control'
+                                disabled
+                                label={
+                                  <span>
+                                    {" "}
+                                    Shift Hours
+                                  </span>
+                                }
+                                autoComplete="off"
+                              />
+                            </div>
+                            {/* Shift Hours Field End */}
+
+                            {/* Late In Time Field Start */}
+                            <div className="col-12 col-md-4 mt-3">
+                              <Field
+                                name="shiftLateIn"
+                                component={Input}
+                                disabled
+                                className='form-control'
+                                label={
+                                  <span>
+                                    {" "}
+                                    Late In Time
+                                  </span>
+                                }
+                                autoComplete="off"
+                              />
+                            </div>
+                            {/* Late In Time Field End */}
+
+                            {/* Early Out Time Field Start */}
+                            <div className="col-12 col-md-4 mt-3">
+                              <Field
+                                name="shiftEarlyOut"
+                                component={Input}
+                                className='form-control'
+                                disabled
+                                label={
+                                  <span>
+                                    {" "}
+                                    Early Out Time
+                                  </span>
+                                }
+                                autoComplete="off"
+                              />
+                            </div>
+                            {/* Early Out Time Field End */}
+
+                            {/* Half day Start Field Start */}
+                            <div className="col-12 col-md-4 mt-3">
+                              <Field
+                                name="shiftHalfDayStart"
+                                component={Input}
+                                className='form-control'
+                                disabled
+                                label={
+                                  <span>
+                                    {" "}
+                                    Half day Start
+                                  </span>
+                                }
+                                autoComplete="off"
+                              />
+                            </div>
+                            {/* Half day Start Field End */}
+
+                            {/* Half Day End Field Start */}
+                            <div className="col-12 col-md-4 mt-3">
+                              <Field
+                                name="shiftHalfDayEnd"
+                                component={Input}
+                                className='form-control'
+                                disabled
+                                label={
+                                  <span>
+                                    {" "}
+                                    Half Day End
+                                  </span>
+                                }
+                                autoComplete="off"
+                              />
+                            </div>
+                            {/* Half Day End Field End */}
+
+                            {/* Allow OverTime Field Starts */}
+                            <div className="col-12 col-md-4 mt-3">
+                              <Field
+                                name={`isOverTime`}
+                                component={Checkbox}
+                                disabled
+                                onChange={(e) => {
+                                  setFieldValue(
+                                    `isOverTime`,
+                                    e.target.checked
+                                  )
+                                }}
+                                isSelected={values.isOverTime}
+                              />
+                              <span>Allow OverTime</span>
+                            </div>
+                            {/* Allow OverTime Field End */}
+
+                            {/* Include Inter-Shift Gap Field Starts */}
+                            <div className="col-12 col-md-4 mt-3">
+                              <Field
+                                name={`isIncludeInterShifGap`}
+                                component={Checkbox}
+                                onChange={(e) => {
+                                  setFieldValue(
+                                    `isIncludeInterShifGap`,
+                                    e.target.checked
+                                  )
+                                }}
+                                disabled
+                                isSelected={values.isIncludeInterShifGap}
+                              />
+                              <span>Include Inter-Shift Gap</span>
+                            </div>
+                            {/* Include Inter-Shift Gap Field End */}
+
+                            {/* Late By Hours Field Start */}
+                            <div className="col-12 col-md-4 mt-3">
+                              <Field
+                                name="lateInHours"
+                                component={Input}
+                                className='form-control'
+                                label={
+                                  <span>
+                                    {" "}
+                                    Late By Hours
+                                  </span>
+                                }
+                                disabled
+                                autoComplete="off"
+                              />
+                            </div>
+                            {/* Late By Hours Field End */}
+
+                            {/* Overtime Start Time Field Start */}
+                            <div className="col-12 col-md-4 mt-3">
+                              <Field
+                                name="overtimeStart"
+                                component={Input}
+                                className='form-control'
+                                label={
+                                  <span>
+                                    {" "}
+                                    Overtime Start Time
+                                  </span>
+                                }
+                                disabled
+                                autoComplete="off"
+                              />
+                            </div>
+                            {/* Overtime Start Time Field End */}
+
+                            {/* Overtime Hours Field Start */}
+                            <div className="col-12 col-md-4 mt-3">
+                              <Field
+                                name="interShifGap"
+                                component={Input}
+                                className='form-control'
+                                label={
+                                  <span>
+                                    {" "}
+                                    Overtime Hours
+                                  </span>
+                                }
+                                disabled
+                                autoComplete="off"
+                              />
+                            </div>
+                            {/* Overtime Hours Field End */}
+
+                            {/* Actual Overtime Field Start */}
+                            <div className="col-12 col-md-4 mt-3">
+                              <Field
+                                name="interShifGap"
+                                component={Input}
+                                className='form-control'
+                                label={
+                                  <span>
+                                    {" "}
+                                    Actual Overtime
+                                  </span>
+                                }
+                                disabled
+                                autoComplete="off"
+                              />
+                            </div>
+                            {/* Actual Overtime Field End */}
+                          </div>
+                        </Card.Body>
+                      </Accordion.Collapse>
+                    </Card>
+                  </Accordion>
                 </fieldset>
               </Form>
             </Modal.Body>
@@ -525,8 +520,8 @@ export function MasterEditForm({
               {!isUserForRead && (
                 <button
                   type="button"
-                  onClick={()=> {
-                    setfilters({employeeId: '', attDateIn:''})
+                  onClick={() => {
+                    setfilters({ employeeId: '', attDateIn: '' })
                     handleReset()
                   }}
                   className="btn btn-light btn-elevate"
