@@ -109,7 +109,7 @@ export function FormFIlter({ listLoading,user }) {
               <div className="col-12 col-md-12 ">
                 <input
                   type="text"
-                  className="form-control"
+                  className="form-control input-field"
                   name="searchText"
                   placeholder="Search"
                   onBlur={handleBlur}

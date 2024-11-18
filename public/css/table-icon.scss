@@ -2,7 +2,7 @@
 .view-button{
 
     background-color: hsl(171, 92%, 37%) !important; 
-    fill: rgb(255, 255, 255); 
+    // fill: rgb(255, 255, 255); 
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -64,10 +64,15 @@
   }
   
   .btn-primary{
-    background-color: #2490CF !important; 
+    background-color: #0093DD !important; 
+    border:0;
   }
 
 .card-header1{
     background-color: transparent !important; ;
+}
+  
+.input-field{
+  border-color: #333333;
 }
 

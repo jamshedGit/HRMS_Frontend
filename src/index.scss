@@ -34,6 +34,25 @@
   @import "./_metronic/_assets/sass/themes/layout/brand/light.scss";
 }
 
+// <uniquifier>: Use a unique and descriptive class name
+// <weight>: Use a value from 100 to 900
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+// <uniquifier>: Use a unique and descriptive class name
+// <weight>: Use a value from 100 to 900
+
+.noto-sans-bold {
+  font-family: "Noto Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;  /* Bold weight */
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
+margin-top: 12px;
+}
+
+
 // Aside themes
 // Dark
 //@import "./_metronic/_assets/sass/themes/layout/aside/dark.scss";
@@ -279,6 +298,9 @@
 // }
 
 body{
-  background-color: #dcf3fa;
+  background-color: #E6F8FF !important;
   height: 100vh;  
+}
+.body-color{
+  background-color: #E6F8FF !important;
 }

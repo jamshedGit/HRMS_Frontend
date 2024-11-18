@@ -1,15 +1,40 @@
 import React, { forwardRef, useEffect, useState } from "react";
 import clsx from "clsx";
 import { isFragment } from "react-is";
-
+import { format } from 'date-fns';
 export const CardHeaderIcon = forwardRef(({ className }, ref) => (
   <span ref={ref} className={clsx("card-head-icon", className)} />
 ));
 
-export const CardHeaderTitle = forwardRef(({ className, ...props }, ref) => (
-  // eslint-disable-next-line jsx-a11y/heading-has-content
-  <h3 {...props} ref={ref} className={clsx("card-label", className)} />
-));
+// export const CardHeaderTitle = forwardRef(({ className, ...props }, ref) => (
+//   // eslint-disable-next-line jsx-a11y/heading-has-content
+//   const currentDate = new Date().toLocaleDateString();
+//   return(
+//   <>
+
+//   <h1 {...props} ref={ref} className="noto-sans-bold mt-5" />
+
+
+// <h3>{currentDate}</h3>;
+//   </>
+
+// )
+// ));
+
+
+
+
+export const CardHeaderTitle = forwardRef(({ className, ...props }, ref) => {
+  // Calculate the current date outside the JSX return block
+  const currentDate = format(new Date(), 'EEEE, dd MMMM yyyy');
+
+  return (
+    <>
+      <h1 {...props} ref={ref} className={`noto-sans-bold  ${className}`} />
+      <h5>{currentDate}</h5>
+    </>
+  );
+});
 
 export const CardHeaderToolbar = forwardRef(
   ({ children, className, ...props }, ref) => (
@@ -88,7 +113,7 @@ export const CardHeader = forwardRef(
     return (
       <div
         ref={ref}
-        className="card-header"
+        className="card-header body-color"
         style={
           !sticky
             ? undefined
@@ -96,7 +121,7 @@ export const CardHeader = forwardRef(
         }
       >
         {title != null && (
-          <div ref={labelRef} className={clsx("card-title", className)}>
+          <div ref={labelRef} className={ className}>
             {icon}
 
             {/* Wrap string and fragments in CardHeaderTitle */
