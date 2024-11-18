@@ -25,9 +25,10 @@ const userEditSchema_2 = Yup.object().shape(
   {
     // parentDept: Yup.string().required("Please select parent department"),
     deptCode: Yup.string().required("*Required"),
-    deptName: Yup.string() .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.'),
+    deptName: Yup.string() .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.').required("*Required"),
     budgetStrength: Yup.string()  .matches(/^\d+$/, "Must contain only digits").required("*Required"),
     subsidiary: Yup.string().required("*Required"),
+    // parentDept: Yup.string().required("*Required"),
     // parentDept: Yup.string().nullable().required("*Required"),
   }
 );
@@ -71,24 +72,16 @@ export function DeptEditForm({
 
   // This method is used for when edit record and get selected dept where id save in DB
   useEffect(() => {
-    const deptId = defDept?.value ? defDept.value : user.deptId;
+    const parentDept = defDept?.value ? defDept.value : user.parentDept;
     setDefaultDept(
       dashboard.allDept &&
       dashboard.allDept.filter((item) => {
-        return item.value === deptId;
+        return item.value === parentDept;
       })
     );
-  }, [user?.deptId, dashboard.deptId]);
+  }, [user?.parentDept, dashboard.parentDept]);
 
-  const onCheckboxChange = async (event) => {
-    const target = event.currentTarget;
-    const name = target.name;
-    const id = target.id;
-    const checked = target.checked;
-
-    console.log("checked", checked, id, name, target)
-    
-  };
+  
 
 
   
@@ -164,7 +157,7 @@ console.log("pep", dashboard.allDept)
                       <div className="col-12 col-md-4 mt-3">
                         <SearchSelect
                           name="parentDept"
-                          label={<span> Parent Dept<span style={{ color: 'red' }}>*</span></span>}
+                          label={<span> Parent Dept</span>}
                           isDisabled={isUserForRead && true}
                           onBlur={() => {
                             // handleBlur({ target: { name: "countryId" } });

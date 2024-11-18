@@ -45,7 +45,7 @@ export function BanksCard() {
                 className="btn btn-primary"
                 onClick={BanksUIProps.newBankButtonClick}
               >
-                + Add Compensation Benefits
+                + Add Compensation Policy
               </button>
             ) : (
               <></>
