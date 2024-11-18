@@ -72,6 +72,7 @@ const reimbursement_claimModule = lazy(() => import("./modules/Reimbursement_cla
 const employee_loan_requestModule = lazy(() => import("./modules/Employee_Loan_Request/pages/index")); 
 const AttendanceConfigurationManagement = lazy(() => import("./modules/Attendance_Configuration/pages/index")); 
 const HolidaysModule = lazy(() => import("./modules/Holidays/pages/index")); 
+const Attendance = lazy(() => import("./modules/Attendance/pages/index")); 
 
 
 const LeaveEncashment = lazy(() => import("./modules/LeaveEncashment/pages/index"));
@@ -135,7 +136,8 @@ const ROUTES = {
   employee_loan_request:employee_loan_requestModule,
   attendance_configuration: AttendanceConfigurationManagement,
   holidays:HolidaysModule,
-  leave_encashment: LeaveEncashment
+  leave_encashment: LeaveEncashment,
+  attendance: Attendance
 };
 
 export default function BasePage() {
