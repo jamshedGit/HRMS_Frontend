@@ -82,16 +82,6 @@ export function DeptEditForm({
 
   
 
-  const onCheckboxChange = async (event) => {
-    const target = event.currentTarget;
-    const name = target.name;
-    const id = target.id;
-    const checked = target.checked;
-
-    console.log("checked", checked, id, name, target)
-    
-  };
-
 
   
   useEffect(() => {
