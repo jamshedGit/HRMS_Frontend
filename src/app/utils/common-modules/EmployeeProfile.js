@@ -237,7 +237,7 @@ const EmployeeProfile = ({ employeeId }) => {
     <Accordion defaultActiveKey="">
       <Card>
         <Card.Header>
-          <div className='accordion-header-btn'>
+          <div className='accordion-header-btn '>
             <Accordion.Toggle as={Button} eventKey="0">
               Employee Detail
               <KeyboardArrowDown />
@@ -246,8 +246,9 @@ const EmployeeProfile = ({ employeeId }) => {
         </Card.Header>
         <Accordion.Collapse eventKey="0">
           <Card.Body>
-            
-            <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
+         
+          {/* "rgb(235 243 255)" */}
+            <div style={{ backgroundColor:  "#CBE4F9", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
      
               
 

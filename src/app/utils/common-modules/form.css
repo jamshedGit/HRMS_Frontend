@@ -5,5 +5,11 @@
 
 .accordion-header-btn > button {
     width: -webkit-fill-available;
-    background-color: #476074 !important;
+    background-color: #0093DD !important;
+    padding: 1.5%;
 }
+
+.accordion-header-btn:hover > button {
+    background-color: #000000 !important;/* Darker background on hover */
+    transform: translateY(-2px);
+  }
