@@ -28,6 +28,7 @@ const userEditSchema_2 = Yup.object().shape(
     deptName: Yup.string() .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.').required("*Required"),
     budgetStrength: Yup.string()  .matches(/^\d+$/, "Must contain only digits").required("*Required"),
     subsidiary: Yup.string().required("*Required"),
+    parentDept: Yup.string().required("*Required"),
     // parentDept: Yup.string().nullable().required("*Required"),
   }
 );
