@@ -234,12 +234,13 @@ console.log("in func")
                 <fieldset disabled={isUserForRead}>
                   <div className="from-group row">
                     <div className="col-12 col-md-4 mt-3">
+                    <span> Month<span style={{ color: 'red' }}>*</span></span>
                       <select className="form-control" name="month" value={defMonth}
                         onChange={(e) => {
                           console.log("bell", e.target.value)
                           setFieldValue("month", e.target.value);
                           setDefaulMonth(e.target.value);
-                          console.log("shortFormatGlobal", shortFormatGlobal)
+                          
                           setDefaulShortFormat(e.target.value > 9 ? e.target.value + "" + shortFormatGlobal : +"0" + e.target.value + "" + shortFormatGlobal)
                           handleMonthChange(e.target.value);
 

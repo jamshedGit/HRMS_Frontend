@@ -95,8 +95,9 @@ export function BranchEditForm({
 
   useEffect(() => {
    
+    console.log("fff",user?.accOpeningDate)
     if (user.Id && user?.accOpeningDate) {
-      console.log("date::")
+      
       setAccountOpeningDate(new Date(user?.accOpeningDate));
     }
   }, [user.accOpeningDate]);
