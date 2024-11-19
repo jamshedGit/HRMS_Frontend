@@ -13,9 +13,9 @@ import {
   headerSortingClasses,
 } from "../../../../../../_metronic/_helpers";
 import * as uiHelpers from "../FormUIHelpers";
-import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatter";
 import { Pagination } from "../../../../../../_metronic/_partials/controls";
 import { useFormUIContext } from "../FormUIContext";
+import { Modal } from "react-bootstrap";
 
 export function FormTable() {
   //Users UI Context
@@ -23,20 +23,15 @@ export function FormTable() {
 
   const FormUIProps = useMemo(() => {
     return {
-      ids: formUIContext.ids,
-      setIds: formUIContext.setIds,
       queryParams: formUIContext.queryParams,
       setQueryParams: formUIContext.setQueryParams,
-      openEditFormDialog: formUIContext.openEditFormDialog,
-      openDeleteFormDialog: formUIContext.openDeleteFormDialog,
-      openReadFormDialog: formUIContext.openReadFormDialog,
     };
   }, [formUIContext]);
 
   const { currentState, userAccess } = useSelector(
     (state) => {
       return {
-        currentState: state.Attendance,
+        currentState: state.attendance,
         userAccess: state?.auth?.userAccess["Attendance"],
       }
     },
@@ -48,69 +43,122 @@ export function FormTable() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    FormUIProps.setIds([]);
     dispatch(actions.fetchAttendance(FormUIProps.queryParams));
-  }, [FormUIProps.queryParams, dispatch, totalCount]);
+  }, [FormUIProps.queryParams, dispatch]);
 
-  const isAccessForEdit = userAccess?.find(
-    (item) => item.componentName === "UpdateAttendance"
-  );
-
-  const isAccessForDelete = userAccess?.find(
-    (item) => item.componentName === "DeleteAttendance"
-  );
   // Table columns
   const columns = [
     {
-      dataField: "name",
+      dataField: "employeeCode",
+      text: "Emp. Code",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+        maxWidth: "160px",
+      },
+    },
+    {
+      dataField: "fullName",
       text: "Name",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
       style: {
         minWidth: "160px",
+        maxWidth: "160px",
       },
     },
     {
-      dataField: "code",
-      text: "Code",
+      dataField: "attDateIn",
+      text: "Attendance Date In",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
       style: {
         minWidth: "160px",
+        maxWidth: "160px",
       },
     },
     {
-      dataField: "typeName",
-      text: "Type",
+      dataField: "timeIn",
+      text: "Time In",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
       style: {
         minWidth: "160px",
+        maxWidth: "160px",
       },
     },
     {
-      dataField: "action",
-      text: "Actions",
-      isDummyField: true,
-      formatter: ActionsColumnFormatter,
-      formatExtraData: {
-        openEditFormDialog: FormUIProps.openEditFormDialog,
-        openDeleteFormDialog: FormUIProps.openDeleteFormDialog,
-        openReadFormDialog: FormUIProps.openReadFormDialog,
-        isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,
-        isAccessForDelete: isAccessForDelete
-          ? isAccessForDelete.isAccess
-          : false,
-      },
-      classes: "text-right pr-0",
-      headerClasses: "text-right pr-3",
+      dataField: "attDateOut",
+      text: "Attendance Date Out",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
       style: {
-        minWidth: "170px",
+        minWidth: "160px",
+        maxWidth: "160px",
       },
     },
+    {
+      dataField: "timeOut",
+      text: "Time Out",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+        maxWidth: "160px",
+      },
+    },
+    {
+      dataField: "dayStatus",
+      text: "Attendance Status",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+        maxWidth: "160px",
+      },
+    },
+    {
+      dataField: "workedHours",
+      text: "Worked Hours",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+        maxWidth: "160px",
+      },
+    },
+    {
+      dataField: "oT",
+      text: "OT Hours",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+        maxWidth: "160px",
+      },
+    },
+    {
+      dataField: "comments",
+      text: "Remarks",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+        maxWidth: "160px",
+      },
+    },
+
   ];
 
   //Table pagination properties
@@ -124,41 +172,44 @@ export function FormTable() {
 
   return (
     <>
-      <PaginationProvider pagination={paginationFactory(paginationOptions)}>
-        {({ paginationProps, paginationTableProps }) => {
-          return (
-            <Pagination
-              isLoading={listLoading}
-              paginationProps={paginationProps}
-            >
-              <BootstrapTable
-                noDataIndication={NoRecordsFoundMessage({ entities })}
-                wrapperClasses="table-responsive"
-                bordered={false}
-                classes="table table-head-custom table-vertical-center overflow-hidden table-hover"
-                bootstrap4
-                remote
-                keyField="Id"
-                data={entities === null ? [] : entities}
-                columns={columns}
-                defaultSorted={uiHelpers.defaultSorted}
-                onTableChange={getHandlerTableChange(
-                  FormUIProps.setQueryParams
-                )}
-                // selectRow={getSelectRow({
-                //   entities,
-
-                // })}
-                {...paginationTableProps}
+      <Modal.Body className="overlay overlay-block cursor-default">
+        <PaginationProvider pagination={paginationFactory(paginationOptions)}>
+          {({ paginationProps, paginationTableProps }) => {
+            return (
+              <Pagination
+                isLoading={listLoading}
+                paginationProps={paginationProps}
               >
+                <BootstrapTable
+                responsive
+                  noDataIndication={NoRecordsFoundMessage({ entities })}
+                  wrapperClasses="table-responsive"
+                  bordered={false}
+                  classes="table table-head-custom table-vertical-center overflow-hidden table-hover fixed-layout-table"
+                  bootstrap4
+                  remote
+                  keyField="Id"
+                  data={entities === null ? [] : entities}
+                  columns={columns}
+                  defaultSorted={uiHelpers.defaultSorted}
+                  onTableChange={getHandlerTableChange(
+                    FormUIProps.setQueryParams
+                  )}
+                  // selectRow={getSelectRow({
+                  //   entities,
 
-                <PleaseWaitMessage entities={entities} />
-                <NoRecordsFoundMessage entities={entities} />
-              </BootstrapTable>
-            </Pagination>
-          );
-        }}
-      </PaginationProvider>
+                  // })}
+                  {...paginationTableProps}
+                >
+
+                  <PleaseWaitMessage entities={entities} />
+                  <NoRecordsFoundMessage entities={entities} />
+                </BootstrapTable>
+              </Pagination>
+            );
+          }}
+        </PaginationProvider>
+      </Modal.Body>
     </>
   );
 }

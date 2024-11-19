@@ -1,26 +1,52 @@
 import React, { useMemo } from "react"
-import { Formik } from "formik"
+import { Field, Formik } from "formik"
 import { isEqual } from "lodash"
 import { useFormUIContext } from "../FormUIContext"
-import { debounce } from "lodash";
-import { useCallback } from "react";
+import { Form, Modal } from "react-bootstrap";
+import { useSelector, shallowEqual } from "react-redux";
+import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
+import { DatePickerField, Select } from "../../../../../../_metronic/_partials/controls";
+import { ATTENDANCE_TYPE } from "../../../../../utils/constants";
+import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
+import { initialFilter } from "../FormUIHelpers";
 
 const prepareFilter = (queryParams, values) => {
-  const { searchText } = values
   const newQueryParams = { ...queryParams }
-  const filter = {}
-
-  if (searchText) {
-    filter.searchQuery = searchText
-    // filter.email = searchText
-  }
-  newQueryParams.filter = filter
+  newQueryParams.filter = { ...values }
   return newQueryParams
 }
 
-export function FormFilter() {
+export function FormFilter({ loading }) {
 
   const FormUIContext = useFormUIContext()
+
+  const { allEmployees, allSubsidiaryList, allEmployeeGradeList, allDept, allLocationChildMenus, allDesignations } = useSelector(
+    (state) => (state.dashboard),
+  )
+
+  const allEmployeesMap = useMemo(() => {
+    return new Map(allEmployees?.map(item => [item.value, item]));
+  }, [allEmployees]);
+
+  const allSubsidiaryMap = useMemo(() => {
+    return new Map(allSubsidiaryList?.map(item => [item.value, item]));
+  }, [allSubsidiaryList]);
+
+  const allGradeMap = useMemo(() => {
+    return new Map(allEmployeeGradeList?.map(item => [item.value, item]));
+  }, [allEmployeeGradeList]);
+
+  const allDeptMap = useMemo(() => {
+    return new Map(allDept?.map(item => [item.value, item]));
+  }, [allDept]);
+
+  const allLocationMap = useMemo(() => {
+    return new Map(allLocationChildMenus?.map(item => [item.value, item]));
+  }, [allLocationChildMenus]);
+
+  const allDesignationsMap = useMemo(() => {
+    return new Map(allDesignations?.map(item => [item.value, item]));
+  }, [allDesignations]);
 
   const formUIProps = useMemo(() => {
     return {
@@ -29,7 +55,6 @@ export function FormFilter() {
     }
   }, [FormUIContext])
 
-  // queryParams, setQueryParams,
   const applyFilter = (values) => {
     const newQueryParams = prepareFilter(formUIProps.queryParams, values)
     if (!isEqual(newQueryParams, formUIProps.queryParams)) {
@@ -39,22 +64,13 @@ export function FormFilter() {
     }
   }
 
-
-  //This is a Debounce Function that will run the function only after 500ms even if the function is triggered every second.
-  const debouncedApplyFilter = useCallback(
-    debounce((values) => applyFilter(values), 500), 
-    []
-  );
-
   return (
     <>
       <Formik
         enableReinitialize={true}
-        initialValues={{
-          searchText: ""
-        }}
+        initialValues={initialFilter.filter}
         onSubmit={(values) => {
-          debouncedApplyFilter(values)
+          applyFilter(values)
         }}
       >
         {({
@@ -62,28 +78,278 @@ export function FormFilter() {
           handleSubmit,
           handleBlur,
           setFieldValue,
+          handleReset
         }) => (
-          <form className="form form-label-right" style={{margin: '0.8rem 0'}}>
-            <div className="row">
-              <div className="col-12 col-md-12">
-                <input
-                  type="text"
-                  className="form-control"
-                  name="searchText"
-                  placeholder="Search By Name"
-                  onBlur={handleBlur}
-                  value={values.searchText}
-                  onChange={(e) => {
-                      setFieldValue("searchText", e.target.value)
-                      handleSubmit()
-                  }}
-                />
-                <small className="form-text text-muted">
-                  {/* <b>Search</b> in Type field */}
-                </small>
-              </div>
-            </div>
-          </form>
+          <>
+            <Modal.Body className="overlay overlay-block cursor-default">
+              <Form className="form form-label-right">
+                <fieldset>
+                  <div className="from-group row">
+
+                    {/* Subsidiary Field Start */}
+                    <div className="col-12 col-md-4 mt-3">
+                      <Field
+                        name="subsidiaryId"
+                        component={SearchSelect}
+                        onBlur={handleBlur}
+                        onChange={(e) => {
+                          const value = e.value == '--Select--' ? '' : Number(e.value)
+                          setFieldValue('subsidiaryId', value)
+                        }}
+                        label={
+                          <span>
+                            {" "}
+                            Subsidiary
+                          </span>
+                        }
+                        value={allSubsidiaryMap?.get(values?.subsidiaryId || '') || ''}
+                        autoComplete="off"
+                        options={allSubsidiaryList}
+                      />
+                    </div>
+                    {/* Subsidiary Field End */}
+
+                    {/* Deparment Field Start */}
+                    <div className="col-12 col-md-4 mt-3">
+                      <Field
+                        name="departmentId"
+                        component={SearchSelect}
+                        onBlur={handleBlur}
+                        onChange={(e) => {
+                          const value = e.value == '--Select--' ? '' : Number(e.value)
+                          setFieldValue('departmentId', value)
+                        }}
+                        label={
+                          <span>
+                            {" "}
+                            Department
+                          </span>
+                        }
+                        value={allDeptMap?.get(values?.departmentId || '') || ''}
+                        autoComplete="off"
+                        options={allDept}
+                      />
+                    </div>
+                    {/* Deparment Field End */}
+
+                    {/* Report To Field Start */}
+                    <div className="col-12 col-md-4 mt-3">
+                      <Field
+                        name="reportTo"
+                        component={SearchSelect}
+                        onBlur={handleBlur}
+                        onChange={(e) => {
+                          const value = e.value == '--Select--' ? '' : Number(e.value)
+                          setFieldValue('reportTo', value)
+                        }}
+                        label={
+                          <span>
+                            {" "}
+                            Report To
+                          </span>
+                        }
+                        value={allEmployeesMap?.get(values?.reportTo || '') || ''}
+                        autoComplete="off"
+                        options={allEmployees}
+                      />
+                    </div>
+                    {/* Report To Field End */}
+
+                    {/* Grade Field Start */}
+                    <div className="col-12 col-md-4 mt-3">
+                      <Field
+                        name="gradeId"
+                        component={SearchSelect}
+                        onBlur={handleBlur}
+                        onChange={(e) => {
+                          const value = e.value == '--Select--' ? '' : Number(e.value)
+                          setFieldValue('gradeId', value)
+                        }}
+                        label={
+                          <span>
+                            {" "}
+                            Grade
+                          </span>
+                        }
+                        value={allGradeMap?.get(values?.gradeId || '') || ''}
+                        autoComplete="off"
+                        options={allEmployeeGradeList}
+                      />
+                    </div>
+                    {/* Grade Field End */}
+
+                    {/* Designation Field Start */}
+                    <div className="col-12 col-md-4 mt-3">
+                      <Field
+                        name="designationId"
+                        component={SearchSelect}
+                        onBlur={handleBlur}
+                        onChange={(e) => {
+                          const value = e.value == '--Select--' ? '' : Number(e.value)
+                          setFieldValue('designationId', value)
+                        }}
+                        label={
+                          <span>
+                            {" "}
+                            Designation
+                          </span>
+                        }
+                        value={allDesignationsMap?.get(values?.designationId || '') || ''}
+                        autoComplete="off"
+                        options={allDesignations}
+                      />
+                    </div>
+                    {/* Designation Field End */}
+
+                    {/* Location Field Start */}
+                    <div className="col-12 col-md-4 mt-3">
+                      <Field
+                        name="locationId"
+                        component={SearchSelect}
+                        onBlur={handleBlur}
+                        onChange={(e) => {
+                          const value = e.value == '--Select--' ? '' : Number(e.value)
+                          setFieldValue('locationId', value)
+                        }}
+                        label={
+                          <span>
+                            {" "}
+                            Location
+                          </span>
+                        }
+                        value={allLocationMap?.get(values?.locationId || '') || ''}
+                        autoComplete="off"
+                        options={allLocationChildMenus}
+                      />
+                    </div>
+                    {/* Location Field End */}
+
+                    {/* Attendance Type Field Start */}
+                    <div className="col-12 col-md-4 mt-3">
+                      <Field
+                        name="attendanceType"
+                        component={Select}
+                        placeholder=""
+                        onChange={(e) => {
+                          const value = e.target.value == -1 ? '' : Number(e.target.value)
+                          setFieldValue('attendanceType', value)
+                        }}
+                        label={
+                          <span>
+                            {" "}
+                            Attendance Type
+                          </span>
+                        }
+                        value={values.attendanceType}
+                        autoComplete="off"
+                        children={CustomDropdown({ data: ATTENDANCE_TYPE })}
+                      />
+                    </div>
+                    {/* Attendance Type Field End */}
+
+                  </div>
+
+                  <div className="from-group row">
+                    {/* Employee Field Start */}
+                    <div className="col-12 col-md-4 mt-3">
+                      <Field
+                        name="employeeId"
+                        component={SearchSelect}
+                        onBlur={handleBlur}
+                        onChange={(e) => {
+                          const value = e.value == '--Select--' ? '' : Number(e.value)
+                          setFieldValue('employeeId', value)
+                        }}
+                        label={
+                          <span>
+                            {" "}
+                            Employee
+                          </span>
+                        }
+                        value={allEmployeesMap?.get(values?.employeeId || '') || ''}
+                        autoComplete="off"
+                        options={allEmployees}
+                      />
+                    </div>
+                    {/* Employee Field End */}
+
+                  </div>
+
+                  <div className="from-group row">
+                    {/* Date from Field Start */}
+                    <div className="col-12 col-md-4 mt-3">
+                      <Field
+                        name="from"
+                        component={DatePickerField}
+                        dateFormat="dd/MM/yyyy"
+                        label={
+                          <span>
+                            {" "}
+                            Date From
+                          </span>
+                        }
+                        onChange={(date) => {
+                          setFieldValue('from', date)
+                          setFieldValue('to', date)
+                        }}
+                        autoComplete="off"
+                      />
+                    </div>
+                    {/* Date from Field End */}
+
+                    {/* Date to Field Start */}
+                    <div className="col-12 col-md-4 mt-3">
+                      <Field
+                        name="to"
+                        component={DatePickerField}
+                        onBlur={handleBlur}
+                        dateFormat="dd/MM/yyyy"
+                        label={
+                          <span>
+                            {" "}
+                            Date To
+                          </span>
+                        }
+                        onChange={(date) => {
+                          setFieldValue('to', date)
+                        }}
+                        autoComplete="off"
+                      />
+                    </div>
+                    {/* Date to Field End */}
+
+                  </div>
+                </fieldset>
+              </Form>
+            </Modal.Body>
+            <Modal.Footer>
+
+              <button
+                type="button"
+                onClick={() => {
+                  applyFilter(initialFilter.filter)
+                  handleReset()
+                }}
+                className="btn btn-light btn-elevate"
+              >
+                Cancel
+              </button>
+
+              <button
+                type="submit"
+                onClick={() => handleSubmit()}
+                disabled={loading}
+                className="btn btn-primary btn-elevate"
+              >
+                Apply
+                {loading && (
+                  <span className="ml-3 mr-3 spinner spinner-white"></span>
+                )}
+              </button>
+
+            </Modal.Footer>
+
+          </>
         )}
       </Formik>
     </>

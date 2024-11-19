@@ -4,18 +4,26 @@ export const CustomerTypeCssClasses = ["success", "primary", ""]
 export const CustomerTypeTitles = ["Business", "Individual", ""]
 export const defaultSorted = [{ dataField: "id", order: "asc" }]
 export const sizePerPageList = [
-  { text: "3", value: 3 },
-  { text: "5", value: 5 },
-  { text: "10", value: 10 },
+  { text: "50", value: 50 },
+  { text: "100", value: 100 },
+  { text: "150", value: 150 },
 ]
 
 export const initialFilter = {
   filter: {
-    searchQuery: ""
+    subsidiaryId: "",
+    departmentId: "",
+    reportTo: "",
+    gradeId: "",
+    designationId: "",
+    locationId: "",
+    attendanceType: "",
+    employeeId: "",
+    from: "",
+    to: "",
   },
-
   sortOrder: "asc",
-  pageSize: 5,
+  pageSize: 50,
   pageNumber: 1
 }
 
