@@ -70,15 +70,18 @@ export function BankEditForm({
 
   useEffect(() => {
 
-    //=========== END
-    useEffect(() => {
+    if (!user.Id) {
+      dispatch(fetchAllFormsMenu(45, "allAccountList")); // For All Grade Codes
+    }
+  }, [dispatch]);
 
-      if (!user.Id) {
-        dispatch(fetchAllFormsMenu(45, "allAccountList")); // For All Grade Codes
-      }
-    }, [dispatch]);
-  }
-  );
+
+  useEffect(() => {
+
+    if (!user.Id) {
+      dispatch(fetchAllFormsMenu(45, "allAccountList")); // For All Grade Codes
+    }
+  }, [dispatch]);
 
   return (
     <>
@@ -196,6 +199,7 @@ export function BankEditForm({
                     }
                     {
                       <div className="col-12 col-md-4 mt-3">
+
                         <SearchSelect
                           name="account"
                           label={
@@ -219,7 +223,7 @@ export function BankEditForm({
                           }))}
 
                           error={errors.account}
-                        touched={touched.account}
+                          touched={touched.account}
                         />
 
                         {/* <Field

@@ -136,10 +136,11 @@ export const rootReducer = combineReducers({
   allocate_leaves: AllocateLeavesSlice.reducer,
   employee_leave_balance: EmployeeLeaveBalanceSlice.reducer,
   attendance_configuration:AttendanceConfigurationSlice.reducer,
-  employee_shift: employeeShiftSlice.reducer,
+  employee_shift: employeeShiftSlice.reducer, 
   holidays:HolidaysSlice.reducer,
   reimbursement_claim:reimbursement_claimSlice.reducer,
   leave_encashment: LeaveEncashmentSlice.reducer,
+  
 });
 
 export function* rootSaga() {
