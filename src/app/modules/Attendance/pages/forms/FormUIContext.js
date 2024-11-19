@@ -31,15 +31,12 @@ export function FormUIProvider({ FormUIEvents, children }) {
 
   const initUser = {
     employeeId: "",
-    subsidiaryId: "",
-    employeeId: "",
-    employeeCode: "",
     comments: "",
     attDateIn: "",
     attDateOut: "",
     timeIn: "",
     timeOut: "",
-    shiftId: "",
+    shiftCode: "",
     shiftStartTime: "",
     shiftEndTime: "",
     interShifGap: "",
@@ -52,6 +49,8 @@ export function FormUIProvider({ FormUIEvents, children }) {
     isIncludeInterShifGap: "",
     lateInHours: "",
     overtimeStart: "",
+    oT: "",
+    approvedOT: "",
   };
 
 

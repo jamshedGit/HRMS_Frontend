@@ -223,7 +223,7 @@ export function MasterEditForm({
 
                   <br />
                   <hr />
-                  <Accordion defaultActiveKey="">
+                  <Accordion defaultActiveKey="0">
                     <Card>
                       <Card.Header>
                         <div className='accordion-header-btn'>
@@ -240,7 +240,7 @@ export function MasterEditForm({
                             {/* Shift Field Start */}
                             <div className="col-12 col-md-4 mt-3">
                               <Field
-                                name="shiftId"
+                                name="shiftCode"
                                 component={Select}
                                 className='form-control'
                                 disabled
@@ -250,7 +250,7 @@ export function MasterEditForm({
                                     Employee Shift
                                   </span>
                                 }
-                                value={values.shiftId}
+                                value={values.shiftCode}
                                 autoComplete="off"
                                 children={CustomDropdown({ data: allEmployeeShifts, firstElement: { label: '', value: null } })}
                               />
@@ -476,7 +476,7 @@ export function MasterEditForm({
                             {/* Overtime Hours Field Start */}
                             <div className="col-12 col-md-4 mt-3">
                               <Field
-                                name="interShifGap"
+                                name="oT"
                                 component={Input}
                                 className='form-control'
                                 label={
@@ -494,7 +494,7 @@ export function MasterEditForm({
                             {/* Actual Overtime Field Start */}
                             <div className="col-12 col-md-4 mt-3">
                               <Field
-                                name="interShifGap"
+                                name="approvedOT"
                                 component={Input}
                                 className='form-control'
                                 label={
