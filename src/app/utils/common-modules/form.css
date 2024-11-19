@@ -4,12 +4,30 @@
 }
 
 .accordion-header-btn > button {
+    border: none;
     width: -webkit-fill-available;
     background-color: #0093DD !important;
     padding: 1.5%;
+    color: rgb(255, 255, 255);
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .accordion-header-btn:hover > button {
-    background-color: #000000 !important;/* Darker background on hover */
+   
+    background-color: #333333 !important;
     transform: translateY(-2px);
   }
+  .flex-between-center {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+
+.custom_color_1{
+    color:  #0093DD !important;
+}
+.bg_custom_color_1{
+    background-color:  #0093DD !important;
+}
+

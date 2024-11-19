@@ -281,6 +281,7 @@ export function FormEditForm({
                       {isFileReq && <span style={{ color: "red" }}>*</span>}
                     </label>
                     <input
+  
                       name="file"
                       type="file"
                       accept=".jpeg,.jpg,.png,.pdf,.doc,.docx"

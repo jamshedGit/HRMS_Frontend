@@ -26,14 +26,14 @@
 }
 
 .custom-button:hover {
-  background-color: #000000; /* Darker background on hover */
+  background-color: #333333; /* Darker background on hover */
   transform: translateY(-2px); /* Slightly move the button upwards on hover */
 }
 
-.custom-button:active {
-  background-color: #000000; /* Even darker background when the button is pressed */
-  transform: translateY(0); /* Reset the movement when clicked */
-}
+// .custom-button:active {
+//   background-color: #333333; /* Even darker background when the button is pressed */
+//   transform: translateY(0); /* Reset the movement when clicked */
+// }
 
 
 

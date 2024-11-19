@@ -101,7 +101,8 @@ margin-top: 12px;
   border-right: 1px solid #ffffff !important;
   border-bottom: 1px solid #ffffff !important;
   border-radius: 12px;
-  color: #000 ;
+  font-family: "Noto Sans", sans-serif;
+  color: #333333 ;
   th {
     outline: none;
    background-color:#fafafa;
@@ -125,14 +126,14 @@ margin-top: 12px;
         color: $primary !important;
     } 
     // background-color: #f7f7f7;
-    color: #000000 !important; 
+    color: #333333 !important; 
     border-radius: 140px;
   }
 
 
   .table.table-head-custom thead th {
-    color: #000000 !important;  /* Same text color for header cells */
-    font-family: Georgia, serif;
+    color: #333333 !important;  /* Same text color for header cells */
+   
   }
 }
 
@@ -301,7 +302,11 @@ margin-top: 12px;
 body{
   background-color: #E6F8FF !important;
   height: 100vh;  
+  font-family: "Noto Sans", sans-serif;
 }
 .body-color{
   background-color: #E6F8FF !important;
+}
+.text-bold {
+  font-weight: bold;
 }
