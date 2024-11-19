@@ -26,11 +26,12 @@ export function DatePickerField({ ...props }) {
         className={getFieldCSSClasses(touched[field.name], errors[field.name])}
         style={{ width: "100%" }}
         {...field}
-        {...props}
         selected={(field.value && new Date(field.value)) || new Date()}
         onChange={(val) => {
           setFieldValue(field.name, val);
         }}
+        {...props}
+
       />
       {errors[field.name] && touched[field.name] && (
         <div className="invalid-datepicker-feedback" style={{ color: '#F64E60', 'font-size': '0.9rem' }}>

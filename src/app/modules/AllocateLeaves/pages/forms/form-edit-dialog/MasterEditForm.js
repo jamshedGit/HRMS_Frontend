@@ -119,7 +119,7 @@ export function MasterEditForm({
                         }
                         value={values.cycleTypeId}
                         autoComplete="off"
-                        children={CustomDropdown({ data: dropdownData.allCycleTypeList })}
+                        children={CustomDropdown({ data: dropdownData.allCycleTypeList, firstElement: { label: '--Select--', value: null } })}
                       />
                       {
                         errors.cycleTypeId && touched.cycleTypeId && <CustomErrorLabel touched={true} error={errors.cycleTypeId} />

@@ -83,7 +83,7 @@ export function BanksTable() {
 
     {
       dataField: "deductionCode",
-      text: "Code",
+      text: "Deduction Code",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -94,7 +94,7 @@ export function BanksTable() {
 
     {
       dataField: "deductionName",
-      text: "Deduction",
+      text: "Deduction Name",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -123,19 +123,19 @@ export function BanksTable() {
     //     minWidth: "160px",
     //   },
     // },
-    {
-      dataField: "mappedDeduction",
-      text: "Mapped Deduction",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
+    // {
+    //   dataField: "mappedDeduction",
+    //   text: "Mapped Deduction",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "160px",
+    //   },
+    // },
     {
       dataField: "account",
-      text: "Account",
+      text: "Account Code",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,

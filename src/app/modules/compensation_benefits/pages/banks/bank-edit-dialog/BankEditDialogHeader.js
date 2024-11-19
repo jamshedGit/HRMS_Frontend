@@ -17,9 +17,9 @@ export function BankEditDialogHeader({ id, isUserForRead }) {
   );
 
   useEffect(() => {
-    let _title = id ? "" : "Add Compensation & Benefits";
+    let _title = id ? "" : "Add Compensation Policy";
     if (id) {
-      _title = `Edit Policy`;
+      _title = `Edit Compensation Policy`;
     } //else if (isUserForRead) {
     //   _title = `Read user '}'`
     // }
@@ -31,7 +31,7 @@ export function BankEditDialogHeader({ id, isUserForRead }) {
       {actionsLoading && <ModalProgressBar />}
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-lg">
-          {!isUserForRead ? title : "View Policy"}
+          {!isUserForRead ? title : "View Compensation Policy"}
         </Modal.Title>
       </Modal.Header>
     </>

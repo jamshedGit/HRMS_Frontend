@@ -17,9 +17,10 @@ export function DeptEditDialogHeader({ id, isUserForRead }) {
   );
 
   useEffect(() => {
-    let _title = id ? "" : "New Department";
+    console.log("test",id)
+    let _title = id ? " " : "Add Department";
     if (id) {
-      _title = `Edit`;
+      _title = `Edit Department`;
     } //else if (isUserForRead) {
     //   _title = `Read user '}'`
     // }
@@ -31,7 +32,7 @@ export function DeptEditDialogHeader({ id, isUserForRead }) {
       {actionsLoading && <ModalProgressBar />}
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-lg">
-          {!isUserForRead ? title : "View"}
+          {!isUserForRead ? title : "View Department"}
         </Modal.Title>
       </Modal.Header>
     </>

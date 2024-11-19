@@ -61,15 +61,13 @@ export function BankEditForm({
   const [isDisabled, setIsDisabled] = useState(false);
   const dispatch = useDispatch();
 
+  useEffect(() => {
 
-  //   useEffect(() => {
 
-  //     const response = dispatch(getLatestTableId("t_employee_deduction", "ED-")) // For Getting Last ID For Code
-  //     console.log("dish",response[0].Id);
-  //     setDefDeductionCode(response[0].Id)
-
-  // }, [dispatch]);
-  // EMployee Dropdown Binding
+    if (!user.Id) {
+      dispatch(fetchAllFormsMenu(45, "allAccountList")); // For All Grade Codes
+    }
+  }, [dispatch]);
   useEffect(() => {
 
     const employeeId = defEmployee?.value ? defEmployee.value : user.employeeId;
@@ -207,14 +205,39 @@ export function BankEditForm({
                     }
                     {
                       <div className="col-12 col-md-4 mt-3">
-                        <Field
+                         <SearchSelect
+                          name="account"
+                          label={
+                            <span>
+                              Account<span style={{ color: "red" }}>*</span>
+                            </span>
+                          }
+                          isDisabled={isUserForRead}
+                          onChange={(e) => {
+                            setFieldValue("account", e.value || null);
+                          }}
+                          value={
+                            dashboard.allAccountList.find(
+                              (option) => option.value == values.account
+                            ) || null
+                          }
+                          // options={dashboard.allAccountList}
+                          options={dashboard.allAccountList.map((option) => ({
+                            label: `${option.mergeLabel}`, // Adding the value to the label
+                            value: option.value,
+                          }))}
+
+                          error={errors.account}
+                          touched={touched.account}
+                        />
+                        {/* <Field
                           name="account"
                           component={Input}
                           placeholder="Ener Account"
                           maxLength={15}
                           autoComplete="off"
                           label={<span> Account<span style={{ color: 'red' }}>*</span></span>}
-                        />
+                        /> */}
                       </div>
                     }
                   </div>

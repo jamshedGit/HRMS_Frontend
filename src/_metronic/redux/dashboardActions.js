@@ -128,6 +128,7 @@ export const fetchAllDept = (id) => async (dispatch) => {
     .getAllDepartments(id)
     .then((response) => {
       const entities = response.data?.data;
+      console.log("free",entities);
       dispatch(actions.AllDeptFetch(entities));
     })
     .catch((error) => {
@@ -172,6 +173,26 @@ export const fetchAllFormsMenu = (id, key, text=null,mergeLabel=false) => async 
 export const fetchAllLeaveType = (key, employeeId = null) => async (dispatch) => {
   return await requestFromServer
     .getAllLeaveTypes({ employeeId })
+    .then((response) => {
+      const entities = [...response.data?.data];
+      dispatch(actions.AllChildMenusFetch({ entities, key }));
+    })
+    .catch((error) => {
+      toast.error("Something went wrong");
+    });
+};
+
+/**
+ * 
+ * Get All leave Types Data from Server and set it in state on the key provided in argument
+ * It will only get Leave Type Data that are of Encashable for current year
+ * 
+ * @param {String} key 
+ * @returns 
+ */
+export const fetchEncashmentLeaveType = (key, employeeId = null, yearId = null) => async (dispatch) => {
+  return await requestFromServer
+    .getAllEncashmentLeaveTypes({ employeeId, yearId })
     .then((response) => {
       const entities = [...response.data?.data];
       dispatch(actions.AllChildMenusFetch({ entities, key }));

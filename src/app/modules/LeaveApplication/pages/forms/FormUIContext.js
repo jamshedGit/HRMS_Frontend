@@ -31,7 +31,7 @@ export function FormUIProvider({ FormUIEvents, children }) {
     from: '',
     leaveType: '',
     remarks: '',
-    days: 0,
+    days: '',
     file: null,
   };
 

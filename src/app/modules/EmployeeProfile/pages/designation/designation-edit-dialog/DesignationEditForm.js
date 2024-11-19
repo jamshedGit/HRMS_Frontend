@@ -22,6 +22,7 @@ import { toAbsoluteUrl } from "../../../../../../_metronic/_helpers";
 import { Link } from "@material-ui/core";
 import { useDesignationUIContext } from "../DesignationUIContext";
 import MaskedInput from "react-text-mask";
+import { getDateDiffInDays } from "../../../../../utils/common";
 
 export const USERS_URL = process.env.REACT_APP_API_URL;
 const currentDate = new Date();
@@ -208,7 +209,7 @@ const profileValidation = Yup.object().shape(
   }
 
   if ((title === 'Mr.' || title === 'Dr.' || title === 'Professor.' || title === 'Captain') && gender === 'Female') {
-    return this.createError({ path: 'gender', message: 'cannot be female.' });
+    return this.createError({ path: 'gender', message: 'Mr. cannot be female.' });
   }
 
 
@@ -349,7 +350,7 @@ export function DesignationEditForm({
       dispatch(fetchAllFormsMenu(125, "allRelationCodeList"));
       dispatch(fetchAllFormsMenu(109, "allInstitution")); // For Institution
       dispatch(fetchAllFormsMenu(108, "allDegreeTitle")); // For Degree Title
-      dispatch(fetchAllFormsMenu(198, "allCycleTypeList")); // For Degree Title
+      dispatch(fetchAllFormsMenu(205, "allCycleTypeList")); // For Degree Title
       dispatch(fetchAllFormsMenu(184, "allContractTypeList")); // For Degree Title
     }
   }, [dispatch]);
@@ -442,7 +443,7 @@ export function DesignationEditForm({
   }, [user?.designationId, dashboard.designationId]);
 
   useEffect(() => {
-    const cycleType = defcycleType?.value ? defcycleType.value : user.cycleType;
+    const cycleType = defcycleType?.value ? defcycleType.value : user.cycleTypeId;
     setcycleType(
       dashboard.allCycleTypeList &&
       dashboard.allCycleTypeList.filter((item) => {
@@ -450,11 +451,11 @@ export function DesignationEditForm({
       })
     );
 
-  }, [user?.cycleType, dashboard.cycleType]);
+  }, [user?.cycleTypeId, dashboard.cycleTypeId]);
 
   useEffect(() => {
 
-    const contractType = defcontractType?.value ? defcontractType.value : user.contractType;
+    const contractType = defcontractType?.value ? defcontractType.value : user.contractTypeId;
     console.log("::tet", dashboard.allContractTypeList, contractType)
     setcontractType(
       dashboard.allContractTypeList &&
@@ -463,7 +464,7 @@ export function DesignationEditForm({
       })
     );
 
-  }, [user?.contractType, dashboard.contractType]);
+  }, [user?.contractTypeId, dashboard.contractTypeId]);
 
   ///
 
@@ -1006,36 +1007,21 @@ export function DesignationEditForm({
       if (!obj.cityId) {
         newErrors[`cityId-${index}`] = '*Required';
       }
-      if (new Date(obj.startDate) > new Date()) {
-        newErrors[`startDate-${index}`] = 'Start Date cannot be a future date';
+      console.log("work date", obj.startDate);
+      const num = getDateDiffInDays(obj.startDate, new Date().getTime())
+
+
+
+      if (new Date(obj.startDate).getTime() > new Date().getTime()) {
+        newErrors[`startDate_W-${index}`] = 'Start Date cannot be a future date';
       }
 
       // Validate endDate
       if (new Date(obj.endDate) < new Date(obj.startDate)) {
-        newErrors[`endDate-${index}`] = 'End Date must be later than Start Date';
+        newErrors[`endDate_W-${index}`] = 'End Date must be later than Start Date';
       }
 
-      // Check if startDate and endDate are the same
-      if (new Date(obj.startDate).getTime() === new Date(obj.endDate).getTime()) {
-        newErrors[`endDate-${index}`] = 'End Date cannot be the same as Start Date';
-      }
 
-      // Check for date duplicates across rows
-      const datePairs = workExperienceList.map((obj, index) => ({
-        startDate: new Date(obj.startDate),
-        endDate: new Date(obj.endDate),
-        index,
-      }));
-
-      datePairs.forEach(({ startDate, endDate }, index) => {
-        datePairs.forEach(({ startDate: otherStartDate, endDate: otherEndDate }, otherIndex) => {
-          if (index !== otherIndex) { // Ensure we don't compare the same row
-            if (startDate === otherStartDate || endDate === otherEndDate) {
-              newErrors[`startDate-${index}`].duplicateDates = 'Start and End Dates must be unique across rows';
-            }
-          }
-        });
-      });
 
     });
 
@@ -1066,12 +1052,12 @@ export function DesignationEditForm({
         newErrors[`cityId-${index}`] = '*Required';
       }
       if (new Date(obj.startDate) > new Date()) {
-        newErrors[`startDate-${index}`] = 'Start Date cannot be a future date';
+        newErrors[`startDate_A-${index}`] = 'Start Date cannot be a future date';
       }
 
       // Validate endDate
       if (new Date(obj.endDate) < new Date(obj.startDate)) {
-        newErrors[`endDate-${index}`] = 'End Date must be later than Start Date';
+        newErrors[`endDate_A-${index}`] = 'End Date must be later than Start Date';
       }
 
     });
@@ -2202,7 +2188,7 @@ export function DesignationEditForm({
                       </div>
                       <div className="col-12 col-md-4 mt-3">
                         <SearchSelect
-                          name="contractType"
+                          name="contractTypeId"
                           label={<span> Contract Type</span>}
                           isDisabled={isUserForRead && true}
                           onBlur={() => {
@@ -2210,34 +2196,34 @@ export function DesignationEditForm({
                           }}
                           onChange={(e) => {
 
-                            setFieldValue("contractType", e.value || null);
+                            setFieldValue("contractTypeId", e.value || null);
                             setcontractType(e);
 
                             // dispatch(fetchAllFormsMenu(e.value));
                           }}
-                          value={(defcontractType || values.contractType)}
-                          error={errors.contractType}
-                          touched={touched.contractType}
+                          value={(defcontractType || values.contractTypeId)}
+                          error={errors.contractTypeId}
+                          touched={touched.contractTypeId}
                           options={dashboard.allContractTypeList}
                         />
                       </div>
 
                       <div className="col-12 col-md-4 mt-3">
                         <SearchSelect
-                          name="cycleType"
+                          name="cycleTypeId"
                           label={<span> Cycle Type</span>}
                           isDisabled={isUserForRead && true}
                           onBlur={() => {
                             // handleBlur({ target: { name: "countryId" } });
                           }}
                           onChange={(e) => {
-                            setFieldValue("cycleType", e.value || null);
+                            setFieldValue("cycleTypeId", e.value || null);
                             setcycleType(e);
                             // dispatch(fetchAllFormsMenu(e.value));
                           }}
                           value={(defcycleType || null)}
-                          error={errors.cycleType}
-                          touched={touched.cycleType}
+                          error={errors.cycleTypeId}
+                          touched={touched.cycleTypeId}
                           options={dashboard.allCycleTypeList}
                         />
                       </div>
@@ -2497,10 +2483,10 @@ export function DesignationEditForm({
                                 scrollableMonthYearDropdown
                                 onChange={(el) => {
                                   handleDatePicker(el, 'startDate', rightindex, '');
-                                  setErrors((prev) => ({ ...prev, [`startDate-${rightindex}`]: '' })); // Clear error on change
+                                  setErrors((prev) => ({ ...prev, [`startDate_W-${rightindex}`]: '' })); // Clear error on change
                                 }
                                 }
-                                id={"startDate-" + rightindex}
+                                id={"endDate_W-" + rightindex}
                                 timeInputLabel="Time:"
                                 dateFormat="dd/MM/yyyy"
                                 showTimeInput
@@ -2508,7 +2494,7 @@ export function DesignationEditForm({
                                 disabled={isUserForRead}
                                 autoComplete="off"
                               />
-                              {deferrors[`startDate-${rightindex}`] && <div className="form-feedBack">{deferrors[`startDate-${rightindex}`]}</div>}
+                              {deferrors[`startDate_W-${rightindex}`] && <div className="form-feedBack">{deferrors[`startDate_W-${rightindex}`]}</div>}
                             </td>
                             <td>
                               <DatePicker
@@ -2519,10 +2505,10 @@ export function DesignationEditForm({
                                 scrollableMonthYearDropdown
                                 onChange={(el) => {
                                   handleDatePicker(el, 'endDate', rightindex, '');
-                                  setErrors((prev) => ({ ...prev, [`endDate-${rightindex}`]: '' })); // Clear error on change
+                                  setErrors((prev) => ({ ...prev, [`endDate_W-${rightindex}`]: '' })); // Clear error on change
                                 }
                                 }
-                                id={"endDate-" + rightindex}
+                                id={"endDate_W" + rightindex}
                                 timeInputLabel="Time:"
                                 dateFormat="dd/MM/yyyy"
                                 showTimeInput
@@ -2530,7 +2516,7 @@ export function DesignationEditForm({
                                 disabled={isUserForRead}
                                 autoComplete="off"
                               />
-                              {deferrors[`endDate-${rightindex}`] && <div className="form-feedBack">{deferrors[`endDate-${rightindex}`]}</div>}
+                              {deferrors[`endDate_W-${rightindex}`] && <div className="form-feedBack">{deferrors[`endDate_W-${rightindex}`]}</div>}
                             </td>
                           </tr>
                           </>
@@ -2659,7 +2645,7 @@ export function DesignationEditForm({
                                   showYearDropdown
                                   scrollableMonthYearDropdown
                                   onChange={(el) => handleDatePickerAcademic(el, 'startDate', rightindex, '')}
-                                  id={"startDate-" + rightindex}
+                                  id={"startDate_A-" + rightindex}
                                   timeInputLabel="Time:"
                                   dateFormat="dd/MM/yyyy"
                                   showTimeInput
@@ -2667,7 +2653,7 @@ export function DesignationEditForm({
                                   disabled={isUserForRead}
                                   autoComplete="off"
                                 />
-                                {deferrors[`startDate-${rightindex}`] && <div className="form-feedBack">{deferrors[`startDate-${rightindex}`]}</div>}
+                                {deferrors[`startDate_A-${rightindex}`] && <div className="form-feedBack">{deferrors[`startDate_A-${rightindex}`]}</div>}
                               </td>
                               <td>
                                 <DatePicker
@@ -2677,7 +2663,7 @@ export function DesignationEditForm({
                                   showYearDropdown
                                   scrollableMonthYearDropdown
                                   onChange={(el) => handleDatePickerAcademic(el, 'endDate', rightindex, '')}
-                                  id={"endDate-" + rightindex}
+                                  id={"endDate_A-" + rightindex}
                                   timeInputLabel="Time:"
                                   dateFormat="dd/MM/yyyy"
                                   showTimeInput
@@ -2685,7 +2671,7 @@ export function DesignationEditForm({
                                   disabled={isUserForRead}
                                   autoComplete="off"
                                 />
-                                {deferrors[`endDate-${rightindex}`] && <div className="form-feedBack">{deferrors[`endDate-${rightindex}`]}</div>}
+                                {deferrors[`endDate_A-${rightindex}`] && <div className="form-feedBack">{deferrors[`endDate_A-${rightindex}`]}</div>}
                               </td>
                             </tr>
                           </>

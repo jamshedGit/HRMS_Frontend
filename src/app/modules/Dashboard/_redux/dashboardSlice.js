@@ -54,6 +54,7 @@ const initialDashboardState = {
   allReimbursementTypeList:[],
   allReimbursementConfigList:[],
   allPayrollMonthYearList:[],
+  allHolidayTypeList:[],
 };
 
 export const callTypes = {
@@ -212,6 +213,9 @@ export const dashboardSlice = createSlice({
     },
     AllPayrollMonthYearListFetch: (state, action) => {
       state.allPayrollMonthYearList = action.payload;
+    },
+    AllHolidayTypeListFetch: (state, action) => {
+      state.allHolidayTypeList = action.payload;
     },
 
   },

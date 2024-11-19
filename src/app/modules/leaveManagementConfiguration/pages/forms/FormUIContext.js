@@ -27,8 +27,8 @@ export function FormUIProvider({ FormUIEvents, children }) {
 
   const initUser = {
     subsidiaryId: "",
-    employeeTypeId: "",
-    gradeId: "",
+    // employeeTypeId: "",
+    // gradeId: "",
     weekend: [],
     isSandwich: false,
     leavetypePolicies: [],

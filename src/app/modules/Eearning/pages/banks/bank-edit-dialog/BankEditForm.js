@@ -70,12 +70,16 @@ export function BankEditForm({
 
   useEffect(() => {
 
-    if (!user.Id) {
-      dispatch(fetchAllFormsMenu(45, "allAccountList")); // For All Grade Codes
-    }
-  }, [dispatch]);
+    //=========== END
+    useEffect(() => {
 
-  console.log("defEarningCode", defEarningCode)
+      if (!user.Id) {
+        dispatch(fetchAllFormsMenu(45, "allAccountList")); // For All Grade Codes
+      }
+    }, [dispatch]);
+  }
+  );
+
   return (
     <>
       <Formik
@@ -205,7 +209,7 @@ export function BankEditForm({
                           }}
                           value={
                             dashboard.allAccountList.find(
-                              (option) => option.value === values.account
+                              (option) => option.value == values.account
                             ) || null
                           }
                           // options={dashboard.allAccountList}
@@ -214,9 +218,10 @@ export function BankEditForm({
                             value: option.value,
                           }))}
 
-                          error={errors.graduity_payable_accountId}
-                          touched={touched.graduity_payable_accountId}
+                          error={errors.account}
+                        touched={touched.account}
                         />
+
                         {/* <Field
                           name="account"
                           component={Input}
