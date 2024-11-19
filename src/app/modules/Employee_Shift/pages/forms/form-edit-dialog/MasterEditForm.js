@@ -215,7 +215,7 @@ setFieldValue('workingdays', newWorkingDays); // Update the Formik form state
         onSubmit={(values) => {
           const listOfValues = { ...values, workingdays: defWeekDays.join(',') }
 
-          console.log("values", listOfValues)
+          
           enableLoading();
           submitForm(listOfValues)
         }}
