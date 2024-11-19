@@ -37,7 +37,7 @@ export function FormTable() {
     (state) => {
       return {
         currentState: state.employee_shift,
-        userAccess: state?.auth?.userAccess["employee_shift"],
+        userAccess: state?.auth?.userAccess["Employee_Shift"],
       }
     },
     shallowEqual
@@ -52,6 +52,7 @@ export function FormTable() {
     dispatch(actions.fetchEmployeeShift(FormUIProps.queryParams));
   }, [FormUIProps.queryParams, dispatch, totalCount]);
 
+
   const isAccessForEdit = userAccess?.find(
     (item) => item.componentName === "UpdateEmployeeShift"
   );
@@ -59,6 +60,7 @@ export function FormTable() {
   const isAccessForDelete = userAccess?.find(
     (item) => item.componentName === "DeleteEmployeeShift"
   );
+  console.log("pak::",isAccessForEdit,isAccessForDelete)
   // Table columns
   const columns = [
     {

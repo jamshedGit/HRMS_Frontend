@@ -40,8 +40,9 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
  
   //Fetch record to edit on dialog load
   useEffect(() => {
+    console.log("test11::",id);
     dispatch(actions.fetchEditRecord(id));
-  }, [id, dispatch]); 
+  }, [id, dispatch,show]); 
 
 
   //Create or Update record according to values from dialog
@@ -51,6 +52,8 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
 
     
   }
+
+  
 
  
   return (

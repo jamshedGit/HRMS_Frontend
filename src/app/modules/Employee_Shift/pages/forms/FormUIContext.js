@@ -30,7 +30,7 @@ export function FormUIProvider({ FormUIEvents, children }) {
     companyId: "",
     name: "",
     shiftCode: "",
-    shiftType: "Morning",
+    shiftType: "",
     startTime: "",
     endTime: "",
     workingdays: "",

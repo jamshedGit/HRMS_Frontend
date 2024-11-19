@@ -49,7 +49,7 @@ export const fetchEmployeeShift = (queryparm) => async (dispatch) => {
  */
 export const fetchEditRecord = (id) => (dispatch) => {
   if (!id) {
-    return dispatch(actions.EmployeeshiftFetched(null));
+    return dispatch(actions.EmployeeshiftFetchedForEdit(null));
   }
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
@@ -97,12 +97,13 @@ export const fetchEditRecord = (id) => (dispatch) => {
 export const saveRecord = (data, id, disableLoading, onHide) => (dispatch) => {
 
   if (!id) {
+   
     return requestFromServer.createEmployeeShiftSetup(data)
       .then((res) => {
         const EmployeeShiftData = res.data?.data;
        
         if (EmployeeShiftData) {
-          dispatch(actions.EmployeeShiftCreated(EmployeeShiftData));
+          dispatch(actions.EmployeeshiftCreated(EmployeeShiftData));
           disableLoading();
           toast.success(SERVER_MESSAGES.insertedSuccess, {
             position: "top-right",
@@ -117,9 +118,10 @@ export const saveRecord = (data, id, disableLoading, onHide) => (dispatch) => {
         }
       })
       .catch((error) => {
-        disableLoading();
-        error.clientMessage = "Can't Create Employee Shift";
-        toast.error(SERVER_MESSAGES.insertedFail, {
+        error.clientMessage = "Can't create user";
+        dispatch(actions.catchError({ error, callType: callTypes.action }));
+       
+        toast.error(error?.response?.data?.message, {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -135,7 +137,7 @@ export const saveRecord = (data, id, disableLoading, onHide) => (dispatch) => {
       .then((res) => {
         const EmployeeShiftData = res.data?.data;
         if (EmployeeShiftData) {
-          dispatch(actions.EmployeeShiftUpdated(EmployeeShiftData));
+          dispatch(actions.EmployeeshiftUpdated(EmployeeShiftData));
           disableLoading();
           toast.success(SERVER_MESSAGES.updatedSuccess, {
             position: "top-right",

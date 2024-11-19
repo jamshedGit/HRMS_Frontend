@@ -21,7 +21,7 @@ export function FormCard() {
 
   const { userAccess } = useSelector(
     (state) => ({
-      userAccess: state.auth.userAccess.Employee_Shift,
+      userAccess: state.auth.userAccess?.Employee_Shift,
     }),
     shallowEqual
   )

@@ -13,10 +13,85 @@ import { useEffect, useState, useMemo } from "react";
 //Validation for Form
 const formValidation = Yup.object().shape({
   subsidiaryId: Yup.number().required(VALIDATION_MESSAGES.required),
-  // companyId: Yup.string().required(VALIDATION_MESSAGES.required),
-  leave_typeId: Yup.string().required(VALIDATION_MESSAGES.required),
-  late_count_leave_deduction: Yup.string().required(VALIDATION_MESSAGES.required)
-    .matches(/^[0-3]{1,2}$/, 'Leave Count must be between 0 and 3 digits long and contain only digits.')
+  shiftType: Yup.number().required(VALIDATION_MESSAGES.required),
+  name: Yup.string().required(VALIDATION_MESSAGES.required),
+  shiftCode: Yup.string().required(VALIDATION_MESSAGES.required),
+  startTime: Yup.string()
+    .required('Start Time is required')
+    .matches(/^\d{4}$/, 'Start Time must be in HHmm format'), // Ensuring HHmm format
+ 
+    workingdays: Yup.array()
+    .min(1, 'At least one working day must be selected')
+    .required('Working days are required'),
+    
+  endTime: Yup.string()
+    .required('Required*')
+    .matches(/^\d{4}$/, 'End Time must be in HHmm format') // Ensuring HHmm format
+    .when('startTime', {
+      // Check that endTime is greater than or equal to startTime
+      is: (startTime) => startTime && startTime !== '',
+      then: Yup.string().test('end-time-validation', 'End Time cannot be less than Start Time', function (endTime) {
+        const { startTime } = this.parent; // Access startTime from parent values
+        if (startTime && endTime && startTime > endTime) {
+          return false; // Validation fails if endTime is less than startTime
+        }
+        return true;
+      })
+    }),
+
+  earlyIn: Yup.string()
+    .required('Early In Time is required')
+    .matches(/^\d{4}$/, 'Early In Time must be in HHmm format'),
+
+  earlyOut: Yup.string()
+    .required('Early Out Time is required')
+    .matches(/^\d{4}$/, 'Early Out Time must be in HHmm format')
+    .when('earlyIn', {
+      is: (earlyIn) => earlyIn && earlyIn !== '',
+      then: Yup.string().test('early-out-validation', 'Early Out Time cannot be less than Early In Time', function (earlyOut) {
+        const { earlyIn } = this.parent;
+        if (earlyIn && earlyOut && earlyIn > earlyOut) {
+          return false; // Validation fails if earlyOut is less than earlyIn
+        }
+        return true;
+      })
+    }),
+
+  halfDayStart: Yup.string()
+    .required('Half Day Start is required')
+    .matches(/^\d{4}$/, 'Half Day Start must be in HHmm format'),
+
+  halfDayEnd: Yup.string()
+    .required('Half Day End is required')
+    .matches(/^\d{4}$/, 'Half Day End must be in HHmm format')
+    .when('halfDayStart', {
+      is: (halfDayStart) => halfDayStart && halfDayStart !== '',
+      then: Yup.string().test('half-day-end-validation', 'Half Day End cannot be less than Half Day Start', function (halfDayEnd) {
+        const { halfDayStart } = this.parent; // Access halfDayStart from parent values
+        if (halfDayStart && halfDayEnd && halfDayStart > halfDayEnd) {
+          return false; // Validation fails if halfDayEnd is less than halfDayStart
+        }
+        return true;
+      })
+    }),
+  breakTimeStart: Yup.string()
+    .required('Break Time Start is required')
+    .matches(/^\d{4}$/, 'Break Time Start must be in HHmm format'),
+
+  breakTimeEnd: Yup.string()
+    .required('Break Time End is required')
+    .matches(/^\d{4}$/, 'Break Time End must be in HHmm format')
+    .when('breakTimeStart', {
+      is: (breakTimeStart) => breakTimeStart && breakTimeStart !== '',
+      then: Yup.string().test('break-time-end-validation', 'Break Time End cannot be less than Break Time Start', function (breakTimeEnd) {
+        const { breakTimeStart } = this.parent; // Access breakTimeStart from parent values
+        if (breakTimeStart && breakTimeEnd && breakTimeStart > breakTimeEnd) {
+          return false; // Validation fails if breakTimeEnd is less than breakTimeStart
+        }
+        return true;
+      })
+    })
+
 });
 
 export function MasterEditForm({
@@ -36,7 +111,7 @@ export function MasterEditForm({
   const [defSubsidiary = null, setDefualtSubsidiaryList] = useState(null);
   const [defLeaveType = null, setDefualtLeaveType] = useState(null);
   const [defWeekDays, setDefaultWeekDays] = useState([]); //  For Email Recipents
-
+  const [defShiftType = null, setShiftTypeCodeList] = useState(null);
 
   const WeekDays = Object.freeze({
     SUNDAY: 'Sunday',
@@ -54,6 +129,7 @@ export function MasterEditForm({
       dispatch(fetchAllLeaveType("allLeaveTypes"))
       // dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsisidaries
       dispatch(fetchAllSubsidiaryData("allSubsidiaryList"));
+      dispatch(fetchAllFormsMenu(219, "allShiftTypeList"));
     }
   }, [dispatch]);
 
@@ -61,7 +137,9 @@ export function MasterEditForm({
   useEffect(() => {
 
     const subsidiaryId = defSubsidiary?.value ? defSubsidiary.value : user.subsidiaryId;
-
+    if (subsidiaryId) {
+      setDefaultWeekDays(user?.workingdays?.split(",") || []);
+    }
     setDefualtSubsidiaryList(
       dashboard.allSubsidiaryList &&
       dashboard.allSubsidiaryList.filter((item) => {
@@ -72,42 +150,74 @@ export function MasterEditForm({
   }, [user?.subsidiaryId, dashboard.subsidiaryId]);
 
 
+
   useEffect(() => {
 
-    const leaveTypeId = defLeaveType?.value ? defLeaveType.value : user.leave_typeId;
 
-    setDefualtLeaveType(
-      dashboard.allLeaveTypes &&
-      dashboard.allLeaveTypes.filter((item) => {
-        return item.value === leaveTypeId;
+    const shiftType = defShiftType?.value ? defShiftType.value : user.shiftType;
+
+    setShiftTypeCodeList(
+      dashboard.allShiftTypeList &&
+      dashboard.allShiftTypeList.filter((item) => {
+        return item.value == shiftType;
       })
     );
 
-  }, [user?.leave_typeId, dashboard.leave_typeId]);
+  }, [user?.shiftType, dashboard.shiftType]);
+
+  // useEffect(() => {
+
+  //   const leaveTypeId = defLeaveType?.value ? defLeaveType.value : user.leave_typeId;
+
+  //   setDefualtLeaveType(
+  //     dashboard.allLeaveTypes &&
+  //     dashboard.allLeaveTypes.filter((item) => {
+  //       return item.value === leaveTypeId;
+  //     })
+  //   );
+
+  // }, [user?.leave_typeId, dashboard.leave_typeId]);
 
 
-  const handleCheckboxChangeFor_WeekDays = (option) => {
+  const handleCheckboxChangeFor_WeekDays = (option,setFieldValue, values) => {
+
     setDefaultWeekDays((prevState) =>
+
       prevState.includes(option)
         ? prevState.filter(item => item !== option)
         : [...prevState, option]
     );
+
+     // Update Formik state (workingdays)
+  const newWorkingDays = values.workingdays.includes(option)
+  ? values.workingdays.filter((day) => day !== option)
+  : [...values.workingdays, option];
+
+setFieldValue('workingdays', newWorkingDays); // Update the Formik form state
+
   };
 
+    // Handle checkbox changes (adding/removing days from the selected list)
+    const handleCheckboxChange = (day, setFieldValue, values) => {
+      const newWorkingDays = values.workingdays.includes(day)
+        ? values.workingdays.filter((selectedDay) => selectedDay !== day)
+        : [...values.workingdays, day];
+      setFieldValue('workingdays', newWorkingDays);
+    };
 
 
   return (
     <>
       <Formik
         enableReinitialize={true}
-        initialValues={{ ...user, overTimeStart: "" }}
-        //  validationSchema={formValidation}
+        initialValues={user}
+        validationSchema={formValidation}
         onSubmit={(values) => {
-          const listOfValues = {...values,workingdays: defWeekDays.join(',')}
-          
-          console.log("values",listOfValues)
+          const listOfValues = { ...values, workingdays: defWeekDays.join(',') }
+
+          console.log("values", listOfValues)
           enableLoading();
-         // submitForm(listOfValues)
+          submitForm(listOfValues)
         }}
       >
         {({
@@ -128,7 +238,53 @@ export function MasterEditForm({
               <Form className="form form-label-right">
                 <fieldset disabled={isUserForRead}>
                   <div className="from-group row">
+                    <div className="col-12 col-md-4 mt-3">
+                      <SearchSelect
+                        name="subsidiaryId"
+                        label={<span> Subsidiary<span style={{ color: 'red' }}>*</span></span>}
+                        isDisabled={isUserForRead && true}
+                        onBlur={() => {
+                          // handleBlur({ target: { name: "countryId" } });
+                        }}
+                        onChange={(e) => {
 
+                          setFieldValue("subsidiaryId", e.value || null);
+                          setDefualtSubsidiaryList(e);
+
+                          //handlePaymenModeChanged(e)
+                        }}
+                        error={errors.subsidiaryId}
+                        value={(defSubsidiary || null)}
+                        options={dashboard?.allSubsidiaryList}
+                      />
+                      <ErrorMessage className="form-feedBack" name="subsidiaryId" component="div" />
+
+
+                    </div>
+                  </div>
+
+                  <div className="from-group row">
+                    <div className="col-12 col-md-4 mt-3">
+                      <SearchSelect
+                        name="shiftType"
+                        label={<span> Shift Type<span style={{ color: 'red' }}>*</span></span>}
+                        isDisabled={isUserForRead && true}
+                        onBlur={() => {
+                          // handleBlur({ target: { name: "countryId" } });
+                        }}
+                        onChange={(e) => {
+                          setFieldValue("shiftType", e.value);
+                          setShiftTypeCodeList(e);
+
+                        }}
+                        value={defShiftType}
+                        error={errors.shiftType}
+
+                        options={dashboard.allShiftTypeList}
+
+                      />
+                      <ErrorMessage className="form-feedBack" name="shiftType" component="div" />
+                    </div>
                     <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="name"
@@ -167,28 +323,7 @@ export function MasterEditForm({
                       />
                     </div>
 
-                    <div className="col-12 col-md-4 mt-3">
-                      <SearchSelect
-                        name="subsidiaryId"
-                        label={<span> Subsidiary<span style={{ color: 'red' }}>*</span></span>}
-                        isDisabled={isUserForRead && true}
-                        onBlur={() => {
-                          // handleBlur({ target: { name: "countryId" } });
-                        }}
-                        onChange={(e) => {
-                          setFieldValue("subsidiaryId", e.value || null);
-                          setDefualtSubsidiaryList(e);
 
-                          //handlePaymenModeChanged(e)
-                        }}
-                        error={errors.subsidiaryId}
-                        value={(defSubsidiary || null)}
-                        options={dashboard?.allSubsidiaryList}
-                      />
-                      <ErrorMessage className="form-feedBack" name="subsidiaryId" component="div" />
-
-
-                    </div>
 
                     {/* <div className="col-12 col-md-4 mt-3">
                       <SearchSelect
@@ -259,7 +394,10 @@ export function MasterEditForm({
                         placeholder="Select Time"
                         type="time"
                         minDate={values.startTime}
-
+                        onChange={(e) => {
+                          const formattedTime = e ? e.toISOString().slice(11, 16).replace(":", "") : '';
+                          setFieldValue('startTime', formattedTime);
+                        }}
                       />
                     </div>
 
@@ -278,6 +416,10 @@ export function MasterEditForm({
                         placeholder="Select Time"
                         type="time"
                         minDate={values.endTime}
+                        onChange={(e) => {
+                          const formattedTime = e ? e.toISOString().slice(11, 16).replace(":", "") : '';
+                          setFieldValue('endTime', formattedTime);
+                        }}
 
                       />
                     </div>
@@ -305,6 +447,11 @@ export function MasterEditForm({
                         value={values.earlyIn}
                         error={errors.earlyIn}
                         autoComplete="off"
+                        onChange={(e) => {
+                          const formattedTime = e ? e.toISOString().slice(11, 16).replace(":", "") : '';
+                          setFieldValue('earlyIn', formattedTime);
+                        }}
+
                       />
                     </div>
 
@@ -326,6 +473,11 @@ export function MasterEditForm({
                         value={values.earlyOut}
                         error={errors.earlyOut}
                         autoComplete="off"
+                        onChange={(e) => {
+                          const formattedTime = e ? e.toISOString().slice(11, 16).replace(":", "") : '';
+                          setFieldValue('earlyOut', formattedTime);
+                        }}
+
                       />
                     </div>
 
@@ -350,6 +502,10 @@ export function MasterEditForm({
                         value={values.halfDayStart}
                         error={errors.halfDayStart}
                         autoComplete="off"
+                        onChange={(e) => {
+                          const formattedTime = e ? e.toISOString().slice(11, 16).replace(":", "") : '';
+                          setFieldValue('halfDayStart', formattedTime);
+                        }}
                       />
                     </div>
 
@@ -371,6 +527,10 @@ export function MasterEditForm({
                         value={values.halfDayEnd}
                         error={errors.halfDayEnd}
                         autoComplete="off"
+                        onChange={(e) => {
+                          const formattedTime = e ? e.toISOString().slice(11, 16).replace(":", "") : '';
+                          setFieldValue('halfDayEnd', formattedTime);
+                        }}
                       />
                     </div>
 
@@ -395,6 +555,10 @@ export function MasterEditForm({
                         value={values.breakTimeStart}
                         error={errors.breakTimeStart}
                         autoComplete="off"
+                        onChange={(e) => {
+                          const formattedTime = e ? e.toISOString().slice(11, 16).replace(":", "") : '';
+                          setFieldValue('breakTimeStart', formattedTime);
+                        }}
                       />
                     </div>
 
@@ -416,37 +580,51 @@ export function MasterEditForm({
                         value={values.breakTimeEnd}
                         error={errors.breakTimeEnd}
                         autoComplete="off"
+                        onChange={(e) => {
+                          const formattedTime = e ? e.toISOString().slice(11, 16).replace(":", "") : '';
+                          setFieldValue('breakTimeEnd', formattedTime);
+                        }}
                       />
                     </div>
-                  
+
                   </div>
                   <div className="from-group row">
-                      <div className="col-12 col-md-4 mt-3">
-                        Weekdays
-                        <div style={{ backgroundColor: "#ffffff", height: "170px", padding: "10px", overflow: "scroll" }}>
+                    <div className="col-12 col-md-4 mt-3">
+                      Working Days
+                      <div style={{ backgroundColor: "#ffffff", height: "170px", padding: "10px", overflow: "scroll" }}>
 
-                          <div className="multi-select">
+                        <div className="multi-select">
 
-                            <div className="dropdown-label"></div>
-                            <div className="dropdown-options" style={{ fontSize: "12px", fontWeight: "bold", padding: "5px" }}>
-                              {Object.values(WeekDays).map((day) => (
-                                <div key={day} className="dropdown-option">
-                                  <input style={{ width: "25px" }}
-                                    name="employee_email_recipentId"
-                                    type="checkbox"
-                                    checked={defWeekDays?.includes(day)}
-                                    onChange={() => handleCheckboxChangeFor_WeekDays(day)}
-                                  />
-                                  {day}
-                                </div>
-                              ))}
-                              {console.log("pak::", defWeekDays)}
-                            </div>
+                          <div className="dropdown-label"></div>
+                          <div className="dropdown-options" style={{ fontSize: "12px", fontWeight: "bold", padding: "5px" }}>
+                            {Object.values(WeekDays).map((day) => (
+                              <div key={day} className="dropdown-option">
+                                <input style={{ width: "25px" }}
+                                  name="workingdays"
+                                  type="checkbox"
+                                  checked={defWeekDays?.includes(day)}
+                                  onChange={
+                                    () => {
+                                      handleCheckboxChangeFor_WeekDays(day, setFieldValue, values)
+
+                                      //setDefaultWeekDays(day)
+
+                                    }
+
+                                  }
+                                />
+                                {day}
+                              </div>
+                            ))}
 
                           </div>
+                        
                         </div>
+                     
                       </div>
+                      <ErrorMessage className="form-feedBack" name="workingdays" component="div" />
                     </div>
+                  </div>
                   <hr></hr>
                   <label>
                     <h3>Over Time</h3>
@@ -479,7 +657,7 @@ export function MasterEditForm({
 
                     <div className="col-12 col-md-4 mt-3">
                       <label>
-                        Over Time Start <span style={{ color: "red" }}>*</span>
+                        Over Time Start
                       </label>
                       <Field
                         name="overTimeStart"
@@ -495,7 +673,10 @@ export function MasterEditForm({
                         value={values.overTimeStart}
                         error={errors.overTimeStart}
                         disabled={!values.isOverTime}
-
+                        onChange={(e) => {
+                          const formattedTime = e ? e.toISOString().slice(11, 16).replace(":", "") : '';
+                          setFieldValue('overTimeStart', formattedTime);
+                        }}
                       />
                     </div>
 
@@ -534,7 +715,7 @@ export function MasterEditForm({
                         label={
                           <span>
                             {" "}
-                            InterShift Gap Time<span style={{ color: "red" }}>*</span>
+                            InterShift Gap Time
                           </span>
                         }
                         value={values.interShiftGap}
