@@ -1216,7 +1216,7 @@ export function DesignationEditForm({
 
                         <div className="col-12 col-md-4 mt-3">
                           <Select
-                            label="Title"
+                           label={<span> Title<span style={{ color: 'red' }}>*</span></span>}
                             name="title"
                             value={values.title}
                             onChange={handleChange}
@@ -1974,6 +1974,25 @@ export function DesignationEditForm({
                         />
                         <ErrorMessage className="form-feedBack" name="dateOfRetirement" component="div" />
                       </div> */}
+                          <div className="col-12 col-md-4 mt-14">
+                        <input
+                          name="requireDeligation"
+                          type="checkbox"
+                          onChange={(e) => {
+                            const { checked } = e.target;
+                            setFieldValue('requireDeligation', checked); // Update the checkbox state
+                            if (!checked) {
+                              setFieldValue('deligation', ''); // Clear deligation field when unchecked
+                            }
+                          }}
+                          onBlur={handleBlur}
+                          value={values.requireDeligation}
+                          checked={values.requireDeligation}
+                          label="Require Deligation"
+                          
+                        />
+                        <label>Require Deligation</label>
+                      </div>
                       <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="deligation"
@@ -1982,21 +2001,11 @@ export function DesignationEditForm({
                           placeholder="Enter Deligation"
                           label="Deligation"
                           autoComplete="off"
+                          disabled={!values.requireDeligation} 
                         />
 
                       </div>
-                      <div className="col-12 col-md-4 mt-14">
-                        <input
-                          name="requireDeligation"
-                          type="checkbox"
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.requireDeligation}
-                          checked={values.requireDeligation}
-                          label="Require Deligation"
-                        />
-                        <label>Require Deligation</label>
-                      </div>
+                  
                       {/* <div className="col-12 col-md-4 mt-3">
                         <label>NIC Expiry Date</label>
                         <DatePicker
