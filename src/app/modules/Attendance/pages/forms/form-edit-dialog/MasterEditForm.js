@@ -149,23 +149,6 @@ export function MasterEditForm({
                     </div>
                     {/* Date In Field End */}
 
-                    {/* Date Out Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="attDateOut"
-                        component={DatePickerField}
-                        dateFormat="dd/MM/yyyy"
-                        label={
-                          <span>
-                            {" "}
-                            Date Out<span style={{ color: "red" }}>*</span>
-                          </span>
-                        }
-                        autoComplete="off"
-                      />
-                    </div>
-                    {/* Date Out Field End */}
-
                     {/* Time In Field Start */}
                     <div className="col-12 col-md-4 mt-3">
                       <Field
@@ -183,6 +166,27 @@ export function MasterEditForm({
                     </div>
                     {/* Time In Field End */}
 
+                    </div>
+
+                    <div className="from-group row">
+
+                    {/* Date Out Field Start */}
+                    <div className="col-12 col-md-4 mt-3">
+                      <Field
+                        name="attDateOut"
+                        component={DatePickerField}
+                        dateFormat="dd/MM/yyyy"
+                        label={
+                          <span>
+                            {" "}
+                            Date Out<span style={{ color: "red" }}>*</span>
+                          </span>
+                        }
+                        autoComplete="off"
+                      />
+                    </div>
+                    {/* Date Out Field End */}
+
                     {/* Time Out Field Start */}
                     <div className="col-12 col-md-4 mt-3">
                       <Field
@@ -199,6 +203,10 @@ export function MasterEditForm({
                       />
                     </div>
                     {/* Time Out Field End */}
+
+                    </div>
+
+                    <div className="from-group row">
 
                     {/* Comments Field Start */}
                     <div className="col-12 col-md-8 mt-3">
