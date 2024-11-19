@@ -247,10 +247,8 @@ setFieldValue('workingdays', newWorkingDays); // Update the Formik form state
                           // handleBlur({ target: { name: "countryId" } });
                         }}
                         onChange={(e) => {
-
                           setFieldValue("subsidiaryId", e.value || null);
                           setDefualtSubsidiaryList(e);
-
                           //handlePaymenModeChanged(e)
                         }}
                         error={errors.subsidiaryId}
@@ -258,8 +256,6 @@ setFieldValue('workingdays', newWorkingDays); // Update the Formik form state
                         options={dashboard?.allSubsidiaryList}
                       />
                       <ErrorMessage className="form-feedBack" name="subsidiaryId" component="div" />
-
-
                     </div>
                   </div>
 
@@ -275,13 +271,10 @@ setFieldValue('workingdays', newWorkingDays); // Update the Formik form state
                         onChange={(e) => {
                           setFieldValue("shiftType", e.value);
                           setShiftTypeCodeList(e);
-
                         }}
                         value={defShiftType}
                         error={errors.shiftType}
-
                         options={dashboard.allShiftTypeList}
-
                       />
                       <ErrorMessage className="form-feedBack" name="shiftType" component="div" />
                     </div>
@@ -423,9 +416,6 @@ setFieldValue('workingdays', newWorkingDays); // Update the Formik form state
 
                       />
                     </div>
-
-
-
                   </div>
 
                   <div className="from-group row">
