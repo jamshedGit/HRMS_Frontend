@@ -76,6 +76,7 @@ const HolidaysModule = lazy(() => import("./modules/Holidays/pages/index"));
 
 
 const LeaveEncashment = lazy(() => import("./modules/LeaveEncashment/pages/index"));
+const EmployeeRoster = lazy(() => import("./modules/EmployeeRoster/pages/index"));
 
 const ROUTES = {
   settings: SettingsPage,
@@ -135,9 +136,10 @@ const ROUTES = {
   reimbursement_claim:reimbursement_claimModule,
   employee_loan_request:employee_loan_requestModule,
   attendance_configuration: AttendanceConfigurationManagement,
+  leave_encashment: LeaveEncashment,
+  employee_roster: EmployeeRoster,
   employee_shift: EmployeeShiftManagement,
   holidays:HolidaysModule,
-  leave_encashment: LeaveEncashment
 };
 
 export default function BasePage() {
