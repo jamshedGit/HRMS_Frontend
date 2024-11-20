@@ -22,6 +22,7 @@ import { toAbsoluteUrl } from "../../../../../../_metronic/_helpers";
 import { Link } from "@material-ui/core";
 import { useDesignationUIContext } from "../DesignationUIContext";
 import MaskedInput from "react-text-mask";
+import { getDateDiffInDays } from "../../../../../utils/common";
 
 export const USERS_URL = process.env.REACT_APP_API_URL;
 const currentDate = new Date();
@@ -208,7 +209,7 @@ const profileValidation = Yup.object().shape(
   }
 
   if ((title === 'Mr.' || title === 'Dr.' || title === 'Professor.' || title === 'Captain') && gender === 'Female') {
-    return this.createError({ path: 'gender', message: 'cannot be female.' });
+    return this.createError({ path: 'gender', message: 'Mr. cannot be female.' });
   }
 
 
@@ -1006,36 +1007,21 @@ export function DesignationEditForm({
       if (!obj.cityId) {
         newErrors[`cityId-${index}`] = '*Required';
       }
-      if (new Date(obj.startDate) > new Date()) {
-        newErrors[`startDate-${index}`] = 'Start Date cannot be a future date';
+      console.log("work date", obj.startDate);
+      const num = getDateDiffInDays(obj.startDate, new Date().getTime())
+
+
+
+      if (new Date(obj.startDate).getTime() > new Date().getTime()) {
+        newErrors[`startDate_W-${index}`] = 'Start Date cannot be a future date';
       }
 
       // Validate endDate
       if (new Date(obj.endDate) < new Date(obj.startDate)) {
-        newErrors[`endDate-${index}`] = 'End Date must be later than Start Date';
+        newErrors[`endDate_W-${index}`] = 'End Date must be later than Start Date';
       }
 
-      // Check if startDate and endDate are the same
-      if (new Date(obj.startDate).getTime() === new Date(obj.endDate).getTime()) {
-        newErrors[`endDate-${index}`] = 'End Date cannot be the same as Start Date';
-      }
 
-      // Check for date duplicates across rows
-      const datePairs = workExperienceList.map((obj, index) => ({
-        startDate: new Date(obj.startDate),
-        endDate: new Date(obj.endDate),
-        index,
-      }));
-
-      datePairs.forEach(({ startDate, endDate }, index) => {
-        datePairs.forEach(({ startDate: otherStartDate, endDate: otherEndDate }, otherIndex) => {
-          if (index !== otherIndex) { // Ensure we don't compare the same row
-            if (startDate === otherStartDate || endDate === otherEndDate) {
-              newErrors[`startDate-${index}`].duplicateDates = 'Start and End Dates must be unique across rows';
-            }
-          }
-        });
-      });
 
     });
 
@@ -1066,12 +1052,12 @@ export function DesignationEditForm({
         newErrors[`cityId-${index}`] = '*Required';
       }
       if (new Date(obj.startDate) > new Date()) {
-        newErrors[`startDate-${index}`] = 'Start Date cannot be a future date';
+        newErrors[`startDate_A-${index}`] = 'Start Date cannot be a future date';
       }
 
       // Validate endDate
       if (new Date(obj.endDate) < new Date(obj.startDate)) {
-        newErrors[`endDate-${index}`] = 'End Date must be later than Start Date';
+        newErrors[`endDate_A-${index}`] = 'End Date must be later than Start Date';
       }
 
     });
@@ -1230,7 +1216,7 @@ export function DesignationEditForm({
 
                         <div className="col-12 col-md-4 mt-3">
                           <Select
-                            label="Title"
+                           label={<span> Title<span style={{ color: 'red' }}>*</span></span>}
                             name="title"
                             value={values.title}
                             onChange={handleChange}
@@ -1988,6 +1974,25 @@ export function DesignationEditForm({
                         />
                         <ErrorMessage className="form-feedBack" name="dateOfRetirement" component="div" />
                       </div> */}
+                          <div className="col-12 col-md-4 mt-14">
+                        <input
+                          name="requireDeligation"
+                          type="checkbox"
+                          onChange={(e) => {
+                            const { checked } = e.target;
+                            setFieldValue('requireDeligation', checked); // Update the checkbox state
+                            if (!checked) {
+                              setFieldValue('deligation', ''); // Clear deligation field when unchecked
+                            }
+                          }}
+                          onBlur={handleBlur}
+                          value={values.requireDeligation}
+                          checked={values.requireDeligation}
+                          label="Require Deligation"
+                          
+                        />
+                        <label>Require Deligation</label>
+                      </div>
                       <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="deligation"
@@ -1996,21 +2001,11 @@ export function DesignationEditForm({
                           placeholder="Enter Deligation"
                           label="Deligation"
                           autoComplete="off"
+                          disabled={!values.requireDeligation} 
                         />
 
                       </div>
-                      <div className="col-12 col-md-4 mt-14">
-                        <input
-                          name="requireDeligation"
-                          type="checkbox"
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.requireDeligation}
-                          checked={values.requireDeligation}
-                          label="Require Deligation"
-                        />
-                        <label>Require Deligation</label>
-                      </div>
+                  
                       {/* <div className="col-12 col-md-4 mt-3">
                         <label>NIC Expiry Date</label>
                         <DatePicker
@@ -2497,10 +2492,10 @@ export function DesignationEditForm({
                                 scrollableMonthYearDropdown
                                 onChange={(el) => {
                                   handleDatePicker(el, 'startDate', rightindex, '');
-                                  setErrors((prev) => ({ ...prev, [`startDate-${rightindex}`]: '' })); // Clear error on change
+                                  setErrors((prev) => ({ ...prev, [`startDate_W-${rightindex}`]: '' })); // Clear error on change
                                 }
                                 }
-                                id={"startDate-" + rightindex}
+                                id={"endDate_W-" + rightindex}
                                 timeInputLabel="Time:"
                                 dateFormat="dd/MM/yyyy"
                                 showTimeInput
@@ -2508,7 +2503,7 @@ export function DesignationEditForm({
                                 disabled={isUserForRead}
                                 autoComplete="off"
                               />
-                              {deferrors[`startDate-${rightindex}`] && <div className="form-feedBack">{deferrors[`startDate-${rightindex}`]}</div>}
+                              {deferrors[`startDate_W-${rightindex}`] && <div className="form-feedBack">{deferrors[`startDate_W-${rightindex}`]}</div>}
                             </td>
                             <td>
                               <DatePicker
@@ -2519,10 +2514,10 @@ export function DesignationEditForm({
                                 scrollableMonthYearDropdown
                                 onChange={(el) => {
                                   handleDatePicker(el, 'endDate', rightindex, '');
-                                  setErrors((prev) => ({ ...prev, [`endDate-${rightindex}`]: '' })); // Clear error on change
+                                  setErrors((prev) => ({ ...prev, [`endDate_W-${rightindex}`]: '' })); // Clear error on change
                                 }
                                 }
-                                id={"endDate-" + rightindex}
+                                id={"endDate_W" + rightindex}
                                 timeInputLabel="Time:"
                                 dateFormat="dd/MM/yyyy"
                                 showTimeInput
@@ -2530,7 +2525,7 @@ export function DesignationEditForm({
                                 disabled={isUserForRead}
                                 autoComplete="off"
                               />
-                              {deferrors[`endDate-${rightindex}`] && <div className="form-feedBack">{deferrors[`endDate-${rightindex}`]}</div>}
+                              {deferrors[`endDate_W-${rightindex}`] && <div className="form-feedBack">{deferrors[`endDate_W-${rightindex}`]}</div>}
                             </td>
                           </tr>
                           </>
@@ -2659,7 +2654,7 @@ export function DesignationEditForm({
                                   showYearDropdown
                                   scrollableMonthYearDropdown
                                   onChange={(el) => handleDatePickerAcademic(el, 'startDate', rightindex, '')}
-                                  id={"startDate-" + rightindex}
+                                  id={"startDate_A-" + rightindex}
                                   timeInputLabel="Time:"
                                   dateFormat="dd/MM/yyyy"
                                   showTimeInput
@@ -2667,7 +2662,7 @@ export function DesignationEditForm({
                                   disabled={isUserForRead}
                                   autoComplete="off"
                                 />
-                                {deferrors[`startDate-${rightindex}`] && <div className="form-feedBack">{deferrors[`startDate-${rightindex}`]}</div>}
+                                {deferrors[`startDate_A-${rightindex}`] && <div className="form-feedBack">{deferrors[`startDate_A-${rightindex}`]}</div>}
                               </td>
                               <td>
                                 <DatePicker
@@ -2677,7 +2672,7 @@ export function DesignationEditForm({
                                   showYearDropdown
                                   scrollableMonthYearDropdown
                                   onChange={(el) => handleDatePickerAcademic(el, 'endDate', rightindex, '')}
-                                  id={"endDate-" + rightindex}
+                                  id={"endDate_A-" + rightindex}
                                   timeInputLabel="Time:"
                                   dateFormat="dd/MM/yyyy"
                                   showTimeInput
@@ -2685,7 +2680,7 @@ export function DesignationEditForm({
                                   disabled={isUserForRead}
                                   autoComplete="off"
                                 />
-                                {deferrors[`endDate-${rightindex}`] && <div className="form-feedBack">{deferrors[`endDate-${rightindex}`]}</div>}
+                                {deferrors[`endDate_A-${rightindex}`] && <div className="form-feedBack">{deferrors[`endDate_A-${rightindex}`]}</div>}
                               </td>
                             </tr>
                           </>

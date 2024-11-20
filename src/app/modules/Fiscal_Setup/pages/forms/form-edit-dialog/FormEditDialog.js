@@ -68,7 +68,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   useEffect(() => {
     dispatch(actions.fetchUser(id));
 
-    // dispatch(actions.fetchUser(FormUIProps.queryParams))
+     dispatch(actions.fetchUser(formUIProps.queryParams))
   }, [id, dispatch]);
 
   // useEffect(() => {

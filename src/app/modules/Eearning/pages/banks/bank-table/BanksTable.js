@@ -81,7 +81,7 @@ export function BanksTable() {
    
     {
       dataField: "earningCode",
-      text: "Code",
+      text: "Earning Code",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -92,7 +92,7 @@ export function BanksTable() {
 
     {
       dataField: "earningName",
-      text: "Earning",
+      text: "Earning Name",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,

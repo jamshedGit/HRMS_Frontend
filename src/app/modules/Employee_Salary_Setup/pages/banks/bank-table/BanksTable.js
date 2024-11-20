@@ -78,20 +78,9 @@ export function BanksTable() {
     //     minWidth: "160px",
     //   },
     // },
-   
-    {
-      dataField: "employeeName",
-      text: "Employee",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
     {
       dataField: "employeeCode",
-      text: "Code",
+      text: "Employee Code",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -100,8 +89,19 @@ export function BanksTable() {
       },
     },
     {
+      dataField: "employeeName",
+      text: "Employee Name",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
+   
+    {
       dataField: "employeeType",
-      text: "Type",
+      text: "Employee Type",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -111,7 +111,7 @@ export function BanksTable() {
     },
     {
       dataField: "grossSalary",
-      text: "Gross",
+      text: "Gross Salary",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -121,7 +121,7 @@ export function BanksTable() {
     },
     {
       dataField: "basicSalary",
-      text: "Basic",
+      text: "Basic Salary",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,

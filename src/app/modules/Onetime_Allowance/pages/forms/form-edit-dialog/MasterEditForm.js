@@ -12,6 +12,7 @@ import {
 } from "../../../../../../_metronic/redux/dashboardActions";
 import DatePicker from "react-datepicker";
 import axios from 'axios';
+import { amountLimit } from "../../../../../utils/common";
 export const USERS_URL = process.env.REACT_APP_API_URL;
 
 // Phone Number Regex
@@ -25,21 +26,9 @@ const formValidation = Yup.object().shape(
   {
 
 
-    type: Yup.string().required("*Required*"),
+    employeeId: Yup.string().required("*Required*"),
 
 
-    value: Yup.number().when("type", {
-      is: "fixed_days",
-      then: Yup.number().required("*Required"),
-    }),
-    multiplier: Yup.number().when("type", {
-      is: "ratio_of_year",
-      then: Yup.number().required("*Required"),
-    }),
-    divisor: Yup.number().when("type", {
-      is: "ratio_of_year",
-      then: Yup.number().required("*Required"),
-    }),
   },
 
 );
@@ -60,6 +49,10 @@ export function MasterEditForm({
   const [defMapEarningDeductionList = null, setDefaultMapEarningDeductionList] = useState([]);
   const [defEmployee = null, setEmployeeDefault] = useState(null);
   const [defMonthDate, setMonthDefault] = useState(null);
+  const [deferrors, setErrors] = useState({});
+
+
+
   //===== Date Of Joining
   useEffect(() => {
     if (!user.Id) {
@@ -68,10 +61,10 @@ export function MasterEditForm({
       dispatch(fetchAllDeductionList(2));
 
     }
-  
+
   }, [dispatch]);
 
-  
+
   useEffect(() => {
 
     if (user.employeeId) {
@@ -81,10 +74,10 @@ export function MasterEditForm({
 
   const fnEditForm = async (empId) => {
 
-    const response = await axios.post(`${USERS_URL}/onetime_earning/read-all-onetime-earning`,{employeeId: empId});
-  
+    const response = await axios.post(`${USERS_URL}/onetime_earning/read-all-onetime-earning`, { employeeId: empId });
+
     const resp = response?.data?.data;
-  
+
     setDefaultMapEarningDeductionList(resp);
 
   }
@@ -143,8 +136,36 @@ export function MasterEditForm({
       }
       return el;
     })
-     setDefaultMapEarningDeductionList(data);
+    setDefaultMapEarningDeductionList(data);
   }
+
+
+  const validate = () => {
+    const newErrors = {};
+
+    defMapEarningDeductionList.forEach((objValidate, index) => {
+
+      if (!objValidate.earning_Id) {
+        newErrors[`earning_Id-${index}`] = 'Required*';
+      }
+    
+     
+      console.log("amount::", objValidate.amount)
+      // Check if factorValue is required
+      if (!objValidate.amount) {
+        newErrors[`amount-${index}`] = 'Required*';
+      }
+
+      // Check if amount is required
+      if (!objValidate.amount && objValidate.factorValue <= 0) {
+        newErrors[`amount-${index}`] = 'Required*';
+      }
+    });
+
+
+
+    return newErrors;
+  };
 
   console.log(":1:", defMapEarningDeductionList)
   return (
@@ -152,12 +173,20 @@ export function MasterEditForm({
       <Formik
         enableReinitialize={true}
         initialValues={user}
-        //validationSchema={formValidation}
+        validationSchema={formValidation}
         onSubmit={(values) => {
           console.log("values", values);
-          enableLoading();
+          
+          const validationErrors = validate();
+          console.log("ppp", validationErrors)
+          if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+          } else {
+            enableLoading();
+            SaveOntimeAllowance(values, defMapEarningDeductionList);
+          }
 
-          SaveOntimeAllowance(values, defMapEarningDeductionList);
+
         }}
       >
         {({
@@ -191,7 +220,7 @@ export function MasterEditForm({
                         onChange={(e) => {
                           setFieldValue("employeeId", e.value || null);
                           setEmployeeDefault(e);
-                          fnEditForm(e.value);
+                         /// fnEditForm(e.value);
                           //  dispatch(fetchAllActiveEmployees(e.value));
                         }}
                         value={(defEmployee || null)}
@@ -217,17 +246,26 @@ export function MasterEditForm({
                         <td>Remarks</td>
                       </tr>
                       {defMapEarningDeductionList?.map((obj, rightindex) => (
-                         obj.transactionType == 'Earning' &&
+                        obj.transactionType == 'Earning' &&
                         <><tr>
                           <td id={rightindex} onClick={deleteRow}> Delete</td>
                           <td>
-                            <select className="form-control" onChange={handleFieldChanged} id={'earning_Id-' + rightindex} value={obj.earning_Id}>
+                            <select className="form-control"
+
+                              onChange={(e) => {
+                                handleFieldChanged(e);
+                                setErrors((prev) => ({ ...prev, [`earning_Id-${rightindex}`]: '' })); // Clear error on change
+                              }}
+
+                              id={'earning_Id-' + rightindex} value={obj.earning_Id}>
                               <option value="-1"> --Select--</option>
                               {
                                 dashboard.allEarnings?.map((x) => {
                                   return <option disabled={defMapEarningDeductionList.find(el => el.earning_Id == x.value) ? true : false} value={x.value}> {x.label} </option>
                                 })}
                             </select>
+
+                            {deferrors[`earning_Id-${rightindex}`] && <div className="form-feedBack">{deferrors[`earning_Id-${rightindex}`]}</div>}
                           </td>
                           <td>
                             <DatePicker
@@ -235,7 +273,7 @@ export function MasterEditForm({
                               placeholder="Enter Month"
                               selected={new Date(obj.month || new Date())}
                               onChange={(date) => {
-                              //  setFieldValue("month-" + rightindex, date);
+                                //  setFieldValue("month-" + rightindex, date);
                                 onChangeValue(rightindex, 'month', date)
 
                               }}
@@ -244,14 +282,31 @@ export function MasterEditForm({
                               showTimeInput
                               id={"month-" + rightindex}
                               autoComplete="off"
-                             // value={values["month-" + rightindex]}
+                            // value={values["month-" + rightindex]}
                             />
+                            {/* {deferrors[`earning_Id-${rightindex}`] && <div className="form-feedBack">{deferrors[`earning_Id-${rightindex}`]}</div>} */}
                           </td>
                           <td>
-                            <input value={obj.amount} onChange={handleFieldChanged} type="text" id={"amount-" + rightindex} className="form-control"></input>
+                            <input value={obj.amount}
+
+                              onChange={(e) => {
+                                handleFieldChanged(e);
+                                setErrors((prev) => ({ ...prev, [`amount-${rightindex}`]: '' })); // Clear error on change
+                              }}
+
+                              type="number"
+                              onInput={(e) => {
+                                e.target.value = amountLimit(e.target.value); // Limit to 3 digits
+                              }}
+
+                              id={"amount-" + rightindex}
+                              className="form-control"></input>
+                            {deferrors[`amount-${rightindex}`] && <div className="form-feedBack">{deferrors[`amount-${rightindex}`]}</div>}
                           </td>
                           <td>
-                            <input type="text" onChange={handleFieldChanged} value={obj.remarks} id={"remarks-" + rightindex} className="form-control"></input>
+                            <input type="text"
+                              maxLength={50}
+                             onChange={handleFieldChanged} value={obj.remarks} id={"remarks-" + rightindex} className="form-control"></input>
                           </td>
                         </tr>
 
@@ -288,38 +343,63 @@ export function MasterEditForm({
                         <><tr>
                           <td id={rightindex} onClick={deleteRow}> Delete</td>
                           <td>
-                            <select className="form-control" onChange={handleFieldChanged} id={'earning_Id-' + rightindex} value={obj.earning_Id}>
+                            <select
+                              className="form-control"
+                              onChange={(e) => {
+                                handleFieldChanged(e);
+                                setErrors((prev) => ({ ...prev, [`earning_Id-${rightindex}`]: '' })); // Clear error on change
+
+                              }}
+                              id={'earning_Id-' + rightindex} value={obj.earning_Id}>
                               <option value="-1"> --Select--</option>
                               {
                                 dashboard.allDeductions?.map((x) => {
                                   return <option disabled={defMapEarningDeductionList.find(el => el.earning_Id == x.value) ? true : false} value={x.value}> {x.label} </option>
                                 })}
                             </select>
+                            {deferrors[`earning_Id-${rightindex}`] && <div className="form-feedBack">{deferrors[`earning_Id-${rightindex}`]}</div>}
                           </td>
                           <td>
 
                             <DatePicker
-                               className="form-control"
-                               placeholder="Enter Month"
-                               selected={new Date(obj.month || new Date())}
-                               onChange={(date) => {
-                               //  setFieldValue("month-" + rightindex, date);
-                                 onChangeValue(rightindex, 'month', date)
- 
-                               }}
-                               timeInputLabel="Time:"
-                               dateFormat="MM/yyyy"
-                               showTimeInput
-                               id={"month-" + rightindex}
-                               autoComplete="off"
+                              className="form-control"
+                              placeholder="Enter Month"
+                              selected={new Date(obj.month || new Date())}
+                              onChange={(date) => {
+                                //  setFieldValue("month-" + rightindex, date);
+                                onChangeValue(rightindex, 'month', date)
+                                setErrors((prev) => ({ ...prev, [`month-${rightindex}`]: '' })); // Clear error on change
+
+                              }}
+                              timeInputLabel="Time:"
+                              dateFormat="MM/yyyy"
+                              showTimeInput
+                              id={"month-" + rightindex}
+                              autoComplete="off"
 
                             />
+                            {deferrors[`month-${rightindex}`] && <div className="form-feedBack">{deferrors[`month-${rightindex}`]}</div>}
                           </td>
                           <td>
-                            <input value={obj.amount} onChange={handleFieldChanged} type="text" id={"amount-" + rightindex} className="form-control"></input>
+                            <input value={obj.amount}
+                              onChange={(e) => {
+                                handleFieldChanged(e);
+                                setErrors((prev) => ({ ...prev, [`amount-${rightindex}`]: '' })); // Clear error on change
+                              }}
+
+                              type="number"
+                              onInput={(e) => {
+                                e.target.value = amountLimit(e.target.value); // Limit to 3 digits
+                              }}
+                              id={"amount-" + rightindex} className="form-control"></input>
+                            {deferrors[`amount-${rightindex}`] && <div className="form-feedBack">{deferrors[`amount-${rightindex}`]}</div>}
                           </td>
+
                           <td>
-                            <input type="text" onChange={handleFieldChanged} value={obj.remarks} id={"remarks-" + rightindex} className="form-control"></input>
+                            <input type="text"
+                              maxLength={50}
+                              onChange={handleFieldChanged}
+                              value={obj.remarks} id={"remarks-" + rightindex} className="form-control"></input>
                           </td>
                         </tr>
 

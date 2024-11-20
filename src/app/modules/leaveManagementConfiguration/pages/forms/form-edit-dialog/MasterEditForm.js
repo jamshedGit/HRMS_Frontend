@@ -14,8 +14,8 @@ import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
 //Validations for Form
 const formValidation = Yup.object().shape({
   subsidiaryId: Yup.number().required(VALIDATION_MESSAGES.required),
-  gradeId: Yup.number().required(VALIDATION_MESSAGES.required),
-  employeeTypeId: Yup.number().required(VALIDATION_MESSAGES.required),
+  // gradeId: Yup.number().required(VALIDATION_MESSAGES.required),
+  // employeeTypeId: Yup.number().required(VALIDATION_MESSAGES.required),
   weekend: Yup.array().required(VALIDATION_MESSAGES.required).min(1),
   isSandwich: Yup.boolean().optional(),
   leavetypePolicies: Yup.array().of(
@@ -81,7 +81,7 @@ export function MasterEditForm({
   //Function to fetch Data from server when all dropdown values are present or updated.
   //If there is no old data for selected dropdown values then form will clear for user to enter new data
   const getOldData = (values) => {
-    if (values.subsidiaryId && values.gradeId && values.employeeTypeId) {
+    if (values.subsidiaryId) {
       dispatch(actions.fetchEditRecord(values, { ...initUser, ...values }));
     }
   }
@@ -143,7 +143,7 @@ export function MasterEditForm({
                         onChange={(e) => {
                           const value = e.target.value == '--Select--' ? '' : e.target.value
                           setFieldValue('subsidiaryId', value)
-                          const filter = { subsidiaryId: value, gradeId: values.gradeId, employeeTypeId: values.employeeTypeId }
+                          const filter = { subsidiaryId: value,/* gradeId: values.gradeId, employeeTypeId: values.employeeTypeId*/ }
                           getOldData(filter)
                         }}
                         label={
@@ -162,8 +162,9 @@ export function MasterEditForm({
                     </div>
                     {/* Subsidiary Field End */}
 
+                    {/* This field is commented/removed after discussion with mubin bhai because of it's link with Leave Allocation Form */}
                     {/* Grade Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
+                    {/* <div className="col-12 col-md-4 mt-3">  
                       <Field
                         name="gradeId"
                         component={Select}
@@ -190,11 +191,12 @@ export function MasterEditForm({
                       {
                         errors.gradeId && touched.gradeId && <CustomErrorLabel touched={true} error={errors.gradeId} />
                       }
-                    </div>
+                    </div> */}
                     {/* Grade Field End */}
 
+                    {/* This field is commented/removed after discussion with mubin bhai because of it's link with Leave Allocation Form */}
                     {/* Employee Type Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
+                    {/* <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="employeeTypeId"
                         component={Select}
@@ -216,7 +218,7 @@ export function MasterEditForm({
                       {
                         errors.employeeTypeId && touched.employeeTypeId && <CustomErrorLabel touched={true} error={errors.employeeTypeId} />
                       }
-                    </div>
+                    </div> */}
                     {/* Employee Type Field End */}
 
                     {/* Weekends Field Start */}
@@ -354,6 +356,7 @@ export function MasterEditForm({
               {!isUserForRead && (
                 <button
                   type="submit"
+                  disabled={loading}
                   onClick={() => handleSubmit()}
                   className="btn btn-primary btn-elevate"
                 >
