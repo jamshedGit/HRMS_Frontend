@@ -56,8 +56,11 @@ const formValidation = Yup.object().shape(
       }
     ),
     exchange_rate: Yup.string()
-     .required(VALIDATION_MESSAGES.required)
-     .matches(/^\d+(\.\d+)?$/, "Must contain only digits"),
+    .required(VALIDATION_MESSAGES.required)
+    .matches(/^\d+(\.\d+)?$/, "Must contain only digits or a decimal point") // Ensures the value is a number (integer or decimal)
+    .test('greaterThanZero', 'Exchange rate must be greater than zero', (value) => {
+      return parseFloat(value) > 0; // Checks if the parsed value is greater than zero
+    }),
     effective_date: Yup.date()
     .nullable()
     .min(currentDate, 'Effective date must be a future date')

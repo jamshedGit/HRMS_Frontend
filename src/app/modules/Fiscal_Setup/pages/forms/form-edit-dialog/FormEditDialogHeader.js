@@ -17,7 +17,7 @@ export function FormEditDialogHeader({ id, isUserForRead }) {
   );
 
   useEffect(() => {
-    let _title = id ? "" : "New Fiscal Year";
+    let _title = id ? "" : "Add Fiscal Year";
     if (id) {
       _title = `Edit Fiscal Year`;
     } //else if (isUserForRead) {

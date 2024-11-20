@@ -4,7 +4,7 @@ import paginationFactory, {
   PaginationProvider,
 } from "react-bootstrap-table2-paginator";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import * as actions from "../../../_redux/bankActions";
+import * as actions from "../../../_redux/formActions";
 import {
   getHandlerTableChange,
   NoRecordsFoundMessage,
@@ -12,76 +12,60 @@ import {
   sortCaret,
   headerSortingClasses,
 } from "../../../../../../_metronic/_helpers";
-import * as uiHelpers from "../BanksUIHelpers";
+import * as uiHelpers from "../FormUIHelpers";
 import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatter";
 import { Pagination } from "../../../../../../_metronic/_partials/controls";
-import { useBanksUIContext } from "../BanksUIContext";
-import { DatetimeColumnFormatter } from "../../../../Dashboard/pages/dashboard/last-trips-vehicles-table/column-formatter/CreatedColumnFormatter";
+import { useFormUIContext } from "../FormUIContext";
 
-export function BanksTable() {
+export function FormTable() {
   //Users UI Context
-  const bankUIContext = useBanksUIContext();
+  const formUIContext = useFormUIContext();
 
-  const bankUIProps = useMemo(() => {
+  const FormUIProps = useMemo(() => {
     return {
-      ids: bankUIContext.ids,
-      setIds: bankUIContext.setIds,
-      queryParams: bankUIContext.queryParams,
-      setQueryParams: bankUIContext.setQueryParams,
-      openEditBankDialog: bankUIContext.openEditBankDialog,
-      openDeleteBankDialog: bankUIContext.openDeleteBankDialog,
-      openActiveBankDialog: bankUIContext.openActiveBankDialog,
-      openReadBankDialog: bankUIContext.openReadBankDialog,
+      ids: formUIContext.ids,
+      setIds: formUIContext.setIds,
+      queryParams: formUIContext.queryParams,
+      setQueryParams: formUIContext.setQueryParams,
+      openEditFormDialog: formUIContext.openEditFormDialog,
+      openDeleteFormDialog: formUIContext.openDeleteFormDialog,
+      openReadFormDialog: formUIContext.openReadFormDialog,
     };
-  }, [bankUIContext]);
+  }, [formUIContext]);
 
-  //console.log("queryparms", usersUIProps.queryparms)
   const { currentState, userAccess } = useSelector(
-    (state) => {  console.log("academic state ",state); return {
-      
-      currentState: state.earning,
-      userAccess: state?.auth?.userAccess["Earning"],
-    }},
+    (state) => {
+      return {
+        currentState: state.employee_shift,
+        userAccess: state?.auth?.userAccess["Employee_Shift"],
+      }
+    },
     shallowEqual
   );
-  console.log("currentState", currentState);
-  
-  const { totalCount, entities, listLoading } = currentState;
 
-  //totalCount = 10
+  const { totalCount, entities, listLoading } = currentState;
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    bankUIProps.setIds([]);
-    console.log("test 2",bankUIProps.queryParams)
-    dispatch(actions.fetchUsers(bankUIProps.queryParams));
-  }, [bankUIProps.queryParams, dispatch, totalCount]);
+    FormUIProps.setIds([]);
+    dispatch(actions.fetchEmployeeShift(FormUIProps.queryParams));
+  }, [FormUIProps.queryParams, dispatch, totalCount]);
 
-  console.log("access earning",userAccess);
+
   const isAccessForEdit = userAccess?.find(
-    (item) => item.componentName === "UpdateEarning"
+    (item) => item.componentName === "UpdateEmployeeShift"
   );
 
   const isAccessForDelete = userAccess?.find(
-    (item) => item.componentName === "DeleteEarning"
+    (item) => item.componentName === "DeleteEmployeeShift"
   );
+  console.log("pak::",isAccessForEdit,isAccessForDelete)
   // Table columns
   const columns = [
-    // {
-    //   dataField: "Id",
-    //   text: "ID",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    //   headerSortingClasses,
-    //   style: {
-    //     minWidth: "160px",
-    //   },
-    // },
-   
     {
-      dataField: "earningCode",
-      text: "Earning Code",
+      dataField: "name",
+      text: "Shift Name",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -91,8 +75,8 @@ export function BanksTable() {
     },
 
     {
-      dataField: "earningName",
-      text: "Earning Name",
+      dataField: "shiftCode",
+      text: "Shift Code",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -101,39 +85,9 @@ export function BanksTable() {
       },
     },
 
-    // {
-    //   dataField: "linkedAttendance",
-    //   text: "Linked Attendance",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    //   headerSortingClasses,
-    //   style: {
-    //     minWidth: "160px",
-    //   },
-    // },
-    // {
-    //   dataField: "isTaxable",
-    //   text: "Taxable",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    //   headerSortingClasses,
-    //   style: {
-    //     minWidth: "160px",
-    //   },
-    // },
     {
-      dataField: "mappedAllowance",
-      text: "Mapped Allowance",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
-    {
-      dataField: "account",
-      text: "Account",
+      dataField: "shiftType",
+      text: "Shift Type",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -143,20 +97,15 @@ export function BanksTable() {
     },
     
     
-    
-    
-   
-   
-       {
+    {
       dataField: "action",
       text: "Actions",
       isDummyField: true,
       formatter: ActionsColumnFormatter,
       formatExtraData: {
-        openEditBankDialog: bankUIProps.openEditBankDialog,
-        openDeleteBankDialog: bankUIProps.openDeleteBankDialog,
-        openActiveBankDialog: bankUIProps.openActiveBankDialog,
-        openReadBankDialog: bankUIProps.openReadBankDialog,
+        openEditFormDialog: FormUIProps.openEditFormDialog,
+        openDeleteFormDialog: FormUIProps.openDeleteFormDialog,
+        openReadFormDialog: FormUIProps.openReadFormDialog,
         isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,
         isAccessForDelete: isAccessForDelete
           ? isAccessForDelete.isAccess
@@ -175,11 +124,14 @@ export function BanksTable() {
     custom: true,
     totalSize: totalCount,
     sizePerPageList: uiHelpers.sizePerPageList,
-    sizePerPage: bankUIProps.queryParams.pageSize,
-    page: bankUIProps.queryParams.pageNumber,
+    sizePerPage: FormUIProps.queryParams.pageSize,
+    page: FormUIProps.queryParams.pageNumber,
   };
 
-    return (
+ 
+
+
+  return (
     <>
       <PaginationProvider pagination={paginationFactory(paginationOptions)}>
         {({ paginationProps, paginationTableProps }) => {
@@ -189,6 +141,7 @@ export function BanksTable() {
               paginationProps={paginationProps}
             >
               <BootstrapTable
+                noDataIndication={NoRecordsFoundMessage({ entities })}
                 wrapperClasses="table-responsive"
                 bordered={false}
                 classes="table table-head-custom table-vertical-center overflow-hidden table-hover"
@@ -199,7 +152,7 @@ export function BanksTable() {
                 columns={columns}
                 defaultSorted={uiHelpers.defaultSorted}
                 onTableChange={getHandlerTableChange(
-                  bankUIProps.setQueryParams
+                  FormUIProps.setQueryParams
                 )}
                 // selectRow={getSelectRow({
                 //   entities,
@@ -207,6 +160,7 @@ export function BanksTable() {
                 // })}
                 {...paginationTableProps}
               >
+
                 <PleaseWaitMessage entities={entities} />
                 <NoRecordsFoundMessage entities={entities} />
               </BootstrapTable>

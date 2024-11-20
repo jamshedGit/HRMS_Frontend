@@ -119,7 +119,16 @@ export function FormTable() {
         minWidth: "160px",
       },
     },
-   
+    {
+      dataField: "shortFormat",
+      text: "Short Format",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
     {
       dataField: "isActive",
       text: "Active",
