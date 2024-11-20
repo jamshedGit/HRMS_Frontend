@@ -1,6 +1,5 @@
 import React from "react";
 import { Formik, Form, Field } from "formik";
-import * as Yup from "yup";
 import { Select } from "../../../../../../_metronic/_partials/controls";
 import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
 import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLabel";
