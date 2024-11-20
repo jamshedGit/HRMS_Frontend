@@ -56,14 +56,6 @@ export const AttendanceSlice = createSlice({
             state.userForEdit = entities;
             state.error = null;
         },
-        AttendanceDeleted: (state, action) => {
-            state.error = null;
-            state.actionsLoading = false;
-            state.entities = state.entities.filter(
-                (el) => el.Id != action.payload.id
-            );
-            state.totalCount--;
-        },
         AttendanceCreated: (state, action) => {
             const entities = action?.payload
             state.actionsLoading = false;

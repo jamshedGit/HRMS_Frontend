@@ -55,14 +55,3 @@ export function getAttendanceSetupByFilters(filters) {
 export function updateAttendanceSetup(body) {
   return axios.put(`${USERS_URL}/attendance/update-attendance`, body);
 }
-
-/**
- *
- * Delete Single Attendance By Id
- *  
- * @param {Object} body 
- * @returns 
- */
-export function deleteAttendanceSetup(id) {
-  return axios.delete(`${USERS_URL}/attendance/delete-attendance/${id}`);
-}

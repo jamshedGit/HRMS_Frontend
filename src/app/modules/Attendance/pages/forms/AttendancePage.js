@@ -4,12 +4,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { FormUIProvider } from "./FormUIContext";
 import { FormCard } from "./form-card/FormCard";
 
-export function AttendancePage({ history }) {
-  const FormUIEvents = {
-  };
+export function AttendancePage() {
   return (
 
-    <FormUIProvider FormUIEvents={FormUIEvents}>
+    <FormUIProvider FormUIEvents={{}}>
       <FormCard />
       <ToastContainer
         position="top-right"
