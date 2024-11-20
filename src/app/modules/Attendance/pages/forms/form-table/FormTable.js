@@ -70,7 +70,7 @@ export function FormTable() {
       },
     },
     {
-      dataField: "attDateIn",
+      dataField: "formattedDateIn",
       text: "Attendance Date In",
       sort: false,
       sortCaret: sortCaret,
@@ -92,7 +92,7 @@ export function FormTable() {
       },
     },
     {
-      dataField: "attDateOut",
+      dataField: "formattedDateOut",
       text: "Attendance Date Out",
       sort: false,
       sortCaret: sortCaret,
