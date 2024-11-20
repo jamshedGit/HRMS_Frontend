@@ -1,7 +1,5 @@
 import React from "react";
-import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
-import * as Yup from "yup";
 import { Select } from "../../../../../../_metronic/_partials/controls";
 import { useSelector, shallowEqual } from "react-redux"
 import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
