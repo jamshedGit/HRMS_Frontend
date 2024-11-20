@@ -1,5 +1,6 @@
 import React, { useMemo } from "react"
 import { Field, Formik } from "formik"
+import * as Yup from "yup";
 import { isEqual } from "lodash"
 import { useFormUIContext } from "../FormUIContext"
 import { Form, Modal } from "react-bootstrap";
@@ -9,6 +10,12 @@ import { DatePickerField, Select } from "../../../../../../_metronic/_partials/c
 import { ATTENDANCE_TYPE } from "../../../../../utils/constants";
 import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
 import { initialFilter } from "../FormUIHelpers";
+
+//Validation for date fields
+const formValidation = Yup.object().shape({
+  from: Yup.date().optional(),
+  to: Yup.date().optional().min(Yup.ref('from'), 'Date to date cannot be before Date from date'),
+})
 
 //Prepare new Filter
 const prepareFilter = (queryParams, values) => {
@@ -75,6 +82,7 @@ export function FormFilter({ loading }) {
       <Formik
         enableReinitialize={true}
         initialValues={initialFilter.filter}
+        validationSchema={formValidation}
         onSubmit={(values) => {
           applyFilter(values)
         }}
@@ -288,6 +296,7 @@ export function FormFilter({ loading }) {
                         name="from"
                         component={DatePickerField}
                         dateFormat="dd/MM/yyyy"
+                        className="form-control"
                         label={
                           <span>
                             {" "}
@@ -309,6 +318,7 @@ export function FormFilter({ loading }) {
                         name="to"
                         component={DatePickerField}
                         onBlur={handleBlur}
+                        className="form-control"
                         dateFormat="dd/MM/yyyy"
                         label={
                           <span>
