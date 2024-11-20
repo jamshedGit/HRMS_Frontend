@@ -56,6 +56,10 @@ export const employeeShiftSlice = createSlice({
         EmployeeshiftFetchedForEdit: (state, action) => {
             const entities = action?.payload?.userForEdit;
             state.actionsLoading = false;
+            if(entities)
+            {
+                entities.workingdays = entities.workingdays?.split(",") || []
+            }
             state.userForEdit = entities;
             state.error = null;
         },
