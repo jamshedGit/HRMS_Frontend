@@ -10,6 +10,7 @@ import { ATTENDANCE_TYPE } from "../../../../../utils/constants";
 import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
 import { initialFilter } from "../FormUIHelpers";
 
+//Prepare new Filter
 const prepareFilter = (queryParams, values) => {
   const newQueryParams = { ...queryParams }
   newQueryParams.filter = { ...values }
@@ -20,10 +21,12 @@ export function FormFilter({ loading }) {
 
   const FormUIContext = useFormUIContext()
 
+  //Get All dropdown data from state
   const { allEmployees, allSubsidiaryList, allEmployeeGradeList, allDept, allLocationChildMenus, allDesignations } = useSelector(
     (state) => (state.dashboard),
   )
 
+  //Create Maps for every dropdown data so setting value in dropdown can be fast optimized (Start)
   const allEmployeesMap = useMemo(() => {
     return new Map(allEmployees?.map(item => [item.value, item]));
   }, [allEmployees]);
@@ -47,7 +50,9 @@ export function FormFilter({ loading }) {
   const allDesignationsMap = useMemo(() => {
     return new Map(allDesignations?.map(item => [item.value, item]));
   }, [allDesignations]);
+  //Create Maps for every dropdown data so setting value in dropdown can be fast optimized (End)
 
+  //Fetch Params from Context
   const formUIProps = useMemo(() => {
     return {
       queryParams: FormUIContext.queryParams,
@@ -55,6 +60,7 @@ export function FormFilter({ loading }) {
     }
   }, [FormUIContext])
 
+  //Function to update filter in queryparams when any filter is selected or updated
   const applyFilter = (values) => {
     const newQueryParams = prepareFilter(formUIProps.queryParams, values)
     if (!isEqual(newQueryParams, formUIProps.queryParams)) {

@@ -28,11 +28,10 @@ export function FormTable() {
     };
   }, [formUIContext]);
 
-  const { currentState, userAccess } = useSelector(
+  const { currentState } = useSelector(
     (state) => {
       return {
         currentState: state.attendance,
-        userAccess: state?.auth?.userAccess["Attendance"],
       }
     },
     shallowEqual

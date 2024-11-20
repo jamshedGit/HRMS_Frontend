@@ -12,25 +12,30 @@ export function AttendanceViewPage() {
   const dispatch = useDispatch();
   const {
     dashboard,
-    loading
+    listLoading
   } = useSelector((state) => ({
     dashboard: state.dashboard,
-    loading: state.attendance.loading
+    listLoading: state.attendance.listLoading
   }
   ));
 
-  //If Id is present (In Edit case) then fetch data for edit. Also fetch all dropdown data if not present in state
+  //Get all Dropdown data from server on page load and set it in state
   useEffect(() => {
     if (!dashboard?.allEmployeeGradeList || !dashboard?.allEmployeeGradeList?.length)
       dispatch(fetchAllFormsMenu(143, "allEmployeeGradeList"));
+
     if (!dashboard?.allSubsidiaryList?.length)
       dispatch(fetchAllSubsidiaryData("allSubsidiaryList"));
+
     if (!dashboard.allEmployees || !dashboard.allEmployees.length)
       dispatch(fetchAllActiveEmployees());
+
     if (!dashboard?.allDesignations || !dashboard?.allDesignations?.length)
       dispatch(fetchAllFormsMenu(158, "allDesignations"));
+
     if (!dashboard?.allLocationChildMenus || !dashboard?.allLocationChildMenus?.length)
       dispatch(fetchAllFormsMenu(89, "allLocationChildMenus"));
+
     if (!dashboard?.allDept || !dashboard?.allDept?.length)
       dispatch(fetchAllDept());
   }, [dispatch]);
@@ -39,8 +44,15 @@ export function AttendanceViewPage() {
     <FormUIProvider FormUIEvents={{}}>
       < Card>
         {/* Card Starts */}
-        <FormFilter loading={loading} />
+
+        {/* Filter Form Starts */}
+        <FormFilter loading={listLoading} />
+        {/* Filter Form Ends */}
+
+        {/* Table Starts */}
         <FormTable />
+        {/* Table Ends */}
+
         {/* Card Ends */}
       </Card >
 
