@@ -10,19 +10,14 @@ export function FormEditDialogHeader({ id, isUserForRead }) {
   const { userForEdit, actionsLoading } = useSelector(
     
     (state) => ({
-      userForEdit: state.payroll_month.userForEdit,
+      userForEdit: state.employee_shift.userForEdit,
       actionsLoading: state.users.actionsLoading,
     }),
     shallowEqual
   );
 
   useEffect(() => {
-    let _title = id ? "" : "Add Payroll Month";
-    if (id) {
-      _title = `Edit Payroll Month`;
-    } //else if (isUserForRead) {
-    //   _title = `Read user '}'`
-    // }
+    let _title = id ? "Edit Employee Shift" : "New Employee Shift";
     setTitle(_title);
   }, [userForEdit, actionsLoading]);
 
@@ -31,7 +26,7 @@ export function FormEditDialogHeader({ id, isUserForRead }) {
       {actionsLoading && <ModalProgressBar />}
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-lg">
-          {!isUserForRead ? title : "View Payroll Month"}
+          {!isUserForRead ? title : "View Employee Shift"}
         </Modal.Title>
       </Modal.Header>
     </>
