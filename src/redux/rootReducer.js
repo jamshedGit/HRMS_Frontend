@@ -71,6 +71,7 @@ import { LeaveEncashmentSlice } from "../app/modules/LeaveEncashment/_redux/Leav
 import {AttendanceConfigurationSlice} from "../app/modules/Attendance_Configuration/_redux/attendanceConfigSlice"
 import {employeeShiftSlice} from "../app/modules/Employee_Shift/_redux/employeeShiftSlice"
 import {HolidaysSlice} from "../app/modules/Holidays/_redux/redux-Slice"
+import {payroll_processSlice} from "../app/modules/Payroll_Process/_redux/redux-Slice"
 
 export const rootReducer = combineReducers({
   auth: auth.reducer,
@@ -140,6 +141,8 @@ export const rootReducer = combineReducers({
   holidays:HolidaysSlice.reducer,
   reimbursement_claim:reimbursement_claimSlice.reducer,
   leave_encashment: LeaveEncashmentSlice.reducer,
+  payroll_process:payroll_processSlice.reducer,
+
   
 });
 
