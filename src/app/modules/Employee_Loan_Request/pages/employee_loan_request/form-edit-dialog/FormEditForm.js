@@ -284,6 +284,7 @@ if(changeLoanType){
                  
                       type="date"
                       minDate={dateOfJoining} 
+                      maxDate={new Date()}
                       disabled={userForEdit?.details[0]?.is_deducted }
                     />
                   </div>

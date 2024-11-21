@@ -165,6 +165,7 @@ export function FormEditForm({
                       placeholder="Select Date"
                       // label="Date"
                       type="date"
+                      maxDate={new Date()}
                     />
                   </div>
 
