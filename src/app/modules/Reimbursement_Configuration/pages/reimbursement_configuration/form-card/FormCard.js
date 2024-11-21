@@ -13,7 +13,7 @@ import { useSelector, shallowEqual } from "react-redux"
 
 export function FormCard() {
   const FormUIContext = useFormUIContext()
-  //console.log("FormUIContext", FormUIContext)
+ 
   const FormUIProps  = useMemo(() => {
     return {
       newFormButtonClick: FormUIContext.newFormButtonClick,
@@ -29,13 +29,13 @@ export function FormCard() {
     }),
     shallowEqual
   )
-  console.log("userAccess Temp",userAccess)
+
   const accessUser = userAccess.find(
     (item) => item.componentName === "CreateReimbursementConfiguration"
   )
 
   const { currentState } = useSelector(
-    (state) => {  console.log("state ",state); return {
+    (state) => {  return {
       
       currentState: state.reimbursement_configuration,
       userAccess: state?.auth?.userAccess["reimbursement_configuration"],
@@ -46,7 +46,7 @@ export function FormCard() {
   // const { currentState } = useSelector();
   
   const {entities } = currentState;
-  console.log("reimbursement_configuration",  entities?.length);
+
 
   return (
     <>

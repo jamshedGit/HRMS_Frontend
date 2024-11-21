@@ -27,7 +27,6 @@ export const fetchmoduledata = (id) => (dispatch) => {
     return dispatch(actions.EmployeeLoanRequestFetchedForEdit({ userForEdit: undefined }));
   }
 
-  // dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
     .getEmployeeLoanRequestById({ Id: id })
     .then((response) => {
@@ -43,7 +42,7 @@ export const fetchmoduledata = (id) => (dispatch) => {
 };
 
 export const deleteEmployeeLoanRequest= (id) => (dispatch) => {
-  // dispatch(actions.startCall({ callType: callTypes.action }));
+
   return requestFromServer
     .deleteEmployeeLoanRequest({ Id: id })
     .then((response) => {
@@ -74,7 +73,7 @@ export const createEmployeeLoanRequest = (employeeLoanRequestForCreation, disbal
   return requestFromServer
     .createEmployeeLoanRequest(employeeLoanRequestForCreation)
     .then((res) => {
-      dispatch(actions.startCall({ callType: callTypes.action }));
+
       const user = res.data?.data;
 
 
@@ -95,6 +94,7 @@ export const createEmployeeLoanRequest = (employeeLoanRequestForCreation, disbal
       error.clientMessage = "Can't create user";
       dispatch(actions.catchError({ error, callType: callTypes.action }));
       disbaleLoading();
+      onHide();
       toast.error(error?.response?.data?.message, {
         position: "top-right",
         autoClose: 5000,
@@ -116,7 +116,7 @@ export const getAllLoanConfigDetail = (employeeId) => (
   return requestFromServer
     .getAllLoanConfigDetail(employeeId)
     .then((res) => {
-      // dispatch(actions.startCall({ callType: callTypes.action }));
+   
       const user = res.data?.data;
 
 
@@ -135,6 +135,7 @@ export const getAllLoanConfigDetail = (employeeId) => (
     })
     .catch((error) => {
       error.clientMessage = "Can't create user";
+      dispatch(actions.getLoanConfigDetails(null));
       dispatch(actions.catchError({ error, callType: callTypes.action }));
 
       toast.error(error?.response?.data?.message, {
@@ -162,7 +163,7 @@ export const updateEmployeeLoanRequest = (user, disbaleLoading, onHide) => (disp
       dispatch(actions.clearUserForEdit());
       dispatch(actions.employeeLoanRequestUpdated({ updatedEmployeeLoanRequest }));
 
-      dispatch(actions.startCall({ callType: callTypes.action }));
+ 
       disbaleLoading();
       onHide();
       toast.success(response.data.message, {
@@ -201,7 +202,7 @@ export const getAllLoanType = () => (
   return requestFromServer
     .getAllLoanType()
     .then((res) => {
-      // dispatch(actions.startCall({ callType: callTypes.action }));
+  
       const user = res.data?.data;
 
 

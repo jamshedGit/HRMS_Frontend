@@ -40,14 +40,7 @@ export const employee_loan_requestSlice = createSlice({
         
             state.userForEdit = null;
         },
-        startCall: (state, action) => {
-            state.error = null;
-            if (action.payload.callType === callTypes.list) {
-                state.listLoading = true;
-            } else {
-                state.actionsLoading = true;
-            }
-        },
+
         employeeLoanRequestFetched: (state, action) => {
            
    
@@ -108,7 +101,7 @@ export const employee_loan_requestSlice = createSlice({
         },
 
         getLoanConfigDetails: (state, action) => {
-           
+        
             state.actionsLoading = false;
             state.error = null;
             state.loan_config_details_permission=action.payload;

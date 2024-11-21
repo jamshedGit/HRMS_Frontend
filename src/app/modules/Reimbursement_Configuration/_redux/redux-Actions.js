@@ -5,39 +5,38 @@ import { toast } from "react-toastify";
 const { actions } = reimbursement_configurationSlice;
 
 
-export const fetchSalarypolicies = (queryparm) => async (dispatch) => {
-  // console.log("Receive QPsss", queryparm)
-  dispatch(actions.startCall({ callType: callTypes.list }));
-  console.log("test query param", queryparm)
-  return requestFromServer.getAllSalarypolicy(queryparm)
+export const fetchReimbursementConfigs = (queryparm) => async (dispatch) => {
+
+ 
+  return requestFromServer.getAllReimbursementConfig(queryparm)
 
     .then((response) => {
    
   
-      dispatch(actions.salarypolicyFetched(response));
+      dispatch(actions.reimbursementConfigFetched(response));
     })
     .catch((error) => {
-      //console.log("Can't find user", error)
+     
       error.clientMessage = "Can't find ";
       dispatch(actions.catchError({ error, callType: callTypes.list }));
     });
 };
 
-export const fetchSalarypolicy = (id) => (dispatch) => {
+export const fetchReimbursementConfig = (id) => (dispatch) => {
 
-  console.log("User Action id " + id)
+
   if (!id) {
-    return dispatch(actions.SalarypolicyFetchedForEdit({ userForEdit: undefined }));
+    return dispatch(actions.ReimbursementConfigFetchedForEdit({ userForEdit: undefined }));
   }
 
-  dispatch(actions.startCall({ callType: callTypes.action }));
+
   return requestFromServer
-    .getSalarypolicyById({ Id: id })
+    .getReimbursementConfigById({ Id: id })
     .then((response) => {
       const entities = response.data?.data;
 
-      console.log("User fetched for search " + id)
-      dispatch(actions.SalarypolicyFetchedForEdit({ userForEdit: entities }));
+   
+      dispatch(actions.ReimbursementConfigFetchedForEdit({ userForEdit: entities }));
     })
     .catch((error) => {
       error.clientMessage = "Can't find user";
@@ -45,13 +44,13 @@ export const fetchSalarypolicy = (id) => (dispatch) => {
     });
 };
 
-export const deleteSalarypolicy = (id) => (dispatch) => {
-  dispatch(actions.startCall({ callType: callTypes.action }));
+export const deleteReimbursementConfig = (id) => (dispatch) => {
+
   return requestFromServer
-    .deleteSalarypolicy({ Id: id })
+    .deleteReimbursementConfig({ Id: id })
     .then((response) => {
-      //console.log("response from delete user ", response.data.message)
-      dispatch(actions.SalarypolicyDeleted({ Id: id }));
+
+      dispatch(actions.ReimbursementConfigDeleted({ Id: id }));
       toast.success("Successfully Deleted", {
         position: "top-right",
         autoClose: 5000,
@@ -69,21 +68,19 @@ export const deleteSalarypolicy = (id) => (dispatch) => {
 };
 
 
-export const createSalarypolicy = (salarypolicyForCreation, disbaleLoading, onHide) => (
+export const createReimbursementConfig = (reimbursementConfigForCreation, disbaleLoading, onHide) => (
   dispatch
 ) => {
-  // salarypolicyForCreation.phNo = salarypolicyForCreation.phNo.toString();
-  // salarypolicyForCreation.cnic = salarypolicyForCreation.cnic.toString();
 
   
   return requestFromServer
-    .createSalarypolicy(salarypolicyForCreation)
+    .createReimbursementConfig(reimbursementConfigForCreation)
     .then((res) => {
-      dispatch(actions.startCall({ callType: callTypes.action }));
+
       const user = res.data?.data;
      
-      console.log("dispatch user",res);
-      dispatch(actions.salarypolicyCreated(user));
+   
+      dispatch(actions.reimbursementConfigCreated(user));
       disbaleLoading();
       toast.success("Successfully Created", {
         position: "top-right",
@@ -112,18 +109,18 @@ export const createSalarypolicy = (salarypolicyForCreation, disbaleLoading, onHi
     });
 };
 
-export const updateSalarypolicy = (user, disbaleLoading, onHide) => (dispatch) => {
+export const updateReimbursementConfig = (user, disbaleLoading, onHide) => (dispatch) => {
   return requestFromServer
-    .updateSalarypolicy(user)
+    .updateReimbursementConfig(user)
     .then((response) => {
-      console.log("my response",response?.config?.data);
-      const updatedSalarypolicy = response?.config?.data; // response.data?.data;
-      console.log("bnkAction Res", response)
-      dispatch(actions.salarypolicyUpdated({ updatedSalarypolicy }));
-      dispatch(actions.startCall({ callType: callTypes.action }));
+      
+      const updatedReimbursementConfig = response?.config?.data; // response.data?.data;
+   
+      dispatch(actions.reimbursementConfigUpdated({ updatedReimbursementConfig }));
+    
       disbaleLoading();
       onHide();
-      toast.success(response.data.message + " Updated", {
+      toast.success(response.data.message , {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -136,8 +133,7 @@ export const updateSalarypolicy = (user, disbaleLoading, onHide) => (dispatch) =
 
     })
     .catch((error) => {
-      // console.log("error User update", error)
-      //error.clientMessage = "Can't update User"
+
       dispatch(actions.catchError({ error, callType: callTypes.action }));
       disbaleLoading();
       toast.error(error?.response?.data?.message, {

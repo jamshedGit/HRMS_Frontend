@@ -68,8 +68,22 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     // dispatch(actions.fetchmoduledata(formUIProps .queryParams))
   }, [id, dispatch, show]);
 
-  const saveForm = async (data, isFileReq, resetForm) => {
+  const saveForm = async (data,maxAmount, isFileReq, resetForm) => {
     // enableLoading();
+
+    if (maxAmount < data.amount) {
+      disbaleLoading();
+      toast.error("Amount exceeds the limit.", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return;
+    }
  
 
     if (isFileReq && !data.file) {

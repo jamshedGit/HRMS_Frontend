@@ -8,41 +8,61 @@ import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect"
 import {
   fetchAllFormsMenu,
   fetchAllHumanResourceRole,
+  fetchAllSubsidiaryData,
 } from "../../../../../../_metronic/redux/dashboardActions";
+import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 
 // percentage: Yup.string().required("Required*"),
 const gratuity_configurationEditSchema = Yup.object().shape({
   // from_amount: Yup.string().required("Required*"),
 
   subsidiaryId: Yup.number()
-    .required("Required*"),
+    .required(VALIDATION_MESSAGES.required),
 
   // to_amount: Yup.string().required("Required*"),
 
   contract_typeId: Yup.number()
-    .required("Required*"),
+    .required(VALIDATION_MESSAGES.required),
 
-    basis_of_gratuityId: Yup.number()
-    .required("Required*"),
+  basis_of_gratuityId: Yup.number()
+    .required(VALIDATION_MESSAGES.required),
 
   // fixed_amount: Yup.string().required("Required*"),
 
   num_of_days: Yup.number()
-    .min(1, "Must be at least 1")
-    .max(100, "Must be at most 100")
-    .required("Required*"),
+    .min(1, VALIDATION_MESSAGES.minOneValue)
+    .max(999, "Must be at most 999")
+    .required(VALIDATION_MESSAGES.required),
 
 
-    gratuity_fraction: Yup.number()
-    .required("Required*"),
+  gratuity_fraction: Yup.number()
+    .required(VALIDATION_MESSAGES.required),
 
-    min_year: Yup.number()
-    .min(0, "Must be at least 0")
-    .required("Required*"),
+  // min_year: Yup.number()
+  //   .min(1, "Must be at least 1")
+  //   .required(VALIDATION_MESSAGES.required),
 
-    max_year: Yup.number()
-    .min(1, "Must be at least 0")
-    .required("Required*"),
+  // max_year: Yup.number()
+  //   .min(1,VALIDATION_MESSAGES.minOneValue)
+  //   .max(60, "Must be at most 60")
+  //   .required(VALIDATION_MESSAGES.required),
+
+
+  min_year: Yup.number()
+    .min(0, VALIDATION_MESSAGES.minZeroValue)
+    .max(99, "Maximum Year at most 99")
+    .required(VALIDATION_MESSAGES.required)
+    .typeError("Minimum Year must be a number"),
+
+  max_year: Yup.number()
+    .min(0, VALIDATION_MESSAGES.minZeroValue)
+    .max(99, "Maximum Year at most 99")
+    .required(VALIDATION_MESSAGES.required)
+    .typeError("Maximum Year must be a number")
+    .test('max_greater_than_min', 'Maximum Year must be greater than Minimum Year', function (value) {
+      const { min_year } = this.parent; // Access the value of min_year
+      return value > min_year; // Ensure max_year is greater than min_year
+    })
 });
 
 export function FormEditForm({
@@ -58,8 +78,10 @@ export function FormEditForm({
   const { dashboard } = useSelector((state) => state);
   useEffect(() => {
     if (!user.Id) {
-      dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsidiaries
-      dispatch(fetchAllFormsMenu(184, "allContractTypeList")); 
+      // dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsidiaries
+      dispatch(fetchAllSubsidiaryData("allSubsidiaryList"));
+      dispatch(fetchAllFormsMenu(184, "allContractTypeList"));
+     
 
     }
   }, [dispatch, user.Id]);
@@ -70,7 +92,7 @@ export function FormEditForm({
   ];
 
 
-  
+
   const gratuityFractionOptions = [
     { value: 0, label: "1/3" },
     { value: 1, label: "2/3" },
@@ -92,7 +114,7 @@ export function FormEditForm({
       initialValues={user}
       validationSchema={gratuity_configurationEditSchema}
       onSubmit={(values) => {
-  
+
         enableLoading();
         saveForm(values);
       }}
@@ -121,11 +143,12 @@ export function FormEditForm({
                         setFieldValue("subsidiaryId", e.value || null);
                       }}
                       value={
-                        dashboard.allSubidiaryList.find(
+                        dashboard?.allSubsidiaryList?.find(
                           (option) => option.value === values.subsidiaryId
                         ) || null
                       }
-                      options={dashboard.allSubidiaryList}
+
+                      options={dashboard?.allSubsidiaryList}
                       // options={dashboard.allSubidiaryList.map(option => ({
                       //   label: `${option.label} (${option.value})`, // Adding the value to the label
                       //   value: option.value,
@@ -159,8 +182,10 @@ export function FormEditForm({
                   </div>
 
                   <div className="col-12 col-md-6 mt-3">
-                  <label htmlFor="basis_of_gratuityId">
-                  Basis of Gratuity
+                    <label htmlFor="basis_of_gratuityId">
+                      Basis of Gratuity <span style={{ color: "red" }}>*</span>
+
+
                     </label>
                     <Field
                       name="basis_of_gratuityId"
@@ -171,51 +196,87 @@ export function FormEditForm({
                         setFieldValue("basis_of_gratuityId", e.target.value); // Use the raw value
                       }}
                     >
-                      <option value="">Select Deduction Basis Type</option>
+                      <option value="">Select </option>
                       {basisOptions.map((option) => (
                         <option key={option.value} value={option.value}>
                           {option.label}
                         </option>
+
+
                       ))}
+                    
+
                     </Field>
+                    {errors.basis_of_gratuityId && touched.basis_of_gratuityId && (
+                        <div className="text-danger">{errors.basis_of_gratuityId}</div>
+                      )}
                   </div>
                   <div className="col-12 col-md-6 mt-3">
+                    <label>
+                      <span>
+                        Number of Days<span style={{ color: "red" }}>*</span>
+                      </span>
+                    </label>
                     <Field
                       name="num_of_days"
                       component={Input}
                       placeholder="Enter Number of Days"
-                      label="Number of Days"
+                      // label="Number of Days"
                       type="number"
-                      min={0}
+                      onInput={(e) => {
+                        if (e.target.value.length > 3) {
+                          e.target.value = e.target.value.slice(0, 3); // Restrict to 2 digits
+                        }
+                      }}
                     />
                   </div>
 
 
                   <div className="col-12 col-md-6 mt-3">
+                    <label>
+                      <span>
+                        Minimum Year<span style={{ color: "red" }}>*</span>
+                      </span>
+                    </label>
                     <Field
                       name="min_year"
                       component={Input}
                       placeholder="Enter Minimum Year"
-                      label="Minimum Year"
+                      // label="Minimum Year"
                       type="number"
-                      min={0}
+                      onInput={(e) => {
+                        if (e.target.value.length > 2) {
+                          e.target.value = e.target.value.slice(0, 2); // Restrict to 2 digits
+                        }
+                      }}
+
                     />
                   </div>
 
                   <div className="col-12 col-md-6 mt-3">
+                    <label>
+                      <span>
+                        Maximum Year<span style={{ color: "red" }}>*</span>
+                      </span>
+                    </label>
                     <Field
                       name="max_year"
                       component={Input}
                       placeholder="Enter Maximum Year"
-                      label="Maximum Year"
+                      // label="Maximum Year"
                       type="number"
-                      min={0}
+                      onInput={(e) => {
+                        if (e.target.value.length > 2) {
+                          e.target.value = e.target.value.slice(0, 2); // Restrict to 2 digits
+                        }
+                      }}
+
                     />
                   </div>
 
                   <div className="col-12 col-md-6 mt-3">
-                  <label htmlFor="basis_of_gratuityId">
-                  Gratuity Fraction
+                    <label htmlFor="basis_of_gratuityId">
+                      Gratuity Fraction <span style={{ color: "red" }}>*</span>
                     </label>
                     <Field
                       name="gratuity_fraction"
@@ -226,13 +287,16 @@ export function FormEditForm({
                         setFieldValue("gratuity_fraction", e.target.value); // Use the raw value
                       }}
                     >
-                      <option value="">Select Gratuity Fraction</option>
+                      <option value="">Select </option>
                       {gratuityFractionOptions.map((option) => (
                         <option key={option.value} value={option.value}>
                           {option.label}
                         </option>
                       ))}
                     </Field>
+                    {errors.gratuity_fraction && touched.gratuity_fraction && (
+                        <div className="text-danger">{errors.gratuity_fraction}</div>
+                      )}
                   </div>
 
                 </div>

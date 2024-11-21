@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialSalarypolicyState = {
+const initialReimbursementConfigState = {
     listLoading: false,
     actionsLoading: null,
     totalCount: 0,
@@ -20,7 +20,7 @@ export const callTypes = {
 
 export const reimbursement_configurationSlice = createSlice({
     name: "reimbursement_configurationSlice",
-    initialState: initialSalarypolicyState,
+    initialState: initialReimbursementConfigState,
     reducers: {
         catchError: (state, action) => {
             state.error = `${action.type}: ${action.payload.error}`;
@@ -30,21 +30,14 @@ export const reimbursement_configurationSlice = createSlice({
                 state.actionsLoading = false;
             }
         },
-        startCall: (state, action) => {
-            state.error = null;
-            if (action.payload.callType === callTypes.list) {
-                state.listLoading = true;
-            } else {
-                state.actionsLoading = true;
-            }
-        },
-        salarypolicyFetched: (state, action) => {
-            // console.log(action)
+
+        reimbursementConfigFetched: (state, action) => {
+           
    
             const entities = action.payload.data?.data.rows;
 
             const totalResult = action.payload.data?.data.totalResults;
-            console.log(entities);
+         
             state.listLoading = false;
             state.error = null;
             state.entities = entities;
@@ -52,16 +45,16 @@ export const reimbursement_configurationSlice = createSlice({
         },
 
          //get User By ID
-         SalarypolicyFetchedForEdit: (state, action) => {
+         ReimbursementConfigFetchedForEdit: (state, action) => {
           
-            console.log(action);
+     
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
         },
 
       
-        SalarypolicyDeleted: (state, action) => {
+        ReimbursementConfigDeleted: (state, action) => {
 
             state.error = null;
             state.actionsLoading = false;
@@ -71,13 +64,13 @@ export const reimbursement_configurationSlice = createSlice({
                 (el) => el.Id !== action.payload.Id
             );
         },
-        salarypolicyCreated: (state, action) => {
+        reimbursementConfigCreated: (state, action) => {
            
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);
         },
-        salarypolicyUpdated: (state, action) => {
+        reimbursementConfigUpdated: (state, action) => {
             state.error = null;
             state.actionsLoading = false;
             // state.entities.push(action.payload)
@@ -87,9 +80,9 @@ export const reimbursement_configurationSlice = createSlice({
                 //const payload = { ...action.payload };
                 let payload = JSON.stringify(action.payload)
                 let payloadObj = JSON.parse(payload);
-                let finalObj = JSON.parse(payloadObj.updatedSalarypolicy);
+                let finalObj = JSON.parse(payloadObj.updatedReimbursementConfig);
                 if (entity.Id === finalObj.Id) {
-                    return finalObj; //action.payload.updatedSalarypolicy;
+                    return finalObj; //action.payload.updatedReimbursementConfig;
                 }
                 return entity;
             });

@@ -8,7 +8,7 @@ const { actions } = reimbursement_claimSlice;
 export const fetchReimbursementClaim = (params) => async (dispatch) => {
 
 
-  // dispatch(actions.startCall({ callType: callTypes.list }));
+  
 
   return requestFromServer.getAllReimbursementClaim(params)
 
@@ -31,7 +31,6 @@ export const fetchmoduledata = (id) => (dispatch) => {
     return dispatch(actions.ReimbursementClaimFetchedForEdit({ userForEdit: undefined }));
   }
 
-  dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
     .getReimbursementClaimById({ Id: id })
     .then((response) => {
@@ -47,7 +46,7 @@ export const fetchmoduledata = (id) => (dispatch) => {
 };
 
 export const deleteReimbursementClaim= (id) => (dispatch) => {
-  // dispatch(actions.startCall({ callType: callTypes.action }));
+
   return requestFromServer
     .deleteReimbursementClaim({ Id: id })
     .then((response) => {
@@ -91,7 +90,7 @@ export const createReimbursementClaim = (reimbursementClaimForCreation, disbaleL
   return requestFromServer
     .createReimbursementClaim(reimbursementClaimForCreation)
     .then((res) => {
-      dispatch(actions.startCall({ callType: callTypes.action }));
+     
       const user = res.data?.data;
 
 
@@ -133,7 +132,7 @@ export const getAllReimbursementConfigPolicy = (employeeId) => (
   return requestFromServer
     .getAllReimbursementConfigPolicy(employeeId)
     .then((res) => {
-      // dispatch(actions.startCall({ callType: callTypes.action }));
+
       const user = res.data?.data;
 
 
@@ -153,7 +152,7 @@ export const getAllReimbursementConfigPolicy = (employeeId) => (
     .catch((error) => {
       error.clientMessage = "Can't create user";
       dispatch(actions.catchError({ error, callType: callTypes.action }));
-
+      dispatch(actions.getReimbursementConfigPolicies(null));
       toast.error(error?.response?.data?.message, {
         position: "top-right",
         autoClose: 5000,
@@ -179,7 +178,7 @@ export const updateReimbursementClaim = (user, disbaleLoading, onHide) => (dispa
       dispatch(actions.clearUserForEdit());
       dispatch(actions.reimbursementClaimUpdated({ updatedReimbursementClaim }));
 
-      dispatch(actions.startCall({ callType: callTypes.action }));
+    
       disbaleLoading();
       onHide();
       toast.success(response.data.message, {

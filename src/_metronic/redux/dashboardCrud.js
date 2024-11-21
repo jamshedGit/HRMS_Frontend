@@ -88,6 +88,18 @@ export const getAllLeaveTypes = async (body) => {
   return await axios.post(`${USERS_URL}/settings/read-all-leave-types`,body);
 };
 
+export const getAllEmployeeShift = async (body) => {
+  return await axios.post(`${USERS_URL}/settings/read-all-employee-shift`,body);
+};
+
+export function getPayrollMonth() {
+  return axios.post(`${USERS_URL}/payroll_month/get-payroll-month-previous-date`);
+}
+
+export const getAllEncashmentLeaveTypes = async (body) => {
+  return await axios.post(`${USERS_URL}/settings/read-encashment-leave-types`,body);
+};
+
 export const getAllSubsidiary = async (Id) => {
   return await axios.get(`${USERS_URL}/settings/read-all-subsidiaries`);
 };

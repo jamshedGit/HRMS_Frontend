@@ -61,20 +61,20 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     .userForRead,
   }));
  
-  console.log("for  isuserForRead",userForEdit)
+
  
  
   useEffect(() => {
-    console.log("fetch loan show",show,id);
-    dispatch(actions.fetchSalarypolicy(id));
+    
+    dispatch(actions.fetchReimbursementConfig(id));
  
-    // dispatch(actions.fetchSalarypolicy(formUIProps .queryParams))
+    // dispatch(actions.fetchReimbursementConfig(formUIProps .queryParams))
   }, [id, dispatch,show]);
  
  
   const saveForm = async (user) => {
  
-    console.log("reimbursement getUserStatus updated save", user);
+   
 
 
     //    if (user.policies=="" ) {
@@ -96,14 +96,14 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
  
  
       const finalObject = { user }
-      dispatch(actions.createSalarypolicy(user, disbaleLoading, onHide));
+      dispatch(actions.createReimbursementConfig(user, disbaleLoading, onHide));
      
      
  
     } else {
  
      
-      console.log("reimbursement configuration", user);
+
  
       const formUpdatedFields = {
         Id: user.Id,
@@ -117,8 +117,8 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
 
   
  
-     await dispatch(actions.updateSalarypolicy(formUpdatedFields, disbaleLoading, onHide));
-     await dispatch(actions.fetchSalarypolicies(usersUIProps.queryParams));
+     await dispatch(actions.updateReimbursementConfig(formUpdatedFields, disbaleLoading, onHide));
+     await dispatch(actions.fetchReimbursementConfigs(usersUIProps.queryParams));
     }
   };
  

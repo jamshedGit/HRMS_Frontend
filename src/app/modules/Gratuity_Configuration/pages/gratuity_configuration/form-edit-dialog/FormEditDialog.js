@@ -61,9 +61,9 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
 
 
   useEffect(() => {
-    dispatch(actions.fetchSalarypolicy(id));
+    dispatch(actions.fetchGratuityConfig(id));
 
-    // dispatch(actions.fetchSalarypolicy(formUIProps .queryParams))
+    // dispatch(actions.fetchGratuityConfig(formUIProps .queryParams))
   }, [id, dispatch]);
 
 
@@ -75,7 +75,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
  
   
       const finalObject = { user }
-      dispatch(actions.createSalarypolicy(user, disbaleLoading, onHide));
+      dispatch(actions.createGratuityConfig(user, disbaleLoading, onHide));
       
       
 
@@ -97,8 +97,8 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
 
       
 
-     await dispatch(actions.updateSalarypolicy(formUpdatedFields, disbaleLoading, onHide));
-     await dispatch(actions.fetchSalarypolicies(usersUIProps.queryParams));
+     await dispatch(actions.updateGratuityConfig(formUpdatedFields, disbaleLoading, onHide));
+     await dispatch(actions.fetchGratuityConfigs(usersUIProps.queryParams));
     }
   };
 

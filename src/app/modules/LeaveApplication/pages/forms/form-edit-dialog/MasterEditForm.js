@@ -34,12 +34,12 @@ export function MasterEditForm({
   )
 
   //Check Access for creation and Updation
-  const accessUser = useMemo(() => 
+  const accessUser = useMemo(() =>
     userAccess.find(
-      (item) => 
-        item.componentName === "CreateLeaveApplication" || 
+      (item) =>
+        item.componentName === "CreateLeaveApplication" ||
         item.componentName === "UpdateLeaveApplication"
-    ), 
+    ),
     [userAccess]
   );
 
@@ -55,7 +55,14 @@ export function MasterEditForm({
         from: Yup.date().required(VALIDATION_MESSAGES.required).min(payrollData.startDate, `Date cannot be before ${formatDates(payrollData.startDate)}`),
         to: Yup.date().required(VALIDATION_MESSAGES.required).min(Yup.ref('from'), 'To date cannot be before From date'),
         leaveType: Yup.number().required(VALIDATION_MESSAGES.required),
-        days: Yup.number().optional(),
+        days: Yup.number()
+          .when(['from', 'to'], {
+            is: (from, to) => from && to && getDateDiffInDays(from, to) == 1,
+            then: Yup.number()
+              .required(VALIDATION_MESSAGES.required)
+              .oneOf([1, 0.5], 'Days must be either 1 or 0.5'),
+            otherwise: Yup.number().optional()
+          }),
         remarks: Yup.string().required(VALIDATION_MESSAGES.required),
       })
     }
@@ -64,7 +71,14 @@ export function MasterEditForm({
         from: Yup.date().required(VALIDATION_MESSAGES.required),
         to: Yup.date().required(VALIDATION_MESSAGES.required).min(Yup.ref('from'), 'To date cannot be before From date'),
         leaveType: Yup.number().required(VALIDATION_MESSAGES.required),
-        days: Yup.number().optional(),
+        days: Yup.number()
+          .when(['from', 'to'], {
+            is: (from, to) => from && to && getDateDiffInDays(from, to) == 1,
+            then: Yup.number()
+              .required(VALIDATION_MESSAGES.required)
+              .oneOf([1, 0.5], 'Days must be either 1 or 0.5'),
+            otherwise: Yup.number().optional()
+          }),
         remarks: Yup.string().required(VALIDATION_MESSAGES.required),
       })
     }
@@ -128,6 +142,10 @@ export function MasterEditForm({
                             Date From<span style={{ color: "red" }}>*</span>
                           </span>
                         }
+                        onChange={(date) => {
+                          setFieldValue('from', date)
+                          setFieldValue('days', getDateDiffInDays(date, values.to)) //Set difference in to from days in days key
+                        }}
                         autoComplete="off"
                       />
                     </div>
@@ -146,6 +164,10 @@ export function MasterEditForm({
                             Date To<span style={{ color: "red" }}>*</span>
                           </span>
                         }
+                        onChange={(date) => {
+                          setFieldValue('to', date)
+                          setFieldValue('days', getDateDiffInDays(values.from, date)) //Set difference in to from days in days key
+                        }}
                         autoComplete="off"
                       />
                     </div>
@@ -156,10 +178,10 @@ export function MasterEditForm({
                       <Field
                         name="days"
                         component={Input}
-                        disabled={true}
+                        className={errors?.days && touched?.days && getDateDiffInDays(values.from, values.to) === 1 ? 'form-control is-invalid' : 'form-control'} //throw validation error if the difference in days is 1 day
+                        disabled={isEdit || getDateDiffInDays(values.from, values.to) !== 1} //disable field if the difference in dates is more than 1 days
                         type="number"
                         min="0"
-                        className='form-control'
                         onChange={handleChange}
                         label={
                           <span>
@@ -167,7 +189,6 @@ export function MasterEditForm({
                             Days
                           </span>
                         }
-                        value={getDateDiffInDays(values.from, values.to)}
                       />
                     </div>
                     {/* Days Field End */}
@@ -288,6 +309,7 @@ export function MasterEditForm({
               {/* Save button Start */}
               {employeeId && accessUser ? <button
                 type="submit"
+                disabled={loading}
                 onClick={() => handleSubmit()}
                 className="btn btn-primary btn-elevate"
               >

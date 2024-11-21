@@ -2,6 +2,7 @@ import { Field, FieldArray } from 'formik'
 import React from 'react'
 import { Checkbox, Input, Select } from '../../../../../../_metronic/_partials/controls'
 import CustomErrorLabel from '../../../../../utils/common-modules/CustomErrorLabel';
+import CustomDropdown from '../../../../../utils/common-modules/CustomDropdown';
 
 function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, touched, dropdownData, handleDelete }) {
   return (
@@ -114,7 +115,7 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
                           )
                         }}
                         value={row.gender}
-                        children={createDropdown(dropdownData.allGenderList || [])}
+                        children={CustomDropdown({ data: dropdownData.allGenderList, firstElement: { label: 'All', value: null } })}
                       />
                       {errors.leavetypePolicies?.[index]?.gender &&
                         touched.leavetypePolicies?.[index]?.gender &&
@@ -160,7 +161,7 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
                           )
                         }}
                         value={row.maritalStatus}
-                        children={createDropdown(dropdownData.allMaritalStatus || [])}
+                        children={CustomDropdown({ data: dropdownData.allMaritalStatus, firstElement: { label: 'All', value: null } })}
                       />
                       {errors.leavetypePolicies?.[index]?.maritalStatus &&
                         touched.leavetypePolicies?.[index]?.maritalStatus &&
@@ -177,7 +178,7 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
              {/* Table Ends */}
 
             {/* Add button Field Starts */}
-           {values.subsidiaryId && values.gradeId && values.employeeTypeId && <button
+           {values.subsidiaryId && /* values.gradeId && values.employeeTypeId &&*/ <button
               type="button"
               onClick={() =>
                 push({

@@ -5,16 +5,15 @@ import { toast } from "react-toastify";
 const { actions } = loan_manag_confSlice;
 
 
-export const fetchSalarypolicies = (queryparm) => async (dispatch) => {
+export const fetchLoanManagConfigs = (queryparm) => async (dispatch) => {
 
-  dispatch(actions.startCall({ callType: callTypes.list }));
-
-  return requestFromServer.getAllSalarypolicy(queryparm)
+ 
+  return requestFromServer.getAllLoanManagConfig(queryparm)
 
     .then((response) => {
    
   
-      dispatch(actions.salarypolicyFetched(response));
+      dispatch(actions.loanManagConfigFetched(response));
     })
     .catch((error) => {
   
@@ -23,21 +22,21 @@ export const fetchSalarypolicies = (queryparm) => async (dispatch) => {
     });
 };
 
-export const fetchSalarypolicy = (id) => (dispatch) => {
+export const fetchLoanManagConfig = (id) => (dispatch) => {
 
 
   if (!id) {
-    return dispatch(actions.SalarypolicyFetchedForEdit({ userForEdit: undefined }));
+    return dispatch(actions.LoanManagConfigForEdit({ userForEdit: undefined }));
   }
 
-  dispatch(actions.startCall({ callType: callTypes.action }));
+
   return requestFromServer
-    .getSalarypolicyById({ Id: id })
+    .getLoanManagConfigById({ Id: id })
     .then((response) => {
       const entities = response.data?.data;
 
   
-      dispatch(actions.SalarypolicyFetchedForEdit({ userForEdit: entities }));
+      dispatch(actions.LoanManagConfigForEdit({ userForEdit: entities }));
     })
     .catch((error) => {
       error.clientMessage = "Can't find user";
@@ -45,13 +44,13 @@ export const fetchSalarypolicy = (id) => (dispatch) => {
     });
 };
 
-export const deleteSalarypolicy = (id) => (dispatch) => {
-  dispatch(actions.startCall({ callType: callTypes.action }));
+export const deleteLoanManagConfig = (id) => (dispatch) => {
+  
   return requestFromServer
-    .deleteSalarypolicy({ Id: id })
+    .deleteLoanManagConfig({ Id: id })
     .then((response) => {
    
-      dispatch(actions.SalarypolicyDeleted({ Id: id }));
+      dispatch(actions.LoanManagConfigDeleted({ Id: id }));
       toast.success("Successfully Deleted", {
         position: "top-right",
         autoClose: 5000,
@@ -69,21 +68,19 @@ export const deleteSalarypolicy = (id) => (dispatch) => {
 };
 
 
-export const createSalarypolicy = (salarypolicyForCreation, disbaleLoading, onHide) => (
+export const createLoanManagConfig = (loanManagConfigForCreation, disbaleLoading, onHide) => (
   dispatch
 ) => {
-  // salarypolicyForCreation.phNo = salarypolicyForCreation.phNo.toString();
-  // salarypolicyForCreation.cnic = salarypolicyForCreation.cnic.toString();
 
   
   return requestFromServer
-    .createSalarypolicy(salarypolicyForCreation)
+    .createLoanManagConfig(loanManagConfigForCreation)
     .then((res) => {
-      dispatch(actions.startCall({ callType: callTypes.action }));
+     
       const user = res.data?.data;
      
 
-      dispatch(actions.salarypolicyCreated(user));
+      dispatch(actions.loanManagConfigCreated(user));
       disbaleLoading();
       toast.success("Successfully Created", {
         position: "top-right",
@@ -112,15 +109,15 @@ export const createSalarypolicy = (salarypolicyForCreation, disbaleLoading, onHi
     });
 };
 
-export const updateSalarypolicy = (user, disbaleLoading, onHide) => (dispatch) => {
+export const updateLoanManagConfig = (user, disbaleLoading, onHide) => (dispatch) => {
   return requestFromServer
-    .updateSalarypolicy(user)
+    .updateLoanManagConfig(user)
     .then((response) => {
      
-      const updatedSalarypolicy = response?.config?.data; // response.data?.data;
+      const updatedLoanManagConfig = response?.config?.data; // response.data?.data;
     
-      dispatch(actions.salarypolicyUpdated({ updatedSalarypolicy }));
-      dispatch(actions.startCall({ callType: callTypes.action }));
+      dispatch(actions.loanManagConfigUpdated({ updatedLoanManagConfig }));
+     
       disbaleLoading();
       onHide();
       toast.success(response.data.message + " Updated", {
@@ -160,7 +157,7 @@ export const getAllLoanType = () => (
   return requestFromServer
     .getAllLoanType()
     .then((res) => {
-      // dispatch(actions.startCall({ callType: callTypes.action }));
+  
       const user = res.data?.data;
 
 

@@ -67,7 +67,12 @@ import { gratuity_configurationSlice } from "../app/modules/Gratuity_Configurati
 import { accrue_gratuity_configurationSlice } from "../app/modules/Accrue_Gratuity_Configuration/_redux/redux-Slice"
 import { reimbursement_configurationSlice } from "../app/modules/Reimbursement_Configuration/_redux/redux-Slice"
 import { reimbursement_claimSlice } from "../app/modules/Reimbursement_claim/_redux/redux-Slice"
+import { LeaveEncashmentSlice } from "../app/modules/LeaveEncashment/_redux/LeaveEncashmentSlice";
+import { EmployeeRosterSlice } from "../app/modules/EmployeeRoster/_redux/EmployeeRosterSlice";
 import {AttendanceConfigurationSlice} from "../app/modules/Attendance_Configuration/_redux/attendanceConfigSlice"
+import {employeeShiftSlice} from "../app/modules/Employee_Shift/_redux/employeeShiftSlice"
+import {HolidaysSlice} from "../app/modules/Holidays/_redux/redux-Slice"
+import { AttendanceSlice } from "../app/modules/Attendance/_redux/AttendanceSlice";
 
 export const rootReducer = combineReducers({
   auth: auth.reducer,
@@ -132,7 +137,13 @@ export const rootReducer = combineReducers({
   employee_loan_request:employee_loan_requestSlice.reducer,
   allocate_leaves: AllocateLeavesSlice.reducer,
   employee_leave_balance: EmployeeLeaveBalanceSlice.reducer,
-  attendance_configuration:AttendanceConfigurationSlice.reducer
+  attendance_configuration:AttendanceConfigurationSlice.reducer,
+  employee_shift: employeeShiftSlice.reducer, 
+  holidays:HolidaysSlice.reducer,
+  reimbursement_claim:reimbursement_claimSlice.reducer,
+  leave_encashment: LeaveEncashmentSlice.reducer,
+  attendance: AttendanceSlice.reducer,
+  employee_roster:EmployeeRosterSlice.reducer,
 });
 
 export function* rootSaga() {

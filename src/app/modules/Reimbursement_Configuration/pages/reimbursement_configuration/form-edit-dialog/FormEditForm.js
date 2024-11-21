@@ -9,33 +9,34 @@ import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect"
 import {
   fetchAllFormsMenu,
   fetchAllHumanResourceRole,
+  fetchAllSubsidiaryData,
 } from "../../../../../../_metronic/redux/dashboardActions";
+import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
+import { amountLimit } from "../../../../../utils/common";
 
 // Define the validation schema for the main form and the policies
 const ReimbursementSchema = Yup.object().shape({
-  subsidiaryId: Yup.number().required("Subsidiary is required"),
-  payroll_groupId: Yup.number().required("Payroll group is required"),
-  cycle_typeId: Yup.number().required("Cycle type required"),
+  subsidiaryId: Yup.number().required(VALIDATION_MESSAGES.required),
+  payroll_groupId: Yup.number().required(VALIDATION_MESSAGES.required),
+  cycle_typeId: Yup.number().required(VALIDATION_MESSAGES.required),
 
   policies: Yup.array().of(
     Yup.object().shape({
-      reimbursement_typeId: Yup.number().required(
-        "Reimbursement type required"
-      ),
+      reimbursement_typeId: Yup.number().required(VALIDATION_MESSAGES.required),
       max_amount: Yup.number()
         .min(1, "Must be at least 1")
-        .required("Max  amount is required"),
-      attachment_required: Yup.string().required("Required"),
-      grades: Yup.string().required("Required"),
+        .required(VALIDATION_MESSAGES.required),
+      attachment_required: Yup.string().required(VALIDATION_MESSAGES.required),
+      grades: Yup.string().required(VALIDATION_MESSAGES.required),
     })
   ),
 
   accounts: Yup.array().of(
     Yup.object().shape({
-      reimbursement_typeId: Yup.number().required("required"),
+      reimbursement_typeId: Yup.number().required(VALIDATION_MESSAGES.required),
          expense_accountId: Yup.number()
-        .required("Expense account is required"),
-        bank_accountId: Yup.number().required("bank account required"),
+         .required(VALIDATION_MESSAGES.required),
+        bank_accountId: Yup.number().required(VALIDATION_MESSAGES.required),
 
     })
   )
@@ -58,14 +59,15 @@ export function FormEditForm({
     { value: false, label: "No" },
   ];
   const checkIds = (id) => {
-    console.log("Ids", id);
+
   };
   // Fetch necessary data if not already present
   useEffect(() => {
     if (!user.Id) {
-      dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsidiaries
+      // dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsidiaries
+      dispatch(fetchAllSubsidiaryData("allSubsidiaryList"));
       dispatch(fetchAllFormsMenu(127, "allPayrolGroupList")); // For All Accounts
-      dispatch(fetchAllFormsMenu(191, "allCycleTypeList"));
+      dispatch(fetchAllFormsMenu(205, "allCycleTypeList"));
       dispatch(fetchAllFormsMenu(202, "allReimbursementTypeList"));
       dispatch(fetchAllFormsMenu(143, "allEmployeeGradeList"));
       dispatch(fetchAllFormsMenu(45, "allAccountList"));
@@ -74,9 +76,9 @@ export function FormEditForm({
     }
     //allPayrolGroupList
   }, [dispatch, user.Id]);
-  console.log("dashboard.allEmployeeGradeList", dashboard.allEmployeeGradeList);
+ 
   const { currentState, userAccess } = useSelector((state) => {
-    console.log("state for clear data", state);
+
     return {
       currentState: state.reimbursement_configuration,
       userAccess: state?.auth?.userAccess["reimbursement_configuration"],
@@ -90,10 +92,10 @@ export function FormEditForm({
     entities.forEach((i) => {
       if (i.subsidiaryId == subsidiaryId) {
         existedId = i.Id;
-        console.log("update api hit");
-        dispatch(actions.fetchSalarypolicy(existedId));
+
+        dispatch(actions.fetchReimbursementConfig(existedId));
       } else {
-        dispatch(actions.fetchSalarypolicy(0));
+        dispatch(actions.fetchReimbursementConfig(0));
       }
     });
   };
@@ -104,7 +106,7 @@ export function FormEditForm({
       initialValues={user}
       validationSchema={ReimbursementSchema}
       onSubmit={(values) => {
-        console.log("Form Values: updated", values);
+ 
         enableLoading();
         saveForm(values);
       }}
@@ -135,11 +137,11 @@ export function FormEditForm({
                         // check_Existed_Data(e.value);
                       }}
                       value={
-                        dashboard.allSubidiaryList.find(
-                          (option) => option.value === values.subsidiaryId
+                        dashboard?.allSubsidiaryList?.find(
+                          (option) => option?.value === values?.subsidiaryId
                         ) || null
                       }
-                      options={dashboard.allSubidiaryList}
+                      options={dashboard?.allSubsidiaryList}
                       error={errors.subsidiaryId}
                       touched={touched.subsidiaryId}
                     />
@@ -159,8 +161,8 @@ export function FormEditForm({
                         setFieldValue("payroll_groupId", e.value || null);
                       }}
                       value={
-                        dashboard.allPayrolGroupList.find(
-                          (option) => option.value === values.payroll_groupId
+                        dashboard?.allPayrolGroupList?.find(
+                          (option) => option?.value === values?.payroll_groupId
                         ) || null
                       }
                       // options={dashboard.allAccountList}
@@ -188,12 +190,12 @@ export function FormEditForm({
                         setFieldValue("cycle_typeId", e.value || null);
                       }}
                       value={
-                        dashboard.allCycleTypeList.find(
-                          (option) => option.value === values.cycle_typeId
+                        dashboard?.allCycleTypeList?.find(
+                          (option) => option?.value === values?.cycle_typeId
                         ) || null
                       }
                       // options={dashboard.allAccountList}
-                      options={dashboard.allCycleTypeList.map((option) => ({
+                      options={dashboard?.allCycleTypeList?.map((option) => ({
                         label: `${option.label}`, // Adding the value to the label
                         value: option.value,
                       }))}
@@ -253,13 +255,15 @@ export function FormEditForm({
                                   as="select"
                                   className="form-control"
                                   disabled={isUserForRead}
+                                  
                                 >
+                                    <option value="">Select...</option> {/* Default "Select..." option */}
                                   {dashboard.allReimbursementTypeList?.map(
                                     (x) => {
                                       return (
                                         <option
                                           disabled={
-                                            values.policies.find(
+                                            values?.policies?.find(
                                               (el) =>
                                                 el.reimbursement_typeId ==
                                                 x.value
@@ -293,8 +297,12 @@ export function FormEditForm({
                                 <Field
                                   name={`policies[${index}].max_amount`}
                                   type="number"
+                                  placeholder="Write amount"
                                   className="form-control"
                                   disabled={isUserForRead}
+                                  onInput={(e) => {
+                                    e.target.value = amountLimit(e.target.value); // Limit to 3 digits
+                                  }}
                                 />
                                 {errors.policies?.[index]?.max_amount &&
                                   touched.policies?.[index]?.max_amount && (
@@ -318,6 +326,7 @@ export function FormEditForm({
                                       ); // Use the raw value
                                     }}
                                   >
+                                    
                                     <option value="">Select</option>
                                     {basisOptions.map((option) => (
                                       <option
@@ -534,6 +543,7 @@ export function FormEditForm({
                                   className="form-control"
                                   disabled={isUserForRead}
                                 >
+                                    <option value="">Select...</option> {/* Default "Select..." option */}
                                   {dashboard.allReimbursementTypeList?.map(
                                     (x) => {
                                       return (
@@ -576,6 +586,7 @@ export function FormEditForm({
                                   className="form-control"
                                   disabled={isUserForRead}
                                 >
+                                    <option value="">Select...</option> {/* Default "Select..." option */}
                                   {dashboard.allAccountList?.map((x) => {
                                     return (
                                       <option
@@ -611,6 +622,7 @@ export function FormEditForm({
                                   className="form-control"
                                   disabled={isUserForRead}
                                 >
+                                    <option value="">Select...</option> {/* Default "Select..." option */}
                                   {dashboard.allAccountList?.map((x) => {
                                     return (
                                       <option

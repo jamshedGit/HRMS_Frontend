@@ -27,7 +27,6 @@ export function MasterEditForm({
   submitForm,
   user,
   actionsLoading,
-  onHide,
   isUserForRead,
   enableLoading,
   loading,
@@ -54,6 +53,7 @@ export function MasterEditForm({
           values,
           handleBlur,
           setFieldValue,
+          handleReset,
           dirty
         }) => (
           <>
@@ -119,7 +119,7 @@ export function MasterEditForm({
                         }
                         value={values.cycleTypeId}
                         autoComplete="off"
-                        children={CustomDropdown({ data: dropdownData.allCycleTypeList })}
+                        children={CustomDropdown({ data: dropdownData.allCycleTypeList, firstElement: { label: '--Select--', value: null } })}
                       />
                       {
                         errors.cycleTypeId && touched.cycleTypeId && <CustomErrorLabel touched={true} error={errors.cycleTypeId} />
@@ -184,21 +184,18 @@ export function MasterEditForm({
               </Form>
             </Modal.Body>
             <Modal.Footer>
-              {!isUserForRead ? (
+              {!isUserForRead && (
                 <button
-                  type="button"
-                  onClick={onHide}
+                  type="reset"
+                  onClick={() => {
+                    setFieldValue('subsidiaryId', '')
+                    setFieldValue('cycleTypeId', '')
+                    setFieldValue('yearId', '')
+                    setFieldValue('list', [])
+                  }}
                   className="btn btn-light btn-elevate"
                 >
                   Cancel
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  onClick={onHide}
-                  className="btn btn-primary btn-elevate"
-                >
-                  Ok
                 </button>
               )}
 
@@ -206,7 +203,7 @@ export function MasterEditForm({
               {accessUser && (
                 <button
                   type="submit"
-                  disabled={!values?.list?.length}
+                  disabled={!values?.list?.length || loading}
                   onClick={() => handleSubmit()}
                   className="btn btn-primary btn-elevate"
                 >

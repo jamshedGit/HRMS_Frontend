@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialSalarypolicyState = {
+const initialIncomeTaxSlabState = {
     listLoading: false,
     actionsLoading: null,
     totalCount: 0,
@@ -21,7 +21,7 @@ export const callTypes = {
 
 export const tax_slabSlice = createSlice({
     name: "tax_slab",
-    initialState: initialSalarypolicyState,
+    initialState: initialIncomeTaxSlabState,
     reducers: {
         catchError: (state, action) => {
             state.error = `${action.type}: ${action.payload.error}`;
@@ -31,15 +31,8 @@ export const tax_slabSlice = createSlice({
                 state.actionsLoading = false;
             }
         },
-        startCall: (state, action) => {
-            state.error = null;
-            if (action.payload.callType === callTypes.list) {
-                state.listLoading = true;
-            } else {
-                state.actionsLoading = true;
-            }
-        },
-        salarypolicyFetched: (state, action) => {
+      
+        incomeTaxSlabFetched: (state, action) => {
        
     
             const entities = action.payload.data?.data.rows;
@@ -53,7 +46,7 @@ export const tax_slabSlice = createSlice({
         },
 
          //get User By ID
-         SalarypolicyFetchedForEdit: (state, action) => {
+         IncomeTaxSlabFetchedForEdit: (state, action) => {
            
    
             state.actionsLoading = false;
@@ -62,7 +55,7 @@ export const tax_slabSlice = createSlice({
         },
 
       
-        SalarypolicyDeleted: (state, action) => {
+        IncomeTaxSlabDeleted: (state, action) => {
 
             state.error = null;
             state.actionsLoading = false;
@@ -72,13 +65,13 @@ export const tax_slabSlice = createSlice({
                 (el) => el.Id !== action.payload.Id
             );
         },
-        salarypolicyCreated: (state, action) => {
+        incomeTaxSlabCreated: (state, action) => {
            
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);
         },
-        salarypolicyUpdated: (state, action) => {
+        incomeTaxSlabUpdated: (state, action) => {
             state.error = null;
             state.actionsLoading = false;
             // state.entities.push(action.payload)
@@ -88,9 +81,9 @@ export const tax_slabSlice = createSlice({
                 //const payload = { ...action.payload };
                 let payload = JSON.stringify(action.payload)
                 let payloadObj = JSON.parse(payload);
-                let finalObj = JSON.parse(payloadObj.updatedSalarypolicy);
+                let finalObj = JSON.parse(payloadObj.updatedIncomeTaxSlab);
                 if (entity.Id === finalObj.Id) {
-                    return finalObj; //action.payload.updatedSalarypolicy;
+                    return finalObj; //action.payload.updatedIncomeTaxSlab;
                 }
 
               

@@ -4,7 +4,7 @@ import { LayoutSplashScreen, ContentRoute } from "../../../../_metronic/layout";
 import { FormPage } from "./reimbursement_configuration/FormPage";
 
 export default function Reimbursement_configurationManagement() {
- console.log("render loan PAGE")
+
   return (
 
     <>

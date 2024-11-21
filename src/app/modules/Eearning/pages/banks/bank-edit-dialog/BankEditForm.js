@@ -72,8 +72,14 @@ export function BankEditForm({
   const [defEarningCode = null, setDefaultEarningCode] = useState(null);
   const [defSubsidiary = null, setDefualtSubsidiaryList] = useState(null);
 
+  useEffect(() => {
 
-  //=========== END
+    if (!user.Id) {
+      dispatch(fetchAllFormsMenu(45, "allAccountList")); // For All Grade Codes
+    }
+  }, [dispatch]);
+
+
   useEffect(() => {
 
     if (!user.Id) {

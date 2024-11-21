@@ -134,6 +134,7 @@ export function MasterEditForm({
               {!isUserForRead && (
                 <button
                   type="submit"
+                  disabled={loading}
                   onClick={() => handleSubmit()}
                   className="btn btn-primary btn-elevate"
                 >

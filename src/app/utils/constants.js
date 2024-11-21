@@ -344,6 +344,21 @@ export const WEEK_DAYS = [
   }
 ]
 
+export const ATTENDANCE_TYPE = [
+  {
+    label: "Select...",
+    value: -1
+  },
+  {
+    label: "Regular Attendance",
+    value: 1
+  },
+  {
+    label: "Auto Present Attendance",
+    value: 2
+  },
+]
+
 //Validation Messages for form
 export const VALIDATION_MESSAGES = {
   required: 'Required',
