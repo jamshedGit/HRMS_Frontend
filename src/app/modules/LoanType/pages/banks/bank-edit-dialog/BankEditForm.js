@@ -10,7 +10,8 @@ import {
   fetchAllCountry,
   fetchAllFormsMenu,
   fetchAllActiveEmployees,
-  getLatestTableId
+  getLatestTableId,
+  fetchAllSubsidiaryData
 } from "../../../../../../_metronic/redux/dashboardActions";
 import DatePicker from "react-datepicker";
 import { amountLimit } from "../../../../../utils/common";
@@ -25,20 +26,21 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 const formValidation = Yup.object().shape(
   {
 
-    code: Yup.string()
+    subsidiaryId: Yup.string()
       .required("Required*"),
+
     name: Yup.string()
       .required("Required*")
       .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.'),
-      
+
     linkedAttendance: Yup.string()
       .required("Required*"),
     // loan: Yup.string()
     //   .required("Required*"),
     // mapped: Yup.string()
-    //   .required("Required*"),
-    account: Yup.string()
-    .matches(/^\d+(\.\d+)?$/, 'Must be a valid number (digits with optional decimal)')
+    //   .accountId("Required*"),
+    accountId: Yup.string()
+      .matches(/^\d+(\.\d+)?$/, 'Must be a valid number (digits with optional decimal)')
       .required("Required*")
   },
 
@@ -61,6 +63,17 @@ export function BankEditForm({
   const [defDeductionCode = null, setDefDeductionCode] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
   const dispatch = useDispatch();
+  const [defSubsidiary = null, setDefualtSubsidiaryList] = useState(null);
+
+  const [defCode = null, setDefaultCode] = useState(null);
+    //=========== END
+    useEffect(() => {
+
+      if (!user.Id) {
+        dispatch(fetchAllFormsMenu(45, "allAccountList")); // For All Grade Codes
+        dispatch(fetchAllSubsidiaryData("allSubsidiaryList"))
+      }
+    }, [dispatch]);
 
   useEffect(() => {
 
@@ -75,19 +88,38 @@ export function BankEditForm({
 
   }, [user?.employeeId, dashboard.employeeId]);
 
- 
+  
+  useEffect(() => {
+
+    const subsidiaryId = defSubsidiary?.value ? defSubsidiary.value : user.subsidiaryId;
+
+    setDefualtSubsidiaryList(
+      dashboard.allSubsidiaryList &&
+      dashboard.allSubsidiaryList.filter((item) => {
+        return item.value === subsidiaryId;
+      })
+    );
+
+  }, [user?.subsidiaryId, dashboard.subsidiaryId]);
+
+  const fetchData = async (subsidiaryId, setValue) => {
+   
+    if (subsidiaryId) {
+      dispatch(getLatestTableId("t_loan_type_setup", "Id", " subsidiaryId = "+ subsidiaryId, setValue));
+    }
+};
 
   return (
     <>
       <Formik
         enableReinitialize={true}
-        initialValues={{...user,code:user.code || defDeductionCode}}
+        initialValues={user}
         validationSchema={formValidation}
         onSubmit={(values) => {
           console.log("values", values);
-           
+
           enableLoading();
-          saveLoanType(values);
+          saveLoanType({...values,code: defCode ? defCode : user.code });
         }}
       >
         {({
@@ -109,16 +141,39 @@ export function BankEditForm({
               )}
               <Form className="form form-label-right">
                 <fieldset disabled={isUserForRead}>
+                <div className="from-group row">
+                    <div className="col-12 col-md-4 mt-3">
+                      <SearchSelect
+                        name="subsidiaryId"
+                        label={<span> Subsidiary<span style={{ color: 'red' }}>*</span></span>}
+                        isDisabled={isUserForRead && true}
+                        onBlur={() => {
+                          // handleBlur({ target: { name: "countryId" } });
+                        }}
+                        onChange={(e) => {
+                          setFieldValue("subsidiaryId", e.value || null);
+                          setDefualtSubsidiaryList(e);
+                          fetchData(e.value, setDefaultCode)
+                          //handlePaymenModeChanged(e)
+                        }}
 
+                        value={(defSubsidiary || null)}
+                        error={errors.subsidiaryId}
+                        touched={touched.subsidiaryId}
+                        options={dashboard.allSubsidiaryList}
+                      />
+                    </div>
+                 </div>
                   <div className="from-group row">
                     {
                       <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="code"
+                          disabled
                           component={Input}
                           maxLength={6}
-                          placeholder="Enter Deduction Code"
-                         
+                          placeholder="Enter Code"
+                          value={defCode || values.code}
                           label={<span> Code<span style={{ color: 'red' }}>*</span></span>}
                           autoComplete="off"
                         />
@@ -140,7 +195,7 @@ export function BankEditForm({
 
                   </div>
                   <div className="from-group row">
-                    {
+                    
 
                       <div className="col-12 col-md-4 mt-3">
                         <Select
@@ -169,83 +224,45 @@ export function BankEditForm({
                           <div className="invalid-text">{errors.linkedAttendance}</div>
                         )}
                       </div>
-
-                    }
-
-                    {/* <div className="col-12 col-md-4 mt-3">
-                      <Select
-                        label={<span> Mapped<span style={{ color: 'red' }}>*</span></span>}
-                        name="mapped"
-                        value={values.mapped}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        style={{ display: "block" }}
-                      >
-                        <option value="-1" label="Select" />
-                        <option value="Income Tax" label="Income Tax" />
-                        <option value="Leaves" label="Leaves" />
-
-
-                      </Select>
-                      {errors.mapped && touched.mapped && (
-                        <div className="invalid-text">{errors.mapped}</div>
-                      )}
-                    </div> */}
-
-                    {/* {
-
+                      
                       <div className="col-12 col-md-4 mt-3">
-                        <Select
-                          label={<span> Loan<span style={{ color: 'red' }}>*</span></span>}
-                          name="loan"
-                          value={values.loan}
-                          onChange={(e) => {
+                                          
+                                          <SearchSelect
+                                            name="accountId"
+                                            label={
+                                              <span>
+                                                Account<span style={{ color: "red" }}>*</span>
+                                              </span>
+                                            }
+                                            isDisabled={isUserForRead}
+                                            onChange={(e) => {
+                                              setFieldValue("accountId", e.value || null);
+                                            }}
+                                            value={
+                                              dashboard.allAccountList.find(
+                                                (option) => option.value == values.accountId
+                                              ) || null
+                                            }
+                                            // options={dashboard.allAccountList}
+                                            options={dashboard.allAccountList.map((option) => ({
+                                              label: `${option.mergeLabel}`, // Adding the value to the label
+                                              value: option.value,
+                                            }))}
+                
+                                            error={errors.accountId}
+                                            touched={touched.accountId}
+                                          />
+                
+                
+                                      </div>
+                    
 
-                            if (e.target.value === "true") {
-                              setFieldValue("loan", true);
-                              setFieldValue("linkedAttendance", false);
-                            }
-                            else
-                              setFieldValue("loan", false);
-
-                          }}
-                          onBlur={handleBlur}
-                          style={{ display: "block" }}
-                        >
-                          <option value="-1" label="Select" />
-                          <option value="true" label="Yes" />
-                          <option value="false" label="No" />
-
-
-                        </Select>
-                        {errors.loan && touched.loan && (
-                          <div className="invalid-text">{errors.loan}</div>
-                        )}
-                      </div>
-
-                    } */}
-                  </div>
+                  </div> 
 
                   <div className="from-group row">
+                  
                     {
-
-
-
-                    }
-                    {
-                      <div className="col-12 col-md-4 mt-3">
-                        <Field
-                          name="account"
-                          onInput={(e) => {
-                            e.target.value = amountLimit(e.target.value); // Limit to 3 digits
-                          }}
-                          maxLength={15}
-                          component={Input}
-                          placeholder="Ener Account"
-                          autoComplete="off"
-                          label={<span> Account<span style={{ color: 'red' }}>*</span></span>}
-                        />
-                      </div>
+                   
                     }
                   </div>
 

@@ -77,6 +77,17 @@ export function BanksTable() {
     //     minWidth: "160px",
     //   },
     // },
+   
+    {
+      dataField: "subs.subsName",
+      text: "Subsidiary",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
     {
       dataField: "Name",
       text: "Bank Name",

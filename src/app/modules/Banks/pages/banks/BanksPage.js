@@ -15,25 +15,13 @@ import {
   // fetchCenters,
 } from "../../_redux/bankActions";
 
-
-// dispatch(actions.fetchRoles());
-//     dispatch(actions.fetchCenters());
-
 export function BanksPage({ history }) {
   const dispatch = useDispatch();
   const BanksUIEvents = {
     newBankButtonClick: () => {
-      dispatch(fetchAllCountry());
-      dispatch(fetchRoles());
-      // dispatch(fetchCenters());
-      dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
       history.push("/bank/read-all-banks/new");
     },
     openEditBankDialog: (id) => {
-      dispatch(fetchAllCountry());
-      dispatch(fetchRoles());
-      // dispatch(fetchCenters());
-      dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
       history.push(`/bank/read-all-banks/${id}/edit`);
     },
     openDeleteBankDialog: (id, status) => {
@@ -43,16 +31,10 @@ export function BanksPage({ history }) {
       history.push(`/bank/read-all-banks/${id}/active`);
     },
     openReadBankDialog: (id, isUserRead) => {
-      
-      // dispatch(fetchAllCountry());
-      // dispatch(fetchRoles());
-      // dispatch(fetchCenters());
-      // dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
       history.push(`/bank/read-all-banks/${id}/read`);
     },
   };
   return (
-    
     <BanksUIProvider BanksUIEvents={BanksUIEvents}>
       <Route exact path="/bank/read-all-banks/new">
         {({ history, match }) => (
