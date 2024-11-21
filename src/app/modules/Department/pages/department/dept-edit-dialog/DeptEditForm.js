@@ -133,16 +133,7 @@ console.log("pep", dashboard.allDept)
               <Form className="form form-label-right">
                 <fieldset disabled={isUserForRead}>
                   <div className="from-group row">
-                    <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="deptName"
-                        maxLength={30}
-                        component={Input}
-                        placeholder="Enter Department Name"
-                        label={<span> Department Name<span style={{ color: 'red' }}>*</span></span>}
-                      />
-                    </div>
-                    {
+                  
                       <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="deptCode"
@@ -152,7 +143,17 @@ console.log("pep", dashboard.allDept)
                           label={<span> Department Code<span style={{ color: 'red' }}>*</span></span>}
                         />
                       </div>
-                    }
+                    
+                    <div className="col-12 col-md-4 mt-3">
+                      <Field
+                        name="deptName"
+                        maxLength={30}
+                        component={Input}
+                        placeholder="Enter Department Name"
+                        label={<span> Department Name<span style={{ color: 'red' }}>*</span></span>}
+                      />
+                    </div>
+                    
                     {
                       <div className="col-12 col-md-4 mt-3">
                         <SearchSelect

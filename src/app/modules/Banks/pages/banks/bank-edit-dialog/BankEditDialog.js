@@ -79,7 +79,7 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
   // }, [actionsLoading]);
   //console.log("userForEdit", userForEdit);
 
-  const saveBank = (user) => {
+  const saveBank = async (user) => {
 
     if (!id) {
       console.log("bank edit dialog");
@@ -112,8 +112,8 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
       };
 
       console.log("bankUpdatedFields", bankUpdatedFields);
-      dispatch(actions.updateBank(bankUpdatedFields, disbaleLoading, onHide));
-      dispatch(actions.fetchUsers(usersUIProps.queryParams));
+    await  dispatch(actions.updateBank(bankUpdatedFields, disbaleLoading, onHide));
+     await dispatch(actions.fetchUsers(usersUIProps.queryParams));
     }
   };
 

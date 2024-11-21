@@ -35,13 +35,14 @@ export function BanksUIProvider({ BanksUIEvents, children }) {
     code: "",
     name: "",
     linkedAttendance: "",
-    mapped: "",
-    account: "",
-    mapped :""
+    // mapped: "",
+    accountId: "",
+    subsidiaryId: "",
+    companyId: "1"
+    //mapped :""
 
   };
 
-  console.log("acadenuc ui events", BanksUIEvents);
 
   const value = {
     queryParams,

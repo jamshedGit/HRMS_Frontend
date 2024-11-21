@@ -146,10 +146,11 @@ export const getLastBookingNo = async (bookingNo) => {
   });
 };
 
-export const getLastTableId = async (tableName, prefix) => {
+export const getLastTableId = async (tableName, pkIdColumn,whereClause) => {
   return await axios.post(`${USERS_URL}/settings/get-max-tableId`, {
     tableName: tableName,
-    prefix: prefix,
+    pkIdColumn: pkIdColumn,
+    whereClause: whereClause
   });
 };
 

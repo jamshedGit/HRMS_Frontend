@@ -10,7 +10,8 @@ import {
   fetchAllCountry,
   fetchAllFormsMenu,
   fetchAllActiveEmployees,
-  getLatestTableId
+  getLatestTableId,
+  fetchAllSubsidiaryData
 
 } from "../../../../../../_metronic/redux/dashboardActions";
 import DatePicker from "react-datepicker";
@@ -26,10 +27,12 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
 const formValidation = Yup.object().shape(
   {
-
-    earningCode: Yup.string()
+    subsidiaryId: Yup.string()
       .nullable()
       .required(VALIDATION_MESSAGES.required),
+    // earningCode: Yup.string()
+    //   .nullable()
+    //   .required(VALIDATION_MESSAGES.required),
     earningName: Yup.string()
       .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.')
       .required(VALIDATION_MESSAGES.required),
@@ -67,6 +70,7 @@ export function BankEditForm({
   const dispatch = useDispatch();
 
   const [defEarningCode = null, setDefaultEarningCode] = useState(null);
+  const [defSubsidiary = null, setDefualtSubsidiaryList] = useState(null);
 
 
   //=========== END
@@ -74,8 +78,32 @@ export function BankEditForm({
 
     if (!user.Id) {
       dispatch(fetchAllFormsMenu(45, "allAccountList")); // For All Grade Codes
+      dispatch(fetchAllSubsidiaryData("allSubsidiaryList"))
     }
   }, [dispatch]);
+
+
+  useEffect(() => {
+
+    const subsidiaryId = defSubsidiary?.value ? defSubsidiary.value : user.subsidiaryId;
+
+    setDefualtSubsidiaryList(
+      dashboard.allSubsidiaryList &&
+      dashboard.allSubsidiaryList.filter((item) => {
+        return item.value === subsidiaryId;
+      })
+    );
+
+  }, [user?.subsidiaryId, dashboard.subsidiaryId]);
+
+
+
+  const fetchData = async (subsidiaryId, setValue) => {
+    console.log("jj::", subsidiaryId)
+    if (subsidiaryId) {
+      dispatch(getLatestTableId("t_employee_earning", "Id", " subsidiaryId = " + subsidiaryId, setValue));
+    }
+  };
 
   return (
     <>
@@ -86,7 +114,8 @@ export function BankEditForm({
         onSubmit={(values) => {
           console.log("values", values);
           enableLoading();
-          saveEarning(values);
+
+          saveEarning({ ...values, earningCode: defEarningCode ? defEarningCode : values.earningCode });
         }}
       >
         {({
@@ -108,31 +137,30 @@ export function BankEditForm({
               )}
               <Form className="form form-label-right">
                 <fieldset disabled={isUserForRead}>
-                  {/* <div className="from-group row">
-                    {
-                      <div className="col-12 col-md-4 mt-3">
-                        <SearchSelect
-                          name="employeeId"
-                          label={<span> Employee<span style={{ color: 'red' }}>*</span></span>}
-                          isDisabled={isUserForRead && true}
-                          onBlur={() => {
-                            // handleBlur({ target: { name: "countryId" } });
-                          }}
-                          onChange={(e) => {
-                            setFieldValue("employeeId", e.value || null);
-                            setEmployeeDefault(e);
-                            dispatch(fetchAllActiveEmployees(e.value));
-                          }}
-                          value={(defEmployee || null)}
-                          error={errors.employeeId}
-                          touched={touched.employeeId}
-                          options={dashboard.allEmployees}
-                        />
-                      </div>
-                    }
 
+                  <div className="from-group row">
+                    <div className="col-12 col-md-4 mt-3">
+                      <SearchSelect
+                        name="subsidiaryId"
+                        label={<span> Subsidiary<span style={{ color: 'red' }}>*</span></span>}
+                        isDisabled={isUserForRead && true}
+                        onBlur={() => {
+                          // handleBlur({ target: { name: "countryId" } });
+                        }}
+                        onChange={(e) => {
+                          setFieldValue("subsidiaryId", e.value || null);
+                          setDefualtSubsidiaryList(e);
+                          fetchData(e.value, setDefaultEarningCode)
+                          //handlePaymenModeChanged(e)
+                        }}
 
-                  </div> */}
+                        value={(defSubsidiary || null)}
+                        error={errors.subsidiaryId}
+                        touched={touched.subsidiaryId}
+                        options={dashboard.allSubsidiaryList}
+                      />
+                    </div>
+                  </div>
                   <div className="from-group row">
                     {
                       <div className="col-12 col-md-4 mt-3">
@@ -142,11 +170,12 @@ export function BankEditForm({
                           maxLength={6}
                           onChange={(e) => {
                             setFieldValue("earningCode", e.target.value || null);
-                            setDefaultEarningCode(e.value);
+                            setDefaultEarningCode(e);
 
                           }}
+                          disabled
                           placeholder="Enter Earning Code"
-                          value={values.earningCode}
+                          value={defEarningCode || values.earningCode}
                           label={<span> Earning Code<span style={{ color: 'red' }}>*</span></span>}
                           autoComplete="off"
                         />
@@ -220,14 +249,7 @@ export function BankEditForm({
                           touched={touched.account}
                         />
 
-                        {/* <Field
-                          name="account"
-                          component={Input}
-                          maxLength={15}
-                          placeholder="Ener Account"
-                          autoComplete="off"
-                          label={<span> Account<span style={{ color: 'red' }}>*</span></span>}
-                        /> */}
+
                       </div>
                     }
                   </div>

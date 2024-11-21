@@ -8,19 +8,11 @@ const { actions } = bankSlice;
 export const fetchUsers = (queryparm) => async (dispatch) => {
   // console.log("Receive QPsss", queryparm)
   dispatch(actions.startCall({ callType: callTypes.list }));
-  console.log("test query param", queryparm)
+
   return requestFromServer.getAllBanks(queryparm)
-    // .getAllReceipts({
-    //   filter: {
-    //     searchQuery: ""
-    //   },
-    //   sortBy: "receiptNo",
-    //   limit: 10,
-    //   page: 1
-    // })
+  
     .then((response) => {
-      //  console.log("user action receipt fetched 321")
-      console.log("response", response)
+      console.log("::::::A::",response);
       dispatch(actions.bankFetched(response));
     })
     .catch((error) => {
@@ -101,17 +93,12 @@ export const activeUser = (id) => (dispatch) => {
 export const createBank = (bankForCreation, disbaleLoading, onHide) => (
   dispatch
 ) => {
-  // bankForCreation.phNo = bankForCreation.phNo.toString();
-  // bankForCreation.cnic = bankForCreation.cnic.toString();
-
-  console.log("bank for creation", bankForCreation);
   return requestFromServer
     .createBank(bankForCreation)
     .then((res) => {
       dispatch(actions.startCall({ callType: callTypes.action }));
       const user = res.data?.data;
-      console.log("bank data");
-      console.log(user);
+    
       dispatch(actions.bankCreated(user));
       disbaleLoading();
       toast.success("Successfully Created", {
@@ -181,40 +168,3 @@ export const updateBank = (user, disbaleLoading, onHide) => (dispatch) => {
     });
 };
 
-export const fetchRoles = () => (dispatch) => {
-  dispatch(actions.startCall({ callType: callTypes.list }));
-
-  return requestFromServer
-    .getAllRoles()
-    .then((response) => {
-      const entities = response.data?.data;
-      // console.log("User entities: ", entities)
-      dispatch(actions.RolesFetched(entities));
-    })
-    .catch((error) => {
-      error.clientMessage = "Can't find roles";
-      dispatch(actions.catchError({ error, callType: callTypes.list }));
-    });
-};
-
-export const fetchUserStatusTypes = (body) => (dispatch) => {
-  dispatch(actions.startCall({ callType: callTypes.list }));
-  return requestFromServer.getAllUserStatusTypes(body).then((response) => {
-    const entities = response.data?.data;
-    dispatch(actions.UserStatusTypesFetched(entities));
-  });
-};
-
-
-// export const fetchDonationReport = (body) => async (dispatch) => {
-//   return await requestFromServer
-//     .donationReport(body)
-//     .then((response) => {
-//       console.log("Res", response);
-//       const entities = response?.data?.data;
-//       dispatch(actions.donationReportFetch(entities));
-//     })
-//     .catch((error) => {
-//       toast("error", "Data not found");
-//     });
-// };
