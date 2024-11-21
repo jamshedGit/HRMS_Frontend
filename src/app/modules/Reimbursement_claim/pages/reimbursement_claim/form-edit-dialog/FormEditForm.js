@@ -83,6 +83,10 @@ export function FormEditForm({
     )
   );
 
+
+  const { entities } = currentState;
+  console.log("entities",entities)
+
   return (
     <Formik
       // key={user.Id || "new"}
@@ -178,7 +182,7 @@ export function FormEditForm({
                       placeholder="Enter Amount"
                       label={
                         <span>
-                          Amount Limit:
+                          Amount Limit :
                           {currentState?.reimbursement_config_policies_permission?.policies?.find(
                             (item) =>
                               item.reimbursement_typeId ===
