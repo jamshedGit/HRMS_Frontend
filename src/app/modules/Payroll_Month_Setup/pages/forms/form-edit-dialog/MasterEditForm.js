@@ -118,9 +118,9 @@ export function MasterEditForm({
       }
       else {
         console.log("step1")
-        if (pmonth_db <= 9)
+        if (pmonth_db < 9)
 
-          setDefaulShortFormat((pmonth_db + 1) + "" + setDaysInDate.getFullYear().toString().substring(2, 4))
+          setDefaulShortFormat("0" + (pmonth_db + 1) + "" + setDaysInDate.getFullYear().toString().substring(2, 4))
         else
           setDefaulShortFormat((pmonth_db + 1) + "" + setDaysInDate.getFullYear().toString().substring(2, 4))
 
@@ -128,7 +128,8 @@ export function MasterEditForm({
       }
     }
     else {
-      setDefaulShortFormat("0" + getCurrentMonth() + "" + defYear.toString().substring(2, 4))
+      const currentMonth = getCurrentMonth()
+      setDefaulShortFormat((currentMonth < 10 ? "0" + currentMonth : currentMonth) + "" + defYear.toString().substring(2, 4))
     }
   }
   const [defstartDate, setDefaultStartDate] = useState(getStartOfMonth());
