@@ -44,7 +44,7 @@ export const reimbursement_claimSlice = createSlice({
 
 
             const entities = action.payload.data?.data.rows;
-            console.log("reimbursementClaimFetched", entities)
+     
             const totalResult = action.payload.data?.data.totalResults;
 
             state.listLoading = false;
@@ -69,7 +69,7 @@ export const reimbursement_claimSlice = createSlice({
 
             state.entities = updatedEntities;
             state.totalCount = totalResult;
-            console.log("reimbursementClaimFetched",state.entities)
+           
         },
 
         //get User By ID
@@ -92,12 +92,41 @@ export const reimbursement_claimSlice = createSlice({
                 (el) => el.Id !== action.payload.Id
             );
         },
-        reimbursementClaimCreated: (state, action) => {
+        // reimbursementClaimCreated: (state, action) => {
+            
 
+        //     state.actionsLoading = false;
+        //     state.error = null;
+        //     state.entities.unshift(action.payload);
+        // },
+      
+      
+        reimbursementClaimCreated: (state, action) => {
+            
             state.actionsLoading = false;
             state.error = null;
-            state.entities.unshift(action.payload);
+        
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        
+            // Format the new entity
+            const newEntity = { ...action.payload };
+        
+            // Extract month and year from the PayInPayrollForId
+            const month = newEntity.PayInPayrollForId ? newEntity.PayInPayrollForId.month : null;
+            const year = newEntity.PayInPayrollForId ? newEntity.PayInPayrollForId.year : null;
+        
+            // Add formatted currentMonth
+            if (month !== null && year !== null) {
+                newEntity.currentMonth = `${monthNames[month - 1]}-${year}`;
+            } else {
+                newEntity.currentMonth = null; // If either month or year is missing
+            }
+        
+            // Add the new entity to the start of the entities array
+            state.entities.unshift(newEntity);
         },
+        
+      
         reimbursementClaimUpdated: (state, action) => {
             state.error = null;
             state.actionsLoading = false;
