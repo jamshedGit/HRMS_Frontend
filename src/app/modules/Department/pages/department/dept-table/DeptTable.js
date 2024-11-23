@@ -78,7 +78,7 @@ export function DeptTable() {
       },
     },
     {
-      dataField: "Department",
+      dataField: "DepartmentTree",
       text: "Department",
       sort: false,
       sortCaret: sortCaret,
