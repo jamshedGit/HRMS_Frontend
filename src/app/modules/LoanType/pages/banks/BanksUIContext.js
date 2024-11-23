@@ -34,7 +34,7 @@ export function BanksUIProvider({ BanksUIEvents, children }) {
 
     code: "",
     name: "",
-    linkedAttendance: "",
+    //linkedAttendance: "",
     // mapped: "",
     accountId: "",
     subsidiaryId: "",

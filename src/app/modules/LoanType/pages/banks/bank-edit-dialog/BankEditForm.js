@@ -33,8 +33,8 @@ const formValidation = Yup.object().shape(
       .required("Required*")
       .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.'),
 
-    linkedAttendance: Yup.string()
-      .required("Required*"),
+    // linkedAttendance: Yup.string()
+    //   .required("Required*"),
     // loan: Yup.string()
     //   .required("Required*"),
     // mapped: Yup.string()
@@ -197,7 +197,7 @@ export function BankEditForm({
                   <div className="from-group row">
                     
 
-                      <div className="col-12 col-md-4 mt-3">
+                      {/* <div className="col-12 col-md-4 mt-3">
                         <Select
                           label={<span> Linked With Attendance<span style={{ color: 'red' }}>*</span></span>}
                           name="linkedAttendance"
@@ -223,7 +223,7 @@ export function BankEditForm({
                         {errors.linkedAttendance && touched.linkedAttendance && (
                           <div className="invalid-text">{errors.linkedAttendance}</div>
                         )}
-                      </div>
+                      </div> */}
                       
                       <div className="col-12 col-md-4 mt-3">
                                           
