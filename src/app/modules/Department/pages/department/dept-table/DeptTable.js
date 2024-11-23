@@ -99,7 +99,7 @@ export function DeptTable() {
     },
    
     {
-      dataField: "subsidiary",
+      dataField: "Subsidiary",
       text: "Subsidiary",
       sort: false,
       sortCaret: sortCaret,
