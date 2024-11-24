@@ -166,7 +166,7 @@ export function MasterEditForm({
   const [defLeaveType = null, setDefualtLeaveType] = useState(null);
   const [defShiftType = null, setShiftTypeCodeList] = useState(null);
   const [defWeekDays, setDefaultWeekDays] = useState(Object.values(WEEK_DAY_STRING)); //  For Email Recipents
-
+  const [defInterShiftGapTime = null, setInterShiftGapTime] = useState(null);
   useEffect(() => {
     if (!user.Id) {
       dispatch(fetchAllLeaveType("allLeaveTypes"))
@@ -246,7 +246,8 @@ export function MasterEditForm({
     if (values.endTime) {
       const gap = calculateTimeDifference(values.endTime, values.overTimeStart);
       console.log('::::::::gap::::::',gap);
-      
+      setFieldValue("interShiftGap",gap || 0);
+     setInterShiftGapTime(gap || 0);
     }
   };
 
@@ -607,7 +608,7 @@ export function MasterEditForm({
                         }
                         onHide={false}
                         
-                        value={values.interShiftGap}
+                        value={defInterShiftGapTime || values.interShiftGap}
                         autoComplete="off"
                       />
                     </div>
