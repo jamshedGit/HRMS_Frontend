@@ -90,7 +90,7 @@ export function FormEditForm({
 
   const calculateRemainingAmount = (reimbursementTypeId, payrollForId, policies) => {
     // Find the max amount allowed for the reimbursement type
-  console.log("reimbursementTypeId, payrollForId, policies",reimbursementTypeId, payrollForId, policies)
+  
     const maxAmount = 
       policies?.find((item) => item.reimbursement_typeId === reimbursementTypeId)?.max_amount || 0;
   
