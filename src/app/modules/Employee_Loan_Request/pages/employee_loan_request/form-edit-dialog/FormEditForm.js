@@ -311,12 +311,19 @@ if(changeLoanType){
                       component={Input}
                       placeholder="Enter total loan amount"
                       label={
+
+                        <div className="d-flex">
+                          <div className="d-flex">Total Loan Amount </div>
+                          <div className="d-flex ml-3">
                         <span>
-                          Amount Limit :
+                          ( Amount Limit : 
                           
-                          {maxAmountLimit || 0}
+                          {maxAmountLimit?.toLocaleString() || 0})
                           <span style={{ color: "red" }}>*</span>
                         </span>
+                        </div>
+                        </div>
+                        
                       }
                       type="number"
                       onChange={(e) => {
@@ -347,10 +354,16 @@ if(changeLoanType){
                       component={Input}
                       placeholder="Enter monthly installment"
                       label={
+
+                        <div className="d-flex">
+                        <div className="d-flex"> Monthly Installment </div>
+                        <div className="d-flex ml-3">
                         <span>
-                          Monthly Installment Suggested : {maxMonthlyAmountSuggest || 0}
+                         (Max Suggested Installment Based on Salary : {maxMonthlyAmountSuggest?.toLocaleString() || 0})
                           <span style={{ color: "red" }}>*</span>
                         </span>
+                        </div>
+                        </div>
                       }
                       type="number"
                       onChange={(e) => {

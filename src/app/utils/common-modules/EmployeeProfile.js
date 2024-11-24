@@ -196,7 +196,7 @@ const SECTIONS = [
       { name: 'Employee Type', value: 'employeeTypeName' },
       { name: 'Payroll Group', value: 'payrollName' },
       { name: 'Team', value: 'teamName' },
-      { name: 'Default Shift', value: 'shiftName' },
+      // { name: 'Default Shift', value: 'shiftName' },
     ]
   },
   {
