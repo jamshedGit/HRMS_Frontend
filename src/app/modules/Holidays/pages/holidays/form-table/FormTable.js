@@ -79,6 +79,16 @@ export function FormTable() {
         minWidth: "160px",
       },
     },
+    {
+      dataField: "name",
+      text: "Holiday",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
 
 {
   dataField: "Religion.formName",
