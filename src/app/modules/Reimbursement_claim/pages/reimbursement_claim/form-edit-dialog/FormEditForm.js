@@ -24,6 +24,8 @@ import {
   fetchAllPayrollMonthYearList,
 } from "../../../../../../_metronic/redux/dashboardActions";
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
+import { getEmployeeProfileById } from "../../../../../../_metronic/redux/dashboardCrud";
+
 
 const ReimbursementSchema = Yup.object().shape({
   reimbursement_typeId: Yup.number().required(VALIDATION_MESSAGES.required),
@@ -56,6 +58,7 @@ export function FormEditForm({
   isEdit,
   isFileReq,
   setIsFileReq,
+  employeeId
 }) {
   const dispatch = useDispatch();
   const { dashboard } = useSelector((state) => state);
@@ -84,13 +87,27 @@ export function FormEditForm({
   );
 
   const { entities } = currentState;
-
-
+  const [data, setdata] = useState({});
+  useEffect(() => {
+    if (employeeId) {
+      getEmployeeProfileById(employeeId)
+        .then((res) => {
+          if (res?.data?.data) {
+            setdata(res.data.data);
+          }
+        })
+        .catch(() => {
+          setdata({});
+        });
+    } else {
+      setdata({});
+    }
+  }, [employeeId]);
 
 
   const calculateRemainingAmount = (reimbursementTypeId, payrollForId, policies) => {
     // Find the max amount allowed for the reimbursement type
-  
+    // let employee = currentState?.loan_config_details_permission?.employee;
     const maxAmount = 
       policies?.find((item) => item.reimbursement_typeId === reimbursementTypeId)?.max_amount || 0;
   
@@ -197,6 +214,7 @@ export function FormEditForm({
                       // label="Date"
                       type="date"
                       maxDate={new Date()}
+                      minDate={data.dateOfJoining ? new Date(data.dateOfJoining) : null}
                     />
                   </div>
 

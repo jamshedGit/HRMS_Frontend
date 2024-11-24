@@ -116,6 +116,7 @@ export const reimbursement_claimSlice = createSlice({
             const year = newEntity.PayInPayrollForId ? newEntity.PayInPayrollForId.year : null;
         
             // Add formatted currentMonth
+          
             if (month !== null && year !== null) {
                 newEntity.currentMonth = `${monthNames[month - 1]}-${year}`;
             } else {
@@ -123,6 +124,7 @@ export const reimbursement_claimSlice = createSlice({
             }
         
             // Add the new entity to the start of the entities array
+       
             state.entities.unshift(newEntity);
         },
         
