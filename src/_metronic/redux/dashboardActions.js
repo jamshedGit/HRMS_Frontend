@@ -128,6 +128,8 @@ export const fetchAllDept = (id) => async (dispatch) => {
     .getAllDepartments(id)
     .then((response) => {
       const entities = response.data?.data;
+
+
       dispatch(actions.AllDeptFetch(entities));
     })
     .catch((error) => {
@@ -148,9 +150,9 @@ export const fetchAllDept = (id) => async (dispatch) => {
  * @param {string} text 
  * @returns 
  */
-export const fetchAllFormsMenu = (id, key, text=null,mergeLabel=false) => async (dispatch) => {
+export const fetchAllFormsMenu = (id, key, text = null, mergeLabel = false) => async (dispatch) => {
   return await requestFromServer
-    .getAllFormMenus(id, text,mergeLabel)
+    .getAllFormMenus(id, text, mergeLabel)
     .then((response) => {
       const entities = [...response.data?.data];
       dispatch(actions.AllChildMenusFetch({ entities, key }));
@@ -249,7 +251,7 @@ export const fetchAllSubsidiaryData = (key) => async (dispatch) => {
   return await requestFromServer
     .getAllSubsidiary()
     .then((response) => {
-   
+
       const entities = [...response.data?.data];
       dispatch(actions.AllChildMenusFetch({ entities, key }));
     })
@@ -391,10 +393,13 @@ export const getLatestBookingNo = (bookingNo) => async (dispatch) => {
     });
 };
 
-export const getLatestTableId = (tableName, prefix) => async (dispatch) => {
+export const getLatestTableId = (tableName, pkIdColumn, whereClause, setValue = null) => async () => {
   return await requestFromServer
-    .getLastTableId(tableName, prefix)
+    .getLastTableId(tableName, pkIdColumn, whereClause)
     .then((response) => {
+      if(setValue){
+        setValue(response?.data?.data?.[0]?.NewId || '')
+      }
       return response?.data?.data;
       // dispatch(receiptSlice.MaxIdFetchForReceipt(response?.data?.data));
     })
@@ -445,5 +450,5 @@ export const fetchAllPayrollMonthYearList = (key) => async (dispatch) => {
       toast.error("Something went wrong");
     });
 
-    
+
 }

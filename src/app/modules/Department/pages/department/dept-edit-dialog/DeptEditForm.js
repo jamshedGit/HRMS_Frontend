@@ -9,6 +9,7 @@ import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect"
 import {
   fetchAllDept,
   fetchAllSubsidiaryData,
+  getLatestTableId,
 
 } from "../../../../../../_metronic/redux/dashboardActions";
 import DeptManagement from "../..";
@@ -24,10 +25,10 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 const userEditSchema_2 = Yup.object().shape(
   {
     // parentDept: Yup.string().required("Please select parent department"),
-    deptCode: Yup.string().required("*Required"),
+    // deptCode: Yup.string().required("*Required"),
     deptName: Yup.string() .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.').required("*Required"),
     budgetStrength: Yup.string()  .matches(/^\d+$/, "Must contain only digits").required("*Required"),
-    subsidiary: Yup.string().required("*Required"),
+    subsidiaryId: Yup.string().required("*Required"),
     // parentDept: Yup.string().required("*Required"),
     // parentDept: Yup.string().nullable().required("*Required"),
   }
@@ -57,9 +58,8 @@ export function DeptEditForm({
   const { auth } = useSelector((state) => state);
  
   const [defDept = null, setDefaultDept] = useState(null);
-
   const [defSubsidiary = null, setDefualtSubsidiaryList] = useState(null);
-
+  const [defDepartmentCode = null, setDefaultDepartmentCode] = useState(null);
 
   // Department DropDown Load when pageLoad
   useEffect(() => {
@@ -87,7 +87,7 @@ export function DeptEditForm({
   
   useEffect(() => {
 
-    const subsidiaryId = defSubsidiary?.value ? defSubsidiary.value : user.subsidiary;
+    const subsidiaryId = defSubsidiary?.value ? defSubsidiary.value : user.subsidiaryId;
 
     setDefualtSubsidiaryList(
       dashboard.allSubsidiaryList &&
@@ -96,7 +96,17 @@ export function DeptEditForm({
       })
     );
 
-  }, [user?.subsidiary, dashboard.subsidiary]);
+  }, [user?.subsidiaryId, dashboard.subsidiaryId]);
+
+  
+
+
+  const fetchData = async (subsidiaryId, setValue) => {
+    console.log("jj::", subsidiaryId)
+    if (subsidiaryId) {
+      dispatch(getLatestTableId("t_department", "deptId", " subsidiaryId = " + subsidiaryId, setValue));
+    }
+  };
 
 console.log("pep", dashboard.allDept)
 
@@ -110,7 +120,7 @@ console.log("pep", dashboard.allDept)
           console.log("values", values);
           
           enableLoading();
-          saveDept(values);
+          saveDept({...values, deptCode: defDepartmentCode ? defDepartmentCode : values.deptCode});
         }}
       >
         {({
@@ -133,6 +143,43 @@ console.log("pep", dashboard.allDept)
               <Form className="form form-label-right">
                 <fieldset disabled={isUserForRead}>
                   <div className="from-group row">
+                  {
+                      <>
+                       <div className="col-12 col-md-4 mt-3">
+                        <SearchSelect
+                          name="subsidiaryId"
+                          label={<span> Subsidiary<span style={{ color: 'red' }}>*</span></span>}
+                          isDisabled={isUserForRead && true}
+                          onBlur={() => {
+                            // handleBlur({ target: { name: "countryId" } });
+                          }}
+                          onChange={(e) => {
+                            setFieldValue("subsidiaryId", e.value || null);
+                            setDefualtSubsidiaryList(e);
+                            fetchData(e.value, setDefaultDepartmentCode)
+                          }}
+
+                          value={(defSubsidiary || null)}
+                          error={errors.subsidiaryId}
+                          touched={touched.subsidiaryId}
+                          options={dashboard.allSubsidiaryList}
+                        />
+                        </div>
+                        </>
+
+                    }
+                      <div className="col-12 col-md-4 mt-3">
+                        <Field
+                          name="deptCode"
+                          disabled
+                          maxLength={6}
+                          component={Input}
+                          placeholder="Enter Department Code"
+                          value={defDepartmentCode || values.deptCode}
+                          label={<span> Department Code<span style={{ color: 'red' }}>*</span></span>}
+                        />
+                      </div>
+                    
                     <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="deptName"
@@ -142,17 +189,7 @@ console.log("pep", dashboard.allDept)
                         label={<span> Department Name<span style={{ color: 'red' }}>*</span></span>}
                       />
                     </div>
-                    {
-                      <div className="col-12 col-md-4 mt-3">
-                        <Field
-                          name="deptCode"
-                          maxLength={6}
-                          component={Input}
-                          placeholder="Enter Department Code"
-                          label={<span> Department Code<span style={{ color: 'red' }}>*</span></span>}
-                        />
-                      </div>
-                    }
+                    
                     {
                       <div className="col-12 col-md-4 mt-3">
                         <SearchSelect
@@ -190,31 +227,7 @@ console.log("pep", dashboard.allDept)
                       </div>
                     }
                   
-                    {
-                      <>
-                       <div className="col-12 col-md-4 mt-3">
-                        <SearchSelect
-                          name="subsidiary"
-                          label={<span> Subsidiary<span style={{ color: 'red' }}>*</span></span>}
-                          isDisabled={isUserForRead && true}
-                          onBlur={() => {
-                            // handleBlur({ target: { name: "countryId" } });
-                          }}
-                          onChange={(e) => {
-                            setFieldValue("subsidiary", e.value || null);
-                            setDefualtSubsidiaryList(e);
-                            //handlePaymenModeChanged(e)
-                          }}
-
-                          value={(defSubsidiary || null)}
-                          error={errors.subsidiary}
-                          touched={touched.subsidiary}
-                          options={dashboard.allSubsidiaryList}
-                        />
-                        </div>
-                        </>
-
-                    }
+                  
 
                     {/* {<div className="col-12 col-md-4 mt-3">
                       <SearchSelect

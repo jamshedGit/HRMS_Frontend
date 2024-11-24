@@ -38,7 +38,8 @@ export function BanksUIProvider({ BanksUIEvents, children }) {
     // loan: "",
     mappedDeduction: "",
     account: "",
-
+    companyId: "",
+    subsidiaryId: ""
   };
 
   console.log("acadenuc ui events", BanksUIEvents);

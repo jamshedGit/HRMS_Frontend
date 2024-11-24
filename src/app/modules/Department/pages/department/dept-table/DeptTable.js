@@ -77,9 +77,8 @@ export function DeptTable() {
         minWidth: "160px",
       },
     },
-   
     {
-      dataField: "Hierarchy",
+      dataField: "DepartmentTree",
       text: "Department",
       sort: false,
       sortCaret: sortCaret,
@@ -100,7 +99,7 @@ export function DeptTable() {
     },
    
     {
-      dataField: "subsidiary",
+      dataField: "Subsidiary",
       text: "Subsidiary",
       sort: false,
       sortCaret: sortCaret,

@@ -138,12 +138,9 @@ export function BankEditForm({
   }, [user?.employeeTypeId, dashboard.employeeTypeId]);
   //======================= End
 
-  console.log("dashboard.allSubsidiaryList", dashboard.allSubsidiaryList)
   useEffect(() => {
 
     const subsidiaryId = defSubsidiary?.value ? defSubsidiary.value : user.subsidiaryId;
-
-
     setDefualtSubsidiaryList(
       dashboard.allSubsidiaryList &&
       dashboard.allSubsidiaryList.filter((item) => {
@@ -197,10 +194,6 @@ export function BankEditForm({
     setDefaultEarningList([...defEarningList, { transactionType: element.target.id }])
 
   }
-
-  // const addRowDeduction = (element) => {
-  //   setDefaultDeductionList([...defDeductionList, { transactionType: element.target.id }])
-  // }
 
   const deleteRow = (element) => {
     const data = defEarningList;
@@ -610,7 +603,9 @@ export function BankEditForm({
                             {obj.earningName}
                           </td> */}
                           <td>
+                          {console.log("test:::",obj.calculation_type)}
                             <select
+                            
                               value={obj.calculation_type}
                               onChange={(e) => {
                                 handleFieldChanged(e);
@@ -623,7 +618,7 @@ export function BankEditForm({
 
                               id={'calculation_type-' + rightindex} >
                               <option value="-1">--Select--</option>
-                              <option value="% Of Basic">% Of Basic</option>
+                              <option value="% Of Gross">% Of Gross</option>
                               <option value="Fixed Amount">Fixed Amount</option>
                             </select>
                             {deferrors[`calculation_type-${rightindex}`] && <div className="form-feedBack">{deferrors[`calculation_type-${rightindex}`]}</div>}
@@ -644,7 +639,7 @@ export function BankEditForm({
 
                           <td>
                             <input
-                              disabled={obj.calculation_type == "% Of Basic"}
+                              disabled={obj.calculation_type == "% Of Gross"}
                               style={{ width: "80px" }} type="number"
                               onChange={(e) => {
                                 handleFieldChanged(e);
@@ -659,6 +654,7 @@ export function BankEditForm({
                           <td>
                             <select value={obj.isPartOfGrossSalary} onChange={handleFieldChanged} id={'isPartOfGrossSalary-' + rightindex} >
 
+                            <option selected value="-1">Select</option>
                               <option selected value="1">Yes</option>
                               <option value="0">No</option>
                             </select>
@@ -718,7 +714,7 @@ export function BankEditForm({
                               }}
                               id={'calculation_type-' + rightindex} >
                               <option value="-1">--Select--</option>
-                              <option value="% Of Basic">% Of Basic</option>
+                              <option value="% Of Gross">% Of Gross</option>
                               <option value="Fixed Amount">Fixed Amount</option>
                             </select>
                             {deferrors[`calculation_type-${rightindex}`] && <div className="form-feedBack">{deferrors[`calculation_type-${rightindex}`]}</div>}
@@ -740,7 +736,7 @@ export function BankEditForm({
                             onInput={(e) => {
                               e.target.value = amountLimit(e.target.value); // Limit to 3 digits
                             }}
-                           disabled={obj.calculation_type == "% Of Basic"} style={{ width: "80px" }}
+                           disabled={obj.calculation_type == "% Of Gross"} style={{ width: "80px" }}
                             onChange={handleFieldChanged} value={obj.amount} id={'amount-' + rightindex}></input>
                           </td>
                           {deferrors[`amount-${rightindex}`] && <div className="form-feedBack">{deferrors[`amount-${rightindex}`]}</div>}

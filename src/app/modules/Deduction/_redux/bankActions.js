@@ -10,17 +10,10 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.list }));
   console.log("test query param", queryparm)
   return requestFromServer.getAllDeduction({...queryparm,id:'null'})
-    // .getAllReceipts({
-    //   filter: {
-    //     searchQuery: ""
-    //   },
-    //   sortBy: "receiptNo",
-    //   limit: 10,
-    //   page: 1
-    // })
+   
     .then((response) => {
       //  console.log("user action receipt fetched 321")
-      console.log("response", response)
+      console.log("response::::::", response)
       dispatch(actions.deductionFetched(response));
     })
     .catch((error) => {
