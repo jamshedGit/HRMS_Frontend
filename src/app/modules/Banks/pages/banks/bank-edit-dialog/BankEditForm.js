@@ -24,13 +24,13 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 const bankEditSchema = Yup.object().shape(
   {
     Name: Yup.string()
-    .matches(/^[A-Za-z\s]+$/, 'Only alphabetic characters allowed')
-    .required(VALIDATION_MESSAGES.required),
+      .matches(/^[A-Za-z\s]+$/, 'Only alphabetic characters allowed')
+      .required(VALIDATION_MESSAGES.required),
     subsidiaryId: Yup.string()
-    .nullable()
-    .required(VALIDATION_MESSAGES.required),
+      .nullable()
+      .required(VALIDATION_MESSAGES.required),
   },
-  
+
 );
 export function BankEditForm({
   saveBank,
@@ -54,7 +54,7 @@ export function BankEditForm({
 
   useEffect(() => {
     if (!user.Id) {
-      
+
       dispatch(fetchAllSubsidiaryData("allSubsidiaryList"))
     }
   }, [dispatch]);
@@ -77,7 +77,7 @@ export function BankEditForm({
       <Formik
         enableReinitialize={true}
         initialValues={user}
-         validationSchema={bankEditSchema}
+        validationSchema={bankEditSchema}
         onSubmit={(values) => {
           console.log("bank values", values);
           enableLoading();
@@ -104,7 +104,7 @@ export function BankEditForm({
               <Form className="form form-label-right">
                 <fieldset disabled={isUserForRead}>
                   <div className="from-group row">
-                  <div className="col-12 col-md-4 mt-3">
+                    <div className="col-12 col-md-4 mt-3">
                       <SearchSelect
                         name="subsidiaryId"
                         label={<span> Subsidiary<span style={{ color: 'red' }}>*</span></span>}
@@ -115,7 +115,7 @@ export function BankEditForm({
                         onChange={(e) => {
                           setFieldValue("subsidiaryId", e.value || null);
                           setDefualtSubsidiaryList(e);
-                         
+
                         }}
 
                         value={(defSubsidiary || null)}
@@ -127,15 +127,15 @@ export function BankEditForm({
                     <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="Name"
-                        MaxLength = {40}
+                        MaxLength={40}
                         component={Input}
                         placeholder="Bank Name"
                         label={<span> Bank Name<span style={{ color: 'red' }}>*</span></span>}
-                        
+
                       />
                     </div>
-                   
-                    
+
+
                   </div>
                   <div className="form-group row"></div>
                 </fieldset>

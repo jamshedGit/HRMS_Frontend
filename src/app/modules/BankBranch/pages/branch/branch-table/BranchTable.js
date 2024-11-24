@@ -88,16 +88,6 @@ export function BranchTable() {
       },
     },
     {
-      dataField: "Name",
-      text: "Branch Name",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
-    {
       dataField: "branchCode",
       text: "Branch Code",
       sort: false,
@@ -107,6 +97,17 @@ export function BranchTable() {
         minWidth: "160px",
       },
     },
+    {
+      dataField: "Name",
+      text: "Branch Name",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
+    
    
        {
       dataField: "action",
