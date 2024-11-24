@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { DatePickerField, Input, Select } from "../../../../../../_metronic/_partials/controls";
 import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLabel";
 import { getClassName } from "../../../../../utils/common";
-import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
+import { VALIDATION_MESSAGES, WEEK_DAY_STRING } from "../../../../../utils/constants";
 import { fetchAllFormsMenu, fetchAllLeaveType, fetchAllSubsidiaryData } from "../../../../../../_metronic/redux/dashboardActions";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,16 +17,21 @@ const formValidation = Yup.object().shape({
   name: Yup.string().required(VALIDATION_MESSAGES.required),
   shiftCode: Yup.string().required(VALIDATION_MESSAGES.required),
   startTime: Yup.string()
-    .required('Start Time is required')
-    .matches(/^\d{4}$/, 'Start Time must be in HHmm format'), // Ensuring HHmm format
- 
-    workingdays: Yup.array()
+    .required('Required*')
+    .matches(
+      /^(?:[01]\d|2[0-3])[0-5]\d$/,
+      'Time must be in HHMM format and valid 24-hour format'),
+
+  workingdays: Yup.array().nullable()
     .min(1, 'At least one working day must be selected')
     .required('Working days are required'),
-    
+
   endTime: Yup.string()
     .required('Required*')
-    .matches(/^\d{4}$/, 'End Time must be in HHmm format') // Ensuring HHmm format
+    .matches(
+      /^(?:[01]\d|2[0-3])[0-5]\d$/,
+      'Time must be in HHMM format and valid 24-hour format'
+    )
     .when('startTime', {
       // Check that endTime is greater than or equal to startTime
       is: (startTime) => startTime && startTime !== '',
@@ -40,12 +45,16 @@ const formValidation = Yup.object().shape({
     }),
 
   earlyIn: Yup.string()
-    .required('Early In Time is required')
-    .matches(/^\d{4}$/, 'Early In Time must be in HHmm format'),
+    .required('Required*')
+    .matches(
+      /^(?:[01]\d|2[0-3])[0-5]\d$/,
+      'Time must be in HHMM format and valid 24-hour format'),
 
   earlyOut: Yup.string()
-    .required('Early Out Time is required')
-    .matches(/^\d{4}$/, 'Early Out Time must be in HHmm format')
+    .required('Required*')
+    .matches(
+      /^(?:[01]\d|2[0-3])[0-5]\d$/,
+      'Time must be in HHMM format and valid 24-hour format')
     .when('earlyIn', {
       is: (earlyIn) => earlyIn && earlyIn !== '',
       then: Yup.string().test('early-out-validation', 'Early Out Time cannot be less than Early In Time', function (earlyOut) {
@@ -58,12 +67,16 @@ const formValidation = Yup.object().shape({
     }),
 
   halfDayStart: Yup.string()
-    .required('Half Day Start is required')
-    .matches(/^\d{4}$/, 'Half Day Start must be in HHmm format'),
+    .required('Required*')
+    .matches(
+      /^(?:[01]\d|2[0-3])[0-5]\d$/,
+      'Time must be in HHMM format and valid 24-hour format'),
 
   halfDayEnd: Yup.string()
-    .required('Half Day End is required')
-    .matches(/^\d{4}$/, 'Half Day End must be in HHmm format')
+    .required('Required*')
+    .matches(
+      /^(?:[01]\d|2[0-3])[0-5]\d$/,
+      'Time must be in HHMM format and valid 24-hour format')
     .when('halfDayStart', {
       is: (halfDayStart) => halfDayStart && halfDayStart !== '',
       then: Yup.string().test('half-day-end-validation', 'Half Day End cannot be less than Half Day Start', function (halfDayEnd) {
@@ -75,12 +88,16 @@ const formValidation = Yup.object().shape({
       })
     }),
   breakTimeStart: Yup.string()
-    .required('Break Time Start is required')
-    .matches(/^\d{4}$/, 'Break Time Start must be in HHmm format'),
+    .required('Required*')
+    .matches(
+      /^(?:[01]\d|2[0-3])[0-5]\d$/,
+      'Time must be in HHMM format and valid 24-hour format'),
 
   breakTimeEnd: Yup.string()
-    .required('Break Time End is required')
-    .matches(/^\d{4}$/, 'Break Time End must be in HHmm format')
+    .required('Required*')
+    .matches(
+      /^(?:[01]\d|2[0-3])[0-5]\d$/,
+      'Time must be in HHMM format and valid 24-hour format')
     .when('breakTimeStart', {
       is: (breakTimeStart) => breakTimeStart && breakTimeStart !== '',
       then: Yup.string().test('break-time-end-validation', 'Break Time End cannot be less than Break Time Start', function (breakTimeEnd) {
@@ -90,9 +107,46 @@ const formValidation = Yup.object().shape({
         }
         return true;
       })
-    })
+    }),
+
+    overTimeStart: Yup.string()
+    
+    .matches(
+      /^(?:[01]\d|2[0-3])[0-5]\d$/,
+      'Time must be in HHMM format and valid 24-hour format')
+      .when('isOverTime', {
+        is: true, // Only validate if overTime is enabled
+        then: Yup.string()
+          .required('Over Time Start is required')
+          .test('overTimeStart-is-valid', 'Over Time Start should not be less than End Time', function (value) {
+            const { endTime } = this.parent; // Access the `endTime` field
+            if (!value || !endTime) return true; // If there's no value or endTime, validation is skipped
+            // Convert times to numbers to compare them (e.g., "1230" => 1230)
+            const endTimeNumeric = parseInt(endTime, 10);
+            const overTimeStartNumeric = parseInt(value, 10);
+  
+            // Ensure overTimeStart is not less than endTime
+            return overTimeStartNumeric >= endTimeNumeric;
+          })
+      })
+      .nullable(),
 
 });
+
+const calculateTimeDifference = (start, end) => {
+  // Convert HHmm to total minutes
+  const startMinutes = parseInt(start.substring(0, 2), 10) * 60 + parseInt(start.substring(2), 10);
+  const endMinutes = parseInt(end.substring(0, 2), 10) * 60 + parseInt(end.substring(2), 10);
+
+  // Calculate the absolute difference in minutes
+  const gapMinutes = Math.abs(endMinutes - startMinutes);
+
+  // Convert minutes back to HHmm format
+  const gapHours = Math.floor(gapMinutes / 60);
+  const gapMinutesRemaining = gapMinutes % 60;
+
+  return `${gapHours.toString().padStart(2, '0')}${gapMinutesRemaining.toString().padStart(2, '0')}`;
+};
 
 export function MasterEditForm({
   dropdownData,
@@ -110,20 +164,9 @@ export function MasterEditForm({
   const { dashboard } = useSelector((state) => state);
   const [defSubsidiary = null, setDefualtSubsidiaryList] = useState(null);
   const [defLeaveType = null, setDefualtLeaveType] = useState(null);
-  const [defWeekDays, setDefaultWeekDays] = useState([]); //  For Email Recipents
   const [defShiftType = null, setShiftTypeCodeList] = useState(null);
-
-  const WeekDays = Object.freeze({
-    SUNDAY: 'Sunday',
-    MONDAY: 'Monday',
-    TUESDAY: 'Tuesday',
-    WEDNESDAY: 'Wednesday',
-    THURSDAY: 'Thursday',
-    FRIDAY: 'Friday',
-    SATURDAY: 'Saturday',
-  });
-
-
+  const [defWeekDays, setDefaultWeekDays] = useState(Object.values(WEEK_DAY_STRING)); //  For Email Recipents
+  const [defInterShiftGapTime = null, setInterShiftGapTime] = useState(null);
   useEffect(() => {
     if (!user.Id) {
       dispatch(fetchAllLeaveType("allLeaveTypes"))
@@ -138,7 +181,7 @@ export function MasterEditForm({
 
     const subsidiaryId = defSubsidiary?.value ? defSubsidiary.value : user.subsidiaryId;
     if (subsidiaryId) {
-      setDefaultWeekDays(user?.workingdays?.split(",") || []);
+      setDefaultWeekDays(user?.workingdays);
     }
     setDefualtSubsidiaryList(
       dashboard.allSubsidiaryList &&
@@ -165,47 +208,50 @@ export function MasterEditForm({
 
   }, [user?.shiftType, dashboard.shiftType]);
 
-  // useEffect(() => {
 
-  //   const leaveTypeId = defLeaveType?.value ? defLeaveType.value : user.leave_typeId;
-
-  //   setDefualtLeaveType(
-  //     dashboard.allLeaveTypes &&
-  //     dashboard.allLeaveTypes.filter((item) => {
-  //       return item.value === leaveTypeId;
-  //     })
-  //   );
-
-  // }, [user?.leave_typeId, dashboard.leave_typeId]);
-
-
-  const handleCheckboxChangeFor_WeekDays = (option,setFieldValue, values) => {
-
+  const handleCheckboxChangeFor_WeekDays = (option, setFieldValue, values) => {
+    // Update the local state with the new week days selection
     setDefaultWeekDays((prevState) =>
-
       prevState.includes(option)
         ? prevState.filter(item => item !== option)
         : [...prevState, option]
     );
-
-     // Update Formik state (workingdays)
-  const newWorkingDays = values.workingdays.includes(option)
-  ? values.workingdays.filter((day) => day !== option)
-  : [...values.workingdays, option];
-
-setFieldValue('workingdays', newWorkingDays); // Update the Formik form state
-
+  
+    // Ensure values.workingdays is a string (handle both array and string cases)
+    let workingDaysString = values?.workingdays;
+  
+    // If it's an array, convert it to a string
+    if (Array.isArray(workingDaysString)) {
+      workingDaysString = workingDaysString.join(",");
+    }
+  
+    // If it's undefined or empty, default to an empty string
+    workingDaysString = workingDaysString || "";
+  
+    // Split the string into an array of days
+    const workingDaySplit = workingDaysString.split(",");
+  
+    // Update the array based on the option selected
+    const newWorkingDays = workingDaySplit.includes(option)
+      ? workingDaySplit.filter((day) => day !== option)
+      : [...workingDaySplit, option];
+  
+    // Update the Formik form state with the new working days
+    setFieldValue('workingdays', newWorkingDays); // Update the Formik form state
   };
 
-    // Handle checkbox changes (adding/removing days from the selected list)
-    const handleCheckboxChange = (day, setFieldValue, values) => {
-      const newWorkingDays = values.workingdays.includes(day)
-        ? values.workingdays.filter((selectedDay) => selectedDay !== day)
-        : [...values.workingdays, day];
-      setFieldValue('workingdays', newWorkingDays);
-    };
+  const handleOverTimeStartChange = (e, setFieldValue, values) => {
+    console.log('::::::::::', values);
+    
+    if (values.endTime) {
+      const gap = calculateTimeDifference(values.endTime, values.overTimeStart);
+      console.log('::::::::gap::::::',gap);
+      setFieldValue("interShiftGap",gap || 0);
+     setInterShiftGapTime(gap || 0);
+    }
+  };
 
-
+  console.log("defWeekDays", user)
   return (
     <>
       <Formik
@@ -215,7 +261,7 @@ setFieldValue('workingdays', newWorkingDays); // Update the Formik form state
         onSubmit={(values) => {
           const listOfValues = { ...values, workingdays: defWeekDays.join(',') }
 
-          
+
           enableLoading();
           submitForm(listOfValues)
         }}
@@ -229,6 +275,7 @@ setFieldValue('workingdays', newWorkingDays); // Update the Formik form state
           setFieldValue,
         }) => (
           <>
+          {console.log("dsddd",values)}
             <Modal.Body className="overlay overlay-block cursor-default">
               {actionsLoading && (
                 <div className="overlay-layer bg-transparent">
@@ -247,10 +294,8 @@ setFieldValue('workingdays', newWorkingDays); // Update the Formik form state
                           // handleBlur({ target: { name: "countryId" } });
                         }}
                         onChange={(e) => {
-
                           setFieldValue("subsidiaryId", e.value || null);
                           setDefualtSubsidiaryList(e);
-
                           //handlePaymenModeChanged(e)
                         }}
                         error={errors.subsidiaryId}
@@ -258,8 +303,6 @@ setFieldValue('workingdays', newWorkingDays); // Update the Formik form state
                         options={dashboard?.allSubsidiaryList}
                       />
                       <ErrorMessage className="form-feedBack" name="subsidiaryId" component="div" />
-
-
                     </div>
                   </div>
 
@@ -275,13 +318,10 @@ setFieldValue('workingdays', newWorkingDays); // Update the Formik form state
                         onChange={(e) => {
                           setFieldValue("shiftType", e.value);
                           setShiftTypeCodeList(e);
-
                         }}
                         value={defShiftType}
                         error={errors.shiftType}
-
                         options={dashboard.allShiftTypeList}
-
                       />
                       <ErrorMessage className="form-feedBack" name="shiftType" component="div" />
                     </div>
@@ -322,60 +362,6 @@ setFieldValue('workingdays', newWorkingDays); // Update the Formik form state
                         autoComplete="off"
                       />
                     </div>
-
-
-
-                    {/* <div className="col-12 col-md-4 mt-3">
-                      <SearchSelect
-                        name="leave_typeId"
-                        label={<span> Leave Type<span style={{ color: 'red' }}>*</span></span>}
-                        isDisabled={isUserForRead && true}
-                        onBlur={() => {
-                          // handleBlur({ target: { name: "countryId" } });
-                        }}
-                        onChange={(e) => {
-                          setFieldValue("leave_typeId", e.value || null);
-                          setDefualtLeaveType(e);
-                          //handlePaymenModeChanged(e)
-                        }}
-                        value={(defLeaveType || null)}
-                        options={dashboard?.allLeaveTypes}
-                      />
-                      <ErrorMessage className="form-feedBack" name="leave_typeId" component="div" />
-                    </div>
-
-                    <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="late_count_leave_deduction"
-                        component={Input}
-                        placeholder=""
-                        maxLength={2}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        label={
-                          <span>
-                            {" "}
-                            Late Count (Per Leave)<span style={{ color: "red" }}>*</span>
-                          </span>
-                        }
-                        value={values.late_count_leave_deduction}
-                        autoComplete="off"
-                      />
-                    </div>
-
-                    <div className="col-12 col-md-4 mt-3">
-                        <input
-                          name="isEnable_att_integration"
-                          type="checkbox"
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.isEnable_att_integration}
-                          checked={values.isEnable_att_integration}
-                          label="Enable Employee Shift"
-                        />
-                        <label>&nbsp;<span>Enable Employee Shift</span></label>
-                      </div> */}
-
                   </div>
                   <div className="from-group row">
 
@@ -385,19 +371,10 @@ setFieldValue('workingdays', newWorkingDays); // Update the Formik form state
                       </label>
                       <Field
                         name="startTime"
-                        component={DatePickerField}
-                        showTimeSelect
-                        showTimeSelectOnly
-                        timeFormat="HH:mm aa"
-                        timeIntervals={15} // Optional: set interval for time selection (e.g., every 15 minutes)
-                        dateFormat="HHmm"
+                        component={Input}
                         placeholder="Select Time"
-                        type="time"
-                        minDate={values.startTime}
-                        onChange={(e) => {
-                          const formattedTime = e ? e.toISOString().slice(11, 16).replace(":", "") : '';
-                          setFieldValue('startTime', formattedTime);
-                        }}
+                        maxLength={4}
+                        autoComplete="off"
                       />
                     </div>
 
@@ -407,25 +384,13 @@ setFieldValue('workingdays', newWorkingDays); // Update the Formik form state
                       </label>
                       <Field
                         name="endTime"
-                        component={DatePickerField}
-                        showTimeSelect
-                        showTimeSelectOnly
-                        timeFormat="HH:mm"
-                        timeIntervals={15} // Optional: set interval for time selection (e.g., every 15 minutes)
-                        dateFormat="HHmm"
+                        component={Input}
                         placeholder="Select Time"
-                        type="time"
-                        minDate={values.endTime}
-                        onChange={(e) => {
-                          const formattedTime = e ? e.toISOString().slice(11, 16).replace(":", "") : '';
-                          setFieldValue('endTime', formattedTime);
-                        }}
+                         autoComplete="off"
+                        maxLength={4}
 
                       />
                     </div>
-
-
-
                   </div>
 
                   <div className="from-group row">
@@ -435,22 +400,11 @@ setFieldValue('workingdays', newWorkingDays); // Update the Formik form state
                       </label>
                       <Field
                         name="earlyIn"
-                        component={DatePickerField}
-                        showTimeSelect
-                        showTimeSelectOnly
-                        timeFormat="HH:mm aa"
-                        timeIntervals={15} // Optional: set interval for time selection (e.g., every 15 minutes)
-                        dateFormat="HHmm"
-                        placeholder="Select Time"
-                        type="time"
-                        minDate={values.earlyIn}
-                        value={values.earlyIn}
+                        component={Input}
+                        placeholder="Enter Min:hours"
                         error={errors.earlyIn}
                         autoComplete="off"
-                        onChange={(e) => {
-                          const formattedTime = e ? e.toISOString().slice(11, 16).replace(":", "") : '';
-                          setFieldValue('earlyIn', formattedTime);
-                        }}
+                        maxLength={4}
 
                       />
                     </div>
@@ -461,22 +415,12 @@ setFieldValue('workingdays', newWorkingDays); // Update the Formik form state
                       </label>
                       <Field
                         name="earlyOut"
-                        component={DatePickerField}
-                        showTimeSelect
-                        showTimeSelectOnly
-                        timeFormat="HH:mm aa"
-                        timeIntervals={15} // Optional: set interval for time selection (e.g., every 15 minutes)
-                        dateFormat="HHmm"
-                        placeholder="Select Time"
-                        type="time"
-                        minDate={values.earlyOut}
-                        value={values.earlyOut}
+                         component={Input}
+                        placeholder="Enter Min:hours"
+                       
                         error={errors.earlyOut}
                         autoComplete="off"
-                        onChange={(e) => {
-                          const formattedTime = e ? e.toISOString().slice(11, 16).replace(":", "") : '';
-                          setFieldValue('earlyOut', formattedTime);
-                        }}
+                        maxLength={4}
 
                       />
                     </div>
@@ -490,22 +434,12 @@ setFieldValue('workingdays', newWorkingDays); // Update the Formik form state
                       </label>
                       <Field
                         name="halfDayStart"
-                        component={DatePickerField}
-                        showTimeSelect
-                        showTimeSelectOnly
-                        timeFormat="HH:mm aa"
-                        timeIntervals={15} // Optional: set interval for time selection (e.g., every 15 minutes)
-                        dateFormat="HHmm"
-                        placeholder="Select Time"
-                        type="time"
-                        minDate={values.halfDayStart}
-                        value={values.halfDayStart}
+                         component={Input}
+                        placeholder="Enter Min:hours"
+                        maxLength={4}
                         error={errors.halfDayStart}
                         autoComplete="off"
-                        onChange={(e) => {
-                          const formattedTime = e ? e.toISOString().slice(11, 16).replace(":", "") : '';
-                          setFieldValue('halfDayStart', formattedTime);
-                        }}
+                      
                       />
                     </div>
 
@@ -515,22 +449,12 @@ setFieldValue('workingdays', newWorkingDays); // Update the Formik form state
                       </label>
                       <Field
                         name="halfDayEnd"
-                        component={DatePickerField}
-                        showTimeSelect
-                        showTimeSelectOnly
-                        timeFormat="HH:mm aa"
-                        timeIntervals={15} // Optional: set interval for time selection (e.g., every 15 minutes)
-                        dateFormat="HHmm"
-                        placeholder="Select Time"
-                        type="time"
-                        minDate={values.halfDayEnd}
-                        value={values.halfDayEnd}
+                         component={Input}
+                        placeholder="Enter Min:hours"
+                        maxLength={4}
                         error={errors.halfDayEnd}
                         autoComplete="off"
-                        onChange={(e) => {
-                          const formattedTime = e ? e.toISOString().slice(11, 16).replace(":", "") : '';
-                          setFieldValue('halfDayEnd', formattedTime);
-                        }}
+                      
                       />
                     </div>
 
@@ -543,22 +467,12 @@ setFieldValue('workingdays', newWorkingDays); // Update the Formik form state
                       </label>
                       <Field
                         name="breakTimeStart"
-                        component={DatePickerField}
-                        showTimeSelect
-                        showTimeSelectOnly
-                        timeFormat="HH:mm aa"
-                        timeIntervals={15} // Optional: set interval for time selection (e.g., every 15 minutes)
-                        dateFormat="HHmm"
-                        placeholder="Select Time"
-                        type="time"
-                        minDate={values.breakTimeStart}
-                        value={values.breakTimeStart}
+                         component={Input}
+                        placeholder="Enter Min:hours"
+                        maxLength={4}
                         error={errors.breakTimeStart}
                         autoComplete="off"
-                        onChange={(e) => {
-                          const formattedTime = e ? e.toISOString().slice(11, 16).replace(":", "") : '';
-                          setFieldValue('breakTimeStart', formattedTime);
-                        }}
+                      
                       />
                     </div>
 
@@ -568,22 +482,12 @@ setFieldValue('workingdays', newWorkingDays); // Update the Formik form state
                       </label>
                       <Field
                         name="breakTimeEnd"
-                        component={DatePickerField}
-                        showTimeSelect
-                        showTimeSelectOnly
-                        timeFormat="HH:mm aa"
-                        timeIntervals={15} // Optional: set interval for time selection (e.g., every 15 minutes)
-                        dateFormat="HHmm"
-                        placeholder="Select Time"
-                        type="time"
-                        minDate={values.breakTimeEnd}
-                        value={values.breakTimeEnd}
+                          component={Input}
+                        placeholder="Enter Min:hours"
+                        maxLength={4}
                         error={errors.breakTimeEnd}
                         autoComplete="off"
-                        onChange={(e) => {
-                          const formattedTime = e ? e.toISOString().slice(11, 16).replace(":", "") : '';
-                          setFieldValue('breakTimeEnd', formattedTime);
-                        }}
+                    
                       />
                     </div>
 
@@ -597,7 +501,7 @@ setFieldValue('workingdays', newWorkingDays); // Update the Formik form state
 
                           <div className="dropdown-label"></div>
                           <div className="dropdown-options" style={{ fontSize: "12px", fontWeight: "bold", padding: "5px" }}>
-                            {Object.values(WeekDays).map((day) => (
+                            {Object.values(WEEK_DAY_STRING).map((day) => (
                               <div key={day} className="dropdown-option">
                                 <input style={{ width: "25px" }}
                                   name="workingdays"
@@ -606,11 +510,8 @@ setFieldValue('workingdays', newWorkingDays); // Update the Formik form state
                                   onChange={
                                     () => {
                                       handleCheckboxChangeFor_WeekDays(day, setFieldValue, values)
-
                                       //setDefaultWeekDays(day)
-
                                     }
-
                                   }
                                 />
                                 {day}
@@ -618,9 +519,9 @@ setFieldValue('workingdays', newWorkingDays); // Update the Formik form state
                             ))}
 
                           </div>
-                        
+
                         </div>
-                     
+
                       </div>
                       <ErrorMessage className="form-feedBack" name="workingdays" component="div" />
                     </div>
@@ -631,7 +532,6 @@ setFieldValue('workingdays', newWorkingDays); // Update the Formik form state
                   </label>
 
                   <div className="from-group row">
-
                     <div className="col-12 col-md-4 mt-12">
                       <input
                         name="isOverTime"
@@ -640,7 +540,6 @@ setFieldValue('workingdays', newWorkingDays); // Update the Formik form state
                           // Update the checkbox value using Formik's handleChange
                           handleChange(e);
                           const { checked } = e.target;
-
                           // If unchecked, clear the overTimeStart field
                           if (!checked) {
                             setFieldValue("overTimeStart", ""); // Clear the time field when Overtime is disabled
@@ -661,22 +560,11 @@ setFieldValue('workingdays', newWorkingDays); // Update the Formik form state
                       </label>
                       <Field
                         name="overTimeStart"
-                        component={DatePickerField}
-                        showTimeSelect
-                        showTimeSelectOnly
-                        timeFormat="HH:mm aa"
-                        timeIntervals={15} // Optional: set interval for time selection (e.g., every 15 minutes)
-                        dateFormat="HHmm"
-                        placeholder="Select Time"
-                        type="time"
-                        minDate={values.overTimeStart}
-                        value={values.overTimeStart}
+                        component={Input}
+                        maxLength={4}
                         error={errors.overTimeStart}
                         disabled={!values.isOverTime}
-                        onChange={(e) => {
-                          const formattedTime = e ? e.toISOString().slice(11, 16).replace(":", "") : '';
-                          setFieldValue('overTimeStart', formattedTime);
-                        }}
+                       autoComplete="off"
                       />
                     </div>
 
@@ -690,10 +578,10 @@ setFieldValue('workingdays', newWorkingDays); // Update the Formik form state
                           // Update the checkbox value using Formik's handleChange
                           handleChange(e);
                           const { checked } = e.target;
-
+                          
                           // If unchecked, clear the overTimeStart field
-                          if (!checked) {
-                            setFieldValue("interShiftGap", ""); // Clear the time field when Overtime is disabled
+                          if (checked) {
+                            setFieldValue("interShiftGap", handleOverTimeStartChange(e,setFieldValue,values)  ); // Clear the time field when Overtime is disabled
                           }
                         }}
                         onBlur={handleBlur}
@@ -704,13 +592,13 @@ setFieldValue('workingdays', newWorkingDays); // Update the Formik form state
                       />
                       <label>&nbsp;<span>IsInclude InterShift Gap</span></label>
                     </div>
-                    <div className="col-12 col-md-4 mt-3">
+                    <div  className="col-12 col-md-4 mt-3">
                       <Field
                         name="interShiftGap"
                         component={Input}
                         placeholder="Enter shift gap time"
-                        maxLength={6}
-                        onChange={handleChange}
+                        maxLength={4}
+                        disabled
                         onBlur={handleBlur}
                         label={
                           <span>
@@ -718,9 +606,10 @@ setFieldValue('workingdays', newWorkingDays); // Update the Formik form state
                             InterShift Gap Time
                           </span>
                         }
-                        value={values.interShiftGap}
+                        onHide={false}
+                        
+                        value={defInterShiftGapTime || values.interShiftGap}
                         autoComplete="off"
-                        disabled={!values.isIncludeInterShifGap}
                       />
                     </div>
 
