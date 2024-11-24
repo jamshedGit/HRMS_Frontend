@@ -259,7 +259,7 @@ export function MasterEditForm({
         initialValues={user}
         validationSchema={formValidation}
         onSubmit={(values) => {
-          const listOfValues = { ...values, workingdays: defWeekDays.join(',') }
+          const listOfValues = { ...values, workingdays: defWeekDays.join(','),interShiftGap:defInterShiftGapTime || values.interShiftGap }
 
 
           enableLoading();
