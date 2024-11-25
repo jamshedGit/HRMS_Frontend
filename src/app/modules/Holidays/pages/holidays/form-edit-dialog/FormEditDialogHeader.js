@@ -17,7 +17,7 @@ export function FormEditDialogHeader({ id, isUserForRead }) {
   );
 
   useEffect(() => {
-    let _title = id ? "" : "Add Holidays";
+    let _title = id ? "" : "Add Holiday";
     if (id) {
       _title = `Edit Holidays`;
     } //else if (isUserForRead) {
