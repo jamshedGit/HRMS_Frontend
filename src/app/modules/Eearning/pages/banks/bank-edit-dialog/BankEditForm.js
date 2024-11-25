@@ -40,8 +40,8 @@ const formValidation = Yup.object().shape(
       .required(VALIDATION_MESSAGES.required),
     isTaxable: Yup.string()
       .required(VALIDATION_MESSAGES.required),
-    mappedAllowance: Yup.string()
-      .required(VALIDATION_MESSAGES.required),
+    // mappedAllowance: Yup.string()
+    //   .required(VALIDATION_MESSAGES.required),
     account: Yup.string()
       .matches(/^\d+$/, "Must contain only digits")
       .required(VALIDATION_MESSAGES.required),
@@ -210,7 +210,7 @@ export function BankEditForm({
                     {
                       <div className="col-12 col-md-4 mt-3">
                         <Select
-                          label={<span> Mapped Allowance<span style={{ color: 'red' }}>*</span></span>}
+                          label={<span> Mapped Allowance</span>}
                           name="mappedAllowance"
                           value={values.mappedAllowance}
                           onChange={handleChange}
