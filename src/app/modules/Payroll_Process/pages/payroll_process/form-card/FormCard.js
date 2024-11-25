@@ -40,20 +40,20 @@ export function FormCard() {
    
     (state) => ({
       
-      userAccess: state.auth.userAccess.reimbursement_claim,
+      userAccess: state.auth.userAccess.payroll_process,
     }),
     shallowEqual
   )
  
   const accessUser = userAccess.find(
-    (item) => item.componentName === "CreateReimbursementClaim"
+    (item) => item.componentName === "CreatePayrollProcess"
   )
 
   const { currentState } = useSelector(
     (state) => {  return {
       
-      currentState: state.reimbursement_claim,
-      userAccess: state?.auth?.userAccess["reimbursement_claim"],
+      currentState: state.payroll_process,
+      userAccess: state?.auth?.userAccess["payroll_process"],
     }},
     shallowEqual
   );
@@ -91,15 +91,7 @@ export function FormCard() {
       
 
         <CardBody>
-        <EmployeeSelect setemployeeId={FormUIProps.setemployeeId} />
-        <br />
-        <hr />
-        
-
-
-<EmployeeProfile employeeId={FormUIProps.employeeId} />
-        {/* EmployeeProfile Ends */}
-
+       
         <br />
         <hr />
    {/* FormEditDialog Starts */}

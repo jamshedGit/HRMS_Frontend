@@ -11,7 +11,7 @@ export function uploadImage(body) {
 export function createReimbursementClaim(body) {
  
 
-  return axios.post(`${USERS_URL}/reimbursement_claim/create-reimbursement-claim`, body);
+  return axios.post(`${USERS_URL}/payroll_process/create-payroll-process`, body);
 
   
 }
@@ -21,24 +21,24 @@ export function createReimbursementClaim(body) {
 export function getAllReimbursementClaim(body) {
 
 
-  return axios.post(`${USERS_URL}/reimbursement_claim/read-all-reimbursement-claim`, body);
+  return axios.post(`${USERS_URL}/payroll_process/read-all-payroll-process`, body);
 }
 
 export function getReimbursementClaimById(id) {
 
-  return axios.post(`${USERS_URL}/reimbursement_claim/read-reimbursement-claim`, id);
+  return axios.post(`${USERS_URL}/payroll_process/read-payroll-process`, id);
 }
 
 //Update
 export function updateReimbursementClaim(reimbursementClaim) {
    
-  return axios.put(`${USERS_URL}/reimbursement_claim/update-reimbursement-claim`, reimbursementClaim);
+  return axios.put(`${USERS_URL}/payroll_process/update-payroll-process`, reimbursementClaim);
 }
 
 //Delete
 export function deleteReimbursementClaim(body) {
 
-  return axios.patch(`${USERS_URL}/reimbursement_claim/delete-reimbursement-claim`, body);
+  return axios.patch(`${USERS_URL}/payroll_process/delete-payroll-process`, body);
 }
 
 export function getAllReimbursementConfigPolicy(body) {

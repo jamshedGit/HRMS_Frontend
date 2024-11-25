@@ -47,8 +47,8 @@ export function FormTable() {
     (state) => {  return {
      
       
-      currentState: state.reimbursement_claim,
-      userAccess: state?.auth?.userAccess["reimbursement_claim"],
+      currentState: state.payroll_process,
+      userAccess: state?.auth?.userAccess["payroll_process"],
     }},
     shallowEqual
   );
@@ -69,27 +69,18 @@ export function FormTable() {
   }, [formUIProps.queryParams, dispatch, totalCount,formUIProps.employeeId]);
  
   const isAccessForEdit = userAccess?.find(
-    (item) => item.componentName === "UpdateReimbursementClaim"
+    (item) => item.componentName === "UpdatePayrollProcess"
   );
  
   const isAccessForDelete = userAccess?.find(
-    (item) => item.componentName === "DeleteReimbursementClaim"
+    (item) => item.componentName === "DeletePayrollProcess"
   );
   // Table columns
   const columns = [
-    // {
-    //   dataField: "Id",
-    //   text: "ID",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    //   headerSortingClasses,
-    //   style: {
-    //     minWidth: "10px",
-    //   },
-    // },
+
     {
-      dataField: "ReimbursementType.formName",
-      text: "Reimbursement Type",
+      dataField: "Subsidiary.name",
+      text: "Subsidiary",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -100,39 +91,22 @@ export function FormTable() {
  
  
  
-// {
-//   dataField: "Employee.firstName",
-//   text: "Employee",
-//   sort: false,
-//   sortCaret: sortCaret,
-//   headerSortingClasses,
-//   style: {
-//     minWidth: "10px",
-//   },
+{
+  dataField: "PayrollGroup.formName",
+  text: "Payroll Group",
+  sort: false,
+  sortCaret: sortCaret,
+  headerSortingClasses,
+  style: {
+    minWidth: "10px",
+  },
  
-// },
+},
  
  
-
- 
-    {
-      dataField: "date",
-      text: "date",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "10px",
-      },
-      formatter: (cell) => {
-        // Format the date without timestamp
-        return format(new Date(cell), 'dd-MMM-yyyy'); // Customize format as needed
-      },
-    },
-     
     {
       dataField: "currentMonth",
-      text: "Pay in",
+      text: "Payroll Month",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -145,23 +119,7 @@ export function FormTable() {
       // },
     },
 
-    {
-      dataField: "amount",
-      text: "amount",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "10px",
-        textAlign: "center",
-      },
-      headerStyle: {
-        textAlign: "center", // Align header text to the left
-      },
-      formatter: (cell) => formatNumberWithCommas(cell), 
-    
-    },
- 
+
  
        {
       dataField: "action",

@@ -32,14 +32,9 @@ export function FormUIProvider({ FormUIEvents, children }) {
 
   const initUser={
     Id: "",
-    reimbursement_typeId: "",
-    employeeId:employeeId,
-    details: "",
-    date:"",
-    amount:"",
-    file:"",
-    pay_in_payroll_forId:"", 
-    // pay_slip_refId: "", 
+    payroll_groupId: "",
+    payroll_monthId: "",
+    subsidiaryId:"",
 
 
   }
@@ -55,8 +50,6 @@ export function FormUIProvider({ FormUIEvents, children }) {
     isFileReq,
     setIsFileReq,
     initUser,
-    setemployeeId,
-    employeeId,
     newFormButtonClick: FormUIEvents.newFormButtonClick,
     openEditFormDialog: FormUIEvents.openEditFormDialog,
     openDeleteFormDialog: FormUIEvents.openDeleteFormDialog,

@@ -17,7 +17,7 @@ export function ActionsColumnFormatter(
     isAccessForEdit,
     isAccessForDelete,
     openReadFormDialog,
-    setIds,setIsFileReq,
+    setIds
   }
 ) {
 
@@ -34,7 +34,7 @@ export function ActionsColumnFormatter(
             title=""
             className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
             onClick={() =>{
-              setIsFileReq(false)
+           
               setIds(row.Id)}
             }
             

@@ -54,8 +54,8 @@ export const payroll_processSlice = createSlice({
             // Iterate over the rows and add the formatted month-year to each entry
             const updatedEntities = entities.map(row => {
                 // Get the corresponding month and year from the PayInPayrollForId
-                const month = row.PayInPayrollForId ? row.PayInPayrollForId.month : null;
-                const year = row.PayInPayrollForId ? row.PayInPayrollForId.year : null;
+                const month = row.PayrollMonth ? row.PayrollMonth.month : null;
+                const year = row.PayrollMonth ? row.PayrollMonth.year : null;
 
                 // Add the formatted currentMonth field (e.g. 'Dec-2024')
                 if (month !== null && year !== null) {
@@ -92,14 +92,7 @@ export const payroll_processSlice = createSlice({
                 (el) => el.Id !== action.payload.Id
             );
         },
-        // reimbursementClaimCreated: (state, action) => {
-            
-
-        //     state.actionsLoading = false;
-        //     state.error = null;
-        //     state.entities.unshift(action.payload);
-        // },
-      
+   
       
         reimbursementClaimCreated: (state, action) => {
             
