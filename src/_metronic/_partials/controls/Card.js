@@ -26,12 +26,12 @@ export const CardHeaderIcon = forwardRef(({ className }, ref) => (
 
 export const CardHeaderTitle = forwardRef(({ className, ...props }, ref) => {
   // Calculate the current date outside the JSX return block
-  const currentDate = format(new Date(), 'EEEE, dd MMMM yyyy');
+  // const currentDate = format(new Date(), 'EEEE, dd MMMM yyyy');
 
   return (
     <>
       <h1 {...props} ref={ref} className={`noto-sans-bold  ${className}`} />
-      <h5>{currentDate}</h5>
+      {/* <h5>{currentDate}</h5> */}
     </>
   );
 });
