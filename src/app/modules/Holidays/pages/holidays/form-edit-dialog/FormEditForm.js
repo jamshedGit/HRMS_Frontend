@@ -221,7 +221,7 @@ export function FormEditForm({
                   <div className="col-12 col-md-6 mt-3">
                     <label>
                       <span>
-                        Name<span style={{ color: "red" }}>*</span>
+                       Holiday Name<span style={{ color: "red" }}>*</span>
                       </span>
                     </label>
                     <Field

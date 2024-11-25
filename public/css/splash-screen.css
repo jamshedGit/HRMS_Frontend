@@ -85,3 +85,7 @@ body {
   border-radius: 12px;
   color:#000 
 }
+
+.fixed-layout-table {
+  table-layout: fixed !important;
+}

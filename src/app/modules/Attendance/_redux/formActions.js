@@ -1,0 +1,154 @@
+import * as requestFromServer from "./formCrud";
+import { AttendanceSlice, callTypes } from "./AttendanceSlice";
+import { toast } from "react-toastify";
+import { savingFields } from "../pages/forms/FormUIHelpers";
+import { SERVER_MESSAGES } from "../../../utils/constants";
+const { actions } = AttendanceSlice;
+
+/**
+ * 
+ * Fetch All Attendance Paginated from the server
+ * 
+ * @param {Object} queryparm 
+ * @returns 
+ */
+export const fetchAttendance = (queryparm) => async (dispatch) => {
+  dispatch(actions.startCall({ callType: callTypes.list }));
+  return requestFromServer.getAllAttendanceSetup(queryparm)
+    .then((response) => {
+      dispatch(actions.AttendanceFetched(response));
+    })
+    .catch((error) => {
+      error.clientMessage = "Can't find Attendances";
+      dispatch(actions.catchError({ error, callType: callTypes.list }));
+    });
+};
+
+/**
+ * 
+ * Fetch Single Attendance Record by Id
+ * 
+ * @param {string|number} id 
+ * @returns
+ */
+export const fetchEditRecord = (id) => (dispatch) => {
+  if (!id) {
+    return dispatch(actions.AttendanceFetchedForEdit(null));
+  }
+  dispatch(actions.startCall({ callType: callTypes.action }));
+  return requestFromServer
+    .getAttendanceSetupById(id)
+    .then((response) => {
+
+      const entities = response.data?.data;
+      dispatch(actions.AttendanceFetchedForEdit({ userForEdit: entities }));
+    })
+    .catch((error) => {
+      error.clientMessage = "Can't find Attendance";
+      dispatch(actions.catchError({ error, callType: callTypes.action }));
+    });
+};
+
+/**
+ * 
+ * Fetch Single Attendance Record by Id
+ * 
+ * @param {string|number} id 
+ * @returns
+ */
+export const fetchRecordByFilters = (filters) => (dispatch) => {
+  if (!(filters.employeeId && filters.attDateIn)) {
+    return dispatch(actions.AttendanceFetchedForEdit(null));
+  }
+  dispatch(actions.startCall({ callType: callTypes.action }));
+  return requestFromServer
+    .getAttendanceSetupByFilters(filters)
+    .then((response) => {
+
+      const entities = response.data?.data;
+      dispatch(actions.AttendanceFetchedForEdit({ userForEdit: entities || filters }));
+    })
+    .catch((error) => {
+      error.clientMessage = "Can't find Attendance";
+      dispatch(actions.catchError({ error, callType: callTypes.action }));
+    });
+};
+
+/**
+ * 
+ * Save or update Attendance Record
+ * 
+ * @param {Object} data 
+ * @param {String|Number|Null} id 
+ * @param {Function} disableLoading 
+ * @param {Function} onHide 
+ * @returns 
+ */
+export const saveRecord = (data, disableLoading, initialValues) => (dispatch) => {
+  const values = {};
+  savingFields.forEach(key => values[key]= data[key])
+  if (!data.Id) {
+    return requestFromServer.createAttendanceSetup(values)
+      .then((res) => {
+        const AttendanceData = res.data?.data;
+        if (AttendanceData) {
+          dispatch(actions.AttendanceCreated(AttendanceData));
+          disableLoading();
+          toast.success(SERVER_MESSAGES.insertedSuccess, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      })
+      .catch((error) => {
+        disableLoading();
+        error.clientMessage = "Can't Create Attendance";
+        toast.error(error?.response?.data?.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      });
+  }
+  else {
+    return requestFromServer.updateAttendanceSetup(values)
+      .then((res) => {
+        const AttendanceData = res.data?.data;
+        if (AttendanceData) {
+          dispatch(actions.AttendanceUpdated(AttendanceData));
+          disableLoading();
+          toast.success(SERVER_MESSAGES.updatedSuccess, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      })
+      .catch((error) => {
+        disableLoading();
+        error.clientMessage = "Can't Update Attendance";
+        toast.error(error?.response?.data?.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      });
+  }
+};

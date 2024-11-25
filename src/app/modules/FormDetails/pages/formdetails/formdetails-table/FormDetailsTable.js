@@ -194,7 +194,7 @@ export function FormTable() {
     <>
 
 
-      <h1 className="mb-10">General Setups</h1>
+      {/* <h1 className="mb-10">General Setups</h1> */}
       {['1']?.map((dd, index) => (
 
 

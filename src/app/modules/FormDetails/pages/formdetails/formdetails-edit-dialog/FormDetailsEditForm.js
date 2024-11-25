@@ -157,26 +157,27 @@ export function FormEditForm({
                       </div>
 
                     } */}
-                    {<div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="formName"
-                        maxLength={30}
-                        component={Input}
-                        placeholder="Enter Form Name"
-                        label="Form Name"
-
-                      />
-                    </div>}
                      {<div className="col-12 col-md-4 mt-3">
                       <Field
                         name="formCode"
                         component={Input}
                         maxLength={6}
                         placeholder="Enter Form Code"
-                        label="Form Code"
+                        label={<span> Form Code<span style={{ color: 'red' }}>*</span></span>}
 
                       />
                     </div>}
+                    {<div className="col-12 col-md-4 mt-3">
+                      <Field
+                        name="formName"
+                        maxLength={30}
+                        component={Input}
+                        placeholder="Enter Form Name"
+                        label={<span> Form Name<span style={{ color: 'red' }}>*</span></span>}
+
+                      />
+                    </div>}
+                    
                   </div>
                   <div className="form-group row"></div>
                 </fieldset>

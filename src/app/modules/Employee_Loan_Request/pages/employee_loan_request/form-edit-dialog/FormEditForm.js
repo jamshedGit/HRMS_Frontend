@@ -33,17 +33,17 @@ const EmployeeLoanRequestSchema = Yup.object().shape({
   applied_date: Yup.date().required(VALIDATION_MESSAGES.required),
   installment_start_date: Yup.date()
     .min(
-      Yup.ref('applied_date'), 
+      Yup.ref("applied_date"),
       "Installment start date cannot be earlier than applied date"
     )
     .required(VALIDATION_MESSAGES.required),
-  total_loan_amount:Yup.number()
-  .min(1,VALIDATION_MESSAGES.minOneValue)
-  .required(VALIDATION_MESSAGES.required),
+  total_loan_amount: Yup.number()
+    .min(1, VALIDATION_MESSAGES.minOneValue)
+    .required(VALIDATION_MESSAGES.required),
   monthly_installment: Yup.number()
-  .min(1,VALIDATION_MESSAGES.minOneValue)
-  .required(VALIDATION_MESSAGES.required),
-  reason:Yup.string().required(VALIDATION_MESSAGES.required),
+    .min(1, VALIDATION_MESSAGES.minOneValue)
+    .required(VALIDATION_MESSAGES.required),
+  reason: Yup.string().required(VALIDATION_MESSAGES.required),
 });
 
 export function FormEditForm({
@@ -68,8 +68,7 @@ export function FormEditForm({
       // dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsidiaries
       // dispatch(fetchAllPayrollMonthYearList("allPayrollMonthYearList"));
       dispatch(actions.getAllLoanType());
-      dispatch(fetchAllFormsMenu(45, "allAccountList",null,true));
-   
+      dispatch(fetchAllFormsMenu(45, "allAccountList", null, true));
     }
     //allPayrolGroupList
   }, [dispatch, user.Id]);
@@ -89,71 +88,73 @@ export function FormEditForm({
     };
   }, shallowEqual);
 
-  const { loan_type,userForEdit } = currentState;
+  const { loan_type, userForEdit } = currentState;
 
-
-useEffect(()=>{
-  setTotalLoanAmount(userForEdit?.total_loan_amount)
-  setMonthlyInstallments(userForEdit?.monthly_installment)
+  useEffect(() => {
+    setTotalLoanAmount(userForEdit?.total_loan_amount);
+    setMonthlyInstallments(userForEdit?.monthly_installment);
     setChangeLoanType(userForEdit?.loan_typeId);
-    setIsClear(false)
-},[userForEdit])
+    setIsClear(false);
+  }, [userForEdit]);
 
   useEffect(() => {
-   
-if(changeLoanType){
+    if (changeLoanType) {
+      let loandetails = currentState?.loan_config_details_permission?.loanDetails?.details?.find(
+        (item) => item.loan_typeId === changeLoanType
+      );
+      let employee = currentState?.loan_config_details_permission?.employee;
+      let salary = currentState?.loan_config_details_permission?.salary;
+      let payroll = currentState?.loan_config_details_permission?.payroll;
+      let salaryAmount =
+        loandetails?.basis == 0
+          ? salary?.gross * loandetails?.salary_count
+          : salary?.basic * loandetails?.salary_count;
 
-
-    let loandetails = currentState?.loan_config_details_permission?.loanDetails?.details?.find(
-      (item) => item.loan_typeId === changeLoanType
-    );
-    let employee = currentState?.loan_config_details_permission?.employee;
-    let salary = currentState?.loan_config_details_permission?.salary;
-    let payroll = currentState?.loan_config_details_permission?.payroll;
-    let salaryAmount =
-      loandetails?.basis == 0
-        ? salary?.gross * loandetails?.salary_count
-        : salary?.basic * loandetails?.salary_count;
-
-    let monthlySalarySuggest =
+      let monthlySalarySuggest =
         loandetails?.installment_deduction_basis_type == 0
-          ? salary?.gross * (parseFloat(currentState?.loan_config_details_permission?.loanDetails?.installment_deduction_percentage))/100
-          : salary?.basic * (parseFloat(currentState?.loan_config_details_permission?.loanDetails?.installment_deduction_percentage))/100;
+          ? (salary?.gross *
+              parseFloat(
+                currentState?.loan_config_details_permission?.loanDetails
+                  ?.installment_deduction_percentage
+              )) /
+            100
+          : (salary?.basic *
+              parseFloat(
+                currentState?.loan_config_details_permission?.loanDetails
+                  ?.installment_deduction_percentage
+              )) /
+            100;
 
-//  if(!isClear){
-  setMaxAmountLimit(Math.min(loandetails?.max_loan_amount, salaryAmount));
- 
-  setMaxMonthlyAmountSuggest(monthlySalarySuggest)
-//  }
- 
-    if (employee?.dateOfJoining) {
-      const joiningDate = new Date(employee?.dateOfJoining);
-      joiningDate.setHours(0, 0, 0, 0);
-      setDateOfJoining(joiningDate); // Update state with the valid date
+      //  if(!isClear){
+      setMaxAmountLimit(Math.min(loandetails?.max_loan_amount, salaryAmount));
+
+      setMaxMonthlyAmountSuggest(monthlySalarySuggest);
+      //  }
+
+      if (employee?.dateOfJoining) {
+        const joiningDate = new Date(employee?.dateOfJoining);
+        joiningDate.setHours(0, 0, 0, 0);
+        setDateOfJoining(joiningDate); // Update state with the valid date
+      }
+
+      if (payroll?.startDate) {
+        const payrollDate = new Date(payroll?.startDate);
+        payrollDate.setHours(0, 0, 0, 0);
+        setPayrollMonth(payrollDate); // Update state with the valid date
+      }
+    } else {
+      setMaxAmountLimit("");
+      setMaxMonthlyAmountSuggest("");
+      setTotalInstallments("");
     }
-
-    if (payroll?.startDate) {
-      const payrollDate = new Date(payroll?.startDate);
-      payrollDate.setHours(0, 0, 0, 0);
-      setPayrollMonth(payrollDate); // Update state with the valid date
-    }
-
-
-  }else{
-    setMaxAmountLimit("")
-    setMaxMonthlyAmountSuggest("")
-    setTotalInstallments("")
-  }
-  }, [changeLoanType,isEdit]);
+  }, [changeLoanType, isEdit]);
 
   useEffect(() => {
-   
     if (totalLoanAmount && monthlyInstallment) {
       const calculatedMonths = Math.ceil(totalLoanAmount / monthlyInstallment);
       setTotalInstallments(calculatedMonths);
-   
     }
-  }, [totalLoanAmount, monthlyInstallment,isEdit]);
+  }, [totalLoanAmount, monthlyInstallment, isEdit]);
 
   const filteredOptions = loan_type?.filter((option) =>
     currentState?.loan_config_details_permission?.loanDetails?.details?.some(
@@ -161,17 +162,16 @@ if(changeLoanType){
     )
   );
 
-  const clearCustomeData=()=>{
-
-    setMaxAmountLimit("")
-    setMaxMonthlyAmountSuggest("")
-    setTotalInstallments("")
-  }
+  const clearCustomeData = () => {
+    setMaxAmountLimit("");
+    setMaxMonthlyAmountSuggest("");
+    setTotalInstallments("");
+  };
 
   const statusOptions = [
     { value: 0, label: "Inactive" },
     { value: 1, label: "Active" },
-    { value:2, label: "Pending" },
+    { value: 2, label: "Pending" },
   ];
 
   return (
@@ -191,7 +191,15 @@ if(changeLoanType){
           //   // values.statusId=""
           // }
         };
-        saveForm(values,totalInstallments,maxAmountLimit,setTotalInstallments,setMaxMonthlyAmountSuggest,setMaxAmountLimit, clearForm);
+        saveForm(
+          values,
+          totalInstallments,
+          maxAmountLimit,
+          setTotalInstallments,
+          setMaxMonthlyAmountSuggest,
+          setMaxAmountLimit,
+          clearForm
+        );
       }}
     >
       {({
@@ -202,9 +210,6 @@ if(changeLoanType){
         setFieldValue,
         handleReset,
       }) => (
-
-
-        
         <>
           <Modal.Body className="overlay overlay-block cursor-default">
             {actionsLoading && (
@@ -216,31 +221,30 @@ if(changeLoanType){
               <fieldset disabled={isUserForRead}>
                 <div className="form-group row">
                   {/* <div className="col-12 col-md-12  p-0 m-0"> */}
-                    <div className="col-12 col-md-6 ">
-                      <SearchSelect
-                        name="loan_typeId"
-                        label={
-                          <span>
-                            Loan Type
-                            <span style={{ color: "red" }}>*</span>
-                          </span>
-                        }
-                        isDisabled={isEdit}
-                        onChange={(e) => {
-                          setFieldValue("loan_typeId", e.value || null);
-                          setChangeLoanType(e.value);
-                         
-                        }}
-                        value={
-                          loan_type?.find(
-                            (option) => option.value === values.loan_typeId
-                          ) || null
-                        }
-                        options={filteredOptions}
-                        error={errors.loan_typeId}
-                        touched={touched.loan_typeId}
-                      />
-                    </div>
+                  <div className="col-12 col-md-6 ">
+                    <SearchSelect
+                      name="loan_typeId"
+                      label={
+                        <span>
+                          Loan Type
+                          <span style={{ color: "red" }}>*</span>
+                        </span>
+                      }
+                      isDisabled={isEdit}
+                      onChange={(e) => {
+                        setFieldValue("loan_typeId", e.value || null);
+                        setChangeLoanType(e.value);
+                      }}
+                      value={
+                        loan_type?.find(
+                          (option) => option.value === values.loan_typeId
+                        ) || null
+                      }
+                      options={filteredOptions}
+                      error={errors.loan_typeId}
+                      touched={touched.loan_typeId}
+                    />
+                  </div>
                   {/* </div> */}
 
                   <div className="col-12 col-md-6">
@@ -248,16 +252,21 @@ if(changeLoanType){
                       name="employee_loan_accountId"
                       label={
                         <span>
-                          Employee Loan Account<span style={{ color: "red" }}>*</span>
+                          Employee Loan Account
+                          <span style={{ color: "red" }}>*</span>
                         </span>
                       }
                       // isDisabled={isUserForRead}
                       onChange={(e) => {
-                        setFieldValue("employee_loan_accountId", e.value || null);
+                        setFieldValue(
+                          "employee_loan_accountId",
+                          e.value || null
+                        );
                       }}
                       value={
                         dashboard.allAccountList.find(
-                          (option) => option.value === values.employee_loan_accountId
+                          (option) =>
+                            option.value === values.employee_loan_accountId
                         ) || null
                       }
                       // options={dashboard.allAccountList}
@@ -265,10 +274,9 @@ if(changeLoanType){
                         label: `${option.mergeLabel}`, // Adding the value to the label
                         value: option.value,
                       }))}
-               
                       error={errors.employee_loan_accountId}
                       touched={touched.employee_loan_accountId}
-                      isDisabled={userForEdit?.details[0]?.is_deducted }
+                      isDisabled={userForEdit?.details[0]?.is_deducted}
                     />
                   </div>
 
@@ -281,10 +289,10 @@ if(changeLoanType){
                       component={DatePickerField}
                       dateFormat="dd/MM/yyyy"
                       placeholder="Select Date"
-                 
                       type="date"
-                      minDate={dateOfJoining} 
-                      disabled={userForEdit?.details[0]?.is_deducted }
+                      minDate={dateOfJoining}
+                      maxDate={new Date()}
+                      disabled={userForEdit?.details[0]?.is_deducted}
                     />
                   </div>
 
@@ -300,7 +308,7 @@ if(changeLoanType){
                       placeholder="Select Date"
                       type="date"
                       minDate={payrollMonth}
-                      disabled={userForEdit?.details[0]?.is_deducted }
+                      disabled={userForEdit?.details[0]?.is_deducted}
                     />
                   </div>
 
@@ -310,12 +318,16 @@ if(changeLoanType){
                       component={Input}
                       placeholder="Enter total loan amount"
                       label={
-                        <span>
-                          Amount Limit :
-                          
-                          {maxAmountLimit || 0}
-                          <span style={{ color: "red" }}>*</span>
-                        </span>
+                        <div className="d-flex">
+                          <div className="d-flex">Total Loan Amount </div>
+                          <div className="d-flex ml-3">
+                            <span>
+                              ( Amount Limit :
+                              {maxAmountLimit?.toLocaleString() || 0})
+                              <span style={{ color: "red" }}>*</span>
+                            </span>
+                          </div>
+                        </div>
                       }
                       type="number"
                       onChange={(e) => {
@@ -329,16 +341,14 @@ if(changeLoanType){
                         }
 
                         setFieldValue("total_loan_amount", value);
-                        setTotalLoanAmount(value)
+                        setTotalLoanAmount(value);
                       }}
                       onInput={(e) => {
                         e.target.value = amountLimit(e.target.value); // Limit to 3 digits
                       }}
-                      disabled={userForEdit?.details[0]?.is_deducted }
+                      disabled={userForEdit?.details[0]?.is_deducted}
                     />
                   </div>
-
-                  
 
                   <div className="col-12 col-md-6 mt-3">
                     <Field
@@ -346,10 +356,16 @@ if(changeLoanType){
                       component={Input}
                       placeholder="Enter monthly installment"
                       label={
-                        <span>
-                          Monthly Installment Suggested : {maxMonthlyAmountSuggest || 0}
-                          <span style={{ color: "red" }}>*</span>
-                        </span>
+                        <div className="d-flex">
+                          <div className="d-flex"> Monthly Installment </div>
+                          <div className="d-flex ml-3">
+                            <span>
+                              (Max Suggested Installment Based on Salary :{" "}
+                              {maxMonthlyAmountSuggest?.toLocaleString() || 0})
+                              <span style={{ color: "red" }}>*</span>
+                            </span>
+                          </div>
+                        </div>
                       }
                       type="number"
                       onChange={(e) => {
@@ -363,17 +379,12 @@ if(changeLoanType){
                         }
 
                         setFieldValue("monthly_installment", value);
-                        setMonthlyInstallments(value)
-
-                      
-
-
-                        
+                        setMonthlyInstallments(value);
                       }}
                       onInput={(e) => {
                         e.target.value = amountLimit(e.target.value); // Limit to 3 digits
                       }}
-                      disabled={userForEdit?.details[0]?.is_deducted }
+                      disabled={userForEdit?.details[0]?.is_deducted}
                     />
                   </div>
 
@@ -390,10 +401,6 @@ if(changeLoanType){
                       }
                       type="number"
                       value={totalInstallments}
-
-          
-
-              
                       disabled={true}
                     />
                   </div>
@@ -409,23 +416,17 @@ if(changeLoanType){
                         </span>
                       }
                       type="text"
-                      disabled={userForEdit?.details[0]?.is_deducted }
+                      disabled={userForEdit?.details[0]?.is_deducted}
                     />
                   </div>
-
 
                   <div className="col-12 col-md-6 mt-3">
                     <Field
                       name="loan_amount_paid"
                       component={Input}
                       placeholder=""
-                      label={
-                        <span>
-                          Loan Amount Paid
-                       
-                        </span>
-                      }
-                      type="number" 
+                      label={<span>Loan Amount Paid</span>}
+                      type="number"
                       // value={""}
                       disabled={true}
                     />
@@ -436,55 +437,36 @@ if(changeLoanType){
                       name="loan_amount_remaining"
                       component={Input}
                       placeholder=""
-                      label={
-                        <span>
-                          Loan Amount Remaining
-                       
-                        </span>
-                      }
-                      type="number"    
+                      label={<span>Loan Amount Remaining</span>}
+                      type="number"
                       // value={""}
                       // value={totalLoanAmount}
                       disabled={true}
                     />
                   </div>
 
-
                   <div className="col-12 col-md-6 mt-3">
                     <Field
                       // name="approval_statusId"
                       component={Input}
                       placeholder=""
-                      label={
-                        <span>
-                          Approval Status
-                       
-                        </span>
-                      }
-                      type="text"   
-                      value={""} 
+                      label={<span>Approval Status</span>}
+                      type="text"
+                      value={""}
                       disabled={true}
                     />
                   </div>
 
-                  
-                  
-<div className="col-12 col-md-6 mt-3">
+                  <div className="col-12 col-md-6 mt-3">
                     <SearchSelect
                       name="statusId"
-                      label={
-                        <span>
-                         Status
-                        
-                        </span>
-                      }
+                      label={<span>Status</span>}
                       onChange={(e) => {
                         setFieldValue("statusId", e.value || null);
                       }}
                       value={
                         statusOptions?.find(
-                          (option) =>
-                            option.value === values.statusId
+                          (option) => option.value === values.statusId
                         ) || null
                       }
                       // options={dashboard.allPayrollMonthYearList}
@@ -493,7 +475,6 @@ if(changeLoanType){
                       touched={touched.statusId}
                     />
                   </div>
-
                 </div>
               </fieldset>
             </Form>
@@ -502,20 +483,19 @@ if(changeLoanType){
           <Modal.Footer>
             {/* Cancel / Ok Button */}
             {/* {!isUserForRead ? ( */}
-              <button
-                type="reset"
-                onClick={() => {
-                  setIds("");
-          
-                  clearCustomeData()
-                 
-                  handleReset();
-                  
-                }}
-                className="btn btn-light btn-elevate"
-              >
-                Cancel
-              </button>
+            <button
+              type="reset"
+              onClick={() => {
+                setIds("");
+
+                clearCustomeData();
+
+                handleReset();
+              }}
+              className="btn btn-light btn-elevate"
+            >
+              Cancel
+            </button>
             {/* ) : (
               <button
                 type="button"
@@ -533,18 +513,16 @@ if(changeLoanType){
                 // onClick={() => handleSubmit()}
                 onClick={() => {
                   handleSubmit();
-                 
                 }}
                 className="btn btn-primary btn-elevate"
                 disabled={loading}
-
               >
                 Save
                 {loading && (
                   <span className="ml-3 mr-3 spinner spinner-white"></span>
                 )}
               </button>
-           )} 
+            )}
           </Modal.Footer>
         </>
       )}

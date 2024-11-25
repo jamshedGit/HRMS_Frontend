@@ -10,7 +10,8 @@ import {
   fetchAllCountry,
   fetchAllFormsMenu,
   fetchAllActiveEmployees,
-  getLatestTableId
+  getLatestTableId,
+  fetchAllSubsidiaryData
 } from "../../../../../../_metronic/redux/dashboardActions";
 import DatePicker from "react-datepicker";
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
@@ -24,9 +25,12 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 // Validation schema
 const formValidation = Yup.object().shape(
   {
-    deductionCode: Yup.string()
-      .nullable()
-      .required(VALIDATION_MESSAGES.required),
+    subsidiaryId: Yup.string()
+    .nullable()
+    .required(VALIDATION_MESSAGES.required),
+    // deductionCode: Yup.string()
+    //   .nullable()
+    //   .required(VALIDATION_MESSAGES.required),
     deductionName: Yup.string()
       .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.')
       .required(VALIDATION_MESSAGES.required),
@@ -37,7 +41,7 @@ const formValidation = Yup.object().shape(
     mappedDeduction: Yup.string()
       .required(VALIDATION_MESSAGES.required),
     account: Yup.string()
-    .matches(/^\d+$/, "Must contain only digits")
+      .matches(/^\d+$/, "Must contain only digits")
       .required(VALIDATION_MESSAGES.required),
   },
 
@@ -60,12 +64,14 @@ export function BankEditForm({
   const [defDeductionCode = null, setDefDeductionCode] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
   const dispatch = useDispatch();
+  const [defSubsidiary = null, setDefualtSubsidiaryList] = useState(null);
 
   useEffect(() => {
 
 
     if (!user.Id) {
       dispatch(fetchAllFormsMenu(45, "allAccountList")); // For All Grade Codes
+      dispatch(fetchAllSubsidiaryData("allSubsidiaryList"))
     }
   }, [dispatch]);
   useEffect(() => {
@@ -81,46 +87,55 @@ export function BankEditForm({
 
   }, [user?.employeeId, dashboard.employeeId]);
 
+  
+  
+  useEffect(() => {
+
+    const subsidiaryId = defSubsidiary?.value ? defSubsidiary.value : user.subsidiaryId;
+
+    setDefualtSubsidiaryList(
+      dashboard.allSubsidiaryList &&
+      dashboard.allSubsidiaryList.filter((item) => {
+        return item.value === subsidiaryId;
+      })
+    );
+
+  }, [user?.subsidiaryId, dashboard.subsidiaryId]);
+
+  const fetchData = async (subsidiaryId, setValue) => {
+      if (subsidiaryId) {
+        dispatch(getLatestTableId("t_employee_deduction", "Id", " subsidiaryId = "+ subsidiaryId, setValue));
+  
+      }
+
+  };
+
   // useEffect(() => {
   //   // Define an async function within useEffect
   //   if (!user.Id) {
 
-  //     const fetchData = async () => {
-  //       try {
-  //         console.log("User:", user);
-  //         if (user.deductionCode === '') {
-  //           const response = await dispatch(getLatestTableId("t_employee_deduction", "D-000"));
+    
 
-  //           // Assuming response[0].Id is the correct way to access the ID
-  //           console.log("Response:", response[0]?.Id);
-  //           setDefDeductionCode(response[0]?.Id);
-  //         }
-  //       } catch (error) {
-  //         console.error("Error fetching data:", error);
-  //       }
-  //     };
-
-  //     fetchData(); // Call the async function
+  //    // fetchData(); // Call the async function
   //   }
-  //   else{
+  //   else {
 
   //     setDefDeductionCode(user.deductionCode);
   //   }
   // }, [dispatch, user.deductionCode]);
 
+  
   return (
     <>
       <Formik
         enableReinitialize={true}
-        initialValues={user}
+        initialValues={{ ...user}}
         validationSchema={formValidation}
         onSubmit={(values) => {
           console.log("values", values);
-         // values.deductionCode = defDeductionCode;
-         
          
           enableLoading();
-          saveIncident(values);
+          saveIncident({...values,deductionCode: defDeductionCode ? defDeductionCode : values.deductionCode});
         }}
       >
         {({
@@ -134,6 +149,7 @@ export function BankEditForm({
           formik,
         }) => (
           <>
+          {console.log(":::val::",values)}
             <Modal.Body className="overlay overlay-block cursor-default">
               {actionsLoading && (
                 <div className="overlay-layer bg-transparent">
@@ -142,22 +158,45 @@ export function BankEditForm({
               )}
               <Form className="form form-label-right">
                 <fieldset disabled={isUserForRead}>
+                <div className="from-group row">
+                    <div className="col-12 col-md-4 mt-3">
+                      <SearchSelect
+                        name="subsidiaryId"
+                        label={<span> Subsidiary<span style={{ color: 'red' }}>*</span></span>}
+                        isDisabled={isUserForRead && true}
+                        onBlur={() => {
+                          // handleBlur({ target: { name: "countryId" } });
+                        }}
+                        onChange={(e) => {
+                          setFieldValue("subsidiaryId", e.value || null);
+                          setDefualtSubsidiaryList(e);
+                          fetchData(e.value, setDefDeductionCode)
+                          //handlePaymenModeChanged(e)
+                        }}
 
+                        value={(defSubsidiary || null)}
+                        error={errors.subsidiaryId}
+                        touched={touched.subsidiaryId}
+                        options={dashboard.allSubsidiaryList}
+                      />
+                    </div>
+                 </div>
                   <div className="from-group row">
                     {
+
+
+
                       <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="deductionCode"
                           component={Input}
                           maxLength={6}
-                          placeholder="Enter Deduction Code"
-                          onChange={(e) => {
-                            setFieldValue("deductionCode", e.target.value || null);
-                            setDefDeductionCode(e.value);
 
-                          }}
-                          value={values.deductionCode}
-                          label={<span> Deduction Code<span style={{ color: 'red' }}>*</span></span>}
+                          disabled
+                          placeholder="Enter Deduction Code"
+                        
+                          value={ defDeductionCode || values.deductionCode}
+                          label={<span> Deduction Code</span>}
                           autoComplete="off"
                         />
                       </div>
@@ -205,7 +244,7 @@ export function BankEditForm({
                     }
                     {
                       <div className="col-12 col-md-4 mt-3">
-                         <SearchSelect
+                        <SearchSelect
                           name="account"
                           label={
                             <span>

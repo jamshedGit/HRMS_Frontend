@@ -34,9 +34,9 @@ export function DeptUIProvider({ DeptUIEvents, children }) {
     deptName: "",
     deptCode:"",
     budgetStrength: "",
-    subsidiary: "",
+    subsidiaryId: "",
     parentDept: "",
-    subsidiary: ""
+    subsidiaryId: ""
 
   };
 

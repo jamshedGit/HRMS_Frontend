@@ -10,14 +10,7 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.list }));
   console.log("test query param", queryparm)
   return requestFromServer.getAllEarning({...queryparm,id:'null'})
-    // .getAllReceipts({
-    //   filter: {
-    //     searchQuery: ""
-    //   },
-    //   sortBy: "receiptNo",
-    //   limit: 10,
-    //   page: 1
-    // })
+   
     .then((response) => {
       //  console.log("user action receipt fetched 321")
       console.log("response", response)
@@ -146,10 +139,11 @@ export const updatedearning = (user, disbaleLoading, onHide) => (dispatch) => {
   return requestFromServer
     .updateEarning(user)
     .then((response) => {
-      console.log("my response",response?.config?.data);
+      
       const updatedEarning = response?.config?.data; // response.data?.data;
-      console.log("earningUpdated Res", response)
+    
       dispatch(actions.earningUpdated({ updatedEarning }));
+      
       dispatch(actions.startCall({ callType: callTypes.action }));
       disbaleLoading();
       onHide();

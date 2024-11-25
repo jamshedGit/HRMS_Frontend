@@ -194,6 +194,7 @@ export function MasterEditForm({
               {/* Save button Start */}
               {employeeId && yearId && accessUser && !readOnly ? <button
                 type="submit"
+                disabled={loading}
                 onClick={() => handleSubmit()}
                 className="btn btn-primary btn-elevate"
               >

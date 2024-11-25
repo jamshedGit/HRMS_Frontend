@@ -180,6 +180,7 @@ import { getEmployeeProfileById } from '../../../_metronic/redux/dashboardCrud';
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import './form.css';
 import { formatDates } from '../common';
+import { toAbsoluteUrl } from '../../../_metronic/_helpers';
 
 // Field name and keys organized by sections
 const SECTIONS = [
@@ -195,7 +196,7 @@ const SECTIONS = [
       { name: 'Employee Type', value: 'employeeTypeName' },
       { name: 'Payroll Group', value: 'payrollName' },
       { name: 'Team', value: 'teamName' },
-      { name: 'Default Shift', value: 'shiftName' },
+      // { name: 'Default Shift', value: 'shiftName' },
     ]
   },
   {
@@ -258,10 +259,14 @@ const EmployeeProfile = ({ employeeId }) => {
               <div className="col-12 col-md-4 mt-3">
                 <img
                   name='profile_image'
-                  src={data.profile_image ? `${data.profile_image}` : ''} // Fallback if no image
+                  src={data.profile_image ? `${data.profile_image}` :toAbsoluteUrl("/media/users/profileImage.png") } // Fallback if no image
                   alt="Profile"
                   width={120}
                   height={120}
+                  onError={(e) => {
+                    e.target.onerror = null; // Error loop rokne ke liye
+                    e.target.src = toAbsoluteUrl("/media/users/profileImage.png"); // Agar image load na ho toh fallback image set karo
+                  }}
                 />
               </div>
             </div>

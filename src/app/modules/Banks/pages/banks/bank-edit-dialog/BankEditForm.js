@@ -9,8 +9,10 @@ import {
   fetchAllCity,
 
   fetchAllSubCenter,
+  fetchAllSubsidiaryData,
   getLatestBookingNo,
 } from "../../../../../../_metronic/redux/dashboardActions";
+import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 
 // Phone Number Regex
 const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
@@ -22,11 +24,13 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 const bankEditSchema = Yup.object().shape(
   {
     Name: Yup.string()
-    .matches(/^[A-Za-z\s]+$/, 'Only alphabetic characters allowed')
-    .required('Required*')
-   
+      .matches(/^[A-Za-z\s]+$/, 'Only alphabetic characters allowed')
+      .required(VALIDATION_MESSAGES.required),
+    subsidiaryId: Yup.string()
+      .nullable()
+      .required(VALIDATION_MESSAGES.required),
   },
-  
+
 );
 export function BankEditForm({
   saveBank,
@@ -41,18 +45,39 @@ export function BankEditForm({
   enableLoading,
   loading,
 }) {
-  
+  const dispatch = useDispatch();
   const { dashboard } = useSelector((state) => state);
   // Get User Details
   const { auth } = useSelector((state) => state);
-  
+  const [defSubsidiary = null, setDefualtSubsidiaryList] = useState(null);
+
+
+  useEffect(() => {
+    if (!user.Id) {
+
+      dispatch(fetchAllSubsidiaryData("allSubsidiaryList"))
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
+
+    const subsidiaryId = defSubsidiary?.value ? defSubsidiary.value : user.subsidiaryId;
+
+    setDefualtSubsidiaryList(
+      dashboard.allSubsidiaryList &&
+      dashboard.allSubsidiaryList.filter((item) => {
+        return item.value === subsidiaryId;
+      })
+    );
+
+  }, [user?.subsidiaryId, dashboard.subsidiaryId]);
 
   return (
     <>
       <Formik
         enableReinitialize={true}
         initialValues={user}
-         validationSchema={bankEditSchema}
+        validationSchema={bankEditSchema}
         onSubmit={(values) => {
           console.log("bank values", values);
           enableLoading();
@@ -80,121 +105,37 @@ export function BankEditForm({
                 <fieldset disabled={isUserForRead}>
                   <div className="from-group row">
                     <div className="col-12 col-md-4 mt-3">
+                      <SearchSelect
+                        name="subsidiaryId"
+                        label={<span> Subsidiary<span style={{ color: 'red' }}>*</span></span>}
+                        isDisabled={isUserForRead && true}
+                        onBlur={() => {
+                          // handleBlur({ target: { name: "countryId" } });
+                        }}
+                        onChange={(e) => {
+                          setFieldValue("subsidiaryId", e.value || null);
+                          setDefualtSubsidiaryList(e);
+
+                        }}
+
+                        value={(defSubsidiary || null)}
+                        error={errors.subsidiaryId}
+                        touched={touched.subsidiaryId}
+                        options={dashboard.allSubsidiaryList}
+                      />
+                    </div>
+                    <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="Name"
-                        MaxLength = {40}
+                        MaxLength={40}
                         component={Input}
                         placeholder="Bank Name"
                         label={<span> Bank Name<span style={{ color: 'red' }}>*</span></span>}
-                        
+
                       />
                     </div>
-                   
-                    {/* <div className="col-12 col-md-4 mt-3">
-                      <SearchSelect
-                        name="countryId"
-                        label="Select Country*"
-                        isDisabled={isUserForRead && true}
-                        onBlur={() => {
-                         // handleBlur({ target: { name: "countryId" } });
-                        }}
-                        onChange={(e) => {
-                          setFieldValue("countryId", e.value);
-                          setDefaultCountry(e);
-                          dispatch(fetchAllCity(e.value));
-                        }}
-                        value={defCountry}
-                        error={errors.countryId}
-                        touched={touched.countryId}
-                        options={dashboard.allCountry}
-                      />
-                    </div>  */}
-                    {/* <div className="col-12 col-md-4 mt-3">
-                      <SearchSelect
-                        name="cityId"
-                        label="Select City*"
-                        isDisabled={isUserForRead && true}
-                        onBlur={() => {
-                          //   handleBlur({ target: { name: "cityId" } });
-                        }}
-                        onChange={(e) => {
-                          setFieldValue("cityId", e.value);
-                          setDefaultCity(e);
-                          dispatch(fetchAllCityCenters(e.value));
-                        }}
-                        value={defCity}
-                        error={errors.cityId}
-                        touched={touched.cityId}
-                        options={dashboard.allCity}
-                      />
-                    </div> */}
 
-                    {/* <div className="col-12 col-md-4 mt-3">
-                      <SearchSelect
-                        name="cityId"
-                        label="City*"
-                        isDisabled={isUserForRead ? true : false}
-                       // onBlur={handleBlur}
-                        onBlur={() => {
-                          handleBlur({ target: { name: "cityId" } });
-                        }}
-                        //options={dashboard.allCity}
-                        onChange={(e) => {
-                          setFieldValue("cityId", e.value);
-                          setSelectCity(e);
-                        }}
-                        value={selectCity}
-                        error={errors.cityId}
-                        touched={touched.cityId}
-                        options={dashboard.allCity}
-                      />
-                    </div> */}
-                    {/* <div className="col-12 col-md-4 mt-3">
-                      <SearchSelect
-                        name="centerId"
-                        label="Select Circle*"
-                        isDisabled={isUserForRead && true}
-                        onBlur={() => {
-                          handleBlur({ target: { name: "centerId" } });
-                        }}
-                        onChange={(e) => {
-                          setFieldValue("centerId", e.value);
-                          setDefaultCenter(e);
-                          dispatch(fetchAllSubCenter(e.value));
-                        }}
-                        value={defCenter}
-                        // error={user.centerId}
-                        // touched={touched.centerId}
-                        options={dashboard.cityCenters}
-                      />
-                    </div> */}
-                    {/* <div className="col-12 col-md-4 mt-3">
-                      <SearchSelect
-                        name="subCenterId"
-                        label="Center*"
-                        isDisabled={isUserForRead && true}
-                        onBlur={() => {
-                          handleBlur({ target: { name: "subCenterId" } });
-                        }}
-                        onChange={(e) => {
-                          setFieldValue("subCenterId", e.value);
-                          setDefaultSubCenter(e);
 
-                        }}
-                        value={defSubcenter}
-                        error={errors.subCenterId}
-                        touched={touched.subCenterId}
-                        options={dashboard.allSubCenter}
-                      />
-                    </div> */}
-                    {/* <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="description"
-                        component={TextArea}
-                        placeholder="Description"
-                        label="Description"
-                      />
-                    </div> */}
                   </div>
                   <div className="form-group row"></div>
                 </fieldset>
