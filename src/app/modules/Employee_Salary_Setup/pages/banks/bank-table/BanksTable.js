@@ -98,10 +98,29 @@ export function BanksTable() {
         minWidth: "160px",
       },
     },
-   
+    {
+      dataField: "grade",
+      text: "Grade",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
     {
       dataField: "employeeType",
       text: "Employee Type",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
+    {
+      dataField: "currency",
+      text: "Currency",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -118,6 +137,10 @@ export function BanksTable() {
       style: {
         minWidth: "160px",
       },
+      formatter: (cell) => {
+        // Format the number with thousand separators
+        return new Intl.NumberFormat("en-US").format(cell);
+      }
     },
     {
       dataField: "basicSalary",
@@ -128,54 +151,12 @@ export function BanksTable() {
       style: {
         minWidth: "160px",
       },
+      formatter: (cell) => {
+        // Format the number with thousand separators
+        return new Intl.NumberFormat("en-US").format(cell);
+      }
     },
-    // {
-    //   dataField: "calculation_type",
-    //   text: "Calculation Type",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    //   headerSortingClasses,
-    //   style: {
-    //     minWidth: "160px",
-    //   },
-    // },
-
-    // {
-    //   dataField: "earningName",
-    //   text: "Earning",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    //   headerSortingClasses,
-    //   style: {
-    //     minWidth: "160px",
-    //   },
-    // },
-    // {
-    //   dataField: "factorValue",
-    //   text: "Factor",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    //   headerSortingClasses,
-    //   style: {
-    //     minWidth: "160px",
-    //   },
-    // },
-    // {
-    //   dataField: "subsidiary",
-    //   text: "Subsidiary",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    //   headerSortingClasses,
-    //   style: {
-    //     minWidth: "160px",
-    //   },
-    // },
-   
     
-    
-    
-   
-   
        {
       dataField: "action",
       text: "Actions",
