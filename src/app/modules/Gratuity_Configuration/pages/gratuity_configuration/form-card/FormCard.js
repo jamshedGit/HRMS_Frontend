@@ -68,13 +68,15 @@ export function FormCard() {
       <div className=" p-2">
       <CardHeaderToolbar>
     
-    <button
-      type="button"
-      className="btn btn-primary "
-      onClick={FormUIProps .newFormButtonClick}
-    >
-      + Add Gratuity Configuration
-    </button>
+      {accessUser && (
+<button
+    type="button"
+    className="btn btn-primary"
+    onClick={FormUIProps.newFormButtonClick}
+>
+    + Add Gratuity Configuration
+</button>
+)}
   
 
 </CardHeaderToolbar>
