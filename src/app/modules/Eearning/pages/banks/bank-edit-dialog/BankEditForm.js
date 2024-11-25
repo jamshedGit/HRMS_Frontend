@@ -40,8 +40,8 @@ const formValidation = Yup.object().shape(
       .required(VALIDATION_MESSAGES.required),
     isTaxable: Yup.string()
       .required(VALIDATION_MESSAGES.required),
-    mappedAllowance: Yup.string()
-      .required(VALIDATION_MESSAGES.required),
+    // mappedAllowance: Yup.string()
+    //   .required(VALIDATION_MESSAGES.required),
     account: Yup.string()
       .matches(/^\d+$/, "Must contain only digits")
       .required(VALIDATION_MESSAGES.required),
