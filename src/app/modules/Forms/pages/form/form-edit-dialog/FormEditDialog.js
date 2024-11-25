@@ -73,7 +73,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   // }, [actionsLoading]);
   //console.log("userForEdit", userForEdit);
 
-  const saveReligion = (user) => {
+  const saveReligion = async (user) => {
 
     if (!id) {
       console.log("relegion save");
@@ -89,8 +89,8 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
       //   ...rest,
       // };
       const finalObject = { user }
-      dispatch(actions.createform(user, disbaleLoading, onHide));
-      
+     await dispatch(actions.createform(user, disbaleLoading, onHide));
+      await dispatch(actions.fetchUsers(FormUIProps.queryParams));
       
 
     } else {
@@ -107,8 +107,8 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
       };
 
       console.log("formUpdatedFields", formUpdatedFields);
-      dispatch(actions.updateForm(formUpdatedFields, disbaleLoading, onHide));
-      dispatch(actions.fetchUsers(FormUIProps.queryParams));
+      await dispatch(actions.updateForm(formUpdatedFields, disbaleLoading, onHide));
+      await dispatch(actions.fetchUsers(FormUIProps.queryParams));
     }
   };
 
