@@ -89,7 +89,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         amount: user.amount,
         remakrs: user.remarks,
         employeeId : user.employeeId,
-        earning_Id : user.earning_Id,
+        earning_deduction_Id : user.earning_deduction_Id,
         transactionType: user.transactionType,
       };
 

@@ -115,6 +115,7 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
         loan: user.loan,
         mappedAllowance: user.mappedAllowance,
         account: user.account,
+        subsidiaryId: user.subsidiaryId
 
       };
 

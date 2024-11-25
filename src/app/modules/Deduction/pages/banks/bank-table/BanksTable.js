@@ -70,16 +70,16 @@ export function BanksTable() {
   );
   // Table columns
   const columns = [
-    // {
-    //   dataField: "Id",
-    //   text: "ID",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    //   headerSortingClasses,
-    //   style: {
-    //     minWidth: "160px",
-    //   },
-    // },
+    {
+      dataField: "subsidiary",
+      text: "Subsidiary",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
 
     {
       dataField: "deductionCode",
@@ -103,36 +103,7 @@ export function BanksTable() {
       },
     },
 
-    // {
-    //   dataField: "linkedAttendance",
-    //   text: "Linked Attendance",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    //   headerSortingClasses,
-    //   style: {
-    //     minWidth: "160px",
-    //   },
-    // },
-    // {
-    //   dataField: "isTaxable",
-    //   text: "Taxable",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    //   headerSortingClasses,
-    //   style: {
-    //     minWidth: "160px",
-    //   },
-    // },
-    // {
-    //   dataField: "mappedDeduction",
-    //   text: "Mapped Deduction",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    //   headerSortingClasses,
-    //   style: {
-    //     minWidth: "160px",
-    //   },
-    // },
+    
     {
       dataField: "account",
       text: "Account Code",
@@ -143,7 +114,8 @@ export function BanksTable() {
         minWidth: "160px",
       },
     },
-
+   
+    
     {
       dataField: "action",
       text: "Actions",

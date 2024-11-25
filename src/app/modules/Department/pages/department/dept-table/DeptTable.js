@@ -67,10 +67,9 @@ export function DeptTable() {
   );
   // Table columns
   const columns = [
-    
     {
-      dataField: "ParentName",
-      text: "Parent Name",
+      dataField: "deptCode",
+      text: "Department Code",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -79,7 +78,7 @@ export function DeptTable() {
       },
     },
     {
-      dataField: "department",
+      dataField: "DepartmentTree",
       text: "Department",
       sort: false,
       sortCaret: sortCaret,
@@ -89,7 +88,18 @@ export function DeptTable() {
       },
     },
     {
-      dataField: "subsidiary",
+      dataField: "ParentDeptName",
+      text: "Parent Name",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
+   
+    {
+      dataField: "Subsidiary",
       text: "Subsidiary",
       sort: false,
       sortCaret: sortCaret,

@@ -178,7 +178,7 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
              {/* Table Ends */}
 
             {/* Add button Field Starts */}
-           {values.subsidiaryId && values.gradeId && values.employeeTypeId && <button
+           {values.subsidiaryId && /* values.gradeId && values.employeeTypeId &&*/ <button
               type="button"
               onClick={() =>
                 push({

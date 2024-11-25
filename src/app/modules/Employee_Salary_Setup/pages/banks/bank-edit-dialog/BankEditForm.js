@@ -22,7 +22,7 @@ import {
 } from "../../../../../../_metronic/redux/dashboardActions";
 import DatePicker from "react-datepicker";
 import axios from 'axios';
-import { amountLimit } from "../../../../../utils/common";
+import { amountLimit, amountLimitDynamic } from "../../../../../utils/common";
 export const USERS_URL = process.env.REACT_APP_API_URL;
 
 // Phone Number Regex
@@ -65,8 +65,29 @@ const formValidation = Yup.object().shape(
     emp_bank_accNo: Yup.string()
       .matches(/^\d+$/, "Must contain only digits"), // Only digits validation
 
+    gratuity_startDate: Yup.date()
+      .nullable()
+      .max(new Date(), "Date cannot be in the future"),
 
+    eobi_reg_date: Yup.date()
+      .nullable()
+      .max(new Date(), "Date cannot be in the future"),
 
+    pf_reg_date: Yup.date()
+      .nullable()
+      .max(new Date(), "Date cannot be in the future"),
+
+    social_security_reg_date: Yup.date()
+      .nullable()
+      .max(new Date(), "Date cannot be in the future"),
+
+    pension_reg_date: Yup.date()
+      .nullable()
+      .max(new Date(), "Date cannot be in the future"),
+
+    pension_reg_date: Yup.date()
+      .nullable()
+      .max(new Date(), "Date cannot be in the future")
 
   },
 
@@ -214,7 +235,7 @@ export function BankEditForm({
 
   useEffect(() => {
     const employeeId = user.employeeId; // defEmployee?.value ? defEmployee.value : user.employeeId;
-   
+
     dispatch(fetchAllActiveEmployeesSalaryForDDL(employeeId));
     console.log("test", dashboard.allEmployeesSalaryDDL);
     setEmployeeDefault(
@@ -229,9 +250,9 @@ export function BankEditForm({
 
 
   useEffect(() => {
-   
+
     const currencyId = defCurrencyCodeList?.value ? defCurrencyCodeList.value : user.currencyId;
-  
+
     setDefualtCurrencyCodeList(
       dashboard.allCurrencyCodeList &&
       dashboard.allCurrencyCodeList.filter((item) => {
@@ -356,14 +377,25 @@ export function BankEditForm({
 
 
 
-  const calculateEmployeeSalaryPolicy = (el, setFieldValue) => {
+  const calculateEmployeeSalaryPolicy = async (el, setFieldValue) => {
 
     const basicSalaryInputFactor = el.target.form.elements['basicSalaryFactor'].value;
-    const grossSalaryInput = el.target.form.elements['grossSalary'].value;
+    let grossSalaryInput = el.target.form.elements['grossSalary'].value;
 
     setGrossSalary(grossSalaryInput);
-    const totalBasicWithFactorVal = ((Number(grossSalaryInput) * Number(basicSalaryInputFactor)) / 100)
+   
+    const result = await Promise.all(
+      defMapEarningDeductionList.map(async (x) => {
+        if (x.calculation_type === 'Fixed Amount' && x.isPartOfGrossSalary && x.transactionType == "Earning") {
+          console.log("fixed_amount", x.amount);
+          grossSalaryInput = grossSalaryInput - x.amount;
+        }
+        return grossSalaryInput; // Return the updated grossSalaryInput
+      })
+    );
+    console.log("grossSalaryInput", result);
 
+    const totalBasicWithFactorVal = ((Number(grossSalaryInput) * Number(basicSalaryInputFactor)) / 100)
 
     setFieldValue("basicSalary", totalBasicWithFactorVal)
     setBasicSalary(totalBasicWithFactorVal);
@@ -372,8 +404,8 @@ export function BankEditForm({
     if (Number(basicSalaryInputFactor)) {
 
       setDefaultMapEarningDeductionList([...defMapEarningDeductionList.map((x) => {
-        if (x.calculation_type == '% Of Basic') {
-          x.amount = ((totalBasicWithFactorVal * x.factorValue) / 100);
+        if (x.calculation_type == '% Of Gross') {
+          x.amount = ((grossSalaryInput * x.factorValue) / 100);
         }
         return x;
       })]);
@@ -523,7 +555,7 @@ export function BankEditForm({
                           setFieldValue("grossSalary", e.target.value);
                         }}
                         component={Input}
-                        value={defGrossSalaryDB || 0}
+                        value={defGrossSalaryDB || ''}
                         placeholder="Enter Gross Salary"
                         label={<span> Gross Salary<span style={{ color: 'red' }}>*</span></span>}
                         autoComplete="off"
@@ -541,7 +573,7 @@ export function BankEditForm({
                           setBasicSalary(e.target.value);
                           setFieldValue("basicSalary", e.target.value);
                         }}
-                        value={defBasicSalary || defBasicSalaryDB || 0}
+                        value={defBasicSalary || defBasicSalaryDB}
                         component={Input}
                         placeholder="Enter Basic Salary"
                         label={<span> Basic Salary<span style={{ color: 'red' }}>*</span></span>}
@@ -555,7 +587,8 @@ export function BankEditForm({
                         onInput={(e) => {
                           e.target.value = amountLimit(e.target.value); // Limit to 3 digits
                         }}
-                        maxLength={10}
+
+
                         value={defBasicSalaryFactor}
                         component={Input}
                         placeholder="Enter Basic Salary"
@@ -623,7 +656,7 @@ export function BankEditForm({
                               id={'calculation_type-' + rightindex} >
 
                               <option value="-1">--Select--</option>
-                              <option value="% Of Basic">% Of Basic</option>
+                              <option value="% Of Gross">% Of Gross</option>
                               <option value="Fixed Amount">Fixed Amount</option>
                             </select>
                             {deferrors[`calculation_type-${rightindex}`] && <div className="form-feedBack">{deferrors[`calculation_type-${rightindex}`]}</div>}
@@ -641,8 +674,11 @@ export function BankEditForm({
                           </td>
                           <td>
                             <input
-                              maxLength={8}
-                              disabled={obj.calculation_type == '% Of Basic'}
+                              type="number"
+                              onInput={(e) => {
+                                e.target.value = amountLimit(e.target.value); // Limit to 3 digits
+                              }}
+                              disabled={obj.calculation_type == '% Of Gross'}
                               style={{ width: "100px" }}
 
                               onChange={(e) => {
@@ -721,7 +757,7 @@ export function BankEditForm({
 
                               id={'calculation_type-' + rightindex} >
                               <option value="-1">--Select--</option>
-                              <option value="% Of Basic">% Of Basic</option>
+                              <option value="% Of Gross">% Of Gross</option>
                               <option value="Fixed Amount">Fixed Amount</option>
                             </select>
                             {deferrors[`calculation_type-${rightindex}`] && <div className="form-feedBack">{deferrors[`calculation_type-${rightindex}`]}</div>}
@@ -740,7 +776,15 @@ export function BankEditForm({
                           </td>
 
                           <td>
-                            <input maxLength="10" disabled={obj.calculation_type == '% Of Basic'} style={{ width: "100px" }} type="number" onChange={handleFieldChanged}
+                            <input
+
+                              type="number"
+                              onInput={(e) => {
+                                e.target.value = amountLimit(e.target.value); // Limit to 3 digits
+                              }}
+
+                              disabled={obj.calculation_type == '% Of Gross'} style={{ width: "100px" }}
+                              onChange={handleFieldChanged}
                               value={obj.amount} id={'amount-' + rightindex}></input>
                             {deferrors[`amount-${rightindex}`] && <div className="form-feedBack">{deferrors[`amount-${rightindex}`]}</div>}
                           </td>
@@ -812,7 +856,7 @@ export function BankEditForm({
 
                                 id={'calculation_type-' + rightindex} >
                                 <option value="-1">--Select--</option>
-                                <option value="% Of Basic">% Of Basic</option>
+                                <option value="% Of Gross">% Of Gross</option>
                                 <option value="Fixed Amount">Fixed Amount</option>
                               </select>
                               {deferrors[`calculation_type-${rightindex}`] && <div className="form-feedBack">{deferrors[`calculation_type-${rightindex}`]}</div>}
@@ -829,7 +873,12 @@ export function BankEditForm({
                             {deferrors[`factorValue-${rightindex}`] && <div className="form-feedBack">{deferrors[`factorValue-${rightindex}`]}</div>}
                           </td>
                           <td>
-                            <input disabled={obj.calculation_type == '% Of Basic'} style={{ width: "100px" }} type="number"
+                            <input
+                              type="number"
+                              onInput={(e) => {
+                                e.target.value = amountLimit(e.target.value); // Limit to 3 digits
+                              }}
+                              disabled={obj.calculation_type == '% Of Gross'} style={{ width: "100px" }}
                               onChange={(e) => {
                                 handleFieldChanged(e);
                                 setErrors((prev) => ({ ...prev, [`amount-${rightindex}`]: '' })); // Clear error on change
@@ -933,6 +982,7 @@ export function BankEditForm({
                           disabled={!values.gratuity_member}
                         // value = {values.dateOfJoining}
                         />
+                        <ErrorMessage className="form-feedBack" name="gratuity_startDate" component="div" />
                       </div>
 
                     </div>
@@ -1021,16 +1071,20 @@ export function BankEditForm({
 
                           disabled={!values.eobi_member}
                         />
+                        <ErrorMessage className="form-feedBack" name="eobi_reg_date" component="div" />
                       </div>
 
                       <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="eobi_accNo"
+                          type='number'
                           component={Input}
+                          onInput={(e) => {
+                            e.target.value = amountLimitDynamic(e.target.value, 15); // Limit to 3 digits
+                          }}
 
-                          maxLength={15}
-                          placeholder="Enter EOBI Acc No"
-                          label={<span> EOBI Acc No</span>}
+                          placeholder="Enter EOBI Account No"
+                          label={<span> EOBI Account No</span>}
                           autoComplete="off"
                           disabled={!values.eobi_member}
                         />
@@ -1070,15 +1124,21 @@ export function BankEditForm({
                           disabled={!values.pf_member}
                         // value = {values.dateOfJoining}
                         />
+                        <ErrorMessage className="form-feedBack" name="pf_reg_date" component="div" />
                       </div>
 
                       <div className="col-12 col-md-4 mt-3">
 
                         <Field
                           name="pf_accNo"
+
                           component={Input}
+                          type='number'
+                          onInput={(e) => {
+                            e.target.value = amountLimitDynamic(e.target.value, 15); // Limit to 3 digits
+                          }}
                           placeholder="Enter PF Acc No"
-                          label={<span> PF AccNo</span>}
+                          label={<span> PF Account No</span>}
                           autoComplete="off"
                           disabled={!values.pf_member}
                         />
@@ -1128,15 +1188,20 @@ export function BankEditForm({
                           disabled={!values.social_security_member}
                         // value = {values.dateOfJoining}
                         />
+                        <ErrorMessage className="form-feedBack" name="social_security_reg_date" component="div" />
                       </div>
 
                       <div className="col-12 col-md-4 mt-3">
 
                         <Field
+                          onInput={(e) => {
+                            e.target.value = amountLimitDynamic(e.target.value, 15); // Limit to 3 digits
+                          }}
                           name="social_security_accNo"
                           component={Input}
+                          type='number'
                           placeholder="Enter Social Security AccNo"
-                          label={<span> Social Security Acc No</span>}
+                          label={<span> Social Security Account No</span>}
                           autoComplete="off"
                           disabled={!values.social_security_member}
                         />
@@ -1171,15 +1236,21 @@ export function BankEditForm({
                           autoComplete="off"
                           disabled={!values.pension_member}
                         />
+                        <ErrorMessage className="form-feedBack" name="pension_reg_date" component="div" />
                       </div>
 
                       <div className="col-12 col-md-4 mt-3">
 
                         <Field
+
+                          type="number"
                           name="pension_accNo"
+                          onInput={(e) => {
+                            e.target.value = amountLimitDynamic(e.target.value, 15); // Limit to 3 digits
+                          }}
                           component={Input}
                           placeholder="Enter Pension AccNo"
-                          label={<span> Pension AccNo<span style={{ color: 'red' }}>*</span></span>}
+                          label={<span> Pension Account No<span style={{ color: 'red' }}>*</span></span>}
                           autoComplete="off"
                           disabled={!values.pension_member}
                         />
@@ -1334,16 +1405,20 @@ export function BankEditForm({
 
                         <Field
                           maxLength={20}
-                        
+
                           disabled={isDropdownDisabled}
                           name="company_from_accNo"
                           component={Input}
+                          type='number'
+                          onInput={(e) => {
+                            e.target.value = amountLimitDynamic(e.target.value, 15); // Limit to 3 digits
+                          }}
                           // value={clearComBankAccField}
                           // onChange={(e) => setComBankAccClearField(e.target.value)}
                           placeholder="Enter Bank Account No"
                           label={<span>Company Bank Account No</span>}
                           autoComplete="off"
-                       
+
                         />
                       </div>
                     </div>
@@ -1352,18 +1427,22 @@ export function BankEditForm({
 
                         <Field
                           maxLength={20}
-                        
+
                           disabled={isDropdownDisabled}
                           name="emp_bank_accNo"
                           component={Input}
-                         // value={clearEmpBankAccField}
+                          type='number'
+                          onInput={(e) => {
+                            e.target.value = amountLimitDynamic(e.target.value, 15); // Limit to 3 digits
+                          }}
+                          // value={clearEmpBankAccField}
                           //onChange={(e) => setEmpBankAccClearField(e.target.value)}
                           placeholder="Enter Bank Account No"
                           label={<span>Bank Account No</span>}
                           autoComplete="off"
-                         
+
                         />
-                          {/* <ErrorMessage className="form-feedBack" name="emp_bank_accNo" component="div" /> */}
+                        {/* <ErrorMessage className="form-feedBack" name="emp_bank_accNo" component="div" /> */}
                       </div>
                     </div>
                   </div>

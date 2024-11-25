@@ -344,6 +344,21 @@ export const WEEK_DAYS = [
   }
 ]
 
+export const ATTENDANCE_TYPE = [
+  {
+    label: "Select...",
+    value: -1
+  },
+  {
+    label: "Regular Attendance",
+    value: 1
+  },
+  {
+    label: "Auto Present Attendance",
+    value: 2
+  },
+]
+
 //Validation Messages for form
 export const VALIDATION_MESSAGES = {
   required: 'Required',
@@ -363,4 +378,14 @@ export const SERVER_MESSAGES = {
   updatedFail: 'Unable to Update',
   deletedSuccess: 'Deleted Successfully',
   deletedFail: 'Unable to Delete',
+}
+
+export const WEEK_DAY_STRING = {
+  SUNDAY: 'Sunday',
+  MONDAY: 'Monday',
+  TUESDAY: 'Tuesday',
+  WEDNESDAY: 'Wednesday',
+  THURSDAY: 'Thursday',
+  FRIDAY: 'Friday',
+  SATURDAY: 'Saturday',
 }

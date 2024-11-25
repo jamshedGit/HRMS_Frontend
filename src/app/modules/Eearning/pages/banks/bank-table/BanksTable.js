@@ -78,10 +78,19 @@ export function BanksTable() {
     //     minWidth: "160px",
     //   },
     // },
-   
+    {
+      dataField: "subsidiary",
+      text: "Subsidiary",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
     {
       dataField: "earningCode",
-      text: "Code",
+      text: "Earning Code",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -92,7 +101,7 @@ export function BanksTable() {
 
     {
       dataField: "earningName",
-      text: "Earning",
+      text: "Earning Name",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,

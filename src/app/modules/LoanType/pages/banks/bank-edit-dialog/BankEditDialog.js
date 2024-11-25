@@ -111,10 +111,10 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
         Id: user.Id,
         code: user.code,
         name: user.name,
-        linkedAttendance: user.linkedAttendance,
+      //  linkedAttendance: user.linkedAttendance,
         mapped: user.mapped,
-        account: user.account
-
+        account: user.account,
+        subsidiaryId:user.subsidiaryId
       };
 
       console.log("skill updated", UpdatedFields);

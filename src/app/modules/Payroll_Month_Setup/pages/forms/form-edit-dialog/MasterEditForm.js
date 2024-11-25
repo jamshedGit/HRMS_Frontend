@@ -94,7 +94,7 @@ export function MasterEditForm({
   };
 
   const getActivePreviousPayrollMonth = async () => {
-
+console.log("in func")
     const response = await axios.post(`${USERS_URL}/payroll_month/get-payroll-month-previous-date`);
     if (response.data.data.length) {
 
@@ -106,8 +106,6 @@ export function MasterEditForm({
 
       setDefaultEndDate(setDaysInDate);
       setDefaultYear(setDaysInDate.getFullYear());
-
-
 
       const pmonth_db = response?.data?.data[0]?.month || 0;
 
@@ -129,6 +127,7 @@ export function MasterEditForm({
       }
     }
     else {
+      console.log("test::",defYear)
       setDefaulShortFormat("0" + getCurrentMonth() + "" + defYear.toString().substring(2, 4))
     }
   }
@@ -153,44 +152,6 @@ export function MasterEditForm({
 
   };
 
-
-  // const daysDiff = (startDate) => {
-  //   // Ensure that the input dates are in a valid string format (YYYY-MM-DD)
-  //   console.log("input startDate", startDate)
-  //   console.log("ttt", defstartDate, defendDate);
-
-  //   const startDate_F = defstartDate.getDate()
-  //   const endDate_F = defendDate.getDate()
-
-
-  //   console.log("fff", startDate_F, endDate_F)
-
-  //   const start = new Date(defstartDate);  // Convert startDate to a Date object
-  //   const end = new Date(defendDate);      // Convert endDate to a Date object
-
-  //   // Check if the dates are valid
-  //   if (isNaN(start) || isNaN(end)) {
-  //     console.error("Invalid date input");
-  //     return null;  // Return null if either of the dates is invalid
-  //   }
-
-  //   console.log("Start Date:", start);
-  //   console.log("End Date:", end);
-
-  //   // Calculate the difference in time (milliseconds)
-  //   const timeDiff = end - start;
-  //   console.log("Time difference in milliseconds:", timeDiff);
-
-  //   // Convert time difference from milliseconds to days
-  //   const diffInDays = timeDiff / (1000 * 60 * 60 * 24);
-  //   console.log("Days Difference final:", diffInDays);
-  //   // Log and return the absolute value of the difference, rounded to the nearest whole number
-  //   const roundedDiffInDays = Math.abs(Math.round(diffInDays));  // Absolute value to ensure non-negative days
-  //   console.log("Days Difference (rounded):", roundedDiffInDays);
-
-  //   // Return the result
-  //   return roundedDiffInDays;
-  // };
 
 
 
@@ -273,12 +234,13 @@ export function MasterEditForm({
                 <fieldset disabled={isUserForRead}>
                   <div className="from-group row">
                     <div className="col-12 col-md-4 mt-3">
+                    <span> Month<span style={{ color: 'red' }}>*</span></span>
                       <select className="form-control" name="month" value={defMonth}
                         onChange={(e) => {
                           console.log("bell", e.target.value)
                           setFieldValue("month", e.target.value);
                           setDefaulMonth(e.target.value);
-                          console.log("shortFormatGlobal", shortFormatGlobal)
+                          
                           setDefaulShortFormat(e.target.value > 9 ? e.target.value + "" + shortFormatGlobal : +"0" + e.target.value + "" + shortFormatGlobal)
                           handleMonthChange(e.target.value);
 

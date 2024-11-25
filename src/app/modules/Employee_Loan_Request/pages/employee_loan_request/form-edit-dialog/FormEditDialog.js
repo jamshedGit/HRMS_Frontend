@@ -88,6 +88,18 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         draggable: true,
         progress: undefined,
       });
+    }
+   else if ( data.total_loan_amount < data.monthly_installment) {
+      disbaleLoading();
+      toast.error("The monthly installment must not exceed loan amount.", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     } else if (!data.Id && data) {
       formUIProps.setIds("");
       data.total_installment = totalInstallments;

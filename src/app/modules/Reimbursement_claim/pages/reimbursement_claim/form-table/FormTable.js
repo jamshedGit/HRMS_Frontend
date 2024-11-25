@@ -129,6 +129,21 @@ export function FormTable() {
         return format(new Date(cell), 'dd-MMM-yyyy'); // Customize format as needed
       },
     },
+     
+    {
+      dataField: "currentMonth",
+      text: "Pay in",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "10px",
+      },
+      // formatter: (cell) => {
+      //   // Format the date without timestamp
+      //   return format(new Date(cell), 'dd-MMM-yyyy'); // Customize format as needed
+      // },
+    },
 
     {
       dataField: "amount",

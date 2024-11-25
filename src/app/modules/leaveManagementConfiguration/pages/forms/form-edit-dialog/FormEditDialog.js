@@ -41,10 +41,10 @@ export function FormEditDialog({ id, show, onHide, userForRead, isEdit }) {
   //If Id is present (In Edit case) then fetch data for edit. Also fetch all dropdown data if not present in state
   useEffect(() => {
     dispatch(actions.fetchEditRecord(id ? { Id: id } : null));
-    if (!dashboard?.allEmployeeGradeList || !dashboard?.allEmployeeGradeList?.length)
-      dispatch(fetchAllFormsMenu(143, "allEmployeeGradeList"));
-    if (!dashboard?.allEmpTypeChildMenus || !dashboard?.allEmpTypeChildMenus?.length)
-      dispatch(fetchAllFormsMenu(88, "allEmpTypeChildMenus"));
+    // if (!dashboard?.allEmployeeGradeList || !dashboard?.allEmployeeGradeList?.length)
+    //   dispatch(fetchAllFormsMenu(143, "allEmployeeGradeList"));
+    // if (!dashboard?.allEmpTypeChildMenus || !dashboard?.allEmpTypeChildMenus?.length)
+    //   dispatch(fetchAllFormsMenu(88, "allEmpTypeChildMenus"));
     if (!dashboard?.allSubsidiaryList?.length)
       dispatch(fetchAllSubsidiaryData("allSubsidiaryList"));
 

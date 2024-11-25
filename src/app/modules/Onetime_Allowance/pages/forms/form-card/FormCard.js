@@ -45,7 +45,7 @@ export function FormCard() {
                 className="btn btn-primary"
                 onClick={formUIProps.newFormButtonClick}
               >
-                + Add OneTime Allowance
+                + Add OneTime Earning & Deduction
               </button>
             ) : (
               <></>

@@ -80,27 +80,29 @@ export function BranchEditDialog({ id, show, onHide, userForRead }) {
   // }, [actionsLoading]);
   //console.log("userForEdit", userForEdit);
 
-  const saveBranch = (branch) => {
+  const saveBranch = async (branch) => {
 
     if (!id) {
       console.log("Branch edit dialog");
       console.log(branch);
 
       const finalObject = { branch }
-      dispatch(actions.createBranch(branch, disbaleLoading, onHide));
+     await dispatch(actions.createBranch(branch, disbaleLoading, onHide));
 
-      dispatch(actions.fetchUsers(usersUIProps.queryParams));
+     await dispatch(actions.fetchUsers(usersUIProps.queryParams));
 
     } else {
       // const getUserStatus = userStatusTypes.find((item) => {
       //   return item.value === +user.status;
       // });
 
-      console.log("getUserStatus", branch);
+      console.log("branchUpdateObj", branch);
 
       const BranchUpdatedFields = {
         Id: branch.Id,
         Name: branch.Name,
+        BankId: branch.BankId,
+        bankId: branch.bankId,
         bankName: branch.Name,
         branchCode:branch.branchCode,
         countryId: branch.countryId,
@@ -117,8 +119,8 @@ export function BranchEditDialog({ id, show, onHide, userForRead }) {
       };
 
       console.log("BranchUpdatedFields", BranchUpdatedFields);
-      dispatch(actions.updateBranch(BranchUpdatedFields, disbaleLoading, onHide));
-      
+     await dispatch(actions.updateBranch(BranchUpdatedFields, disbaleLoading, onHide));
+     await dispatch(actions.fetchUsers(usersUIProps.queryParams));
     }
   };
 

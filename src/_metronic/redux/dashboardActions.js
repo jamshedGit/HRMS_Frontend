@@ -128,7 +128,8 @@ export const fetchAllDept = (id) => async (dispatch) => {
     .getAllDepartments(id)
     .then((response) => {
       const entities = response.data?.data;
-      console.log("free",entities);
+
+
       dispatch(actions.AllDeptFetch(entities));
     })
     .catch((error) => {
@@ -149,9 +150,9 @@ export const fetchAllDept = (id) => async (dispatch) => {
  * @param {string} text 
  * @returns 
  */
-export const fetchAllFormsMenu = (id, key, text=null,mergeLabel=false) => async (dispatch) => {
+export const fetchAllFormsMenu = (id, key, text = null, mergeLabel = false) => async (dispatch) => {
   return await requestFromServer
-    .getAllFormMenus(id, text,mergeLabel)
+    .getAllFormMenus(id, text, mergeLabel)
     .then((response) => {
       const entities = [...response.data?.data];
       dispatch(actions.AllChildMenusFetch({ entities, key }));
@@ -204,6 +205,43 @@ export const fetchEncashmentLeaveType = (key, employeeId = null, yearId = null) 
 
 /**
  * 
+ * Get All Employee Shift Data from Server and set it in state on the key provided in argument
+ * 
+ * @param {String} key 
+ * @returns 
+ */
+export const fetchAllEmployeeShifts = (key) => async (dispatch) => {
+  return await requestFromServer
+    .getAllEmployeeShift()
+    .then((response) => {
+      const entities = [...response.data?.data];
+      dispatch(actions.AllChildMenusFetch({ entities, key }));
+    })
+    .catch((error) => {
+      toast.error("Something went wrong");
+    });
+};
+
+/**
+ * 
+ * Get Current Payroll Month data from server and set it in state on the key provided in argument
+ * 
+ * @param {String} key 
+ * @returns 
+ */
+export const getPayrollMonth = (key) => (dispatch) => {
+  return requestFromServer.getPayrollMonth()
+    .then((res) => {
+      const payrollData = res.data?.data;
+      dispatch(actions.AllChildMenusFetch({ entities: payrollData[0], key }));
+    })
+    .catch((error) => {
+      toast.error("Something went wrong");
+    });
+}
+
+/**
+ * 
  * Get All Subsidiaries Data from Server and set it in state on the key provided in argument
  * 
  * @param {String} key 
@@ -213,7 +251,7 @@ export const fetchAllSubsidiaryData = (key) => async (dispatch) => {
   return await requestFromServer
     .getAllSubsidiary()
     .then((response) => {
-   
+
       const entities = [...response.data?.data];
       dispatch(actions.AllChildMenusFetch({ entities, key }));
     })
@@ -355,10 +393,13 @@ export const getLatestBookingNo = (bookingNo) => async (dispatch) => {
     });
 };
 
-export const getLatestTableId = (tableName, prefix) => async (dispatch) => {
+export const getLatestTableId = (tableName, pkIdColumn, whereClause, setValue = null) => async () => {
   return await requestFromServer
-    .getLastTableId(tableName, prefix)
+    .getLastTableId(tableName, pkIdColumn, whereClause)
     .then((response) => {
+      if(setValue){
+        setValue(response?.data?.data?.[0]?.NewId || '')
+      }
       return response?.data?.data;
       // dispatch(receiptSlice.MaxIdFetchForReceipt(response?.data?.data));
     })
@@ -409,5 +450,5 @@ export const fetchAllPayrollMonthYearList = (key) => async (dispatch) => {
       toast.error("Something went wrong");
     });
 
-    
+
 }

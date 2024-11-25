@@ -37,8 +37,8 @@ const userEditSchema_2 = Yup.object().shape(
       .string()
       .matches(/^\d+$/, 'Only numeric characters are allowed')
       .min(11)
-      .max(15)
-      .required("*Required"),
+      .max(15),
+      // .required("*Required"),
 
       contactPerson: Yup
       .string()
@@ -88,25 +88,34 @@ export function BranchEditForm({
   useEffect(() => {
     if (!user.Id) {
       dispatch(fetchAllBanks(1));
+     
     }
   }, [user.BankId, dispatch]);
 
 
   useEffect(() => {
-    if (user.accOpeningDate) {
-      setAccountOpeningDate(new Date(user.accOpeningDate));
+   
+    console.log("fff",user?.accOpeningDate)
+    if (user.Id && user?.accOpeningDate) {
+      
+      setAccountOpeningDate(new Date(user?.accOpeningDate));
     }
   }, [user.accOpeningDate]);
 
   useEffect(() => {
     
     const countryId = defCountry?.value ? defCountry.value : user.countryId;
+    if(countryId)
+    {
+      dispatch(fetchAllCity(countryId));
+    }
     setDefaultCountry(
       dashboard.allCountry &&
       dashboard.allCountry.filter((item) => {
         return item.value === countryId;
       })
     );
+   
   }, [user?.countryId, dashboard.allCountry]);
 
   useEffect(() => {
@@ -117,11 +126,18 @@ export function BranchEditForm({
         return item.value === BankId;
       })
     );
+   
   }, [user?.BankId, dashboard.allBanks]);
 
   useEffect(() => {
+   
+    const cityId = defCity?.value ? defCity.value : user.cityId;
+    
     setDefaultCity(
-      dashboard.allCity.filter((item) => item.value === user.cityId)
+      dashboard.allCity &&
+      dashboard.allCity.filter((item) => {
+        return item.value === cityId;
+      })
     );
   }, [user.cityId, dashboard.allCity]);
 
@@ -169,7 +185,7 @@ export function BranchEditForm({
                         onChange={(e) => {
                           setFieldValue("BankId", e.value);
                           setDefaultBanks(e);
-                          dispatch(fetchAllBanks(e.value));
+                         // dispatch(fetchAllBanks(e.value));
                         }}
                         value={defBank}
                         error={errors.BankId}
@@ -304,7 +320,7 @@ export function BranchEditForm({
                         selected={accOpeningDateSelected}
                         onChange={(date) => {
                           setFieldValue("accOpeningDate", date);
-                          setAccountOpeningDate(date);
+                          setAccountOpeningDate(date || null);
                         }}
                         timeInputLabel="Time:"
                         dateFormat="dd/MM/yyyy"
