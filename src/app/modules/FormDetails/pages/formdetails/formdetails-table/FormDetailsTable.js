@@ -109,8 +109,8 @@ export function FormTable() {
     //   },
     // },
     {
-      dataField: "formName",
-      text: "Form",
+      dataField: "formCode",
+      text: "Form Code",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -119,8 +119,8 @@ export function FormTable() {
       },
     },
     {
-      dataField: "formCode",
-      text: "Code",
+      dataField: "formName",
+      text: "Form Name",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -128,6 +128,7 @@ export function FormTable() {
         minWidth: "160px",
       },
     },
+   
     // {
     //   dataField: "MenuName",
     //   text: "Parent",

@@ -79,7 +79,7 @@ export function FormTable() {
     // },
     {
       dataField: "formCode",
-      text: "Code",
+      text: "Form Code",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -89,7 +89,7 @@ export function FormTable() {
     },
     {
       dataField: "formName",
-      text: "Form",
+      text: "Form Name",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
