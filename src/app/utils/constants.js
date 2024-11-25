@@ -379,3 +379,13 @@ export const SERVER_MESSAGES = {
   deletedSuccess: 'Deleted Successfully',
   deletedFail: 'Unable to Delete',
 }
+
+export const WEEK_DAY_STRING = {
+  SUNDAY: 'Sunday',
+  MONDAY: 'Monday',
+  TUESDAY: 'Tuesday',
+  WEDNESDAY: 'Wednesday',
+  THURSDAY: 'Thursday',
+  FRIDAY: 'Friday',
+  SATURDAY: 'Saturday',
+}

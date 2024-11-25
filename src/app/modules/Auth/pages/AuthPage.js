@@ -1,99 +1,39 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react"
-import { Link, Switch, Redirect } from "react-router-dom"
-import { toAbsoluteUrl } from "../../../../_metronic/_helpers"
-import { ContentRoute } from "../../../../_metronic/layout"
-import Login from "./Login"
-import Registration from "./Registration"
-import ForgotPassword from "./ForgotPassword"
-import "../../../../_metronic/_assets/sass/pages/login/classic/login-1.scss"
+import React from "react";
+import { Link, Switch, Redirect } from "react-router-dom";
+import { toAbsoluteUrl } from "../../../../_metronic/_helpers";
+import { ContentRoute } from "../../../../_metronic/layout";
+import Login from "./Login";
+import Registration from "./Registration";
+import ForgotPassword from "./ForgotPassword";
+import "../../../../_metronic/_assets/sass/pages/login/classic/login-1.scss";
 
 export function AuthPage() {
   return (
     <>
-      <div className="d-flex flex-column flex-root">
+      <div
+        className="d-flex flex-column flex-root"
+        style={{
+          backgroundImage: `url(${toAbsoluteUrl("/media/bg/bg-4.png")})`,
+        }}
+      >
         {/*begin::Login*/}
         <div
           className="login login-1 login-signin-on d-flex flex-column flex-lg-row flex-column-fluid bg-white"
           id="kt_login"
+          style={{
+            height: "100vh", // Full height of the viewport
+            width: "100%", // Full width of the viewport
+            // backgroundImage: 'linear-gradient(to bottom, rgb(36, 144, 207), rgb(13, 114, 185)',  // Linear gradient background
+            backgroundImage: `url(${toAbsoluteUrl("/media/bg/login-bg.png")})`,
+            backgroundSize: "cover", // Ensures the gradient covers the entire area
+            backgroundPosition: "center", // Ensures the background is centered
+          }}
         >
-          {/*begin::Aside*/}
-          <div
-            className="login-aside d-flex flex-row-auto bgi-size-cover bgi-no-repeat p-10 p-lg-10"
-            style={{
-              backgroundImage: `url(${toAbsoluteUrl("/media/bg/bg-4.png")})`,
-            }}
-          >
-            {/*begin: Aside Container*/}
-            <div className="d-flex flex-row-fluid flex-column justify-content-between">
-              {/* start:: Aside header */}
-             
-               <Link to="/" className="flex-column-auto mt-5 pb-lg-0 pb-10">
-                <img
-                 style={{marginTop: "-15px", width:"265px"}}
-                  alt="Logo"
-                  className="max-h-250px"
-                  src={toAbsoluteUrl("/media/logos/dsc_logo.png")}
-                />
-              </Link>
-              {/* end:: Aside header */}
+          {/* login div */}
 
-              {/* start:: Aside content */}
-              <div className="flex-column-fluid d-flex flex-column justify-content-center">
-                <h3 className="font-size-h1 mb-5 text-white">
-                  Welcome to Dynasoft Cloud!
-                </h3>
-                {/* <p className="font-weight-lighter text-white opacity-80">
-                Edhi strongly believes in protecting basic human rights without any discrimination of color,
-                 caste, and creed. My religion is “service for humanity” that is spanned over 56 years, 
-                 thus our efforts and services are greatly liked and commended by all schools of thought, 
-                 across Pakistan and many parts of the world.
-                </p> */}
-              </div>
-              {/* end:: Aside content */}
-
-              {/* start:: Aside footer for desktop */}
-              <div className="d-none flex-column-auto d-lg-flex justify-content-between mt-10">
-                <div className="opacity-70 font-weight-bold	text-white">
-                  &copy; 2024 Dynasoft Cloud PVT Ltd.
-                </div>
-                <div className="d-flex">
-                  <Link to={{ pathname: "https://edhi.org/privacy-policy/"}} target="_blank" className="text-white">
-                    Privacy
-                  </Link>
-                  <Link to={{ pathname: "https://edhi.org"}} target="_blank" className="text-white ml-10">
-                    Legal
-                  </Link>
-                  <Link to={{ pathname: "https://edhi.org/contact-us/"}} target="_blank" className="text-white ml-10">
-                    Contact
-                  </Link>
-                </div>
-              </div>
-              {/* end:: Aside footer for desktop */}
-            </div>
-            {/*end: Aside Container*/}
-          </div>
-          {/*begin::Aside*/}
-
-          {/*begin::Content*/}
           <div className="d-flex flex-column flex-row-fluid position-relative p-7 overflow-hidden">
-            {/*begin::Content header*/}
-            {/* <div className="position-absolute top-0 right-0 text-right mt-5 mb-15 mb-lg-0 flex-column-auto justify-content-center py-5 px-10">
-              <span className="font-weight-bold text-dark-50">
-                Don't have an account yet?
-              </span>
-              <Link
-                to="/auth/registration"
-                className="font-weight-bold ml-2" 
-                id="kt_login_signup"
-              >
-                Sign Up!
-              </Link>
-            </div> */}
-            {/*end::Content header*/}
-
-            {/* begin::Content body */}
-            <div className="d-flex flex-column-fluid flex-center mt-30 mt-lg-0">
+            <div className="d-flex flex-column-fluid flex-center mt-30 mt-lg-0 p-0">
               <Switch>
                 <ContentRoute path="/auth/login" component={Login} />
                 <ContentRoute
@@ -108,37 +48,129 @@ export function AuthPage() {
                 <Redirect to="/auth/login" />
               </Switch>
             </div>
-            {/*end::Content body*/}
-
-            {/* begin::Mobile footer */}
-            <div className="d-flex d-lg-none flex-column-auto flex-column flex-sm-row justify-content-between align-items-center mt-5 p-5">
-              <div className="text-dark-50 font-weight-bold order-2 order-sm-1 my-2">
-              &copy; 2024 Dynasoft Cloud PVT Ltd.
-              </div>
-              <div className="d-flex order-1 order-sm-2 my-2">
-                <Link to="/terms" className="text-dark-75 text-hover-primary">
-                  Privacy
-                </Link>
-                <Link
-                  to="/terms"
-                  className="text-dark-75 text-hover-primary ml-4"
-                >
-                  Legal
-                </Link>
-                <Link
-                  to="/terms"
-                  className="text-dark-75 text-hover-primary ml-4"
-                >
-                  Contact
-                </Link>
-              </div>
-            </div>
-            {/* end::Mobile footer */}
           </div>
-          {/*end::Content*/}
+
+          {/* left side */}
+
+          <div className="login-left-container d-none d-lg-block">
+            <div
+              className="login-left-container-inner"
+              style={{
+                width: "50vw",
+              }}
+            >
+              <div
+                className="login-left-container-inner-img"
+                style={{
+                  backgroundImage: `url(${toAbsoluteUrl(
+                    "/media/bg/login-pic.png"
+                  )})`,
+                  backgroundSize: "cover", // Ensures the gradient covers the entire area
+                  backgroundPosition: "center", // Ensures the background is centered
+                }}
+              ></div>
+              <div className="login-left-container-inner-bottom-img">
+                <div className="login-left-container-inner-bottom-img1 mt-5">
+                  <img
+                    src="/media/bg/partner-logo.png"
+                    alt="Partner Logo"
+                    style={{
+                      width: "100%", // Ensure the image takes full width of the container
+                      height: "100%", // Ensure the image takes full height of the container
+                      objectFit: "cover", // Ensures the image covers the container while maintaining aspect ratio
+                      objectPosition: "center", // Ensures the image stays centered if it gets cropped
+                    }}
+                  />
+
+
+                </div>
+
+
+
+                <div className="login-left-container-inner-bottom-img2">
+                  <div className="login-left-container-inner-bottom-img2-heading">
+                    <h1  style={{ fontSize: '1.5vw' }}>Our Technology Partners</h1>
+                  </div>
+
+
+                  <div className="login-left-container-inner-bottom-img2-container ">
+                    <img
+                      src="/media/bg/tech-partner1.png"
+                      alt="Partner Logo"
+                      className="partner-image"
+
+                    />
+
+                    <img
+                      src="/media/bg/tech-partner2.png"
+                      alt="Partner Logo"
+                      className="partner-image"
+
+                    />
+                    <img
+                      src="/media/bg/tech-partner3.png"
+                      alt="Partner Logo"
+                      className="partner-image"
+
+                    />
+                    <img
+                      src="/media/bg/tech-partner4.png"
+                      alt="Partner Logo"
+                      className="partner-image"
+
+                    />
+                  </div>
+                </div>
+
+              </div>
+
+
+
+
+
+
+
+            </div>
+
+            <footer className="d-flex gap-4  login-left-footer justify-content-between p-4 pl-0">
+              <div>
+               <div className="mt-4">
+               <img
+                      src="/media/bg/facebook-logo.png"
+                      alt="Partner Logo"
+                      // className="partner-image"
+                      className="ml-0" 
+
+                    />
+                    <img
+                      src="/media/bg/insta-logo.png"
+                      alt="Partner Logo"
+                      className="ml-4" 
+
+                    />
+                    <img
+                      src="/media/bg/youtube-logo.png"
+                      alt="Partner Logo"
+                      className="ml-4" 
+
+                    />
+                    <img
+                      src="/media/bg/linkedin-logo.png"
+                      alt="Partner Logo"
+                      className="ml-4" 
+
+                    />
+               </div>
+              </div>
+              <div>
+                <p className="mt-5 pr-2">&copy;Copyright © 2024, Powered by Dynasoft Cloud</p>
+              </div>
+
+
+            </footer>
+          </div>
         </div>
-        {/*end::Login*/}
       </div>
     </>
-  )
+  );
 }

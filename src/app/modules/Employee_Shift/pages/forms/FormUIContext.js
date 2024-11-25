@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
 import { isEqual, isFunction } from "lodash";
 import { initialFilter } from "./FormUIHelpers";
+import { WEEK_DAY_STRING } from "../../../../utils/constants";
 
 const FormUIContext = createContext();
 
@@ -33,7 +34,7 @@ export function FormUIProvider({ FormUIEvents, children }) {
     shiftType: "",
     startTime: "",
     endTime: "",
-    workingdays: "",
+    workingdays: [...Object.values(WEEK_DAY_STRING)],
     earlyIn: "",
     earlyOut: "",
     halfDayStart: "",

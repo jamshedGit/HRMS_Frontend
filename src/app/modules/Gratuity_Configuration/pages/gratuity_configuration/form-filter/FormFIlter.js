@@ -106,10 +106,10 @@ export function FormFIlter({ listLoading,user }) {
           <form onSubmit={handleSubmit} className="form form-label-right">
             <div className="row">
 
-              <div className="col-12 col-md-12">
+              <div className="col-12 col-md-12 ">
                 <input
                   type="text"
-                  className="form-control"
+                  className="form-control input-field"
                   name="searchText"
                   placeholder="Search"
                   onBlur={handleBlur}
@@ -120,7 +120,7 @@ export function FormFIlter({ listLoading,user }) {
                   }}
                 />
                 <small className="form-text text-muted">
-                  <b>Search</b> in all fields
+                  <b>Search</b> in min year
                 </small>
               </div>
             </div>
