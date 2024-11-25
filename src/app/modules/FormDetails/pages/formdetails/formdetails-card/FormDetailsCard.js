@@ -48,7 +48,7 @@ export function FormCard() {
                 className="btn btn-primary"
                 onClick={FormUIProps.newFormButtonClick}
               >
-                + Add Child Menu
+                + Add General Setup
               </button>
             ) : (
               <></>
