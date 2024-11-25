@@ -120,6 +120,8 @@ export function BankEditForm({
         onSubmit={(values) => {
           console.log("values", values);
           enableLoading();
+          if (values.mappedAllowance == "-1")
+            values.mappedAllowance = ""
 
           saveEarning({ ...values, earningCode: defEarningCode ? defEarningCode : values.earningCode });
         }}
