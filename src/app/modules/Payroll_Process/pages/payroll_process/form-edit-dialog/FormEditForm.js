@@ -450,7 +450,7 @@ import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 import { getDateDiffInDays } from "../../../../../utils/common";
 
 // percentage: Yup.string().required("Required*"),
-const holidaysEditSchema = Yup.object().shape({
+const payroll_processEditSchema = Yup.object().shape({
   // from_amount: Yup.string().required("Required*"),
 
   subsidiaryId: Yup.number()
@@ -458,25 +458,14 @@ const holidaysEditSchema = Yup.object().shape({
 
   // to_amount: Yup.string().required("Required*"),
 
-  name: Yup.string()
+  payroll_groupId: Yup.string()
     .required(VALIDATION_MESSAGES.required),
 
-
-  from_date: Yup.date().required(VALIDATION_MESSAGES.required),
-  to_date: Yup.date()
-    .min(
-      Yup.ref('from_date'),
-      "End date cannot be earlier than from date"
-    )
+    payroll_monthId: Yup.string()
     .required(VALIDATION_MESSAGES.required),
 
 
 
-  holiday_typeId: Yup.number()
-    .required(VALIDATION_MESSAGES.required),
-
-  religionId: Yup.string()
-    .required(VALIDATION_MESSAGES.required),
 
 });
 
@@ -521,7 +510,7 @@ export function FormEditForm({
       enableReinitialize={true}
 
       initialValues={user}
-      // validationSchema={holidaysEditSchema}
+      validationSchema={payroll_processEditSchema}
       onSubmit={(values, { resetForm }) => {
 
         enableLoading();
