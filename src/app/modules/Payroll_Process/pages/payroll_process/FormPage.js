@@ -14,61 +14,20 @@ import {} from "../../_redux/redux-Actions";
 
 export function FormPage({ history }) {
 
+
   const dispatch = useDispatch();
   const FormUIEvents = {
-    newFormButtonClick: () => {
-      history.push("/payroll_process/read-all-payroll-process/new");
-    },
-    openEditFormDialog: (id) => {
-      history.push(`/payroll_process/read-all-payroll-process/${id}/edit`);
-    },
+
     openDeleteFormDialog: (id, status) => {
       history.push(`/payroll_process/read-all-payroll-process/${id}/${status}/delete`);
     },
-    openActiveFormDialog: (id) => {
-      history.push(`/payroll_process/read-all-payroll-process/${id}/active`);
-    },
-    openReadFormDialog: (id, isUserRead) => {
-      history.push(`/payroll_process/read-all-payroll-process/${id}/read`);
-    },
+
   };
   return (
 
     
     <FormUIProvider FormUIEvents={FormUIEvents}>
-      <Route exact path="/payroll_process/read-all-payroll-process/new">
-        {({ history, match }) => (
-          <FormEditDialog
-            show={match != null}
-            onHide={() => {
-              history.push("/payroll_process/read-all-payroll-process");
-            }}
-          />
-        )}
-      </Route>
-      <Route path="/payroll_process/read-all-payroll-process/:id/edit">
-        {({ history, match }) => (
-          <FormEditDialog
-            show={match != null}
-            id={match && match.params.id}
-            onHide={() => {
-              history.push("/payroll_process/read-all-payroll-process");
-            }}
-          />
-        )}
-      </Route>
-      <Route path="/payroll_process/read-all-payroll-process/:id/read">
-        {({ history, match }) => (
-          <FormEditDialog
-            show={match != null}
-            id={match && match.params.id}
-            userForRead={true}
-            onHide={() => {
-              history.push("/payroll_process/read-all-payroll-process");
-            }}
-          />
-        )}
-      </Route>
+     
       <Route path="/payroll_process/read-all-payroll-process/:id/:status/delete">
         {({ history, match }) => (
           <FormDeleteDialog
@@ -81,6 +40,7 @@ export function FormPage({ history }) {
           />
         )}
       </Route>
+
     
       <FormCard />
       <ToastContainer

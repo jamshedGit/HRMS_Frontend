@@ -12,7 +12,9 @@ export const ReceiptUIConsumer = FormUIContext.Consumer;
 
 export function FormUIProvider({ FormUIEvents, children }) {
   const [queryParams, setQueryParamsBase] = useState(initialFilter);
-  const [ids, setIds] = useState([]);
+  const [employeeId, setemployeeId] = useState('');
+  const [ids, setIds] = useState("");
+  const [isFileReq,setIsFileReq]=useState(false)
   const setQueryParams = useCallback((nextQueryParams) => {
     setQueryParamsBase((prevQueryParams) => {
       if (isFunction(nextQueryParams)) {
@@ -26,12 +28,21 @@ export function FormUIProvider({ FormUIEvents, children }) {
       return nextQueryParams;
     });
   }, []);
-  const initUser = {
+
+
+  const initUser={
     Id: "",
-    subsidiaryId: "",
-    payroll_groupId: "",
-    payroll_monthId: "",
-  };
+    reimbursement_typeId: "",
+    employeeId:employeeId,
+    details: "",
+    date:"",
+    amount:"",
+    file:"",
+    pay_in_payroll_forId:"", 
+    // pay_slip_refId: "", 
+
+
+  }
 
 
 
@@ -41,7 +52,11 @@ export function FormUIProvider({ FormUIEvents, children }) {
     setQueryParams,
     ids,
     setIds,
+    isFileReq,
+    setIsFileReq,
     initUser,
+    setemployeeId,
+    employeeId,
     newFormButtonClick: FormUIEvents.newFormButtonClick,
     openEditFormDialog: FormUIEvents.openEditFormDialog,
     openDeleteFormDialog: FormUIEvents.openDeleteFormDialog,

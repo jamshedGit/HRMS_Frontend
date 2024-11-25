@@ -1,42 +1,43 @@
 import * as requestFromServer from "./redux-Crud";
-import {payroll_processSlice, callTypes } from "./redux-Slice";
+import { payroll_processSlice, callTypes } from "./redux-Slice";
 import { toast } from "react-toastify";
 
 const { actions } = payroll_processSlice;
 
 
-export const fetchHolidays = (queryparm) => async (dispatch) => {
+export const fetchReimbursementClaim = (params) => async (dispatch) => {
 
 
   
-  return requestFromServer.getAllHoliday(queryparm)
-   
-    .then((response) => {
-    
 
-      dispatch(actions.holidayFetched(response));
+  return requestFromServer.getAllReimbursementClaim(params)
+
+    .then((response) => {
+
+     
+      dispatch(actions.reimbursementClaimFetched(response));
     })
     .catch((error) => {
-    
-      error.clientMessage = "Can't find";
+
+      error.clientMessage = "Can't find ";
       dispatch(actions.catchError({ error, callType: callTypes.list }));
     });
 };
 
-export const fetchHoliday = (id) => (dispatch) => {
+export const fetchmoduledata = (id) => (dispatch) => {
 
 
   if (!id) {
-    return dispatch(actions.HolidayFetchedForEdit({ userForEdit: undefined }));
+    return dispatch(actions.ReimbursementClaimFetchedForEdit({ userForEdit: undefined }));
   }
 
   return requestFromServer
-    .getHolidayById({ Id: id })
+    .getReimbursementClaimById({ Id: id })
     .then((response) => {
       const entities = response.data?.data;
 
-   
-      dispatch(actions.HolidayFetchedForEdit({ userForEdit: entities }));
+
+      dispatch(actions.ReimbursementClaimFetchedForEdit({ userForEdit: entities }));
     })
     .catch((error) => {
       error.clientMessage = "Can't find user";
@@ -44,16 +45,16 @@ export const fetchHoliday = (id) => (dispatch) => {
     });
 };
 
-export const deleteHoliday = (id) => (dispatch) => {
+export const deleteReimbursementClaim= (id) => (dispatch) => {
 
   return requestFromServer
-    .deleteHoliday({ Id: id })
+    .deleteReimbursementClaim({ Id: id })
     .then((response) => {
-    
-      dispatch(actions.HolidayDeleted({ Id: id }));
+
+      dispatch(actions.ReimbursementClaimDeleted({ Id: id }));
       toast.success("Successfully Deleted", {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -67,24 +68,37 @@ export const deleteHoliday = (id) => (dispatch) => {
     });
 };
 
+export const uploadImage = async (file) => {
+  const formData = new FormData()
+  formData.append('file', file)
+  return await requestFromServer.uploadImage(formData)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      error.clientMessage = "File not Uploaded";
+      // dispatch(actions.catchError({ error, callType: callTypes.list }));
+    });
 
-export const createHoliday = (holidayForCreation, disbaleLoading, onHide) => (
+};
+
+
+export const createReimbursementClaim = (reimbursementClaimForCreation, disbaleLoading, onHide) => (
   dispatch
 ) => {
 
-  
   return requestFromServer
-    .createHoliday(holidayForCreation)
+    .createReimbursementClaim(reimbursementClaimForCreation)
     .then((res) => {
-   
-      const user = res.data?.data;
      
-  
-      dispatch(actions.holidayCreated(user));
+      const user = res.data?.data;
+
+
+      dispatch(actions.reimbursementClaimCreated(user));
       disbaleLoading();
       toast.success("Successfully Created", {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -109,18 +123,37 @@ export const createHoliday = (holidayForCreation, disbaleLoading, onHide) => (
     });
 };
 
-export const updateHoliday = (user, disbaleLoading, onHide) => (dispatch) => {
+
+export const getAllReimbursementConfigPolicy = (employeeId) => (
+
+  dispatch
+) => {
+
   return requestFromServer
-    .updateHoliday(user)
-    .then((response) => {
+    .getAllReimbursementConfigPolicy(employeeId)
+    .then((res) => {
+
+      const user = res.data?.data;
+
+
+      dispatch(actions.getReimbursementConfigPolicies(user));
+
+      // toast.success("Successfully", {
+      //   position: "top-right",
+      //   autoClose: 5000,
+      //   hideProgressBar: false,
+      //   closeOnClick: true,
+      //   pauseOnHover: true,
+      //   draggable: true,
+      //   progress: undefined,
+      // });
   
-      const updatedHoliday = response?.config?.data; // response.data?.data;
-   
-      dispatch(actions.holidayUpdated({ updatedHoliday }));
-    
-      disbaleLoading();
-      onHide();
-      toast.success(response.data.message , {
+    })
+    .catch((error) => {
+      error.clientMessage = "Can't create user";
+      dispatch(actions.catchError({ error, callType: callTypes.action }));
+      dispatch(actions.getReimbursementConfigPolicies(null));
+      toast.error(error?.response?.data?.message, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -129,12 +162,39 @@ export const updateHoliday = (user, disbaleLoading, onHide) => (dispatch) => {
         draggable: true,
         progress: undefined,
       });
-      
+    });
+};
+
+
+
+export const updateReimbursementClaim = (user, disbaleLoading, onHide) => (dispatch) => {
+  return requestFromServer
+    .updateReimbursementClaim(user)
+    .then((response) => {
+
+      const updatedReimbursementClaim = response?.config?.data; // response.data?.data;
+
+
+      dispatch(actions.clearUserForEdit());
+      dispatch(actions.reimbursementClaimUpdated({ updatedReimbursementClaim }));
+
+    
+      disbaleLoading();
+      onHide();
+      toast.success(response.data.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+
 
     })
     .catch((error) => {
-  
-      //error.clientMessage = "Can't update User"
+
       dispatch(actions.catchError({ error, callType: callTypes.action }));
       disbaleLoading();
       toast.error(error?.response?.data?.message, {

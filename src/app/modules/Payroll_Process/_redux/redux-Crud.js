@@ -2,33 +2,49 @@ import axios from "axios";
 
 export const USERS_URL = process.env.REACT_APP_API_URL;
 
-//Create user
-export function createHoliday(body) {
 
-  return axios.post(`${USERS_URL}/payroll_process/create-payroll-process`, body);
+export function uploadImage(body) {
+  return axios.post(`${USERS_URL}/file-upload`, body);
+}
+
+//Create record
+export function createReimbursementClaim(body) {
+ 
+
+  return axios.post(`${USERS_URL}/reimbursement_claim/create-reimbursement-claim`, body);
+
   
 }
 
 
 // Read
-export function getAllHoliday(body) {
+export function getAllReimbursementClaim(body) {
 
-  return axios.post(`${USERS_URL}/payroll_process/read-all-payroll-process`, body);
+
+  return axios.post(`${USERS_URL}/reimbursement_claim/read-all-reimbursement-claim`, body);
 }
 
-export function getHolidayById(id) {
+export function getReimbursementClaimById(id) {
 
-  return axios.post(`${USERS_URL}/payroll_process/read-payroll-process`, id);
+  return axios.post(`${USERS_URL}/reimbursement_claim/read-reimbursement-claim`, id);
 }
 
 //Update
-export function updateHoliday(body) {
+export function updateReimbursementClaim(reimbursementClaim) {
    
-  return axios.put(`${USERS_URL}/payroll_process/update-payroll-process`, body);
+  return axios.put(`${USERS_URL}/reimbursement_claim/update-reimbursement-claim`, reimbursementClaim);
 }
 
 //Delete
-export function deleteHoliday(body) {
+export function deleteReimbursementClaim(body) {
 
-  return axios.patch(`${USERS_URL}/payroll_process/delete-payroll-process`, body);
+  return axios.patch(`${USERS_URL}/reimbursement_claim/delete-reimbursement-claim`, body);
+}
+
+export function getAllReimbursementConfigPolicy(body) {
+ 
+
+  return axios.post(`${USERS_URL}/reimbursement_claim/read-reimbursement-configuration-policies`, body);
+
+  
 }

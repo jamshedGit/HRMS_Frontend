@@ -1,16 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialHolidaysState = {
+
+
+
+const initialReimbursementClaimState = {
     listLoading: false,
     actionsLoading: null,
     totalCount: 0,
     entities: null,
     roles: null,
-    centers: null,
     userStatusTypes: null,
     userForEdit: undefined,
     lastError: null,
     userForRead: false,
+    reimbursement_config_policies_permission: null
 };
 
 
@@ -20,8 +23,8 @@ export const callTypes = {
 };
 
 export const payroll_processSlice = createSlice({
-    name: "payroll_process",
-    initialState: initialHolidaysState,
+    name: "payroll_processSlice",
+    initialState: initialReimbursementClaimState,
     reducers: {
         catchError: (state, action) => {
             state.error = `${action.type}: ${action.payload.error}`;
@@ -32,110 +35,130 @@ export const payroll_processSlice = createSlice({
             }
         },
 
-        holidayFetched: (state, action) => {
-        
-  
+        clearUserForEdit: (state) => {
+
+            state.userForEdit = null;
+        },
+
+        reimbursementClaimFetched: (state, action) => {
+
+
             const entities = action.payload.data?.data.rows;
-           
+     
             const totalResult = action.payload.data?.data.totalResults;
-            // const updatedEntities = entities.map(entity => {
-             
-            //     const basis_of_gratuity = entity.basis_of_gratuityId === 0 ? 'Gross' : 'Basis';
-                
-            
-            //     return {
-            //         ...entity,
-            //         basis_of_gratuity // Add the new field to the entity
-            //     };
-            // });
-          
+
             state.listLoading = false;
             state.error = null;
-            state.entities = entities;
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+            // Iterate over the rows and add the formatted month-year to each entry
+            const updatedEntities = entities.map(row => {
+                // Get the corresponding month and year from the PayInPayrollForId
+                const month = row.PayInPayrollForId ? row.PayInPayrollForId.month : null;
+                const year = row.PayInPayrollForId ? row.PayInPayrollForId.year : null;
+
+                // Add the formatted currentMonth field (e.g. 'Dec-2024')
+                if (month !== null && year !== null) {
+                    row.currentMonth = `${monthNames[month - 1]}-${year}`;
+                } else {
+                    row.currentMonth = null; // If either month or year is missing, set to null
+                }
+
+                return row;
+            });
+
+            state.entities = updatedEntities;
             state.totalCount = totalResult;
            
         },
 
-         //get User By ID
-         HolidayFetchedForEdit: (state, action) => {
-           
-   
+        //get User By ID
+        ReimbursementClaimFetchedForEdit: (state, action) => {
+
+
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
         },
 
-      
-        HolidayDeleted: (state, action) => {
+
+        ReimbursementClaimDeleted: (state, action) => {
 
             state.error = null;
             state.actionsLoading = false;
-         
-          
+
+
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );
         },
+        // reimbursementClaimCreated: (state, action) => {
+            
 
-
-
-
-
-        // holidayCreated: (state, action) => {
-           
         //     state.actionsLoading = false;
         //     state.error = null;
         //     state.entities.unshift(action.payload);
         // },
-
-
-        holidayCreated: (state, action) => {
+      
+      
+        reimbursementClaimCreated: (state, action) => {
+            
             state.actionsLoading = false;
             state.error = null;
         
-            // Clone the payload to avoid direct mutation
-            // let payload = JSON.stringify(action.payload);
-            // let payloadObj = JSON.parse(payload);
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         
-            // // If basis_of_gratuityId is 0, set "Gross", if 1, set "Basis"
-            // if (payloadObj.basis_of_gratuityId == 0) {
-             
-            //     payloadObj.basis_of_gratuity = "Gross";
-            // } else if (payloadObj.basis_of_gratuityId == 1) {
+            // Format the new entity
+            const newEntity = { ...action.payload };
+        
+            // Extract month and year from the PayInPayrollForId
+            const month = newEntity.PayInPayrollForId ? newEntity.PayInPayrollForId.month : null;
+            const year = newEntity.PayInPayrollForId ? newEntity.PayInPayrollForId.year : null;
+        
+            // Add formatted currentMonth
           
-            //     payloadObj.basis_of_gratuity = "Basis";
-            // }
+            if (month !== null && year !== null) {
+                newEntity.currentMonth = `${monthNames[month - 1]}-${year}`;
+            } else {
+                newEntity.currentMonth = null; // If either month or year is missing
+            }
         
-            // Add the modified payload to the beginning of the entities list
-            state.entities.unshift(action.payload);
+            // Add the new entity to the start of the entities array
+       
+            state.entities.unshift(newEntity);
         },
         
-
-
-
-        holidayUpdated: (state, action) => {
+      
+        reimbursementClaimUpdated: (state, action) => {
             state.error = null;
             state.actionsLoading = false;
             // state.entities.push(action.payload)
-            
-          
+
             state.entities = state.entities.map((entity) => {
-                
+
                 //const payload = { ...action.payload };
                 let payload = JSON.stringify(action.payload)
                 let payloadObj = JSON.parse(payload);
-                let finalObj = JSON.parse(payloadObj.updatedHoliday);
+                let finalObj = JSON.parse(payloadObj.updatedReimbursementClaim);
                 if (entity.Id === finalObj.Id) {
-                    return finalObj; //action.payload.updatedHoliday;
+                    return finalObj;
                 }
+
                 return entity;
             });
-           
+
         },
 
+        getReimbursementConfigPolicies: (state, action) => {
 
-        
-        
+            state.actionsLoading = false;
+            state.error = null;
+            state.reimbursement_config_policies_permission = action.payload;
+
+
+
+        },
+
 
     },
 });

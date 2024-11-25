@@ -9,12 +9,32 @@ export function FormDeleteDialog({ id, status, show, onHide }) {
 
   const [loading, setLoading] = useState(false);
   // Customers UI Context
-  const usersUIContext = useFormUIContext();
-  const usersUIProps = useMemo(() => {
+  // const usersUIContext = useFormUIContext();
+  // const usersUIProps = useMemo(() => {
+  //   return {
+  //     queryParams: usersUIContext.queryParams,
+  //   };
+  // }, [usersUIContext]);
+
+  const formUIContext = useFormUIContext();
+  const formUIProps = useMemo(() => {
+ 
     return {
-      queryParams: usersUIContext.queryParams,
+      ids: formUIContext.ids,
+      setIds: formUIContext.setIds,
+      employeeId: formUIContext.employeeId,
+      queryParams: formUIContext.queryParams,
+      setQueryParams: formUIContext.setQueryParams,
+      openEditFormDialog: formUIContext.openEditFormDialog,
+      openDeleteFormDialog: formUIContext.openDeleteFormDialog,
+      openActiveFormDialog: formUIContext.openActiveFormDialog,
+      openReadFormDialog: formUIContext.openReadFormDialog,
     };
-  }, [usersUIContext]);
+  }, [formUIContext]);
+
+
+
+
 
   // Customers Redux state
   const dispatch = useDispatch();
@@ -42,18 +62,19 @@ export function FormDeleteDialog({ id, status, show, onHide }) {
   // looking for loading/dispatch
   useEffect(() => {}, [isLoading, dispatch]);
 
-  const deleteHoliday = () => {
+  const deleteReimbursementClaim = () => {
     // server request for deleting customer by id
     enableLoading();
-    dispatch(actions.deleteHoliday(id)).then(() => {
+    dispatch(actions.deleteReimbursementClaim(id)).then(() => {
       onHide();
       // refresh list after deletion
-      dispatch(actions.fetchHolidays(usersUIProps.queryParams));
+  
+      dispatch(actions.fetchReimbursementClaim(formUIProps));
    
       disableLoading();
     });
   };
-
+ 
   return (
     <Modal
       show={show}
@@ -84,7 +105,7 @@ export function FormDeleteDialog({ id, status, show, onHide }) {
           <> </>
           <button
             type="button"
-            onClick={deleteHoliday}
+            onClick={deleteReimbursementClaim}
             className="btn btn-primary btn-elevate"
           >
             Delete Record

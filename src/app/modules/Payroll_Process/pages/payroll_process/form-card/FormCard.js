@@ -1,4 +1,9 @@
-import React, { useMemo } from "react"
+import React, { useMemo ,useEffect} from "react"
+import { EmployeeSelect } from "../form-edit-dialog/EmployeeSelect"
+import EmployeeProfile from "../../../../../utils/common-modules/EmployeeProfile"
+import { FormEditDialog } from "../form-edit-dialog/FormEditDialog"
+import { fetchAllActiveEmployees } from "../../../../../../_metronic/redux/dashboardActions"
+
 
 import {
   Card,
@@ -9,69 +14,102 @@ import {
 import { FormTable } from "../form-table/FormTable"
 import { useFormUIContext } from "../FormUIContext"
 import { FormFIlter } from "../form-filter/FormFIlter"
-import { useSelector, shallowEqual } from "react-redux"
+import { useSelector, shallowEqual, useDispatch } from "react-redux"
+import { getAllReimbursementConfigPolicy } from "../../../_redux/redux-Actions"
 
 export function FormCard() {
   const FormUIContext = useFormUIContext()
-
+  const dispatch = useDispatch();
   const FormUIProps  = useMemo(() => {
     return {
-      newFormButtonClick: FormUIContext.newFormButtonClick,
-      openEditFormDialog: FormUIContext.openEditFormDialog,
+      employeeId: FormUIContext.employeeId,
+      setemployeeId: FormUIContext.setemployeeId,
+      queryParamsLeaveApp: FormUIContext.queryParamsLeaveApp,
+      id: FormUIContext.ids,
     }
   }, [FormUIContext])
+
+  useEffect(()=>{
+
+
+  },[FormUIProps])
+
+
 
   const { userAccess } = useSelector(
    
     (state) => ({
       
-      userAccess: state.auth.userAccess.payroll_process,
+      userAccess: state.auth.userAccess.reimbursement_claim,
     }),
     shallowEqual
   )
-
+ 
   const accessUser = userAccess.find(
-    (item) => item.componentName === "CreatePayrollProcess"
+    (item) => item.componentName === "CreateReimbursementClaim"
   )
 
   const { currentState } = useSelector(
     (state) => {  return {
       
-      currentState: state.payroll_process,
-      userAccess: state?.auth?.userAccess["payroll_process"],
+      currentState: state.reimbursement_claim,
+      userAccess: state?.auth?.userAccess["reimbursement_claim"],
     }},
     shallowEqual
   );
 
-  // const { currentState } = useSelector();
-  
-  const {entities } = currentState;
+  const { dashboard } = useSelector(
+    (state) => ({
+      dashboard: state.dashboard
+    }),
+    shallowEqual
+  )
 
+
+  useEffect(() => {
+
+
+    if (!dashboard.allEmployees || !dashboard.allEmployees.length)
+      dispatch(fetchAllActiveEmployees());
+
+  }, [dispatch, FormUIProps.employeeId])
+
+  
+  useEffect(() => {
+
+
+    if (FormUIProps.employeeId)
+      dispatch(getAllReimbursementConfigPolicy({Id:FormUIProps.employeeId}));
+
+  }, [dispatch, FormUIProps.employeeId])
+
+  
   return (
     <>
 
       <Card>
-        <CardHeader title="">
-          {/* <FormFIlter /> */}
-          <CardHeaderToolbar>
-          {/* {accessUser &&  entities?.length==0 ? ( */}
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={FormUIProps .newFormButtonClick}
-              >
-                + Add Payroll Process
-              </button>
-            {/* ) : (
-              <></>
-            )} */}
-   
-          </CardHeaderToolbar>
-        </CardHeader>
+      
 
         <CardBody>
+        <EmployeeSelect setemployeeId={FormUIProps.setemployeeId} />
+        <br />
+        <hr />
+        
 
+
+<EmployeeProfile employeeId={FormUIProps.employeeId} />
+        {/* EmployeeProfile Ends */}
+
+        <br />
+        <hr />
+   {/* FormEditDialog Starts */}
+   <FormEditDialog id={FormUIProps.id} employeeId={FormUIProps.employeeId} />
+        {/* FormEditDialog Ends */}
+
+        <br />
+        <hr />
           <FormTable />
+          
         </CardBody>
       </Card>
     </>
