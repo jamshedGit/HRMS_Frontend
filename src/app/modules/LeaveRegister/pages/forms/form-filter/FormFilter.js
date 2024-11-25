@@ -346,7 +346,7 @@ export function FormFilter({ loading }) {
                   applyFilter(initialFilter.filter)
                   handleReset()
                 }}
-                className="btn btn-light btn-elevate"
+                className="btn btn-danger btn-elevate"
               >
                 Cancel
               </button>
@@ -355,12 +355,20 @@ export function FormFilter({ loading }) {
                 type="submit"
                 onClick={() => handleSubmit()}
                 disabled={loading}
-                className="btn btn-primary btn-elevate"
+                className="btn btn-success btn-elevate"
               >
-                Apply
+                Filter Record
                 {loading && (
                   <span className="ml-3 mr-3 spinner spinner-white"></span>
                 )}
+              </button>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="btn btn-secondary"
+              >
+                Generate Report
               </button>
 
             </Modal.Footer>
