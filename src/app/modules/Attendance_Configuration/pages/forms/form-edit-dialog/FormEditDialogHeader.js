@@ -17,7 +17,7 @@ export function FormEditDialogHeader({ id, isUserForRead }) {
   );
 
   useEffect(() => {
-    let _title = id ? "Edit Attendance Configuration" : "New Attendance Configuration";
+    let _title = id ? "Edit Attendance Configuration" : "Add Attendance Configuration";
     setTitle(_title);
   }, [userForEdit, actionsLoading]);
 

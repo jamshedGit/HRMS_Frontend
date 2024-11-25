@@ -15,8 +15,11 @@ const formValidation = Yup.object().shape({
   subsidiaryId: Yup.number().required(VALIDATION_MESSAGES.required),
   // companyId: Yup.string().required(VALIDATION_MESSAGES.required),
   leave_typeId: Yup.string().required(VALIDATION_MESSAGES.required),
-  late_count_leave_deduction: Yup.string().required(VALIDATION_MESSAGES.required)
-  .matches(/^[0-3]{1,2}$/, 'Leave Count must be between 0 and 3 digits long and contain only digits.')
+  late_count_leave_deduction: Yup.number()
+  .required(VALIDATION_MESSAGES.required)
+  .min(0, 'Leave Count must be at least 0.')
+  .max(99, 'Leave Count must be at most 99.')
+  .typeError('Leave Count must be a number.')
 });
 
 export function MasterEditForm({

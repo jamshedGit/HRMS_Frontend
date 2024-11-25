@@ -27,7 +27,8 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 const formValidationSchema = Yup.object().shape(
   {
     policyName: Yup.string()
-      .matches(/^[A-Za-z]+$/, 'Only characters are allowed')
+    .nullable()
+    .matches(/^[A-Za-z\s]+$/, 'Only characters are allowed')
       .required("Required*"),
     subsdiaryId: Yup.string()
       .required("Required*"),
@@ -57,8 +58,6 @@ const formValidationSchema = Yup.object().shape(
 
       documentFilesSupport: Yup.string()
       .required("Required*"),
-
-      
 
       
       contractualPolicyInMonth: Yup.number()
@@ -116,7 +115,21 @@ export function DesignationEditForm({
         return item.value === currencyId;
       })
     );
-  },[user.subsdiaryId])
+  },[user.currencyId])
+
+  
+  useEffect(() => {
+
+    const subsdiaryId = defSubsidiary?.value ? defSubsidiary.value : user.subsdiaryId;
+
+    setDefualtSubsidiaryList(
+      dashboard.allSubsidiaryList &&
+      dashboard.allSubsidiaryList.filter((item) => {
+        return item.value === subsdiaryId;
+      })
+    );
+
+  }, [user?.subsdiaryId, dashboard.subsdiaryId]);
 
  
   return (

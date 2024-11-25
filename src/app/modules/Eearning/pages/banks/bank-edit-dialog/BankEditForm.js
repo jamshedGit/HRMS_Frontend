@@ -44,7 +44,7 @@ const formValidation = Yup.object().shape(
     //   .required(VALIDATION_MESSAGES.required),
     account: Yup.string()
       .matches(/^\d+$/, "Must contain only digits")
-      .required(VALIDATION_MESSAGES.required),
+      //.required(VALIDATION_MESSAGES.required),
 
 
   },
@@ -235,7 +235,7 @@ export function BankEditForm({
                           name="account"
                           label={
                             <span>
-                              Account<span style={{ color: "red" }}>*</span>
+                              Account
                             </span>
                           }
                           isDisabled={isUserForRead}
