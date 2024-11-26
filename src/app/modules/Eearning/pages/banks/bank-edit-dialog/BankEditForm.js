@@ -102,8 +102,6 @@ export function BankEditForm({
 
   }, [user?.subsidiaryId, dashboard.subsidiaryId]);
 
-
-
   const fetchData = async (subsidiaryId, setValue) => {
     console.log("jj::", subsidiaryId)
     if (subsidiaryId) {
