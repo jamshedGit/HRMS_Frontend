@@ -26,7 +26,7 @@ const prepareFilter = (queryParams, values) => {
   return newQueryParams
 }
 
-export function FormFilter({ loading, dispatch }) {
+export function FormFilter({ loading, dispatch, pdfLoading }) {
 
   const FormUIContext = useFormUIContext()
 
@@ -391,10 +391,13 @@ export function FormFilter({ loading, dispatch }) {
 
               <button
                 onClick={() => { getPdf(values) }}
-                disabled={loading}
+                disabled={pdfLoading}
                 className="btn btn-secondary"
               >
                 Generate Report
+                {pdfLoading && (
+                  <span className="ml-3 mr-3 spinner spinner-white"></span>
+                )}
               </button>
 
             </Modal.Footer>

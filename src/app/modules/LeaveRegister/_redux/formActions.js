@@ -30,6 +30,7 @@ export const fetchLeaveRegister = (queryparm) => async (dispatch) => {
  * @returns 
  */
 export const fetchPdfData = (filter, document, labels={}) => async (dispatch) => {
+  dispatch(actions.startCall({ callType: callTypes.pdf }));
   return requestFromServer.getAllLeaveRegisterForPdf({...filter, labels})
     .then((res) => {
       const pdfBlob = new Blob([res.data], { type: 'application/pdf' });
@@ -38,13 +39,14 @@ export const fetchPdfData = (filter, document, labels={}) => async (dispatch) =>
       // Trigger file download
       const link = document.createElement('a');
       link.href = pdfUrl;
-      link.setAttribute('download', 'kamil_test.pdf');
+      link.setAttribute('download', 'leave_register.pdf');
       document.body.appendChild(link);
       link.click();
+      dispatch(actions.pdfFetched({}));
       document.body.removeChild(link);
     })
     .catch((error) => {
-      error.clientMessage = "Can't find Registered leaves";
-      dispatch(actions.catchError({ error, callType: callTypes.list }));
+      error.clientMessage = "Can't generate Pdf";
+      dispatch(actions.catchError({ error, callType: callTypes.pdf }));
     });
 };

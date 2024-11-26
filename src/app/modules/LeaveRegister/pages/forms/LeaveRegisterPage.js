@@ -12,10 +12,12 @@ export function LeaveRegisterPage() {
   const dispatch = useDispatch();
   const {
     dashboard,
-    listLoading
+    listLoading,
+    pdfLoading
   } = useSelector((state) => ({
     dashboard: state.dashboard,
-    listLoading: state.attendance.listLoading
+    listLoading: state.leave_register.listLoading,
+    pdfLoading: state.leave_register.pdfLoading
   }
   ));
 
@@ -47,7 +49,7 @@ export function LeaveRegisterPage() {
         {/* Card Starts */}
 
         {/* Filter Form Starts */}
-        <FormFilter loading={listLoading} dispatch={dispatch} />
+        <FormFilter loading={listLoading} pdfLoading={pdfLoading} dispatch={dispatch} />
         {/* Filter Form Ends */}
 
         {/* Table Starts */}

@@ -11,11 +11,13 @@ const initialState = {
     userForEdit: undefined,
     lastError: null,
     userForRead: false,
+    pdfLoading: false
 };
 
 export const callTypes = {
     list: "list",
     action: "action",
+    pdf: "pdf"
 };
 
 export const LeaveRegisterSlice = createSlice({
@@ -26,7 +28,11 @@ export const LeaveRegisterSlice = createSlice({
             state.error = `${action.type}: ${action.payload.error}`;
             if (action.payload.callType === callTypes.list) {
                 state.listLoading = false;
-            } else {
+            } 
+            else if(action.payload.callType === callTypes.pdf){
+                state.pdfLoading = false;
+            }
+            else {
                 state.actionsLoading = false;
             }
         },
@@ -34,9 +40,15 @@ export const LeaveRegisterSlice = createSlice({
             state.error = null;
             if (action.payload.callType === callTypes.list) {
                 state.listLoading = true;
+            } 
+            else if(action.payload.callType === callTypes.pdf){
+                state.pdfLoading = true;
             } else {
                 state.actionsLoading = true;
             }
+        },
+        pdfFetched: (state, action) => {
+            state.pdfLoading = false;
         },
         LeaveRegisterFetched: (state, action) => {
             const entities = action.payload.data?.data.rows;
