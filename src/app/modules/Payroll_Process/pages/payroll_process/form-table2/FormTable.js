@@ -22,7 +22,7 @@ import { Accordion, Button, Card } from "react-bootstrap";
 import { KeyboardArrowDown } from "@material-ui/icons";
 import { formatDate, formatNumberWithCommas } from "../../../../../utils/common";
 
-export function FormTable() {
+export function FormTablePayrollGroup() {
   //Users UI Context
   const formUIContext = useFormUIContext();
  
@@ -204,12 +204,12 @@ export function FormTable() {
     return (
     <>
   
-    <Accordion defaultActiveKey="">
+    {/* <Accordion defaultActiveKey=""> */}
       <Card>
         <Card.Header className="d-flex justify-content-center">
         <div className='accordion-header-btn w-100  d-flex justify-content-center'>
           <Accordion.Toggle as={Button} eventKey="0" >
-            Payroll Process Details
+            Payroll Group Details
             <KeyboardArrowDown />
           </Accordion.Toggle>
           </div>
@@ -253,7 +253,7 @@ export function FormTable() {
           </Card.Body>
         </Accordion.Collapse>
       </Card>
-    </Accordion>
+    {/* </Accordion> */}
  
 
    

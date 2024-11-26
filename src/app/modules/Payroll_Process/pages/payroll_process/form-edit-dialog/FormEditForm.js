@@ -232,7 +232,7 @@ export function FormEditForm({
     className="btn btn-primary btn-elevate"
     disabled={loading}
   >
-    Save
+    Execute
     {loading && (
       <span className="ml-3 mr-3 spinner spinner-white"></span>
     )}

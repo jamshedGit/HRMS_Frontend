@@ -17,9 +17,9 @@ export function FormEditDialogHeader({ id, isUserForRead }) {
   );
 
   useEffect(() => {
-    let _title = id ? "" : "Add Payroll Process";
+    let _title = id ? "" : "Execute Payroll Process";
     if (id) {
-      _title = `Edit Payroll Process`;
+      _title = `Execute Payroll Process`;
     } //else if (isUserForRead) {
     //   _title = `Read user '}'`
     // }

@@ -22,7 +22,7 @@ import { Accordion, Button, Card } from "react-bootstrap";
 import { KeyboardArrowDown } from "@material-ui/icons";
 import { formatDate, formatNumberWithCommas } from "../../../../../utils/common";
 
-export function FormTable() {
+export function FormTablePayrollGroup() {
   //Users UI Context
   const formUIContext = useFormUIContext();
  
@@ -79,8 +79,8 @@ export function FormTable() {
   const columns = [
 
     {
-      dataField: "Subsidiary.name",
-      text: "Subsidiary",
+      dataField: "",
+      text: "Total Employee",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -92,8 +92,8 @@ export function FormTable() {
  
  
 {
-  dataField: "PayrollGroup.formName",
-  text: "Payroll Group",
+  dataField: "",
+  text: "Salary Setup not created",
   sort: false,
   sortCaret: sortCaret,
   headerSortingClasses,
@@ -105,8 +105,8 @@ export function FormTable() {
  
  
     {
-      dataField: "currentMonth",
-      text: "Payroll Month",
+      dataField: "",
+      text: "Loan to be process",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -119,75 +119,8 @@ export function FormTable() {
       // },
     },
 
-    
-
-    {
-      dataField: "completed",
-      text: "completed",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "10px",
-      },
-     formatter: (cell) => cell ? "Yes" : "No"
-    },
-
-    {
-      dataField: "createdAt",
-      text: "started at",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "10px",
-      },
-      formatter: (cell) => {
-        // Format the date without timestamp
-        return  formatDate(cell)
-      },
-    },
-
-    {
-      dataField: "updatedAt",
-      text: "completed at",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "10px",
-      },
-      formatter: (cell) => {
-        // Format the date without timestamp
-        return  formatDate(cell)
-      },
-    },
-
- 
-       {
-      dataField: "action",
-      text: "Actions",
-      isDummyField: true,
-      formatter: ActionsColumnFormatter,
-      formatExtraData: {
-        setIds:formUIProps.setIds,
-        setIsFileReq:formUIProps.setIsFileReq,
-        openEditFormDialog: formUIProps.openEditFormDialog,
-        openDeleteFormDialog: formUIProps.openDeleteFormDialog,
-        // openActiveFormDialog: formUIProps.openActiveFormDialog,
-        // openReadFormDialog: formUIProps.openReadFormDialog,
-        isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,
-        isAccessForDelete: isAccessForDelete
-          ? isAccessForDelete.isAccess
-          : false,
-      },
-      classes: "text-right pr-0",
-      headerClasses: "text-right pr-3",
-      style: {
-        minWidth: "10px",
-       
-      },
-    },
+  
+  
   ];
  
   //Table pagination properties
@@ -204,26 +137,10 @@ export function FormTable() {
     return (
     <>
   
-    <Accordion defaultActiveKey="">
       <Card>
-        <Card.Header className="d-flex justify-content-center">
-        <div className='accordion-header-btn w-100  d-flex justify-content-center'>
-          <Accordion.Toggle as={Button} eventKey="0" >
-            Payroll Process Details
-            <KeyboardArrowDown />
-          </Accordion.Toggle>
-          </div>
-        </Card.Header>
-        <Accordion.Collapse eventKey="0">
+      
           <Card.Body>
-          <PaginationProvider pagination={paginationFactory(paginationOptions)}>
-        {({ paginationProps, paginationTableProps }) => {
-          return (
-            <Pagination
-              isLoading={listLoading}
-              paginationProps={paginationProps}
-            >
-              <BootstrapTable
+          <BootstrapTable
                 wrapperClasses="table-responsive"
                 bordered={false}
                 classes="table table-head-custom table-vertical-center overflow-hidden table-hover"
@@ -240,20 +157,29 @@ export function FormTable() {
                 //   entities,
  
                 // })}
-                {...paginationTableProps}
+                // {...paginationTableProps}
               >
                 <PleaseWaitMessage entities={entities} />
                 <NoRecordsFoundMessage entities={entities} />
               </BootstrapTable>
+
+          {/* <PaginationProvider pagination={paginationFactory(paginationOptions)}>
+        {({ paginationProps, paginationTableProps }) => {
+          return (
+            <Pagination
+              isLoading={listLoading}
+              paginationProps={paginationProps}
+            >
+             
             </Pagination>
           );
         }}
-      </PaginationProvider>
+      </PaginationProvider> */}
 
           </Card.Body>
-        </Accordion.Collapse>
+      
       </Card>
-    </Accordion>
+   
  
 
    

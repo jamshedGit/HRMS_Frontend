@@ -12,6 +12,7 @@ import {
   CardHeaderToolbar,
 } from "../../../../../../_metronic/_partials/controls"
 import { FormTable } from "../form-table/FormTable"
+import  {FormTablePayrollGroup} from "../FormTablePayrollGroup/FormTable"
 import { useFormUIContext } from "../FormUIContext"
 import { FormFIlter } from "../form-filter/FormFIlter"
 import { useSelector, shallowEqual, useDispatch } from "react-redux"
@@ -92,7 +93,6 @@ export function FormCard() {
         <br />
         <hr />
           <FormTable />
-          
         </CardBody>
       </Card>
     </>
