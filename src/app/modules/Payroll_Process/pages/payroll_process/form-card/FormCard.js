@@ -15,7 +15,6 @@ import { FormTable } from "../form-table/FormTable"
 import { useFormUIContext } from "../FormUIContext"
 import { FormFIlter } from "../form-filter/FormFIlter"
 import { useSelector, shallowEqual, useDispatch } from "react-redux"
-import { getAllReimbursementConfigPolicy } from "../../../_redux/redux-Actions"
 
 export function FormCard() {
   const FormUIContext = useFormUIContext()
@@ -75,15 +74,7 @@ export function FormCard() {
   }, [dispatch, FormUIProps.employeeId])
 
   
-  useEffect(() => {
 
-
-    if (FormUIProps.employeeId)
-      dispatch(getAllReimbursementConfigPolicy({Id:FormUIProps.employeeId}));
-
-  }, [dispatch, FormUIProps.employeeId])
-
-  
   return (
     <>
 

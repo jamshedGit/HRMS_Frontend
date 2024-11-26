@@ -3,12 +3,10 @@ import axios from "axios";
 export const USERS_URL = process.env.REACT_APP_API_URL;
 
 
-export function uploadImage(body) {
-  return axios.post(`${USERS_URL}/file-upload`, body);
-}
+
 
 //Create record
-export function createReimbursementClaim(body) {
+export function createPayrollProcess(body) {
  
 
   return axios.post(`${USERS_URL}/payroll_process/create-payroll-process`, body);
@@ -18,33 +16,26 @@ export function createReimbursementClaim(body) {
 
 
 // Read
-export function getAllReimbursementClaim(body) {
+export function getAllPayrollProcess(body) {
 
 
   return axios.post(`${USERS_URL}/payroll_process/read-all-payroll-process`, body);
 }
 
-export function getReimbursementClaimById(id) {
+export function getPayrollProcessById(id) {
 
   return axios.post(`${USERS_URL}/payroll_process/read-payroll-process`, id);
 }
 
 //Update
-export function updateReimbursementClaim(reimbursementClaim) {
+export function updatePayrollProcess(body) {
    
-  return axios.put(`${USERS_URL}/payroll_process/update-payroll-process`, reimbursementClaim);
+  return axios.put(`${USERS_URL}/payroll_process/update-payroll-process`, body);
 }
 
 //Delete
-export function deleteReimbursementClaim(body) {
+export function deletePayrollProcess(body) {
 
   return axios.patch(`${USERS_URL}/payroll_process/delete-payroll-process`, body);
 }
 
-export function getAllReimbursementConfigPolicy(body) {
- 
-
-  return axios.post(`${USERS_URL}/reimbursement_claim/read-reimbursement-configuration-policies`, body);
-
-  
-}

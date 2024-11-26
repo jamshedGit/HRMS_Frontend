@@ -65,7 +65,7 @@ export function FormTable() {
     formUIProps.setIds("");
  
  
-    dispatch(actions.fetchReimbursementClaim(formUIProps));
+    dispatch(actions.fetchPayrollProcess(formUIProps));
   }, [formUIProps.queryParams, dispatch, totalCount,formUIProps.employeeId]);
  
   const isAccessForEdit = userAccess?.find(

@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 
 
-const initialReimbursementClaimState = {
+const initialPayrollProcessState = {
     listLoading: false,
     actionsLoading: null,
     totalCount: 0,
@@ -13,7 +13,7 @@ const initialReimbursementClaimState = {
     userForEdit: undefined,
     lastError: null,
     userForRead: false,
-    reimbursement_config_policies_permission: null
+    
 };
 
 
@@ -24,7 +24,7 @@ export const callTypes = {
 
 export const payroll_processSlice = createSlice({
     name: "payroll_processSlice",
-    initialState: initialReimbursementClaimState,
+    initialState: initialPayrollProcessState,
     reducers: {
         catchError: (state, action) => {
             state.error = `${action.type}: ${action.payload.error}`;
@@ -40,7 +40,7 @@ export const payroll_processSlice = createSlice({
             state.userForEdit = null;
         },
 
-        reimbursementClaimFetched: (state, action) => {
+        payrollProcessFetched: (state, action) => {
 
 
             const entities = action.payload.data?.data.rows;
@@ -73,7 +73,7 @@ export const payroll_processSlice = createSlice({
         },
 
         //get User By ID
-        ReimbursementClaimFetchedForEdit: (state, action) => {
+        PayrollProcessFetchedForEdit: (state, action) => {
 
 
             state.actionsLoading = false;
@@ -82,7 +82,7 @@ export const payroll_processSlice = createSlice({
         },
 
 
-        ReimbursementClaimDeleted: (state, action) => {
+        PayrollProcessDeleted: (state, action) => {
 
             state.error = null;
             state.actionsLoading = false;
@@ -94,7 +94,7 @@ export const payroll_processSlice = createSlice({
         },
    
       
-        reimbursementClaimCreated: (state, action) => {
+        payrollProcessCreated: (state, action) => {
             
             state.actionsLoading = false;
             state.error = null;
@@ -122,7 +122,7 @@ export const payroll_processSlice = createSlice({
         },
         
       
-        reimbursementClaimUpdated: (state, action) => {
+        payrollProcessUpdated: (state, action) => {
             state.error = null;
             state.actionsLoading = false;
             // state.entities.push(action.payload)
@@ -132,7 +132,7 @@ export const payroll_processSlice = createSlice({
                 //const payload = { ...action.payload };
                 let payload = JSON.stringify(action.payload)
                 let payloadObj = JSON.parse(payload);
-                let finalObj = JSON.parse(payloadObj.updatedReimbursementClaim);
+                let finalObj = JSON.parse(payloadObj.updatedPayrollProcess);
                 if (entity.Id === finalObj.Id) {
                     return finalObj;
                 }

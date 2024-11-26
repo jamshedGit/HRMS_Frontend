@@ -75,9 +75,9 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     if (!data.Id && data) {
       
         await dispatch(
-          actions.createReimbursementClaim(data, disbaleLoading, resetForm)
+          actions.createPayrollProcess(data, disbaleLoading, resetForm)
         );
-        await dispatch(actions.fetchReimbursementClaim(formUIProps));
+        await dispatch(actions.fetchPayrollProcess(formUIProps));
       }
      else {
      
@@ -91,13 +91,13 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
      
      
         await dispatch(
-          actions.updateReimbursementClaim(
+          actions.updatePayrollProcess(
             formUpdatedFields,
             disbaleLoading,
             resetForm
           )
         );
-        await dispatch(actions.fetchReimbursementClaim(formUIProps));
+        await dispatch(actions.fetchPayrollProcess(formUIProps));
       }
     
   };
