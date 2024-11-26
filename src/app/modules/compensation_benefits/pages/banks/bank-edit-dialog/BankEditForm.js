@@ -295,6 +295,7 @@ export function BankEditForm({
           } else {
             enableLoading();
             let i = 0;
+            i = values.basicFactor;
             defEarningList.forEach((element, index) => {
 
               console.log("element", element, index)
@@ -354,7 +355,7 @@ export function BankEditForm({
                             setFieldValue("subsidiaryId", e.value || null);
                             setDefualtSubsidiaryList(e);
                             //handlePaymenModeChanged(e)
-
+                           
                           }}
 
                           value={(defSubsidiary || null)}
