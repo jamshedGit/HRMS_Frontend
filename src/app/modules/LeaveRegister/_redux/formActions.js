@@ -24,14 +24,16 @@ export const fetchLeaveRegister = (queryparm) => async (dispatch) => {
 
 /**
  * 
- * Fetch All Registered Leaves Paginated from the server
+ * Fetch Pdf from server
  * 
- * @param {Object} queryparm 
+ * @param {Object} filter 
+ * @param {Document} document 
+ * @param {Object} labels 
  * @returns 
  */
-export const fetchPdfData = (filter, document, labels={}) => async (dispatch) => {
+export const fetchPdfData = (filter, document, labels = {}) => async (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.pdf }));
-  return requestFromServer.getAllLeaveRegisterForPdf({...filter, labels})
+  return requestFromServer.getAllLeaveRegisterForPdf({ ...filter, labels })
     .then((res) => {
       const pdfBlob = new Blob([res.data], { type: 'application/pdf' });
       const pdfUrl = URL.createObjectURL(pdfBlob);
