@@ -49,11 +49,9 @@ export const fetchPdfData = (filter, document, labels = {}) => async (dispatch) 
       document.body.removeChild(link);
     })
     .catch((error) => {
-      console.log(':::::::::',error.response);
-      
       error.clientMessage = "Can't generate PDF";
       dispatch(actions.catchError({ error, callType: callTypes.pdf }));
-      toast.error(error?.response?.status == 403 ? 'Please select filter to generate PDF' : error.clientMessage, {
+      toast.error(error?.response?.status == 400 ? 'Please select filter to generate PDF' : error.clientMessage, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
