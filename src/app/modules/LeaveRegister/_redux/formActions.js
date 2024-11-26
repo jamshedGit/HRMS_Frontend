@@ -20,3 +20,31 @@ export const fetchLeaveRegister = (queryparm) => async (dispatch) => {
       dispatch(actions.catchError({ error, callType: callTypes.list }));
     });
 };
+
+
+/**
+ * 
+ * Fetch All Registered Leaves Paginated from the server
+ * 
+ * @param {Object} queryparm 
+ * @returns 
+ */
+export const fetchPdfData = (filter, document, labels={}) => async (dispatch) => {
+  return requestFromServer.getAllLeaveRegisterForPdf({...filter, labels})
+    .then((res) => {
+      const pdfBlob = new Blob([res.data], { type: 'application/pdf' });
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+
+      // Trigger file download
+      const link = document.createElement('a');
+      link.href = pdfUrl;
+      link.setAttribute('download', 'kamil_test.pdf');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    })
+    .catch((error) => {
+      error.clientMessage = "Can't find Registered leaves";
+      dispatch(actions.catchError({ error, callType: callTypes.list }));
+    });
+};

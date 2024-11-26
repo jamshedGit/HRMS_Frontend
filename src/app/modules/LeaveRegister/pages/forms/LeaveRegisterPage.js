@@ -47,7 +47,7 @@ export function LeaveRegisterPage() {
         {/* Card Starts */}
 
         {/* Filter Form Starts */}
-        <FormFilter loading={listLoading} />
+        <FormFilter loading={listLoading} dispatch={dispatch} />
         {/* Filter Form Ends */}
 
         {/* Table Starts */}
