@@ -11,6 +11,15 @@
 @import "./_metronic/_assets/sass/themes/layout/brand/dark.scss";
 @import "./_metronic/_assets/sass/themes/layout/aside/dark.scss";
 
+
+//Theme_1
+@import "../public/css/custome_theme_1/login-screen.scss";
+@import "../public/css/custome_theme_1/table-icon.scss";
+@import "../public/css/custome_theme_1/accordion.scss";
+@import "../public/css/custome_theme_1/custom_color.scss";
+@import "../public/css/custome_theme_1/body.scss";
+@import "../public/css/custome_theme_1/font.scss";
+@import "../public/css/custome_theme_1/bg_custom_color.scss";
 // Header themes
 // Light
 //@import "./_metronic/_assets/sass/themes/layout/header/base/light.scss";
@@ -31,6 +40,17 @@
 .brand-light {
   @import "./_metronic/_assets/sass/themes/layout/brand/light.scss";
 }
+
+// <uniquifier>: Use a unique and descriptive class name
+// <weight>: Use a value from 100 to 900
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+// <uniquifier>: Use a unique and descriptive class name
+// <weight>: Use a value from 100 to 900
+
+
 
 // Aside themes
 // Dark
@@ -76,14 +96,15 @@
 }
 
 .react-bootstrap-table {
-  border-left: 1px solid #000 !important;
-  border-right: 1px solid #000 !important;
-  border-bottom: 1px solid #000 !important;
+  border-left: 1px solid #ffffffd3 !important;
+  border-right: 1px solid #ffffff !important;
+  border-bottom: 1px solid #ffffff !important;
   border-radius: 12px;
-  color: #000 ;
+  font-family: "Noto Sans", sans-serif;
+  color: #333333 ;
   th {
     outline: none;
-   
+   background-color:#fafafa;
     &.sortable {  
       .svg-icon-sort {
         opacity: 0;
@@ -103,8 +124,15 @@
     .sortable-active {
         color: $primary !important;
     } 
-    background-color: #607799;
-    color: #fff !important; 
+    // background-color: #f7f7f7;
+    color: #333333 !important; 
+    border-radius: 140px;
+  }
+
+
+  .table.table-head-custom thead th {
+    color: #333333 !important;  /* Same text color for header cells */
+   
   }
 }
 
@@ -122,4 +150,8 @@
     border-right: 1px solid #e5e5e5;
     border-bottom: 1px solid #e5e5e5;
     border-radius: 12px;
+  
+    
 }
+
+

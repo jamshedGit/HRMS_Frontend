@@ -627,11 +627,11 @@ $modal-sm:                          				300px !default;
 
 
 // Pagination
-$pagination-color:                  				$primary !default;
-$pagination-border-color:           				$gray-300 !default;
-$pagination-hover-bg:              	 				$gray-200 !default;
-$pagination-hover-border-color:     				$gray-300 !default;
-$pagination-disabled-border-color:  				$gray-200 !default;
+// $pagination-color:                  				#333333 ;
+// $pagination-border-color:           				#333330 ;
+// $pagination-hover-bg:              	 				#333333 ;
+// $pagination-hover-border-color:     				#333333 ;
+// $pagination-disabled-border-color:  				#333333 ;
 
 
 // Dropdowns
@@ -758,7 +758,7 @@ $pagination-padding-x-lg:                           1.5rem !default;
 $pagination-line-height:                            1.25 !default;
 
 $pagination-color:                                  $link-color !default;
-$pagination-bg:                                     $white !default;
+$pagination-bg:                                     #333333 !default;
 $pagination-border-color:                           $gray-300 !default;
 
 $pagination-focus-box-shadow:                       none !default;

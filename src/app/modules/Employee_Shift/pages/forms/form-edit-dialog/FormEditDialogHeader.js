@@ -17,7 +17,7 @@ export function FormEditDialogHeader({ id, isUserForRead }) {
   );
 
   useEffect(() => {
-    let _title = id ? "Edit Employee Shift" : "New Employee Shift";
+    let _title = id ? "Edit Employee Shift" : "Add Employee Shift";
     setTitle(_title);
   }, [userForEdit, actionsLoading]);
 

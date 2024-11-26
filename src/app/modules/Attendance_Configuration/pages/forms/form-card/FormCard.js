@@ -44,7 +44,7 @@ export function FormCard() {
                 className="btn btn-primary"
                 onClick={formUIProps.newFormButtonClick}
               >
-                + Add
+                + Add Attendance Configuration
               </button>
             )}
           </CardHeaderToolbar>
