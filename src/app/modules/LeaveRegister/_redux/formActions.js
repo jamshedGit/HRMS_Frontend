@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import * as requestFromServer from "./formCrud";
 import { LeaveRegisterSlice, callTypes } from "./LeaveRegisterSlice";
 const { actions } = LeaveRegisterSlice;
@@ -48,7 +49,18 @@ export const fetchPdfData = (filter, document, labels = {}) => async (dispatch) 
       document.body.removeChild(link);
     })
     .catch((error) => {
-      error.clientMessage = "Can't generate Pdf";
+      console.log(':::::::::',error.response);
+      
+      error.clientMessage = "Can't generate PDF";
       dispatch(actions.catchError({ error, callType: callTypes.pdf }));
+      toast.error(error?.response?.status == 403 ? 'Please select filter to generate PDF' : error.clientMessage, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     });
 };
