@@ -37,10 +37,11 @@ export function updatePayrollProcess(body) {
 export function deletePayrollProcess(body) {
 
   return axios.patch(`${USERS_URL}/payroll_process/delete-payroll-process`, body);
-  // let data={
-  //   subsidiaryId:3,
-  //   payroll_groupId:90
-  // }
-  // return axios.get(`${USERS_URL}/payroll_process/read-all-payroll-group-detail`, data);
+
 }
 
+export function getAllPayrollGroupDetails(body) {
+
+
+  return axios.post(`${USERS_URL}/payroll_process/read-all-payroll-group-detail`, body);
+}

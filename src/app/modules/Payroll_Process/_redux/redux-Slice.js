@@ -13,7 +13,8 @@ const initialPayrollProcessState = {
     userForEdit: undefined,
     lastError: null,
     userForRead: false,
-    
+    payroll_group_details: null,
+
 };
 
 
@@ -44,7 +45,7 @@ export const payroll_processSlice = createSlice({
 
 
             const entities = action.payload.data?.data.rows;
-     
+
             const totalResult = action.payload.data?.data.totalResults;
 
             state.listLoading = false;
@@ -69,7 +70,17 @@ export const payroll_processSlice = createSlice({
 
             state.entities = updatedEntities;
             state.totalCount = totalResult;
-           
+
+        },
+
+        payrollGroupDetailsFetched: (state, action) => {
+
+
+            let payroll_group_details = action?.payload?.data?.data;
+            state.listLoading = false;
+            state.error = null;
+            state.payroll_group_details = payroll_group_details;
+
         },
 
         //get User By ID
@@ -92,36 +103,36 @@ export const payroll_processSlice = createSlice({
                 (el) => el.Id !== action.payload.Id
             );
         },
-   
-      
+
+
         payrollProcessCreated: (state, action) => {
-            
+
             state.actionsLoading = false;
             state.error = null;
-        
+
             const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        
+
             // Format the new entity
             const newEntity = { ...action.payload };
-        
+
             // Extract month and year from the PayInPayrollForId
             const month = newEntity.PayInPayrollForId ? newEntity.PayInPayrollForId.month : null;
             const year = newEntity.PayInPayrollForId ? newEntity.PayInPayrollForId.year : null;
-        
+
             // Add formatted currentMonth
-          
+
             if (month !== null && year !== null) {
                 newEntity.currentMonth = `${monthNames[month - 1]}-${year}`;
             } else {
                 newEntity.currentMonth = null; // If either month or year is missing
             }
-        
+
             // Add the new entity to the start of the entities array
-       
+
             state.entities.unshift(newEntity);
         },
-        
-      
+
+
         payrollProcessUpdated: (state, action) => {
             state.error = null;
             state.actionsLoading = false;

@@ -4,7 +4,7 @@ import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { DatePickerField, Input } from "../../../../../../_metronic/_partials/controls"; // Adjust import as needed
-import {shallowEqual, useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import {
   fetchAllFormsMenu,
@@ -14,6 +14,7 @@ import {
 } from "../../../../../../_metronic/redux/dashboardActions";
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 import { getDateDiffInDays } from "../../../../../utils/common";
+import * as actions from "../../../_redux/redux-Actions";
 
 // percentage: Yup.string().required("Required*"),
 const payroll_processEditSchema = Yup.object().shape({
@@ -27,7 +28,7 @@ const payroll_processEditSchema = Yup.object().shape({
   payroll_groupId: Yup.string()
     .required(VALIDATION_MESSAGES.required),
 
-    payroll_monthId: Yup.string()
+  payroll_monthId: Yup.string()
     .required(VALIDATION_MESSAGES.required),
 
 
@@ -70,6 +71,24 @@ export function FormEditForm({
   const { userForEdit } = currentState;
 
 
+  const payrollGroupDetails = async (subsidiaryId, payroll_groupId) => {
+    if (subsidiaryId && payroll_groupId) {
+      // Dispatch action to fetch payroll group details
+      let body = {
+        subsidiaryId,
+        payroll_groupId,
+      };
+      await dispatch(actions.fetchPayrollGroupDetails(body));
+    }
+  };
+
+
+  useEffect(() => {
+    if (currentState?.payroll_group_details) {
+      console.log("Updated payroll group details:", currentState.payroll_group_details);
+    }
+  }, [currentState?.payroll_group_details]); 
+
 
   return (
     <Formik
@@ -83,7 +102,7 @@ export function FormEditForm({
         const clearForm = () => {
           resetForm();
         };
-        saveForm(values,clearForm);
+        saveForm(values, clearForm);
       }}
     >
       {({ handleSubmit, errors, touched, values, handleReset, setFieldValue }) => (
@@ -109,6 +128,7 @@ export function FormEditForm({
                         isDisabled={isUserForRead}
                         onChange={(e) => {
                           setFieldValue("subsidiaryId", e.value || null);
+                          payrollGroupDetails(e.value,values.payroll_groupId)
                         }}
                         value={
                           dashboard?.allSubsidiaryList?.find(
@@ -139,6 +159,7 @@ export function FormEditForm({
                       isDisabled={isUserForRead}
                       onChange={(e) => {
                         setFieldValue("payroll_groupId", e.value || null);
+                        payrollGroupDetails(values.subsidiaryId,e.value)
                       }}
                       value={
                         dashboard?.allPayrolGroupList?.find(
@@ -188,6 +209,20 @@ export function FormEditForm({
                       touched={touched.payroll_monthId}
                     />
                   </div>
+                  <div className="col-12 col-md-6 mt-3">
+                    <label>
+                    Total Employee: {currentState?.payroll_group_details?.total_employees}
+                    </label>
+                  
+                  </div>
+
+                  <div className="col-12 col-md-6 mt-3">
+                    <label>
+                      Salary setup not created: {currentState?.payroll_group_details?.slary_setup_not_created}
+                    </label>
+                  
+                  </div>
+
 
 
 
@@ -196,49 +231,49 @@ export function FormEditForm({
               </fieldset>
             </Form>
           </Modal.Body>
-     
 
-<Modal.Footer>
-{/* Cancel / Ok Button */}
-{!isUserForRead ? (
-  <button
-    type="reset"
-    onClick={() => {
-      setIds("");
-      handleReset();
 
-    }}
-    className="btn btn-light btn-elevate"
-  >
-    Cancel
-  </button>
-) : (
-  <button
-    type="button"
-    onClick={onHide}
-    className="btn btn-primary btn-elevate"
-  >
-    Ok
-  </button>
-)}
+          <Modal.Footer>
+            {/* Cancel / Ok Button */}
+            {!isUserForRead ? (
+              <button
+                type="reset"
+                onClick={() => {
+                  setIds("");
+                  handleReset();
 
-{/* Save Button */}
-{!isUserForRead && (
-  <button
-    type="submit"
-    onClick={() => {
-      handleSubmit();
-    }}
-    className="btn btn-primary btn-elevate"
-    disabled={loading}
-  >
-    Execute
-    {loading && (
-      <span className="ml-3 mr-3 spinner spinner-white"></span>
-    )}
-  </button>
-)}
-</Modal.Footer>
+                }}
+                className="btn btn-light btn-elevate"
+              >
+                Cancel
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={onHide}
+                className="btn btn-primary btn-elevate"
+              >
+                Ok
+              </button>
+            )}
+
+            {/* Save Button */}
+            {!isUserForRead && (
+              <button
+                type="submit"
+                onClick={() => {
+                  handleSubmit();
+                }}
+                className="btn btn-primary btn-elevate"
+                disabled={loading}
+              >
+                Execute
+                {loading && (
+                  <span className="ml-3 mr-3 spinner spinner-white"></span>
+                )}
+              </button>
+            )}
+          </Modal.Footer>
         </>
       )}
     </Formik>

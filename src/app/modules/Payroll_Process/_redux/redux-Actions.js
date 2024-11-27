@@ -154,3 +154,22 @@ export const updatePayrollProcess = (user, disbaleLoading, onHide) => (dispatch)
       });
     });
 };
+
+
+
+export const fetchPayrollGroupDetails = (params) => async (dispatch) => {
+
+
+  
+
+  return requestFromServer.getAllPayrollGroupDetails(params)
+
+    .then((response) => {     
+      dispatch(actions.payrollGroupDetailsFetched(response));
+    })
+    .catch((error) => {
+     
+      error.clientMessage = "Can't find ";
+      dispatch(actions.catchError({ error, callType: callTypes.list }));
+    });
+};
