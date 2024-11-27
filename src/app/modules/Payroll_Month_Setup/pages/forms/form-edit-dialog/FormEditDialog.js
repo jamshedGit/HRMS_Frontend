@@ -103,7 +103,8 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         month:user.month,
         month_days: user.month_days,
         shortFormat: user.shortFormat,
-        year: user.year
+        year: user.year,
+        subsidiaryId: user.subsidiaryId
       };
 
       console.log("payrollMonthSetupUpdatedFields", payrollMonthSetupUpdatedFields);
