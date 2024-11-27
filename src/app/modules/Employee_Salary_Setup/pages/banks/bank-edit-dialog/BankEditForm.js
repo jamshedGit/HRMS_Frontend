@@ -587,9 +587,9 @@ export function BankEditForm({
                         onInput={(e) => {
                           e.target.value = amountLimit(e.target.value); // Limit to 3 digits
                         }}
-
-
-                        value={defBasicSalaryFactor}
+                        
+                        disabled
+                        value={defBasicSalaryFactor || values.basicFactor}
                         component={Input}
                         placeholder="Enter Basic Salary"
                         label={<span> Gross to Basic Factor<span style={{ color: 'red' }}>*</span></span>}
@@ -598,8 +598,6 @@ export function BankEditForm({
                     </div>
                     <div className="col-12 col-md-4 mt-12">
                       <input type="button" class="btn btn-success" onClick={(e) => calculateEmployeeSalaryPolicy(e, setFieldValue)} id="btnSalaryPolicyCalc" value="Calculate"></input>
-
-
                     </div>
                   </div>}
                   { /* For Earning WIth Payroll Include ByDefault Yes  */}
