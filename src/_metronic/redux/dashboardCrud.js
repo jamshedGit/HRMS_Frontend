@@ -88,6 +88,10 @@ export const getAllLeaveTypes = async (body) => {
   return await axios.post(`${USERS_URL}/settings/read-all-leave-types`,body);
 };
 
+export const getAllLeaveTypesBySubsidiary = async (body) => {
+  return await axios.post(`${USERS_URL}/settings/read-all-leave-types-by-subsidiary`,body);
+};
+
 export const getAllEmployeeShift = async (body) => {
   return await axios.post(`${USERS_URL}/settings/read-all-employee-shift`,body);
 };

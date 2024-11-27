@@ -6,7 +6,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useFormUIContext } from "../FormUIContext";
 import { FilterForm } from "./FilterForm";
-import { fetchAllActiveEmployees, fetchAllFiscalYearData, fetchAllLeaveType } from "../../../../../../_metronic/redux/dashboardActions";
+import { fetchAllActiveEmployees, fetchAllFiscalYearData, fetchAllLeaveType, fetchAllLeaveTypeBySubsidiary } from "../../../../../../_metronic/redux/dashboardActions";
 
 export function FormEditDialog() {
   const [loading, setLoading] = useState(false);
@@ -47,8 +47,6 @@ export function FormEditDialog() {
   useEffect(() => {
     if (!dashboard?.allFiscalYears?.length)
       dispatch(fetchAllFiscalYearData("allFiscalYears"));
-    if (!dashboard?.allLeaveTypes?.length)
-      dispatch(fetchAllLeaveType("allLeaveTypes"));
     if (!dashboard.allEmployees || !dashboard.allEmployees.length)
       dispatch(fetchAllActiveEmployees());
   }, [dispatch]);
@@ -73,6 +71,7 @@ export function FormEditDialog() {
           allLeaveTypes: dashboard?.allLeaveTypes,
           allEmployees: dashboard?.allEmployees,
         }}
+        dispatch={dispatch}
       />
       <MasterEditForm
         submitForm={submitForm}
