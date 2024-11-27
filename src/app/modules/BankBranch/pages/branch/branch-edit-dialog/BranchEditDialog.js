@@ -83,10 +83,10 @@ export function BranchEditDialog({ id, show, onHide, userForRead }) {
   const saveBranch = async (branch) => {
 
     if (!id) {
-      console.log("Branch edit dialog");
-      console.log(branch);
-
+    
       const finalObject = { branch }
+      delete branch.subsidiaryId;
+      console.log("branch data",branch)
      await dispatch(actions.createBranch(branch, disbaleLoading, onHide));
 
      await dispatch(actions.fetchUsers(usersUIProps.queryParams));
@@ -113,7 +113,7 @@ export function BranchEditDialog({ id, show, onHide, userForRead }) {
         contactPerson: branch.contactPerson,
         address : branch.address,
         accOpeningDate: branch.accOpeningDate,
-        accNoOfSalary:branch.accNoOfSalary,
+        accNoForSalary:branch.accNoForSalary,
         accNoForPF: branch.accNoForPF,
         accNoForGrad: branch.accNoForGrad
       };

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import { Input, Select, TextArea } from "../../../../../../_metronic/_partials/controls";
+import { DatePickerField, Input, Select, TextArea } from "../../../../../../_metronic/_partials/controls";
 import { useDispatch, useSelector } from "react-redux";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import DatePicker from "react-datepicker";
@@ -12,8 +12,10 @@ import {
   fetchAllCity,
 
   fetchAllSubCenter,
+  fetchAllSubsidiaryData,
   getLatestBookingNo,
 } from "../../../../../../_metronic/redux/dashboardActions";
+import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 
 
 // Phone Number Regex
@@ -24,13 +26,14 @@ const cnicRegExp = /^[0-9]{5}-[0-9]{7}-[0-9]$/;
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 const userEditSchema_2 = Yup.object().shape(
   {
-    countryId: Yup.string().required("*Required"),
-    cityId: Yup.string().required("*Required"),
-    branchCode: Yup.string().required("*Required"),
+    countryId: Yup.string().required(VALIDATION_MESSAGES.required),
+    cityId: Yup.string().required(VALIDATION_MESSAGES.required),
+    branchCode: Yup.string().required(VALIDATION_MESSAGES.required),
     Name: Yup.string()
-    .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.')
-    .required('Required*'),
-    BankId: Yup.string().required("*Required"),
+      // .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.')
+      .matches(/^[A-Za-z\s.-]+$/, 'Name must only contain letters.')
+      .required(VALIDATION_MESSAGES.required),
+    BankId: Yup.string().required(VALIDATION_MESSAGES.required),
     email: Yup.string()
       .email("Invalid email"),
     phone: Yup
@@ -38,26 +41,26 @@ const userEditSchema_2 = Yup.object().shape(
       .matches(/^\d+$/, 'Only numeric characters are allowed')
       .min(11)
       .max(15),
-      // .required("*Required"),
+    // .required("*Required"),
 
-      contactPerson: Yup
+    contactPerson: Yup
       .string()
-      .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.'),
-      
+      .matches(/^[A-Za-z\s.-]+$/, 'Name must only contain letters.'),
 
-      accNoForSalary: Yup.string()
+
+    accNoForSalary: Yup.string()
       .matches(/^\d+$/, 'Only numeric characters are allowed'),
 
-      accNoForPF: Yup.string()
+    accNoForPF: Yup.string()
       .matches(/^\d+$/, 'Only numeric characters are allowed'),
 
-      accNoForGrad: Yup.string()
+    accNoForGrad: Yup.string()
       .matches(/^\d+$/, 'Only numeric characters are allowed'),
-      fax: 
+    fax:
       Yup.string()
-      .matches(/^\d+$/, 'Only numeric characters are allowed'),
+        .matches(/^\d+$/, 'Only numeric characters are allowed'),
   }
-  
+
 );
 
 
@@ -87,26 +90,26 @@ export function BranchEditForm({
 
   useEffect(() => {
     if (!user.Id) {
-      dispatch(fetchAllBanks(1));
-     
+      // dispatch(fetchAllBanks(1));
+      dispatch(fetchAllBanks(null));
+
     }
   }, [user.BankId, dispatch]);
 
 
   useEffect(() => {
-   
-    console.log("fff",user?.accOpeningDate)
+
+    console.log("fff", user?.accOpeningDate)
     if (user.Id && user?.accOpeningDate) {
-      
+
       setAccountOpeningDate(new Date(user?.accOpeningDate));
     }
   }, [user.accOpeningDate]);
 
   useEffect(() => {
-    
+
     const countryId = defCountry?.value ? defCountry.value : user.countryId;
-    if(countryId)
-    {
+    if (countryId) {
       dispatch(fetchAllCity(countryId));
     }
     setDefaultCountry(
@@ -115,7 +118,7 @@ export function BranchEditForm({
         return item.value === countryId;
       })
     );
-   
+
   }, [user?.countryId, dashboard.allCountry]);
 
   useEffect(() => {
@@ -126,13 +129,13 @@ export function BranchEditForm({
         return item.value === BankId;
       })
     );
-   
+
   }, [user?.BankId, dashboard.allBanks]);
 
   useEffect(() => {
-   
+
     const cityId = defCity?.value ? defCity.value : user.cityId;
-    
+
     setDefaultCity(
       dashboard.allCity &&
       dashboard.allCity.filter((item) => {
@@ -141,7 +144,17 @@ export function BranchEditForm({
     );
   }, [user.cityId, dashboard.allCity]);
 
-  console.log("master", user);
+  useEffect(() => {
+    if (!user.Id) {
+      // dispatch(fetchAllFormsMenu(133, "allSubidiaryList",null,false)); // For All Subsidiaries
+      dispatch(fetchAllSubsidiaryData("allSubsidiaryList"));
+
+
+    }
+  }, [dispatch, user.Id]);
+
+
+
   return (
     <>
       <Formik
@@ -149,7 +162,7 @@ export function BranchEditForm({
         initialValues={user}
         validationSchema={userEditSchema_2}
         onSubmit={(values) => {
-          console.log("values", values);
+
           enableLoading();
           saveBranch(values);
         }}
@@ -174,6 +187,34 @@ export function BranchEditForm({
               <Form className="form form-label-right">
                 <fieldset disabled={isUserForRead}>
                   <div className="from-group row">
+                    <div className="col-12 col-md-12   p-0 m-0">
+                      <div className="col-4 col-md-4 mb-5">
+                        <SearchSelect
+                          name="subsidiaryId"
+                          label={
+                            <span>
+                              Subsidiary<span style={{ color: "red" }}>*</span>
+                            </span>
+                          }
+                          isDisabled={isUserForRead}
+                          onChange={(e) => {
+                            setFieldValue("subsidiaryId", e.value || null);
+
+                          }}
+                          value={
+                            dashboard?.allSubsidiaryList?.find(
+                              (option) => option?.value === values?.subsidiaryId
+                            ) || null
+                          }
+                          options={dashboard?.allSubsidiaryList}
+
+
+
+                          error={errors.subsidiaryId}
+                          touched={touched.subsidiaryId}
+                        />
+                      </div>
+                    </div>
                     {<div className="col-12 col-md-4 mt-3">
                       <SearchSelect
                         name="BankId"
@@ -185,12 +226,24 @@ export function BranchEditForm({
                         onChange={(e) => {
                           setFieldValue("BankId", e.value);
                           setDefaultBanks(e);
-                         // dispatch(fetchAllBanks(e.value));
+                          // dispatch(fetchAllBanks(e.value));
                         }}
                         value={defBank}
                         error={errors.BankId}
                         touched={touched.BankId}
-                        options={dashboard.allBanks}
+                        // options={dashboard.allBanks}
+
+                        options={
+
+                          dashboard?.allBanks?.filter(
+                            (option) => option.subsidiaryId == values.subsidiaryId
+                          ) || []
+                        }
+
+
+                        
+
+
                       />
                     </div>
 
@@ -249,7 +302,7 @@ export function BranchEditForm({
                         onChange={(e) => {
                           setFieldValue("cityId", e.value);
                           setDefaultCity(e);
-                      
+
                         }}
                         value={defCity}
                         error={errors.cityId}
@@ -260,8 +313,8 @@ export function BranchEditForm({
                     {
                       <div className="col-12 col-md-4 mt-3">
                         <Field
-                        pattern="\d*"
-                        maxLength={15}
+                          pattern="\d*"
+                          maxLength={15}
                           name="phone"
                           component={Input}
                           placeholder="Enter Phone No."
@@ -302,6 +355,35 @@ export function BranchEditForm({
                         />
                       </div>
                     }
+
+                    <div className="col-12 col-md-12 row p-0 m-0">
+
+                      {
+                        <div className="col-12 col-md-4 mt-3">
+                          <Field
+                            name="accNoForSalary"
+                            maxLength={15}
+                            component={Input}
+                            placeholder="Enter Account No For Salary"
+                            label="Account No (Salary)"
+                          />
+                        </div>
+                      }
+
+                      {
+                        <div className="col-12 col-md-4 mt-3">
+                          <Field
+                            name="accNoForGrad"
+                            component={Input}
+                            maxLength={15}
+                            placeholder="Enter Account No For Gratuity"
+                            label="Account No (Gratuity)"
+                          />
+                        </div>
+                      }
+
+                    </div>
+
                     {
                       <div className="col-12 col-md-4 mt-3">
                         <Field
@@ -312,7 +394,7 @@ export function BranchEditForm({
                         />
                       </div>
                     }
-                    {<div className="col-12 col-md-4 mt-3">
+                    {/* {<div className="col-12 col-md-4 mt-3">
                       <label>Account Opening Date</label>
                       <DatePicker
                         className="form-control"
@@ -329,20 +411,25 @@ export function BranchEditForm({
                         disabled={isUserForRead}
                         autoComplete="off"
                       />
-                    </div>}
+                    </div>} */}
 
-                    {
-                      <div className="col-12 col-md-4 mt-3">
-                        <Field
-                          name="accNoForSalary"
-                          maxLength={15}
-                          component={Input}
-                          placeholder="Enter Account No For Salary"
-                          label="Account No (Salary)"
-                        />
-                      </div>
-                    }
-                    {
+                    <div className="col-12 col-md-4 mt-3">
+                      <label>Account Opening Date</label>
+                      <Field
+                        name="accOpeningDate"
+                        component={DatePickerField}
+                        dateFormat="dd/MM/yyyy"
+                        placeholder="Select Date"
+                        type="date"
+
+                        maxDate={new Date()}
+                        disabled={isUserForRead}
+                      />
+                    </div>
+
+
+
+                    {/* {
                       <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="accNoForPF"
@@ -352,18 +439,8 @@ export function BranchEditForm({
                           label="Account No (Provident Fund)"
                         />
                       </div>
-                    }
-                    {
-                      <div className="col-12 col-md-4 mt-3">
-                        <Field
-                          name="accNoForGrad"
-                          component={Input}
-                          maxLength={15}
-                          placeholder="Enter Account No For Gratuity"
-                          label="Account No (Gratuity)"
-                        />
-                      </div>
-                    }
+                    } */}
+
 
                     {/* <div className="col-12 col-md-4 mt-3">
                       <SearchSelect

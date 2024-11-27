@@ -45,6 +45,7 @@ export function BranchUIProvider({ BranchUIEvents, children }) {
     accNoForSalary: "",
     accNoForGrad:"",
     accNoForPF: "",
+  
   };
 
   console.log("bank ui events",BranchUIEvents);
