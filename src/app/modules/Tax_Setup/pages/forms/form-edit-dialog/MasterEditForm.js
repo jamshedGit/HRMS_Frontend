@@ -39,7 +39,7 @@ const formValidation = Yup.object().shape(
         const monthDiff = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
         
         // Check if the difference is at least 11 months
-        return monthDiff >= 11;
+        return monthDiff >= 12;
       }
       return true; // If no endDate or startDate, don't apply the check
     }),

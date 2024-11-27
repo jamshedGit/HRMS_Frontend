@@ -27,7 +27,7 @@ export function ActionsColumnFormatter(
         <a
           title=""
             className="btn btn-icon view-button"
-          onClick={() => openReadBankDialog(row.Id, isUserRead)}
+          onClick={() => openReadBankDialog(row.empId, isUserRead)}
         >
           <span className="svg-icon svg-icon-md svg-icon-primary">
             <SVG
@@ -43,7 +43,7 @@ export function ActionsColumnFormatter(
           <a
             title=""
              className="btn btn-icon edit-button"
-            onClick={() => openEditBankDialog(row.Id)}
+            onClick={() => openEditBankDialog(row.empId)}
           >
             <span className="svg-icon svg-icon-md svg-icon-primary">
               <SVG
@@ -68,7 +68,7 @@ export function ActionsColumnFormatter(
             <a
               title=""
                className="btn btn-icon delete-button"
-              onClick={() => openDeleteBankDialog(row.Id, row.isActive)}
+              onClick={() => openDeleteBankDialog(row.empId, row.isActive)}
             >
               <span className="svg-icon svg-icon-md svg-icon-danger">
                 <SVG
