@@ -32,9 +32,10 @@ export const fetchUser = (id) => (dispatch) => {
 
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
-    .getEmployee_SalaryById({ Id: id })
+    .getEmployee_SalaryById({ id: id, transactionType: 'null' })
     .then((response) => {
-      const entities = response.data?.data;
+      console.log("res:::d",response)
+      const entities = response.data?.data[0];
 
       console.log("User fetched for search " ,entities)
       dispatch(actions.employee_salary_FetchedForEdit({ userForEdit: entities }));
