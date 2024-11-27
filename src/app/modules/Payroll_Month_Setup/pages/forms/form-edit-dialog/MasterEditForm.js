@@ -11,6 +11,7 @@ import {
   fetchAllCity,
 
   fetchAllSubCenter,
+  fetchAllSubsidiaryData,
   getLatestBookingNo,
 } from "../../../../../../_metronic/redux/dashboardActions";
 
@@ -27,6 +28,10 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 // Validation schema
 const formValidation = Yup.object().shape(
   {
+    subsidiaryId: Yup.number()
+    .nullable().
+    required("Required*"),
+
     startDate: Yup.date()
       .nullable()
       .required("Start date is required")
@@ -36,6 +41,7 @@ const formValidation = Yup.object().shape(
       .nullable()
       .required("End date is required")
       .min(Yup.ref('startDate'), 'End date cannot be earlier than start date'), // Use Yup.ref to reference startDate
+    
   },
 
 );
@@ -51,10 +57,16 @@ export function MasterEditForm({
   loading,
 }) {
 
+  const dispatch = useDispatch();
   const { dashboard } = useSelector((state) => state);
   // Get User Details
   const { auth } = useSelector((state) => state);
   const [defShortFormat, setDefaulShortFormat] = useState(null);
+  const [defSubsidiary = null, setDefualtSubsidiaryList] = useState(null);
+
+
+
+
   const getCurrentMonth = () => {
     const now = new Date();
     const currentMonth = now.getMonth(); // Zero-based index (0 = January)
@@ -62,6 +74,30 @@ export function MasterEditForm({
   };
 
   console.log("months", getCurrentMonth())
+
+
+  
+  useEffect(() => {
+
+    if (!user.Id) {
+      dispatch(fetchAllSubsidiaryData("allSubsidiaryList"))
+    }
+  }, [dispatch]);
+
+  
+  useEffect(() => {
+
+    const subsidiaryId = defSubsidiary?.value ? defSubsidiary.value : user.subsidiaryId;
+
+    setDefualtSubsidiaryList(
+      dashboard.allSubsidiaryList &&
+      dashboard.allSubsidiaryList.filter((item) => {
+        return item.value === subsidiaryId;
+      })
+    );
+
+  }, [user?.subsidiaryId, dashboard.subsidiaryId]);
+
 
   const getEndOfMonth = () => {
     const now = new Date();
@@ -232,6 +268,28 @@ console.log("in func")
               )}
               <Form className="form form-label-right">
                 <fieldset disabled={isUserForRead}>
+                <div className="from-group row">
+                    <div className="col-12 col-md-4 mt-3">
+                      <SearchSelect
+                        name="subsidiaryId"
+                        label={<span> Subsidiary<span style={{ color: 'red' }}>*</span></span>}
+                        isDisabled={isUserForRead && true}
+                        onBlur={() => {
+                          // handleBlur({ target: { name: "countryId" } });
+                        }}
+                        onChange={(e) => {
+                          setFieldValue("subsidiaryId", e.value || null);
+                          setDefualtSubsidiaryList(e);
+
+                        }}
+
+                        value={(defSubsidiary || null)}
+                        error={errors.subsidiaryId}
+                        touched={touched.subsidiaryId}
+                        options={dashboard.allSubsidiaryList}
+                      />
+                    </div>
+                  </div>
                   <div className="from-group row">
                     <div className="col-12 col-md-4 mt-3">
                     <span> Month<span style={{ color: 'red' }}>*</span></span>
