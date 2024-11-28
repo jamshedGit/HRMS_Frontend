@@ -29,7 +29,7 @@ export function FormEditDialogHeader({ id, isUserForRead }) {
   return (
     <>
       {actionsLoading && <ModalProgressBar />}
-      <Modal.Header closeButton>
+      <Modal.Header>
         <Modal.Title id="example-modal-sizes-title-lg " className="text-bold">
           {!isUserForRead ? title : "View"}
         </Modal.Title>
