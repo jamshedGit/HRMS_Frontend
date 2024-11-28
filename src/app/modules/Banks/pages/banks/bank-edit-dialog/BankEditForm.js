@@ -24,7 +24,8 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 const bankEditSchema = Yup.object().shape(
   {
     Name: Yup.string()
-      .matches(/^[A-Za-z\s]+$/, 'Only alphabetic characters allowed')
+      // .matches(/^[A-Za-z\s]+$/, 'Only alphabetic characters allowed')
+      .matches(/^[A-Za-z\s.-]+$/, 'Name must only contain letters.')
       .required(VALIDATION_MESSAGES.required),
     subsidiaryId: Yup.string()
       .nullable()
