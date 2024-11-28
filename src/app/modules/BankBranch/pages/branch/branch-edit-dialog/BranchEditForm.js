@@ -16,6 +16,7 @@ import {
   getLatestBookingNo,
 } from "../../../../../../_metronic/redux/dashboardActions";
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
+import { amountLimitDynamic } from "../../../../../utils/common";
 
 
 // Phone Number Regex
@@ -49,15 +50,23 @@ const userEditSchema_2 = Yup.object().shape(
 
 
     accNoForSalary: Yup.string()
+    .min(9, 'Must be at least 9 characters') // 9 characters minimum for accNoForPF
+    .max(18, 'Must be at most 18 characters')
       .matches(/^\d+$/, 'Only numeric characters are allowed'),
 
     accNoForPF: Yup.string()
+    .min(9, 'Must be at least 9 characters') // 9 characters minimum for accNoForPF
+    .max(18, 'Must be at most 18 characters')
       .matches(/^\d+$/, 'Only numeric characters are allowed'),
 
     accNoForGrad: Yup.string()
+    .min(9, 'Must be at least 9 characters') // 9 characters minimum for accNoForPF
+    .max(18, 'Must be at most 18 characters')
       .matches(/^\d+$/, 'Only numeric characters are allowed'),
     fax:
       Yup.string()
+     .min(7, 'must be at least 7 digits') // Minimum 7 digits
+    .max(15, 'must be at most 15 digits')
         .matches(/^\d+$/, 'Only numeric characters are allowed'),
   }
 
@@ -241,7 +250,7 @@ export function BranchEditForm({
                         }
 
 
-                        
+
 
 
                       />
@@ -259,16 +268,34 @@ export function BranchEditForm({
                       />
                       {errors.branchCode && touched.branchCode}
                     </div>
-
-                    <div className="col-12 col-md-4 mt-3">
+                    <div className="col-12 col-md-12 p-0 m-0">
+                    <div className="col-12 col-md-8 mt-3">
                       <Field
                         name="Name"
                         component={Input}
                         maxLength={30}
                         placeholder="Enter Branch Name"
                         label={<span> Branch Name<span style={{ color: 'red' }}>*</span></span>}
+                        onInput={(e) => {
+                          e.target.value = amountLimitDynamic(e.target.value,50); // Limit to 3 digits
+                        }}
                       />
                     </div>
+
+                    </div>
+                    {
+                      <div className="col-12 col-md-4 mt-3">
+                        <Field
+                          name="contactPerson"
+                          component={Input}
+                          placeholder="Enter Contact Person"
+                          label="Contact Person"
+                          onInput={(e) => {
+                            e.target.value = amountLimitDynamic(e.target.value,40); // Limit to 3 digits
+                          }}
+                        />
+                      </div>
+                    }
 
                     {<div className="col-12 col-md-4 mt-3">
                       <SearchSelect
@@ -330,6 +357,9 @@ export function BranchEditForm({
                           component={Input}
                           placeholder="Enter Email"
                           label="Email"
+                          onInput={(e) => {
+                            e.target.value = amountLimitDynamic(e.target.value,40); // Limit to 3 digits
+                          }}
                         />
                       </div>
                     }
@@ -345,55 +375,68 @@ export function BranchEditForm({
                       </div>
                     }
 
+
+
+                    {/* <div className="col-12 col-md-12 row p-0 m-0"> */}
+
                     {
                       <div className="col-12 col-md-4 mt-3">
                         <Field
-                          name="contactPerson"
+                          name="accNoForSalary"
+                          maxLength={15}
                           component={Input}
-                          placeholder="Enter Contact Person"
-                          label="Contact Person"
+                          placeholder="Enter Account No For Salary"
+                          label="Account No (Salary)"
                         />
                       </div>
                     }
 
+                    {
+                      <div className="col-12 col-md-4 mt-3">
+                        <Field
+                          name="accNoForGrad"
+                          component={Input}
+                          maxLength={15}
+                          placeholder="Enter Account No For Gratuity"
+                          label="Account No (Gratuity)"
+                        />
+                      </div>
+                    }
+
+                    <div className="col-12 col-md-4 mt-3">
+                      <label>Account Opening Date</label>
+                      <Field
+                        name="accOpeningDate"
+                        component={DatePickerField}
+                        dateFormat="dd/MM/yyyy"
+                        placeholder="Select Date"
+                        type="date"
+
+                        maxDate={new Date()}
+                        disabled={isUserForRead}
+                      />
+                    </div>
+
+
+                    {/* </div> */}
+
                     <div className="col-12 col-md-12 row p-0 m-0">
 
                       {
-                        <div className="col-12 col-md-4 mt-3">
+                        <div className="col-12 col-md-12 mt-3">
                           <Field
-                            name="accNoForSalary"
-                            maxLength={15}
-                            component={Input}
-                            placeholder="Enter Account No For Salary"
-                            label="Account No (Salary)"
-                          />
-                        </div>
-                      }
-
-                      {
-                        <div className="col-12 col-md-4 mt-3">
-                          <Field
-                            name="accNoForGrad"
-                            component={Input}
-                            maxLength={15}
-                            placeholder="Enter Account No For Gratuity"
-                            label="Account No (Gratuity)"
+                            name="address"
+                            component={TextArea}
+                            placeholder="Enter Branch Address"
+                            label="Address"
+                            onInput={(e) => {
+                              e.target.value = amountLimitDynamic(e.target.value,250); // Limit to 3 digits
+                            }}
                           />
                         </div>
                       }
 
                     </div>
-
-                    {
-                      <div className="col-12 col-md-4 mt-3">
-                        <Field
-                          name="address"
-                          component={TextArea}
-                          placeholder="Enter Branch Address"
-                          label="Address"
-                        />
-                      </div>
-                    }
                     {/* {<div className="col-12 col-md-4 mt-3">
                       <label>Account Opening Date</label>
                       <DatePicker
@@ -413,19 +456,6 @@ export function BranchEditForm({
                       />
                     </div>} */}
 
-                    <div className="col-12 col-md-4 mt-3">
-                      <label>Account Opening Date</label>
-                      <Field
-                        name="accOpeningDate"
-                        component={DatePickerField}
-                        dateFormat="dd/MM/yyyy"
-                        placeholder="Select Date"
-                        type="date"
-
-                        maxDate={new Date()}
-                        disabled={isUserForRead}
-                      />
-                    </div>
 
 
 
