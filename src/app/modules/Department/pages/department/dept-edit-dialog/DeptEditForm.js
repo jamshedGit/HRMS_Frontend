@@ -102,7 +102,6 @@ export function DeptEditForm({
 
 
   const fetchData = async (subsidiaryId, setValue) => {
-    console.log("jj::", subsidiaryId)
     if (subsidiaryId) {
       dispatch(getLatestTableId("t_department", "deptCode", " subsidiaryId = " + subsidiaryId, setValue));
     }
@@ -207,7 +206,13 @@ console.log("pep", dashboard.allDept)
                           value={(defDept || null)}
                           error={errors.parentDept}
                           touched={touched.parentDept}
-                          options={dashboard.allDept}
+                          // options={dashboard.allDept}
+                          options={
+
+                            dashboard?.allDept?.filter(
+                              (option) => option.subsidiaryId == values.subsidiaryId
+                            ) || []
+                          }
                         />
                         
 

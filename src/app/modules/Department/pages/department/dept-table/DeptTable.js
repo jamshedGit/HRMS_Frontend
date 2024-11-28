@@ -68,6 +68,19 @@ export function DeptTable() {
   // Table columns
   const columns = [
     {
+      dataField: "Subsidiary",
+      text: "Subsidiary",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
+
+   
+   
+    {
       dataField: "deptCode",
       text: "Department Code",
       sort: false,
@@ -98,16 +111,6 @@ export function DeptTable() {
       },
     },
    
-    {
-      dataField: "Subsidiary",
-      text: "Subsidiary",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
 
     {
       dataField: "budgetStrength",
@@ -117,6 +120,8 @@ export function DeptTable() {
       headerSortingClasses,
       style: {
         minWidth: "160px",
+        textAlign: "center",
+        
       },
     },
    

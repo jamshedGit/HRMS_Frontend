@@ -10,6 +10,7 @@ import { DeptTable } from "../dept-table/DeptTable"
 import { useDeptUIContext } from "../DeptUIContext"
 import { DeptFilter } from "../dept-filter/DeptFIlter"
 import { useSelector, shallowEqual } from "react-redux"
+import CurrentModuleName from "../../../../../utils/common-modules/ModuleName"
 
 export function DeptCard() {
   const DeptUIContext = useDeptUIContext()
@@ -37,45 +38,72 @@ export function DeptCard() {
   return (
     <>
 
+
       <Card>
-        <CardHeader title="">
-          <DeptFilter />
-          <CardHeaderToolbar>
-            {accessUser ? (
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={DeptUIProps.newDeptButtonClick}
-              >
-                + Add Department
-              </button>
-            ) : (
-              <></>
-            )}
-            {/* {userAccess.find((item) => {
-              if (
-                item.componentName === "CreateUser" ||
-                item.isAccess === true
-              ) {
-                return (
+
+        <CardHeader title={CurrentModuleName()} >
+
+          <div className="d-flex justify-content-between align-items-center gap-3 m-4">
+
+
+
+            <div className="pt-5">
+
+              <DeptFilter />
+
+            </div>
+
+            <div className=" p-2">
+
+              <CardHeaderToolbar>
+
+
+
+                {accessUser && (
+
                   <button
+
                     type="button"
+
                     className="btn btn-primary"
-                    onClick={DeptUIProps.newUserButtonClick}
+
+                    onClick={DeptUIProps.newDeptButtonClick}
+
                   >
-                    Add New User
+
+                    + Add Department
+
                   </button>
-                )
-              }
-            })} */}
-          </CardHeaderToolbar>
+
+                )}
+
+
+
+
+
+              </CardHeaderToolbar>
+
+            </div>
+
+
+
+          </div>
+
         </CardHeader>
+
+
 
         <CardBody>
 
+
+
           <DeptTable />
+
         </CardBody>
+
       </Card>
+
+
     </>
   )
 }
