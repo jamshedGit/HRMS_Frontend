@@ -4,11 +4,13 @@ import { Select } from "../../../../../../_metronic/_partials/controls";
 import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
 import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLabel";
 import { Modal } from "react-bootstrap";
+import { fetchAllLeaveType } from "../../../../../../_metronic/redux/dashboardActions";
 
 export function FilterForm({
   filters,
   setfilters,
-  dropdownData
+  dropdownData,
+  dispatch
 }) {
 
   return (
@@ -40,8 +42,11 @@ export function FilterForm({
                         onBlur={handleBlur}
                         onChange={(e) => {
                           const value = e.target.value == '--Select--' ? '' : Number(e.target.value)
+                          if (value) {
+                            dispatch(fetchAllLeaveType("allLeaveTypes", value));
+                          }
                           setFieldValue('employeeId', value)
-                          setfilters({...filters, employeeId: value})
+                          setfilters({ ...filters, employeeId: value, leaveType: '' })
                         }}
                         label={
                           <span>
@@ -63,6 +68,7 @@ export function FilterForm({
                     <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="leaveType"
+                        disabled={!values.employeeId}
                         component={Select}
                         className={errors.leaveType && touched.leaveType ? 'form-control is-invalid' : 'form-control'}
                         placeholder=""
@@ -70,7 +76,7 @@ export function FilterForm({
                         onChange={(e) => {
                           const value = e.target.value == '--Select--' ? '' : Number(e.target.value)
                           setFieldValue('leaveType', value)
-                          setfilters({...filters, leaveType: value})
+                          setfilters({ ...filters, leaveType: value })
                         }}
                         label={
                           <span>
@@ -80,7 +86,7 @@ export function FilterForm({
                         }
                         value={values.leaveType}
                         autoComplete="off"
-                        children={CustomDropdown({ data: dropdownData.allLeaveTypes })}
+                        children={CustomDropdown({ data: values.employeeId ? dropdownData.allLeaveTypes : [{ label: '--Select--', value: null }] })}
                       />
                       {
                         errors.leaveType && touched.leaveType && <CustomErrorLabel touched={true} error={errors.leaveType} />
@@ -93,13 +99,14 @@ export function FilterForm({
                       <Field
                         name="yearId"
                         component={Select}
+                        disabled={!values.employeeId}
                         className={errors.yearId && touched.yearId ? 'form-control is-invalid' : 'form-control'}
                         placeholder=""
                         onBlur={handleBlur}
                         onChange={(e) => {
                           const value = e.target.value == '--Select--' ? '' : Number(e.target.value)
                           setFieldValue('yearId', value)
-                          setfilters({...filters, yearId: value})
+                          setfilters({ ...filters, yearId: value })
                         }}
                         label={
                           <span>

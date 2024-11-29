@@ -16,6 +16,7 @@ import * as uiHelpers from "../FormUIHelpers";
 import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatter";
 import { Pagination } from "../../../../../../_metronic/_partials/controls";
 import { useFormUIContext } from "../FormUIContext";
+import { Modal } from "react-bootstrap";
 
 export function FormTable() {
   //Users UI Context
@@ -23,21 +24,15 @@ export function FormTable() {
 
   const FormUIProps = useMemo(() => {
     return {
-      ids: formUIContext.ids,
-      setIds: formUIContext.setIds,
       queryParams: formUIContext.queryParams,
       setQueryParams: formUIContext.setQueryParams,
-      openEditFormDialog: formUIContext.openEditFormDialog,
-      openDeleteFormDialog: formUIContext.openDeleteFormDialog,
-      openReadFormDialog: formUIContext.openReadFormDialog,
     };
   }, [formUIContext]);
 
-  const { currentState, userAccess } = useSelector(
+  const { currentState } = useSelector(
     (state) => {
       return {
-        currentState: state.leave_type,
-        userAccess: state?.auth?.userAccess["Leave_Type"],
+        currentState: state.leave_register,
       }
     },
     shallowEqual
@@ -48,43 +43,36 @@ export function FormTable() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    FormUIProps.setIds([]);
-    dispatch(actions.fetchLeaveType(FormUIProps.queryParams));
-  }, [FormUIProps.queryParams, dispatch, totalCount]);
+    dispatch(actions.fetchLeaveRegister(FormUIProps.queryParams));
+  }, [FormUIProps.queryParams, dispatch]);
 
-  const isAccessForEdit = userAccess?.find(
-    (item) => item.componentName === "UpdateLeaveType"
-  );
-
-  const isAccessForDelete = userAccess?.find(
-    (item) => item.componentName === "DeleteLeaveType"
-  );
   // Table columns
   const columns = [
     {
-      dataField: "t_subsidiary.name",
-      text: "Subsidiary",
+      dataField: "employeeCode",
+      text: "Emp. Code",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
       style: {
         minWidth: "160px",
+        maxWidth: "160px",
       },
     },
     {
-      dataField: "name",
+      dataField: "fullName",
       text: "Name",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
       style: {
         minWidth: "160px",
+        maxWidth: "160px",
       },
     },
-
     {
-      dataField: "code",
-      text: "Code",
+      dataField: "name",
+      text: "Leave Type",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -93,35 +81,60 @@ export function FormTable() {
       },
     },
     {
-      dataField: "typeName",
-      text: "Type",
+      dataField: "from",
+      text: "Date From",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
       style: {
         minWidth: "160px",
+        maxWidth: "160px",
       },
     },
     {
-      dataField: "action",
-      text: "Actions",
-      isDummyField: true,
-      formatter: ActionsColumnFormatter,
-      formatExtraData: {
-        openEditFormDialog: FormUIProps.openEditFormDialog,
-        openDeleteFormDialog: FormUIProps.openDeleteFormDialog,
-        openReadFormDialog: FormUIProps.openReadFormDialog,
-        isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,
-        isAccessForDelete: isAccessForDelete
-          ? isAccessForDelete.isAccess
-          : false,
-      },
-      classes: "text-right pr-0",
-      headerClasses: "text-right pr-3",
+      dataField: "to",
+      text: "Date To",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
       style: {
-        minWidth: "170px",
+        minWidth: "160px",
+        maxWidth: "160px",
       },
     },
+    {
+      dataField: "days",
+      text: "Leave Days",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+        maxWidth: "160px",
+      },
+    },
+    {
+      dataField: "remarks",
+      text: "Remarks",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+        maxWidth: "160px",
+      },
+    },
+    {
+      dataField: "fileStatus",
+      text: "Attachment",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+        maxWidth: "160px",
+      },
+    }
   ];
 
   //Table pagination properties
@@ -134,7 +147,7 @@ export function FormTable() {
   };
 
   return (
-    <>
+    <Modal.Body className="overlay overlay-block cursor-default">
       <PaginationProvider pagination={paginationFactory(paginationOptions)}>
         {({ paginationProps, paginationTableProps }) => {
           return (
@@ -146,7 +159,7 @@ export function FormTable() {
                 noDataIndication={NoRecordsFoundMessage({ entities })}
                 wrapperClasses="table-responsive"
                 bordered={false}
-                classes="table table-head-custom table-vertical-center overflow-hidden table-hover"
+                classes="table table-head-custom table-vertical-center overflow-hidden table-hover fixed-layout-table"
                 bootstrap4
                 remote
                 keyField="Id"
@@ -170,6 +183,6 @@ export function FormTable() {
           );
         }}
       </PaginationProvider>
-    </>
+      </Modal.Body>
   );
 }

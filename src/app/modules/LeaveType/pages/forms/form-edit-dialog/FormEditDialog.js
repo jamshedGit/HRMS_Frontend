@@ -8,6 +8,7 @@ import * as actions from "../../../_redux/formActions";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useFormUIContext } from "../FormUIContext";
+import { fetchAllSubsidiaryData } from "../../../../../../_metronic/redux/dashboardActions";
 
 export function FormEditDialog({ id, show, onHide, userForRead }) {
   const [loading, setLoading] = useState(false);
@@ -30,10 +31,12 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   const dispatch = useDispatch();
   const {
     userForEdit,
-    typeDropdownData
+    typeDropdownData,
+    dashboard
   } = useSelector((state) => ({
     userForEdit: state.leave_type.userForEdit,
-    typeDropdownData: state.leave_type.typeDropdownData
+    typeDropdownData: state.leave_type.typeDropdownData,
+    dashboard: state.dashboard
   }
   ));
 
@@ -43,6 +46,8 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     if(!typeDropdownData || !typeDropdownData.length){
       dispatch(actions.fetchTypeDropdownData()); 
     }
+    if (!dashboard?.allSubsidiaryList?.length)
+      dispatch(fetchAllSubsidiaryData("allSubsidiaryList"));
   }, [id, dispatch]);
 
   //Create or Update record according to values from dialog
@@ -67,6 +72,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         isUserForRead={userForRead}
         enableLoading={enableLoading}
         loading={loading}
+        allSubsidiaryList={dashboard?.allSubsidiaryList || []}
       />
       <ToastContainer
         position="top-right"

@@ -186,6 +186,27 @@ export const fetchAllLeaveType = (key, employeeId = null) => async (dispatch) =>
 /**
  * 
  * Get All leave Types Data from Server and set it in state on the key provided in argument
+ * Get Leave Type according to Subsidiary. If Subsidiary is not present then it will bring empty array.
+ * 
+ * @param {String} key 
+ * @param {String|Number} subsidiaryId 
+ * @returns 
+ */
+export const fetchAllLeaveTypeBySubsidiary = (key, subsidiaryId = null) => async (dispatch) => {
+  return await requestFromServer
+    .getAllLeaveTypesBySubsidiary({ subsidiaryId })
+    .then((response) => {
+      const entities = [...response.data?.data];
+      dispatch(actions.AllChildMenusFetch({ entities, key }));
+    })
+    .catch((error) => {
+      toast.error("Something went wrong");
+    });
+};
+
+/**
+ * 
+ * Get All leave Types Data from Server and set it in state on the key provided in argument
  * It will only get Leave Type Data that are of Encashable for current year
  * 
  * @param {String} key 
