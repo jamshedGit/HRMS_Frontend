@@ -17,7 +17,7 @@ export function FormEditDialogHeader({ id, isUserForRead }) {
   );
 
   useEffect(() => {
-    let _title = id ? "" : "Execute Payroll Process";
+    let _title = id ? "" : "Execute Payroll Process" ;
     if (id) {
       _title = `Execute Payroll Process`;
     } //else if (isUserForRead) {
@@ -30,7 +30,7 @@ export function FormEditDialogHeader({ id, isUserForRead }) {
     <>
       {actionsLoading && <ModalProgressBar />}
       <Modal.Header>
-        <Modal.Title id="example-modal-sizes-title-lg">
+        <Modal.Title id="example-modal-sizes-title-lg" className="text-bold">
           {!isUserForRead ? title : "View Payroll Process"}
         </Modal.Title>
       </Modal.Header>

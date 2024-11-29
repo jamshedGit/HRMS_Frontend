@@ -26,13 +26,13 @@ export function ActionsColumnFormatter(
   return (
     <>
 
-      {isAccessForEdit && row.isActive && (
+      {/* {isAccessForEdit && row.isActive && (
         <OverlayTrigger
           overlay={<Tooltip id="products-edit-tooltip">Edit</Tooltip>}
         >
           <a
             title=""
-            className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
+             className="btn btn-icon edit-button"
             onClick={() =>{
            
               setIds(row.Id)}
@@ -46,11 +46,14 @@ export function ActionsColumnFormatter(
             </span>
           </a>
         </OverlayTrigger>
-      )}
+      )} */}
 
       <> </>
 
-      {isAccessForDelete && (
+   
+
+
+{isAccessForDelete && (
         <OverlayTrigger
           overlay={
             <Tooltip id="products-edit-tooltip">
@@ -61,7 +64,7 @@ export function ActionsColumnFormatter(
           {row.isActive ? (
             <a
               title=""
-              className="btn btn-icon btn-light btn-hover-danger btn-sm mx-3"
+              className="btn btn-icon  delete-button"
               onClick={() => openDeleteFormDialog(row.Id, row.isActive)}
             >
               <span className="svg-icon svg-icon-md svg-icon-danger">

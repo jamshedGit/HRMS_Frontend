@@ -208,7 +208,7 @@ export function FormTable() {
       <Card>
         <Card.Header className="d-flex justify-content-center">
         <div className='accordion-header-btn w-100  d-flex justify-content-center'>
-          <Accordion.Toggle as={Button} eventKey="0" >
+          <Accordion.Toggle as={Button} eventKey="0" className="flex-between-center text-bold" >
             Payroll Process Details
             <KeyboardArrowDown />
           </Accordion.Toggle>
