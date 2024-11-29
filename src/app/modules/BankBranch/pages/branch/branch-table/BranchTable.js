@@ -108,16 +108,6 @@ export function BranchTable() {
       },
     },
     
-    {
-      dataField: "Name",
-      text: "Branch Name",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
    
        {
       dataField: "action",

@@ -108,7 +108,7 @@ export function BranchEditForm({
 
   useEffect(() => {
 
-    console.log("fff", user?.accOpeningDate)
+  
     if (user.Id && user?.accOpeningDate) {
 
       setAccountOpeningDate(new Date(user?.accOpeningDate));
@@ -196,34 +196,40 @@ export function BranchEditForm({
               <Form className="form form-label-right">
                 <fieldset disabled={isUserForRead}>
                   <div className="from-group row">
-                    <div className="col-12 col-md-12   p-0 m-0">
-                      <div className="col-4 col-md-4 mb-5">
-                        <SearchSelect
-                          name="subsidiaryId"
-                          label={
-                            <span>
-                              Subsidiary<span style={{ color: "red" }}>*</span>
-                            </span>
-                          }
-                          isDisabled={isUserForRead}
-                          onChange={(e) => {
-                            setFieldValue("subsidiaryId", e.value || null);
+                  {!isUserForRead ? (
+                     <div className="col-12 col-md-12   p-0 m-0">
+                     <div className="col-4 col-md-4 mb-5">
+                       <SearchSelect
+                         name="subsidiaryId"
+                         label={
+                           <span>
+                             Subsidiary<span style={{ color: "red" }}>*</span>
+                           </span>
+                         }
+                         isDisabled={isUserForRead}
+                         onChange={(e) => {
+                           setFieldValue("subsidiaryId", e.value || null);
 
-                          }}
-                          value={
-                            dashboard?.allSubsidiaryList?.find(
-                              (option) => option?.value === values?.subsidiaryId
-                            ) || null
-                          }
-                          options={dashboard?.allSubsidiaryList}
+                         }}
+                         value={
+                           dashboard?.allSubsidiaryList?.find(
+                             (option) => option?.value === values?.subsidiaryId
+                           ) || null
+                         }
+                         options={dashboard?.allSubsidiaryList}
 
 
 
-                          error={errors.subsidiaryId}
-                          touched={touched.subsidiaryId}
-                        />
-                      </div>
-                    </div>
+                         error={errors.subsidiaryId}
+                         touched={touched.subsidiaryId}
+                       />
+                     </div>
+                   </div>
+                  ):(
+<p></p>
+
+                  )}
+                   
                     {<div className="col-12 col-md-4 mt-3">
                       <SearchSelect
                         name="BankId"

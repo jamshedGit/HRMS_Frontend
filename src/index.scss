@@ -104,7 +104,8 @@
   color: #333333 ;
   th {
     outline: none;
-   background-color:#fafafa;
+   background-color:#0093dd;
+
     &.sortable {  
       .svg-icon-sort {
         opacity: 0;
@@ -127,12 +128,18 @@
     // background-color: #f7f7f7;
     color: #333333 !important; 
     border-radius: 140px;
-  }
 
+  }
+ .table.table-head-custom tr:hover{
+  background-color: #E6F8FF;
+ }
 
   .table.table-head-custom thead th {
-    color: #333333 !important;  /* Same text color for header cells */
-   
+    color: #ffffff !important;  /* Same text color for header cells */
+   font-size: 16px;
+   font-weight: 600;
+   text-transform: capitalize;
+   letter-spacing: 0px;
   }
 }
 

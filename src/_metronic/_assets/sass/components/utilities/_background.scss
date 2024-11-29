@@ -77,7 +77,7 @@
 @each $color, $value in $theme-light-colors {
 	// Initial
 	.bg-light-#{$color} {
-		background-color: #607799 !important  // $value !important;
+		background-color: #0093DD !important  // $value !important;
 	}
 
 	// Hover

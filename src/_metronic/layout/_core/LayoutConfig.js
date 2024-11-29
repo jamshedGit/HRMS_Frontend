@@ -20,7 +20,7 @@ export function getInitLayoutConfig() {
             info: "#8950FC",
             warning: "#FFA800",
             danger: "#F64E60",
-            light: "#607799",
+            light: "#0093DD",
             dark: "#212121",
           },
           light: {
@@ -31,7 +31,7 @@ export function getInitLayoutConfig() {
             info: "#EEE5FF",
             warning: "#FFF4DE",
             danger: "#FFE2E5",
-            light: "#607799",
+            light: "#0093DD",
             dark: "#D6D6E0",
           },
           inverse: {
@@ -47,7 +47,7 @@ export function getInitLayoutConfig() {
           },
         },
         gray: {
-          gray100: "#607799",
+          gray100: "#0093DD",
           gray200: "#ECF0F3",
           gray300: "#E5EAEE",
           gray400: "#D6D6E0",

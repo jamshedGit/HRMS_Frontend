@@ -107,7 +107,7 @@ export function DeptEditForm({
     }
   };
 
-console.log("pep", dashboard.allDept)
+
 
   return (
     <>
@@ -116,7 +116,7 @@ console.log("pep", dashboard.allDept)
         initialValues={user}
         validationSchema={userEditSchema_2}
         onSubmit={(values) => {
-          console.log("values", values);
+      
           
           enableLoading();
           saveDept({...values, deptCode: defDepartmentCode ? defDepartmentCode : values.deptCode});

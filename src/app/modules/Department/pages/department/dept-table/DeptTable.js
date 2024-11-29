@@ -88,6 +88,7 @@ export function DeptTable() {
       headerSortingClasses,
       style: {
         minWidth: "160px",
+        textAlign: "center",
       },
     },
     {
