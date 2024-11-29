@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
@@ -10,6 +10,7 @@ import LeaveTypeSalaryDeductionTable from "./LeaveTypeSalaryDeductionTable";
 import * as actions from "../../../_redux/formActions";
 import { VALIDATION_MESSAGES, WEEK_DAYS } from "../../../../../utils/constants";
 import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
+import { fetchAllLeaveTypeBySubsidiary } from "../../../../../../_metronic/redux/dashboardActions";
 
 //Validations for Form
 const formValidation = Yup.object().shape({
@@ -66,6 +67,13 @@ export function MasterEditForm({
     allMaritalStatus,
     allLeaveTypes
   } = useSelector((state) => state.dashboard);
+
+  //Get Leave Type Dropdown data on Edit when subisidary is present
+  useEffect(() => {
+    if (user.subsidiaryId) {
+      dispatch(fetchAllLeaveTypeBySubsidiary("allLeaveTypes", user.subsidiaryId));
+    }
+  }, [user.subsidiaryId])
 
   //Create Dropdown HTML from data for Select Components.
   //when leaveTypeData is provided it will check one of leave type is already selected then it will not allow it to be selected again.
@@ -142,6 +150,7 @@ export function MasterEditForm({
                         onBlur={handleBlur}
                         onChange={(e) => {
                           const value = e.target.value == '--Select--' ? '' : e.target.value
+                          dispatch(fetchAllLeaveTypeBySubsidiary("allLeaveTypes", value)); //When subsidiary is updated then fetch leave types dropdown data according to the subsidiary selected
                           setFieldValue('subsidiaryId', value)
                           const filter = { subsidiaryId: value,/* gradeId: values.gradeId, employeeTypeId: values.employeeTypeId*/ }
                           getOldData(filter)

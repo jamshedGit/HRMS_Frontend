@@ -8,7 +8,7 @@ import * as actions from "../../../_redux/formActions";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useFormUIContext } from "../FormUIContext";
-import { fetchAllFormsMenu, fetchAllLeaveType, fetchAllSubsidiaryData } from "../../../../../../_metronic/redux/dashboardActions";
+import { fetchAllFormsMenu, fetchAllSubsidiaryData } from "../../../../../../_metronic/redux/dashboardActions";
 
 export function FormEditDialog({ id, show, onHide, userForRead, isEdit }) {
   const [loading, setLoading] = useState(false);
@@ -54,8 +54,6 @@ export function FormEditDialog({ id, show, onHide, userForRead, isEdit }) {
       dispatch(fetchAllFormsMenu(191, "allLeaveStatus", 'All'));
     if (!dashboard?.allMaritalStatus || !dashboard?.allMaritalStatus?.length)
       dispatch(fetchAllFormsMenu(190, "allMaritalStatus", 'All'));
-    if (!dashboard?.allLeaveTypes || !dashboard?.allLeaveTypes?.length)
-      dispatch(fetchAllLeaveType("allLeaveTypes"));
   }, [id, dispatch, show]);
 
   //Create or Update record according to values from dialog
