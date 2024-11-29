@@ -100,6 +100,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         Id: user.Id,
         startDate: user.startDate,
         endDate: user.endDate,
+        subsidiaryId:user.subsidiaryId
       };
 
       console.log("taxSetupUpdatedFields", taxSetupUpdatedFields);

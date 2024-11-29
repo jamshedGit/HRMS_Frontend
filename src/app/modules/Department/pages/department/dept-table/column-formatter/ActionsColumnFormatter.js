@@ -27,7 +27,7 @@ export function ActionsColumnFormatter(
         overlay={<Tooltip id="products-edit-tooltip">View</Tooltip>}>
         <a
           title=""
-          className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
+         className="btn btn-icon view-button"
           onClick={() => openReadDeptDialog(row.deptId, isUserRead)}
         >
           <span className="svg-icon svg-icon-md svg-icon-primary">
@@ -43,7 +43,7 @@ export function ActionsColumnFormatter(
         >
           <a
             title=""
-            className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
+           className="btn btn-icon edit-button"
             onClick={() => openEditDeptDialog(row.deptId)}
           >
             <span className="svg-icon svg-icon-md svg-icon-primary">
@@ -68,7 +68,7 @@ export function ActionsColumnFormatter(
           {row.isActive ? (
             <a
               title=""
-              className="btn btn-icon btn-light btn-hover-danger btn-sm mx-3"
+               className="btn btn-icon delete-button"
               onClick={() => openDeleteDeptDialog(row.deptId, row.isActive)}
             >
               <span className="svg-icon svg-icon-md svg-icon-danger">

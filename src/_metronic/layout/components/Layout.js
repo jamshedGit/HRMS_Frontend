@@ -77,7 +77,7 @@ export function Layout({ children }) {
 
                   {/*begin::Container*/}
                   <div className={layoutProps.contentContainerClasses}>
-                    <h1>{name}</h1>
+                    {/* <h1 className="noto-sans-bold">{name}</h1> */}
                     {children}
                   </div>
                   {/*end::Container*/}
@@ -89,6 +89,9 @@ export function Layout({ children }) {
               {/*end::Entry*/}
             </div>
             {/*end::Content*/}
+            <br/>
+            <br/>
+            <br/>
             <Footer />
           </div>
           {/*end::Wrapper*/}

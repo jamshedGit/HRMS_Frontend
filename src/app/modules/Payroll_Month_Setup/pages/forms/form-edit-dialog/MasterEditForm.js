@@ -11,6 +11,7 @@ import {
   fetchAllCity,
 
   fetchAllSubCenter,
+  fetchAllSubsidiaryData,
   getLatestBookingNo,
 } from "../../../../../../_metronic/redux/dashboardActions";
 
@@ -18,6 +19,7 @@ import DatePicker from "react-datepicker";
 import axios from "axios";
 import { USERS_URL } from "../../../_redux/formCrud";
 import { formatDates, formatDatesGlobal, getDateDiffInDays } from "../../../../../utils/common";
+import { addMonths, getMonth } from "date-fns";
 // Phone Number Regex
 const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
 // CNIC Regex
@@ -27,6 +29,10 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 // Validation schema
 const formValidation = Yup.object().shape(
   {
+    subsidiaryId: Yup.mixed()
+      .nullable().
+      required("Required*"),
+
     startDate: Yup.date()
       .nullable()
       .required("Start date is required")
@@ -36,6 +42,7 @@ const formValidation = Yup.object().shape(
       .nullable()
       .required("End date is required")
       .min(Yup.ref('startDate'), 'End date cannot be earlier than start date'), // Use Yup.ref to reference startDate
+
   },
 
 );
@@ -51,17 +58,9 @@ export function MasterEditForm({
   loading,
 }) {
 
+  const dispatch = useDispatch();
   const { dashboard } = useSelector((state) => state);
-  // Get User Details
-  const { auth } = useSelector((state) => state);
-  const [defShortFormat, setDefaulShortFormat] = useState(null);
-  const getCurrentMonth = () => {
-    const now = new Date();
-    const currentMonth = now.getMonth(); // Zero-based index (0 = January)
-    return currentMonth + 1; // Convert to 1-based (1 = January)
-  };
 
-  console.log("months", getCurrentMonth())
 
   const getEndOfMonth = () => {
     const now = new Date();
@@ -80,6 +79,41 @@ export function MasterEditForm({
     return lastDayOfCurrentMonth.getDate(); // Get the day of the month
   };
 
+
+  const getCurrentMonth = () => {
+    const now = new Date();
+    const currentMonth = now.getMonth(); // Zero-based index (0 = January)
+    return currentMonth + 1; // Convert to 1-based (1 = January)
+  };
+
+  // Get User Details
+  const { auth } = useSelector((state) => state);
+  const [defShortFormat, setDefaulShortFormat] = useState(null);
+  const [defSubsidiary = null, setDefualtSubsidiaryList] = useState(null);
+  const [defstartDate, setDefaultStartDate] = useState(getStartOfMonth());
+  const [defendDate, setDefaultEndDate] = useState(getEndOfMonth());
+
+  const currentYear = new Date().getFullYear();
+  const [defYear, setDefaultYear] = useState(currentYear);
+  const [defDays, setDefaultDays] = useState(getDaysInCurrentMonth());
+  const [defMonth, setDefaulMonth] = useState(getCurrentMonth());
+
+
+  console.log("months", getCurrentMonth())
+
+
+
+  useEffect(() => {
+
+    if (!user.Id) {
+      dispatch(fetchAllSubsidiaryData("allSubsidiaryList"))
+    }
+  }, [dispatch]);
+
+
+
+
+
   const addOneMonth = (currentDate) => {
     const newDate = new Date(currentDate);
     newDate.setMonth(newDate.getMonth() + 1);
@@ -93,51 +127,105 @@ export function MasterEditForm({
     return newDate;
   };
 
-  const getActivePreviousPayrollMonth = async () => {
-console.log("in func")
-    const response = await axios.post(`${USERS_URL}/payroll_month/get-payroll-month-previous-date`);
-    if (response.data.data.length) {
-
+  const getActivePreviousPayrollMonth = async (subsidiaryId,setFieldValue) => {
+    console.log("sd::",subsidiaryId);
+    const response = await axios.post(`${USERS_URL}/payroll_month/get-payroll-month-previous-date`,{subsidiaryId: subsidiaryId});
+    console.log(":::log",response);
+    if (response?.data?.data?.length > 0) {
       const get_startDate = addOneMonth(response?.data?.data[0]?.startDate)
 
       const setDaysInDate = addDays(addOneMonth(response?.data?.data[0]?.startDate), getDaysInCurrentMonth());
+      const getmonth = getMonth(get_startDate) + 1 ;
 
       setDefaultStartDate(get_startDate)
-
+      setFieldValue("startDate", new Date(get_startDate));
+      
       setDefaultEndDate(setDaysInDate);
+      setFieldValue("endDate", new Date(setDaysInDate));
+     
+      // if (getmonth == 12) {
+      //   month = (1);
+      // }
+      // else
+      //   month = getmonth + 1;
+
+
+      
+      setDefaulMonth(getmonth)
+      setFieldValue("month", getMonth);
+
       setDefaultYear(setDaysInDate.getFullYear());
+      setFieldValue("year", setDaysInDate.getFullYear());
 
-      const pmonth_db = response?.data?.data[0]?.month || 0;
+      const t = formatDates(get_startDate, 'MMyy')
+     
+      setDefaulShortFormat(t)
 
-      if (pmonth_db == 12) {
-        setDefaulMonth(1)
+      setFieldValue("shortFormat", t);
+      const daysDiff = getDateDiffInDays(get_startDate, setDaysInDate)
+  
+      setDefaultDays(daysDiff);
+      setFieldValue("month_days", daysDiff);
 
-        const defaultStartDate = "01" + "" + setDaysInDate.getFullYear().toString().substring(2, 4)
-        setDefaulShortFormat(defaultStartDate)
-      }
-      else {
-       
-        if (pmonth_db <= 9)
+      setFieldValue("subsidiaryId",subsidiaryId);
 
-          setDefaulShortFormat((pmonth_db + 1) + "" + setDaysInDate.getFullYear().toString().substring(2, 4))
-        else
-          setDefaulShortFormat((pmonth_db + 1) + "" + setDaysInDate.getFullYear().toString().substring(2, 4))
+      //  const pmonth_db = response?.data?.data[0]?.month || 0;
 
-        setDefaulMonth((response?.data?.data[0]?.month) + 1)
-      }
+
+      //   if (pmonth_db == 12) {
+      //     setDefaulMonth(1)
+
+      //     const defaultStartDate = "01" + "" + setDaysInDate.getFullYear().toString().substring(2, 4)
+      //     setDefaulShortFormat(defaultStartDate)
+      //   }
+      //   else {
+
+      //     if (pmonth_db <= 9)
+
+      //       setDefaulShortFormat((pmonth_db + 1) + "" + setDaysInDate.getFullYear().toString().substring(2, 4))
+      //     else
+      //       setDefaulShortFormat((pmonth_db + 1) + "" + setDaysInDate.getFullYear().toString().substring(2, 4))
+
+      //     setDefaulMonth((response?.data?.data[0]?.month) + 1)
+      //   }
+      // }
+      // else {
+      //   console.log("test::",defYear?.toString().length)
+      //   setDefaulShortFormat("0" + getCurrentMonth() + "" + defYear.toString().substring(2, 4))
     }
     else {
-      console.log("test::",defYear)
-      setDefaulShortFormat("0" + getCurrentMonth() + "" + defYear.toString().substring(2, 4))
+      
+      setDefaultStartDate(new Date());
+      setFieldValue("startDate", new Date());
+
+      setDefaultEndDate(addMonths(new Date(), 1));
+      setFieldValue("endDate",  addMonths(new Date(), 1));
+
+      const t = formatDates(new Date(), 'MMyy')
+   
+      setFieldValue("shortFormat", t);
+      setDefaulShortFormat(t)
+
+      setDefaulMonth(getMonth(new Date())+1)
+      setFieldValue("month", getMonth(new Date())+1);
+
+       const daysDiff = getDateDiffInDays( new Date(),  addOneMonth(new Date()))
+  
+       const getYear = formatDates(new Date(), 'yyyy')
+       setDefaultYear(getYear);
+       setFieldValue("year", getYear);
+      //  setDefaultYear(setDaysInDate.getFullYear());
+      //  setFieldValue("year", setDaysInDate.getFullYear());
+
+      setDefaultDays(daysDiff);
+      setFieldValue("month_days", daysDiff);
+
+      setFieldValue("subsidiaryId",subsidiaryId);
+      
+
     }
   }
-  const [defstartDate, setDefaultStartDate] = useState(getStartOfMonth());
-  const [defendDate, setDefaultEndDate] = useState(getEndOfMonth());
 
-  const currentYear = new Date().getFullYear();
-  const [defYear, setDefaultYear] = useState(currentYear);
-  const [defDays, setDefaultDays] = useState(getDaysInCurrentMonth());
-  const [defMonth, setDefaulMonth] = useState(getCurrentMonth());
   const shortFormatGlobal = defYear.toString().substring(2, 4);
 
   const getDaysInMonth = async (month, year) => {
@@ -152,13 +240,9 @@ console.log("in func")
 
   };
 
-
-
-
-
   useEffect(() => {
 
-    getActivePreviousPayrollMonth();
+   // getActivePreviousPayrollMonth();
   }, []);
 
   useEffect(() => {
@@ -199,12 +283,13 @@ console.log("in func")
       setDefaultYear(defYear);
     }
   }, [user.year]);
- 
+
+  {console.log(":::tree:::",user.subsidiaryId)}
   return (
     <>
       <Formik
         enableReinitialize={true}
-        initialValues={{ Id: user.Id, shortFormat: defShortFormat, month: defMonth, month_days: defDays, year: defYear, startDate: defstartDate, endDate: defendDate }}
+        initialValues={user}
 
         validationSchema={formValidation}
         onSubmit={(values) => {
@@ -234,13 +319,60 @@ console.log("in func")
                 <fieldset disabled={isUserForRead}>
                   <div className="from-group row">
                     <div className="col-12 col-md-4 mt-3">
-                    <span> Month<span style={{ color: 'red' }}>*</span></span>
-                      <select className="form-control" name="month" value={defMonth}
+                      {/* <SearchSelect
+                        name="subsidiaryId"
+                        label={<span> Subsidiary<span style={{ color: 'red' }}>*</span></span>}
+                        isDisabled={isUserForRead && true}
+                        onBlur={() => {
+                          // handleBlur({ target: { name: "countryId" } });
+                        }}
+                        onChange={(e) => {
+                          setFieldValue("subsidiaryId", e.value || null);
+                          console.log(":::::::g",e.value);
+                          setDefualtSubsidiaryList(e);
+
+                        }}
+
+                        value={(defSubsidiary || null)}
+                        error={errors.subsidiaryId}
+                        touched={touched.subsidiaryId}
+                        options={dashboard.allSubsidiaryList}
+                      /> */}
+                      {console.log("::::::T:::",values,user, dashboard?.allSubsidiaryList)}
+                       <SearchSelect
+                          name="subsidiaryId"
+                          label={
+                            <span>
+                              Subsidiary<span style={{ color: "red" }}>*</span>
+                            </span>
+                          }
+                          isDisabled={isUserForRead}
+                          onChange={(e) => {
+                            // setFieldValue("subsidiaryId", e.value || null);
+                            getActivePreviousPayrollMonth(e.value,setFieldValue);
+                          }}
+                          value={
+                            dashboard?.allSubsidiaryList?.find(
+                              (option) => option?.value ===  values.subsidiaryId
+                            ) || null
+                          }
+                          options={dashboard?.allSubsidiaryList}
+                          error={errors.subsidiaryId}
+                          touched={touched.subsidiaryId}
+                        />
+                    </div>
+                  </div>
+                  <div className="from-group row">
+                    <div className="col-12 col-md-4 mt-3">
+                      <span> Month<span style={{ color: 'red' }}>*</span></span>
+                      <select className="form-control"
+                        name="month"
+                        value={defMonth || values.month}
                         onChange={(e) => {
                           console.log("bell", e.target.value)
                           setFieldValue("month", e.target.value);
                           setDefaulMonth(e.target.value);
-                          
+
                           setDefaulShortFormat(e.target.value > 9 ? e.target.value + "" + shortFormatGlobal : +"0" + e.target.value + "" + shortFormatGlobal)
                           handleMonthChange(e.target.value);
 

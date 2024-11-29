@@ -75,10 +75,9 @@ const EmployeeShiftManagement = lazy(() => import("./modules/Employee_Shift/page
 const HolidaysModule = lazy(() => import("./modules/Holidays/pages/index")); 
 const Payroll_processSModule=lazy(() => import("./modules/Payroll_Process/pages/index")); 
 const Attendance = lazy(() => import("./modules/Attendance/pages/index")); 
-
-
 const LeaveEncashment = lazy(() => import("./modules/LeaveEncashment/pages/index"));
 const EmployeeRoster = lazy(() => import("./modules/EmployeeRoster/pages/index"));
+const LeaveRegister = lazy(() => import("./modules/LeaveRegister/pages/index"));
 
 const ROUTES = {
   settings: SettingsPage,
@@ -144,7 +143,8 @@ const ROUTES = {
   holidays:HolidaysModule,
   leave_encashment: LeaveEncashment,
   payroll_process:Payroll_processSModule,
-  attendance: Attendance
+  attendance: Attendance,
+  leave_register :LeaveRegister,
 };
 
 export default function BasePage() {

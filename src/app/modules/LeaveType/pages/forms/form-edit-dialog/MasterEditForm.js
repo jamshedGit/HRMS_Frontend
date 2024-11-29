@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { Input, Select } from "../../../../../../_metronic/_partials/controls";
 import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLabel";
-import { getClassName } from "../../../../../utils/common";
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
+import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 
 //Validation for Form
 const formValidation = Yup.object().shape({
@@ -23,6 +23,7 @@ export function MasterEditForm({
   isUserForRead,
   enableLoading,
   loading,
+  allSubsidiaryList
 }) {
 
   const dropdown = (data) => {
@@ -32,6 +33,10 @@ export function MasterEditForm({
       </>)
     })
   }
+
+  const allSubsidiaryMap = useMemo(() => {
+    return new Map(allSubsidiaryList?.map(item => [item.value, item]));
+  }, [allSubsidiaryList]);
 
   return (
     <>
@@ -51,6 +56,7 @@ export function MasterEditForm({
           handleBlur,
           handleChange,
           setFieldValue,
+          touched
         }) => (
           <>
             <Modal.Body className="overlay overlay-block cursor-default">
@@ -63,6 +69,33 @@ export function MasterEditForm({
                 <fieldset disabled={isUserForRead}>
                   <div className="from-group row">
 
+                    <div className="col-12 col-md-4 mt-3">
+                      <Field
+                        name="subsidiaryId"
+                        component={SearchSelect}
+                        className={errors?.subsidiaryId && touched?.subsidiaryId ? 'form-control is-invalid' : 'form-control'}
+                        onBlur={handleBlur}
+                        onChange={(e) => {
+                          const value = e.value == '--Select--' ? '' : Number(e.value)
+                          setFieldValue('subsidiaryId', value)
+                        }}
+                        label={
+                          <span>
+                            {" "}
+                            Employee<span style={{ color: "red" }}>*</span>
+                          </span>
+                        }
+                        value={allSubsidiaryMap?.get(values?.subsidiaryId || '') || ''}
+                        autoComplete="off"
+                        options={allSubsidiaryList}
+                      />
+                      {
+                        errors.subsidiaryId && touched.subsidiaryId && <CustomErrorLabel touched={true} error={errors.subsidiaryId} />
+                      }
+                    </div>
+                  </div>
+
+                  <div className="from-group row">
                     <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="name"

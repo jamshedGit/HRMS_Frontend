@@ -26,8 +26,8 @@ const userEditSchema_2 = Yup.object().shape(
   {
     // parentDept: Yup.string().required("Please select parent department"),
     // deptCode: Yup.string().required("*Required"),
-    deptName: Yup.string() .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.').required("*Required"),
-    budgetStrength: Yup.string()  .matches(/^\d+$/, "Must contain only digits").required("*Required"),
+    deptName: Yup.string().matches(/^[A-Za-z\s\:-]*$/, 'Name must only contain letters.').required("*Required"),
+    budgetStrength: Yup.string().matches(/^\d+$/, "Must contain only digits").required("*Required"),
     subsidiaryId: Yup.string().required("*Required"),
     // parentDept: Yup.string().required("*Required"),
     // parentDept: Yup.string().nullable().required("*Required"),
@@ -104,7 +104,7 @@ export function DeptEditForm({
   const fetchData = async (subsidiaryId, setValue) => {
     console.log("jj::", subsidiaryId)
     if (subsidiaryId) {
-      dispatch(getLatestTableId("t_department", "deptId", " subsidiaryId = " + subsidiaryId, setValue));
+      dispatch(getLatestTableId("t_department", "deptCode", " subsidiaryId = " + subsidiaryId, setValue));
     }
   };
 
@@ -183,7 +183,7 @@ console.log("pep", dashboard.allDept)
                     <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="deptName"
-                        maxLength={30}
+                        maxLength={100}
                         component={Input}
                         placeholder="Enter Department Name"
                         label={<span> Department Name<span style={{ color: 'red' }}>*</span></span>}

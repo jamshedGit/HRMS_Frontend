@@ -238,21 +238,26 @@ const EmployeeProfile = ({ employeeId }) => {
     <Accordion defaultActiveKey="">
       <Card>
         <Card.Header>
-          <div className='accordion-header-btn'>
-            <Accordion.Toggle as={Button} eventKey="0">
+          <div className='accordion-header-btn '>
+            <Accordion.Toggle eventKey="0" className="flex-between-center">
               Employee Detail
               <KeyboardArrowDown />
             </Accordion.Toggle>
           </div>
         </Card.Header>
         <Accordion.Collapse eventKey="0">
-          <Card.Body>
-            
-            <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
+          <Card.Body style={{ backgroundColor: '#E6F8FF' }}>
+         
+          {/* "rgb(235 243 255)" */}
+            <div style={{ backgroundColor:  "#E6F8FF", padding: "20px", borderRadius: "5px", border: 'none' }}>
      
               
 
+            <div className="d-flex justify-content-between flex-column flex-md-row align-items-center">
 
+
+              {/* Employee Information Sections */}
+              <h2 className='text-bold'>Employee Information</h2>
 
               {Object.keys(data).length ? (
               <div className="form-group row">
@@ -263,7 +268,12 @@ const EmployeeProfile = ({ employeeId }) => {
                   alt="Profile"
                   width={120}
                   height={120}
-                  onError={(e) => {
+                  style={{
+                    borderRadius: '50%',  // Make the image circular
+                    objectFit: 'cover',   // Ensure the image covers the entire area without distortion
+                  
+                  }}
+                    onError={(e) => {
                     e.target.onerror = null; // Error loop rokne ke liye
                     e.target.src = toAbsoluteUrl("/media/users/profileImage.png"); // Agar image load na ho toh fallback image set karo
                   }}
@@ -274,23 +284,17 @@ const EmployeeProfile = ({ employeeId }) => {
                 <p></p>
               )}
 
-
-
-
-
-
-
-              {/* Employee Information Sections */}
-              <h4 style={{ marginBottom: "15px" }}>Employee Information</h4>
+              </div>
               <hr />
               {Object.keys(data).length ? (
                 SECTIONS.map((section, sectionIndex) => (
                   <div key={sectionIndex} style={{ marginBottom: "2%" }}>
-                    <h5>{section.heading}</h5>
+                    <h5 className='text-bold mb-5 custom_color_1'>{section.heading}</h5>
+                
                     <Row>
                       {section.fields.map((field, fieldIndex) => (
                         <Col key={fieldIndex} md={3}> {/* Four columns layout */}
-                          <strong>{field.name}:</strong> 
+                          <strong>{field.name}: </strong> 
                           {data[field.value] ? 
                             (field.isDate ? formatDates(data[field.value]) : data[field.value]) 
                             : 'N/A' // Display 'N/A' if no value
