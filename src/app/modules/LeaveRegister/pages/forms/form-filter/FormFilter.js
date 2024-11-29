@@ -4,12 +4,14 @@ import * as Yup from "yup";
 import { isEqual } from "lodash"
 import { useFormUIContext } from "../FormUIContext"
 import { Form, Modal } from "react-bootstrap";
-import { useSelector, shallowEqual } from "react-redux";
+import { useSelector } from "react-redux";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import { DatePickerField, Select } from "../../../../../../_metronic/_partials/controls";
 import { ATTENDANCE_TYPE } from "../../../../../utils/constants";
 import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
 import { initialFilter } from "../FormUIHelpers";
+import * as actions from "../../../_redux/formActions";
+import { formatDates } from "../../../../../utils/common";
 
 //Validation for date fields
 const formValidation = Yup.object().shape({
@@ -24,7 +26,7 @@ const prepareFilter = (queryParams, values) => {
   return newQueryParams
 }
 
-export function FormFilter({ loading }) {
+export function FormFilter({ loading, dispatch, pdfLoading }) {
 
   const FormUIContext = useFormUIContext()
 
@@ -75,6 +77,30 @@ export function FormFilter({ loading }) {
       // update list by queryParams
       formUIProps.setQueryParams(newQueryParams)
     }
+  }
+
+  //Get Labels of Dropdown to Display in PDF
+  const getLabels = (values) => {
+    return {
+      subsidiaryLabel: allSubsidiaryMap?.get(values.subsidiaryId || '')?.label,
+      employeeLabel: allEmployeesMap?.get(values.employeeId || '')?.label,
+      departmentLabel: allDeptMap?.get(values.departmentId || '')?.label,
+      reportToLabel: allEmployeesMap?.get(values.reportTo || '')?.label,
+      gradeLabel: allGradeMap?.get(values.gradeId || '')?.label,
+      designationLabel: allDesignationsMap?.get(values.designationId || '')?.label,
+      locationLabel: allLocationMap?.get(values.locationId || '')?.label,
+      subsidiaryLabel: allSubsidiaryMap?.get(values.subsidiaryId || '')?.label,
+      fromLabel: values?.from ? formatDates(values.from) : '',
+      toLabel: values?.to ? formatDates(values.to) : '',
+      attendanceTypeLabel: values?.attendanceType ? ATTENDANCE_TYPE.find(el => el.value == values.attendanceType)?.label : ''
+    }
+  }
+
+  //Trugger request to download PDF of data according to filters
+  const getPdf = (values) => {
+    const newQueryParams = prepareFilter(formUIProps.queryParams, values)
+    const labels = getLabels(values);
+    dispatch(actions.fetchPdfData(newQueryParams.filter, document, labels));
   }
 
   return (
@@ -357,24 +383,21 @@ export function FormFilter({ loading }) {
                 disabled={loading}
                 className="btn btn-success btn-elevate"
               >
-                Filter Records
+                Filter Record
                 {loading && (
                   <span className="ml-3 mr-3 spinner spinner-white"></span>
                 )}
               </button>
 
               <button
-                disabled={loading}
+                onClick={() => { getPdf(values) }}
+                disabled={pdfLoading}
                 className="btn btn-secondary"
               >
                 Generate Report
-              </button>
-
-              <button
-                disabled={loading}
-                className="btn btn-secondary"
-              >
-                Run Process
+                {pdfLoading && (
+                  <span className="ml-3 mr-3 spinner spinner-white"></span>
+                )}
               </button>
 
             </Modal.Footer>
