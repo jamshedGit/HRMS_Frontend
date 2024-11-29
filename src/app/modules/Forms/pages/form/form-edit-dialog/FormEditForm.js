@@ -10,7 +10,8 @@ import {
 
   fetchAllSubCenter,
   getLatestBookingNo,
-  fetchAllFormsMenu
+  fetchAllFormsMenu,
+  getLatestTableId
 } from "../../../../../../_metronic/redux/dashboardActions";
 
 
@@ -26,8 +27,8 @@ const FormEditSchema = Yup.object().shape(
     formName: Yup.string()
     .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.')
       .required("Required*"),
-      formCode: Yup.string()
-      .required("Required*"),
+      // formCode: Yup.string()
+      // .required("Required*"),
 
   },
 
@@ -53,12 +54,16 @@ export function FormEditForm({
   // Get User Details
   const { auth } = useSelector((state) => state);
   const [defFormMenu = null, setDefaultParentFormMenu] = useState(null);
+  const [defFormCode = null, setDefaultFormCode] = useState(null);
 
 
   
   // Department DropDown Load when pageLoad
   useEffect(() => {
+
+    if (!user.formCode) { fetchData("1", setDefaultFormCode); }
     if (!user.parentFormID) {
+   
       dispatch(fetchAllFormsMenu(1));
     }
   }, [dispatch]);
@@ -74,6 +79,10 @@ export function FormEditForm({
       })
     );
   }, [user?.parentFormID, dashboard.parentFormID]);
+ 
+  const fetchData = async (subsidiaryId, setValue) => {
+    dispatch(getLatestTableId("t_form_menu", "Id", " 1 = 1 ", setValue));
+};
 
 
 
@@ -86,7 +95,7 @@ export function FormEditForm({
         onSubmit={(values) => {
         //  console.log("values", values);
           enableLoading();
-          saveReligion(values);
+          saveReligion({...values,formCode: values.formCode ? values.formCode : defFormCode   });
         }}
       >
         {({
@@ -110,63 +119,31 @@ export function FormEditForm({
                 <fieldset disabled={isUserForRead}>
                   <div className="from-group row">
                   {
-                      // <div className="col-12 col-md-4 mt-3">
-                      //   <SearchSelect
-                      //     name="  "
-                      //     label="Select Parent Form*"
-                      //     isDisabled={isUserForRead && true}
-                      //     onBlur={() => {
-                      //       // handleBlur({ target: { name: "countryId" } });
-                      //     }}
-                      //     onChange={(e) => {
-                      //       setFieldValue("parentFormID", e.value || null);
-                      //       setDefaultParentFormMenu(e);
-                      //       dispatch(fetchAllFormsMenu(e.value));
-                      //     }}
-                      //     value={(defFormMenu || null)}
-                      //     error={errors.Id}
-                      //     touched={touched.Id}
-                      //     options={dashboard.allDept}
-                      //   />
-                      //   {/* isParent &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-                      //    <Field
-                      //     type="checkbox"
-                      //     id="chkParent"
-                      //     name="chkParent"
-                      //     className="form-check-input"
-                      //     checked={values.chkParent}
-                      //     defaultChecked = {false}
-                      //     onChange={(e) => { setFieldValue('chkParent', e.target.checked)
-                      //       if(e.target.checked)
-                      //         {
-                      //           console.log("t")
-                      //         }
-
-                      //      }}
-                      //   /> */}
-                      // </div>
+                      
 
                     }
+                      { <div className="col-12 col-md-4 mt-3">
+                      <Field
+                        name="formCode"
+                        disabled
+                        maxLength={6}
+                        component={Input}
+                        placeholder="Enter Form Code"
+                        label={<span> Form Code<span style={{ color: 'red' }}>*</span></span>}
+                        value={  values.formCode || defFormCode}
+                      />
+                    </div>}
                    { <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="formName"
                         maxLength={30}
                         component={Input}
                         placeholder="Enter Form Name"
-                        label="Form Name"
+                        label={<span> Form Name<span style={{ color: 'red' }}>*</span></span>}
 
                       />
                     </div>}
-                   { <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="formCode"
-                        maxLength={6}
-                        component={Input}
-                        placeholder="Enter Form Code"
-                        label="Form Code"
-
-                      />
-                    </div>}
+                 
                   </div>
                   <div className="form-group row"></div>
                 </fieldset>

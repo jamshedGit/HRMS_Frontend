@@ -129,6 +129,21 @@ export function FormTable() {
         return format(new Date(cell), 'dd-MMM-yyyy'); // Customize format as needed
       },
     },
+     
+    {
+      dataField: "currentMonth",
+      text: "Pay in",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "10px",
+      },
+      // formatter: (cell) => {
+      //   // Format the date without timestamp
+      //   return format(new Date(cell), 'dd-MMM-yyyy'); // Customize format as needed
+      // },
+    },
 
     {
       dataField: "amount",
@@ -192,7 +207,7 @@ export function FormTable() {
       <Card>
         <Card.Header className="d-flex justify-content-center">
         <div className='accordion-header-btn w-100  d-flex justify-content-center'>
-          <Accordion.Toggle as={Button} eventKey="0" >
+          <Accordion.Toggle  eventKey="0" className="flex-between-center text-bold">
             Reimbursement Claim Details
             <KeyboardArrowDown />
           </Accordion.Toggle>

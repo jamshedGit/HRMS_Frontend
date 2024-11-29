@@ -9,7 +9,8 @@ import {
   fetchAllCity,
   fetchAllSubCenter,
   getLatestBookingNo,
-  fetchAllFormsMenu
+  fetchAllFormsMenu,
+  getLatestTableId
 } from "../../../../../../_metronic/redux/dashboardActions";
 
 
@@ -25,8 +26,8 @@ const FormEditSchema = Yup.object().shape(
     formName: Yup.string()
       .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.')
       .required("Required*"),
-     formCode: Yup.string()
-       .required("Required*"),
+    //  formCode: Yup.string()
+    //    .required("Required*"),
 
   },
 
@@ -49,24 +50,28 @@ export function FormEditForm({
 
   const dispatch = useDispatch();
   const { dashboard } = useSelector((state) => {
-    
+
     return state
   });
   // Get User Details
   const { auth, formDetails } = useSelector((state) => state);
   const [defFormMenu = null, setDefaultParentFormMenu] = useState(null);
+  const [defFormCode = null, setDefaultFormCode] = useState(null);
 
   const [ddlParentForm, setddlParentForm] = useState(null)
 
   useEffect(() => {
-   
+
+    if (!user.formCode) { fetchData("1", setDefaultFormCode); }
+
     if (!user.parentFormID) {
+
       dispatch(fetchAllFormsMenu(1));
     }
   }, [dispatch]);
 
   useEffect(() => {
-   
+
     if (formDetails.currentId) {
 
       setddlParentForm(
@@ -83,21 +88,12 @@ export function FormEditForm({
 
   )
 
-  // This method is used for when edit record and get selected dept where id save in DB
-  // useEffect(() => {
-  //   const parentFormID = defFormMenu?.value ? defFormMenu.value : user.parentFormID;
 
-  //   setDefaultParentFormMenu(
-  //     dashboard.allDept &&
-  //     dashboard.allDept.filter((item) => {
+  const fetchData = async (subsidiaryId, setValue) => {
+    dispatch(getLatestTableId("t_form_menu", "Id", " 1 = 1 ", setValue));
+  };
 
-  //       return item.value === parentFormID;
-  //     })
-  //   );
-  // }, [user?.parentFormID, dashboard.parentFormID]);
-
-
-  console.log("defFormMenu", defFormMenu)
+  console.log("defFormMenu", defFormCode, user)
 
   return (
     <>
@@ -109,7 +105,7 @@ export function FormEditForm({
           //  console.log("values", values);
           enableLoading();
           //values.formCode = 'NA ';
-          saveReligion(values);
+          saveReligion({ ...values, formCode: values.formCode ? values.formCode : defFormCode });
         }}
       >
         {({
@@ -123,6 +119,10 @@ export function FormEditForm({
           formik,
         }) => (
           <>
+            {
+              console.log('::::::::', values)
+
+            }
             <Modal.Body className="overlay overlay-block cursor-default">
               {actionsLoading && (
                 <div className="overlay-layer bg-transparent">
@@ -159,24 +159,26 @@ export function FormEditForm({
                     } */}
                     {<div className="col-12 col-md-4 mt-3">
                       <Field
+                        name="formCode"
+                        disabled
+                        component={Input}
+                        maxLength={6}
+                        placeholder="Enter Form Code"
+                        label={<span> Form Code<span style={{ color: 'red' }}>*</span></span>}
+                        value={values.formCode || defFormCode}
+                      />
+                    </div>}
+                    {<div className="col-12 col-md-4 mt-3">
+                      <Field
                         name="formName"
                         maxLength={30}
                         component={Input}
                         placeholder="Enter Form Name"
-                        label="Form Name"
+                        label={<span> Form Name<span style={{ color: 'red' }}>*</span></span>}
 
                       />
                     </div>}
-                     {<div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="formCode"
-                        component={Input}
-                        maxLength={6}
-                        placeholder="Enter Form Code"
-                        label="Form Code"
 
-                      />
-                    </div>}
                   </div>
                   <div className="form-group row"></div>
                 </fieldset>

@@ -179,6 +179,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         isEdit={id ? true : false}
         isFileReq={formUIProps.isFileReq}
         setIsFileReq={formUIProps.setIsFileReq}
+        employeeId={formUIProps.employeeId}
       />
       <ToastContainer
         position="top-right"

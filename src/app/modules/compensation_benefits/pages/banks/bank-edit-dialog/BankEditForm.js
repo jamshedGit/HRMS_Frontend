@@ -48,7 +48,7 @@ const formValidation = Yup.object().shape(
     currencyId: Yup.string()
       .nullable()
       .required("Required*"),
-      salaryMethod: Yup.string()
+    salaryMethod: Yup.string()
       .nullable()
       .required("Required*"),
 
@@ -56,12 +56,12 @@ const formValidation = Yup.object().shape(
     //   .required('Required*') // Make it required
     // .notOneOf(['-1'], 'Please select a valid salary method'),
 
-    basicFactor: 
-       Yup.string()
-     // .matches(/^\d{15}$/, 'Basic factor must be exactly 15 digits long and contain only digits.')
-      .max(100, 'Value cannot be greater than 100')
-     
-      .required('Required*')
+    basicFactor:
+      Yup.string()
+        // .matches(/^\d{15}$/, 'Basic factor must be exactly 15 digits long and contain only digits.')
+        .max(100, 'Value cannot be greater than 100')
+
+        .required('Required*')
 
   },
 
@@ -96,9 +96,10 @@ export function BankEditForm({
   const [defchildEmptypeMenus = null, setDefaultChildEmpTypeMenus] = useState(null);
 
   const [defEarningList = null, setDefaultEarningList] = useState([]);
-  const [defDeductionList = null, setDefaultDeductionList] = useState([]);
+  
   const [defSubsidiary = null, setDefualtSubsidiaryList] = useState(null);
   const [deferrors, setErrors] = useState({});
+  const [defAllowanceLimit, setDefaultAllowanceLimit] = useState('');
 
   useEffect(() => {
     if (!user.Id) {
@@ -138,12 +139,9 @@ export function BankEditForm({
   }, [user?.employeeTypeId, dashboard.employeeTypeId]);
   //======================= End
 
-  console.log("dashboard.allSubsidiaryList", dashboard.allSubsidiaryList)
   useEffect(() => {
 
     const subsidiaryId = defSubsidiary?.value ? defSubsidiary.value : user.subsidiaryId;
-
-
     setDefualtSubsidiaryList(
       dashboard.allSubsidiaryList &&
       dashboard.allSubsidiaryList.filter((item) => {
@@ -197,10 +195,6 @@ export function BankEditForm({
     setDefaultEarningList([...defEarningList, { transactionType: element.target.id }])
 
   }
-
-  // const addRowDeduction = (element) => {
-  //   setDefaultDeductionList([...defDeductionList, { transactionType: element.target.id }])
-  // }
 
   const deleteRow = (element) => {
     const data = defEarningList;
@@ -300,7 +294,27 @@ export function BankEditForm({
             setErrors(validationErrors);
           } else {
             enableLoading();
-            saveCompensationBenefits(values, defEarningList);
+            let i = 0;
+            i = values.basicFactor;
+            defEarningList.forEach((element, index) => {
+
+              console.log("element", element, index)
+              if (element.factorValue > 0 && element.isPartOfGrossSalary == "1" && element.transactionType == "Earning") {
+                i += element.factorValue
+              }
+           
+            });
+
+           // console.log("tota",i)
+            if(i == 100)
+            {
+              setDefaultAllowanceLimit("")
+             saveCompensationBenefits(values, defEarningList);
+            }
+            else
+            {
+              setDefaultAllowanceLimit("Allowance must be exactly 100%.")
+            }
           }
 
 
@@ -341,7 +355,7 @@ export function BankEditForm({
                             setFieldValue("subsidiaryId", e.value || null);
                             setDefualtSubsidiaryList(e);
                             //handlePaymenModeChanged(e)
-
+                           
                           }}
 
                           value={(defSubsidiary || null)}
@@ -610,7 +624,9 @@ export function BankEditForm({
                             {obj.earningName}
                           </td> */}
                           <td>
+                            {console.log("test:::", obj.calculation_type)}
                             <select
+
                               value={obj.calculation_type}
                               onChange={(e) => {
                                 handleFieldChanged(e);
@@ -623,7 +639,7 @@ export function BankEditForm({
 
                               id={'calculation_type-' + rightindex} >
                               <option value="-1">--Select--</option>
-                              <option value="% Of Basic">% Of Basic</option>
+                              <option value="% Of Gross">% Of Gross</option>
                               <option value="Fixed Amount">Fixed Amount</option>
                             </select>
                             {deferrors[`calculation_type-${rightindex}`] && <div className="form-feedBack">{deferrors[`calculation_type-${rightindex}`]}</div>}
@@ -644,7 +660,7 @@ export function BankEditForm({
 
                           <td>
                             <input
-                              disabled={obj.calculation_type == "% Of Basic"}
+                              disabled={obj.calculation_type == "% Of Gross"}
                               style={{ width: "80px" }} type="number"
                               onChange={(e) => {
                                 handleFieldChanged(e);
@@ -653,13 +669,14 @@ export function BankEditForm({
                               onInput={(e) => {
                                 e.target.value = amountLimit(e.target.value); // Limit to 3 digits
                               }}
-                             maxLength={8}  value={obj.amount} id={'amount-' + rightindex}></input>
+                              maxLength={8} value={obj.amount} id={'amount-' + rightindex}></input>
                             {deferrors[`amount-${rightindex}`] && <div className="form-feedBack">{deferrors[`amount-${rightindex}`]}</div>}
                           </td>
                           <td>
                             <select value={obj.isPartOfGrossSalary} onChange={handleFieldChanged} id={'isPartOfGrossSalary-' + rightindex} >
 
-                              <option selected value="1">Yes</option>
+                              <option selected value="-1">Select</option>
+                              <option value="1">Yes</option>
                               <option value="0">No</option>
                             </select>
                           </td>
@@ -669,6 +686,7 @@ export function BankEditForm({
 
                     </table>
                     <input type='button' id="Earning" onClick={addRow} value='+Add'></input>
+                    &nbsp;&nbsp;<span className="form-feedBack"  id="msgLimitAllowance">{defAllowanceLimit}</span>
                   </div>
                   <br></br>
                   <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
@@ -718,7 +736,7 @@ export function BankEditForm({
                               }}
                               id={'calculation_type-' + rightindex} >
                               <option value="-1">--Select--</option>
-                              <option value="% Of Basic">% Of Basic</option>
+                              <option value="% Of Gross">% Of Gross</option>
                               <option value="Fixed Amount">Fixed Amount</option>
                             </select>
                             {deferrors[`calculation_type-${rightindex}`] && <div className="form-feedBack">{deferrors[`calculation_type-${rightindex}`]}</div>}
@@ -726,8 +744,8 @@ export function BankEditForm({
 
                           <td>
                             <input
-                            
-                            style={{ width: "80px" }}
+
+                              style={{ width: "80px" }}
                               type="number"
                               onChange={handleFieldChanged}
                               disabled={obj.calculation_type == "Fixed Amount"}
@@ -740,7 +758,7 @@ export function BankEditForm({
                             onInput={(e) => {
                               e.target.value = amountLimit(e.target.value); // Limit to 3 digits
                             }}
-                           disabled={obj.calculation_type == "% Of Basic"} style={{ width: "80px" }}
+                            disabled={obj.calculation_type == "% Of Gross"} style={{ width: "80px" }}
                             onChange={handleFieldChanged} value={obj.amount} id={'amount-' + rightindex}></input>
                           </td>
                           {deferrors[`amount-${rightindex}`] && <div className="form-feedBack">{deferrors[`amount-${rightindex}`]}</div>}

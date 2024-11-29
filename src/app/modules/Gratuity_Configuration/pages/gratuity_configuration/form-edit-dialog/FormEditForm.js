@@ -11,6 +11,7 @@ import {
   fetchAllSubsidiaryData,
 } from "../../../../../../_metronic/redux/dashboardActions";
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
+import { amountLimitDynamic } from "../../../../../utils/common";
 
 // percentage: Yup.string().required("Required*"),
 const gratuity_configurationEditSchema = Yup.object().shape({
@@ -49,7 +50,7 @@ const gratuity_configurationEditSchema = Yup.object().shape({
 
 
   min_year: Yup.number()
-    .min(0, VALIDATION_MESSAGES.minZeroValue)
+    .min(1,"Minimum Year at least 1")
     .max(99, "Maximum Year at most 99")
     .required(VALIDATION_MESSAGES.required)
     .typeError("Minimum Year must be a number"),
@@ -223,10 +224,14 @@ export function FormEditForm({
                       placeholder="Enter Number of Days"
                       // label="Number of Days"
                       type="number"
+                      // onInput={(e) => {
+                      //   if (e.target.value.length > 3) {
+                      //     e.target.value = e.target.value.slice(0, 3); // Restrict to 2 digits
+                      //   }
+                      // }}
+
                       onInput={(e) => {
-                        if (e.target.value.length > 3) {
-                          e.target.value = e.target.value.slice(0, 3); // Restrict to 2 digits
-                        }
+                        e.target.value = amountLimitDynamic(e.target.value, 3); // Limit to 3 digits
                       }}
                     />
                   </div>

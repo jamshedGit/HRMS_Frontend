@@ -95,8 +95,8 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
       //   ...rest,
       // };
       const finalObject = { user }
-     await dispatch(actions.createEarning(user, disbaleLoading, onHide));
-     await dispatch(actions.fetchUsers(usersUIProps.queryParams));
+      await dispatch(actions.createEarning(user, disbaleLoading, onHide));
+      await dispatch(actions.fetchUsers(usersUIProps.queryParams));
 
 
     } else {
@@ -109,19 +109,20 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
       // This object set for Edit/Save Fields in DB
       const earningUpdatedFields = {
         Id: user.Id,
-       // employeeId: user.employeeId,
-        earningCode : user.earningCode,
-        earningName : user.earningName,
-        linkedAttendance : user.linkedAttendance,
-          isTaxable : user.isTaxable,
-          mappedAllowance : user.mappedAllowance,
-          account : user.account,
-        
+        // employeeId: user.employeeId,
+        earningCode: user.earningCode,
+        earningName: user.earningName,
+        linkedAttendance: user.linkedAttendance,
+        isTaxable: user.isTaxable,
+        mappedAllowance: user.mappedAllowance,
+        account: user.account,
+        subsidiaryId: user.subsidiaryId
+
       };
 
       console.log("skill updated", earningUpdatedFields);
-     await dispatch(actions.updatedearning(earningUpdatedFields, disbaleLoading, onHide));
-     await dispatch(actions.fetchUsers(usersUIProps.queryParams));
+      await dispatch(actions.updatedearning(earningUpdatedFields, disbaleLoading, onHide));
+      await dispatch(actions.fetchUsers(usersUIProps.queryParams));
     }
   };
 

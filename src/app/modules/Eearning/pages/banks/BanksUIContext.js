@@ -31,14 +31,15 @@ export function BanksUIProvider({ BanksUIEvents, children }) {
     });
   }, []);
   const initUser = {
-   
+
     earningCode: "",
     earningName: "",
     linkedAttendance: "",
     isTaxable: "",
     mappedAllowance: "",
     account: "",
-
+    subsidiaryId: "",
+    companyId: "1"
   };
 
   console.log("acadenuc ui events", BanksUIEvents);

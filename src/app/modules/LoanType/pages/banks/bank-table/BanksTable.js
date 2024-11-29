@@ -80,10 +80,19 @@ export function BanksTable() {
     //     minWidth: "160px",
     //   },
     // },
-
+    {
+      dataField: "subsList.subsName",
+      text: "Subsidiary",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
     {
       dataField: "code",
-      text: "Deduction Code",
+      text: "Loan Type Code",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -94,7 +103,7 @@ export function BanksTable() {
 
     {
       dataField: "name",
-      text: "Deduction Name",
+      text: "Loan Type Name",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -125,7 +134,7 @@ export function BanksTable() {
     //   },
     // },
     {
-      dataField: "account",
+      dataField: "LoanTypeAccount.formName",
       text: "Account No",
       sort: false,
       sortCaret: sortCaret,
@@ -135,16 +144,16 @@ export function BanksTable() {
       },
     },
 
-     {
-      dataField: "linkedAttendance",
-      text: "Linked Attendance",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
+    //  {
+    //   dataField: "linkedAttendance",
+    //   text: "Linked Attendance",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "160px",
+    //   },
+    // },
 
     {
       dataField: "action",

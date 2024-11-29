@@ -185,7 +185,7 @@ export function BranchEditForm({
                         onChange={(e) => {
                           setFieldValue("BankId", e.value);
                           setDefaultBanks(e);
-                          dispatch(fetchAllBanks(e.value));
+                         // dispatch(fetchAllBanks(e.value));
                         }}
                         value={defBank}
                         error={errors.BankId}

@@ -89,7 +89,7 @@ export function DeptEditDialog({ id, show, onHide, userForRead }) {
       console.log(dept);
 
       const finalObject = { dept }
-     await dispatch(actions.createDept(dept, disbaleLoading, onHide));
+      await dispatch(actions.createDept(dept, disbaleLoading, onHide));
       await dispatch(actions.fetchUsers(usersUIProps.queryParams));
 
     } else {
@@ -97,14 +97,14 @@ export function DeptEditDialog({ id, show, onHide, userForRead }) {
       //   return item.value === +user.status;
       // });
 
-      console.log("getUserStatus", dept);
+      console.log("gggggg", dept);
 
       const deptUpdatedFields = {
         deptId: dept.deptId,
         deptName: dept.deptName,
         deptCode: dept.deptCode,
         //parentDept: dept.parentDept,
-        subsidiary: dept.subsidiary,
+        subsidiaryId: dept.subsidiaryId,
         budgetStrength: dept.budgetStrength,
         chkParent: dept.parentDept == null ? true : false
       };
