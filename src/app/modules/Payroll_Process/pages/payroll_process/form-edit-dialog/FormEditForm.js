@@ -85,7 +85,7 @@ export function FormEditForm({
 
   useEffect(() => {
     if (currentState?.payroll_group_details) {
-      console.log("Updated payroll group details:", currentState.payroll_group_details);
+   
     }
   }, [currentState?.payroll_group_details]); 
 

@@ -122,7 +122,7 @@ export const amountLimitDynamic = (value,limitVal) => {
 export const formatDate = (dateInput) =>{
  
   if(dateInput){
-    console.log("dateInput",dateInput)
+ 
     return format(new Date(dateInput), 'dd-MMM-yyyy h:mm:ss a');
   }else{
     return "---"
