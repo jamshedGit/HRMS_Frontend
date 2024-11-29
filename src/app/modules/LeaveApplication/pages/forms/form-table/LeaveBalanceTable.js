@@ -165,7 +165,7 @@ export function LeaveBalanceTable() {
                       noDataIndication={NoRecordsFoundMessage({ entities: leaveBalances || [] })}
                       wrapperClasses="table-responsive"
                       bordered={false}
-                      classes="table table-head-custom table-vertical-center overflow-hidden table-hover"
+                      classes="table table-head-custom table-vertical-center overflow-hidden table-hover fixed-layout-table"
                       bootstrap4
                       remote
                       keyField="Id"
