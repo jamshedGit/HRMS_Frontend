@@ -94,13 +94,13 @@
 
 // const EmployeeProfile = ({ employeeId }) => {
 //   const [data, setdata] = useState({})
-// console.log("employeeId view detail",employeeId)
+
 //   //Use Effect to execute whenever the employee Id is updated. This will fetch employee profile data from view created in Database
 //   useEffect(() => {
 //     if (employeeId) {
 //       getEmployeeProfileById(employeeId).then((res) => {
 //         if (res?.data?.data) {
-//           console.log("employee view detail",res?.data?.data)
+
 //           setdata(res.data.data)
 //         }
 //       }).catch((err) => {
