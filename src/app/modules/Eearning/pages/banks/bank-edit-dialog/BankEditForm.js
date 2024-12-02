@@ -44,7 +44,7 @@ const formValidation = Yup.object().shape(
     //   .required(VALIDATION_MESSAGES.required),
     account: Yup.string()
       .matches(/^\d+$/, "Must contain only digits")
-      //.required(VALIDATION_MESSAGES.required),
+    //.required(VALIDATION_MESSAGES.required),
 
 
   },
@@ -62,6 +62,7 @@ export function BankEditForm({
   values,
   enableLoading,
   loading,
+  userForEdit
 }) {
   const { dashboard } = useSelector((state) => state);
   // Get User Details
@@ -103,7 +104,7 @@ export function BankEditForm({
   }, [user?.subsidiaryId, dashboard.subsidiaryId]);
 
   const fetchData = async (subsidiaryId, setValue) => {
-    console.log("jj::", subsidiaryId)
+
     if (subsidiaryId) {
       dispatch(getLatestTableId("t_employee_earning", "Id", " subsidiaryId = " + subsidiaryId, setValue));
     }
@@ -145,11 +146,12 @@ export function BankEditForm({
                 <fieldset disabled={isUserForRead}>
 
                   <div className="from-group row">
+
                     <div className="col-12 col-md-4 mt-3">
                       <SearchSelect
                         name="subsidiaryId"
                         label={<span> Subsidiary<span style={{ color: 'red' }}>*</span></span>}
-                        isDisabled={isUserForRead && true}
+                        isDisabled={isUserForRead || userForEdit}
                         onBlur={() => {
                           // handleBlur({ target: { name: "countryId" } });
                         }}
@@ -166,6 +168,8 @@ export function BankEditForm({
                         options={dashboard.allSubsidiaryList}
                       />
                     </div>
+
+
                   </div>
                   <div className="from-group row">
                     {
@@ -205,7 +209,7 @@ export function BankEditForm({
 
 
                   <div className="from-group row">
-                    {
+                    {/* {
                       <div className="col-12 col-md-4 mt-3">
                         <Select
                           label={<span> Mapped Allowance</span>}
@@ -225,7 +229,7 @@ export function BankEditForm({
                         )}
                       </div>
 
-                    }
+                    } */}
                     {
                       <div className="col-12 col-md-4 mt-3">
 

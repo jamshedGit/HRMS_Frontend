@@ -96,6 +96,10 @@ export function BanksTable() {
       headerSortingClasses,
       style: {
         minWidth: "160px",
+        textAlign: "center",
+      },
+      headerStyle: {
+        textAlign: "center", // Align header text to the left
       },
     },
 
@@ -130,19 +134,19 @@ export function BanksTable() {
     //     minWidth: "160px",
     //   },
     // },
-    {
-      dataField: "mappedAllowance",
-      text: "Mapped Allowance",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
+    // {
+    //   dataField: "mappedAllowance",
+    //   text: "Mapped Allowance",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "160px",
+    //   },
+    // },
     {
       dataField: "account",
-      text: "Account",
+      text: "Account No.",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,

@@ -82,8 +82,7 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
   const saveEarning = async (user) => {
 
     if (!id) {
-      console.log("skill edit dialog");
-      console.log(user);
+     
 
       // const getUserStatus = userStatusTypes.filter((item) => {
       //   return item.value === +user.status;
@@ -120,7 +119,7 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
 
       };
 
-      console.log("skill updated", earningUpdatedFields);
+    
       await dispatch(actions.updatedearning(earningUpdatedFields, disbaleLoading, onHide));
       await dispatch(actions.fetchUsers(usersUIProps.queryParams));
     }
@@ -144,6 +143,7 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
         isUserForRead={userForRead}
         enableLoading={enableLoading}
         loading={loading}
+        userForEdit={userForEdit}
       />
       <ToastContainer
         position="top-right"
