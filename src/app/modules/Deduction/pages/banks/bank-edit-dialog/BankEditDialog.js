@@ -82,8 +82,7 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
   const saveIncident = async (user) => {
 
     if (!id) {
-      console.log("deduction edit dialog");
-      console.log(user);
+     
 
       // const getUserStatus = userStatusTypes.filter((item) => {
       //   return item.value === +user.status;
@@ -143,6 +142,7 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
         isUserForRead={userForRead}
         enableLoading={enableLoading}
         loading={loading}
+        userForEdit={userForEdit}
       />
       <ToastContainer
         position="top-right"

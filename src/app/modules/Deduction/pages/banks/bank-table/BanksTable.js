@@ -89,6 +89,10 @@ export function BanksTable() {
       headerSortingClasses,
       style: {
         minWidth: "160px",
+        textAlign: "center",
+      },
+      headerStyle: {
+        textAlign: "center", // Align header text to the left
       },
     },
 
@@ -106,7 +110,7 @@ export function BanksTable() {
     
     {
       dataField: "account",
-      text: "Account Code",
+      text: "Account Name",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,

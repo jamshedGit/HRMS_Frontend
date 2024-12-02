@@ -36,7 +36,7 @@ export function BanksUIProvider({ BanksUIEvents, children }) {
     deductionName: "",
     linkedAttendance: "",
     // loan: "",
-    mappedDeduction: "",
+    // mappedDeduction: "",
     account: "",
     companyId: "",
     subsidiaryId: ""
