@@ -39,16 +39,35 @@ export const LoanTypeSlice = createSlice({
             }
         },
         loan_type_Fetched: (state, action) => {
-            // console.log(action)
-            console.log("user slice",action.payload)
+          
+        
             
             const entities = action.payload.data?.rows;
-            console.log("ent loan_type_",entities)
+
+        
+            // Check if entities exist
+            if (entities) {
+                // Map over entities to combine formName and formCode
+                const combinedEntities = entities.map(item => ({
+                    ...item,
+                    LoanTypeAccount: item.LoanTypeAccount 
+                        ? `${item.LoanTypeAccount.formCode} - ${item.LoanTypeAccount.formName}`
+                        : null,
+             
+                }));
+        
+                // Update the state with the combined entities
+                state.entities = combinedEntities;
+            } else {
+                state.entities = [];
+            }
+        
+         
             const totalResult = action.payload.data?.data.totalResults;
-            console.log(entities);
+     
             state.listLoading = false;
             state.error = null;
-            state.entities = entities;
+     
             state.totalCount = totalResult;
         },
 

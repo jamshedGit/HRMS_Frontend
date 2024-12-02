@@ -110,7 +110,7 @@ export function BanksTable() {
     
     {
       dataField: "account",
-      text: "Account Name",
+      text: "Account No.",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,

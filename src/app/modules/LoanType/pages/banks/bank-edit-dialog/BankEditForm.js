@@ -57,6 +57,7 @@ export function BankEditForm({
   values,
   enableLoading,
   loading,
+  userForEdit,
 }) {
   const { dashboard } = useSelector((state) => state);
   const [defEmployee = null, setEmployeeDefault] = useState(null);
@@ -146,7 +147,7 @@ export function BankEditForm({
                       <SearchSelect
                         name="subsidiaryId"
                         label={<span> Subsidiary<span style={{ color: 'red' }}>*</span></span>}
-                        isDisabled={isUserForRead && true}
+                        isDisabled={isUserForRead || userForEdit}
                         onBlur={() => {
                           // handleBlur({ target: { name: "countryId" } });
                         }}

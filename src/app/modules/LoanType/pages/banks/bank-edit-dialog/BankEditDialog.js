@@ -82,8 +82,7 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
   const saveLoanType = async (user) => {
 
     if (!id) {
-      console.log("deduction edit dialog");
-      console.log(user);
+   
 
       // const getUserStatus = userStatusTypes.filter((item) => {
       //   return item.value === +user.status;
@@ -104,7 +103,7 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
       //   return item.value === +user.status;
       // });
 
-      console.log("getUserStatus", user);
+ 
 
       // This object set for Edit/Save Fields in DB
       const UpdatedFields = {
@@ -112,12 +111,12 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
         code: user.code,
         name: user.name,
       //  linkedAttendance: user.linkedAttendance,
-        mapped: user.mapped,
-        account: user.account,
+        // mapped: user.mapped,
+        accountId: user.accountId,
         subsidiaryId:user.subsidiaryId
       };
 
-      console.log("skill updated", UpdatedFields);
+
       await dispatch(actions.updatedLoanType(UpdatedFields, disbaleLoading, onHide));
       await dispatch(actions.fetchUsers(usersUIProps.queryParams));
     }
@@ -141,6 +140,7 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
         isUserForRead={userForRead}
         enableLoading={enableLoading}
         loading={loading}
+        userForEdit={userForEdit}
       />
       <ToastContainer
         position="top-right"
