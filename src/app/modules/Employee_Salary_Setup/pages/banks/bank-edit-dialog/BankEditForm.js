@@ -48,16 +48,36 @@ const formValidation = Yup.object().shape(
       .matches(/^\d+$/, "Must contain only digits"), // Only digits validation
 
     eobi_accNo: Yup.string()
-      .matches(/^\d+$/, "Must contain only digits"), // Only digits validation
+      .matches(/^\d+$/, "Must contain only digits")// Only digits validation
+      .when("eobi_member", {
+        is: true, // Condition to check if eobi_member is true
+        then: Yup.string().required("Required"),
+        otherwise: Yup.string().nullable(), // Optional if eobi_member is false
+      }), 
 
     pf_accNo: Yup.string()
-      .matches(/^\d+$/, "Must contain only digits"), // Only digits validation
+      .matches(/^\d+$/, "Must contain only digits") // Only digits validation
+      .when("pf_member", {
+        is: true, // Condition to check if pf_member is true
+        then: Yup.string().required("Required"),
+        otherwise: Yup.string().nullable(), // Optional if pf_member is false
+      }), 
 
     social_security_accNo: Yup.string()
-      .matches(/^\d+$/, "Must contain only digits"), // Only digits validation
+      .matches(/^\d+$/, "Must contain only digits") // Only digits validation
+      .when("social_security_member", {
+        is: true, // Condition to check if social_security_member is true
+        then: Yup.string().required("Required"),
+        otherwise: Yup.string().nullable(), // Optional if social_security_member is false
+      }), 
 
     pension_accNo: Yup.string()
-      .matches(/^\d+$/, "Must contain only digits"), // Only digits validation
+      .matches(/^\d+$/, "Must contain only digits") // Only digits validation
+      .when("pension_member", {
+        is: true, // Condition to check if pension_member is true
+        then: Yup.string().required("Required"),
+        otherwise: Yup.string().nullable(), // Optional if pension_member is false
+      }), 
 
     company_from_accNo: Yup.string()
       .matches(/^\d+$/, "Must contain only digits"), // Only digits validation
@@ -67,27 +87,48 @@ const formValidation = Yup.object().shape(
 
     gratuity_startDate: Yup.date()
       .nullable()
-      .max(new Date(), "Date cannot be in the future"),
+      .max(new Date(), "Date cannot be in the future")
+      .when("gratuity_member", {
+        is: true, // Condition to check if gratuity_member is true
+        then: Yup.date().required("Required"),
+        otherwise: Yup.date().nullable(), // Optional if gratuity_member is false
+      }),
 
     eobi_reg_date: Yup.date()
       .nullable()
-      .max(new Date(), "Date cannot be in the future"),
+      .max(new Date(), "Date cannot be in the future")
+      .when("eobi_member", {
+        is: true, // Condition to check if eobi_member is true
+        then: Yup.date().required("Required"),
+        otherwise: Yup.date().nullable(), // Optional if eobi_member is false
+      }),
 
     pf_reg_date: Yup.date()
       .nullable()
-      .max(new Date(), "Date cannot be in the future"),
+      .max(new Date(), "Date cannot be in the future")
+      .when("pf_member", {
+        is: true, // Condition to check if pf_member is true
+        then: Yup.date().required("Required"),
+        otherwise: Yup.date().nullable(), // Optional if pf_member is false
+      }),
 
     social_security_reg_date: Yup.date()
       .nullable()
-      .max(new Date(), "Date cannot be in the future"),
-
-    pension_reg_date: Yup.date()
-      .nullable()
-      .max(new Date(), "Date cannot be in the future"),
+      .max(new Date(), "Date cannot be in the future")
+      .when("social_security_member", {
+        is: true, // Condition to check if social_security_member is true
+        then: Yup.date().required("Required"),
+        otherwise: Yup.date().nullable(), // Optional if social_security_member is false
+      }),
 
     pension_reg_date: Yup.date()
       .nullable()
       .max(new Date(), "Date cannot be in the future")
+      .when("pension_member", {
+        is: true, // Condition to check if pension_member is true
+        then: Yup.date().required("Required"),
+        otherwise: Yup.date().nullable(), // Optional if pension_member is false
+      }),
 
   },
 
@@ -237,7 +278,6 @@ export function BankEditForm({
     const employeeId = user.employeeId; // defEmployee?.value ? defEmployee.value : user.employeeId;
 
     dispatch(fetchAllActiveEmployeesSalaryForDDL(employeeId));
-    console.log("test", dashboard.allEmployeesSalaryDDL);
     setEmployeeDefault(
       dashboard.allEmployeesSalaryDDL &&
       dashboard.allEmployeesSalaryDDL.filter((item) => {
@@ -266,7 +306,6 @@ export function BankEditForm({
   useEffect(() => {
 
     const payment_mode_Id = defPaymentModeList?.value ? defPaymentModeList.value : user.payment_mode_Id;
-    console.log("paymentId", payment_mode_Id);
     setDefualtPaymentModeCodeList(
       dashboard.allPaymentModeList &&
       dashboard.allPaymentModeList.filter((item) => {
@@ -291,12 +330,10 @@ export function BankEditForm({
 
   const handleChanged = (e, setFieldValue) => {
     const newValue = e.value;
-    console.log('Selected value:', newValue);
     fetchEmployeeSalaryEarningList(e.value, 0, setFieldValue);
   };
   const handlePaymenModeChanged = (e) => {
     const newValue = e.value;
-    console.log('Selected value:', newValue);
     //Cash & Cheque
     if (newValue == 151 || newValue == 152) {
       setDropdownDisabled(true)
@@ -315,7 +352,6 @@ export function BankEditForm({
     try {
 
       const response = await axios.post(`${USERS_URL}/employee_salary_earning/read-all-emp-earning_byId`, { id: empId, basicSalary: basicSalary || 0 });
-      console.log("::test::", response)
       setDefaultMapEarningDeductionList(response?.data?.data);
       setBasicSalaryFactor(response?.data?.data[0]?.basicFactor);
       setGrossSalaryDB(response?.data?.data[0]?.grossSalary)
@@ -334,8 +370,6 @@ export function BankEditForm({
           })
         );
       }
-
-
 
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -357,7 +391,6 @@ export function BankEditForm({
   }
 
   const addRow = (element) => {
-    console.log("click", element.target.id)
     if (element.target.id == "Other") {
       setDefaultMapEarningDeductionList([...defMapEarningDeductionList, { transactionType: "Earning", isPartOfGrossSalary: 0 }])
     }
@@ -387,13 +420,11 @@ export function BankEditForm({
     const result = await Promise.all(
       defMapEarningDeductionList.map(async (x) => {
         if (x.calculation_type === 'Fixed Amount' && x.isPartOfGrossSalary && x.transactionType == "Earning") {
-          console.log("fixed_amount", x.amount);
           grossSalaryInput = grossSalaryInput - x.amount;
         }
         return grossSalaryInput; // Return the updated grossSalaryInput
       })
     );
-    console.log("grossSalaryInput", result);
 
     const totalBasicWithFactorVal = ((Number(grossSalaryInput) * Number(basicSalaryInputFactor)) / 100)
 
@@ -412,7 +443,6 @@ export function BankEditForm({
 
     }
   }
-  console.log('Sert doasdasodjk', defMapEarningDeductionList);
 
   const totalAllowance = defMapEarningDeductionList?.reduce((prev, curr) => {
     return curr.transactionType == 'Earning' && curr.isPartOfGrossSalary == false ? prev + curr.amount : prev
@@ -438,7 +468,6 @@ export function BankEditForm({
       if (!objValidate.calculation_type) {
         newErrors[`calculation_type-${index}`] = 'Required*';
       }
-      console.log("amount::", objValidate.amount)
       // Check if factorValue is required
       if (!objValidate.factorValue && objValidate.amount <= 0) {
         newErrors[`factorValue-${index}`] = 'Required*';
@@ -462,10 +491,8 @@ export function BankEditForm({
         initialValues={user}
         validationSchema={formValidation}
         onSubmit={(values) => {
-          console.log("values 1 ", values);
 
           const validationErrors = validate();
-          console.log("ppp", validationErrors)
           if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
           } else {
@@ -485,6 +512,9 @@ export function BankEditForm({
           formik,
         }) => (
           <>
+          {
+            
+          }
             <Modal.Body className="overlay overlay-block cursor-default">
               {actionsLoading && (
                 <div className="overlay-layer bg-transparent">
@@ -953,7 +983,9 @@ export function BankEditForm({
                       <div className="col-12 col-md-4 mt-12">
                         <input type="checkbox"
                           name="gratuity_member"
-                          onChange={handleChange}
+                          onChange={(e)=> {
+                            setFieldValue('gratuity_member', e.target.checked)
+                          }}
                           onBlur={handleBlur}
                           value={values.gratuity_member}
                           checked={values.gratuity_member}
@@ -963,7 +995,7 @@ export function BankEditForm({
 
                       <div className="col-12 col-md-4 mt-3">
 
-                        {<span> Date Of Registration</span>}
+                        {<span> Date Of Registration{Boolean(values.gratuity_member) && <span style={{ color: 'red' }}>*</span>} </span>}
                         <DatePicker
                           className="form-control"
                           placeholder="Enter Gratuity Reg Date"
@@ -991,7 +1023,9 @@ export function BankEditForm({
                         <input
                           name="overtime_allowance"
                           type="checkbox"
-                          onChange={handleChange}
+                          onChange={(e)=> {
+                            setFieldValue('overtime_allowance', e.target.checked)
+                          }}
                           onBlur={handleBlur}
                           value={values.overtime_allowance}
                           checked={values.overtime_allowance}
@@ -1001,7 +1035,9 @@ export function BankEditForm({
                         <input
                           type="checkbox"
                           name="shift_allowance"
-                          onChange={handleChange}
+                          onChange={(e)=> {
+                            setFieldValue('shift_allowance', e.target.checked)
+                          }}
                           onBlur={handleBlur}
                           value={values.shift_allowance}
                           checked={values.shift_allowance}
@@ -1012,7 +1048,9 @@ export function BankEditForm({
                         <input
                           type="checkbox"
                           name="regularity_allowance"
-                          onChange={handleChange}
+                          onChange={(e)=> {
+                            setFieldValue('regularity_allowance', e.target.checked)
+                          }}
                           onBlur={handleBlur}
                           value={values.regularity_allowance}
                           checked={values.regularity_allowance}
@@ -1023,7 +1061,9 @@ export function BankEditForm({
                         <input
                           type="checkbox"
                           name="punctuality_allowance"
-                          onChange={handleChange}
+                          onChange={(e)=> {
+                            setFieldValue('punctuality_allowance', e.target.checked)
+                          }}
                           onBlur={handleBlur}
                           checked={values.punctuality_allowance}
                           value={values.punctuality_allowance}
@@ -1041,7 +1081,9 @@ export function BankEditForm({
                         <input
                           name="eobi_member"
                           type="checkbox"
-                          onChange={handleChange}
+                          onChange={(e)=> {
+                            setFieldValue('eobi_member', e.target.checked)
+                          }}
                           onBlur={handleBlur}
                           value={values.eobi_member}
                           checked={values.eobi_member}
@@ -1049,7 +1091,7 @@ export function BankEditForm({
 
                       </div>
                       <div className="col-12 col-md-4 mt-5">
-                        {<span> Date Of Registration</span>}
+                        {<span> Date Of Registration{Boolean(values.eobi_member) && <span style={{ color: 'red' }}>*</span>} </span>}
 
                         <DatePicker
                           className="form-control"
@@ -1082,7 +1124,7 @@ export function BankEditForm({
                           }}
 
                           placeholder="Enter EOBI Account No"
-                          label={<span> EOBI Account No</span>}
+                          label={<span> EOBI Account No{Boolean(values.eobi_member) && <span style={{ color: 'red' }}>*</span>} </span>}
                           autoComplete="off"
                           disabled={!values.eobi_member}
                         />
@@ -1104,7 +1146,7 @@ export function BankEditForm({
                       </div>
 
                       <div className="col-12 col-md-4 mt-5">
-                        {<span> Date Of Registration</span>}
+                        {<span> Date Of Registration{Boolean(values.pf_member) && <span style={{ color: 'red' }}>*</span>}</span>}
                         <DatePicker
                           className="form-control"
                           placeholder="Enter PF Reg Date"
@@ -1136,7 +1178,7 @@ export function BankEditForm({
                             e.target.value = amountLimitDynamic(e.target.value, 15); // Limit to 3 digits
                           }}
                           placeholder="Enter PF Acc No"
-                          label={<span> PF Account No</span>}
+                          label={<span> PF Account No{Boolean(values.pf_member) && <span style={{ color: 'red' }}>*</span>}</span>}
                           autoComplete="off"
                           disabled={!values.pf_member}
                         />
@@ -1148,7 +1190,9 @@ export function BankEditForm({
                           type="checkbox"
                           disabled={!values.pf_member}
                           name="profit_member"
-                          onChange={handleChange}
+                          onChange={(e)=> {
+                            setFieldValue('profit_member', e.target.checked)
+                          }}
                           onBlur={handleBlur}
                           value={values.profit_member}
                           checked={values.profit_member}
@@ -1161,7 +1205,9 @@ export function BankEditForm({
                         <input
                           type="checkbox"
                           name="social_security_member"
-                          onChange={handleChange}
+                          onChange={(e)=> {
+                            setFieldValue('social_security_member', e.target.checked)
+                          }}
                           onBlur={handleBlur}
                           value={values.social_security_member}
                           checked={values.social_security_member}
@@ -1169,7 +1215,7 @@ export function BankEditForm({
 
                       </div>
                       <div className="col-12 col-md-4 mt-5">
-                        {<span> Date Of Registration</span>}
+                        {<span> Date Of Registration{Boolean(values.social_security_member) && <span style={{ color: 'red' }}>*</span>}</span>}
                         <DatePicker
                           className="form-control"
                           placeholder="Enter Social Security Reg Date"
@@ -1199,7 +1245,7 @@ export function BankEditForm({
                           component={Input}
                           type='number'
                           placeholder="Enter Social Security AccNo"
-                          label={<span> Social Security Account No</span>}
+                          label={<span> Social Security Account No{Boolean(values.social_security_member) && <span style={{ color: 'red' }}>*</span>}</span>}
                           autoComplete="off"
                           disabled={!values.social_security_member}
                         />
@@ -1211,14 +1257,16 @@ export function BankEditForm({
                           type="checkbox"
 
                           name="pension_member"
-                          onChange={handleChange}
+                          onChange={(e)=> {
+                            setFieldValue('pension_member', e.target.checked)
+                          }}
                           onBlur={handleBlur}
                           value={values.pension_member}
                           checked={values.pension_member}
                         /> Pension Member
                       </div>
                       <div className="col-12 col-md-4 mt-5">
-                        {<span> Pension Reg Date</span>}
+                        {<span> Pension Reg Date{Boolean(values.pension_member) && <span style={{ color: 'red' }}>*</span>}</span>}
                         <DatePicker
                           className="form-control"
                           placeholder="Enter Pension Reg Date"
@@ -1248,7 +1296,7 @@ export function BankEditForm({
                           }}
                           component={Input}
                           placeholder="Enter Pension AccNo"
-                          label={<span> Pension Account No<span style={{ color: 'red' }}>*</span></span>}
+                          label={<span> Pension Account No{Boolean(values.pension_member) && <span style={{ color: 'red' }}>*</span>}</span>}
                           autoComplete="off"
                           disabled={!values.pension_member}
                         />

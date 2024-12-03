@@ -4,11 +4,6 @@ export const USERS_URL = process.env.REACT_APP_API_URL;
 
 //Create user
 export function createEmployee_Salary(body) {
-  console.log("create earning step 1", body)
-  
-  // body.Name = body.txtEarningName;
-  // delete body.txtEarningName
-
   return axios.post(`${USERS_URL}/employee_salary/create-employee-salary`, body);
 }
 
