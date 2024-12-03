@@ -23,6 +23,7 @@ import { Link } from "@material-ui/core";
 import { useDesignationUIContext } from "../DesignationUIContext";
 import MaskedInput from "react-text-mask";
 import { getDateDiffInDays } from "../../../../../utils/common";
+import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 
 export const USERS_URL = process.env.REACT_APP_API_URL;
 const currentDate = new Date();
@@ -37,6 +38,12 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 // Validation schema
 const profileValidation = Yup.object().shape(
   {
+    deligation: Yup.string()
+    .when('requireDeligation', {
+      is: true, // Condition: when 'requireDeligation' is true
+      then: Yup.string().required(VALIDATION_MESSAGES.required), // Apply 'required' validation
+      otherwise: Yup.string(), // No validation if 'requireDeligation' is false
+    }),
     firstName: Yup.string()
       .required("Required*"),
     lastName: Yup.string()
@@ -1517,81 +1524,81 @@ export function DesignationEditForm({
                             setDisabledConfirmationDate(false);
                             setDisbledConfirmationDueDate(false);
                             setDisabledContractExpiryDate(false);
-                            if (e.value == 148) // WHEN Select Permanet value
-                            {
-                              // For Empty Object
+                            // if (e.value == 148) // WHEN Select Permanet value
+                            // {
+                            //   // For Empty Object
 
-                              setContractExpiryDate('');
-                              setConfirmationDate('');
-                            //  setConfirmationDueDate('');
-                             // setConfirmationEnterDate('');
+                            //   setContractExpiryDate('');
+                            //   setConfirmationDate('');
+                            // //  setConfirmationDueDate('');
+                            //  // setConfirmationEnterDate('');
 
-                              //  setFieldValue("dateOfConfirmation", '');
-                              // setFieldValue("dateOfConfirmationDue", '');
-                              // setFieldValue("dateOfConfirmationEnter", '');
-                              // setFieldValue("dateOfContractExpiry", '');
+                            //   //  setFieldValue("dateOfConfirmation", '');
+                            //   // setFieldValue("dateOfConfirmationDue", '');
+                            //   // setFieldValue("dateOfConfirmationEnter", '');
+                            //   // setFieldValue("dateOfContractExpiry", '');
 
-                              // For Disabled Object
-                              //  setDisbledConfirmationEnterDate(true);
-                              //   setDisabledConfirmationDate(true);
-                              setDisbledConfirmationDueDate(true);
-                              setDisabledContractExpiryDate(true);
-                              setDisbledConfirmationEnterDate(true);
+                            //   // For Disabled Object
+                            //   //  setDisbledConfirmationEnterDate(true);
+                            //   //   setDisabledConfirmationDate(true);
+                            //   setDisbledConfirmationDueDate(true);
+                            //   setDisabledContractExpiryDate(true);
+                            //   setDisbledConfirmationEnterDate(true);
 
 
-                            }
-                            else if (e.value == 93) // Probation Type
-                            {
-                              // setFieldValue("dateOfConfirmation", '');
-                              // setFieldValue("dateOfContractExpiry", '');
+                            // }
+                            // else if (e.value == 93) // Probation Type
+                            // {
+                            //   // setFieldValue("dateOfConfirmation", '');
+                            //   // setFieldValue("dateOfContractExpiry", '');
 
-                              setDisabledConfirmationDate(true);
-                              setDisabledContractExpiryDate(true);
+                            //   setDisabledConfirmationDate(true);
+                            //   setDisabledContractExpiryDate(true);
 
-                              // setContractExpiryDate('');
-                              // setConfirmationDate('');
-                              // setConfirmationEnterDate('');
-                              console.log("session", defProbationPolicyMonth)
+                            //   // setContractExpiryDate('');
+                            //   // setConfirmationDate('');
+                            //   // setConfirmationEnterDate('');
+                            //   console.log("session", defProbationPolicyMonth)
                             
-                              // setFieldValue("dateOfConfirmationDue", defProbationPolicyMonth || null)
-                              // setConfirmationDueDate(addMonths(values.dateOfJoining || null, defProbationPolicyMonth))
+                            //   // setFieldValue("dateOfConfirmationDue", defProbationPolicyMonth || null)
+                            //   // setConfirmationDueDate(addMonths(values.dateOfJoining || null, defProbationPolicyMonth))
 
-                              const a = addMonths(values.dateOfJoining, defProbationPolicyMonth);
-                              console.log("::Probation", e.value,a);
+                            //   const a = addMonths(values.dateOfJoining, defProbationPolicyMonth);
+                            //   console.log("::Probation", e.value,a);
                               
-                              setConfirmationDueDate(a)
-                              setFieldValue("dateOfConfirmationDue",new Date(a))
+                            //   setConfirmationDueDate(a)
+                            //   setFieldValue("dateOfConfirmationDue",new Date(a))
 
 
-                            }
-                            else if (e.value == 147) // Contract Type
-                            {
+                            // }
+                            // else if (e.value == 147) // Contract Type
+                            // {
 
-                              //  setContractExpiryDate('');
-                              // setConfirmationDate('');
-                              // setConfirmationDueDate('');
-                              // setConfirmationEnterDate('');
+                            //   //  setContractExpiryDate('');
+                            //   // setConfirmationDate('');
+                            //   // setConfirmationDueDate('');
+                            //   // setConfirmationEnterDate('');
 
-                              // setFieldValue("dateOfConfirmation", '');
-                              // setFieldValue("dateOfConfirmationDue", '');
-                              // setFieldValue("dateOfConfirmationEnter", '');
-                              // // setFieldValue("dateOfContractExpiry", '');
+                            //   // setFieldValue("dateOfConfirmation", '');
+                            //   // setFieldValue("dateOfConfirmationDue", '');
+                            //   // setFieldValue("dateOfConfirmationEnter", '');
+                            //   // // setFieldValue("dateOfContractExpiry", '');
 
-                              // For Disabled Object
-                              setDisbledConfirmationEnterDate(true);
-                              setDisabledConfirmationDate(true);
-                              setDisbledConfirmationDueDate(true);
-                              //  setDisabledContractExpiryDate(true);
-                              // setFieldValue("dateOfContractExpiry", defContractExpiryPolicy)
-                              // setContractExpiryDate(addMonths(values.dateOfJoining || null, defProbationPolicyMonth))
+                            //   // For Disabled Object
+                            //   setDisbledConfirmationEnterDate(true);
+                            //   setDisabledConfirmationDate(true);
+                            //   setDisbledConfirmationDueDate(true);
+                            //   //  setDisabledContractExpiryDate(true);
+                            //   // setFieldValue("dateOfContractExpiry", defContractExpiryPolicy)
+                            //   // setContractExpiryDate(addMonths(values.dateOfJoining || null, defProbationPolicyMonth))
 
-                              setContractExpiryDate(addMonths(values.dateOfJoining, defContractExpiryPolicy))
-                              setFieldValue("dateOfContractExpiry", addMonths(values.dateOfJoining, defContractExpiryPolicy))
+                            //   setContractExpiryDate(addMonths(values.dateOfJoining, defContractExpiryPolicy))
+                            //   setFieldValue("dateOfContractExpiry", addMonths(values.dateOfJoining, defContractExpiryPolicy))
                              
-                            }
+                            // }
 
 
-                            else {
+                            // else {
 
                               setFieldValue("dateOfContractExpiry", contractExpirtyDateSelected || new Date())
                               setFieldValue("dateOfConfirmationEnter", confirmationEnterDateSelected || new Date())
@@ -1603,7 +1610,7 @@ export function DesignationEditForm({
                               setConfirmationDueDate(new Date());
                               setConfirmationEnterDate(new Date());
 
-                            }
+                            // }
 
                             // dispatch(fetchAllFormsMenu(e.value));
                           }}
@@ -2324,7 +2331,7 @@ export function DesignationEditForm({
                         />
                         {/* <ErrorMessage style={{color:"red"}} name="nic_no" component="div" /> */}
                       </div>
-
+{/* 
                       <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="emiratesId"
@@ -2334,8 +2341,8 @@ export function DesignationEditForm({
                           label={<span> Emirates Id</span>}
                           autoComplete="off"
                         />
-                        {/* <ErrorMessage style={{color:"red"}} name="nic_no" component="div" /> */}
-                      </div>
+                      
+                      </div> */}
 
                     </div>
 
