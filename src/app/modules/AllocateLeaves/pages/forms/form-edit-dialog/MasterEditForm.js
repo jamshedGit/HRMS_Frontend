@@ -7,6 +7,7 @@ import AllocatedListTable from "./AllocatedListTable";
 import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLabel";
 import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
+import { fetchAllLeaveTypeBySubsidiary } from "../../../../../../_metronic/redux/dashboardActions";
 
 //Validations for Form
 const formValidation = Yup.object().shape({
@@ -17,8 +18,8 @@ const formValidation = Yup.object().shape({
     Yup.object().shape({
       leaveType: Yup.number().required('Required'),
       leaveCount: Yup.number().min(1, VALIDATION_MESSAGES.minOneValue).max(999, VALIDATION_MESSAGES.maxThreeDigit).required(VALIDATION_MESSAGES.required),
-      policyType: Yup.number().required('Required'),
-      maxCount: Yup.number().min(1,  VALIDATION_MESSAGES.minOneValue).max(Yup.ref('leaveCount'), 'Max Count cannot be greater than Leave count').required(VALIDATION_MESSAGES.required),
+      policyType: Yup.number().nullable(),
+      maxCount: Yup.number().min(0,  VALIDATION_MESSAGES.minOneValue).max(Yup.ref('leaveCount'), 'Max Count cannot be greater than Leave count').nullable(),
     }))
     .min(1, 'Allocate Atleast One leave'),
 });
@@ -32,7 +33,8 @@ export function MasterEditForm({
   loading,
   dropdownData,
   getOldData,
-  accessUser
+  accessUser,
+  dispatch
 }) {
 
   return (
@@ -77,6 +79,7 @@ export function MasterEditForm({
                         onBlur={handleBlur}
                         onChange={(e) => {
                           const value = e.target.value == '--Select--' ? '' : Number(e.target.value)
+                          dispatch(fetchAllLeaveTypeBySubsidiary("allLeaveTypes", value));
                           setFieldValue('subsidiaryId', value)
                           const filter = { subsidiaryId: value, cycleTypeId: values.cycleTypeId, yearId: values.yearId }
                           getOldData(filter)

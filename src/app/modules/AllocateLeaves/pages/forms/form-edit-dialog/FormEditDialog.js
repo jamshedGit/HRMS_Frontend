@@ -60,8 +60,6 @@ export function FormEditDialog({ onHide, userForRead }) {
       dispatch(fetchAllSubsidiaryData("allSubsidiaryList"));
     if (!dashboard?.allFiscalYears?.length)
       dispatch(fetchAllFiscalYearData("allFiscalYears"));
-    if (!dashboard?.allLeaveTypes?.length)
-      dispatch(fetchAllLeaveType("allLeaveTypes"));
     if (!allocate_leaves?.allPolicyType.length)
       dispatch(fetchPolicyData());
   }, [dispatch]);
@@ -96,6 +94,7 @@ export function FormEditDialog({ onHide, userForRead }) {
         }}
         getOldData={getOldData}
         accessUser={accessUser}
+        dispatch={dispatch}
       />
       <ToastContainer
         position="top-right"

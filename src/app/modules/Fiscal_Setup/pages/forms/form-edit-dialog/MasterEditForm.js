@@ -9,49 +9,43 @@ import {
   fetchAllCity,
  
   fetchAllSubCenter,
+  fetchAllSubsidiaryData,
   getLatestBookingNo,
 } from "../../../../../../_metronic/redux/dashboardActions";
 import DatePicker from "react-datepicker";
-// Phone Number Regex
-const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
-// CNIC Regex
-const cnicRegExp = /^[0-9]{5}-[0-9]{7}-[0-9]$/;
-// Password Regex
-const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
+
+// Function to check if two dates are exactly 365 days apart
+const validateDateDifference = (startDate, endDate) => {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+
+  // Calculate the difference in milliseconds
+  const timeDiff = end - start;
+
+  // Convert milliseconds to days (1 day = 24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
+  const dayDiff = timeDiff / (1000 * 3600 * 24);
+
+  // Check if the difference is exactly 365 days
+  return dayDiff === 365 || dayDiff === 366;
+};
 // Validation schema
 const formValidation = Yup.object().shape(
   {
-    startDate: Yup.date()
-    .nullable()
-    .required('Start date is required')
-    .max(Yup.ref('endDate'), 'Start date cannot be the same or later than end date') // Ensure startDate is not later than endDate
-    .test('not-equal', 'Start date and End date cannot be the same', function(value) {
-      const { endDate } = this.parent; // Access the endDate from the parent object
-      return value && endDate ? value.getTime() !== new Date(endDate).getTime() : true; // Ensure startDate is not equal to endDate
-    })
-    .test('start-end-date-difference', 'Start date should be at least 11 months before the end date', function(value) {
-      const { endDate } = this.parent; // Access the endDate from the parent object
-      if (value && endDate) {
-        // Calculate the difference in months
-        const start = new Date(value);
-        const end = new Date(endDate);
-
-        const monthDiff = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
-        
-        // Check if the difference is at least 11 months
-        return monthDiff >= 11;
-      }
-      return true; // If no endDate or startDate, don't apply the check
-    }),
-
-  endDate: Yup.date()
-    .nullable()
-    .required('End date is required')
-    .min(Yup.ref('startDate'), 'End date cannot be same or earlier than start date') // Ensure endDate is not earlier than startDate
-    .test('not-equal', 'Start date and End date cannot be the same', function(value) {
-      const { startDate } = this.parent; // Access the startDate from the parent object
-      return value && startDate ? value.getTime() !== new Date(startDate).getTime() : true; // Ensure endDate is not equal to startDate
-    }),
+    startDate: Yup.date().nullable().required(VALIDATION_MESSAGES.required),
+    endDate: Yup.date().nullable()
+      .required(VALIDATION_MESSAGES.required)
+      .test(
+        'date-difference',
+        'End date must be exactly 365 or 366 days after start date',
+        function (endDate) {
+          const { startDate } = this.parent;
+          return validateDateDifference(startDate, endDate);
+        }
+      ),
+      subsidiaryId: Yup.number()
+      .nullable().required("Required*")
+      
   },
 
 );
@@ -68,13 +62,24 @@ export function MasterEditForm({
   enableLoading,
   loading,
 }) {
-
+  const dispatch = useDispatch();
   const { dashboard } = useSelector((state) => state);
   // Get User Details
   const { auth } = useSelector((state) => state);
   const [defstartDate, setDefaultStartDate] = useState(null);
   const [defendDate, setDefaultEndDate] = useState(null);
+  const [defSubsidiary = null, setDefualtSubsidiaryList] = useState(null);
+
   //===== Date Of Joining
+
+
+  useEffect(() => {
+
+    if (!user.Id) {
+      dispatch(fetchAllSubsidiaryData("allSubsidiaryList"))
+    }
+  }, [dispatch]);
+
   useEffect(() => {
     if (user.startDate) {
       setDefaultStartDate(new Date(user.startDate));
@@ -90,6 +95,20 @@ export function MasterEditForm({
      setDefaultEndDate(new Date(user.endDate));
     }
   }, [user.endDate]);
+
+  
+  useEffect(() => {
+
+    const subsidiaryId = defSubsidiary?.value ? defSubsidiary.value : user.subsidiaryId;
+
+    setDefualtSubsidiaryList(
+      dashboard.allSubsidiaryList &&
+      dashboard.allSubsidiaryList.filter((item) => {
+        return item.value === subsidiaryId;
+      })
+    );
+
+  }, [user?.subsidiaryId, dashboard.subsidiaryId]);
 
 
   return (
@@ -123,6 +142,28 @@ export function MasterEditForm({
               )}
               <Form className="form form-label-right">
                 <fieldset disabled={isUserForRead}>
+                <div className="from-group row">
+                <div className="col-12 col-md-4 mt-3">
+                      <SearchSelect
+                        name="subsidiaryId"
+                        label={<span> Subsidiary<span style={{ color: 'red' }}>*</span></span>}
+                        isDisabled={isUserForRead && true}
+                        onBlur={() => {
+                          // handleBlur({ target: { name: "countryId" } });
+                        }}
+                        onChange={(e) => {
+                          setFieldValue("subsidiaryId", e.value || null);
+                          setDefualtSubsidiaryList(e);
+
+                        }}
+
+                        value={(defSubsidiary || null)}
+                        error={errors.subsidiaryId}
+                        touched={touched.subsidiaryId}
+                        options={dashboard.allSubsidiaryList}
+                      />
+                    </div>
+                  </div>
                   <div className="from-group row">
                     <div className="col-12 col-md-4 mt-3">
 

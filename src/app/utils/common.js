@@ -117,3 +117,16 @@ export const amountLimitDynamic = (value,limitVal) => {
 //    .matches(/^(100|[1-9]?[0-9])(\.[0-9]{1,2})?$/, 'Must be a valid percentage (0-100) with up to 2 decimal places')
 //   return value; // Return the original value if within limit
 // };
+
+
+export const formatDate = (dateInput) =>{
+ 
+  if(dateInput){
+ 
+    return format(new Date(dateInput), 'dd-MMM-yyyy h:mm:ss a');
+  }else{
+    return "---"
+  }
+ 
+}
+

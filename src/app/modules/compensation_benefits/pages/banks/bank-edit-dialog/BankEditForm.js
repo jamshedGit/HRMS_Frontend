@@ -295,16 +295,16 @@ export function BankEditForm({
           } else {
             enableLoading();
             let i = 0;
-            i = values.basicFactor;
+            i = Number(values.basicFactor || 0);
             defEarningList.forEach((element, index) => {
 
               console.log("element", element, index)
               if (element.factorValue > 0 && element.isPartOfGrossSalary == "1" && element.transactionType == "Earning") {
-                i += element.factorValue
+                i +=  Number(element.factorValue || 0)
               }
            
             });
-
+            console.log("counter",i)
            // console.log("tota",i)
             if(i == 100)
             {
@@ -458,7 +458,7 @@ export function BankEditForm({
                       <Field
                         name="basicFactor"
                         component={Input}
-                        maxLength={10}
+                        maxLength={2}
                         placeholder="Enter Basic Factor" disabled={values.salaryMethod == "Basic to Gross"}
                         label={<span> Basic Factor<span style={{ color: 'red' }}>*</span></span>}
                         autoComplete="off"
