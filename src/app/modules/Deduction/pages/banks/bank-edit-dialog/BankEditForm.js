@@ -148,7 +148,7 @@ export function BankEditForm({
           formik,
         }) => (
           <>
-            {console.log(":::val::", values)}
+   
             <Modal.Body className="overlay overlay-block cursor-default">
               {actionsLoading && (
                 <div className="overlay-layer bg-transparent">
@@ -288,7 +288,7 @@ export function BankEditForm({
                           value={values.linkedAttendance}
                           // onChange={handleLinkedAttendanceChange}
                           onChange={(e) => {
-                            console.log("linked", e.target.value)
+                      
                             setFieldValue("linkedAttendance", e.target.value);
                             if (e.target.value === "true") {
                               setFieldValue("loan", false);
@@ -321,7 +321,7 @@ export function BankEditForm({
                           value={values.linkedAttendance}
                           // onChange={handleLinkedAttendanceChange}
                           onChange={(e) => {
-                            console.log("linked", e.target.value)
+                          
                             setFieldValue("linkedAttendance", e.target.value);
                             if (e.target.value === "true") {
                               setFieldValue("loan", false);

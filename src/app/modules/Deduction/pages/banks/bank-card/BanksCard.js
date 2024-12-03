@@ -14,7 +14,7 @@ import CurrentModuleName from "../../../../../utils/common-modules/ModuleName"
 
 export function BanksCard() {
   const banksUIContext = useBanksUIContext()
-  //console.log("banksUIContext", banksUIContext)
+
   const BanksUIProps = useMemo(() => {
     return {
       newBankButtonClick: banksUIContext.newBankButtonClick,
