@@ -63,7 +63,7 @@ export function BranchEditDialog({ id, show, onHide, userForRead }) {
   //   }
   // }, [actionsLoading === true]);
 
-  //console.log("action", action);
+
 
   useEffect(() => {
     dispatch(actions.fetchUser(id));
@@ -72,21 +72,21 @@ export function BranchEditDialog({ id, show, onHide, userForRead }) {
   }, [id, dispatch]);
 
   // useEffect(() => {
-  //   console.log("UseEffect call");
+
   //   if (actionsLoading === false) {
-  //     console.log("UseEffect call inside function");
+
   //     disbaleLoading();
   //   }
   // }, [actionsLoading]);
-  //console.log("userForEdit", userForEdit);
+
 
   const saveBranch = async (branch) => {
 
     if (!id) {
-      console.log("Branch edit dialog");
-      console.log(branch);
-
+    
       const finalObject = { branch }
+      delete branch.subsidiaryId;
+    
      await dispatch(actions.createBranch(branch, disbaleLoading, onHide));
 
      await dispatch(actions.fetchUsers(usersUIProps.queryParams));
@@ -96,7 +96,7 @@ export function BranchEditDialog({ id, show, onHide, userForRead }) {
       //   return item.value === +user.status;
       // });
 
-      console.log("branchUpdateObj", branch);
+    
 
       const BranchUpdatedFields = {
         Id: branch.Id,
@@ -113,12 +113,12 @@ export function BranchEditDialog({ id, show, onHide, userForRead }) {
         contactPerson: branch.contactPerson,
         address : branch.address,
         accOpeningDate: branch.accOpeningDate,
-        accNoOfSalary:branch.accNoOfSalary,
+        accNoForSalary:branch.accNoForSalary,
         accNoForPF: branch.accNoForPF,
         accNoForGrad: branch.accNoForGrad
       };
 
-      console.log("BranchUpdatedFields", BranchUpdatedFields);
+   
      await dispatch(actions.updateBranch(BranchUpdatedFields, disbaleLoading, onHide));
      await dispatch(actions.fetchUsers(usersUIProps.queryParams));
     }

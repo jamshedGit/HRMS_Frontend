@@ -4,7 +4,7 @@ export const USERS_URL = process.env.REACT_APP_API_URL;
 
 //Create user
 export function createEarning(body) {
-  console.log("create earning step 1", body)
+
   
   // body.Name = body.txtEarningName;
   // delete body.txtEarningName
@@ -15,27 +15,26 @@ export function createEarning(body) {
 
 // Read
 export function getAllEarning(body) {
-  console.log("body",body);
+
   return axios.post(`${USERS_URL}/earning/read-all-earning`, body);
 }
 
 
 
 export function getEarningById(id) {
-   console.log(" earning id", id)
+
   return axios.post(`${USERS_URL}/earning/read-earning`, id);
 }
 
 //Update
 export function updateEarning(earning) {
-   console.log("earning 12", earning)
+
   return axios.put(`${USERS_URL}/earning/update-earning`, earning);
 }
 
 //Delete
 export function deleteEarning(body) {
-  console.log("body")
-  console.log(body);
+
   return axios.patch(`${USERS_URL}/earning/delete-earning`, body);
 }
 

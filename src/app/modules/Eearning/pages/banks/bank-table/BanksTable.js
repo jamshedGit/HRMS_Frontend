@@ -35,16 +35,16 @@ export function BanksTable() {
     };
   }, [bankUIContext]);
 
-  //console.log("queryparms", usersUIProps.queryparms)
+
   const { currentState, userAccess } = useSelector(
-    (state) => {  console.log("academic state ",state); return {
+    (state) => {  return {
       
       currentState: state.earning,
       userAccess: state?.auth?.userAccess["Earning"],
     }},
     shallowEqual
   );
-  console.log("currentState", currentState);
+ 
   
   const { totalCount, entities, listLoading } = currentState;
 
@@ -54,11 +54,11 @@ export function BanksTable() {
 
   useEffect(() => {
     bankUIProps.setIds([]);
-    console.log("test 2",bankUIProps.queryParams)
+
     dispatch(actions.fetchUsers(bankUIProps.queryParams));
   }, [bankUIProps.queryParams, dispatch, totalCount]);
 
-  console.log("access earning",userAccess);
+
   const isAccessForEdit = userAccess?.find(
     (item) => item.componentName === "UpdateEarning"
   );
@@ -96,6 +96,10 @@ export function BanksTable() {
       headerSortingClasses,
       style: {
         minWidth: "160px",
+        textAlign: "center",
+      },
+      headerStyle: {
+        textAlign: "center", // Align header text to the left
       },
     },
 
@@ -130,19 +134,19 @@ export function BanksTable() {
     //     minWidth: "160px",
     //   },
     // },
-    {
-      dataField: "mappedAllowance",
-      text: "Mapped Allowance",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
+    // {
+    //   dataField: "mappedAllowance",
+    //   text: "Mapped Allowance",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "160px",
+    //   },
+    // },
     {
       dataField: "account",
-      text: "Account",
+      text: "Account No.",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,

@@ -35,16 +35,16 @@ export function DeptTable() {
     };
   }, [deptUIContext]);
 
-  //console.log("queryparms", usersUIProps.queryparms)
+
   const { currentState, userAccess } = useSelector(
-    (state) => {  console.log("state ",state); return {
+    (state) => { return {
       
       currentState: state.dept,
       userAccess: state?.auth?.userAccess["Department"],
     }},
     shallowEqual
   );
-  console.log("currentState", currentState);
+
   
   const { totalCount, entities, listLoading } = currentState;
 
@@ -54,7 +54,7 @@ export function DeptTable() {
 
   useEffect(() => {
     deptUIProps.setIds([]);
-    console.log("test 2",deptUIProps.queryParams)
+  
     dispatch(actions.fetchUsers(deptUIProps.queryParams));
   }, [deptUIProps.queryParams, dispatch, totalCount]);
 
@@ -68,6 +68,19 @@ export function DeptTable() {
   // Table columns
   const columns = [
     {
+      dataField: "Subsidiary",
+      text: "Subsidiary",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
+
+   
+   
+    {
       dataField: "deptCode",
       text: "Department Code",
       sort: false,
@@ -75,6 +88,7 @@ export function DeptTable() {
       headerSortingClasses,
       style: {
         minWidth: "160px",
+        textAlign: "center",
       },
     },
     {
@@ -98,16 +112,6 @@ export function DeptTable() {
       },
     },
    
-    {
-      dataField: "Subsidiary",
-      text: "Subsidiary",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
 
     {
       dataField: "budgetStrength",
@@ -117,6 +121,8 @@ export function DeptTable() {
       headerSortingClasses,
       style: {
         minWidth: "160px",
+        textAlign: "center",
+        
       },
     },
    

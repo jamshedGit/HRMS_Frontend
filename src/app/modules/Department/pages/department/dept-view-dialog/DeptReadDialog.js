@@ -27,19 +27,19 @@ export function DeptEditDialog({ id, show, onHide }) {
     }),
     shallowEqual
   )
-  console.log("user RealDialogs" + userForEdit)
-  //console.log(title, roles)
+
+
 
   useEffect(() => {
-    console.log("user read dialog.js",id)
+
     dispatch(actions.fetchUser(id))
     // dispatch(actions.fetchRoles())
     // dispatch(actions.fetchCenters())
     // dispatch(actions.fetchUser(usersUIProps.queryParams))
   }, [id, dispatch])
-  console.log("userForEdit", userForEdit)
+
   const saveDept = (user) => {
-     console.log("CreateUserResponse", user)
+ 
     if (!id) {
       dispatch(actions.createDept(user)).then((res) => {
         onHide()

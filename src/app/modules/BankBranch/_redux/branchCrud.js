@@ -4,7 +4,7 @@ export const USERS_URL = process.env.REACT_APP_API_URL;
 
 //Create user
 export function createBranch(body) {
-  console.log("create branch step 1", body)
+
   
   return axios.post(`${USERS_URL}/branch/create-branch`, body);
   
@@ -13,26 +13,26 @@ export function createBranch(body) {
 
 // Read
 export function getAllBranch(body) {
-  console.log("body",body);
+
   return axios.post(`${USERS_URL}/branch/read-all-branch`, body);
 }
  
 
 export function getBranchById(id) {
-   console.log(" bank id", id)
+ 
   return axios.post(`${USERS_URL}/branch/read-branch`, id);
 }
 
 //Update
 export function updateBranch(bank) {
-   console.log("updateUser 12", bank)
+
   return axios.put(`${USERS_URL}/branch/update-branch`, bank);
 }
 
 //Delete
 export function deleteBranch(body) {
-  console.log("body")
-  console.log(body);
+
+
   return axios.patch(`${USERS_URL}/branch/delete-branch`, body);
 }
 

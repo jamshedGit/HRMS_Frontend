@@ -36,13 +36,13 @@ export function BanksUIProvider({ BanksUIEvents, children }) {
     deductionName: "",
     linkedAttendance: "",
     // loan: "",
-    mappedDeduction: "",
+    // mappedDeduction: "",
     account: "",
     companyId: "",
     subsidiaryId: ""
   };
 
-  console.log("acadenuc ui events", BanksUIEvents);
+
 
   const value = {
     queryParams,

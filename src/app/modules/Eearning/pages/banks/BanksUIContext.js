@@ -42,7 +42,7 @@ export function BanksUIProvider({ BanksUIEvents, children }) {
     companyId: "1"
   };
 
-  console.log("acadenuc ui events", BanksUIEvents);
+
 
   const value = {
     queryParams,

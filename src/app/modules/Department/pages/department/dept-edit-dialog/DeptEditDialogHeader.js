@@ -17,7 +17,7 @@ export function DeptEditDialogHeader({ id, isUserForRead }) {
   );
 
   useEffect(() => {
-    console.log("test",id)
+
     let _title = id ? " " : "Add Department";
     if (id) {
       _title = `Edit Department`;

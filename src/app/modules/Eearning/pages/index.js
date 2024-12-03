@@ -4,7 +4,7 @@ import { LayoutSplashScreen, ContentRoute } from "../../../../_metronic/layout";
 import { EarningPage } from "./banks/BanksPage";
 
 export default function EarningManagement() {
-  console.log('Earning mein aya')
+
   return (
     <Suspense fallback={<LayoutSplashScreen />}>
       <Switch>

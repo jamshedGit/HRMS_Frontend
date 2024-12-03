@@ -83,6 +83,7 @@ export const bankSlice = createSlice({
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);
+            state.totalCount +=1;
         },
         bankUpdated: (state, action) => {
             state.error = null;

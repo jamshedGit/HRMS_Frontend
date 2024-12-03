@@ -6,9 +6,9 @@ const { actions } = deptSlice;
 // const { roleActions } = getAllrolesSlice
 
 export const fetchUsers = (queryparm) => async (dispatch) => {
-  // console.log("Receive QPsss", queryparm)
+
   dispatch(actions.startCall({ callType: callTypes.list }));
-  console.log("test query param dept", queryparm)
+
   return requestFromServer.getAllDept(queryparm)
     // .getAllReceipts({
     //   filter: {
@@ -19,12 +19,12 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
     //   page: 1
     // })
     .then((response) => {
-      //  console.log("user action receipt fetched 321")
-      console.log("response dept", response)
+      
+   
       dispatch(actions.deptFetched(response));
     })
     .catch((error) => {
-      //console.log("Can't find user", error)
+     
       error.clientMessage = "Can't find receipts";
       dispatch(actions.catchError({ error, callType: callTypes.list }));
     });
@@ -32,7 +32,7 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
 
 export const fetchUser = (id) => (dispatch) => {
 
-  console.log("User Action id " + id)
+
   if (!id) {
     return dispatch(actions.deptFetchedForEdit({ userForEdit: undefined }));
   }
@@ -43,7 +43,7 @@ export const fetchUser = (id) => (dispatch) => {
     .then((response) => {
       const entities = response.data?.data;
 
-      console.log("dept fetched for search " + id)
+   
       dispatch(actions.deptFetchedForEdit({ userForEdit: entities }));
     })
     .catch((error) => {
@@ -57,7 +57,7 @@ export const deleteDept = (id) => (dispatch) => {
   return requestFromServer
     .deleteDept({ Id: id })
     .then((response) => {
-      //console.log("response from delete user ", response.data.message)
+  
       dispatch(actions.deptDeleted({ Id: id }));
       toast.success("Successfully Deleted", {
         position: "top-right",
@@ -80,7 +80,7 @@ export const activeUser = (id) => (dispatch) => {
   return requestFromServer
     .deleteDept({ Id: id })
     .then((response) => {
-      //console.log("response from delete user ", response.data.message)
+
       dispatch(actions.userDeleted({ id: id }));
       toast.success("Successfully Activated", {
         position: "top-right",
@@ -104,14 +104,14 @@ export const createDept = (deptForCreation, disbaleLoading, onHide) => (
   // deptForCreation.phNo = deptForCreation.phNo.toString();
   // deptForCreation.cnic = deptForCreation.cnic.toString();
 
-  console.log("dept for creation", deptForCreation);
+
   return requestFromServer
     .createDept(deptForCreation)
     .then((res) => {
       dispatch(actions.startCall({ callType: callTypes.action }));
       const user = res.data?.data;
-      console.log("dept data");
-      console.log(user);
+    
+   
       dispatch(actions.deptCreated(user));
       disbaleLoading();
       toast.success("Successfully Created", {
@@ -145,9 +145,9 @@ export const updateDept = (user, disbaleLoading, onHide) => (dispatch) => {
   return requestFromServer
     .updateDept(user)
     .then((response) => {
-      console.log("my response",response?.config?.data);
+ 
       const updatedDept = response?.config?.data; // response.data?.data;
-      console.log("bnkAction Res", response)
+  
       dispatch(actions.deptUpdated({ updatedDept }));
       dispatch(actions.startCall({ callType: callTypes.action }));
       disbaleLoading();
@@ -165,7 +165,7 @@ export const updateDept = (user, disbaleLoading, onHide) => (dispatch) => {
 
     })
     .catch((error) => {
-      // console.log("error User update", error)
+ 
       //error.clientMessage = "Can't update User"
       dispatch(actions.catchError({ error, callType: callTypes.action }));
       disbaleLoading();
@@ -188,7 +188,7 @@ export const fetchRoles = () => (dispatch) => {
     .getAllRoles()
     .then((response) => {
       const entities = response.data?.data;
-      // console.log("User entities: ", entities)
+
       dispatch(actions.RolesFetched(entities));
     })
     .catch((error) => {

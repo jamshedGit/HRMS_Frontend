@@ -13,6 +13,7 @@ import {
   getLatestBookingNo,
 } from "../../../../../../_metronic/redux/dashboardActions";
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
+import { amountLimitDynamic } from "../../../../../utils/common";
 
 // Phone Number Regex
 const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
@@ -24,7 +25,8 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 const bankEditSchema = Yup.object().shape(
   {
     Name: Yup.string()
-      .matches(/^[A-Za-z\s]+$/, 'Only alphabetic characters allowed')
+      // .matches(/^[A-Za-z\s]+$/, 'Only alphabetic characters allowed')
+      .matches(/^[A-Za-z\s.-]+$/, 'Name must only contain letters.')
       .required(VALIDATION_MESSAGES.required),
     subsidiaryId: Yup.string()
       .nullable()
@@ -131,6 +133,9 @@ export function BankEditForm({
                         component={Input}
                         placeholder="Bank Name"
                         label={<span> Bank Name<span style={{ color: 'red' }}>*</span></span>}
+                        onInput={(e) => {
+                          e.target.value = amountLimitDynamic(e.target.value,50); // Limit to 3 digits
+                        }}
 
                       />
                     </div>

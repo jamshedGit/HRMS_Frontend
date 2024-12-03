@@ -120,7 +120,7 @@ export function FormFIlter({ listLoading,user }) {
                   }}
                 />
                 <small className="form-text text-muted">
-                  <b>Search</b> in all fields
+                  <b>Search</b> in holiday
                 </small>
               </div>
             </div>

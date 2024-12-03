@@ -39,23 +39,41 @@ export const LoanTypeSlice = createSlice({
             }
         },
         loan_type_Fetched: (state, action) => {
-            // console.log(action)
-            console.log("user slice",action.payload)
+          
+        
             
             const entities = action.payload.data?.rows;
-            console.log("ent loan_type_",entities)
+
+        
+            // Check if entities exist
+            if (entities) {
+                // Map over entities to combine formName and formCode
+                const combinedEntities = entities.map(item => ({
+                    ...item,
+                    LoanTypeAccount: item.LoanTypeAccount 
+                        ? `${item.LoanTypeAccount.formCode} - ${item.LoanTypeAccount.formName}`
+                        : null,
+             
+                }));
+        
+                // Update the state with the combined entities
+                state.entities = combinedEntities;
+            } else {
+                state.entities = [];
+            }
+        
+         
             const totalResult = action.payload.data?.data.totalResults;
-            console.log(entities);
+     
             state.listLoading = false;
             state.error = null;
-            state.entities = entities;
+     
             state.totalCount = totalResult;
         },
 
          //get User By ID
          loan_type_FetchedForEdit: (state, action) => {
-            console.log("get user detail from receipt slice")
-            console.log(action);
+         
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
@@ -63,8 +81,7 @@ export const LoanTypeSlice = createSlice({
 
         //get User By ID
         userFetched: (state, action) => {
-            console.log("get user detail from receipt slice")
-            console.log(action);
+        
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
@@ -73,14 +90,13 @@ export const LoanTypeSlice = createSlice({
 
             state.error = null;
             state.actionsLoading = false;
-            console.log("loan_type_ deleted ")
-            console.log(state.entities);
+          
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );
         },
         loan_type_Created: (state, action) => {
-             console.log("action payload for loan_type_", action.payload);
+         
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);
@@ -91,7 +107,7 @@ export const LoanTypeSlice = createSlice({
             // state.entities.push(action.payload)
           
             state.entities = state.entities.map((entity) => {
-                console.log("payload aca",action.payload);
+                
                 //const payload = { ...action.payload };
                 let payload = JSON.stringify(action.payload)
                 let payloadObj = JSON.parse(payload);

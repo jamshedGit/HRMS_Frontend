@@ -4,7 +4,7 @@ import { LayoutSplashScreen, ContentRoute } from "../../../../_metronic/layout";
 import { DeductionPage } from "./banks/BanksPage";
 
 export default function DeductionManagement() {
-  console.log('deduction mein aya')
+
   return (
     <Suspense fallback={<LayoutSplashScreen />}>
       <Switch>

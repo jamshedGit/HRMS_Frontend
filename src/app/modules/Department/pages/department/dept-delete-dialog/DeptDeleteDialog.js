@@ -6,8 +6,8 @@ import * as actions from "../../../_redux/deptActions";
 import { useDeptUIContext } from "../DeptUIContext";
 
 export function DeptDeleteDialog({ id, status, show, onHide }) {
-  console.log("Delete Dept Dialog")
-  // console.log("Status", status);
+
+
   const [loading, setLoading] = useState(false);
   // Customers UI Context
   const usersUIContext = useDeptUIContext();
@@ -56,7 +56,7 @@ export function DeptDeleteDialog({ id, status, show, onHide }) {
       disableLoading();
     });
   };
-  //console.log("status", status, id);
+
   return (
     <Modal
       show={show}

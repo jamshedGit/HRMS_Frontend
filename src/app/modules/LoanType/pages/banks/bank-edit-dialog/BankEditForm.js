@@ -57,6 +57,7 @@ export function BankEditForm({
   values,
   enableLoading,
   loading,
+  userForEdit,
 }) {
   const { dashboard } = useSelector((state) => state);
   const [defEmployee = null, setEmployeeDefault] = useState(null);
@@ -116,7 +117,7 @@ export function BankEditForm({
         initialValues={user}
         validationSchema={formValidation}
         onSubmit={(values) => {
-          console.log("values", values);
+      
 
           enableLoading();
           saveLoanType({...values,code: defCode ? defCode : user.code });
@@ -146,7 +147,7 @@ export function BankEditForm({
                       <SearchSelect
                         name="subsidiaryId"
                         label={<span> Subsidiary<span style={{ color: 'red' }}>*</span></span>}
-                        isDisabled={isUserForRead && true}
+                        isDisabled={isUserForRead || userForEdit}
                         onBlur={() => {
                           // handleBlur({ target: { name: "countryId" } });
                         }}
@@ -204,7 +205,7 @@ export function BankEditForm({
                           value={values.linkedAttendance}
                           // onChange={handleLinkedAttendanceChange}
                           onChange={(e) => {
-                            console.log("linked", e.target.value)
+                           
                             setFieldValue("linkedAttendance", e.target.value);
                             // if (e.target.value === "true") {
                             //   setFieldValue("loan", false);

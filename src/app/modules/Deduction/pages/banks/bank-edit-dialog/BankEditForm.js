@@ -26,20 +26,18 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 const formValidation = Yup.object().shape(
   {
     subsidiaryId: Yup.string()
-    .nullable()
-    .required(VALIDATION_MESSAGES.required),
-    // deductionCode: Yup.string()
-    //   .nullable()
-    //   .required(VALIDATION_MESSAGES.required),
+      .nullable()
+      .required(VALIDATION_MESSAGES.required),
+
     deductionName: Yup.string()
       .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.')
       .required(VALIDATION_MESSAGES.required),
+
     linkedAttendance: Yup.string()
       .required(VALIDATION_MESSAGES.required),
-    // loan: Yup.string()
+
+    // mappedDeduction: Yup.string()
     //   .required(VALIDATION_MESSAGES.required),
-    mappedDeduction: Yup.string()
-      .required(VALIDATION_MESSAGES.required),
     account: Yup.string()
       .matches(/^\d+$/, "Must contain only digits")
       .required(VALIDATION_MESSAGES.required),
@@ -58,6 +56,7 @@ export function BankEditForm({
   values,
   enableLoading,
   loading,
+  userForEdit,
 }) {
   const { dashboard } = useSelector((state) => state);
   const [defEmployee = null, setEmployeeDefault] = useState(null);
@@ -87,8 +86,8 @@ export function BankEditForm({
 
   }, [user?.employeeId, dashboard.employeeId]);
 
-  
-  
+
+
   useEffect(() => {
 
     const subsidiaryId = defSubsidiary?.value ? defSubsidiary.value : user.subsidiaryId;
@@ -103,10 +102,10 @@ export function BankEditForm({
   }, [user?.subsidiaryId, dashboard.subsidiaryId]);
 
   const fetchData = async (subsidiaryId, setValue) => {
-      if (subsidiaryId) {
-        dispatch(getLatestTableId("t_employee_deduction", "Id", " subsidiaryId = "+ subsidiaryId, setValue));
-  
-      }
+    if (subsidiaryId) {
+      dispatch(getLatestTableId("t_employee_deduction", "Id", " subsidiaryId = " + subsidiaryId, setValue));
+
+    }
 
   };
 
@@ -114,7 +113,7 @@ export function BankEditForm({
   //   // Define an async function within useEffect
   //   if (!user.Id) {
 
-    
+
 
   //    // fetchData(); // Call the async function
   //   }
@@ -124,18 +123,18 @@ export function BankEditForm({
   //   }
   // }, [dispatch, user.deductionCode]);
 
-  
+
   return (
     <>
       <Formik
         enableReinitialize={true}
-        initialValues={{ ...user}}
+        initialValues={{ ...user }}
         validationSchema={formValidation}
         onSubmit={(values) => {
-          console.log("values", values);
-         
+          
+
           enableLoading();
-          saveIncident({...values,deductionCode: defDeductionCode ? defDeductionCode : values.deductionCode});
+          saveIncident({ ...values, deductionCode: defDeductionCode ? defDeductionCode : values.deductionCode });
         }}
       >
         {({
@@ -149,7 +148,7 @@ export function BankEditForm({
           formik,
         }) => (
           <>
-          {console.log(":::val::",values)}
+   
             <Modal.Body className="overlay overlay-block cursor-default">
               {actionsLoading && (
                 <div className="overlay-layer bg-transparent">
@@ -158,12 +157,12 @@ export function BankEditForm({
               )}
               <Form className="form form-label-right">
                 <fieldset disabled={isUserForRead}>
-                <div className="from-group row">
+                  <div className="from-group row">
                     <div className="col-12 col-md-4 mt-3">
                       <SearchSelect
                         name="subsidiaryId"
                         label={<span> Subsidiary<span style={{ color: 'red' }}>*</span></span>}
-                        isDisabled={isUserForRead && true}
+                        isDisabled={isUserForRead || userForEdit}
                         onBlur={() => {
                           // handleBlur({ target: { name: "countryId" } });
                         }}
@@ -180,7 +179,7 @@ export function BankEditForm({
                         options={dashboard.allSubsidiaryList}
                       />
                     </div>
-                 </div>
+                  </div>
                   <div className="from-group row">
                     {
 
@@ -194,8 +193,8 @@ export function BankEditForm({
 
                           disabled
                           placeholder="Enter Deduction Code"
-                        
-                          value={ defDeductionCode || values.deductionCode}
+
+                          value={defDeductionCode || values.deductionCode}
                           label={<span> Deduction Code</span>}
                           autoComplete="off"
                         />
@@ -219,7 +218,7 @@ export function BankEditForm({
 
 
                   <div className="from-group row">
-                    {
+                    {/* {
 
                       <div className="col-12 col-md-4 mt-3">
                         <Select
@@ -241,7 +240,7 @@ export function BankEditForm({
                         )}
                       </div>
 
-                    }
+                    } */}
                     {
                       <div className="col-12 col-md-4 mt-3">
                         <SearchSelect
@@ -279,8 +278,7 @@ export function BankEditForm({
                         /> */}
                       </div>
                     }
-                  </div>
-                  <div className="from-group row">
+
                     {
 
                       <div className="col-12 col-md-4 mt-3">
@@ -290,7 +288,7 @@ export function BankEditForm({
                           value={values.linkedAttendance}
                           // onChange={handleLinkedAttendanceChange}
                           onChange={(e) => {
-                            console.log("linked", e.target.value)
+                      
                             setFieldValue("linkedAttendance", e.target.value);
                             if (e.target.value === "true") {
                               setFieldValue("loan", false);
@@ -312,6 +310,39 @@ export function BankEditForm({
                       </div>
 
                     }
+                  </div>
+                  <div className="from-group row">
+                    {/* {
+
+                      <div className="col-12 col-md-4 mt-3">
+                        <Select
+                          label={<span> Linked With Attendance<span style={{ color: 'red' }}>*</span></span>}
+                          name="linkedAttendance"
+                          value={values.linkedAttendance}
+                          // onChange={handleLinkedAttendanceChange}
+                          onChange={(e) => {
+                          
+                            setFieldValue("linkedAttendance", e.target.value);
+                            if (e.target.value === "true") {
+                              setFieldValue("loan", false);
+                            }
+
+                          }}
+                          onBlur={handleBlur}
+                          style={{ display: "block" }}
+                        >
+                          <option value="-1" label="Select" />
+                          <option value="true" label="Yes" />
+                          <option value="false" label="No" />
+
+
+                        </Select>
+                        {errors.linkedAttendance && touched.linkedAttendance && (
+                          <div className="invalid-text">{errors.linkedAttendance}</div>
+                        )}
+                      </div>
+
+                    } */}
                     {/* {
 
                       <div className="col-12 col-md-4 mt-3">

@@ -35,10 +35,10 @@ export function BanksTable() {
     };
   }, [bankUIContext]);
 
-  //console.log("queryparms", usersUIProps.queryparms)
+
   const { currentState, userAccess } = useSelector(
     (state) => {
-      console.log("academic state ", state); return {
+      return {
 
         currentState: state.deduction,
         userAccess: state?.auth?.userAccess["Deduction"],
@@ -46,7 +46,7 @@ export function BanksTable() {
     },
     shallowEqual
   );
-  console.log("currentState", currentState);
+
 
   const { totalCount, entities, listLoading } = currentState;
 
@@ -56,11 +56,11 @@ export function BanksTable() {
 
   useEffect(() => {
     bankUIProps.setIds([]);
-    console.log("test 2", bankUIProps.queryParams)
+
     dispatch(actions.fetchUsers(bankUIProps.queryParams));
   }, [bankUIProps.queryParams, dispatch, totalCount]);
 
-  console.log("access earning", userAccess);
+
   const isAccessForEdit = userAccess?.find(
     (item) => item.componentName === "UpdateDeduction"
   );
@@ -89,6 +89,10 @@ export function BanksTable() {
       headerSortingClasses,
       style: {
         minWidth: "160px",
+        textAlign: "center",
+      },
+      headerStyle: {
+        textAlign: "center", // Align header text to the left
       },
     },
 
@@ -106,7 +110,7 @@ export function BanksTable() {
     
     {
       dataField: "account",
-      text: "Account Code",
+      text: "Account No.",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,

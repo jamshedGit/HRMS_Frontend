@@ -6,18 +6,18 @@ const { actions } = deductionSlice;
 // const { roleActions } = getAllrolesSlice
 
 export const fetchUsers = (queryparm) => async (dispatch) => {
-  // console.log("Receive QPsss", queryparm)
+ 
   dispatch(actions.startCall({ callType: callTypes.list }));
-  console.log("test query param", queryparm)
+  
   return requestFromServer.getAllDeduction({...queryparm,id:'null'})
    
     .then((response) => {
-      //  console.log("user action receipt fetched 321")
-      console.log("response::::::", response)
+   
+
       dispatch(actions.deductionFetched(response));
     })
     .catch((error) => {
-      //console.log("Can't find user", error)
+   
       error.clientMessage = "Can't find receipts";
       dispatch(actions.catchError({ error, callType: callTypes.list }));
     });
@@ -25,7 +25,7 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
 
 export const fetchUser = (id) => (dispatch) => {
 
-  console.log("User Action id " + id)
+
   if (!id) {
     return dispatch(actions.deductionFetchedForEdit({ userForEdit: undefined }));
   }
@@ -36,7 +36,7 @@ export const fetchUser = (id) => (dispatch) => {
     .then((response) => {
       const entities = response.data?.data;
 
-      console.log("User fetched for search " ,entities)
+    
       dispatch(actions.deductionFetchedForEdit({ userForEdit: entities }));
     })
     .catch((error) => {
@@ -50,7 +50,7 @@ export const deleteDeduction = (id) => (dispatch) => {
   return requestFromServer
     .deleteDeduction({ Id: id })
     .then((response) => {
-      //console.log("response from delete user ", response.data.message)
+     
       dispatch(actions.deductionDeleted({ Id: id }));
       toast.success("Successfully Deleted", {
         position: "top-right",
@@ -73,7 +73,7 @@ export const activeUser = (id) => (dispatch) => {
   return requestFromServer
     .deleteDeduction({ receiptId: id })
     .then((response) => {
-      //console.log("response from delete user ", response.data.message)
+      
       dispatch(actions.deductionDeleted({ id: id }));
       toast.success("Successfully Activated", {
         position: "top-right",
@@ -97,15 +97,13 @@ export const createDeduction = (bankForCreation, disbaleLoading, onHide) => (
   // bankForCreation.phNo = bankForCreation.phNo.toString();
   // bankForCreation.cnic = bankForCreation.cnic.toString();
 
-  console.log("Academic for creation", bankForCreation);
+
   return requestFromServer
     .createDeduction(bankForCreation)
     .then((res) => {
       dispatch(actions.startCall({ callType: callTypes.action }));
       const user = res.data?.data;
-      console.log("mira",user);
-      console.log("academic data");
-      console.log(user);
+   
       dispatch(actions.deductionCreated(user));
       disbaleLoading();
       toast.success("Successfully Created", {
@@ -139,9 +137,9 @@ export const updatedDeduction = (user, disbaleLoading, onHide) => (dispatch) => 
   return requestFromServer
     .updateDeduction(user)
     .then((response) => {
-      console.log("my response",response?.config?.data);
+ 
       const updatedDeduction = response?.config?.data; // response.data?.data;
-      console.log("DeductionUpdated Res", response)
+  
       dispatch(actions.deductionUpdated({ updatedDeduction }));
       dispatch(actions.startCall({ callType: callTypes.action }));
       disbaleLoading();
@@ -159,7 +157,7 @@ export const updatedDeduction = (user, disbaleLoading, onHide) => (dispatch) => 
 
     })
     .catch((error) => {
-      // console.log("error User update", error)
+   
       //error.clientMessage = "Can't update User"
       dispatch(actions.catchError({ error, callType: callTypes.action }));
       disbaleLoading();
@@ -182,7 +180,7 @@ export const fetchRoles = () => (dispatch) => {
     .getAllRoles()
     .then((response) => {
       const entities = response.data?.data;
-      // console.log("User entities: ", entities)
+ 
       dispatch(actions.RolesFetched(entities));
     })
     .catch((error) => {

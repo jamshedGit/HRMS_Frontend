@@ -102,13 +102,12 @@ export function DeptEditForm({
 
 
   const fetchData = async (subsidiaryId, setValue) => {
-    console.log("jj::", subsidiaryId)
     if (subsidiaryId) {
       dispatch(getLatestTableId("t_department", "deptCode", " subsidiaryId = " + subsidiaryId, setValue));
     }
   };
 
-console.log("pep", dashboard.allDept)
+
 
   return (
     <>
@@ -117,7 +116,7 @@ console.log("pep", dashboard.allDept)
         initialValues={user}
         validationSchema={userEditSchema_2}
         onSubmit={(values) => {
-          console.log("values", values);
+      
           
           enableLoading();
           saveDept({...values, deptCode: defDepartmentCode ? defDepartmentCode : values.deptCode});
@@ -207,7 +206,13 @@ console.log("pep", dashboard.allDept)
                           value={(defDept || null)}
                           error={errors.parentDept}
                           touched={touched.parentDept}
-                          options={dashboard.allDept}
+                          // options={dashboard.allDept}
+                          options={
+
+                            dashboard?.allDept?.filter(
+                              (option) => option.subsidiaryId == values.subsidiaryId
+                            ) || []
+                          }
                         />
                         
 

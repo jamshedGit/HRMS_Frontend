@@ -6,6 +6,8 @@ import { Select } from "../../../../../../_metronic/_partials/controls";
 import { useSelector, shallowEqual } from "react-redux"
 import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
 import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLabel";
+import CurrentModuleName from "../../../../../utils/common-modules/ModuleName";
+import { CardHeader } from "@material-ui/core";
 
 export function EmployeeSelect({
   actionsLoading,
@@ -26,6 +28,9 @@ export function EmployeeSelect({
 
   return (
     <>
+ 
+     <CardHeader title={CurrentModuleName()} >
+     </CardHeader>
       {/* Formik Starts */}
       <Formik
         enableReinitialize={true}

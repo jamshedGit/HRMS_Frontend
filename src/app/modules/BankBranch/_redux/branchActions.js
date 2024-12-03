@@ -6,7 +6,7 @@ const { actions } = branchSlice;
 // const { roleActions } = getAllrolesSlice
 
 export const fetchUsers = (queryparm) => async (dispatch) => {
-  // console.log("Receive QPsss", queryparm)
+ 
   dispatch(actions.startCall({ callType: callTypes.list }));
   return requestFromServer.getAllBranch(queryparm)
     // .getAllReceipts({
@@ -18,12 +18,12 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
     //   page: 1
     // })
     .then((response) => {
-      //  console.log("user action receipt fetched 321")
-       console.log("response", response)
+    
+     
       dispatch(actions.branchFetched(response));
     })
     .catch((error) => {
-      //console.log("Can't find user", error)
+   
       error.clientMessage = "Can't find receipts";
       dispatch(actions.catchError({ error, callType: callTypes.list }));
     });
@@ -31,7 +31,7 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
 
 export const fetchUser = (id) => (dispatch) => {
 
-  // console.log("User Action id " + id)
+
   if (!id) {
     return dispatch(actions.branchFetchedForEdit({ userForEdit: undefined }));
   }
@@ -41,8 +41,8 @@ export const fetchUser = (id) => (dispatch) => {
     .getBranchById({ Id: id })
     .then((response) => {
       const entities = response.data?.data;
-      console.log("forEdit::",response);
-      // console.log("User fetched for search " + id)
+  
+  
       dispatch(actions.branchFetchedForEdit({ userForEdit: entities }));
     })
     .catch((error) => {
@@ -56,7 +56,7 @@ export const deleteBranch = (id) => (dispatch) => {
   return requestFromServer
     .deleteBranch({ Id: id })
     .then((response) => {
-      //console.log("response from delete user ", response.data.message)
+  
       dispatch(actions.branchDeleted({ Id: id }));
       toast.success("Successfully Deleted", {
         position: "top-right",
@@ -79,7 +79,7 @@ export const activeUser = (id) => (dispatch) => {
   return requestFromServer
     .deleteBranch({ Id: id })
     .then((response) => {
-      //console.log("response from delete user ", response.data.message)
+    
       dispatch(actions.userDeleted({ id: id }));
       toast.success("Successfully Activated", {
         position: "top-right",
@@ -103,14 +103,14 @@ export const createBranch = (branchForCreation, disbaleLoading, onHide) => (
   // branchForCreation.phNo = branchForCreation.phNo.toString();
   // branchForCreation.cnic = branchForCreation.cnic.toString();
 
-  console.log("bank for creation", branchForCreation);
+
   return requestFromServer
     .createBranch(branchForCreation)
     .then((res) => {
       dispatch(actions.startCall({ callType: callTypes.action }));
       const user = res.data?.data;
-      console.log("bank data");
-      console.log(user);
+
+
       dispatch(actions.branchCreated(user));
       disbaleLoading();
       toast.success("Successfully Created", {
@@ -144,9 +144,9 @@ export const updateBranch = (user, disbaleLoading, onHide) => (dispatch) => {
   return requestFromServer
     .updateBranch(user)
     .then((response) => {
-      console.log("my response",response?.config?.data);
+    
       const updatedBank = response?.config?.data; // response.data?.data;
-      console.log("bnkAction Res", response)
+    
       dispatch(actions.branchUpdated({ updatedBank }));
       dispatch(actions.startCall({ callType: callTypes.action }));
       disbaleLoading();
@@ -164,7 +164,7 @@ export const updateBranch = (user, disbaleLoading, onHide) => (dispatch) => {
 
     })
     .catch((error) => {
-      // console.log("error User update", error)
+   
       //error.clientMessage = "Can't update User"
       dispatch(actions.catchError({ error, callType: callTypes.action }));
       disbaleLoading();
@@ -187,7 +187,7 @@ export const fetchRoles = () => (dispatch) => {
     .getAllRoles()
     .then((response) => {
       const entities = response.data?.data;
-      // console.log("User entities: ", entities)
+  
       dispatch(actions.RolesFetched(entities));
     })
     .catch((error) => {
