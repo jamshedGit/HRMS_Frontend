@@ -42,7 +42,7 @@ export const usersSlice = createSlice({
       console.log("user management slice")
       const entities = action.payload.data?.data.rows;
       const totalResult = action.payload.data?.data.totalResults;
-      console.log(entities);
+      
       // const entities = action.payload
       //const length = entities.length
       state.listLoading = false;

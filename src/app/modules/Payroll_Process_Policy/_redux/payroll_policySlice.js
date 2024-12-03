@@ -40,11 +40,11 @@ export const payroll_policySlice = createSlice({
         },
         Payroll_Policy_Fetched: (state, action) => {
           
-            console.log("user slice",action.payload)
+            
             const entities = action.payload.data?.data.rows;
             
             const totalResult = action.payload.data?.data.totalResults;
-            console.log(entities);
+            
             state.listLoading = false;
             state.error = null;
             state.entities = entities;
@@ -53,8 +53,8 @@ export const payroll_policySlice = createSlice({
 
          //get User By ID
          Payroll_Policy_FetchedForEdit: (state, action) => {
-            console.log("get user detail from receipt slice")
-            console.log(action);
+            
+            
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
@@ -62,8 +62,8 @@ export const payroll_policySlice = createSlice({
 
         //get User By ID
         userFetched: (state, action) => {
-            console.log("get user detail from receipt slice")
-            console.log(action);
+            
+            
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;

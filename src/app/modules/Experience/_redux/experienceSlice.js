@@ -39,13 +39,13 @@ export const experienceSlice = createSlice({
             }
         },
         experienceFetched: (state, action) => {
-            // console.log(action)
-            console.log("user slice",action.payload)
+            // 
+            
             
             const entities = action.payload.data?.data.rows;
             console.log("ent experience",entities)
             const totalResult = action.payload.data?.data.totalResults;
-            console.log(entities);
+            
             state.listLoading = false;
             state.error = null;
             state.entities = entities;
@@ -54,8 +54,8 @@ export const experienceSlice = createSlice({
 
          //get User By ID
          experienceFetchedForEdit: (state, action) => {
-            console.log("get user detail from receipt slice")
-            console.log(action);
+            
+            
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
@@ -63,8 +63,8 @@ export const experienceSlice = createSlice({
 
         //get User By ID
         userFetched: (state, action) => {
-            console.log("get user detail from receipt slice")
-            console.log(action);
+            
+            
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;

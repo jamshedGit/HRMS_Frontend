@@ -335,7 +335,7 @@ export function BankEditForm({
   const handlePaymenModeChanged = (e) => {
     const newValue = e.value;
     //Cash & Cheque
-    if (newValue == 151 || newValue == 152) {
+    if (newValue == 151) {
       setDropdownDisabled(true)
       setComBankAccClearField('');
       setEmpBankAccClearField('');
