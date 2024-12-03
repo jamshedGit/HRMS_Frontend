@@ -116,9 +116,7 @@ export function BankEditForm({
   const fetchCompensationEarningDeductionList = async (compensationId) => {
     try {
       if (id != undefined) {
-        console.log("dell", compensationId, user.Id);
         const response = await axios.post(`${USERS_URL}/compensation/read-all-compensation-ed-heads`, { Id: compensationId || 0 });
-        console.log("compensation resp", response);
         setDefaultEarningList(response?.data?.data);
       }
     } catch (error) {
@@ -261,7 +259,6 @@ export function BankEditForm({
       if (!objValidate.calculation_type) {
         newErrors[`calculation_type-${index}`] = 'Required*';
       }
-      console.log("amount::", objValidate.amount)
       // Check if factorValue is required
       if (!objValidate.factorValue && objValidate.amount <= 0) {
         newErrors[`factorValue-${index}`] = 'Required*';
@@ -285,11 +282,9 @@ export function BankEditForm({
         initialValues={user}
         validationSchema={formValidation}
         onSubmit={(values) => {
-          console.log("values", values);
 
 
           const validationErrors = validate();
-          console.log("ppp", validationErrors)
           if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
           } else {
@@ -298,14 +293,11 @@ export function BankEditForm({
             i = Number(values.basicFactor || 0);
             defEarningList.forEach((element, index) => {
 
-              console.log("element", element, index)
               if (element.factorValue > 0 && element.isPartOfGrossSalary == "1" && element.transactionType == "Earning") {
                 i +=  Number(element.factorValue || 0)
               }
            
             });
-            console.log("counter",i)
-           // console.log("tota",i)
             if(i == 100)
             {
               setDefaultAllowanceLimit("")
@@ -451,8 +443,9 @@ export function BankEditForm({
                         <option value="-1" label="Select..." />
                         <option selected value="Gross to Basic" label="Gross to Basic" />
                         <option value="Basic to Gross" label="Basic to Gross" />
-
+                         
                       </Select>
+                      {errors.salaryMethod && touched.salaryMethod && <ErrorMessage className="form-feedBack" name="salaryMethod" component="div" />}
                     </div>
                     <div className="col-12 col-md-4 mt-3">
                       <Field
@@ -624,7 +617,6 @@ export function BankEditForm({
                             {obj.earningName}
                           </td> */}
                           <td>
-                            {console.log("test:::", obj.calculation_type)}
                             <select
 
                               value={obj.calculation_type}

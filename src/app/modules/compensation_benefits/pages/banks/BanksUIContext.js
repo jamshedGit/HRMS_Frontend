@@ -58,8 +58,6 @@ export function BanksUIProvider({ BanksUIEvents, children }) {
 
   };
 
-  console.log("exchange ui events", BanksUIEvents);
-
   const value = {
     queryParams,
     setQueryParamsBase,

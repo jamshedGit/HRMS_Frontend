@@ -35,16 +35,14 @@ export function BanksTable() {
     };
   }, [bankUIContext]);
 
-  //console.log("queryparms", usersUIProps.queryparms)
   const { currentState, userAccess } = useSelector(
-    (state) => {  console.log(" Compensation Rate state ",state); return {
+    (state) => {return {
       
       currentState: state.compensation,
       userAccess: state?.auth?.userAccess["Compensation"]
     }},
     shallowEqual
   );
-  console.log("currentState", currentState);
   
   const { totalCount, entities, listLoading } = currentState;
 
@@ -54,11 +52,9 @@ export function BanksTable() {
 
   useEffect(() => {
     bankUIProps.setIds([]);
-    console.log("test 2",bankUIProps.queryParams)
     dispatch(actions.fetchUsers(bankUIProps.queryParams));
   }, [bankUIProps.queryParams, dispatch, totalCount]);
 
-  console.log("stopage earning",userAccess);
   const isAccessForEdit = userAccess?.find(
     (item) => item.componentName === "UpdateCompensationBenefits"
   );

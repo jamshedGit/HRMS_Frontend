@@ -64,7 +64,6 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
   //   }
   // }, [actionsLoading === true]);
 
-  //console.log("action", action);
 
   useEffect(() => {
     dispatch(actions.fetchUser(id));
@@ -73,19 +72,14 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
   }, [id, dispatch]);
 
   // useEffect(() => {
-  //   console.log("UseEffect call");
   //   if (actionsLoading === false) {
-  //     console.log("UseEffect call inside function");
   //     disbaleLoading();
   //   }
   // }, [actionsLoading]);
-  //console.log("userForEdit", userForEdit);
 
   const saveCompensationBenefits = async (user,earning_deduction_Obj) => {
 
     if (!id) {
-      console.log("stoppage_allowance edit dialog");
-      console.log(user);
 
    
       const finalObject = { user }
@@ -98,7 +92,6 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
       //   return item.value === +user.status;
       // });
 
-      console.log("getUserStatus", user);
 
       // This object set for Edit/Save Fields in DB
       const updateCompensationBenefitsObj = {
@@ -124,10 +117,8 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
 
       };
 
-      console.log("updateCompensationBenefits updated", updateCompensationBenefitsObj);
       await dispatch(actions.updateCompensationBenefits(updateCompensationBenefitsObj, disbaleLoading, onHide));
       await dispatch(actions.fetchUsers(usersUIProps.queryParams));
-      console.log("earninglist",earning_deduction_Obj);
       const list = earning_deduction_Obj.map(res => {
 
         return {
@@ -136,9 +127,7 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
         }
 
       })
-      console.log("arrayList", list);
       const response = axios.post(`${USERS_URL}/compensation/update-compensation-heads-bulk`, { data: {list , compensationId: user.Id }});
-      console.log("bulk res", response);
     }
   };
 

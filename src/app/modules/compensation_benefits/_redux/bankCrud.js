@@ -4,7 +4,6 @@ export const USERS_URL = process.env.REACT_APP_API_URL;
 
 //Create user
 export function createCompensationBenefits(body) {
-  console.log("create CompensationBenefits step 1", body)
   
   // body.Name = body.txtCompensationBenefitsName;
   // delete body.txtCompensationBenefitsName
@@ -15,27 +14,22 @@ export function createCompensationBenefits(body) {
 
 // Read
 export function getAllCompensationBenefits(body) {
-  console.log("body",body);
   return axios.post(`${USERS_URL}/compensation/read-all-compensation-benefits`, body);
 }
 
 
 
 export function getCompensationBenefitsById(id) {
-   console.log(" CompensationBenefits id", id)
   return axios.post(`${USERS_URL}/compensation/read-compensation-benefits`, id);
 }
 
 //Update
 export function updateCompensationBenefits(CompensationBenefits) {
-   console.log("CompensationBenefits 12", CompensationBenefits)
   return axios.put(`${USERS_URL}/compensation/update-compensation-benefits`, CompensationBenefits);
 }
 
 //Delete
 export function deleteCompensationBenefits(body) {
-  console.log("body")
-  console.log(body);
   return axios.patch(`${USERS_URL}/compensation/delete-compensation-benefits`, body);
 }
 
