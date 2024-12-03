@@ -39,12 +39,12 @@ export const branchSlice = createSlice({
             }
         },
         branchFetched: (state, action) => {
-            // console.log(action)
-            console.log("user slice",action.payload)
+       
+        
             const entities = action.payload.data?.data.rows;
-            console.log("ent branch",entities)
+            
             const totalResult = action.payload.data?.data.totalResults;
-            console.log(entities);
+          
             state.listLoading = false;
             state.error = null;
             state.entities = entities;
@@ -53,8 +53,8 @@ export const branchSlice = createSlice({
 
          //get User By ID
          branchFetchedForEdit: (state, action) => {
-            console.log("get user detail from receipt slice")
-            console.log(action);
+     
+
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
@@ -62,8 +62,8 @@ export const branchSlice = createSlice({
 
         //get User By ID
         userFetched: (state, action) => {
-            console.log("get user detail from receipt slice")
-            console.log(action);
+       
+     
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
@@ -72,14 +72,14 @@ export const branchSlice = createSlice({
 
             state.error = null;
             state.actionsLoading = false;
-            console.log("branch deleted ")
-            console.log(state.entities);
+         
+       
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );
         },
         branchCreated: (state, action) => {
-             console.log("action payload for branch", action.payload);
+          
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);
@@ -91,10 +91,10 @@ export const branchSlice = createSlice({
           
             state.entities = state.entities.map((entity) => {
                 
-                console.log("entity.Id",entity.Id);
-                console.log("action.payload.updatedBank.Id",action.payload.updatedBank)
+          
+           
                 if (entity.Id === action.payload.updatedBank.Id) {
-                    console.log("return val",action.payload.updatedBank)
+                  
                     return action.payload.updatedBank;
                 }
                 return entity;

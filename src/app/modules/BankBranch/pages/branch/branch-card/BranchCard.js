@@ -14,7 +14,7 @@ import CurrentModuleName from "../../../../../utils/common-modules/ModuleName"
 
 export function BranchCard() {
   const BranchUIContext = useBranchUIContext()
-  //console.log("banksUIContext", banksUIContext)
+
   const BranchUIProps = useMemo(() => {
     return {
       newBranchButtonClick: BranchUIContext.newBranchButtonClick,
@@ -22,7 +22,7 @@ export function BranchCard() {
     }
   }, [BranchUIContext])
 
-  console.log(" Branch User Acccessss", userAccess);
+
   const { userAccess } = useSelector(
     (state) => ({
       userAccess: state.auth.userAccess.Branch,

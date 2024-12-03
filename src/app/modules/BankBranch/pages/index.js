@@ -4,7 +4,7 @@ import { LayoutSplashScreen, ContentRoute } from "../../../../_metronic/layout";
 import { BranchPage } from "./branch/BranchPage";
 
 export default function BranchManagement() {
-  console.log('Branch mein aya')
+
   return (
     <Suspense fallback={<LayoutSplashScreen />}>
       <Switch>

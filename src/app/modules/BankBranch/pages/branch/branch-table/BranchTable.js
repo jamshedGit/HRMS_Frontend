@@ -35,16 +35,16 @@ export function BranchTable() {
     };
   }, [branchUIContext]);
 
-  //console.log("queryparms", usersUIProps.queryparms)
+
   const { currentState, userAccess } = useSelector(
-    (state) => {  console.log("state ",state); return {
+    (state) => {   return {
       
       currentState: state.branch,
       userAccess: state?.auth?.userAccess["Branch"],
     }},
     shallowEqual
   );
-  console.log("currentState", currentState);
+
   
   const { totalCount, entities, listLoading } = currentState;
 
@@ -54,7 +54,7 @@ export function BranchTable() {
 
   useEffect(() => {
     branchUIProps.setIds([]);
-    console.log("test 2",branchUIProps.queryParams)
+
     dispatch(actions.fetchUsers(branchUIProps.queryParams));
   }, [branchUIProps.queryParams, dispatch, totalCount]);
 
