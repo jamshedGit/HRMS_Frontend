@@ -62,7 +62,7 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
   //   }
   // }, [actionsLoading === true]);
 
-  //console.log("action", action);
+
 
   useEffect(() => {
     dispatch(actions.fetchUser(id));
@@ -71,13 +71,13 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
   }, [id, dispatch]);
 
   // useEffect(() => {
-  //   console.log("UseEffect call");
+
   //   if (actionsLoading === false) {
-  //     console.log("UseEffect call inside function");
+
   //     disbaleLoading();
   //   }
   // }, [actionsLoading]);
-  //console.log("userForEdit", userForEdit);
+
 
   const saveLoanType = async (user) => {
 
@@ -87,7 +87,7 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
       // const getUserStatus = userStatusTypes.filter((item) => {
       //   return item.value === +user.status;
       // });
-      // //console.log("getUserStatus", getUserStatus);
+  
       // const { status = getUserStatus[0].label, ...rest } = user;
       // const finalObject = {
       //   status: getUserStatus[0].label,

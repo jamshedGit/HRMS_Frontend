@@ -35,10 +35,10 @@ export function BanksTable() {
     };
   }, [bankUIContext]);
 
-  //console.log("queryparms", usersUIProps.queryparms)
+
   const { currentState, userAccess } = useSelector(
     (state) => {
-      console.log("academic state ", state); return {
+  return {
 
         currentState: state.loan_type,
         userAccess: state?.auth?.userAccess["Loan_Type"],
@@ -46,7 +46,7 @@ export function BanksTable() {
     },
     shallowEqual
   );
-  console.log("currentState", currentState);
+
 
   const { totalCount, entities, listLoading } = currentState;
 
@@ -56,11 +56,11 @@ export function BanksTable() {
 
   useEffect(() => {
     bankUIProps.setIds([]);
-    console.log("test 2", bankUIProps.queryParams)
+  
     dispatch(actions.fetchUsers(bankUIProps.queryParams));
   }, [bankUIProps.queryParams, dispatch, totalCount]);
 
-  console.log("access earning", userAccess);
+
   const isAccessForEdit = userAccess?.find(
     (item) => item.componentName === "UpdateLoanType"
   );

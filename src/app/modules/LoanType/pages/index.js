@@ -4,7 +4,7 @@ import { LayoutSplashScreen, ContentRoute } from "../../../../_metronic/layout";
 import { LoanType } from "./banks/BanksPage";
 
 export default function LoanTypeManagement() {
-  console.log('LoanType mein aya')
+
   return (
     <Suspense fallback={<LayoutSplashScreen />}>
       <Switch>
