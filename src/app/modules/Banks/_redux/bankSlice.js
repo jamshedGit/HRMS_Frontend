@@ -42,7 +42,6 @@ export const bankSlice = createSlice({
             // 
             
             const entities = action.payload.data?.data.rows;
-            console.log("ent bank",entities)
             const totalResult = action.payload.data?.data.totalResults;
             
             state.listLoading = false;
@@ -72,14 +71,14 @@ export const bankSlice = createSlice({
 
             state.error = null;
             state.actionsLoading = false;
-            console.log("bank deleted ")
+            
             console.log(state.entities);
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );
         },
         bankCreated: (state, action) => {
-             console.log("action payload for bank", action.payload);
+             
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);

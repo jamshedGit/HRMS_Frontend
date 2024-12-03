@@ -42,7 +42,6 @@ export const OnetimeAllowanceSlice = createSlice({
             // 
             
             const entities = action.payload.data?.data;
-            console.log("ent ontimeAllowance",entities)
             const totalResult = action.payload.data?.data.totalResults;
             
             state.listLoading = false;

@@ -42,7 +42,7 @@ export const religionSlice = createSlice({
             // 
             
             const entities = action.payload.data?.data.rows;
-            console.log("ent religion",entities)
+            
             const totalResult = action.payload.data?.data.totalResults;
             
             state.listLoading = false;
@@ -53,7 +53,7 @@ export const religionSlice = createSlice({
 
          //get User By ID
          religionFetchedForEdit: (state, action) => {
-            console.log("get user detail from religion slice")
+            
             
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
@@ -62,7 +62,7 @@ export const religionSlice = createSlice({
 
         //get User By ID
         userFetched: (state, action) => {
-            console.log("get user detail from religion slice")
+            
             
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
@@ -72,14 +72,14 @@ export const religionSlice = createSlice({
 
             state.error = null;
             state.actionsLoading = false;
-            console.log("bank deleted ")
+            
             console.log(state.entities);
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );
         },
         religionCreated: (state, action) => {
-             console.log("action payload for bank", action.payload);
+             
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);

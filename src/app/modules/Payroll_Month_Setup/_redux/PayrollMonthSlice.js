@@ -42,7 +42,6 @@ export const PayrollMonthSlice = createSlice({
             // 
             
             const entities = action.payload.data?.data.rows;
-           // console.log("entpayrollMonth",entities)
             const totalResult = action.payload.data?.data.totalResults;
             
             state.listLoading = false;

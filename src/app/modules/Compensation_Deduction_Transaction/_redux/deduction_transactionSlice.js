@@ -43,7 +43,7 @@ export const deduction_transactionSlice = createSlice({
             
             
             const entities = action.payload.data?.data.rows;
-            console.log("ent earning_deduction_tran_",entities)
+            
             const totalResult = action.payload.data?.data.totalResults;
             
             state.listLoading = false;

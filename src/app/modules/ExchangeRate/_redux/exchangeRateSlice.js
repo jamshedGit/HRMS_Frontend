@@ -43,7 +43,7 @@ export const exchangeRateSlice = createSlice({
             
             
             const entities = action.payload.data?.data.rows;
-            console.log("ent exchangeRate",entities)
+            
             const totalResult = action.payload.data?.data.totalResults;
             
             state.listLoading = false;

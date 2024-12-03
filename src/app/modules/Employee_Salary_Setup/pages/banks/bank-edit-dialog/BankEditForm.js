@@ -512,9 +512,6 @@ export function BankEditForm({
           formik,
         }) => (
           <>
-          {
-            
-          }
             <Modal.Body className="overlay overlay-block cursor-default">
               {actionsLoading && (
                 <div className="overlay-layer bg-transparent">

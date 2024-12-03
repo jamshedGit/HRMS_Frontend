@@ -42,7 +42,7 @@ export const formDetailsSlice = createSlice({
             // 
             
             const entities = action.payload.data?.data.rows;
-            console.log("ent form",action.payload.data?.data)
+            
             const totalResult = action.payload.data?.data.totalResults;
             console.log("totalResult child",totalResult);
             state.listLoading = false;
@@ -54,7 +54,7 @@ export const formDetailsSlice = createSlice({
             // 
             
             const entities = action.payload.data?.data.rows;
-            console.log("ent form",action.payload.data?.data)
+            
             const totalResult = action.payload.data?.data.totalResults;
             console.log("totalResult child",totalResult);
             state.listLoading = false;
@@ -66,7 +66,7 @@ export const formDetailsSlice = createSlice({
 
          //get User By ID
          formFetchedForEdit: (state, action) => {
-            console.log("get user detail from form slice")
+            
             
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
@@ -75,7 +75,7 @@ export const formDetailsSlice = createSlice({
 
         //get User By ID
         userFetched: (state, action) => {
-            console.log("get user detail from form slice")
+            
             
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
@@ -92,7 +92,7 @@ export const formDetailsSlice = createSlice({
             );
         },
         formCreated: (state, action) => {
-             console.log("action payload for bank", action.payload);
+             
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);

@@ -42,7 +42,7 @@ export const FinalSettlementPolicySlice = createSlice({
             // 
             
             const entities = action.payload.data?.data;
-            console.log("ent finalSettlementPolicy",entities)
+            
             const totalResult = action.payload.data?.data.totalResults;
             
             state.listLoading = false;

@@ -39,12 +39,8 @@ export const academicSlice = createSlice({
             }
         },
         academicFetched: (state, action) => {
-            // 
-            
-            
             const entities = action.payload.data?.data.rows;
             const totalResult = action.payload.data?.data.totalResults;
-            
             state.listLoading = false;
             state.error = null;
             state.entities = entities;
@@ -53,8 +49,6 @@ export const academicSlice = createSlice({
 
          //get User By ID
          academicFetchedForEdit: (state, action) => {
-            
-            
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
@@ -62,14 +56,11 @@ export const academicSlice = createSlice({
 
         //get User By ID
         userFetched: (state, action) => {
-            
-            
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
         },
         academicDeleted: (state, action) => {
-
             state.error = null;
             state.actionsLoading = false;
             console.log("academic deleted ")
