@@ -65,7 +65,7 @@ export function DeptEditDialog({ id, show, onHide, userForRead }) {
   //   }
   // }, [actionsLoading === true]);
 
-  //console.log("action", action);
+
 
   useEffect(() => {
     dispatch(actions.fetchUser(id));
@@ -74,19 +74,18 @@ export function DeptEditDialog({ id, show, onHide, userForRead }) {
   }, [id, dispatch]);
 
   // useEffect(() => {
-  //   console.log("UseEffect call");
+
   //   if (actionsLoading === false) {
-  //     console.log("UseEffect call inside function");
+
   //     disbaleLoading();
   //   }
   // }, [actionsLoading]);
-  //console.log("userForEdit", userForEdit);
+
 
   const saveDept = async (dept) => {
 
     if (!id) {
-      console.log("department edit dialog");
-      console.log(dept);
+
 
       const finalObject = { dept }
       await dispatch(actions.createDept(dept, disbaleLoading, onHide));
@@ -97,7 +96,7 @@ export function DeptEditDialog({ id, show, onHide, userForRead }) {
       //   return item.value === +user.status;
       // });
 
-      console.log("gggggg", dept);
+
 
       const deptUpdatedFields = {
         deptId: dept.deptId,
@@ -109,7 +108,7 @@ export function DeptEditDialog({ id, show, onHide, userForRead }) {
         chkParent: dept.parentDept == null ? true : false
       };
 
-      console.log("deptUpdatedFields", deptUpdatedFields);
+
      await dispatch(actions.updateDept(deptUpdatedFields, disbaleLoading, onHide));
      await dispatch(actions.fetchUsers(usersUIProps.queryParams));
     }

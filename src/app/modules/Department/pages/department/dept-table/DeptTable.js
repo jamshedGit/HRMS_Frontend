@@ -35,16 +35,16 @@ export function DeptTable() {
     };
   }, [deptUIContext]);
 
-  //console.log("queryparms", usersUIProps.queryparms)
+
   const { currentState, userAccess } = useSelector(
-    (state) => {  console.log("state ",state); return {
+    (state) => { return {
       
       currentState: state.dept,
       userAccess: state?.auth?.userAccess["Department"],
     }},
     shallowEqual
   );
-  console.log("currentState", currentState);
+
   
   const { totalCount, entities, listLoading } = currentState;
 
@@ -54,7 +54,7 @@ export function DeptTable() {
 
   useEffect(() => {
     deptUIProps.setIds([]);
-    console.log("test 2",deptUIProps.queryParams)
+  
     dispatch(actions.fetchUsers(deptUIProps.queryParams));
   }, [deptUIProps.queryParams, dispatch, totalCount]);
 

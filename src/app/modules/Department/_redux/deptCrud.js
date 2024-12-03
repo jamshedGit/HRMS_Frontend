@@ -4,33 +4,33 @@ export const USERS_URL = process.env.REACT_APP_API_URL;
 
 //Create user
 export function createDept(body) {
-  console.log("create Dept step 1", body)
+
   return axios.post(`${USERS_URL}/department/create-dept`, body);
 }
 
 
 // Read
 export function getAllDept(body) {
-  console.log("body",body);
+
   return axios.post(`${USERS_URL}/department/read-all-dept`, body);
 } 
  
 
 export function getDeptById(id) {
-   console.log(" dept id", id)
+
   return axios.post(`${USERS_URL}/department/read-dept`, id);
 }
 
 //Update
 export function updateDept(bank) {
-   console.log("updateUser 12", bank)
+
   return axios.put(`${USERS_URL}/department/update-dept`, bank);
 }
 
 //Delete
 export function deleteDept(body) {
-  console.log("delete department")
-  console.log(body);
+
+
   return axios.patch(`${USERS_URL}/department/delete-dept`, body);
 }
 

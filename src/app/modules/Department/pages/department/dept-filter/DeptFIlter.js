@@ -56,9 +56,9 @@ export function DeptFilter({ listLoading, user, setCity,
   const [receiptDateFrom, setReceiptDateFrom] = useState(null);
   const [receiptDateTo, setReceiptDateTo] = useState(null);
   useEffect(() => {
-    console.log("bank step 1")
+
     if (countryId) {
-      console.log("countryId id drop", countryId);
+     
       dispatch(fetchAllCity(1));
     }
   }, [countryId, dispatch]);
@@ -66,7 +66,7 @@ export function DeptFilter({ listLoading, user, setCity,
   useEffect(() => {
     if (cityId) {
 
-      console.log("city id drop", cityId);
+  
       
     }
   }, [cityId, dispatch]);
@@ -80,9 +80,7 @@ export function DeptFilter({ listLoading, user, setCity,
 
   async function fetchDonationReport(filterVal) {
     try {
-        console.log("filter",filterVal.receiptDateFrom);
-     // console.log(`${API_URL}/edrs/donation-report`);
-     // console.log("filter value", filterVal)
+
       const response = await axios.post(`${API_URL}/edrs/donation-report`, {
         bookNo: filterVal.txtBookNo,
         cityId: filterVal.cityId || "0",
@@ -92,11 +90,10 @@ export function DeptFilter({ listLoading, user, setCity,
         dateTo: filterVal.receiptDateTo,
                
       });
-      console.log("donation report", response);
+
       return response?.data?.data;
     } catch (error) {
-      console.log("Error fetching data:", error);
-      console.error("Error fetching data:", error);
+ 
     }
   }
 
@@ -127,16 +124,16 @@ export function DeptFilter({ listLoading, user, setCity,
   }
 
   async function createPdf(filterVal) {
-    // console.log("e",e)
+ 
     // setStartDate(e);
     // const getYear = moment(e).format("yyyy");
     //pbookNo = e;
     const pbookNo = filterVal.txtBookNo;
-    console.log("creaet PDF", filterVal)
+ 
     if (filterVal != null) {
       setLoading(true);
       const data = await fetchDonationReport(filterVal);
-      console.log("donation report 1", data);
+    
       
       const table = {
         headerRow: [
@@ -167,7 +164,7 @@ export function DeptFilter({ listLoading, user, setCity,
       let t = 0;
       data &&
         data.forEach((item, index) => {
-          console.log("index", data.length);
+    
 
           if (data.length - 1 == index) {
             data.forEach((item) => { total += parseFloat(item.amount) })
@@ -308,7 +305,7 @@ export function DeptFilter({ listLoading, user, setCity,
         pdfMake.createPdf(documentDefinition).download();
       } catch (error) {
         // Handle the error
-        console.error(error);
+  
       }
     }
   }
@@ -332,8 +329,8 @@ export function DeptFilter({ listLoading, user, setCity,
     if (!isEqual(newQueryParams, deptUIProps.queryParams)) {
       newQueryParams.pageNumber = 1
       // update list by queryParams
-      console.log("update list by queryParams");
-      console.log(newQueryParams);
+
+
       deptUIProps.setQueryParams(newQueryParams)
     }
   }
@@ -352,7 +349,7 @@ export function DeptFilter({ listLoading, user, setCity,
           alarmTimeId: [],
         }}
         onSubmit={(values) => {
-          console.log(1);
+ 
           // createPdf(values);
           applyFilter(values)
         }}
@@ -404,7 +401,7 @@ export function DeptFilter({ listLoading, user, setCity,
         //   alarmTimeId: [],
         // }}
         onSubmit={(values) => {
-           console.log("values", values);
+  
           //createPdf(values);
           //applyFilter(values)
         }}
@@ -528,7 +525,7 @@ export function DeptFilter({ listLoading, user, setCity,
                   // onChange={(e) => {
                   //   setFieldValue("subCenterId", e.value || null);
                   //   setDefaultSubCenter(e);
-                  //   console.log("sub center id", e.value);
+          
                   //   // setDefaultDriver([]);
                   //   // dispatch(fetchDrivers(e.value));
                   // }}

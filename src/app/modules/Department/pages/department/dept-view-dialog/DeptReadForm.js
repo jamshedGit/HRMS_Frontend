@@ -33,7 +33,7 @@ export function deptReadForm({
         initialValues={user}
         //validationSchema={DeptEditSchema}
         onSubmit={(values) => {
-          console.log("Dept form Values", values)
+     
           saveDept(values)
         }}
       >

@@ -14,7 +14,7 @@ import CurrentModuleName from "../../../../../utils/common-modules/ModuleName"
 
 export function DeptCard() {
   const DeptUIContext = useDeptUIContext()
-  //console.log("banksUIContext", banksUIContext)
+
   const DeptUIProps = useMemo(() => {
     return {
       newDeptButtonClick: DeptUIContext.newDeptButtonClick,
@@ -29,7 +29,7 @@ export function DeptCard() {
     }),
     shallowEqual
   )
-  console.log("Department User Acccessss", userAccess);
+
 
   const accessUser = userAccess.find(
     (item) => item.componentName === "CreateDept"

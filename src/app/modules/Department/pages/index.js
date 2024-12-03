@@ -4,7 +4,7 @@ import { LayoutSplashScreen, ContentRoute } from "../../../../_metronic/layout";
 import { DeptPage } from "./department/DeptPage";
 
 export default function DeptManagement() {
-  console.log('depratment page')
+
   return (
     <Suspense fallback={<LayoutSplashScreen />}>
       <Switch>
