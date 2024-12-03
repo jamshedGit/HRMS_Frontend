@@ -39,11 +39,9 @@ export const compensationBenefitsSlice = createSlice({
             }
         },
         compensationBenefitsFetched: (state, action) => {
-            // console.log(action)
            
             
             const entities = action.payload.data?.data.rows;
-            console.log("compensation123",entities)
             const totalResult = action.payload.data?.data.totalResults;
             state.listLoading = false;
             state.error = null;
@@ -53,8 +51,6 @@ export const compensationBenefitsSlice = createSlice({
 
          //get User By ID
          compensationBenefitsFetchedForEdit: (state, action) => {
-            console.log("get user detail from receipt slice")
-            console.log(action);
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
@@ -62,8 +58,6 @@ export const compensationBenefitsSlice = createSlice({
 
         //get User By ID
         userFetched: (state, action) => {
-            console.log("get user detail from receipt slice")
-            console.log(action);
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
@@ -72,14 +66,11 @@ export const compensationBenefitsSlice = createSlice({
 
             state.error = null;
             state.actionsLoading = false;
-            console.log("compensationBenefits deleted ")
-            console.log(state.entities);
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );
         },
         compensationBenefitsCreated: (state, action) => {
-             console.log("action payload for compensationBenefits", action.payload);
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);
@@ -90,7 +81,6 @@ export const compensationBenefitsSlice = createSlice({
             // state.entities.push(action.payload)
           
             state.entities = state.entities.map((entity) => {
-                console.log("payload updatecompensationBenefitsObj",action.payload);
                 //const payload = { ...action.payload };
                 let payload = JSON.stringify(action.payload)
                 let payloadObj = JSON.parse(payload);

@@ -4,7 +4,6 @@ import { LayoutSplashScreen, ContentRoute } from "../../../../_metronic/layout";
 import { CompensationBenefitsPage } from "./banks/BanksPage";
 
 export default function CompensationBenefitsManagement() {
-  console.log('compensation men aya')
   return (
     <Suspense fallback={<LayoutSplashScreen />}>
       <Switch>

@@ -110,7 +110,7 @@ export function AsideMenuList({ layoutProps }) {
                 UserAccess && Object.keys(UserAccess)?.map((res) => {
                   return UserAccess[res].sort((a, b) => a.sortOrder - b.sortOrder).some(item => item.isResourceShow) &&
                     <>
-                      <NavDropdown className="colorText" title={res.replace('_', '')} id="basic-nav-dropdown">
+                      <NavDropdown className="colorText" title={res.replace(/_/g, " ")} id="basic-nav-dropdown">
                         {UserAccess[res].map((ce) => {
                           return ce.isResourceShow &&
                             <NavDropdown.Item href={`/${ce.url}`}>{ce.name}</NavDropdown.Item>
