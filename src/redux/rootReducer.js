@@ -75,7 +75,7 @@ import {HolidaysSlice} from "../app/modules/Holidays/_redux/redux-Slice"
 import {payroll_processSlice} from "../app/modules/Payroll_Process/_redux/redux-Slice"
 import { AttendanceSlice } from "../app/modules/Attendance/_redux/AttendanceSlice";
 import { LeaveRegisterSlice } from "../app/modules/LeaveRegister/_redux/LeaveRegisterSlice";
-
+import{ employee_profileSlice} from "../app/modules/Employee_Profile/_redux/redux-Slice";
 export const rootReducer = combineReducers({
   auth: auth.reducer,
   dashboard: dashboardSlice.reducer,
@@ -150,6 +150,8 @@ export const rootReducer = combineReducers({
   attendance: AttendanceSlice.reducer,
   employee_roster: EmployeeRosterSlice.reducer,
   leave_register: LeaveRegisterSlice.reducer,
+
+  employee_profile:employee_profileSlice.reducer,
 });
 
 export function* rootSaga() {

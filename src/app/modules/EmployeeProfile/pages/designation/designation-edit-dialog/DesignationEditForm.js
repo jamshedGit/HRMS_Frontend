@@ -316,66 +316,65 @@ export function DesignationEditForm({
   const [defContractExpiryPolicy, setDefaultCnotractExpiryPolicy] = useState({});
 
   useEffect(() => {
-    if(user.Id)
+    if (user.Id) {
+      console.log("::::::d", user)
+      if (user.employeeTypeId == 148) // WHEN Select Permanet value
       {
-        console.log("::::::d",user)
-        if (user.employeeTypeId == 148) // WHEN Select Permanet value
-        {
-          // For Empty Object
-  
-          setContractExpiryDate('');
-          setConfirmationDate('');
-         // setConfirmationDueDate('');
-       //   setConfirmationEnterDate('');
-  
-          setDisbledConfirmationDueDate(true);
-          setDisabledContractExpiryDate(true);
-          setDisbledConfirmationEnterDate(true);
-        }
-        else if (user.employeeTypeId == 93) // Probation Type
-        {
-        
-          setDisabledConfirmationDate(true);
-          setDisabledContractExpiryDate(true);
-  
-          setContractExpiryDate('');
-          setConfirmationDate('');
-          setConfirmationEnterDate('');
-         // setConfirmationDueDate(addMonths(values.dateOfJoining || null, defProbationPolicyMonth))
-  
-        }
-        else if (user.employeeTypeId == 147) // Contract Type
-        {
-          console.log(":::::eeee:::",user.employeeTypeId)
-          //  setContractExpiryDate('');
-          setConfirmationDate('');
-          setConfirmationDueDate('');
-          setConfirmationEnterDate('');
-  
-         
-          // setFieldValue("dateOfContractExpiry", '');
-  
-          // For Disabled Object
-          setDisbledConfirmationEnterDate(true);
-          setDisabledConfirmationDate(true);
-          setDisbledConfirmationDueDate(true);
-          //  setDisabledContractExpiryDate(true);
-         
-         // setContractExpiryDate(addMonths(user.dateOfJoining || null, defProbationPolicyMonth))
-  
-        }
-  
-  
-        else {
-  
-       
-          setContractExpiryDate(new Date());
-          setConfirmationDate(new Date());
-          setConfirmationDueDate(new Date());
-          setConfirmationEnterDate(new Date());
-  
-        }
+        // For Empty Object
+
+        setContractExpiryDate('');
+        setConfirmationDate('');
+        // setConfirmationDueDate('');
+        //   setConfirmationEnterDate('');
+
+        setDisbledConfirmationDueDate(true);
+        setDisabledContractExpiryDate(true);
+        setDisbledConfirmationEnterDate(true);
       }
+      else if (user.employeeTypeId == 93) // Probation Type
+      {
+
+        setDisabledConfirmationDate(true);
+        setDisabledContractExpiryDate(true);
+
+        setContractExpiryDate('');
+        setConfirmationDate('');
+        setConfirmationEnterDate('');
+        // setConfirmationDueDate(addMonths(values.dateOfJoining || null, defProbationPolicyMonth))
+
+      }
+      else if (user.employeeTypeId == 147) // Contract Type
+      {
+        console.log(":::::eeee:::", user.employeeTypeId)
+        //  setContractExpiryDate('');
+        setConfirmationDate('');
+        setConfirmationDueDate('');
+        setConfirmationEnterDate('');
+
+
+        // setFieldValue("dateOfContractExpiry", '');
+
+        // For Disabled Object
+        setDisbledConfirmationEnterDate(true);
+        setDisabledConfirmationDate(true);
+        setDisbledConfirmationDueDate(true);
+        //  setDisabledContractExpiryDate(true);
+
+        // setContractExpiryDate(addMonths(user.dateOfJoining || null, defProbationPolicyMonth))
+
+      }
+
+
+      else {
+
+
+        setContractExpiryDate(new Date());
+        setConfirmationDate(new Date());
+        setConfirmationDueDate(new Date());
+        setConfirmationEnterDate(new Date());
+
+      }
+    }
   }, user.Id);
 
   useEffect(() => {
@@ -388,13 +387,13 @@ export function DesignationEditForm({
   useEffect(() => {
 
 
-   
+
 
     if (!user.Id) {
 
 
 
-      
+
       dispatch(fetchAllDept(1));
       dispatch(fetchAllFormsMenu(143, "allEmployeeGradeList")); // For All Grade Codes
       dispatch(fetchAllFormsMenu(127, "allChildMenus")); // For Payroll Group
@@ -1523,8 +1522,8 @@ export function DesignationEditForm({
 
                               setContractExpiryDate('');
                               setConfirmationDate('');
-                            //  setConfirmationDueDate('');
-                             // setConfirmationEnterDate('');
+                              //  setConfirmationDueDate('');
+                              // setConfirmationEnterDate('');
 
                               //  setFieldValue("dateOfConfirmation", '');
                               // setFieldValue("dateOfConfirmationDue", '');
@@ -1552,15 +1551,15 @@ export function DesignationEditForm({
                               // setConfirmationDate('');
                               // setConfirmationEnterDate('');
                               console.log("session", defProbationPolicyMonth)
-                            
+
                               // setFieldValue("dateOfConfirmationDue", defProbationPolicyMonth || null)
                               // setConfirmationDueDate(addMonths(values.dateOfJoining || null, defProbationPolicyMonth))
 
                               const a = addMonths(values.dateOfJoining, defProbationPolicyMonth);
-                              console.log("::Probation", e.value,a);
-                              
+                              console.log("::Probation", e.value, a);
+
                               setConfirmationDueDate(a)
-                              setFieldValue("dateOfConfirmationDue",new Date(a))
+                              setFieldValue("dateOfConfirmationDue", new Date(a))
 
 
                             }
@@ -1587,7 +1586,7 @@ export function DesignationEditForm({
 
                               setContractExpiryDate(addMonths(values.dateOfJoining, defContractExpiryPolicy))
                               setFieldValue("dateOfContractExpiry", addMonths(values.dateOfJoining, defContractExpiryPolicy))
-                             
+
                             }
 
 
@@ -1690,7 +1689,7 @@ export function DesignationEditForm({
                             {
                               setContractExpiryDate(addMonths(date, defContractExpiryPolicy))
                               setFieldValue("dateOfContractExpiry", addMonths(date, defContractExpiryPolicy))
-                              
+
                             }
                           }}
                           showYearDropdown

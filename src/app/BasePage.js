@@ -78,7 +78,7 @@ const Attendance = lazy(() => import("./modules/Attendance/pages/index"));
 const LeaveEncashment = lazy(() => import("./modules/LeaveEncashment/pages/index"));
 const EmployeeRoster = lazy(() => import("./modules/EmployeeRoster/pages/index"));
 const LeaveRegister = lazy(() => import("./modules/LeaveRegister/pages/index"));
-
+const employee_profileModule = lazy(() => import("./modules/Employee_Profile/pages/index")); 
 const ROUTES = {
   settings: SettingsPage,
   users: UserManagment,
@@ -145,6 +145,7 @@ const ROUTES = {
   payroll_process:Payroll_processSModule,
   attendance: Attendance,
   leave_register :LeaveRegister,
+  employee_profile:employee_profileModule
 };
 
 export default function BasePage() {
