@@ -64,7 +64,6 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
   //   }
   // }, [actionsLoading === true]);
 
-  //console.log("action", action);
 
   useEffect(() => {
     dispatch(actions.fetchUser(id));
@@ -75,8 +74,6 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
   const saveEarningDeductionTran = async (user, emp_ed_Obj) => {
 
     if (!id) {
-      console.log("emp_ed_Obj", {emp_ed_Obj,employeeId: user.employeeId});
-      console.log(user);
 
       const finalObject = { user }
       const response = await axios.post(`${USERS_URL}/employee_salary_earning/update-salary-earning-deduction-bulk`, { data: {emp_ed_Obj,employeeId: user.employeeId} });
@@ -88,8 +85,6 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
     } else {
 
 
-      console.log("getUserStatus", user);
-      console.log("emp update", emp_ed_Obj);
       const response = await axios.post(`${USERS_URL}/employee_salary_earning/update-salary-earning-deduction-bulk`, { data:  {emp_ed_Obj,employeeId: user.employeeId} });
 
       // This object set for Edit/Save Fields in DB
@@ -129,7 +124,6 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
 
       };
 
-      console.log("skill updated", earningUpdatedFields);
       await dispatch(actions.updateEmployee_Salary(earningUpdatedFields, disbaleLoading, onHide));
       await dispatch(actions.fetchUsers(usersUIProps.queryParams));
     }

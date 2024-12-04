@@ -39,12 +39,12 @@ export const designationSlice = createSlice({
             }
         },
        religionFetched: (state, action) => {
-            // console.log(action)
-            console.log("user slice",action.payload)
+            // 
+            
             const entities = action.payload.data?.data.rows;
-            console.log("ent designation",entities)
+            
             const totalResult = action.payload.data?.data.totalResults;
-            console.log(entities);
+            
             state.listLoading = false;
             state.error = null;
             state.entities = entities;
@@ -53,8 +53,8 @@ export const designationSlice = createSlice({
 
          //get User By ID
          designationFetchedForEdit: (state, action) => {
-            console.log("get user detail from designation slice")
-            console.log(action);
+            
+            
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
@@ -62,8 +62,8 @@ export const designationSlice = createSlice({
 
         //get User By ID
         userFetched: (state, action) => {
-            console.log("get user detail from designation slice")
-            console.log(action);
+            
+            
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
@@ -72,14 +72,14 @@ export const designationSlice = createSlice({
 
             state.error = null;
             state.actionsLoading = false;
-            console.log("bank deleted ")
+            
             console.log(state.entities);
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );
         },
         designationCreated: (state, action) => {
-             console.log("action payload for bank", action.payload);
+             
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);
