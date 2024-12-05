@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Modal } from "react-bootstrap";
-import { Formik, Form, Field, FieldArray } from "formik";
+import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { format } from "date-fns";
 import {
@@ -25,6 +25,7 @@ import {
 } from "../../../../../../_metronic/redux/dashboardActions";
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 import { getEmployeeProfileById } from "../../../../../../_metronic/redux/dashboardCrud";
+import { toAbsoluteUrl } from "../../../../../../_metronic/_helpers";
 
 
 const ReimbursementSchema = Yup.object().shape({
@@ -63,8 +64,20 @@ export function FormEditForm({
   const dispatch = useDispatch();
   const { dashboard } = useSelector((state) => state);
   const inputFile = useRef(null);
+  const [profile_image, setImage] = useState(toAbsoluteUrl("/media/logos/defaultImg.png"));
   // const [isFileReq,setIsFileReq]=useState(false)
   // Fetch necessary data if not already present
+  const [file, setFile] = useState('');
+
+  const onImageChange = async event => {
+    if (event.target.files && event.target.files[0]) {
+      let img = event.target.files[0];
+      setFile(img);
+      console.log("img", URL.createObjectURL(img));
+      setImage(URL.createObjectURL(img));
+    }
+  };
+
   useEffect(() => {
     if (!user.Id) {
       dispatch(fetchAllFormsMenu(202, "allReimbursementTypeList"));
@@ -168,6 +181,21 @@ export function FormEditForm({
             <Form className="form form-label-right" onSubmit={handleSubmit}>
               <fieldset disabled={isUserForRead}>
                 <div className="form-group row">
+                  {/* <div className="from-group row"> */}
+                    <div className="col-12 col-md-12 mt-5 mb-5">
+                      <div>
+                        <div>
+                          <div>
+                            <img name='profile_image' width={120} height={120} src={profile_image} />
+                            <h4>Select Image</h4>
+                            <input type="file" name="myImage" accept=".jpg, .jpeg, .png" onChange={onImageChange} />
+                            <ErrorMessage className="form-feedBack" name="myImage" component="div" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  {/* </div> */}
+
 
                   <div className="col-12 col-md-4 mt-3">
                     <label>
@@ -875,7 +903,7 @@ export function FormEditForm({
                   </div>
 
 
-                
+
                   <br />
                   <br />
                   <div className="col-12 col-md-12 mt-5" style={{ backgroundColor: '#E6F8FF', padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
@@ -885,7 +913,7 @@ export function FormEditForm({
                       <div className="col-12 col-md-4 mt-3">
                         <label>
                           <span>
-                          Official Email<span style={{ color: "red" }}>*</span>
+                            Official Email<span style={{ color: "red" }}>*</span>
                           </span>
                         </label>
                         <Field
@@ -901,24 +929,7 @@ export function FormEditForm({
                       <div className="col-12 col-md-4 mt-3">
                         <label>
                           <span>
-                          Personal Email<span style={{ color: "red" }}>*</span>
-                          </span>
-                        </label>
-                        <Field
-                          name="name"
-                          component={Input}
-                          placeholder="Enter Name"
-
-                          type="text"
-
-                        />
-                      </div>
-
-
-                      <div className="col-12 col-md-4 mt-3">
-                        <label>
-                          <span>
-                          Phone Home<span style={{ color: "red" }}>*</span>
+                            Personal Email<span style={{ color: "red" }}>*</span>
                           </span>
                         </label>
                         <Field
@@ -935,7 +946,7 @@ export function FormEditForm({
                       <div className="col-12 col-md-4 mt-3">
                         <label>
                           <span>
-                          Official Phone<span style={{ color: "red" }}>*</span>
+                            Phone Home<span style={{ color: "red" }}>*</span>
                           </span>
                         </label>
                         <Field
@@ -952,7 +963,7 @@ export function FormEditForm({
                       <div className="col-12 col-md-4 mt-3">
                         <label>
                           <span>
-                          Cell No.<span style={{ color: "red" }}>*</span>
+                            Official Phone<span style={{ color: "red" }}>*</span>
                           </span>
                         </label>
                         <Field
@@ -969,7 +980,24 @@ export function FormEditForm({
                       <div className="col-12 col-md-4 mt-3">
                         <label>
                           <span>
-                          Professional Summary<span style={{ color: "red" }}>*</span>
+                            Cell No.<span style={{ color: "red" }}>*</span>
+                          </span>
+                        </label>
+                        <Field
+                          name="name"
+                          component={Input}
+                          placeholder="Enter Name"
+
+                          type="text"
+
+                        />
+                      </div>
+
+
+                      <div className="col-12 col-md-4 mt-3">
+                        <label>
+                          <span>
+                            Professional Summary<span style={{ color: "red" }}>*</span>
                           </span>
                         </label>
                         <Field
@@ -987,7 +1015,7 @@ export function FormEditForm({
                         <label>
                           <span>
 
-                          Additional Notes
+                            Additional Notes
                             <span style={{ color: "red" }}>*</span>
                           </span>
                         </label>

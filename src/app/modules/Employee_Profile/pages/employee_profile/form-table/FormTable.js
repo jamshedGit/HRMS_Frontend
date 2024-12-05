@@ -91,8 +91,8 @@ export function FormTable() {
  
  
 {
-  dataField: "firstName",
-  text: "First Name",
+  dataField: "fullName",
+  text: "Full Name",
   sort: false,
   sortCaret: sortCaret,
   headerSortingClasses,
@@ -102,44 +102,50 @@ export function FormTable() {
  
 },
  
- 
 
- 
-
-     
     {
-      dataField: "lastName",
-      text: "Last Name",
+      dataField: "department.deptName",
+      text: "Department",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
       style: {
         minWidth: "10px",
-      },
-      // formatter: (cell) => {
-      //   // Format the date without timestamp
-      //   return format(new Date(cell), 'dd-MMM-yyyy'); // Customize format as needed
-      // },
-    },
 
-    {
-      dataField: "email_personal",
-      text: "Email(Personal)",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "10px",
-        textAlign: "center",
       },
-      headerStyle: {
-        textAlign: "center", // Align header text to the left
-      },
+   
       formatter: (cell) => formatNumberWithCommas(cell), 
     
     },
- 
- 
+    {
+      dataField: "designation.formName",
+      text: "Designation",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "10px",
+       
+      },
+   
+      formatter: (cell) => formatNumberWithCommas(cell), 
+    
+    },
+
+    {
+      dataField: "dateOfJoining",
+      text: "date Of Joining",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "10px",
+       
+      },
+   
+      formatter: (cell) => formatNumberWithCommas(cell), 
+    
+    },
        {
       dataField: "action",
       text: "Actions",

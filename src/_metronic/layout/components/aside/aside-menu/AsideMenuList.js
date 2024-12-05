@@ -95,7 +95,7 @@ export function AsideMenuList({ layoutProps }) {
       </ul>
 
 
-      <div style={{ position: "fixed", width: "100%",marginTop:"2.8%" }}>
+      <div style={{ position: "fixed", width: "100%",marginTop:"45px" }}>
         <Navbar className="navbar" bg="light" expand="lg">
           {/* <Navbar.Brand href="#home">MyApp</Navbar.Brand> */}
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
