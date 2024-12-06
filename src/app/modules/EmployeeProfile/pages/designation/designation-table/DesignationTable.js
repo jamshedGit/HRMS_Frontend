@@ -88,8 +88,8 @@ console.log("designation in")
       },
     },
     {
-      dataField: "firstName",
-      text: "First Name",
+      dataField: "fullName",
+      text: "Name",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -97,19 +97,32 @@ console.log("designation in")
         minWidth: "160px",
       },
     },
-    // {
-    //   dataField: "middleName",
-    //   text: "Middle Name",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    //   headerSortingClasses,
-    //   style: {
-    //     minWidth: "160px",
-    //   },
-    // },
+
     {
-      dataField: "lastName",
-      text: "Last Name",
+      dataField: "department.deptName",
+      text: "Department",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
+
+    {
+      dataField: "designation.formName",
+      text: "Designation",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
+ 
+    {
+      dataField: "employeeType.formName",
+      text: "employee Type",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -118,8 +131,8 @@ console.log("designation in")
       },
     },
     {
-      dataField: "email_personal",
-      text: "Email(Personal)",
+      dataField: "dateOfJoining",
+      text: "date Of Joining",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -127,36 +140,9 @@ console.log("designation in")
         minWidth: "160px",
       },
     },
-    {
-      dataField: "email_official",
-      text: "Email(Official)",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
-    // {
-    //   dataField: "phone_home",
-    //   text: "Phone(Home)",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    //   headerSortingClasses,
-    //   style: {
-    //     minWidth: "160px",
-    //   },
-    // },
-    // {
-    //   dataField: "phone_official",
-    //   text: "Phone(Official)",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    //   headerSortingClasses,
-    //   style: {
-    //     minWidth: "160px",
-    //   },
-    // },
+
+    
+   
        {
       dataField: "action",
       text: "Actions",

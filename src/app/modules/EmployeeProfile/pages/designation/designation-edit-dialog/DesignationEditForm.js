@@ -28,7 +28,7 @@ import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 export const USERS_URL = process.env.REACT_APP_API_URL;
 const currentDate = new Date();
 const minDate = new Date(currentDate.getFullYear() - 18, currentDate.getMonth(), currentDate.getDate());
-
+const minYearDate = new Date(1900, 0, 1);
 // Phone Number Regex
 const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
 // CNIC Regex
@@ -96,6 +96,11 @@ const profileValidation = Yup.object().shape(
 
     dateOfJoining: Yup.date()
       .max(currentDate, 'Date of joining cannot be in the future')
+
+      .test('dateOfBirth', 'Date of joining must be after the date of birth', function (value) {
+        const { dateOfBirth } = this.parent; // Access the value of min_year
+        return value > dateOfBirth; // Ensure max_year is greater than min_year
+      })
       .required("Required*"),
 
 
@@ -194,8 +199,8 @@ const profileValidation = Yup.object().shape(
       .typeError('Invalid date format')
       .required('*Required')
       .max(currentDate, 'Date of birth cannot be in the future')
-      .max(minDate, 'You must be at least 18 years old'),
-
+      .max(minDate, 'You must be at least 18 years old')
+      .min(minYearDate, 'Date of birth cannot be earlier than January 1, 1900'),
 
   },
 
@@ -1710,6 +1715,8 @@ export function DesignationEditForm({
                           disabled={isUserForRead}
                           error={errors.dateOfJoining}
                           touched={touched.dateOfJoining}
+                       
+                          minDate={values.dateOfBirth ? new Date(values.dateOfBirth) : null}
                         />
                         <ErrorMessage className="form-feedBack" name="dateOfJoining" component="div" />
                       </div>
@@ -1730,8 +1737,10 @@ export function DesignationEditForm({
                           dateFormat="dd/MM/yyyy"
                           showTimeInput
                           name="dateOfConfirmation"
-                          disabled={disabledConfirmationDateSelected}
+                          // disabled={disabledConfirmationDateSelected}
                           autoComplete="off"
+                       
+                          minDate={values.dateOfJoining ? new Date(values.dateOfJoining) : null}
                         />
                         <ErrorMessage className="form-feedBack" name="dateOfConfirmation" component="div" />
                       </div>
@@ -1751,6 +1760,9 @@ export function DesignationEditForm({
                           name="dateOfConfirmationDue"
                           disabled={disbaledConfirmationDueDateSelected}
                           autoComplete="off"
+                  
+                        
+                          minDate={values.dateOfJoining ? new Date(values.dateOfJoining) : null}
                         />
                         <ErrorMessage className="form-feedBack" name="dateOfConfirmationDue" component="div" />
                       </div>
@@ -1770,6 +1782,7 @@ export function DesignationEditForm({
                           name="dateOfConfirmationEnter"
                           disabled={disbaledConfirmationEnterDateSelected}
                           autoComplete="off"
+                          minDate={values.dateOfConfirmationDue ? new Date(values.dateOfConfirmationDue) :  new Date(values.dateOfJoining)}
                         />
                         <ErrorMessage className="form-feedBack" name="dateOfConfirmationEnter" component="div" />
                       </div>
@@ -1787,8 +1800,9 @@ export function DesignationEditForm({
                           dateFormat="dd/MM/yyyy"
                           showTimeInput
                           name="dateOfContractExpiry"
-                          disabled={disabledContractExpirtyDateSelected}
+                          // disabled={disabledContractExpirtyDateSelected}
                           autoComplete="off"
+                          minDate={values.dateOfJoining ? new Date(values.dateOfJoining):  null}
                         />
                         <ErrorMessage className="form-feedBack" name="dateOfContractExpiry" component="div" />
                       </div>
@@ -1963,7 +1977,8 @@ export function DesignationEditForm({
                           name="lastReviewDate"
                           disabled={isUserForRead}
                           autoComplete="off"
-
+                          maxDate={new Date()}
+                          minDate={values.dateOfJoining ? new Date(values.dateOfJoining):  null}
                         />
                         <ErrorMessage className="form-feedBack" name="lastReviewDate" component="div" />
                       </div>
@@ -1985,8 +2000,9 @@ export function DesignationEditForm({
                           dateFormat="dd/MM/yyyy"
                           showTimeInput
                           name="nextReviewDate"
-
+                          minDate={new Date()}
                           autoComplete="off"
+                          // minDate={values.dateOfJoining ? new Date(values.dateOfJoining):  null}
                         />
                         <ErrorMessage className="form-feedBack" name="nextReviewDate" component="div" />
                       </div>
@@ -2059,6 +2075,8 @@ export function DesignationEditForm({
                           name="dateOfBirth"
                           disabled={isUserForRead}
                           autoComplete="off"
+                          maxDate={new Date()}
+                          minDate={new Date(1900, 0, 1)}
 
                         />
                         <ErrorMessage className="form-feedBack" name="dateOfBirth" component="div" />
@@ -2225,6 +2243,8 @@ export function DesignationEditForm({
                           name="passportExpiry"
 
                           autoComplete="off"
+                          minDate={new Date()}
+                         
                         />
                         <ErrorMessage className="form-feedBack" name="passportExpiry" component="div" />
                       </div>
@@ -2248,6 +2268,7 @@ export function DesignationEditForm({
                           name="drivingLicenseExpiry"
 
                           autoComplete="off"
+                          minDate={new Date()}
                         />
                         <ErrorMessage className="form-feedBack" name="drivingLicenseExpiry" component="div" />
                       </div>
@@ -2581,7 +2602,7 @@ export function DesignationEditForm({
                           <td>Start Date</td>
                           <td>End Date</td>
                         </tr>
-                        {console.log("::work::", deferrors)}
+                        
                         {workExperienceList?.map((obj, rightindex) => (
 
                           <><tr>
@@ -2666,6 +2687,8 @@ export function DesignationEditForm({
                                 name="startDate"
                                 disabled={isUserForRead}
                                 autoComplete="off"
+                                maxDate={new Date()}
+                                minDate={values.dateOfBirth ? new Date(values.dateOfBirth) : null}
                               />
                               {deferrors[`startDate_W-${rightindex}`] && <div className="form-feedBack">{deferrors[`startDate_W-${rightindex}`]}</div>}
                             </td>
@@ -2688,6 +2711,8 @@ export function DesignationEditForm({
                                 name="endDate"
                                 disabled={isUserForRead}
                                 autoComplete="off"
+                                maxDate={new Date()}
+                                minDate={values.dateOfBirth ? new Date(values.dateOfBirth) : null}
                               />
                               {deferrors[`endDate_W-${rightindex}`] && <div className="form-feedBack">{deferrors[`endDate_W-${rightindex}`]}</div>}
                             </td>
