@@ -39,12 +39,11 @@ export const bankSlice = createSlice({
             }
         },
         bankFetched: (state, action) => {
-            // console.log(action)
-            console.log("user slice",action.payload)
+            // 
+            
             const entities = action.payload.data?.data.rows;
-            console.log("ent bank",entities)
             const totalResult = action.payload.data?.data.totalResults;
-            console.log(entities);
+            
             state.listLoading = false;
             state.error = null;
             state.entities = entities;
@@ -53,8 +52,8 @@ export const bankSlice = createSlice({
 
          //get User By ID
          BankFetchedForEdit: (state, action) => {
-            console.log("get user detail from receipt slice")
-            console.log(action);
+            
+            
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
@@ -62,8 +61,8 @@ export const bankSlice = createSlice({
 
         //get User By ID
         userFetched: (state, action) => {
-            console.log("get user detail from receipt slice")
-            console.log(action);
+            
+            
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
@@ -72,14 +71,14 @@ export const bankSlice = createSlice({
 
             state.error = null;
             state.actionsLoading = false;
-            console.log("bank deleted ")
+            
             console.log(state.entities);
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );
         },
         bankCreated: (state, action) => {
-             console.log("action payload for bank", action.payload);
+             
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);

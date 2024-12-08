@@ -39,12 +39,11 @@ export const OnetimeAllowanceSlice = createSlice({
             }
         },
         ontimeAllowanceFetched: (state, action) => {
-            // console.log(action)
-            console.log("user slice",action.payload)
+            // 
+            
             const entities = action.payload.data?.data;
-            console.log("ent ontimeAllowance",entities)
             const totalResult = action.payload.data?.data.totalResults;
-            console.log(entities);
+            
             state.listLoading = false;
             state.error = null;
             state.entities = entities;
@@ -62,7 +61,7 @@ export const OnetimeAllowanceSlice = createSlice({
         //get User By ID
         userFetched: (state, action) => {
          
-            console.log(action);
+            
             state.actionsLoading = false;
             state.userForEdit = action.payload.userForEdit;
             state.error = null;
