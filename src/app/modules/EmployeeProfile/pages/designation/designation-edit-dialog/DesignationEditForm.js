@@ -95,7 +95,7 @@ const profileValidation = Yup.object().shape(
       .required("Required*"),
 
     dateOfJoining: Yup.date()
-      .max(currentDate, 'Date of joining cannot be in the future')
+      // .max(currentDate, 'Date of joining cannot be in the future')
 
       .test('dateOfBirth', 'Date of joining must be after the date of birth', function (value) {
         const { dateOfBirth } = this.parent; // Access the value of min_year
@@ -1692,13 +1692,15 @@ export function DesignationEditForm({
                           onChange={(date) => {
                             setFieldValue("dateOfJoining", date);
                             setJoiningDate(date);
-
-                            if (values.employeeTypeId == "93") // Probation
+                        
+                            if (values?.employeeTypeId == "93" && !isNaN(defContractExpiryPolicy)) // Probation
+                   
                             {
+                            
                               setConfirmationDueDate(addMonths(date, defProbationPolicyMonth))
                               setFieldValue("dateOfConfirmationDue", addMonths(date, defProbationPolicyMonth))
                             }
-                            if (values.employeeTypeId == "147") // Contract Type
+                            if (values?.employeeTypeId == "147" && !isNaN(defContractExpiryPolicy)) // Contract Type
                             {
                               setContractExpiryDate(addMonths(date, defContractExpiryPolicy))
                               setFieldValue("dateOfContractExpiry", addMonths(date, defContractExpiryPolicy))
