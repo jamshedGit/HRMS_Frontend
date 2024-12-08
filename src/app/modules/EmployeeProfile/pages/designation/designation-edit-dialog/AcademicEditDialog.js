@@ -63,7 +63,7 @@ export function AcademicEditDialog({ id, show, onHide, userForRead }) {
   //   }
   // }, [actionsLoading === true]);
 
-  //console.log("action", action);
+
 
   useEffect(() => {
     dispatch(actions.fetchUser(id));
@@ -73,7 +73,7 @@ export function AcademicEditDialog({ id, show, onHide, userForRead }) {
 
     if (!id) {
 
-      console.log("emp profile save", user, image,contactList);
+ 
     
       dispatch(actions.createEmpProfile({ ...user, profile_image: image,contactList }, disbaleLoading, onHide));
 
@@ -82,8 +82,8 @@ export function AcademicEditDialog({ id, show, onHide, userForRead }) {
       //   return item.value === +user.status;
       // });
 
-      console.log("getUserStatus::", user, image,contactList);
-      console.log("userId des", user.designationId);
+  
+
       const EmpProfileUpdatedFields = {
         designationId: user.designationId || 0,
         Id: user.Id,
@@ -128,7 +128,7 @@ export function AcademicEditDialog({ id, show, onHide, userForRead }) {
         dateOfRetirement: user.dateOfRetirement
       };
 
-      console.log("profile emp::3", EmpProfileUpdatedFields);
+
       dispatch(actions.updateEmpProfile(EmpProfileUpdatedFields,contactList, disbaleLoading, onHide));
       dispatch(actions.fetchUsers(usersUIProps.queryParams));
     }

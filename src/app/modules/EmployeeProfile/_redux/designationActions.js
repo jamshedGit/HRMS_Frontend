@@ -6,36 +6,36 @@ const { actions } = empProfileSlice;
 // const { roleActions } = getAllrolesSlice
 
 export const fetchUsers = (queryparm) => async (dispatch) => {
-  // console.log("Receive QPsss", queryparm)
+ 
   dispatch(actions.startCall({ callType: callTypes.list }));
-  console.log("test query param", queryparm)
+
   return requestFromServer.getAllEmpProfile(queryparm)
     
     .then((response) => {
-      //  console.log("user action receipt fetched 321")
-      console.log("response", response)
+  
+     
       dispatch(actions.profileFetched(response));
     })
     .catch((error) => {
-      //console.log("Can't find user", error)
+  
       error.clientMessage = "Can't find religion record";
       dispatch(actions.catchError({ error, callType: callTypes.list }));
     });
 };
 
 export const fetchContactInfo = (queryparm) => async (dispatch) => {
-  // console.log("Receive QPsss", queryparm)
+
   dispatch(actions.startCall({ callType: callTypes.list }));
-  console.log("test query param", queryparm)
+
   return requestFromServer.getAllContactInfo(queryparm)
     
     .then((response) => {
-      //  console.log("user action receipt fetched 321")
-      console.log("response", response)
+ 
+
       dispatch(actions.profileFetched(response));
     })
     .catch((error) => {
-      //console.log("Can't find user", error)
+    
       error.clientMessage = "Can't find religion record";
       dispatch(actions.catchError({ error, callType: callTypes.list }));
     });
@@ -43,7 +43,7 @@ export const fetchContactInfo = (queryparm) => async (dispatch) => {
 
 export const fetchUser = (id) => (dispatch) => {
 
-  console.log("User Action id " + id)
+
   if (!id) {
     return dispatch(actions.emp_profileFetchedForEdit({ userForEdit: undefined }));
   }
@@ -53,7 +53,7 @@ export const fetchUser = (id) => (dispatch) => {
     .getEmpProfileById({ Id: id })
     .then((response) => {
       const entities = response.data?.data;
-      console.log("entities " + entities)
+    
       dispatch(actions.emp_profileFetchedForEdit({ userForEdit: entities }));
     })
     .catch((error) => {
@@ -67,7 +67,7 @@ export const deleteEmpProfile = (id) => (dispatch) => {
   return requestFromServer
     .deleteEmpProfile({ Id: id })
     .then((response) => {
-      //console.log("response from delete user ", response.data.message)
+  
       dispatch(actions.emp_profileDeleted({ Id: id }));
       toast.success("Successfully Deleted", {
         position: "top-right",
@@ -90,7 +90,7 @@ export const activeUser = (id) => (dispatch) => {
   return requestFromServer
     .deleteEmpProfile({ Id: id })
     .then((response) => {
-      //console.log("response from delete user ", response.data.message)
+   
       dispatch(actions.emp_profileDeleted({ id: id }));
       toast.success("Successfully Activated", {
         position: "top-right",
@@ -112,14 +112,14 @@ export const createEmpProfile = (BodyObj, disbaleLoading, onHide) => (
   dispatch
 ) => {
  
-  console.log("BodyObj", BodyObj);
+
   return requestFromServer
     .createEmpProfile(BodyObj)
     .then((res) => {
       dispatch(actions.startCall({ callType: callTypes.action }));
       const user = res.data?.data;
-      console.log("emp profile");
-      console.log(user);
+  
+
       dispatch(actions.emp_profileCreated(user));
       disbaleLoading();
       toast.success("Successfully Created", {
@@ -153,9 +153,9 @@ export const updateEmpProfile = (user,contactList,workExperienceList,academicLis
   return requestFromServer
     .updateEmpProfile({...user,contactList,workExperienceList,academicList,skillsList,incidentList})
     .then((response) => {
-      console.log("my response",response?.config?.data);
+   
       const updatedProfile = response?.config?.data; // response.data?.data;
-      console.log("emp profile Res", response,updatedProfile)
+  
       dispatch(actions.emp_profileUpdated({ updatedProfile }));
       dispatch(actions.startCall({ callType: callTypes.action }));
       disbaleLoading();
@@ -173,7 +173,7 @@ export const updateEmpProfile = (user,contactList,workExperienceList,academicLis
 
     })
     .catch((error) => {
-      // console.log("error User update", error)
+
       //error.clientMessage = "Can't update User"
       dispatch(actions.catchError({ error, callType: callTypes.action }));
       disbaleLoading();
@@ -196,7 +196,7 @@ export const fetchRoles = () => (dispatch) => {
     .getAllRoles()
     .then((response) => {
       const entities = response.data?.data;
-      // console.log("User entities: ", entities)
+ 
       dispatch(actions.RolesFetched(entities));
     })
     .catch((error) => {

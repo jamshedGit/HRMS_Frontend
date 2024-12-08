@@ -15,7 +15,7 @@ import CurrentModuleName from "../../../../../utils/common-modules/ModuleName"
 
 export function ReligionCard() {
   const designationUIContext = useDesignationUIContext()
-  //console.log("designationUIContext", designationUIContext)
+
   const { openModal } = useModal();
   const DesignationUIProps = useMemo(() => {
     return {
@@ -31,7 +31,7 @@ export function ReligionCard() {
     }),
     shallowEqual
   )
-  console.log("userAccess Temp", userAccess)
+
   const accessUser = userAccess.find(
     (item) => item.componentName === "CreateProfile"
   )

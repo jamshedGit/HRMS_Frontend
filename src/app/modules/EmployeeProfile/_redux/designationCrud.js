@@ -4,7 +4,7 @@ export const USERS_URL = process.env.REACT_APP_API_URL;
 
 //Create user
 export function createEmpProfile(body) {
-  console.log("emp profile religion step 1", body)
+
   
   // body.Name = body.txtbankName;
   // delete body.txtbankName
@@ -14,31 +14,31 @@ export function createEmpProfile(body) {
 }
 // Read
 export function getAllEmpProfile(body) {
-  console.log("body",body);
+
   return axios.post(`${USERS_URL}/profile/read-all-profile`, body);
 }
 
 export function getAllContactInfo(body) {
-  console.log("body contact",body);
+
   return axios.post(`${USERS_URL}/profile/read-all-contact`, body);
 }
 
 
 export function getEmpProfileById(id) {
-   console.log("Religion id", id)
+ 
   return axios.post(`${USERS_URL}/profile/read-profile`, id);
 }
 
 //Update
 export function updateEmpProfile(bodyObj) {
-   console.log("updateUser 12", bodyObj)
+
   return axios.put(`${USERS_URL}/profile/update-profile`, bodyObj);
 }
 
 //Delete
 export function deleteEmpProfile(body) {
-  console.log("body")
-  console.log(body);
+
+
   return axios.patch(`${USERS_URL}/profile/delete-profile`, body);
 }
 

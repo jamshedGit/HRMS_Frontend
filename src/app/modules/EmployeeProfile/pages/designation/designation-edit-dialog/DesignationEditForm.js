@@ -207,7 +207,7 @@ const profileValidation = Yup.object().shape(
 
 
 ).test('check-marital-status', 'Invalid marital status for selected title', function (value) {
-  console.log("validate::", value)
+
   const { title, maritalStatus, gender } = value;
 
   // Check conditions based on title // 196 == Single
@@ -330,7 +330,7 @@ export function DesignationEditForm({
   useEffect(() => {
     if(user.Id)
       {
-        console.log("::::::d",user)
+    
         if (user.employeeTypeId == 148) // WHEN Select Permanet value
         {
           // For Empty Object
@@ -358,7 +358,7 @@ export function DesignationEditForm({
         }
         else if (user.employeeTypeId == 147) // Contract Type
         {
-          console.log(":::::eeee:::",user.employeeTypeId)
+   
           //  setContractExpiryDate('');
           setConfirmationDate('');
           setConfirmationDueDate('');
@@ -542,7 +542,7 @@ export function DesignationEditForm({
   useEffect(() => {
 
     const contractType = defcontractType?.value ? defcontractType.value : user.contractTypeId;
-    console.log("::tet", dashboard.allContractTypeList, contractType)
+
     setcontractType(
       dashboard.allContractTypeList &&
       dashboard.allContractTypeList.filter((item) => {
@@ -555,7 +555,7 @@ export function DesignationEditForm({
   ///
 
   useEffect(() => {
-    console.log("marital::", user, dashboard.allMaritalStatus);
+
     const maritalStatus = defMaritalStatus?.value ? defMaritalStatus.value : user.maritalStatus;
     setDefaultMaritalStatus(
 
@@ -621,7 +621,7 @@ export function DesignationEditForm({
   // This method is used for when edit record and get selected dept where id save in DB
   useEffect(() => {
     const deptId = defDept?.value ? defDept.value : user.departmentId;
-    console.log("deptID", deptId);
+
     setDefaultDept(
       dashboard.allDept &&
       dashboard.allDept.filter((item) => {
@@ -697,7 +697,7 @@ export function DesignationEditForm({
 
   useEffect(() => {
     const reportTo = defEmployeeReportTo?.value ? defEmployeeReportTo.value : user.reportTo;
-    console.log("reportTo", reportTo);
+   
     setEmployeeReportToDefault(
       dashboard.allEmployees &&
       dashboard.allEmployees.filter((item) => {
@@ -711,7 +711,7 @@ export function DesignationEditForm({
   useEffect(() => {
     const emptypeId = defchildEmptypeMenus?.value ? defchildEmptypeMenus.value : user.employeeTypeId;
 
-    console.log("::gree::", emptypeId);
+
     setDefaultChildEmpTypeMenus(
       dashboard.allEmpTypeChildMenus &&
       dashboard.allEmpTypeChildMenus.filter((item) => {
@@ -745,7 +745,7 @@ export function DesignationEditForm({
 
   useEffect(() => {
     const cityId = defCity?.value ? defCity.value : user.cityId;
-    console.log('cityId', cityId, dashboard.allCity)
+ 
     setDefaultCity(
       dashboard.allCity &&
       dashboard.allCity.filter((item) => {
@@ -757,7 +757,7 @@ export function DesignationEditForm({
   useEffect(() => {
     if (user.cityId) {
 
-      console.log(user);
+ 
       setImage(user.profile_image || '');
 
     }
@@ -767,7 +767,7 @@ export function DesignationEditForm({
     if (event.target.files && event.target.files[0]) {
       let img = event.target.files[0];
       setFile(img);
-      console.log("img", URL.createObjectURL(img));
+   
       setImage(URL.createObjectURL(img));
     }
   };
@@ -785,9 +785,9 @@ export function DesignationEditForm({
 
     const fetchWorkExperienceData = async () => {
       try {
-        console.log('test exp', id)
+      
         const response = await axios.post(`${USERS_URL}/experience/read-all-experienceById`, { Id: id });
-        console.log("experience resp", response);
+    
         setworkExperienceList(response?.data?.data);
 
       } catch (error) {
@@ -797,9 +797,9 @@ export function DesignationEditForm({
 
     const fetchAcademicData = async () => {
       try {
-        console.log('test academic', id)
+    
         const response = await axios.post(`${USERS_URL}/academic/read-all-academic_by_empId`, { Id: id });
-        console.log("academy resp", response);
+       
         setAcademicList(response?.data?.data);
 
       } catch (error) {
@@ -809,9 +809,9 @@ export function DesignationEditForm({
 
     const fetchSkillsData = async () => {
       try {
-        console.log('test skill empid', id)
+   
         const response = await axios.post(`${USERS_URL}/skills/read-all-skills_by_employeeId`, { Id: id });
-        console.log("skill resp", response);
+        
         setSkillList(response?.data?.data);
 
       } catch (error) {
@@ -821,9 +821,9 @@ export function DesignationEditForm({
 
     const fetchIncidentData = async () => {
       try {
-        console.log('test incident empid', id)
+     
         const response = await axios.post(`${USERS_URL}/incident/read-all-incident_by_employeeId`, { Id: id });
-        console.log("incident resp", response);
+   
         setIncidentList(response?.data?.data);
 
       } catch (error) {
@@ -841,7 +841,7 @@ export function DesignationEditForm({
   // For Add Employee Contact States
 
   const addRowContact = (element) => {
-    console.log("click", element.target.id)
+ 
     setDefaultContactList([...defContactList, { transactionType: element.target.id, employeeId: id }])
   }
 
@@ -870,7 +870,7 @@ export function DesignationEditForm({
 
   const handleDatePicker = (el, key, index, val) => {
 
-    console.log("datepicker::", el, key, index);
+
     setworkExperienceList([...workExperienceList.map((val, ind) => {
       if (ind == index) {
         val[key] = new Date(el)
@@ -883,12 +883,12 @@ export function DesignationEditForm({
   // const handleFieldChangedExperience = (el) => {
 
 
-  //   console.log("::go", el);
+
   //   const index = el?.target?.id.split('-')[1]
   //   const key = el?.target?.id.split('-')[0]
 
   //   if (key == "countryId") {
-  //     console.log("::el::", el);
+
   //     //  dispatch(fetchAllCity(el.target.value));
 
   //   }
@@ -928,7 +928,7 @@ export function DesignationEditForm({
 
   const handleDatePickerAcademic = (el, key, index, val) => {
 
-    console.log("datepicker::", el, key, index);
+
     setAcademicList([...academicList.map((val, ind) => {
       if (ind == index) {
         val[key] = new Date(el)
@@ -942,13 +942,13 @@ export function DesignationEditForm({
   const fetchEmployeePolicyBySubsidiaryId = async (subsidiaryId) => {
     try {
       const response = await axios.post(`${USERS_URL}/policy/read-policy-by-subsidiaryId`, { subsidiaryId: subsidiaryId || 0 });
-      console.log("policy resp", response?.data?.data[0]);
+
 
       setDefaultProbationPolicyMonth(response?.data?.data[0].probationPolicyInMonth)
       setDefaultCnotractExpiryPolicy(response?.data?.data[0].contractualPolicyInMonth)
       // const currentDate = new Date(user.dateOfJoining); // Current date
       // const newDate = addMonths(currentDate,user.probationPolicyInMonth);
-      // console.log("malta",newDate);
+   
 
       // setDefaultProbationPolicyMonth(new Date(newDate));
 
@@ -961,12 +961,12 @@ export function DesignationEditForm({
 
 
   // const handleFieldChangedAcademic = (el) => {
-  //   console.log("::go", el);
+
   //   const index = el.target.id.split('-')[1]
   //   const key = el.target.id.split('-')[0]
 
   //   if (key == "countryId") {
-  //     console.log("::el::", el);
+
   //     // dispatch(fetchAllCity(el.target.value));
 
   //   }
@@ -1005,7 +1005,7 @@ export function DesignationEditForm({
 
   const handleDatePickerSkills = (el, key, index, val) => {
 
-    console.log("datepicker::", el, key, index);
+
     setSkillList([...skillsList.map((val, ind) => {
       if (ind == index) {
         val[key] = new Date(el)
@@ -1016,7 +1016,7 @@ export function DesignationEditForm({
   }
 
   // const handleFieldChangedSkills = (el) => {
-  //   console.log("::go", el);
+
   //   const index = el?.target.id.split('-')[1]
   //   const key = el?.target.id.split('-')[0]
   //   setSkillList([...skillsList.map((val, ind) => {
@@ -1051,7 +1051,7 @@ export function DesignationEditForm({
 
   const handleDatePickerIncident = (el, key, index, val) => {
 
-    console.log("datepicker::", el, key, index);
+
     setIncidentList([...incidentList.map((val, ind) => {
       if (ind == index) {
         val[key] = new Date(el)
@@ -1067,7 +1067,7 @@ export function DesignationEditForm({
     setIncidentList(newIncidentList);
   };
   // const handleFieldChangedIncident = (el) => {
-  //   console.log("::go", el);
+
   //   const index = el?.target.id.split('-')[1]
   //   const key = el?.target.id.split('-')[0]
   //   setIncidentList([...incidentList.map((val, ind) => {
@@ -1086,7 +1086,7 @@ export function DesignationEditForm({
 
   // End Academic
 
-  console.log("workExperienceList", workExperienceList)
+
 
   const validate = () => {
     const newErrors = {};
@@ -1117,7 +1117,7 @@ export function DesignationEditForm({
       if (!obj.cityId) {
         newErrors[`cityId-${index}`] = '*Required';
       }
-      console.log("work date", obj.startDate);
+   
       const num = getDateDiffInDays(obj.startDate, new Date().getTime())
 
 
@@ -1228,14 +1228,14 @@ export function DesignationEditForm({
         validationSchema={profileValidation}
         onSubmit={async (values) => {
 
-          console.log("::ppp::", values);
+        
           //const t =  handleSubmit();
           const validationErrors = validate();
-          console.log("::val::", validationErrors)
+      
           if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
           } else {
-            console.log('Form submitted:', values);
+      
             // Reset errors on successful submission
             setErrors({});
 
@@ -1252,7 +1252,7 @@ export function DesignationEditForm({
                 });
             }
             else {
-              console.log("values emp", values)
+        
               saveEmployeeProfile(values, profile_image, defContactList, workExperienceList, academicList, skillsList, incidentList);
             }
           }
@@ -1520,7 +1520,7 @@ export function DesignationEditForm({
                             // handleBlur({ target: { name: "countryId" } });
                           }}
                           onChange={(e) => {
-                            console.log("::dd1", e.value);
+                     
                             setFieldValue("employeeTypeId", e.value || null);
 
 
@@ -1563,13 +1563,13 @@ export function DesignationEditForm({
                             //   // setContractExpiryDate('');
                             //   // setConfirmationDate('');
                             //   // setConfirmationEnterDate('');
-                            //   console.log("session", defProbationPolicyMonth)
+                      
                             
                             //   // setFieldValue("dateOfConfirmationDue", defProbationPolicyMonth || null)
                             //   // setConfirmationDueDate(addMonths(values.dateOfJoining || null, defProbationPolicyMonth))
 
                             //   const a = addMonths(values.dateOfJoining, defProbationPolicyMonth);
-                            //   console.log("::Probation", e.value,a);
+                      
                               
                             //   setConfirmationDueDate(a)
                             //   setFieldValue("dateOfConfirmationDue",new Date(a))
@@ -1839,7 +1839,7 @@ export function DesignationEditForm({
                           label={<span> Marital Status<span style={{ color: 'red' }}>*</span></span>}
                           name="maritalStatus"
                           // value={values.maritalStatus}
-
+                          isDisabled={isUserForRead && true}
                           onBlur={handleBlur}
                           onChange={(e) => {
                             setFieldValue("maritalStatus", e.value || null);
@@ -2744,7 +2744,7 @@ export function DesignationEditForm({
                           <td>Start Date</td>
                           <td>End Date</td>
                         </tr>
-                        {console.log("::aca", academicList)}
+                   
                         {academicList?.map((obj, rightindex) => (
                           <>
 

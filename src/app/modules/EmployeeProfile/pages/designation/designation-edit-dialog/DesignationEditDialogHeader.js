@@ -3,7 +3,7 @@ import { shallowEqual, useSelector } from "react-redux"
 import { Modal } from "react-bootstrap"
 import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls"
 
-export function DesignationEditDialogHeader({ id }) {
+export function DesignationEditDialogHeader({ id ,isUserForRead}) {
   const userForEdit = false
   const [title, setTitle] = useState("")
 
@@ -16,18 +16,20 @@ export function DesignationEditDialogHeader({ id }) {
   )
 
   useEffect(() => {
-    console.log("User Read Dialog Header")
+
     let _title = id ? "" : "Add Employee Profile"
-    if (userForEdit && id) {
-      _title = `Edit user '${userForEdit.firstName} ${userForEdit.lastName}'`
+    if (id) {
+      _title = `Edit Employee Profile `
     }
     setTitle(_title)
-  })
+  },[userForEdit, actionsLoading])
 
   return (
     <>
       <Modal.Header closeButton>
-        <Modal.Title id="example-modal-sizes-title-lg">{title}</Modal.Title>
+        <Modal.Title id="example-modal-sizes-title-lg">
+        {!isUserForRead ? title : "View Employee Profile"}
+          </Modal.Title>
       </Modal.Header>
     </>
   )
