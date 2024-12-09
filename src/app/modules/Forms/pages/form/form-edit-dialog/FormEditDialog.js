@@ -103,7 +103,8 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
       const formUpdatedFields = {
         Id: user.Id,
         formName: user.formName,
-        formCode: user.formCode
+        formCode: user.formCode,
+        isActive:user.isActive
       };
 
       console.log("formUpdatedFields", formUpdatedFields);

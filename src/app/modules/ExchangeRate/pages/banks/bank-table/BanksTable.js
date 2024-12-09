@@ -114,12 +114,16 @@ export function BanksTable() {
     },
     {
       dataField: "exchange_rate",
-      text: "Exchange.Rate",
+      text: "Exchange Rate",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
       style: {
-        minWidth: "160px",
+        minWidth: "10px",
+        textAlign: "center",
+      },
+      headerStyle: {
+        textAlign: "center", // Align header text to the left
       },
     },
    

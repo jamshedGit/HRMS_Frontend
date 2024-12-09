@@ -110,7 +110,7 @@ export function FormTable() {
     // },
     {
       dataField: "formCode",
-      text: "Form Code",
+      text: "Code",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -120,7 +120,7 @@ export function FormTable() {
     },
     {
       dataField: "formName",
-      text: "Form Name",
+      text: "Name",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -209,13 +209,14 @@ export function FormTable() {
               </Col> */}
               <Col lg={10}>
                 <Row>
-                  {newdata?.map((obj, rightindex) => (
+                  {/* {newdata?.map((obj, rightindex) => ( */}
+                  {newdata?.filter(obj => obj.isActive == true).map((obj, rightindex) => (
                     <Col lg={3} key={rightindex}>
                       <div className="row">
-                        {/* <a href='#' id={obj.Id}>{obj.formName}</a> */}
+               
                         <Link id={obj.Id} href="javascript:void(0)" onClick={() => handleClick(obj.Id,obj.formName)}>{obj.formName}</Link>
 
-                        {/* <Form.Text className={FormClasses.LABEL_NON_REQUIRED}>{right.rightName}</Form.Text> */}
+                       
                       </div>
                     </Col>
                   ))}

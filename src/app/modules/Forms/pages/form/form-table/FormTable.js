@@ -79,7 +79,7 @@ export function FormTable() {
     // },
     {
       dataField: "formCode",
-      text: "Form Code",
+      text: "Code",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -89,13 +89,26 @@ export function FormTable() {
     },
     {
       dataField: "formName",
-      text: "Form Name",
+      text: "Name",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
       style: {
         minWidth: "160px",
       },
+    },
+
+    
+    {
+      dataField: "isActive",
+      text: "Is Active",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+      formatter: (cell) => (cell === 1 ? "Yes" : "No"),
     },
    
     // {
