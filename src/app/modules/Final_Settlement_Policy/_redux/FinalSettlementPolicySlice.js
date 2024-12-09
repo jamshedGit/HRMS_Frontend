@@ -72,14 +72,11 @@ export const FinalSettlementPolicySlice = createSlice({
 
             state.error = null;
             state.actionsLoading = false;
-            console.log("finalSettlementPolicy deleted ")
-            
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );
         },
         finalSettlementPolicyCreated: (state, action) => {
-             console.log("action payload for finalSettlementPolicy", action.payload);
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);

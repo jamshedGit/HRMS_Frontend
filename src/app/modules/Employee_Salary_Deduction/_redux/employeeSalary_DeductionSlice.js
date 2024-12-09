@@ -39,12 +39,8 @@ export const employeeSalary_DeductionSlice = createSlice({
             }
         },
         employee_salary_Fetched: (state, action) => {
-            // 
-            
-            
             const entities = action.payload.data?.data.rows;
             const totalResult = action.payload.data?.data.totalResults;
-            
             state.listLoading = false;
             state.error = null;
             state.entities = entities;
@@ -72,14 +68,11 @@ export const employeeSalary_DeductionSlice = createSlice({
 
             state.error = null;
             state.actionsLoading = false;
-            console.log("employee_salary_ deleted ")
-            
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );
         },
         employee_salary_Created: (state, action) => {
-             console.log("action payload for employee_salary_", action.payload);
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);
@@ -90,7 +83,6 @@ export const employeeSalary_DeductionSlice = createSlice({
             // state.entities.push(action.payload)
           
             state.entities = state.entities.map((entity) => {
-                console.log("payload aca",action.payload);
                 //const payload = { ...action.payload };
                 let payload = JSON.stringify(action.payload)
                 let payloadObj = JSON.parse(payload);

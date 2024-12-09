@@ -72,14 +72,11 @@ export const fiscalSetupSlice = createSlice({
 
             state.error = null;
             state.actionsLoading = false;
-            console.log("FiscalSetup deleted ")
-            
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );
         },
         FiscalSetupCreated: (state, action) => {
-             console.log("action payload for FiscalSetup", action.payload);
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);
