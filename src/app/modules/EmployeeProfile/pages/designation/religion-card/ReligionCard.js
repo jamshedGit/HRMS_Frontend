@@ -11,10 +11,11 @@ import { useDesignationUIContext } from "../DesignationUIContext"
 import { BanksFilter } from "../bank-filter/BanksFIlter"
 import { useSelector, shallowEqual } from "react-redux"
 import { useModal } from '../../../../../../context/ModalContext';
+import CurrentModuleName from "../../../../../utils/common-modules/ModuleName"
 
 export function ReligionCard() {
   const designationUIContext = useDesignationUIContext()
-  //console.log("designationUIContext", designationUIContext)
+
   const { openModal } = useModal();
   const DesignationUIProps = useMemo(() => {
     return {
@@ -30,7 +31,7 @@ export function ReligionCard() {
     }),
     shallowEqual
   )
-  console.log("userAccess Temp",userAccess)
+
   const accessUser = userAccess.find(
     (item) => item.componentName === "CreateProfile"
   )
@@ -46,50 +47,64 @@ export function ReligionCard() {
 
   return (
     <>
-
       <Card>
-        <CardHeader title="">
-          <BanksFilter />
-          <CardHeaderToolbar>
-            {accessUser ? (
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={DesignationUIProps.newDesignationButtonClick}
-              >
-                + Add Employee Profile
-              </button>
-              // <button onClick={DesignationUIProps.newAcademicButtonClick}>Open Modal from HomePage</button>
-              
-            ) : (
-              <> </>
-            )}
-            {/* {userAccess.find((item) => {
-              if (
-                item.componentName === "CreateUser" ||
-                item.isAccess === true
-              ) {
-                return (
+
+        <CardHeader title={CurrentModuleName()} >
+
+          <div className="d-flex justify-content-between align-items-center gap-3 m-4">
+
+
+
+            <div className="pt-5">
+
+              <BanksFilter />
+
+            </div>
+
+            <div className=" p-2">
+
+              <CardHeaderToolbar>
+
+
+
+                {accessUser && (
+
                   <button
                     type="button"
                     className="btn btn-primary"
-                    onClick={DesignationUIProps.newUserButtonClick}
+                    onClick={DesignationUIProps.newDesignationButtonClick}
                   >
-                    Add New User
+                    + Add Employee Profile
                   </button>
-                )
-              }
-            })} */}
-          </CardHeaderToolbar>
+
+                )}
+
+
+
+
+
+              </CardHeaderToolbar>
+
+            </div>
+
+
+
+          </div>
+
         </CardHeader>
+
+
 
         <CardBody>
 
+
+
           <DesignationTable />
+
         </CardBody>
+
       </Card>
 
-     
     </>
   )
 }

@@ -5,7 +5,7 @@ import { ProfilePage } from "./designation/DesignationPage";
  //import { ReligionPage } from "./Religion/ReligionPage";
 
 export default function ProfileManagement() {
-  console.log('ProfileManagement mein aya')
+
   
   return (
     

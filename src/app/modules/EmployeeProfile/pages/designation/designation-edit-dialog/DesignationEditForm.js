@@ -23,11 +23,12 @@ import { Link } from "@material-ui/core";
 import { useDesignationUIContext } from "../DesignationUIContext";
 import MaskedInput from "react-text-mask";
 import { getDateDiffInDays } from "../../../../../utils/common";
+import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 
 export const USERS_URL = process.env.REACT_APP_API_URL;
 const currentDate = new Date();
 const minDate = new Date(currentDate.getFullYear() - 18, currentDate.getMonth(), currentDate.getDate());
-
+const minYearDate = new Date(1900, 0, 1);
 // Phone Number Regex
 const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
 // CNIC Regex
@@ -37,6 +38,12 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 // Validation schema
 const profileValidation = Yup.object().shape(
   {
+    deligation: Yup.string()
+    .when('requireDeligation', {
+      is: true, // Condition: when 'requireDeligation' is true
+      then: Yup.string().required(VALIDATION_MESSAGES.required), // Apply 'required' validation
+      otherwise: Yup.string(), // No validation if 'requireDeligation' is false
+    }),
     firstName: Yup.string()
       .required("Required*"),
     lastName: Yup.string()
@@ -88,7 +95,12 @@ const profileValidation = Yup.object().shape(
       .required("Required*"),
 
     dateOfJoining: Yup.date()
-      .max(currentDate, 'Date of joining cannot be in the future')
+      // .max(currentDate, 'Date of joining cannot be in the future')
+
+      .test('dateOfBirth', 'Date of joining must be after the date of birth', function (value) {
+        const { dateOfBirth } = this.parent; // Access the value of min_year
+        return value > dateOfBirth; // Ensure max_year is greater than min_year
+      })
       .required("Required*"),
 
 
@@ -187,15 +199,15 @@ const profileValidation = Yup.object().shape(
       .typeError('Invalid date format')
       .required('*Required')
       .max(currentDate, 'Date of birth cannot be in the future')
-      .max(minDate, 'You must be at least 18 years old'),
-
+      .max(minDate, 'You must be at least 18 years old')
+      .min(minYearDate, 'Date of birth cannot be earlier than January 1, 1900'),
 
   },
 
 
 
 ).test('check-marital-status', 'Invalid marital status for selected title', function (value) {
-  console.log("validate::", value)
+
   const { title, maritalStatus, gender } = value;
 
   // Check conditions based on title // 196 == Single
@@ -318,7 +330,7 @@ export function DesignationEditForm({
   useEffect(() => {
     if(user.Id)
       {
-        console.log("::::::d",user)
+    
         if (user.employeeTypeId == 148) // WHEN Select Permanet value
         {
           // For Empty Object
@@ -346,7 +358,7 @@ export function DesignationEditForm({
         }
         else if (user.employeeTypeId == 147) // Contract Type
         {
-          console.log(":::::eeee:::",user.employeeTypeId)
+   
           //  setContractExpiryDate('');
           setConfirmationDate('');
           setConfirmationDueDate('');
@@ -530,7 +542,7 @@ export function DesignationEditForm({
   useEffect(() => {
 
     const contractType = defcontractType?.value ? defcontractType.value : user.contractTypeId;
-    console.log("::tet", dashboard.allContractTypeList, contractType)
+
     setcontractType(
       dashboard.allContractTypeList &&
       dashboard.allContractTypeList.filter((item) => {
@@ -543,7 +555,7 @@ export function DesignationEditForm({
   ///
 
   useEffect(() => {
-    console.log("marital::", user, dashboard.allMaritalStatus);
+
     const maritalStatus = defMaritalStatus?.value ? defMaritalStatus.value : user.maritalStatus;
     setDefaultMaritalStatus(
 
@@ -609,7 +621,7 @@ export function DesignationEditForm({
   // This method is used for when edit record and get selected dept where id save in DB
   useEffect(() => {
     const deptId = defDept?.value ? defDept.value : user.departmentId;
-    console.log("deptID", deptId);
+
     setDefaultDept(
       dashboard.allDept &&
       dashboard.allDept.filter((item) => {
@@ -685,7 +697,7 @@ export function DesignationEditForm({
 
   useEffect(() => {
     const reportTo = defEmployeeReportTo?.value ? defEmployeeReportTo.value : user.reportTo;
-    console.log("reportTo", reportTo);
+   
     setEmployeeReportToDefault(
       dashboard.allEmployees &&
       dashboard.allEmployees.filter((item) => {
@@ -699,7 +711,7 @@ export function DesignationEditForm({
   useEffect(() => {
     const emptypeId = defchildEmptypeMenus?.value ? defchildEmptypeMenus.value : user.employeeTypeId;
 
-    console.log("::gree::", emptypeId);
+
     setDefaultChildEmpTypeMenus(
       dashboard.allEmpTypeChildMenus &&
       dashboard.allEmpTypeChildMenus.filter((item) => {
@@ -733,7 +745,7 @@ export function DesignationEditForm({
 
   useEffect(() => {
     const cityId = defCity?.value ? defCity.value : user.cityId;
-    console.log('cityId', cityId, dashboard.allCity)
+ 
     setDefaultCity(
       dashboard.allCity &&
       dashboard.allCity.filter((item) => {
@@ -745,7 +757,7 @@ export function DesignationEditForm({
   useEffect(() => {
     if (user.cityId) {
 
-      console.log(user);
+ 
       setImage(user.profile_image || '');
 
     }
@@ -755,7 +767,7 @@ export function DesignationEditForm({
     if (event.target.files && event.target.files[0]) {
       let img = event.target.files[0];
       setFile(img);
-      console.log("img", URL.createObjectURL(img));
+   
       setImage(URL.createObjectURL(img));
     }
   };
@@ -773,9 +785,9 @@ export function DesignationEditForm({
 
     const fetchWorkExperienceData = async () => {
       try {
-        console.log('test exp', id)
+      
         const response = await axios.post(`${USERS_URL}/experience/read-all-experienceById`, { Id: id });
-        console.log("experience resp", response);
+    
         setworkExperienceList(response?.data?.data);
 
       } catch (error) {
@@ -785,9 +797,9 @@ export function DesignationEditForm({
 
     const fetchAcademicData = async () => {
       try {
-        console.log('test academic', id)
+    
         const response = await axios.post(`${USERS_URL}/academic/read-all-academic_by_empId`, { Id: id });
-        console.log("academy resp", response);
+       
         setAcademicList(response?.data?.data);
 
       } catch (error) {
@@ -797,9 +809,9 @@ export function DesignationEditForm({
 
     const fetchSkillsData = async () => {
       try {
-        console.log('test skill empid', id)
+   
         const response = await axios.post(`${USERS_URL}/skills/read-all-skills_by_employeeId`, { Id: id });
-        console.log("skill resp", response);
+        
         setSkillList(response?.data?.data);
 
       } catch (error) {
@@ -809,9 +821,9 @@ export function DesignationEditForm({
 
     const fetchIncidentData = async () => {
       try {
-        console.log('test incident empid', id)
+     
         const response = await axios.post(`${USERS_URL}/incident/read-all-incident_by_employeeId`, { Id: id });
-        console.log("incident resp", response);
+   
         setIncidentList(response?.data?.data);
 
       } catch (error) {
@@ -829,7 +841,7 @@ export function DesignationEditForm({
   // For Add Employee Contact States
 
   const addRowContact = (element) => {
-    console.log("click", element.target.id)
+ 
     setDefaultContactList([...defContactList, { transactionType: element.target.id, employeeId: id }])
   }
 
@@ -858,7 +870,7 @@ export function DesignationEditForm({
 
   const handleDatePicker = (el, key, index, val) => {
 
-    console.log("datepicker::", el, key, index);
+
     setworkExperienceList([...workExperienceList.map((val, ind) => {
       if (ind == index) {
         val[key] = new Date(el)
@@ -871,12 +883,12 @@ export function DesignationEditForm({
   // const handleFieldChangedExperience = (el) => {
 
 
-  //   console.log("::go", el);
+
   //   const index = el?.target?.id.split('-')[1]
   //   const key = el?.target?.id.split('-')[0]
 
   //   if (key == "countryId") {
-  //     console.log("::el::", el);
+
   //     //  dispatch(fetchAllCity(el.target.value));
 
   //   }
@@ -916,7 +928,7 @@ export function DesignationEditForm({
 
   const handleDatePickerAcademic = (el, key, index, val) => {
 
-    console.log("datepicker::", el, key, index);
+
     setAcademicList([...academicList.map((val, ind) => {
       if (ind == index) {
         val[key] = new Date(el)
@@ -930,13 +942,13 @@ export function DesignationEditForm({
   const fetchEmployeePolicyBySubsidiaryId = async (subsidiaryId) => {
     try {
       const response = await axios.post(`${USERS_URL}/policy/read-policy-by-subsidiaryId`, { subsidiaryId: subsidiaryId || 0 });
-      console.log("policy resp", response?.data?.data[0]);
+
 
       setDefaultProbationPolicyMonth(response?.data?.data[0].probationPolicyInMonth)
       setDefaultCnotractExpiryPolicy(response?.data?.data[0].contractualPolicyInMonth)
       // const currentDate = new Date(user.dateOfJoining); // Current date
       // const newDate = addMonths(currentDate,user.probationPolicyInMonth);
-      // console.log("malta",newDate);
+   
 
       // setDefaultProbationPolicyMonth(new Date(newDate));
 
@@ -949,12 +961,12 @@ export function DesignationEditForm({
 
 
   // const handleFieldChangedAcademic = (el) => {
-  //   console.log("::go", el);
+
   //   const index = el.target.id.split('-')[1]
   //   const key = el.target.id.split('-')[0]
 
   //   if (key == "countryId") {
-  //     console.log("::el::", el);
+
   //     // dispatch(fetchAllCity(el.target.value));
 
   //   }
@@ -993,7 +1005,7 @@ export function DesignationEditForm({
 
   const handleDatePickerSkills = (el, key, index, val) => {
 
-    console.log("datepicker::", el, key, index);
+
     setSkillList([...skillsList.map((val, ind) => {
       if (ind == index) {
         val[key] = new Date(el)
@@ -1004,7 +1016,7 @@ export function DesignationEditForm({
   }
 
   // const handleFieldChangedSkills = (el) => {
-  //   console.log("::go", el);
+
   //   const index = el?.target.id.split('-')[1]
   //   const key = el?.target.id.split('-')[0]
   //   setSkillList([...skillsList.map((val, ind) => {
@@ -1039,7 +1051,7 @@ export function DesignationEditForm({
 
   const handleDatePickerIncident = (el, key, index, val) => {
 
-    console.log("datepicker::", el, key, index);
+
     setIncidentList([...incidentList.map((val, ind) => {
       if (ind == index) {
         val[key] = new Date(el)
@@ -1055,7 +1067,7 @@ export function DesignationEditForm({
     setIncidentList(newIncidentList);
   };
   // const handleFieldChangedIncident = (el) => {
-  //   console.log("::go", el);
+
   //   const index = el?.target.id.split('-')[1]
   //   const key = el?.target.id.split('-')[0]
   //   setIncidentList([...incidentList.map((val, ind) => {
@@ -1074,7 +1086,7 @@ export function DesignationEditForm({
 
   // End Academic
 
-  console.log("workExperienceList", workExperienceList)
+
 
   const validate = () => {
     const newErrors = {};
@@ -1105,7 +1117,7 @@ export function DesignationEditForm({
       if (!obj.cityId) {
         newErrors[`cityId-${index}`] = '*Required';
       }
-      console.log("work date", obj.startDate);
+   
       const num = getDateDiffInDays(obj.startDate, new Date().getTime())
 
 
@@ -1216,14 +1228,14 @@ export function DesignationEditForm({
         validationSchema={profileValidation}
         onSubmit={async (values) => {
 
-          console.log("::ppp::", values);
+        
           //const t =  handleSubmit();
           const validationErrors = validate();
-          console.log("::val::", validationErrors)
+      
           if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
           } else {
-            console.log('Form submitted:', values);
+      
             // Reset errors on successful submission
             setErrors({});
 
@@ -1240,7 +1252,7 @@ export function DesignationEditForm({
                 });
             }
             else {
-              console.log("values emp", values)
+        
               saveEmployeeProfile(values, profile_image, defContactList, workExperienceList, academicList, skillsList, incidentList);
             }
           }
@@ -1508,7 +1520,7 @@ export function DesignationEditForm({
                             // handleBlur({ target: { name: "countryId" } });
                           }}
                           onChange={(e) => {
-                            console.log("::dd1", e.value);
+                     
                             setFieldValue("employeeTypeId", e.value || null);
 
 
@@ -1517,81 +1529,81 @@ export function DesignationEditForm({
                             setDisabledConfirmationDate(false);
                             setDisbledConfirmationDueDate(false);
                             setDisabledContractExpiryDate(false);
-                            if (e.value == 148) // WHEN Select Permanet value
-                            {
-                              // For Empty Object
+                            // if (e.value == 148) // WHEN Select Permanet value
+                            // {
+                            //   // For Empty Object
 
-                              setContractExpiryDate('');
-                              setConfirmationDate('');
-                            //  setConfirmationDueDate('');
-                             // setConfirmationEnterDate('');
+                            //   setContractExpiryDate('');
+                            //   setConfirmationDate('');
+                            // //  setConfirmationDueDate('');
+                            //  // setConfirmationEnterDate('');
 
-                              //  setFieldValue("dateOfConfirmation", '');
-                              // setFieldValue("dateOfConfirmationDue", '');
-                              // setFieldValue("dateOfConfirmationEnter", '');
-                              // setFieldValue("dateOfContractExpiry", '');
+                            //   //  setFieldValue("dateOfConfirmation", '');
+                            //   // setFieldValue("dateOfConfirmationDue", '');
+                            //   // setFieldValue("dateOfConfirmationEnter", '');
+                            //   // setFieldValue("dateOfContractExpiry", '');
 
-                              // For Disabled Object
-                              //  setDisbledConfirmationEnterDate(true);
-                              //   setDisabledConfirmationDate(true);
-                              setDisbledConfirmationDueDate(true);
-                              setDisabledContractExpiryDate(true);
-                              setDisbledConfirmationEnterDate(true);
+                            //   // For Disabled Object
+                            //   //  setDisbledConfirmationEnterDate(true);
+                            //   //   setDisabledConfirmationDate(true);
+                            //   setDisbledConfirmationDueDate(true);
+                            //   setDisabledContractExpiryDate(true);
+                            //   setDisbledConfirmationEnterDate(true);
 
 
-                            }
-                            else if (e.value == 93) // Probation Type
-                            {
-                              // setFieldValue("dateOfConfirmation", '');
-                              // setFieldValue("dateOfContractExpiry", '');
+                            // }
+                            // else if (e.value == 93) // Probation Type
+                            // {
+                            //   // setFieldValue("dateOfConfirmation", '');
+                            //   // setFieldValue("dateOfContractExpiry", '');
 
-                              setDisabledConfirmationDate(true);
-                              setDisabledContractExpiryDate(true);
+                            //   setDisabledConfirmationDate(true);
+                            //   setDisabledContractExpiryDate(true);
 
-                              // setContractExpiryDate('');
-                              // setConfirmationDate('');
-                              // setConfirmationEnterDate('');
-                              console.log("session", defProbationPolicyMonth)
+                            //   // setContractExpiryDate('');
+                            //   // setConfirmationDate('');
+                            //   // setConfirmationEnterDate('');
+                      
                             
-                              // setFieldValue("dateOfConfirmationDue", defProbationPolicyMonth || null)
-                              // setConfirmationDueDate(addMonths(values.dateOfJoining || null, defProbationPolicyMonth))
+                            //   // setFieldValue("dateOfConfirmationDue", defProbationPolicyMonth || null)
+                            //   // setConfirmationDueDate(addMonths(values.dateOfJoining || null, defProbationPolicyMonth))
 
-                              const a = addMonths(values.dateOfJoining, defProbationPolicyMonth);
-                              console.log("::Probation", e.value,a);
+                            //   const a = addMonths(values.dateOfJoining, defProbationPolicyMonth);
+                      
                               
-                              setConfirmationDueDate(a)
-                              setFieldValue("dateOfConfirmationDue",new Date(a))
+                            //   setConfirmationDueDate(a)
+                            //   setFieldValue("dateOfConfirmationDue",new Date(a))
 
 
-                            }
-                            else if (e.value == 147) // Contract Type
-                            {
+                            // }
+                            // else if (e.value == 147) // Contract Type
+                            // {
 
-                              //  setContractExpiryDate('');
-                              // setConfirmationDate('');
-                              // setConfirmationDueDate('');
-                              // setConfirmationEnterDate('');
+                            //   //  setContractExpiryDate('');
+                            //   // setConfirmationDate('');
+                            //   // setConfirmationDueDate('');
+                            //   // setConfirmationEnterDate('');
 
-                              // setFieldValue("dateOfConfirmation", '');
-                              // setFieldValue("dateOfConfirmationDue", '');
-                              // setFieldValue("dateOfConfirmationEnter", '');
-                              // // setFieldValue("dateOfContractExpiry", '');
+                            //   // setFieldValue("dateOfConfirmation", '');
+                            //   // setFieldValue("dateOfConfirmationDue", '');
+                            //   // setFieldValue("dateOfConfirmationEnter", '');
+                            //   // // setFieldValue("dateOfContractExpiry", '');
 
-                              // For Disabled Object
-                              setDisbledConfirmationEnterDate(true);
-                              setDisabledConfirmationDate(true);
-                              setDisbledConfirmationDueDate(true);
-                              //  setDisabledContractExpiryDate(true);
-                              // setFieldValue("dateOfContractExpiry", defContractExpiryPolicy)
-                              // setContractExpiryDate(addMonths(values.dateOfJoining || null, defProbationPolicyMonth))
+                            //   // For Disabled Object
+                            //   setDisbledConfirmationEnterDate(true);
+                            //   setDisabledConfirmationDate(true);
+                            //   setDisbledConfirmationDueDate(true);
+                            //   //  setDisabledContractExpiryDate(true);
+                            //   // setFieldValue("dateOfContractExpiry", defContractExpiryPolicy)
+                            //   // setContractExpiryDate(addMonths(values.dateOfJoining || null, defProbationPolicyMonth))
 
-                              setContractExpiryDate(addMonths(values.dateOfJoining, defContractExpiryPolicy))
-                              setFieldValue("dateOfContractExpiry", addMonths(values.dateOfJoining, defContractExpiryPolicy))
+                            //   setContractExpiryDate(addMonths(values.dateOfJoining, defContractExpiryPolicy))
+                            //   setFieldValue("dateOfContractExpiry", addMonths(values.dateOfJoining, defContractExpiryPolicy))
                              
-                            }
+                            // }
 
 
-                            else {
+                            // else {
 
                               setFieldValue("dateOfContractExpiry", contractExpirtyDateSelected || new Date())
                               setFieldValue("dateOfConfirmationEnter", confirmationEnterDateSelected || new Date())
@@ -1603,7 +1615,7 @@ export function DesignationEditForm({
                               setConfirmationDueDate(new Date());
                               setConfirmationEnterDate(new Date());
 
-                            }
+                            // }
 
                             // dispatch(fetchAllFormsMenu(e.value));
                           }}
@@ -1680,13 +1692,15 @@ export function DesignationEditForm({
                           onChange={(date) => {
                             setFieldValue("dateOfJoining", date);
                             setJoiningDate(date);
-
-                            if (values.employeeTypeId == "93") // Probation
+                        
+                            if (values?.employeeTypeId == "93" && !isNaN(defContractExpiryPolicy)) // Probation
+                   
                             {
+                            
                               setConfirmationDueDate(addMonths(date, defProbationPolicyMonth))
                               setFieldValue("dateOfConfirmationDue", addMonths(date, defProbationPolicyMonth))
                             }
-                            if (values.employeeTypeId == "147") // Contract Type
+                            if (values?.employeeTypeId == "147" && !isNaN(defContractExpiryPolicy)) // Contract Type
                             {
                               setContractExpiryDate(addMonths(date, defContractExpiryPolicy))
                               setFieldValue("dateOfContractExpiry", addMonths(date, defContractExpiryPolicy))
@@ -1703,6 +1717,8 @@ export function DesignationEditForm({
                           disabled={isUserForRead}
                           error={errors.dateOfJoining}
                           touched={touched.dateOfJoining}
+                       
+                          minDate={values.dateOfBirth ? new Date(values.dateOfBirth) : null}
                         />
                         <ErrorMessage className="form-feedBack" name="dateOfJoining" component="div" />
                       </div>
@@ -1723,8 +1739,10 @@ export function DesignationEditForm({
                           dateFormat="dd/MM/yyyy"
                           showTimeInput
                           name="dateOfConfirmation"
-                          disabled={disabledConfirmationDateSelected}
+                          // disabled={disabledConfirmationDateSelected}
                           autoComplete="off"
+                       
+                          minDate={values.dateOfJoining ? new Date(values.dateOfJoining) : null}
                         />
                         <ErrorMessage className="form-feedBack" name="dateOfConfirmation" component="div" />
                       </div>
@@ -1744,6 +1762,9 @@ export function DesignationEditForm({
                           name="dateOfConfirmationDue"
                           disabled={disbaledConfirmationDueDateSelected}
                           autoComplete="off"
+                  
+                        
+                          minDate={values.dateOfJoining ? new Date(values.dateOfJoining) : null}
                         />
                         <ErrorMessage className="form-feedBack" name="dateOfConfirmationDue" component="div" />
                       </div>
@@ -1763,6 +1784,7 @@ export function DesignationEditForm({
                           name="dateOfConfirmationEnter"
                           disabled={disbaledConfirmationEnterDateSelected}
                           autoComplete="off"
+                          minDate={values.dateOfConfirmationDue ? new Date(values.dateOfConfirmationDue) :  new Date(values.dateOfJoining)}
                         />
                         <ErrorMessage className="form-feedBack" name="dateOfConfirmationEnter" component="div" />
                       </div>
@@ -1780,8 +1802,9 @@ export function DesignationEditForm({
                           dateFormat="dd/MM/yyyy"
                           showTimeInput
                           name="dateOfContractExpiry"
-                          disabled={disabledContractExpirtyDateSelected}
+                          // disabled={disabledContractExpirtyDateSelected}
                           autoComplete="off"
+                          minDate={values.dateOfJoining ? new Date(values.dateOfJoining):  null}
                         />
                         <ErrorMessage className="form-feedBack" name="dateOfContractExpiry" component="div" />
                       </div>
@@ -1818,7 +1841,7 @@ export function DesignationEditForm({
                           label={<span> Marital Status<span style={{ color: 'red' }}>*</span></span>}
                           name="maritalStatus"
                           // value={values.maritalStatus}
-
+                          isDisabled={isUserForRead && true}
                           onBlur={handleBlur}
                           onChange={(e) => {
                             setFieldValue("maritalStatus", e.value || null);
@@ -1956,7 +1979,8 @@ export function DesignationEditForm({
                           name="lastReviewDate"
                           disabled={isUserForRead}
                           autoComplete="off"
-
+                          maxDate={new Date()}
+                          minDate={values.dateOfJoining ? new Date(values.dateOfJoining):  null}
                         />
                         <ErrorMessage className="form-feedBack" name="lastReviewDate" component="div" />
                       </div>
@@ -1978,8 +2002,9 @@ export function DesignationEditForm({
                           dateFormat="dd/MM/yyyy"
                           showTimeInput
                           name="nextReviewDate"
-
+                          minDate={new Date()}
                           autoComplete="off"
+                          // minDate={values.dateOfJoining ? new Date(values.dateOfJoining):  null}
                         />
                         <ErrorMessage className="form-feedBack" name="nextReviewDate" component="div" />
                       </div>
@@ -2052,6 +2077,8 @@ export function DesignationEditForm({
                           name="dateOfBirth"
                           disabled={isUserForRead}
                           autoComplete="off"
+                          maxDate={new Date()}
+                          minDate={new Date(1900, 0, 1)}
 
                         />
                         <ErrorMessage className="form-feedBack" name="dateOfBirth" component="div" />
@@ -2218,6 +2245,8 @@ export function DesignationEditForm({
                           name="passportExpiry"
 
                           autoComplete="off"
+                          minDate={new Date()}
+                         
                         />
                         <ErrorMessage className="form-feedBack" name="passportExpiry" component="div" />
                       </div>
@@ -2241,6 +2270,7 @@ export function DesignationEditForm({
                           name="drivingLicenseExpiry"
 
                           autoComplete="off"
+                          minDate={new Date()}
                         />
                         <ErrorMessage className="form-feedBack" name="drivingLicenseExpiry" component="div" />
                       </div>
@@ -2324,7 +2354,7 @@ export function DesignationEditForm({
                         />
                         {/* <ErrorMessage style={{color:"red"}} name="nic_no" component="div" /> */}
                       </div>
-
+{/* 
                       <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="emiratesId"
@@ -2334,8 +2364,8 @@ export function DesignationEditForm({
                           label={<span> Emirates Id</span>}
                           autoComplete="off"
                         />
-                        {/* <ErrorMessage style={{color:"red"}} name="nic_no" component="div" /> */}
-                      </div>
+                      
+                      </div> */}
 
                     </div>
 
@@ -2574,7 +2604,7 @@ export function DesignationEditForm({
                           <td>Start Date</td>
                           <td>End Date</td>
                         </tr>
-                        {console.log("::work::", deferrors)}
+                        
                         {workExperienceList?.map((obj, rightindex) => (
 
                           <><tr>
@@ -2659,6 +2689,8 @@ export function DesignationEditForm({
                                 name="startDate"
                                 disabled={isUserForRead}
                                 autoComplete="off"
+                                maxDate={new Date()}
+                                minDate={values.dateOfBirth ? new Date(values.dateOfBirth) : null}
                               />
                               {deferrors[`startDate_W-${rightindex}`] && <div className="form-feedBack">{deferrors[`startDate_W-${rightindex}`]}</div>}
                             </td>
@@ -2681,6 +2713,8 @@ export function DesignationEditForm({
                                 name="endDate"
                                 disabled={isUserForRead}
                                 autoComplete="off"
+                                maxDate={new Date()}
+                                minDate={values.dateOfBirth ? new Date(values.dateOfBirth) : null}
                               />
                               {deferrors[`endDate_W-${rightindex}`] && <div className="form-feedBack">{deferrors[`endDate_W-${rightindex}`]}</div>}
                             </td>
@@ -2712,7 +2746,7 @@ export function DesignationEditForm({
                           <td>Start Date</td>
                           <td>End Date</td>
                         </tr>
-                        {console.log("::aca", academicList)}
+                   
                         {academicList?.map((obj, rightindex) => (
                           <>
 
