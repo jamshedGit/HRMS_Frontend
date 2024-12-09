@@ -64,15 +64,13 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
   //   }
   // }, [actionsLoading === true]);
 
-
   useEffect(() => {
     dispatch(actions.fetchUser(id));
 
     // dispatch(actions.fetchUser(banksUIProps.queryParams))
-  }, [id, dispatch]);
+  }, [id, dispatch, show]);
 
   const saveEarningDeductionTran = async (user, emp_ed_Obj) => {
-
     if (!id) {
 
       const finalObject = { user }
@@ -120,7 +118,9 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
         payment_mode_Id: user.payment_mode_Id,
         company_bankId: user.company_bankId,
         company_branchId: user.company_branchId,
-        company_from_accNo: user.company_from_accNo,
+        overtime_working_day: user.overtime_working_day,
+        overtime_off_day: user.overtime_off_day,
+        overtime_holiday: user.overtime_holiday,
 
       };
 

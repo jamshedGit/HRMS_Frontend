@@ -54,7 +54,10 @@ export function BanksUIProvider({ BanksUIEvents, children }) {
     social_security_member: "",
     pension_member: "",
     factorVal: "",
-    tillTransferDate: ""
+    tillTransferDate: "",
+    overtime_working_day: 1,
+    overtime_off_day: 1,
+    overtime_holiday: 1,
 
   };
 

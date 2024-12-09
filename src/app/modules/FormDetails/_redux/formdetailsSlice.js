@@ -44,7 +44,6 @@ export const formDetailsSlice = createSlice({
             const entities = action.payload.data?.data.rows;
             
             const totalResult = action.payload.data?.data.totalResults;
-            console.log("totalResult child",totalResult);
             state.listLoading = false;
             state.error = null;
             state.entities = entities;
@@ -56,7 +55,6 @@ export const formDetailsSlice = createSlice({
             const entities = action.payload.data?.data.rows;
             
             const totalResult = action.payload.data?.data.totalResults;
-            console.log("totalResult child",totalResult);
             state.listLoading = false;
             state.error = null;
             state.customList = entities;
@@ -85,8 +83,6 @@ export const formDetailsSlice = createSlice({
 
             state.error = null;
             state.actionsLoading = false;
-            console.log("form record deleted ")
-            console.log(state.entities);
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );
@@ -98,7 +94,6 @@ export const formDetailsSlice = createSlice({
             state.entities.unshift(action.payload);
         },
         formCreatedCustom: (state, action) => {
-            console.log("action payload for custom list", JSON.stringify(action.payload));
            state.actionsLoading = false;
            state.error = null;
 
@@ -108,12 +103,10 @@ export const formDetailsSlice = createSlice({
             state.error = null;
             state.actionsLoading = false;
             // state.entities.push(action.payload)
-          console.log("formUpdated");
             state.entities = state.entities.map((entity) => {
                
                 //const payload = { ...action.payload };
                 let payload = JSON.stringify(action.payload)
-                console.log("::payload",payload)
                 let payloadObj = JSON.parse(payload);
                 let finalObj = JSON.parse(payloadObj.updatedform);
 

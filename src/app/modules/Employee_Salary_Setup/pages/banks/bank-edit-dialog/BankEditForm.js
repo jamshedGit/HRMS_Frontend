@@ -2,13 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { Input, Select, TextArea } from "../../../../../../_metronic/_partials/controls";
+import { Input } from "../../../../../../_metronic/_partials/controls";
 import { useDispatch, useSelector } from "react-redux";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 
 import {
-  fetchAllCity,
-  fetchAllCountry,
   fetchAllFormsMenu,
   fetchAllActiveEmployees,
   fetchAllActiveEmployeesSalaryForDDL,
@@ -23,15 +21,9 @@ import {
 import DatePicker from "react-datepicker";
 import axios from 'axios';
 import { amountLimit, amountLimitDynamic } from "../../../../../utils/common";
+import { DEFAULT_CALCULATION_TYPE_DROPDOWN, DROPDOWN, VALIDATION_MESSAGES } from "../../../../../utils/constants";
 export const USERS_URL = process.env.REACT_APP_API_URL;
 
-// Phone Number Regex
-const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
-// CNIC Regex
-const cnicRegExp = /^[0-9]{5}-[0-9]{7}-[0-9]$/;
-// Password Regex
-const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-// Validation schema
 const formValidation = Yup.object().shape(
   {
 
@@ -53,7 +45,7 @@ const formValidation = Yup.object().shape(
         is: true, // Condition to check if eobi_member is true
         then: Yup.string().required("Required"),
         otherwise: Yup.string().nullable(), // Optional if eobi_member is false
-      }), 
+      }),
 
     pf_accNo: Yup.string()
       .matches(/^\d+$/, "Must contain only digits") // Only digits validation
@@ -61,7 +53,7 @@ const formValidation = Yup.object().shape(
         is: true, // Condition to check if pf_member is true
         then: Yup.string().required("Required"),
         otherwise: Yup.string().nullable(), // Optional if pf_member is false
-      }), 
+      }),
 
     social_security_accNo: Yup.string()
       .matches(/^\d+$/, "Must contain only digits") // Only digits validation
@@ -69,7 +61,7 @@ const formValidation = Yup.object().shape(
         is: true, // Condition to check if social_security_member is true
         then: Yup.string().required("Required"),
         otherwise: Yup.string().nullable(), // Optional if social_security_member is false
-      }), 
+      }),
 
     pension_accNo: Yup.string()
       .matches(/^\d+$/, "Must contain only digits") // Only digits validation
@@ -77,7 +69,7 @@ const formValidation = Yup.object().shape(
         is: true, // Condition to check if pension_member is true
         then: Yup.string().required("Required"),
         otherwise: Yup.string().nullable(), // Optional if pension_member is false
-      }), 
+      }),
 
     company_from_accNo: Yup.string()
       .matches(/^\d+$/, "Must contain only digits"), // Only digits validation
@@ -129,6 +121,27 @@ const formValidation = Yup.object().shape(
         then: Yup.date().required("Required"),
         otherwise: Yup.date().nullable(), // Optional if pension_member is false
       }),
+    overtime_working_day: Yup.number()
+      .max(100, 'Value cannot be greater than 100')
+      .when('overtime_allowance', {
+        is: (value) => value === true || value === 1, // if select value is 2
+        then: Yup.number().required(VALIDATION_MESSAGES.required),
+        otherwise: Yup.number().notRequired(),
+      }),
+    overtime_off_day: Yup.number()
+      .max(100, 'Value cannot be greater than 100')
+      .when('overtime_allowance', {
+        is: (value) => value === true || value === 1, // if select value is 2
+        then: Yup.number().required(VALIDATION_MESSAGES.required),
+        otherwise: Yup.number().notRequired(),
+      }),
+    overtime_holiday: Yup.number()
+      .max(100, 'Value cannot be greater than 100')
+      .when('overtime_allowance', {
+        is: (value) => value === true || value === 1, // if select value is 2
+        then: Yup.number().required(VALIDATION_MESSAGES.required),
+        otherwise: Yup.number().notRequired(),
+      })
 
   },
 
@@ -177,6 +190,8 @@ export function BankEditForm({
   const [defGrossSalaryDB, setGrossSalaryDB] = useState(0);
   const [defBasicSalaryDB, setBasicSalaryDB] = useState(0);
   const [deferrors, setErrors] = useState({});
+  const [dropdownData, setdropdownData] = useState(DEFAULT_CALCULATION_TYPE_DROPDOWN);
+  const [currentSalaryMethod, setcurrentSalaryMethod] = useState('')
 
   useEffect(() => {
     if (!user.Id) {
@@ -197,10 +212,6 @@ export function BankEditForm({
     }
 
   }, [dispatch]);
-
-  const resetDropdown = () => {
-    setDropdownValue(null); // Reset to initial value
-  };
 
   //===== Date Of End Date
   useEffect(() => {
@@ -332,37 +343,60 @@ export function BankEditForm({
     const newValue = e.value;
     fetchEmployeeSalaryEarningList(e.value, 0, setFieldValue);
   };
-  const handlePaymenModeChanged = (e) => {
-    const newValue = e.value;
-    //Cash & Cheque
-    if (newValue == 151) {
-      setDropdownDisabled(true)
-      setComBankAccClearField('');
-      setEmpBankAccClearField('');
-      setBankAccTitleClearField('');
-      resetDropdown();
-    }
-    else
-      setDropdownDisabled(false);
 
-  };
+  const checkReadOnlyStatus = (values, readOnlyValues = []) => {
+    if (!values.payment_mode_Id || readOnlyValues.includes(Number(values.payment_mode_Id))) {
+      return true;
+    }
+    return false;
+  }
 
 
   const fetchEmployeeSalaryEarningList = async (empId, basicSalary, setFieldValue) => {
     try {
 
       const response = await axios.post(`${USERS_URL}/employee_salary_earning/read-all-emp-earning_byId`, { id: empId, basicSalary: basicSalary || 0 });
-      setDefaultMapEarningDeductionList(response?.data?.data);
-      setBasicSalaryFactor(response?.data?.data[0]?.basicFactor);
-      setGrossSalaryDB(response?.data?.data[0]?.grossSalary)
-      setBasicSalaryDB(response?.data?.data[0]?.basicSalary)
 
+      if (!response?.data?.data?.[0]?.transactionType) {
+        setDefaultMapEarningDeductionList([]);
+      }
+      else {
+        setDefaultMapEarningDeductionList(response?.data?.data);
+      }
+      setBasicSalaryFactor(response?.data?.data[0]?.basicFactor || '');
+      setGrossSalaryDB(response?.data?.data[0]?.grossSalary || '');
+      setBasicSalaryDB(response?.data?.data[0]?.basicSalary || '');
+      setBasicSalary(response?.data?.data[0]?.basicSalary || '');
+
+      if (response.data?.data?.[0]?.salaryMethod) {
+        setcurrentSalaryMethod(response.data?.data?.[0]?.salaryMethod || '');
+        setdropdownData(DROPDOWN[response.data?.data?.[0]?.salaryMethod] || DEFAULT_CALCULATION_TYPE_DROPDOWN);
+      }
+      else {
+        const value = response?.data?.data?.find((el) => el.calculation_type == '% Of Basic' || el.calculation_type == '% Of Gross')?.calculation_type
+        if (value == '% Of Basic') {
+          setcurrentSalaryMethod("Basic to Gross");
+          setdropdownData(DROPDOWN["Basic to Gross"] || DEFAULT_CALCULATION_TYPE_DROPDOWN);
+        }
+        else if (value == '% Of Gross') {
+          setcurrentSalaryMethod("Gross to Basic");
+          setdropdownData(DROPDOWN["Gross to Basic"]);
+        }
+        else {
+          setcurrentSalaryMethod('');
+          setdropdownData(DEFAULT_CALCULATION_TYPE_DROPDOWN);
+        }
+      }
       const currencyId = response?.data?.data[0]?.currencyId;
 
       if (setFieldValue) {
         setFieldValue("grossSalary", response?.data?.data[0]?.grossSalary);
         setFieldValue("basicSalary", response?.data?.data[0]?.basicSalary);
-        setFieldValue("currencyId", currencyId);
+        setFieldValue("overtime_working_day", response?.data?.data[0]?.overtime_working_day || 1);
+        setFieldValue("overtime_off_day", response?.data?.data[0]?.overtime_off_day || 1);
+        setFieldValue("overtime_holiday", response?.data?.data[0]?.overtime_holiday || 1);
+        setFieldValue("overtime_allowance", Boolean(response?.data?.data[0]?.overtime_allowance));
+        setFieldValue("currencyId", currencyId || '');
         setDefualtCurrencyCodeList(
           dashboard.allCurrencyCodeList &&
           dashboard.allCurrencyCodeList.filter((item) => {
@@ -412,35 +446,84 @@ export function BankEditForm({
 
   const calculateEmployeeSalaryPolicy = async (el, setFieldValue) => {
 
+
     const basicSalaryInputFactor = el.target.form.elements['basicSalaryFactor'].value;
     let grossSalaryInput = el.target.form.elements['grossSalary'].value;
+    let basicSalaryInput = el.target.form.elements['basicSalary'].value;
 
-    setGrossSalary(grossSalaryInput);
-   
-    const result = await Promise.all(
-      defMapEarningDeductionList.map(async (x) => {
-        if (x.calculation_type === 'Fixed Amount' && x.isPartOfGrossSalary && x.transactionType == "Earning") {
-          grossSalaryInput = grossSalaryInput - x.amount;
-        }
-        return grossSalaryInput; // Return the updated grossSalaryInput
-      })
-    );
+    if (currentSalaryMethod == 'Gross to Basic') {
 
-    const totalBasicWithFactorVal = ((Number(grossSalaryInput) * Number(basicSalaryInputFactor)) / 100)
+      setGrossSalary(grossSalaryInput);
 
-    setFieldValue("basicSalary", totalBasicWithFactorVal)
-    setBasicSalary(totalBasicWithFactorVal);
+      const result = await Promise.all(
+        defMapEarningDeductionList.map(async (x) => {
+          if (x.calculation_type === 'Fixed Amount' && x.isPartOfGrossSalary && x.transactionType == "Earning") {
+            grossSalaryInput = grossSalaryInput - x.amount;
+          }
+          return grossSalaryInput; // Return the updated grossSalaryInput
+        })
+      );
 
-    // fetchEmployeeSalaryEarningList(employeeId,basicSalary)
-    if (Number(basicSalaryInputFactor)) {
+      const totalBasicWithFactorVal = ((Number(grossSalaryInput) * Number(basicSalaryInputFactor)) / 100)
+
+      setFieldValue("basicSalary", totalBasicWithFactorVal)
+      setBasicSalary(totalBasicWithFactorVal);
+
+
+      // fetchEmployeeSalaryEarningList(employeeId,basicSalary)
+      if (Number(basicSalaryInputFactor)) {
+
+        setDefaultMapEarningDeductionList([...defMapEarningDeductionList.map((x) => {
+          if (x.calculation_type == '% Of Gross') {
+            x.amount = ((grossSalaryInput * x.factorValue) / 100);
+          }
+          return x;
+        })]);
+
+      }
+    }
+    else if (currentSalaryMethod == 'Basic to Gross') {
+      let basicSalaryNumber = Number(basicSalaryInput)
 
       setDefaultMapEarningDeductionList([...defMapEarningDeductionList.map((x) => {
-        if (x.calculation_type == '% Of Gross') {
-          x.amount = ((grossSalaryInput * x.factorValue) / 100);
+        if (x.calculation_type == '% Of Basic') {
+          x.amount = ((basicSalaryNumber * x.factorValue) / 100);
+          if (x.isPartOfGrossSalary) {
+            basicSalaryNumber += x.amount
+          }
         }
         return x;
       })]);
 
+      const result = await Promise.all(
+        defMapEarningDeductionList.map(async (x) => {
+          if (x.calculation_type === 'Fixed Amount' && x.isPartOfGrossSalary && x.transactionType == "Earning") {
+            basicSalaryNumber = Number(basicSalaryNumber) + x.amount;
+          }
+          return basicSalaryNumber; // Return the updated grossSalaryInput
+        })
+      );
+
+      setFieldValue("grossSalary", basicSalaryNumber)
+      setGrossSalary(basicSalaryNumber);
+      setGrossSalaryDB(basicSalaryNumber)
+    }
+    else {
+      let gross = 0;
+      const result = await Promise.all(
+        defMapEarningDeductionList.map(async (x) => {
+          if (x.calculation_type === 'Fixed Amount' && x.isPartOfGrossSalary && x.transactionType == "Earning") {
+            gross = Number(gross) + x.amount;
+          }
+          return gross; // Return the updated grossSalaryInput
+        })
+      );
+
+      setFieldValue("grossSalary", gross)
+      setGrossSalary(gross);
+      setGrossSalaryDB(gross)
+      setFieldValue("basicSalary", 0)
+      setBasicSalary(0);
     }
   }
 
@@ -479,10 +562,16 @@ export function BankEditForm({
       }
     });
 
-
-
     return newErrors;
   };
+
+  const createDropdown = (data) => {
+    return (data || []).map((el) => {
+      return (<>
+        <option value={el.value}>{el.label}</option>
+      </>)
+    })
+  }
 
   return (
     <>
@@ -491,8 +580,8 @@ export function BankEditForm({
         initialValues={user}
         validationSchema={formValidation}
         onSubmit={(values) => {
-
           const validationErrors = validate();
+
           if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
           } else {
@@ -573,11 +662,11 @@ export function BankEditForm({
                         name="grossSalary"
                         type="number"
                         maxLength={8}
+                        disabled={!currentSalaryMethod || currentSalaryMethod == 'Basic to Gross'}
                         onInput={(e) => {
                           e.target.value = amountLimit(e.target.value); // Limit to 3 digits
                         }}
                         onChange={(e) => {
-
                           setGrossSalaryDB(e.target.value);
                           setFieldValue("grossSalary", e.target.value);
                         }}
@@ -593,6 +682,7 @@ export function BankEditForm({
                       <Field
                         name="basicSalary"
                         type="number"
+                        disabled={!currentSalaryMethod || currentSalaryMethod == 'Gross to Basic'}
                         onInput={(e) => {
                           e.target.value = amountLimit(e.target.value); // Limit to 3 digits
                         }}
@@ -611,12 +701,8 @@ export function BankEditForm({
                       <Field
                         name="basicSalaryFactor"
                         type="number"
-                        onInput={(e) => {
-                          e.target.value = amountLimit(e.target.value); // Limit to 3 digits
-                        }}
-                        
                         disabled
-                        value={defBasicSalaryFactor || values.basicFactor}
+                        value={defBasicSalaryFactor}
                         component={Input}
                         placeholder="Enter Basic Salary"
                         label={<span> Gross to Basic Factor<span style={{ color: 'red' }}>*</span></span>}
@@ -679,10 +765,9 @@ export function BankEditForm({
                               }}
 
                               id={'calculation_type-' + rightindex} >
-
-                              <option value="-1">--Select--</option>
-                              <option value="% Of Gross">% Of Gross</option>
-                              <option value="Fixed Amount">Fixed Amount</option>
+                              {
+                                createDropdown(dropdownData || [])
+                              }
                             </select>
                             {deferrors[`calculation_type-${rightindex}`] && <div className="form-feedBack">{deferrors[`calculation_type-${rightindex}`]}</div>}
                           </td>
@@ -703,7 +788,7 @@ export function BankEditForm({
                               onInput={(e) => {
                                 e.target.value = amountLimit(e.target.value); // Limit to 3 digits
                               }}
-                              disabled={obj.calculation_type == '% Of Gross'}
+                              disabled={obj.calculation_type == '% Of Gross' || obj.calculation_type == '% Of Basic'}
                               style={{ width: "100px" }}
 
                               onChange={(e) => {
@@ -720,8 +805,8 @@ export function BankEditForm({
                       ))}
 
                     </table>
-
-                    {<> <div className="from-group row">
+                      
+                    {!Boolean(currentSalaryMethod) && <> <div className="from-group row">
                       <div className="col-12 col-md-4 mt-3">
                         <input type='button' id="Earning" onClick={addRow} value='+Add'></input>
                       </div>
@@ -781,9 +866,12 @@ export function BankEditForm({
                               }}
 
                               id={'calculation_type-' + rightindex} >
-                              <option value="-1">--Select--</option>
+                              {
+                                createDropdown(dropdownData || [])
+                              }
+                              {/* <option value="-1">--Select--</option>
                               <option value="% Of Gross">% Of Gross</option>
-                              <option value="Fixed Amount">Fixed Amount</option>
+                              <option value="Fixed Amount">Fixed Amount</option> */}
                             </select>
                             {deferrors[`calculation_type-${rightindex}`] && <div className="form-feedBack">{deferrors[`calculation_type-${rightindex}`]}</div>}
 
@@ -808,7 +896,7 @@ export function BankEditForm({
                                 e.target.value = amountLimit(e.target.value); // Limit to 3 digits
                               }}
 
-                              disabled={obj.calculation_type == '% Of Gross'} style={{ width: "100px" }}
+                              disabled={obj.calculation_type == '% Of Gross' || obj.calculation_type == '% Of Basic'} style={{ width: "100px" }}
                               onChange={handleFieldChanged}
                               value={obj.amount} id={'amount-' + rightindex}></input>
                             {deferrors[`amount-${rightindex}`] && <div className="form-feedBack">{deferrors[`amount-${rightindex}`]}</div>}
@@ -880,9 +968,9 @@ export function BankEditForm({
                                 }}
 
                                 id={'calculation_type-' + rightindex} >
-                                <option value="-1">--Select--</option>
-                                <option value="% Of Gross">% Of Gross</option>
-                                <option value="Fixed Amount">Fixed Amount</option>
+                                {
+                                  createDropdown(dropdownData || [])
+                                }
                               </select>
                               {deferrors[`calculation_type-${rightindex}`] && <div className="form-feedBack">{deferrors[`calculation_type-${rightindex}`]}</div>}
                             </td></td>
@@ -903,7 +991,7 @@ export function BankEditForm({
                               onInput={(e) => {
                                 e.target.value = amountLimit(e.target.value); // Limit to 3 digits
                               }}
-                              disabled={obj.calculation_type == '% Of Gross'} style={{ width: "100px" }}
+                              disabled={obj.calculation_type == '% Of Gross' || obj.calculation_type == '% Of Basic'} style={{ width: "100px" }}
                               onChange={(e) => {
                                 handleFieldChanged(e);
                                 setErrors((prev) => ({ ...prev, [`amount-${rightindex}`]: '' })); // Clear error on change
@@ -980,7 +1068,7 @@ export function BankEditForm({
                       <div className="col-12 col-md-4 mt-12">
                         <input type="checkbox"
                           name="gratuity_member"
-                          onChange={(e)=> {
+                          onChange={(e) => {
                             setFieldValue('gratuity_member', e.target.checked)
                           }}
                           onBlur={handleBlur}
@@ -1016,11 +1104,11 @@ export function BankEditForm({
                     <br></br>
                     <div className="from-group row">
 
-                      <div className="col-12 col-md-4 mt-3">
+                      <div className="col-12 col-md-3 mt-3">
                         <input
                           name="overtime_allowance"
                           type="checkbox"
-                          onChange={(e)=> {
+                          onChange={(e) => {
                             setFieldValue('overtime_allowance', e.target.checked)
                           }}
                           onBlur={handleBlur}
@@ -1028,7 +1116,47 @@ export function BankEditForm({
                           checked={values.overtime_allowance}
                         /> Over Time
                       </div>
-                      <div className="col-12 col-md-4 mt-3">
+
+                      <div className="col-12 col-md-3 mt-3">
+                        <Field
+                          name="overtime_working_day"
+                          disabled={!Boolean(values.overtime_allowance)}
+                          type="number"
+                          component={Input}
+                          maxLength={2}
+                          label={<span> Overtime Factor Working Day{Boolean(values.overtime_allowance) && <span style={{ color: 'red' }}>*</span>}</span>}
+                          autoComplete="off"
+                          value={!Boolean(values.overtime_allowance) ? '' : values.overtime_working_day}
+                        />
+                      </div>
+
+                      <div className="col-12 col-md-3 mt-3">
+                        <Field
+                          name="overtime_off_day"
+                          disabled={!Boolean(values.overtime_allowance)}
+                          type="number"
+                          component={Input}
+                          maxLength={2}
+                          label={<span> Overtime Factor Off day{Boolean(values.overtime_allowance) && <span style={{ color: 'red' }}>*</span>}</span>}
+                          autoComplete="off"
+                          value={!Boolean(values.overtime_allowance) ? '' : values.overtime_off_day}
+                        />
+                      </div>
+
+                      <div className="col-12 col-md-3 mt-3">
+                        <Field
+                          name="overtime_holiday"
+                          disabled={!Boolean(values.overtime_allowance)}
+                          type="number"
+                          component={Input}
+                          maxLength={2}
+                          label={<span> Overtime Factor Holiday{Boolean(values.overtime_allowance) && <span style={{ color: 'red' }}>*</span>}</span>}
+                          autoComplete="off"
+                          value={!Boolean(values.overtime_allowance) ? '' : values.overtime_holiday}
+                        />
+                      </div>
+
+                      {/* <div className="col-12 col-md-4 mt-3">
                         <input
                           type="checkbox"
                           name="shift_allowance"
@@ -1040,8 +1168,8 @@ export function BankEditForm({
                           checked={values.shift_allowance}
                         />  Shift Allowance
 
-                      </div>
-                      <div className="col-12 col-md-4 mt-3">
+                      </div> */}
+                      {/* <div className="col-12 col-md-4 mt-3">
                         <input
                           type="checkbox"
                           name="regularity_allowance"
@@ -1053,8 +1181,8 @@ export function BankEditForm({
                           checked={values.regularity_allowance}
                         /> Regularity Allowance
 
-                      </div>
-                      <div className="col-12 col-md-4 mt-3">
+                      </div> */}
+                      {/* <div className="col-12 col-md-4 mt-3">
                         <input
                           type="checkbox"
                           name="punctuality_allowance"
@@ -1066,14 +1194,14 @@ export function BankEditForm({
                           value={values.punctuality_allowance}
                         /> Punctuality Allowance
 
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                   <br></br>
                   <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
                     <h6>Deduction Entitlements</h6>
 
-                    <div className="from-group row">
+                    {/* <div className="from-group row">
                       <div className="col-12 col-md-4 mt-12">
                         <input
                           name="eobi_member"
@@ -1126,8 +1254,8 @@ export function BankEditForm({
                           disabled={!values.eobi_member}
                         />
                       </div>
-                    </div>
-                    <div className="from-group row">
+                    </div> */}
+                    {/* <div className="from-group row">
 
                       <div className="col-12 col-md-4 mt-12">
                         <input
@@ -1195,14 +1323,14 @@ export function BankEditForm({
                           checked={values.profit_member}
                         /> Profit Member
                       </div>
-                    </div>
+                    </div> */}
                     <div className="from-group row">
 
                       <div className="col-12 col-md-4 mt-12">
                         <input
                           type="checkbox"
                           name="social_security_member"
-                          onChange={(e)=> {
+                          onChange={(e) => {
                             setFieldValue('social_security_member', e.target.checked)
                           }}
                           onBlur={handleBlur}
@@ -1248,7 +1376,7 @@ export function BankEditForm({
                         />
                       </div>
                     </div>
-                    <div className="from-group row">
+                    {/* <div className="from-group row">
                       <div className="col-12 col-md-4 mt-12">
                         <input
                           type="checkbox"
@@ -1299,7 +1427,7 @@ export function BankEditForm({
                         />
                       </div>
 
-                    </div>
+                    </div> */}
 
                   </div>
                   <br>
@@ -1317,7 +1445,6 @@ export function BankEditForm({
                           onChange={(e) => {
                             setFieldValue("payment_mode_Id", e.value || null);
                             setDefualtPaymentModeCodeList(e);
-                            handlePaymenModeChanged(e)
 
                           }}
                           value={(defPaymentModeList || null)}
@@ -1332,7 +1459,7 @@ export function BankEditForm({
                         <SearchSelect
                           name="emp_bankId"
                           label={<span> Employee Bank</span>}
-                          isDisabled={isDropdownDisabled}
+                          isDisabled={checkReadOnlyStatus(values, [151, 152])}
                           onBlur={() => {
                             // handleBlur({ target: { name: "countryId" } });
                           }}
@@ -1342,7 +1469,7 @@ export function BankEditForm({
                             setDefaultBanks(e);
                             dispatch(fetchAllBanks(e.value));
                           }}
-                          value={defBank}
+                          value={!checkReadOnlyStatus(values, [151, 152]) ? defBank : ''}
                           error={errors.emp_bankId}
                           touched={touched.emp_bankId}
                           options={dashboard.allBanks}
@@ -1359,7 +1486,7 @@ export function BankEditForm({
                         <SearchSelect
                           name="company_bankId"
                           label={<span> Company Bank</span>}
-                          isDisabled={isDropdownDisabled}
+                          isDisabled={checkReadOnlyStatus(values, [151, 152])}
                           onBlur={() => {
                             // handleBlur({ target: { name: "countryId" } });
                           }}
@@ -1368,7 +1495,7 @@ export function BankEditForm({
                             setDefaultCompanyBanks(e);
                             dispatch(fetchAllCompanyBanks(e.value));
                           }}
-                          value={defCompanyBank}
+                          value={!checkReadOnlyStatus(values, [151, 152]) ? defCompanyBank : ''}
                           error={errors.company_bankId}
                           touched={touched.company_bankId}
                           options={dashboard.allCompanyBanks}
@@ -1383,7 +1510,7 @@ export function BankEditForm({
                         <SearchSelect
                           name="emp_bank_branchId"
                           label={<span>Employee Bank Branch</span>}
-                          isDisabled={isDropdownDisabled}
+                          isDisabled={checkReadOnlyStatus(values, [151, 152])}
                           onBlur={() => {
                             // handleBlur({ target: { name: "countryId" } });
                           }}
@@ -1392,7 +1519,7 @@ export function BankEditForm({
                             setDefaultEmpBankBranch(e);
                             dispatch(fetchAllBankBranch(e.value));
                           }}
-                          value={defEmpBankBranch}
+                          value={!checkReadOnlyStatus(values, [151, 152]) ? defEmpBankBranch : ''}
                           error={errors.emp_bank_branchId}
                           touched={touched.emp_bank_branchId}
                           options={dashboard.allBankBranch}
@@ -1408,7 +1535,7 @@ export function BankEditForm({
                         <SearchSelect
                           name="company_branchId"
                           label={<span>Company Bank Branch</span>}
-                          isDisabled={isDropdownDisabled}
+                          isDisabled={checkReadOnlyStatus(values, [151, 152])}
                           onBlur={() => {
                             // handleBlur({ target: { name: "countryId" } });
                           }}
@@ -1417,7 +1544,7 @@ export function BankEditForm({
                             setDefaultCompanyBankBranch(e);
                             dispatch(fetchAllBankBranch(e.value));
                           }}
-                          value={defCompanyBankBranch}
+                          value={!checkReadOnlyStatus(values, [151, 152]) ? defCompanyBankBranch : ''}
                           error={errors.company_branchId}
                           touched={touched.company_branchId}
                           options={dashboard.allBankBranch}
@@ -1431,9 +1558,12 @@ export function BankEditForm({
 
                         <Field
                           name="emp_bank_accountTitle"
-                          disabled={isDropdownDisabled}
-                          value={clearBankAccTitleField}
-                          onChange={(e) => setBankAccTitleClearField(e.target.value)}
+                          disabled={checkReadOnlyStatus(values, [151])}
+                          value={!checkReadOnlyStatus(values, [151]) ? values.emp_bank_accountTitle : ''}
+                          onChange={(e) => {
+                            setFieldValue('emp_bank_accountTitle', e.target.value)
+                            setBankAccTitleClearField(e.target.value)
+                          }}
                           component={Input}
                           placeholder="Enter Bank Account Title"
                           label={<span> Bank Account Title</span>}
@@ -1449,7 +1579,7 @@ export function BankEditForm({
                         <Field
                           maxLength={20}
 
-                          disabled={isDropdownDisabled}
+                          disabled={checkReadOnlyStatus(values, [151, 152])}
                           name="company_from_accNo"
                           component={Input}
                           type='number'
@@ -1471,7 +1601,7 @@ export function BankEditForm({
                         <Field
                           maxLength={20}
 
-                          disabled={isDropdownDisabled}
+                          disabled={checkReadOnlyStatus(values, [151, 152])}
                           name="emp_bank_accNo"
                           component={Input}
                           type='number'

@@ -2,68 +2,77 @@ import React, { useEffect, useState, useMemo } from "react";
 import { Modal } from "react-bootstrap";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { Input, Select, TextArea, Checkbox } from "../../../../../../_metronic/_partials/controls";
+import { Input, Select } from "../../../../../../_metronic/_partials/controls";
 import { useDispatch, useSelector } from "react-redux";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
-import { toast } from "react-toastify";
 
 import {
-  fetchAllCity,
-  fetchAllCountry,
   fetchAllFormsMenu,
-  fetchAllActiveEmployees,
-  fetchAllEarningDeductionList,
-  fetchAllEarningHeads,
   fetchAllDeductionList,
   fetchAllEarningList,
   fetchAllSubsidiaryData
 
 } from "../../../../../../_metronic/redux/dashboardActions";
-import DatePicker from "react-datepicker";
 import { useBanksUIContext } from "../BanksUIContext";
 // // import { CheckBox } from "@material-ui/icons";
 import axios from 'axios';
-import { amountLimit, amountLimitDynamic } from "../../../../../utils/common";
+import { amountLimit } from "../../../../../utils/common";
+import { DROPDOWN, VALIDATION_MESSAGES } from "../../../../../utils/constants";
 export const USERS_URL = process.env.REACT_APP_API_URL;
 
-// Phone Number Regex
-const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
-// CNIC Regex
-const cnicRegExp = /^[0-9]{5}-[0-9]{7}-[0-9]$/;
-// Password Regex
-const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-// Validation schema
-const formValidation = Yup.object().shape(
-  {
+const formValidation = Yup.object().shape({
 
-    subsidiaryId: Yup.string()
-      .nullable()
-      .required("Required*"),
-    gradeId: Yup.string()
-      .nullable()
-      .required("Required*"),
-    employeeTypeId: Yup.string()
-      .nullable()
-      .required("Required*"),
-    currencyId: Yup.string()
-      .nullable()
-      .required("Required*"),
-    salaryMethod: Yup.string()
-      .nullable()
-      .required("Required*"),
+  subsidiaryId: Yup.string()
+    .nullable()
+    .required("Required*"),
+  gradeId: Yup.string()
+    .nullable()
+    .required("Required*"),
+  employeeTypeId: Yup.string()
+    .nullable()
+    .required("Required*"),
+  currencyId: Yup.string()
+    .nullable()
+    .required("Required*"),
+  salaryMethod: Yup.string()
+    .nullable()
+    .required("Required*"),
 
-    //   salaryMethod: Yup.string()
-    //   .required('Required*') // Make it required
-    // .notOneOf(['-1'], 'Please select a valid salary method'),
+  //   salaryMethod: Yup.string()
+  //   .required('Required*') // Make it required
+  // .notOneOf(['-1'], 'Please select a valid salary method'),
 
-    basicFactor:
-      Yup.string()
-        // .matches(/^\d{15}$/, 'Basic factor must be exactly 15 digits long and contain only digits.')
-        .max(100, 'Value cannot be greater than 100')
+  basicFactor: Yup.string()
+    .max(100, 'Value cannot be greater than 100')
+    .when('salaryMethod', {
+      is: "Gross to Basic", // if select value is 2
+      then: Yup.string().required(VALIDATION_MESSAGES.required),
+      otherwise: Yup.string().notRequired(),
+    }),
 
-        .required('Required*')
+  overtime_working_day: Yup.number()
+    .max(100, 'Value cannot be greater than 100')
+    .when('overtime_allowance', {
+      is: (value) => value === true || value == 1, 
+      then: Yup.number().required(VALIDATION_MESSAGES.required),
+      otherwise: Yup.number().notRequired(),
+    }),
+    overtime_off_day: Yup.number()
+    .max(100, 'Value cannot be greater than 100')
+    .when('overtime_allowance', {
+      is: (value) => value === true || value == 1, 
+      then: Yup.number().required(VALIDATION_MESSAGES.required),
+      otherwise: Yup.number().notRequired(),
+    }),
+    overtime_holiday: Yup.number()
+    .max(100, 'Value cannot be greater than 100')
+    .when('overtime_allowance', {
+      is: (value) => value === true || value == 1, 
+      then: Yup.number().required(VALIDATION_MESSAGES.required),
+      otherwise: Yup.number().notRequired(),
+    })
 
-  },
+},
 
 );
 export function BankEditForm({
@@ -81,22 +90,12 @@ export function BankEditForm({
   id
 }) {
   const { dashboard } = useSelector((state) => state);
-  const BanksUIContext = useBanksUIContext()
-  const ModalUIProps = useMemo(() => {
-    return {
-      newButtonEarningTran: BanksUIContext.newButtonEarningTran,
-      newButtonDeductionTran: BanksUIContext.newButtonDeductionTran,
-    }
-  }, [BanksUIContext])
   const dispatch = useDispatch();
   const [defEffectiveDate, setEffectiveDate] = useState(null);
-
   const [defEmployeeGrade = null, setDefualtEmployeeGrade] = useState(null);
   const [defCurrencyCodeList = null, setDefualtCurrencyCodeList] = useState(null);
   const [defchildEmptypeMenus = null, setDefaultChildEmpTypeMenus] = useState(null);
-
   const [defEarningList = null, setDefaultEarningList] = useState([]);
-  
   const [defSubsidiary = null, setDefualtSubsidiaryList] = useState(null);
   const [deferrors, setErrors] = useState({});
   const [defAllowanceLimit, setDefaultAllowanceLimit] = useState('');
@@ -117,6 +116,7 @@ export function BankEditForm({
     try {
       if (id != undefined) {
         const response = await axios.post(`${USERS_URL}/compensation/read-all-compensation-ed-heads`, { Id: compensationId || 0 });
+
         setDefaultEarningList(response?.data?.data);
       }
     } catch (error) {
@@ -219,35 +219,6 @@ export function BankEditForm({
 
   }
 
-  function toastMessage(message, type) {
-
-    if (type == "error") {
-      toast.error(message, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    }
-    if (type == "success") {
-      toast.success(message, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    }
-
-  }
-
-
-
   const validate = () => {
     const newErrors = {};
 
@@ -270,10 +241,16 @@ export function BankEditForm({
       }
     });
 
-
-
     return newErrors;
   };
+
+  const createDropdown = (data) => {
+    return (data || []).map((el) => {
+      return (<>
+        <option value={el.value}>{el.label}</option>
+      </>)
+    })
+  }
 
   return (
     <>
@@ -288,24 +265,29 @@ export function BankEditForm({
           if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
           } else {
-            enableLoading();
-            let i = 0;
-            i = Number(values.basicFactor || 0);
-            defEarningList.forEach((element, index) => {
+            if (values.salaryMethod == "Gross to Basic") {
+              let i = 0;
+              i = Number(values.basicFactor || 0);
+              defEarningList.forEach((element, index) => {
 
-              if (element.factorValue > 0 && element.isPartOfGrossSalary == "1" && element.transactionType == "Earning") {
-                i +=  Number(element.factorValue || 0)
+                if (element.factorValue > 0 && element.isPartOfGrossSalary == "1" && element.transactionType == "Earning") {
+                  i += Number(element.factorValue || 0)
+                }
+
+              });
+              if (i == 100) {
+                setDefaultAllowanceLimit("")
+                enableLoading();
+                saveCompensationBenefits(values, defEarningList);
               }
-           
-            });
-            if(i == 100)
-            {
-              setDefaultAllowanceLimit("")
-             saveCompensationBenefits(values, defEarningList);
+              else {
+                setDefaultAllowanceLimit("Allowance must be exactly 100%.")
+              }
             }
-            else
-            {
-              setDefaultAllowanceLimit("Allowance must be exactly 100%.")
+            else if (values.salaryMethod == "Basic to Gross") {
+              setDefaultAllowanceLimit("")
+              enableLoading();
+              saveCompensationBenefits(values, defEarningList);
             }
           }
 
@@ -347,7 +329,7 @@ export function BankEditForm({
                             setFieldValue("subsidiaryId", e.value || null);
                             setDefualtSubsidiaryList(e);
                             //handlePaymenModeChanged(e)
-                           
+
                           }}
 
                           value={(defSubsidiary || null)}
@@ -425,7 +407,7 @@ export function BankEditForm({
                     </div>
                     <div className="col-12 col-md-4 mt-3">
                       <Select
-                        label="Salary Method"
+                        label={<span> Salary Method<span style={{ color: 'red' }}>*</span></span>}
                         name="salaryMethod"
                         defaultValue="Gross to Basic"
                         value={values.salaryMethod}
@@ -433,7 +415,9 @@ export function BankEditForm({
                           setFieldValue("salaryMethod", e.target.value)
                           if (e.target.value == "Basic to Gross") {
                             setFieldValue("basicFactor", "")
+                            setDefaultAllowanceLimit("")
                           }
+                          setDefaultEarningList([])
                         }}
                         error={errors.salaryMethod}
                         touched={touched.salaryMethod}
@@ -443,7 +427,7 @@ export function BankEditForm({
                         <option value="-1" label="Select..." />
                         <option selected value="Gross to Basic" label="Gross to Basic" />
                         <option value="Basic to Gross" label="Basic to Gross" />
-                         
+
                       </Select>
                       {errors.salaryMethod && touched.salaryMethod && <ErrorMessage className="form-feedBack" name="salaryMethod" component="div" />}
                     </div>
@@ -453,7 +437,7 @@ export function BankEditForm({
                         component={Input}
                         maxLength={2}
                         placeholder="Enter Basic Factor" disabled={values.salaryMethod == "Basic to Gross"}
-                        label={<span> Basic Factor<span style={{ color: 'red' }}>*</span></span>}
+                        label={<span> Basic Factor{Boolean(values.salaryMethod != "Basic to Gross") && <span style={{ color: 'red' }}>*</span>}</span>}
                         autoComplete="off"
                         error={errors.currencyId}
                         touched={touched.currencyId}
@@ -478,7 +462,10 @@ export function BankEditForm({
 
                         /> Gratuity Member
                       </div>
-                      <div className="col-12 col-md-4 mt-3">
+                    </div>
+
+                    <div className="from-group row">
+                      <div className="col-12 col-md-3 mt-3">
                         <input
                           name="overtime_allowance"
                           type="checkbox"
@@ -489,7 +476,46 @@ export function BankEditForm({
                         /> Over Time
 
                       </div>
-                      <div className="col-12 col-md-4 mt-3">
+
+                      <div className="col-12 col-md-3 mt-3">
+                        <Field
+                          name="overtime_working_day"
+                          disabled={!Boolean(values.overtime_allowance)}
+                          type="number"
+                          component={Input}
+                          maxLength={2}
+                          label={<span> Overtime Factor Working Day{Boolean(values.overtime_allowance) && <span style={{ color: 'red' }}>*</span>}</span>}
+                          autoComplete="off"
+                          value={!Boolean(values.overtime_allowance) ? '' : values.overtime_working_day}
+                        />
+                      </div>
+
+                      <div className="col-12 col-md-3 mt-3">
+                        <Field
+                          name="overtime_off_day"
+                          disabled={!Boolean(values.overtime_allowance)}
+                          type="number"
+                          component={Input}
+                          maxLength={2}
+                          label={<span> Overtime Factor Off day{Boolean(values.overtime_allowance) && <span style={{ color: 'red' }}>*</span>}</span>}
+                          autoComplete="off"
+                          value={!Boolean(values.overtime_allowance) ? '' : values.overtime_off_day}
+                        />
+                      </div>
+
+                      <div className="col-12 col-md-3 mt-3">
+                        <Field
+                          name="overtime_holiday"
+                          disabled={!Boolean(values.overtime_allowance)}
+                          type="number"
+                          component={Input}
+                          maxLength={2}
+                          label={<span> Overtime Factor Holiday{Boolean(values.overtime_allowance) && <span style={{ color: 'red' }}>*</span>}</span>}
+                          autoComplete="off"
+                          value={!Boolean(values.overtime_allowance) ? '' : values.overtime_holiday}
+                        />
+                      </div>
+                      {/* <div className="col-12 col-md-4 mt-3">
                         <input
                           type="checkbox"
                           name="shift_allowance"
@@ -520,7 +546,7 @@ export function BankEditForm({
                           value={values.punctuality_allowance}
                         /> Punctuality Allowance
 
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                   <br></br>
@@ -529,7 +555,7 @@ export function BankEditForm({
 
 
                     <div className="from-group row">
-                      <div className="col-12 col-md-4 mt-3">
+                      {/* <div className="col-12 col-md-4 mt-3">
                         <input
                           name="pf_member"
                           type="checkbox"
@@ -540,7 +566,7 @@ export function BankEditForm({
                         //onChange={handleCheckboxChange}
                         /> PF Member
 
-                      </div>
+                      </div> */}
                       <div className="col-12 col-md-4 mt-3">
                         <input
                           name="eobi_member"
@@ -563,7 +589,7 @@ export function BankEditForm({
                         /> Social Security Member
 
                       </div>
-                      <div className="col-12 col-md-4 mt-3">
+                      {/* <div className="col-12 col-md-4 mt-3">
                         <input
                           type="checkbox"
 
@@ -573,7 +599,7 @@ export function BankEditForm({
                           value={values.pension_member}
                           checked={values.pension_member}
                         /> Pension Member
-                      </div>
+                      </div> */}
 
                     </div>
                   </div>
@@ -630,9 +656,9 @@ export function BankEditForm({
                               }}
 
                               id={'calculation_type-' + rightindex} >
-                              <option value="-1">--Select--</option>
-                              <option value="% Of Gross">% Of Gross</option>
-                              <option value="Fixed Amount">Fixed Amount</option>
+                              {
+                                createDropdown(DROPDOWN[values.salaryMethod] || [])
+                              }
                             </select>
                             {deferrors[`calculation_type-${rightindex}`] && <div className="form-feedBack">{deferrors[`calculation_type-${rightindex}`]}</div>}
                           </td>
@@ -652,7 +678,7 @@ export function BankEditForm({
 
                           <td>
                             <input
-                              disabled={obj.calculation_type == "% Of Gross"}
+                              disabled={obj.calculation_type == "% Of Gross" || obj.calculation_type == "% Of Basic"}
                               style={{ width: "80px" }} type="number"
                               onChange={(e) => {
                                 handleFieldChanged(e);
@@ -678,7 +704,7 @@ export function BankEditForm({
 
                     </table>
                     <input type='button' id="Earning" onClick={addRow} value='+Add'></input>
-                    &nbsp;&nbsp;<span className="form-feedBack"  id="msgLimitAllowance">{defAllowanceLimit}</span>
+                    &nbsp;&nbsp;<span className="form-feedBack" id="msgLimitAllowance">{defAllowanceLimit}</span>
                   </div>
                   <br></br>
                   <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
@@ -727,9 +753,9 @@ export function BankEditForm({
 
                               }}
                               id={'calculation_type-' + rightindex} >
-                              <option value="-1">--Select--</option>
-                              <option value="% Of Gross">% Of Gross</option>
-                              <option value="Fixed Amount">Fixed Amount</option>
+                              {
+                                createDropdown(DROPDOWN[values.salaryMethod] || [])
+                              }
                             </select>
                             {deferrors[`calculation_type-${rightindex}`] && <div className="form-feedBack">{deferrors[`calculation_type-${rightindex}`]}</div>}
                           </td>
@@ -750,7 +776,7 @@ export function BankEditForm({
                             onInput={(e) => {
                               e.target.value = amountLimit(e.target.value); // Limit to 3 digits
                             }}
-                            disabled={obj.calculation_type == "% Of Gross"} style={{ width: "80px" }}
+                            disabled={obj.calculation_type == "% Of Gross" || obj.calculation_type == "% Of Basic"} style={{ width: "80px" }}
                             onChange={handleFieldChanged} value={obj.amount} id={'amount-' + rightindex}></input>
                           </td>
                           {deferrors[`amount-${rightindex}`] && <div className="form-feedBack">{deferrors[`amount-${rightindex}`]}</div>}

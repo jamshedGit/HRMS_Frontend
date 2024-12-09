@@ -36,14 +36,16 @@ export function BanksTable() {
   }, [bankUIContext]);
 
   const { currentState, userAccess } = useSelector(
-    (state) => { return {
-      
-      currentState: state.employee_salary,
-      userAccess: state?.auth?.userAccess["Employee_Salary"],
-    }},
+    (state) => {
+      return {
+
+        currentState: state.employee_salary,
+        userAccess: state?.auth?.userAccess["Employee_Salary"],
+      }
+    },
     shallowEqual
   );
-  
+
   const { totalCount, entities, listLoading } = currentState;
 
   //totalCount = 10
@@ -125,35 +127,6 @@ export function BanksTable() {
       },
     },
     {
-      dataField: "grossSalary",
-      text: "Gross Salary",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-      formatter: (cell) => {
-        // Format the number with thousand separators
-        return new Intl.NumberFormat("en-US").format(cell);
-      }
-    },
-    {
-      dataField: "basicSalary",
-      text: "Basic Salary",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-      formatter: (cell) => {
-        // Format the number with thousand separators
-        return new Intl.NumberFormat("en-US").format(cell);
-      }
-    },
-    
-       {
       dataField: "action",
       text: "Actions",
       isDummyField: true,
@@ -185,7 +158,7 @@ export function BanksTable() {
     page: bankUIProps.queryParams.pageNumber,
   };
 
-    return (
+  return (
     <>
       <PaginationProvider pagination={paginationFactory(paginationOptions)}>
         {({ paginationProps, paginationTableProps }) => {

@@ -71,14 +71,11 @@ export const PayrollMonthSlice = createSlice({
 
             state.error = null;
             state.actionsLoading = false;
-            console.log("FiscalSetup deleted ")
-            console.log(state.entities);
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );
         },
        payrollMonthCreated: (state, action) => {
-             console.log("action payload forpayrollMonth", action.payload);
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);
@@ -87,7 +84,6 @@ export const PayrollMonthSlice = createSlice({
             state.error = null;
             state.actionsLoading = false;
             // state.entities.push(action.payload)
-            console.log("action payload forpayrollMonth 1", action.payload);
             state.entities = state.entities.map((entity) => {
                 
                 //const payload = { ...action.payload };
