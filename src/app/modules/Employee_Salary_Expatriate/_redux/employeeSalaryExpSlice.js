@@ -73,7 +73,7 @@ export const employeeSalaryExpSlice = createSlice({
             state.error = null;
             state.actionsLoading = false;
             console.log("employee_salary_exp_ deleted ")
-            console.log(state.entities);
+            
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );

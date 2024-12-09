@@ -73,7 +73,7 @@ export const employeeSalary_DeductionSlice = createSlice({
             state.error = null;
             state.actionsLoading = false;
             console.log("employee_salary_ deleted ")
-            console.log(state.entities);
+            
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );

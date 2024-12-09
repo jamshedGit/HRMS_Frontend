@@ -78,7 +78,6 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
   // }, [actionsLoading]);
 
   const saveCompensationBenefits = async (user,earning_deduction_Obj) => {
-
     if (!id) {
 
    
@@ -113,7 +112,10 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
         pf_member : user.pf_member,
         eobi_member : user.eobi_member,
         social_security_member : user.social_security_member,
-        pension_member : user.pension_member
+        pension_member : user.pension_member,
+        overtime_working_day : user.overtime_working_day,
+        overtime_off_day : user.overtime_off_day,
+        overtime_holiday : user.overtime_holiday,
 
       };
 

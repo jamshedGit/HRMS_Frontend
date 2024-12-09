@@ -74,7 +74,7 @@ export const experienceSlice = createSlice({
             state.error = null;
             state.actionsLoading = false;
             console.log("experience deleted ")
-            console.log(state.entities);
+            
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );

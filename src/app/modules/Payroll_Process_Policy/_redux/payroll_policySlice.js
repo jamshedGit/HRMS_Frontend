@@ -73,7 +73,7 @@ export const payroll_policySlice = createSlice({
             state.error = null;
             state.actionsLoading = false;
             console.log("Payroll_Policy_ deleted ")
-            console.log(state.entities);
+            
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );

@@ -74,7 +74,7 @@ export const deduction_transactionSlice = createSlice({
             state.error = null;
             state.actionsLoading = false;
             console.log("earning_deduction_tran_ deleted ")
-            console.log(state.entities);
+            
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );

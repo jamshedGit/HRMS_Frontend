@@ -73,7 +73,7 @@ export const employee_transfer_slice = createSlice({
             state.error = null;
             state.actionsLoading = false;
             console.log("employeeTransfer deleted ")
-            console.log(state.entities);
+            
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );

@@ -74,7 +74,7 @@ export const compensationExpSlice = createSlice({
             state.error = null;
             state.actionsLoading = false;
             console.log("compensation_exp_ deleted ")
-            console.log(state.entities);
+            
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );
