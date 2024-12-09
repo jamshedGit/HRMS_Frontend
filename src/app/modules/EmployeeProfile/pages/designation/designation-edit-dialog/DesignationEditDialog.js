@@ -69,7 +69,7 @@ export function DesignationEditDialog({ id, show, onHide, userForRead }) {
 
     if (!id) {
 
-      console.log("emp profile save", user, image);
+   
       const finalObject = { user }
       await dispatch(actions.createEmpProfile({ ...user,contactList,workExperienceList,academicList,skillsList,incidentList, profile_image: image }, disbaleLoading, onHide));
       await dispatch(actions.fetchUsers(usersUIProps.queryParams));
@@ -78,7 +78,7 @@ export function DesignationEditDialog({ id, show, onHide, userForRead }) {
       //   return item.value === +user.status;
       // });
 
-      console.log("getUserStatus", user, image);
+ 
 
       const EmpProfileUpdatedFields = {
         Id: user.Id,
@@ -142,7 +142,7 @@ export function DesignationEditDialog({ id, show, onHide, userForRead }) {
         requireDeligation: user.requireDeligation
       };
 
-      console.log("profile emp::2", EmpProfileUpdatedFields,contactList,workExperienceList,academicList,skillsList,incidentList);
+    
       await dispatch(actions.updateEmpProfile(EmpProfileUpdatedFields,contactList,workExperienceList,academicList,skillsList,incidentList, disbaleLoading, onHide));
       await dispatch(actions.fetchUsers(usersUIProps.queryParams));
     }

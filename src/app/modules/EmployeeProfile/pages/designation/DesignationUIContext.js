@@ -87,7 +87,7 @@ export function DesignationUIProvider({ DesignationUIEvents, children }) {
 
   };
 
-  console.log("employee profile ui events",DesignationUIEvents);
+ 
 
   const value = {
     queryParams,
