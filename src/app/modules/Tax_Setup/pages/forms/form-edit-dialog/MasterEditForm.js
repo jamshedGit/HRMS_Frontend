@@ -33,22 +33,22 @@ const validateDateDifference = (startDate, endDate) => {
 const formValidation = Yup.object().shape(
   {
     startDate: Yup.date()
-    .nullable()
-    .required('Start date is required'),
+      .nullable()
+      .required('Start date is required'),
     endDate: Yup.date()
-    .nullable()
-      .required('End date is required')
-      .test(
-        'date-difference',
-        'End date must be exactly 365 or 366 days after start date',
-        function (endDate) {
-          const { startDate } = this.parent;
-          return validateDateDifference(startDate, endDate);
-        }
-      ),
-      subsidiaryId: Yup.number()
+      .nullable()
+      .required('End date is required'),
+    // .test(
+    //   'date-difference',
+    //   'End date must be exactly 365 or 366 days after start date',
+    //   function (endDate) {
+    //     const { startDate } = this.parent;
+    //     return validateDateDifference(startDate, endDate);
+    //   }
+    // ),
+    subsidiaryId: Yup.number()
       .nullable().required("Required*")
-      
+
   },
 
 );
@@ -173,6 +173,20 @@ export function MasterEditForm({
                         onChange={(date) => {
                           setFieldValue("startDate", date);
                           setDefaultStartDate(date);
+
+               
+
+
+
+                          // Add 365 days (considering leap years automatically)
+                          const endDate = new Date(date);
+                          endDate.setFullYear(endDate.getFullYear() + 1); // Add one year (365 or 366 days will be calculated automatically)
+
+                          // Set the calculated end date
+                          endDate.setDate(endDate.getDate() - 1);
+                          setFieldValue("endDate", endDate);
+                          setDefaultEndDate(endDate);
+
                         }}
                         timeInputLabel="Time:"
                         dateFormat="dd/MM/yyyy"
@@ -200,7 +214,7 @@ export function MasterEditForm({
                         dateFormat="dd/MM/yyyy"
                         showTimeInput
                         name="endDate"
-                        disabled={isUserForRead}
+                        disabled={true}
                         autoComplete="off"
                       // value = {values.dateOfJoining}
                       />
