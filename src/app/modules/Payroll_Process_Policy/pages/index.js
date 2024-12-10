@@ -4,7 +4,6 @@ import { LayoutSplashScreen, ContentRoute } from "../../../../_metronic/layout";
 import { Payroll_Policy } from "./forms/Payroll_Policy_Page";
 
 export default function PayrollPolicyManagement() {
-  console.log('payroll policy mein aya')
   return (
     <Suspense fallback={<LayoutSplashScreen />}>
       <Switch>

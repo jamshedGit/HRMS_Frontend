@@ -7,12 +7,8 @@ const { actions } = payroll_policySlice;
 // const { roleActions } = getAllrolesSlice
 
 export const fetchUsers = (queryparm) => async (dispatch) => {
-  // console.log("Receive QPsss", queryparm)
-  dispatch(actions.startCall({ callType: callTypes.list }));
-
   return requestFromServer.getAll_Payroll_Policy(queryparm)
     .then((response) => {
-      console.log("::fetchted::", response)
       dispatch(actions.Payroll_Policy_Fetched(response));
     })
     .catch((error) => {
@@ -51,7 +47,6 @@ export const delete_Payroll_Policy = (id) => (dispatch) => {
   return requestFromServer
     .delete_Payroll_Policy({ Id: id })
     .then((response) => {
-      //console.log("response from delete user ", response.data.message)
       dispatch(actions.Payroll_Policy_Deleted({ Id: id }));
       toast.success("Successfully Deleted", {
         position: "top-right",
@@ -74,7 +69,6 @@ export const activeUser = (id) => (dispatch) => {
   return requestFromServer
     .delete_Payroll_Policy({ receiptId: id })
     .then((response) => {
-      //console.log("response from delete user ", response.data.message)
       dispatch(actions.userDeleted({ id: id }));
       toast.success("Successfully Activated", {
         position: "top-right",
@@ -95,11 +89,11 @@ export const activeUser = (id) => (dispatch) => {
 export const create_Payroll_Policy = (Payroll_Policy_ForCreation, emailRecipentList, eobiAllowancesList, bankInfoList, sessiAllowanceList) => (
   dispatch
 ) => {
+  dispatch(actions.startCall({ callType: callTypes.action }));
 
   return requestFromServer
     .create_Payroll_Policy(Payroll_Policy_ForCreation, emailRecipentList, eobiAllowancesList, bankInfoList, sessiAllowanceList)
     .then((res) => {
-      dispatch(actions.startCall({ callType: callTypes.action }));
       const user = res.data?.data;
 
       dispatch(actions.Payroll_Policy_Created(user));
@@ -132,6 +126,7 @@ export const create_Payroll_Policy = (Payroll_Policy_ForCreation, emailRecipentL
 };
 
 export const update_Payroll_Policy = (user, emailRecipentList, eobiAllowancesList, bankInfoList, sessiAllowanceList) => (dispatch) => {
+  dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
     .update_Payroll_Policy(user, emailRecipentList, eobiAllowancesList, bankInfoList, sessiAllowanceList)
     .then((response) => {
@@ -139,7 +134,6 @@ export const update_Payroll_Policy = (user, emailRecipentList, eobiAllowancesLis
       const payrollUpdatePolicy = response?.config?.data; // response.data?.data;
 
       dispatch(actions.Payroll_Policy_Updated({ payrollUpdatePolicy }));
-      dispatch(actions.startCall({ callType: callTypes.action }));
 
 
       toast.success(response.data.message + " Updated", {
@@ -155,7 +149,6 @@ export const update_Payroll_Policy = (user, emailRecipentList, eobiAllowancesLis
 
     })
     .catch((error) => {
-      // console.log("error User update", error)
       //error.clientMessage = "Can't update User"
       dispatch(actions.catchError({ error, callType: callTypes.action }));
 

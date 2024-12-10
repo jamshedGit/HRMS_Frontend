@@ -65,7 +65,6 @@ export function MasterEditForm({
 
        validationSchema={formValidation}
         onSubmit={(values) => {
-          // console.log("values12312", values);
           // enableLoading();
           // SavePayrollPolicy(values);
         }}

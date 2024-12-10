@@ -1,11 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Modal } from "react-bootstrap";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { MasterEditForm } from "./MasterEditForm";
-import { FormEditDialogHeader } from './FormEditDialogHeader'
 
 import * as actions from "../../../_redux/formActions";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useFormUIContext } from "../FormUIContext";
 
@@ -62,7 +58,6 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   //   }
   // }, [actionsLoading === true]);
 
-  //console.log("action", action);
 
   useEffect(() => {
     dispatch(actions.fetchUser(id));
@@ -71,13 +66,10 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   }, [id, dispatch,show]);
 
   // useEffect(() => {
-  //   console.log("UseEffect call");
   //   if (actionsLoading === false) {
-  //     console.log("UseEffect call inside function");
   //     disbaleLoading();
   //   }
   // }, [actionsLoading]);
-  //console.log("userForEdit", userForEdit);
 
   const SavePayrollPolicy = async (user) => {
 
@@ -92,7 +84,6 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
       //   return item.value === +user.status;
       // });
 
-      console.log("getUserStatus", user);
 
       const payrollMonthSetupUpdatedFields = {
         Id: user.Id,
@@ -104,7 +95,6 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         year: user.year
       };
 
-      console.log("payrollMonthSetupUpdatedFields", payrollMonthSetupUpdatedFields);
       await dispatch(actions.update_Payroll_Policy(payrollMonthSetupUpdatedFields, disbaleLoading, onHide));
       await dispatch(actions.fetchUsers(usersUIProps.queryParams));
     }

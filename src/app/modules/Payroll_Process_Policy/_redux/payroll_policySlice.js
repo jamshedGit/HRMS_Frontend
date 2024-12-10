@@ -75,11 +75,13 @@ export const payroll_policySlice = createSlice({
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );
+            state.totalCount--
         },
         Payroll_Policy_Created: (state, action) => {
             
             state.actionsLoading = false;
             state.error = null;
+            state.totalCount++
             state.entities.unshift(action.payload);
         },
         Payroll_Policy_Updated: (state, action) => {
