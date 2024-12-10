@@ -699,6 +699,7 @@ export function FormTable(user
                     <Field
                       name="employer_uniqueId"
                       component={Input}
+                      type="number"
                       placeholder="Employee Unique ID"
                       label={<span> Employee Unique ID<span style={{ color: 'red' }}>*</span></span>}
                       autoComplete="off"
