@@ -67,9 +67,11 @@ console.log("designation in")
   );
   // Table columns
   const columns = [
+ 
+
     {
-      dataField: "Id",
-      text: "ID",
+      dataField: "Subsidiary.name",
+      text: "Subsidiary",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -77,9 +79,11 @@ console.log("designation in")
         minWidth: "160px",
       },
     },
+
+    
     {
-      dataField: "policyName",
-      text: "Policy",
+      dataField: "Currency.formName",
+      text: "Currency",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -87,36 +91,48 @@ console.log("designation in")
         minWidth: "160px",
       },
     },
+
     {
-      dataField: "code",
-      text: "Code",
+      dataField: "isEmployeeCodeGenerationAuto",
+      text: "Employee Code Generation",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
       style: {
         minWidth: "160px",
       },
+      formatter: (cell) => (cell === true? "Auto" : "Manual"),
     },
-    {
-      dataField: "retirementAgeMale",
-      text: "retirementAgeMale",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
-    {
-      dataField: "retirementAgeFemale",
-      text: "Designation Code",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
+    // {
+    //   dataField: "code",
+    //   text: "Code",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "160px",
+    //   },
+    // },
+    // {
+    //   dataField: "retirementAgeMale",
+    //   text: "retirementAgeMale",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "160px",
+    //   },
+    // },
+    // {
+    //   dataField: "retirementAgeFemale",
+    //   text: "Designation Code",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "160px",
+    //   },
+    // },
        {
       dataField: "action",
       text: "Actions",

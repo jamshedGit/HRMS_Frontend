@@ -31,9 +31,9 @@ export function DesignationUIProvider({ DesignationUIEvents, children }) {
     });
   }, []);
   const initUser = {
-    policyName: "",
+
     currencyId: "",
-    subsdiaryId:"",
+    subsidiaryId:"",
     retirementAgeMale :"",
     isEmployeeCodeGenerationAuto: "",
 

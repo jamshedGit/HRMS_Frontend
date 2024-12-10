@@ -76,9 +76,8 @@ export function DesignationEditDialog({ id, show, onHide, userForRead }) {
       console.log("getUserStatus", user);
       const policyUpdatedFields = {
         Id: user.Id,
-        policyName: user.policyName,
         code: user.code,
-        subsdiaryId: user.subsdiaryId,
+        subsidiaryId: user.subsidiaryId,
         currencyId: user.currencyId,
         isEmployeeCodeGenerationAuto: user.isEmployeeCodeGenerationAuto,
         retirementAgeMale: user.retirementAgeMale,
