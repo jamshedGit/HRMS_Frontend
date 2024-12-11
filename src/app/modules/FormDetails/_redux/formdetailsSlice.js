@@ -44,7 +44,6 @@ export const formDetailsSlice = createSlice({
             const entities = action.payload.data?.data.rows;
             
             const totalResult = action.payload.data?.data.totalResults;
-         
             state.listLoading = false;
             state.error = null;
             state.entities = entities;
@@ -56,7 +55,6 @@ export const formDetailsSlice = createSlice({
             const entities = action.payload.data?.data.rows;
             
             const totalResult = action.payload.data?.data.totalResults;
-   
             state.listLoading = false;
             state.error = null;
             state.customList = entities;
@@ -85,8 +83,6 @@ export const formDetailsSlice = createSlice({
 
             state.error = null;
             state.actionsLoading = false;
-         
-     
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );
@@ -98,7 +94,6 @@ export const formDetailsSlice = createSlice({
             state.entities.unshift(action.payload);
         },
         formCreatedCustom: (state, action) => {
-      
            state.actionsLoading = false;
            state.error = null;
 
@@ -108,12 +103,10 @@ export const formDetailsSlice = createSlice({
             state.error = null;
             state.actionsLoading = false;
             // state.entities.push(action.payload)
-      
             state.entities = state.entities.map((entity) => {
                
                 //const payload = { ...action.payload };
                 let payload = JSON.stringify(action.payload)
-       
                 let payloadObj = JSON.parse(payload);
                 let finalObj = JSON.parse(payloadObj.updatedform);
 

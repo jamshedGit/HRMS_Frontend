@@ -73,7 +73,7 @@ export const religionSlice = createSlice({
             state.error = null;
             state.actionsLoading = false;
             
-            console.log(state.entities);
+            
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );

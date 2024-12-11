@@ -73,7 +73,7 @@ export const formSlice = createSlice({
             state.error = null;
             state.actionsLoading = false;
             
-          
+            
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );

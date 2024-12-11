@@ -73,14 +73,11 @@ export const compensationExpSlice = createSlice({
 
             state.error = null;
             state.actionsLoading = false;
-            console.log("compensation_exp_ deleted ")
-            console.log(state.entities);
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );
         },
         compensation_exp_Created: (state, action) => {
-             console.log("action payload for compensation_exp_", action.payload);
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);
@@ -91,7 +88,6 @@ export const compensationExpSlice = createSlice({
             // state.entities.push(action.payload)
           
             state.entities = state.entities.map((entity) => {
-                console.log("payload aca",action.payload);
                 //const payload = { ...action.payload };
                 let payload = JSON.stringify(action.payload)
                 let payloadObj = JSON.parse(payload);

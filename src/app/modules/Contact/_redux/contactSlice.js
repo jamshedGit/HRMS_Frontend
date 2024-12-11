@@ -71,14 +71,11 @@ export const contactSlice = createSlice({
 
             state.error = null;
             state.actionsLoading = false;
-            console.log("Contact deleted ")
-            console.log(state.entities);
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );
         },
         ContactCreated: (state, action) => {
-             console.log("action payload for Contact", action.payload);
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);

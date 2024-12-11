@@ -73,14 +73,11 @@ export const exchangeRateSlice = createSlice({
 
             state.error = null;
             state.actionsLoading = false;
-         
-          
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );
         },
         exchangeRateCreated: (state, action) => {
-          
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);
@@ -91,7 +88,6 @@ export const exchangeRateSlice = createSlice({
             // state.entities.push(action.payload)
           
             state.entities = state.entities.map((entity) => {
-            
                 //const payload = { ...action.payload };
                 let payload = JSON.stringify(action.payload)
                 let payloadObj = JSON.parse(payload);

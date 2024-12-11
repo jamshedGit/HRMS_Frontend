@@ -102,7 +102,7 @@ export const createCompensationBenefits = (bankForCreation, earning_deduction_Ob
 
         return {
           ...res,
-         compensationId: obj.Id, createdBy: obj.createdBy, createdAt: obj.createdAt, isPartOfGrossSalary: obj.isPartOfGrossSalary, isActive: true
+         compensationId: obj.Id, createdBy: obj.createdBy, createdAt: obj.createdAt, isPartOfGrossSalary: res.isPartOfGrossSalary, isActive: true
         }
 
       })

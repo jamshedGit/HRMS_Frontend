@@ -39,12 +39,8 @@ export const taxSetupSlice = createSlice({
             }
         },
         TaxSetupFetched: (state, action) => {
-            // 
-            
             const entities = action.payload.data?.data.rows;
-       
             const totalResult = action.payload.data?.data.totalResults;
-            
             state.listLoading = false;
             state.error = null;
             state.entities = entities;
@@ -72,14 +68,11 @@ export const taxSetupSlice = createSlice({
 
             state.error = null;
             state.actionsLoading = false;
-         
-          
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );
         },
         TaxSetupCreated: (state, action) => {
-    
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);
