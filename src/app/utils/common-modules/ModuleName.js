@@ -13,7 +13,7 @@ const CurrentModuleName = () => {
   const pathName = window?.location?.pathname?.substring(1);
 
   const name = useMemo(() => {
-    return Object.values(UserAccess || {})?.flatMap(el => el)?.find(acc => acc?.url === pathName)?.name || '';
+    return Object.values(UserAccess || {})?.flatMap(el => el)?.find(acc => pathName.includes(acc?.url))?.name || '';
   }, [pathName, UserAccess]);
 
   return name;

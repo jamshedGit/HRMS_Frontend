@@ -1,28 +1,10 @@
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { Input, Select, TextArea } from "../../../../../../_metronic/_partials/controls";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
-import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
-import {
-  fetchAllCity,
- 
-  fetchAllSubCenter,
-  getLatestBookingNo,
-} from "../../../../../../_metronic/redux/dashboardActions";
-
-import DatePicker from "react-datepicker";
-import axios from "axios";
-import { USERS_URL } from "../../../_redux/formCrud";
-// Phone Number Regex
-const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
-// CNIC Regex
-const cnicRegExp = /^[0-9]{5}-[0-9]{7}-[0-9]$/;
-// Password Regex
-const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 // Validation schema
 const formValidation = Yup.object().shape(
   {

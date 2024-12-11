@@ -138,7 +138,7 @@ export function FormTable(user
 
   useEffect(() => {
 
-    const emailList = currentState.userForEdit?.tran_email_recipents_setups.map((x) => {
+    const emailList = currentState.userForEdit?.tran_email_recipents_setups?.map((x) => {
       return x.employeeId
     }) || [];
     setDefaultEmailRecipents(
@@ -148,7 +148,7 @@ export function FormTable(user
 
   useEffect(() => {
 
-    const bankInfoList = currentState.userForEdit?.tran_payroll_policy_bank_infos.map((x) => {
+    const bankInfoList = currentState.userForEdit?.tran_payroll_policy_bank_infos?.map((x) => {
       return x
     }) || [];
     setDefaultBankInfoList(
@@ -158,7 +158,7 @@ export function FormTable(user
 
 
   useEffect(() => {
-    const eobiAllowance = currentState.userForEdit?.tran_payroll_policy_eobiAllowances.map((x) => {
+    const eobiAllowance = currentState.userForEdit?.tran_payroll_policy_eobiAllowances?.map((x) => {
       return x.earningId
     }) || [];
     setDefaultEOBIAllowances(
@@ -168,7 +168,7 @@ export function FormTable(user
 
   // FOR SESSI List Configuration
   useEffect(() => {
-    const sessiAllowance = currentState.userForEdit?.tran_payroll_policy_sessiAllowances.map((x) => {
+    const sessiAllowance = currentState.userForEdit?.tran_payroll_policy_sessiAllowances?.map((x) => {
       return x.earningId
     }) || [];
     setDefaultSESSIAllowances(
