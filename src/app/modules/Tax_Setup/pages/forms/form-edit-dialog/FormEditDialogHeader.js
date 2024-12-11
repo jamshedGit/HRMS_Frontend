@@ -17,9 +17,9 @@ export function FormEditDialogHeader({ id, isUserForRead }) {
   );
 
   useEffect(() => {
-    let _title = id ? "" : "Add Tax Year";
+    let _title = id ? "" : "Add Tax Year Setup";
     if (id) {
-      _title = `Edit Tax year`;
+      _title = `Edit Tax Year Setup`;
     } //else if (isUserForRead) {
     //   _title = `Read user '}'`
     // }
@@ -31,7 +31,7 @@ export function FormEditDialogHeader({ id, isUserForRead }) {
       {actionsLoading && <ModalProgressBar />}
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-lg">
-          {!isUserForRead ? title : "View Tax Year"}
+          {!isUserForRead ? title : "View Tax Year Setup"}
         </Modal.Title>
       </Modal.Header>
     </>

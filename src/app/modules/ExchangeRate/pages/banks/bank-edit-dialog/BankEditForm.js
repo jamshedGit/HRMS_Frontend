@@ -10,7 +10,8 @@ import {
   fetchAllCountry,
   fetchAllFormsMenu,
   fetchAllActiveEmployees,
-  fetchAllEarningDeductionList
+  fetchAllEarningDeductionList,
+  fetchAllSubsidiaryData
 
 } from "../../../../../../_metronic/redux/dashboardActions";
 import DatePicker from "react-datepicker";
@@ -90,6 +91,16 @@ export function BankEditForm({
   const [defCurrecnyChildMenus = null, setDefaultCurrencyChildMenus] = useState(null);
   const [defCurrecnyToConvertChildMenus = null, setDefaultCurrencyToConvertChildMenus] = useState(null);
 
+
+  useEffect(() => {
+    if (!user.Id) {
+      // dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsidiaries
+      dispatch(fetchAllSubsidiaryData("allSubsidiaryList"));
+  
+     
+
+    }
+  }, [dispatch, user.Id]);
   useEffect(() => {
     if (!user.Id) {
       dispatch(fetchAllFormsMenu(126, "allCurrencyCodeList")); // For All currecy Codes
@@ -131,7 +142,7 @@ export function BankEditForm({
   }, [user.effective_date]);
 
   //=========== END
-  console.log("dashboar111", dashboard, user)
+
   return (
     <>
       <Formik
@@ -139,7 +150,7 @@ export function BankEditForm({
         initialValues={user}
         validationSchema={formValidation}
         onSubmit={(values) => {
-          console.log("values", values);
+     
           enableLoading();
           saveIncident(values);
         }}
@@ -165,7 +176,7 @@ export function BankEditForm({
                 <fieldset disabled={isUserForRead}>
 
                   <div className="from-group row">
-                    {
+                    {/* {
                       <><div className="col-12 col-md-4 mt-3">
                         <Select
 
@@ -186,16 +197,62 @@ export function BankEditForm({
                           <div className="invalid-text">{errors.subsidiaryId}</div>
                         )}
                       </div></>
+                      
 
-                    }
+                    } */}
+
+<div className="col-12 col-md-4 mt-3">
+                    <SearchSelect
+                      name="subsidiaryId"
+                      label={
+                        <span>
+                          Subsidiary<span style={{ color: "red" }}>*</span>
+                        </span>
+                      }
+                      isDisabled={isUserForRead}
+                      onChange={(e) => {
+                        setFieldValue("subsidiaryId", e.value || null);
+                        const selectedSubsidiary = dashboard?.allSubsidiaryList?.find(
+                          (option) => option.value === e.value
+                        );
+                    
+                        // If a corresponding subsidiary is found, set the base_currency_id
+                        if (selectedSubsidiary) {
+                          setFieldValue("base_currency_id", selectedSubsidiary.currencyId || null);
+                        } else {
+                          setFieldValue("base_currency_id", null); // Reset base_currency_id if no subsidiary is found
+                        }
+                    
+                        // Optionally, you can call additional functions like setDefaultCurrencyChildMenus
+                        setDefaultCurrencyChildMenus(e);
+                      }}
+                      value={
+                        dashboard?.allSubsidiaryList?.find(
+                          (option) => option.value === values.subsidiaryId
+                        ) || null
+                      }
+
+                      options={dashboard?.allSubsidiaryList}
+                      // options={dashboard.allSubidiaryList.map(option => ({
+                      //   label: `${option.label} (${option.value})`, // Adding the value to the label
+                      //   value: option.value,
+                      // }))}
+                      error={errors.subsidiaryId}
+                      touched={touched.subsidiaryId}
+                    />
+                  </div>
+
 
                   </div>
                   <div className="from-group row">
                     <div className="col-12 col-md-4 mt-3">
-                      <SearchSelect
+                      {/* <SearchSelect */}
+                      <Field
                         name="base_currency_id"
-                        label={<span> Base Currency<span style={{ color: 'red' }}>*</span></span>}
-                        isDisabled={isUserForRead && true}
+                        label={<span> Base Currency</span>}
+                        // label={values.base_currency_id || "no"}
+                        disabled
+                        component={Input}
                         onBlur={() => {
                           // handleBlur({ target: { name: "countryId" } });
                         }}
@@ -204,10 +261,31 @@ export function BankEditForm({
                           setDefaultCurrencyChildMenus(e);
                           // dispatch(fetchAllFormsMenu(e.value));
                         }}
-                        value={(defCurrecnyChildMenus || null)}
+                        // value={(defCurrecnyChildMenus || null)}
+                        // value={
+                        //   dashboard.allCurrencyCodeList.find(
+                        //     (option) => option.value == values.base_currency_id
+                        //   )?.label || values.subsidiaryId
+                        // }
+
+                        value={
+                          // Find the selected subsidiary
+                          dashboard.allSubsidiaryList?.find(
+                            (subsidiary) => subsidiary.value === values.subsidiaryId
+                          )?.currencyId
+                            // Then find the corresponding currency in allCurrencyCodeList
+                            ? dashboard.allCurrencyCodeList?.find(
+                                (currency) => currency.value === 
+                                dashboard.allSubsidiaryList?.find(
+                                  (subsidiary) => subsidiary.value === values.subsidiaryId
+                                )?.currencyId
+                              )?.label 
+                            : values.subsidiaryId
+                        }
+                        
                         error={errors.base_currency_id}
                         touched={touched.base_currency_id}
-                        options={dashboard.allCurrencyCodeList}
+                  
                       />
                     </div>
 

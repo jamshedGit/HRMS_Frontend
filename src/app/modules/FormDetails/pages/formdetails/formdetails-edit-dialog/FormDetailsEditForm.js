@@ -93,7 +93,7 @@ export function FormEditForm({
     dispatch(getLatestTableId("t_form_menu", "Id", " 1 = 1 ", setValue));
   };
 
-  console.log("defFormMenu", defFormCode, user)
+
 
   return (
     <>
@@ -102,7 +102,7 @@ export function FormEditForm({
         initialValues={user}
         validationSchema={FormEditSchema}
         onSubmit={(values) => {
-          //  console.log("values", values);
+    
           enableLoading();
           //values.formCode = 'NA ';
           saveReligion({ ...values, formCode: values.formCode ? values.formCode : defFormCode });
@@ -120,7 +120,7 @@ export function FormEditForm({
         }) => (
           <>
             {
-              console.log('::::::::', values)
+        
 
             }
             <Modal.Body className="overlay overlay-block cursor-default">

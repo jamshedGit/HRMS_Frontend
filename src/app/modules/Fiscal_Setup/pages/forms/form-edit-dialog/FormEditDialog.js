@@ -63,7 +63,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   //   }
   // }, [actionsLoading === true]);
 
-  //console.log("action", action);
+
 
   useEffect(() => {
     dispatch(actions.fetchUser(id));
@@ -72,13 +72,13 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   }, [id, dispatch]);
 
   // useEffect(() => {
-  //   console.log("UseEffect call");
+ 
   //   if (actionsLoading === false) {
-  //     console.log("UseEffect call inside function");
+ 
   //     disbaleLoading();
   //   }
   // }, [actionsLoading]);
-  //console.log("userForEdit", userForEdit);
+
 
   const SaveTaxSetup = async (user) => {
 
@@ -95,7 +95,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
       //   return item.value === +user.status;
       // });
 
-      console.log("getUserStatus", user);
+     
 
       const taxSetupUpdatedFields = {
         Id: user.Id,
@@ -104,7 +104,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         subsidiaryId: user.subsidiaryId
       };
 
-      console.log("taxSetupUpdatedFields", taxSetupUpdatedFields);
+    
       await dispatch(actions.updateFiscalSetup(taxSetupUpdatedFields, disbaleLoading, onHide));
       await dispatch(actions.fetchUsers(usersUIProps.queryParams));
     }
@@ -139,7 +139,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
       <FormEditDialogHeader id={id} isUserForRead={userForRead} />
       <MasterEditForm
         SaveTaxSetup={SaveTaxSetup}
-        user={userForEdit || userData || formUIProps.initUser}
+        user={userForEdit || formUIProps.initUser}
         onHide={onHide}
         roles={roles}
         centers={centers}

@@ -20,6 +20,7 @@ export function ActionsColumnFormatter(
   }
 ) {
   const isUserRead = false;
+
   return (
     <>
       <OverlayTrigger
@@ -36,7 +37,7 @@ export function ActionsColumnFormatter(
           </span>
         </a>
       </OverlayTrigger>
-      {isAccessForEdit && row.isActive && (
+      {/* {isAccessForEdit && (
         <OverlayTrigger
           overlay={<Tooltip id="products-edit-tooltip">Edit</Tooltip>}
         >
@@ -52,11 +53,11 @@ export function ActionsColumnFormatter(
             </span>
           </a>
         </OverlayTrigger>
-      )}
+      )} */}
 
       <> </>
 
-      {isAccessForDelete && (
+      {isAccessForDelete && row.isActive && (
         <OverlayTrigger
           overlay={
             <Tooltip id="products-edit-tooltip">

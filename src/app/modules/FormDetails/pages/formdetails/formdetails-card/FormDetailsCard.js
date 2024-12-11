@@ -10,10 +10,11 @@ import { FormTable } from "../formdetails-table/FormDetailsTable"
 import { useFormUIContext } from "../FormDetailsUIContext"
 import { BanksFilter } from "../bank-filter/BanksFIlter"
 import { useSelector, shallowEqual } from "react-redux"
+import CurrentModuleName from "../../../../../utils/common-modules/ModuleName"
 
 export function FormCard() {
   const formUIContext = useFormUIContext()
-  //console.log("formUIContext", formUIContext)
+  
   const FormUIProps = useMemo(() => {
     return {
       newFormButtonClick: formUIContext.newFormButtonClick,
@@ -28,7 +29,7 @@ export function FormCard() {
     }),
     shallowEqual
   )
-  console.log("userAccess Temp details", userAccess)
+
   const accessUser = userAccess.find(
     (item) => item.componentName === "CreateChildForms"
   )
@@ -39,43 +40,61 @@ export function FormCard() {
     <>
 
       <Card>
-        <CardHeader title="">
-          <BanksFilter />
-          <CardHeaderToolbar>
-            {accessUser && currentId ? (
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={FormUIProps.newFormButtonClick}
-              >
-                + Add General Setup
-              </button>
-            ) : (
-              <></>
-            )}
-            {/* {userAccess.find((item) => {
-              if (
-                item.componentName === "CreateUser" ||
-                item.isAccess === true
-              ) {
-                return (
+
+        <CardHeader title={CurrentModuleName()} >
+
+          <div className="d-flex justify-content-between align-items-center gap-3 m-4">
+
+
+
+            <div className="pt-5">
+
+              <BanksFilter />
+
+            </div>
+
+            <div className=" p-2">
+
+              <CardHeaderToolbar>
+
+
+
+                {accessUser && (
+
                   <button
                     type="button"
                     className="btn btn-primary"
-                    onClick={FormUIProps.newUserButtonClick}
+                    onClick={FormUIProps.newFormButtonClick}
                   >
-                    Add New User
+                    + Add General Setup
                   </button>
-                )
-              }
-            })} */}
-          </CardHeaderToolbar>
+
+                )}
+
+
+
+
+
+              </CardHeaderToolbar>
+
+            </div>
+
+
+
+          </div>
+
         </CardHeader>
+
+
 
         <CardBody>
 
+
+
           <FormTable />
+
         </CardBody>
+
       </Card>
     </>
   )

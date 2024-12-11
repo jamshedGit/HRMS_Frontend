@@ -77,10 +77,10 @@ export function FormFilter({ listLoading, user, setCity,
 
   function addCommas(nStr) {
     nStr += '';
-    var x = nStr.split('.');
-    var x1 = x[0];
-    var x2 = x.length > 1 ? '.' + x[1] : '';
-    var rgx = /(\d+)(\d{3})/;
+    let x = nStr.split('.');
+    let x1 = x[0];
+    let x2 = x.length > 1 ? '.' + x[1] : '';
+    let rgx = /(\d+)(\d{3})/;
     while (rgx.test(x1)) {
       x1 = x1.replace(rgx, '$1' + ',' + '$2');
     }
@@ -94,8 +94,8 @@ export function FormFilter({ listLoading, user, setCity,
     if (!isEqual(newQueryParams, formUIProps.queryParams)) {
       newQueryParams.pageNumber = 1
       // update list by queryParams
-      console.log("update list by queryParams");
-      console.log(newQueryParams);
+  
+ 
       formUIProps.setQueryParams(newQueryParams)
     }
   }
@@ -114,7 +114,7 @@ export function FormFilter({ listLoading, user, setCity,
           alarmTimeId: [],
         }}
         onSubmit={(values) => {
-          console.log(1);
+ 
           // createPdf(values);
           applyFilter(values)
         }}

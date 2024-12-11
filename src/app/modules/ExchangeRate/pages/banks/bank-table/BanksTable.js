@@ -35,16 +35,16 @@ export function BanksTable() {
     };
   }, [bankUIContext]);
 
-  //console.log("queryparms", usersUIProps.queryparms)
+
   const { currentState, userAccess } = useSelector(
-    (state) => {  console.log(" Exchange Rate state ",state); return {
+    (state) => {   return {
       
       currentState: state.exchange,
       userAccess: state?.auth?.userAccess["Exchange"]
     }},
     shallowEqual
   );
-  console.log("currentState", currentState);
+
   
   const { totalCount, entities, listLoading } = currentState;
 
@@ -54,11 +54,11 @@ export function BanksTable() {
 
   useEffect(() => {
     bankUIProps.setIds([]);
-    console.log("test 2",bankUIProps.queryParams)
+   
     dispatch(actions.fetchUsers(bankUIProps.queryParams));
   }, [bankUIProps.queryParams, dispatch, totalCount]);
 
-  console.log("stopage earning",userAccess);
+
   const isAccessForEdit = userAccess?.find(
     (item) => item.componentName === "UpdateExchangeRate"
   );
@@ -114,12 +114,16 @@ export function BanksTable() {
     },
     {
       dataField: "exchange_rate",
-      text: "Exchange.Rate",
+      text: "Exchange Rate",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
       style: {
-        minWidth: "160px",
+        minWidth: "10px",
+        textAlign: "center",
+      },
+      headerStyle: {
+        textAlign: "center", // Align header text to the left
       },
     },
    

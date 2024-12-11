@@ -6,7 +6,7 @@ import * as actions from "../../../_redux/formdetailsActions";
 import { useFormUIContext } from "../FormDetailsUIContext";
 
 export function BankDeleteDialog({ id, status, show, onHide }) {
-  // console.log("Status", status);
+
   const [loading, setLoading] = useState(false);
   // Customers UI Context
   const usersUIContext = useFormUIContext();
@@ -51,7 +51,7 @@ export function BankDeleteDialog({ id, status, show, onHide }) {
       // refresh list after deletion
       // dispatch(actions.fetchUsers(usersUIProps.queryParams));
     //  dispatch(actions.customfetchFormDetail(usersUIProps.queryParams))
-    console.log("party",formDetails.currentId);
+
       dispatch(actions.customfetchFormDetail(formDetails.currentId));
       // clear selections list
       // usersUIProps.setIds([]);
@@ -59,7 +59,7 @@ export function BankDeleteDialog({ id, status, show, onHide }) {
       disableLoading();
     });
   };
-  //console.log("status", status, id);
+
   return (
     <Modal
       show={show}

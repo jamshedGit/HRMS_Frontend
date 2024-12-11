@@ -31,9 +31,9 @@ export function DesignationUIProvider({ DesignationUIEvents, children }) {
     });
   }, []);
   const initUser = {
-    policyName: "",
+
     currencyId: "",
-    subsdiaryId:"",
+    subsidiaryId:"",
     retirementAgeMale :"",
     isEmployeeCodeGenerationAuto: "",
 
@@ -56,7 +56,7 @@ export function DesignationUIProvider({ DesignationUIEvents, children }) {
     
   };
 
-  console.log("bank ui events",DesignationUIEvents);
+
 
   const value = {
     queryParams,

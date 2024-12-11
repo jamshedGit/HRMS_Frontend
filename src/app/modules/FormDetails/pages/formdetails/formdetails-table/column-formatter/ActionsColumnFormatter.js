@@ -26,7 +26,7 @@ export function ActionsColumnFormatter(
         overlay={<Tooltip id="products-edit-tooltip">View Form</Tooltip>}>
         <a
           title=""
-          className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
+          className="btn btn-icon view-button" 
           onClick={() => openReadFormDialog(row.Id, isUserRead)}
         >
           <span className="svg-icon svg-icon-md svg-icon-primary">
@@ -36,13 +36,13 @@ export function ActionsColumnFormatter(
           </span>
         </a>
       </OverlayTrigger>
-      {isAccessForEdit && row.isActive && (
+      {isAccessForEdit  && (
         <OverlayTrigger
           overlay={<Tooltip id="products-edit-tooltip">Edit Form</Tooltip>}
         >
           <a
             title=""
-            className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
+            className="btn btn-icon edit-button"
             onClick={() => openEditFormDialog(row.Id)}
           >
             <span className="svg-icon svg-icon-md svg-icon-primary">
@@ -64,10 +64,10 @@ export function ActionsColumnFormatter(
             </Tooltip>
           }
         >
-          {row.isActive ? (
+          {/* {row.isActive ? ( */}
             <a
               title=""
-              className="btn btn-icon btn-light btn-hover-danger btn-sm mx-3"
+               className="btn btn-icon delete-button"
               onClick={() => openDeleteFormDialog(row.Id, row.isActive)}
             >
               <span className="svg-icon svg-icon-md svg-icon-danger">
@@ -77,7 +77,7 @@ export function ActionsColumnFormatter(
                 />
               </span>
             </a>
-          ) : (
+          {/* ) : (
             <a
               title=""
               className="btn btn-icon btn-light btn-hover-success btn-sm mx-3"
@@ -85,7 +85,9 @@ export function ActionsColumnFormatter(
             >
               <span className="svg-icon svg-icon-md svg-icon-success">A</span>
             </a>
-          )}
+          )
+          
+          } */}
         </OverlayTrigger>
       )}
     </>

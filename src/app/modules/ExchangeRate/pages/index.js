@@ -4,7 +4,7 @@ import { LayoutSplashScreen, ContentRoute } from "../../../../_metronic/layout";
 import { ExchangeRatePage } from "./banks/BanksPage";
 
 export default function ExchangeRateManagement() {
-  console.log('exchange mein aya')
+
   return (
     <Suspense fallback={<LayoutSplashScreen />}>
       <Switch>

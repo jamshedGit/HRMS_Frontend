@@ -10,10 +10,11 @@ import { BanksTable } from "../bank-table/BanksTable"
 import { useBanksUIContext } from "../BanksUIContext"
 import { BanksFilter } from "../bank-filter/BanksFIlter"
 import { useSelector, shallowEqual } from "react-redux"
+import CurrentModuleName from "../../../../../utils/common-modules/ModuleName"
 
 export function BanksCard() {
   const banksUIContext = useBanksUIContext()
-  //console.log("banksUIContext", banksUIContext)
+
   const BanksUIProps = useMemo(() => {
     return {
       newBankButtonClick: banksUIContext.newBankButtonClick,
@@ -27,7 +28,7 @@ export function BanksCard() {
     }),
     shallowEqual
   )
-  console.log("userAccess exchange",userAccess)
+
   const accessUser = userAccess.find(
     (item) => item.componentName === "CreateExchangeRate"
   )
@@ -35,44 +36,64 @@ export function BanksCard() {
   return (
     <>
 
+
+
       <Card>
-        <CardHeader title="">
-          <BanksFilter />
-          <CardHeaderToolbar>
-            {accessUser ? (
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={BanksUIProps.newBankButtonClick}
-              >
-                + Add Exchange Rate
-              </button>
-            ) : (
-              <></>
-            )}
-            {/* {userAccess.find((item) => {
-              if (
-                item.componentName === "CreateUser" ||
-                item.isAccess === true
-              ) {
-                return (
+
+        <CardHeader title={CurrentModuleName()} >
+
+          <div className="d-flex justify-content-between align-items-center gap-3 m-4">
+
+
+
+            <div className="pt-5">
+
+              <BanksFilter />
+
+            </div>
+
+            <div className=" p-2">
+
+              <CardHeaderToolbar>
+
+
+
+                {accessUser && (
+
                   <button
                     type="button"
                     className="btn btn-primary"
-                    onClick={BanksUIProps.newUserButtonClick}
+                    onClick={BanksUIProps.newBankButtonClick}
                   >
-                    Add New User
+                    + Add Exchange Rate
                   </button>
-                )
-              }
-            })} */}
-          </CardHeaderToolbar>
+
+                )}
+
+
+
+
+
+              </CardHeaderToolbar>
+
+            </div>
+
+
+
+          </div>
+
         </CardHeader>
+
+
 
         <CardBody>
 
+
+
           <BanksTable />
+
         </CardBody>
+
       </Card>
     </>
   )

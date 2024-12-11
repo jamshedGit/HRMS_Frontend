@@ -62,7 +62,7 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
   //   }
   // }, [actionsLoading === true]);
 
-  //console.log("action", action);
+
 
   useEffect(() => {
     dispatch(actions.fetchUser(id));
@@ -71,24 +71,24 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
   }, [id, dispatch]);
 
   // useEffect(() => {
-  //   console.log("UseEffect call");
+
   //   if (actionsLoading === false) {
-  //     console.log("UseEffect call inside function");
+
   //     disbaleLoading();
   //   }
   // }, [actionsLoading]);
-  //console.log("userForEdit", userForEdit);
+
 
   const saveIncident = async (user) => {
 
     if (!id) {
-      console.log("stoppage_allowance edit dialog");
-      console.log(user);
+
+
 
       // const getUserStatus = userStatusTypes.filter((item) => {
       //   return item.value === +user.status;
       // });
-      // //console.log("getUserStatus", getUserStatus);
+ 
       // const { status = getUserStatus[0].label, ...rest } = user;
       // const finalObject = {
       //   status: getUserStatus[0].label,
@@ -104,7 +104,7 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
       //   return item.value === +user.status;
       // });
 
-      console.log("getUserStatus", user);
+
 
       // This object set for Edit/Save Fields in DB
       const updateExchangeRateObj = {
@@ -117,7 +117,7 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
 
       };
 
-      console.log("updateExchangeRate updated", updateExchangeRateObj);
+
       await dispatch(actions.updateExchangeRate(updateExchangeRateObj, disbaleLoading, onHide));
       await dispatch(actions.fetchUsers(usersUIProps.queryParams));
     }

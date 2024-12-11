@@ -33,13 +33,14 @@ export function FormUIProvider({ FormUIEvents, children }) {
   const initUser = {
     formName: "",
     formCode:"",
-    parentFormID:""
+    parentFormID:"",
+    isActive:1
     // createdBy: "",
     // createdAt:"",
     
   };
 
-  console.log("form events",FormUIEvents);
+
 
   const value = {
     queryParams,

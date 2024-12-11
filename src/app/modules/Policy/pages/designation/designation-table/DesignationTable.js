@@ -21,7 +21,7 @@ import { DatetimeColumnFormatter } from "../../../../Dashboard/pages/dashboard/l
 export function DesignationTable() {
   //Users UI Context
   const designationUIContext = useDesignationUIContext();
-console.log("designation in")
+
   const religionUIProps = useMemo(() => {
     return {
       ids: designationUIContext.ids,
@@ -35,16 +35,16 @@ console.log("designation in")
     };
   }, [designationUIContext]);
 
-  //console.log("queryparms", usersUIProps.queryparms)
+
   const { currentState, userAccess } = useSelector(
-    (state) => {  console.log("state ",state); return {
+    (state) => {  return {
       
       currentState: state.policy,
       userAccess: state?.auth?.userAccess["Policy"],
     }},
     shallowEqual
   );
-  console.log("currentState", currentState);
+
   
   const { totalCount, entities, listLoading } = currentState;
 
@@ -54,7 +54,7 @@ console.log("designation in")
 
   useEffect(() => {
     religionUIProps.setIds([]);
-    console.log("test 2",religionUIProps.queryParams)
+
     dispatch(actions.fetchUsers(religionUIProps.queryParams));
   }, [religionUIProps.queryParams, dispatch, totalCount]);
 
@@ -67,9 +67,11 @@ console.log("designation in")
   );
   // Table columns
   const columns = [
+ 
+
     {
-      dataField: "Id",
-      text: "ID",
+      dataField: "Subsidiary.name",
+      text: "Subsidiary",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -77,9 +79,11 @@ console.log("designation in")
         minWidth: "160px",
       },
     },
+
+    
     {
-      dataField: "policyName",
-      text: "Policy",
+      dataField: "Currency.formName",
+      text: "Currency",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -87,36 +91,48 @@ console.log("designation in")
         minWidth: "160px",
       },
     },
+
     {
-      dataField: "code",
-      text: "Code",
+      dataField: "isEmployeeCodeGenerationAuto",
+      text: "Employee Code Generation",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
       style: {
         minWidth: "160px",
       },
+      formatter: (cell) => (cell === true? "Auto" : "Manual"),
     },
-    {
-      dataField: "retirementAgeMale",
-      text: "retirementAgeMale",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
-    {
-      dataField: "retirementAgeFemale",
-      text: "Designation Code",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
+    // {
+    //   dataField: "code",
+    //   text: "Code",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "160px",
+    //   },
+    // },
+    // {
+    //   dataField: "retirementAgeMale",
+    //   text: "retirementAgeMale",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "160px",
+    //   },
+    // },
+    // {
+    //   dataField: "retirementAgeFemale",
+    //   text: "Designation Code",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "160px",
+    //   },
+    // },
        {
       dataField: "action",
       text: "Actions",

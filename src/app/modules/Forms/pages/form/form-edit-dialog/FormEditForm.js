@@ -25,13 +25,13 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 const FormEditSchema = Yup.object().shape(
   {
     formName: Yup.string()
-    .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.')
+      .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.')
       .required("Required*"),
-      // formCode: Yup.string()
-      // .required("Required*"),
+    // formCode: Yup.string()
+    // .required("Required*"),
 
   },
-
+  
 );
 export function FormEditForm({
   saveReligion,
@@ -47,8 +47,8 @@ export function FormEditForm({
   loading,
 }) {
 
-  
-  
+
+
   const dispatch = useDispatch();
   const { dashboard } = useSelector((state) => state);
   // Get User Details
@@ -57,13 +57,16 @@ export function FormEditForm({
   const [defFormCode = null, setDefaultFormCode] = useState(null);
 
 
-  
+  const isActiveOptions = [
+    { value: false, label: "No" },
+    { value: true, label: "Yes" },
+  ];
   // Department DropDown Load when pageLoad
   useEffect(() => {
 
     if (!user.formCode) { fetchData("1", setDefaultFormCode); }
     if (!user.parentFormID) {
-   
+
       dispatch(fetchAllFormsMenu(1));
     }
   }, [dispatch]);
@@ -79,10 +82,10 @@ export function FormEditForm({
       })
     );
   }, [user?.parentFormID, dashboard.parentFormID]);
- 
+
   const fetchData = async (subsidiaryId, setValue) => {
     dispatch(getLatestTableId("t_form_menu", "Id", " 1 = 1 ", setValue));
-};
+  };
 
 
 
@@ -93,9 +96,9 @@ export function FormEditForm({
         initialValues={user}
         validationSchema={FormEditSchema}
         onSubmit={(values) => {
-        //  console.log("values", values);
+    
           enableLoading();
-          saveReligion({...values,formCode: values.formCode ? values.formCode : defFormCode   });
+          saveReligion({ ...values, formCode: values.formCode ? values.formCode : defFormCode });
         }}
       >
         {({
@@ -118,32 +121,78 @@ export function FormEditForm({
               <Form className="form form-label-right">
                 <fieldset disabled={isUserForRead}>
                   <div className="from-group row">
-                  {
-                      
+                    {
+
 
                     }
-                      { <div className="col-12 col-md-4 mt-3">
+                    {<div className="col-12 col-md-4 mt-3">
                       <Field
                         name="formCode"
                         disabled
                         maxLength={6}
                         component={Input}
                         placeholder="Enter Form Code"
-                        label={<span> Form Code<span style={{ color: 'red' }}>*</span></span>}
-                        value={  values.formCode || defFormCode}
+                        label={<span> Code<span style={{ color: 'red' }}>*</span></span>}
+                        value={values.formCode || defFormCode}
                       />
                     </div>}
-                   { <div className="col-12 col-md-4 mt-3">
+                    {<div className="col-12 col-md-4 mt-3">
                       <Field
                         name="formName"
                         maxLength={30}
                         component={Input}
                         placeholder="Enter Form Name"
-                        label={<span> Form Name<span style={{ color: 'red' }}>*</span></span>}
+                        label={<span>  Name<span style={{ color: 'red' }}>*</span></span>}
 
                       />
                     </div>}
-                 
+
+                    {/* {<div className="col-12 col-md-4 mt-3">
+                      <Field
+                        name="isActive"
+                        component={Input}
+                        label={<span> Select active status<span style={{ color: 'red' }}>*</span></span>}
+                      >
+                        <option value="">Select active status</option> 
+                        <option value="1">Yes</option> 
+                        <option value="0">No</option> 
+                      </Field>
+                    </div>
+                    } */}
+
+
+                    <div className="col-12 col-md-4 mt-3">
+                      <label htmlFor="basis_of_gratuityId">
+                      Select Active Status<span style={{ color: "red" }}>*</span>
+                      </label>
+                      <Field
+                        name="isActive"
+                        as="select"
+                        className="form-control"
+                        disabled={isUserForRead}
+                        label={values.isActive}
+                        onChange={(e) => {
+                          setFieldValue("isActive", e.target.value); // Use the raw value
+                        }}
+                        value={
+                          isActiveOptions?.find(
+                            (option) => option.value == values.isActive
+                          ) || null
+                        }
+  
+                      >
+                        
+                        <option value="">Select </option>
+                        {isActiveOptions.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </Field>
+                      {errors.isActive && touched.isActive && (
+                        <div className="text-danger">{errors.isActive}</div>
+                      )}
+                    </div>
                   </div>
                   <div className="form-group row"></div>
                 </fieldset>
@@ -184,7 +233,7 @@ export function FormEditForm({
             </Modal.Footer>
           </>
         )}
-      </Formik>
+      </Formik >
     </>
   );
 }
