@@ -58,8 +58,8 @@ export function FormEditForm({
 
 
   const isActiveOptions = [
-    { value: 0, label: "No" },
-    { value: 1, label: "Yes" },
+    { value: false, label: "No" },
+    { value: true, label: "Yes" },
   ];
   // Department DropDown Load when pageLoad
   useEffect(() => {
@@ -96,7 +96,7 @@ export function FormEditForm({
         initialValues={user}
         validationSchema={FormEditSchema}
         onSubmit={(values) => {
-          //  console.log("values", values);
+    
           enableLoading();
           saveReligion({ ...values, formCode: values.formCode ? values.formCode : defFormCode });
         }}
@@ -163,17 +163,25 @@ export function FormEditForm({
 
                     <div className="col-12 col-md-4 mt-3">
                       <label htmlFor="basis_of_gratuityId">
-                      Select Active Status <span style={{ color: "red" }}>*</span>
+                      Select Active Status<span style={{ color: "red" }}>*</span>
                       </label>
                       <Field
                         name="isActive"
                         as="select"
                         className="form-control"
                         disabled={isUserForRead}
+                        label={values.isActive}
                         onChange={(e) => {
                           setFieldValue("isActive", e.target.value); // Use the raw value
                         }}
+                        value={
+                          isActiveOptions?.find(
+                            (option) => option.value == values.isActive
+                          ) || null
+                        }
+  
                       >
+                        
                         <option value="">Select </option>
                         {isActiveOptions.map((option) => (
                           <option key={option.value} value={option.value}>

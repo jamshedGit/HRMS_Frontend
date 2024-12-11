@@ -4,7 +4,7 @@ export const USERS_URL = process.env.REACT_APP_API_URL;
 
 //Create user
 export function createform(body) {
-  console.log("create form step 1", body)
+
   
   // body.Name = body.txtbankName;
   // delete body.txtbankName
@@ -14,27 +14,27 @@ export function createform(body) {
 }
 // Read
 export function getAllForm(body) {
-  console.log("body",body);
+
   return axios.post(`${USERS_URL}/form/read-all-form`, body);
 }
 
 
 
 export function getFormById(id) {
-   console.log("form id", id)
+
   return axios.post(`${USERS_URL}/form/read-form`, id);
 }
 
 //Update
 export function updateForm(form) {
-   console.log("updateUser 12", form)
+
   return axios.put(`${USERS_URL}/form/update-form`, form);
 }
 
 //Delete
 export function deleteForm(body) {
-  console.log("body")
-  console.log(body);
+
+
   return axios.patch(`${USERS_URL}/form/delete-form`, body);
 }
 

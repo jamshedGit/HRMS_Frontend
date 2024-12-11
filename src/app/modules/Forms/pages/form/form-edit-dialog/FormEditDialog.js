@@ -56,7 +56,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   //   }
   // }, [actionsLoading === true]);
 
-  //console.log("action", action);
+
 
   useEffect(() => {
     dispatch(actions.fetchUser(id));
@@ -65,24 +65,24 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   }, [id, dispatch]);
 
   // useEffect(() => {
-  //   console.log("UseEffect call");
+
   //   if (actionsLoading === false) {
-  //     console.log("UseEffect call inside function");
+
   //     disbaleLoading();
   //   }
   // }, [actionsLoading]);
-  //console.log("userForEdit", userForEdit);
+
 
   const saveReligion = async (user) => {
 
     if (!id) {
-      console.log("relegion save");
-      console.log(user);
+  
+
 
       // const getUserStatus = userStatusTypes.filter((item) => {
       //   return item.value === +user.status;
       // });
-      // //console.log("getUserStatus", getUserStatus);
+
       // const { status = getUserStatus[0].label, ...rest } = user;
       // const finalObject = {
       //   status: getUserStatus[0].label,
@@ -98,7 +98,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
       //   return item.value === +user.status;
       // });
      
-      console.log("getUserStatus", user);
+
 
       const formUpdatedFields = {
         Id: user.Id,
@@ -107,7 +107,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         isActive:user.isActive
       };
 
-      console.log("formUpdatedFields", formUpdatedFields);
+
       await dispatch(actions.updateForm(formUpdatedFields, disbaleLoading, onHide));
       await dispatch(actions.fetchUsers(FormUIProps.queryParams));
     }
