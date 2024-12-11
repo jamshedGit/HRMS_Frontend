@@ -53,21 +53,21 @@ const formValidation = Yup.object().shape({
   overtime_working_day: Yup.number()
     .max(100, 'Value cannot be greater than 100')
     .when('overtime_allowance', {
-      is: (value) => value === true || value == 1, 
+      is: (value) => value === true || value == 1,
       then: Yup.number().required(VALIDATION_MESSAGES.required),
       otherwise: Yup.number().notRequired(),
     }),
-    overtime_off_day: Yup.number()
+  overtime_off_day: Yup.number()
     .max(100, 'Value cannot be greater than 100')
     .when('overtime_allowance', {
-      is: (value) => value === true || value == 1, 
+      is: (value) => value === true || value == 1,
       then: Yup.number().required(VALIDATION_MESSAGES.required),
       otherwise: Yup.number().notRequired(),
     }),
-    overtime_holiday: Yup.number()
+  overtime_holiday: Yup.number()
     .max(100, 'Value cannot be greater than 100')
     .when('overtime_allowance', {
-      is: (value) => value === true || value == 1, 
+      is: (value) => value === true || value == 1,
       then: Yup.number().required(VALIDATION_MESSAGES.required),
       otherwise: Yup.number().notRequired(),
     })
@@ -661,41 +661,42 @@ export function BankEditForm({
                         /> Over Time
 
                       </div>
-
-                      <div className="col-12 col-md-3 mt-3">
+                    </div>
+                    <div className="from-group row">
+                      <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="overtime_working_day"
                           disabled={!Boolean(values.overtime_allowance)}
                           type="number"
                           component={Input}
                           maxLength={2}
-                          label={<span> Overtime Factor Working Day{Boolean(values.overtime_allowance) && <span style={{ color: 'red' }}>*</span>}</span>}
+                          label={<span>Overtime Factor Working Day{Boolean(values.overtime_allowance) && <span style={{ color: 'red' }}>*</span>}</span>}
                           autoComplete="off"
                           value={!Boolean(values.overtime_allowance) ? '' : values.overtime_working_day}
                         />
                       </div>
 
-                      <div className="col-12 col-md-3 mt-3">
+                      <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="overtime_off_day"
                           disabled={!Boolean(values.overtime_allowance)}
                           type="number"
                           component={Input}
                           maxLength={2}
-                          label={<span> Overtime Factor Off day{Boolean(values.overtime_allowance) && <span style={{ color: 'red' }}>*</span>}</span>}
+                          label={<span>Overtime Factor Off day{Boolean(values.overtime_allowance) && <span style={{ color: 'red' }}>*</span>}</span>}
                           autoComplete="off"
                           value={!Boolean(values.overtime_allowance) ? '' : values.overtime_off_day}
                         />
                       </div>
 
-                      <div className="col-12 col-md-3 mt-3">
+                      <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="overtime_holiday"
                           disabled={!Boolean(values.overtime_allowance)}
                           type="number"
                           component={Input}
                           maxLength={2}
-                          label={<span> Overtime Factor Holiday{Boolean(values.overtime_allowance) && <span style={{ color: 'red' }}>*</span>}</span>}
+                          label={<span>Overtime Factor Holiday{Boolean(values.overtime_allowance) && <span style={{ color: 'red' }}>*</span>}</span>}
                           autoComplete="off"
                           value={!Boolean(values.overtime_allowance) ? '' : values.overtime_holiday}
                         />

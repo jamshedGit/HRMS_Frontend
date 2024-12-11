@@ -143,7 +143,7 @@ const formValidation = Yup.object().shape(
         otherwise: Yup.number().notRequired(),
       }),
 
-    payment_mode_Id: Yup.number().required(VALIDATION_MESSAGES.required).min(1,VALIDATION_MESSAGES.required),
+    payment_mode_Id: Yup.number().required(VALIDATION_MESSAGES.required).min(1, VALIDATION_MESSAGES.required),
 
     emp_bankId: Yup.number()
       .when('payment_mode_Id', {
@@ -152,42 +152,42 @@ const formValidation = Yup.object().shape(
         otherwise: Yup.number().notRequired(),
       }),
 
-      company_bankId: Yup.number()
+    company_bankId: Yup.number()
       .when('payment_mode_Id', {
         is: 153, // if select value is 153
         then: Yup.number().required(VALIDATION_MESSAGES.required),
         otherwise: Yup.number().notRequired(),
       }),
 
-      emp_bank_branchId: Yup.number()
+    emp_bank_branchId: Yup.number()
       .when('payment_mode_Id', {
         is: 153, // if select value is 153
         then: Yup.number().required(VALIDATION_MESSAGES.required),
         otherwise: Yup.number().notRequired(),
       }),
 
-      company_branchId: Yup.number()
+    company_branchId: Yup.number()
       .when('payment_mode_Id', {
         is: 153, // if select value is 153
         then: Yup.number().required(VALIDATION_MESSAGES.required),
         otherwise: Yup.number().notRequired(),
       }),
 
-      emp_bank_accountTitle: Yup.string()
+    emp_bank_accountTitle: Yup.string()
       .when('payment_mode_Id', {
         is: (value) => value == 153 || value === 152, // if select value is 151
         then: Yup.string().required(VALIDATION_MESSAGES.required),
         otherwise: Yup.string().notRequired(),
       }),
 
-      company_from_accNo: Yup.number()
+    company_from_accNo: Yup.number()
       .when('payment_mode_Id', {
         is: 153, // if select value is 153
         then: Yup.number().required(VALIDATION_MESSAGES.required),
         otherwise: Yup.number().notRequired(),
       }),
 
-      emp_bank_accNo: Yup.number()
+    emp_bank_accNo: Yup.number()
       .when('payment_mode_Id', {
         is: 153, // if select value is 153
         then: Yup.number().required(VALIDATION_MESSAGES.required),
@@ -1165,8 +1165,10 @@ export function BankEditForm({
                           checked={values.overtime_allowance}
                         /> Over Time
                       </div>
+                    </div>
 
-                      <div className="col-12 col-md-3 mt-3">
+                    <div className="from-group row">
+                      <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="overtime_working_day"
                           disabled={!Boolean(values.overtime_allowance)}
@@ -1179,7 +1181,7 @@ export function BankEditForm({
                         />
                       </div>
 
-                      <div className="col-12 col-md-3 mt-3">
+                      <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="overtime_off_day"
                           disabled={!Boolean(values.overtime_allowance)}
@@ -1192,7 +1194,7 @@ export function BankEditForm({
                         />
                       </div>
 
-                      <div className="col-12 col-md-3 mt-3">
+                      <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="overtime_holiday"
                           disabled={!Boolean(values.overtime_allowance)}
