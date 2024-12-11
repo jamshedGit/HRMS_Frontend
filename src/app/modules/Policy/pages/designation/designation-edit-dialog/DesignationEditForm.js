@@ -175,7 +175,7 @@ export function DesignationEditForm({
 
   
   const {entities } = currentState;
-  console.log("currentState entities", entities?.some((entity) => entity?.subsidiaryId == 2));
+
   return (
     <>
       <Formik
@@ -183,7 +183,7 @@ export function DesignationEditForm({
         initialValues={user}
         validationSchema={formValidationSchema}
         onSubmit={(obj) => {
-          console.log("values employee policy obj", obj);
+       
           enableLoading();
           saveEmpPolicy(obj);
         }}

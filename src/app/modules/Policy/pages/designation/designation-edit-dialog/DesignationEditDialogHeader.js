@@ -16,7 +16,7 @@ export function DesignationEditDialogHeader({ id,isUserForRead }) {
   )
 
 //   useEffect(() => {
-//     console.log("User Read Dialog Header")
+
 //     let _title = id ? "" : "Add Employee Policy"
 //     if (userForEdit && id) {
 //       _title = `Edit Employee Policy '${userForEdit.firstName} ${userForEdit.lastName}'`

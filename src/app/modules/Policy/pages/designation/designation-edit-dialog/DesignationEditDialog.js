@@ -66,14 +66,14 @@ export function DesignationEditDialog({ id, show, onHide, userForRead }) {
   const saveEmpPolicy = async (user) => {
 
     if (!id) {
-      console.log("emp policy save");
-      console.log(user);
+  
+    
       const finalObject = { user }
      await dispatch(actions.createPolicy(user, disbaleLoading, onHide));
       await dispatch(actions.fetchUsers(usersUIProps.queryParams));
     } else {
 
-      console.log("getUserStatus", user);
+   
       const policyUpdatedFields = {
         Id: user.Id,
         code: user.code,
@@ -93,7 +93,7 @@ export function DesignationEditDialog({ id, show, onHide, userForRead }) {
         contractualPolicyInMonth: user.contractualPolicyInMonth
       };
 
-      console.log("policyUpdatedFields", policyUpdatedFields);
+
      await dispatch(actions.updatePolicy(policyUpdatedFields, disbaleLoading, onHide));
      await dispatch(actions.fetchUsers(usersUIProps.queryParams));
     }
