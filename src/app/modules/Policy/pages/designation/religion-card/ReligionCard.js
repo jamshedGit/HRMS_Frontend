@@ -69,10 +69,6 @@ onClick={DesignationUIProps.newDesignationButtonClick}
 
         )}
 
-
-
-
-
       </CardHeaderToolbar>
 
     </div>
