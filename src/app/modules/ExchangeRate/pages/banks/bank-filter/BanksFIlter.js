@@ -102,18 +102,18 @@ export function BanksFilter({ listLoading, user, setCity,
 
   function getBase64ImageFromURL(url) {
     return new Promise((resolve, reject) => {
-      var img = new Image();
+      let img = new Image();
       img.setAttribute("crossOrigin", "anonymous");
 
       img.onload = () => {
-        var canvas = document.createElement("canvas");
+        let canvas = document.createElement("canvas");
         canvas.width = img.width;
         canvas.height = img.height;
 
-        var ctx = canvas.getContext("2d");
+        let ctx = canvas.getContext("2d");
         ctx.drawImage(img, 0, 0);
 
-        var dataURL = canvas.toDataURL("image/png");
+        let dataURL = canvas.toDataURL("image/png");
 
         resolve(dataURL);
       };
@@ -315,10 +315,10 @@ export function BanksFilter({ listLoading, user, setCity,
 
   function addCommas(nStr) {
     nStr += '';
-    var x = nStr.split('.');
-    var x1 = x[0];
-    var x2 = x.length > 1 ? '.' + x[1] : '';
-    var rgx = /(\d+)(\d{3})/;
+    let x = nStr.split('.');
+    let x1 = x[0];
+    let x2 = x.length > 1 ? '.' + x[1] : '';
+    let rgx = /(\d+)(\d{3})/;
     while (rgx.test(x1)) {
       x1 = x1.replace(rgx, '$1' + ',' + '$2');
     }
