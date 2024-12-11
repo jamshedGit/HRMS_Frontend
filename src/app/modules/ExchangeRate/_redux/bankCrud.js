@@ -4,7 +4,7 @@ export const USERS_URL = process.env.REACT_APP_API_URL;
 
 //Create user
 export function createExchangeRate(body) {
-  console.log("create exchangerate step 1", body)
+
   
   // body.Name = body.txtExchangeRateName;
   // delete body.txtExchangeRateName
@@ -15,27 +15,27 @@ export function createExchangeRate(body) {
 
 // Read
 export function getAllExchangeRate(body) {
-  console.log("body",body);
+
   return axios.post(`${USERS_URL}/exchange/read-all-exchange-rate`, body);
 }
 
 
 
 export function getExchangeRateById(id) {
-   console.log(" ExchangeRate id", id)
+
   return axios.post(`${USERS_URL}/exchange/read-exchange-rate`, id);
 }
 
 //Update
 export function updateExchangeRate(ExchangeRate) {
-   console.log("ExchangeRate 12", ExchangeRate)
+
   return axios.put(`${USERS_URL}/exchange/update-exchange-rate`, ExchangeRate);
 }
 
 //Delete
 export function deleteExchangeRate(body) {
-  console.log("body")
-  console.log(body);
+
+
   return axios.patch(`${USERS_URL}/exchange/delete-exchange-rate`, body);
 }
 

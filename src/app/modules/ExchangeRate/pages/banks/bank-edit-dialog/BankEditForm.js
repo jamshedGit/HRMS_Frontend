@@ -132,7 +132,7 @@ export function BankEditForm({
 
 
 
-console.log(" dashboard.allCurrencyCodeList", dashboard.allCurrencyCodeList)
+
   //===== Date Of End Date
   useEffect(() => {
 
@@ -142,7 +142,7 @@ console.log(" dashboard.allCurrencyCodeList", dashboard.allCurrencyCodeList)
   }, [user.effective_date]);
 
   //=========== END
-  console.log("dashboar111", dashboard, user)
+
   return (
     <>
       <Formik
@@ -150,7 +150,7 @@ console.log(" dashboard.allCurrencyCodeList", dashboard.allCurrencyCodeList)
         initialValues={user}
         validationSchema={formValidation}
         onSubmit={(values) => {
-          console.log("values", values);
+     
           enableLoading();
           saveIncident(values);
         }}
