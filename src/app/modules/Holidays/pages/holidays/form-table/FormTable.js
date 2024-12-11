@@ -36,16 +36,18 @@ export function FormTable() {
 
 
   const { currentState, userAccess } = useSelector(
-    (state) => { return {
-      
-    
-      currentState: state.holidays,
-      userAccess: state?.auth?.userAccess["holidays"],
-    }},
+    (state) => {
+      return {
+
+
+        currentState: state.holidays,
+        userAccess: state?.auth?.userAccess["holidays"],
+      }
+    },
     shallowEqual
   );
 
-  
+
   const { totalCount, entities, listLoading } = currentState;
 
   //totalCount = 10
@@ -54,8 +56,8 @@ export function FormTable() {
 
   useEffect(() => {
     formUIProps.setIds([]);
- 
- 
+
+
     dispatch(actions.fetchHolidays(formUIProps.queryParams));
   }, [formUIProps.queryParams, dispatch, totalCount]);
 
@@ -89,20 +91,6 @@ export function FormTable() {
         minWidth: "160px",
       },
     },
-
-{
-  dataField: "Religion.formName",
-  text: "religion",
-  sort: false,
-  sortCaret: sortCaret,
-  headerSortingClasses,
-  style: {
-    minWidth: "10px",
-  },
- 
-},
-
-
     {
       dataField: "from_date",
       text: "from date",
@@ -131,34 +119,6 @@ export function FormTable() {
     },
 
     {
-      dataField: "number_of_days",
-      text: "number of days",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "10px",
-        textAlign: "center",
-      },
-      headerStyle: {
-        textAlign: "center", // Align header text to the left
-      },
-    },
-
-    {
-      dataField: "Holiday_type.formName",
-      text: "holiday type",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "10px",
-      },
-     
-    },
-    
-
-       {
       dataField: "action",
       text: "Actions",
       isDummyField: true,
@@ -190,7 +150,7 @@ export function FormTable() {
     page: formUIProps.queryParams.pageNumber,
   };
 
-    return (
+  return (
     <>
       <PaginationProvider pagination={paginationFactory(paginationOptions)}>
         {({ paginationProps, paginationTableProps }) => {
