@@ -141,8 +141,58 @@ const formValidation = Yup.object().shape(
         is: (value) => value === true || value === 1, // if select value is 2
         then: Yup.number().required(VALIDATION_MESSAGES.required),
         otherwise: Yup.number().notRequired(),
-      })
+      }),
 
+    payment_mode_Id: Yup.number().required(VALIDATION_MESSAGES.required).min(1,VALIDATION_MESSAGES.required),
+
+    emp_bankId: Yup.number()
+      .when('payment_mode_Id', {
+        is: 153, // if select value is 153
+        then: Yup.number().required(VALIDATION_MESSAGES.required),
+        otherwise: Yup.number().notRequired(),
+      }),
+
+      company_bankId: Yup.number()
+      .when('payment_mode_Id', {
+        is: 153, // if select value is 153
+        then: Yup.number().required(VALIDATION_MESSAGES.required),
+        otherwise: Yup.number().notRequired(),
+      }),
+
+      emp_bank_branchId: Yup.number()
+      .when('payment_mode_Id', {
+        is: 153, // if select value is 153
+        then: Yup.number().required(VALIDATION_MESSAGES.required),
+        otherwise: Yup.number().notRequired(),
+      }),
+
+      company_branchId: Yup.number()
+      .when('payment_mode_Id', {
+        is: 153, // if select value is 153
+        then: Yup.number().required(VALIDATION_MESSAGES.required),
+        otherwise: Yup.number().notRequired(),
+      }),
+
+      emp_bank_accountTitle: Yup.string()
+      .when('payment_mode_Id', {
+        is: (value) => value == 153 || value === 152, // if select value is 151
+        then: Yup.string().required(VALIDATION_MESSAGES.required),
+        otherwise: Yup.string().notRequired(),
+      }),
+
+      company_from_accNo: Yup.number()
+      .when('payment_mode_Id', {
+        is: 153, // if select value is 153
+        then: Yup.number().required(VALIDATION_MESSAGES.required),
+        otherwise: Yup.number().notRequired(),
+      }),
+
+      emp_bank_accNo: Yup.number()
+      .when('payment_mode_Id', {
+        is: 153, // if select value is 153
+        then: Yup.number().required(VALIDATION_MESSAGES.required),
+        otherwise: Yup.number().notRequired(),
+      }),
   },
 
 );
@@ -483,7 +533,7 @@ export function BankEditForm({
       }
     }
     else if (currentSalaryMethod == 'Basic to Gross') {
-      let basicSalaryNumber = Number(basicSalaryInput)
+      let basicSalaryNumber = Number(basicSalaryInput);
 
       setDefaultMapEarningDeductionList([...defMapEarningDeductionList.map((x) => {
         if (x.calculation_type == '% Of Basic') {
@@ -509,6 +559,7 @@ export function BankEditForm({
       setGrossSalaryDB(basicSalaryNumber)
     }
     else {
+      let basicSalaryNumber = Number(basicSalaryInput);
       let gross = 0;
       const result = await Promise.all(
         defMapEarningDeductionList.map(async (x) => {
@@ -519,11 +570,9 @@ export function BankEditForm({
         })
       );
 
-      setFieldValue("grossSalary", gross)
-      setGrossSalary(gross);
-      setGrossSalaryDB(gross)
-      setFieldValue("basicSalary", 0)
-      setBasicSalary(0);
+      setFieldValue("grossSalary", gross + basicSalaryNumber);
+      setGrossSalary(gross + basicSalaryNumber);
+      setGrossSalaryDB(gross + basicSalaryNumber);
     }
   }
 
@@ -682,7 +731,7 @@ export function BankEditForm({
                       <Field
                         name="basicSalary"
                         type="number"
-                        disabled={!currentSalaryMethod || currentSalaryMethod == 'Gross to Basic'}
+                        disabled={currentSalaryMethod == 'Gross to Basic'}
                         onInput={(e) => {
                           e.target.value = amountLimit(e.target.value); // Limit to 3 digits
                         }}
@@ -705,7 +754,7 @@ export function BankEditForm({
                         value={defBasicSalaryFactor}
                         component={Input}
                         placeholder="Enter Basic Salary"
-                        label={<span> Gross to Basic Factor<span style={{ color: 'red' }}>*</span></span>}
+                        label={<span> Gross to Basic Factor{Boolean(currentSalaryMethod == 'Gross to Basic') && <><span style={{ color: 'red' }}>*</span></>}</span>}
                         autoComplete="off"
                       />
                     </div>
@@ -805,7 +854,7 @@ export function BankEditForm({
                       ))}
 
                     </table>
-                      
+
                     {!Boolean(currentSalaryMethod) && <> <div className="from-group row">
                       <div className="col-12 col-md-4 mt-3">
                         <input type='button' id="Earning" onClick={addRow} value='+Add'></input>
@@ -1437,7 +1486,7 @@ export function BankEditForm({
                       <div className="col-12 col-md-4 mt-3">
                         <SearchSelect
                           name="payment_mode_Id"
-                          label={<span> Payment Mode</span>}
+                          label={<span> Payment Mode<span style={{ color: 'red' }}>*</span></span>}
                           isDisabled={isUserForRead && true}
                           onBlur={() => {
                             // handleBlur({ target: { name: "countryId" } });
