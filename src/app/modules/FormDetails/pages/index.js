@@ -4,7 +4,7 @@ import { LayoutSplashScreen, ContentRoute } from "../../../../_metronic/layout";
 import { FormDetailsPage } from "./formdetails/FormDetailsPage";
 
 export default function FormDetailsManagement() {
-  console.log('Form Details menu mein aya')
+
   return (
     <Suspense fallback={<LayoutSplashScreen />}>
       <Switch>

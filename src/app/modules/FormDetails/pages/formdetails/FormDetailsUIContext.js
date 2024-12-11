@@ -40,7 +40,7 @@ export function FormUIProvider({ FormUIEvents, children }) {
     
   };
 
-  console.log("form events",FormUIEvents);
+  
 
   const value = {
     queryParams,

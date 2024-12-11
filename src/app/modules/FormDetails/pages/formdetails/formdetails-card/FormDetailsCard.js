@@ -14,7 +14,7 @@ import CurrentModuleName from "../../../../../utils/common-modules/ModuleName"
 
 export function FormCard() {
   const formUIContext = useFormUIContext()
-  //console.log("formUIContext", formUIContext)
+  
   const FormUIProps = useMemo(() => {
     return {
       newFormButtonClick: formUIContext.newFormButtonClick,
@@ -29,7 +29,7 @@ export function FormCard() {
     }),
     shallowEqual
   )
-  console.log("userAccess Temp details", userAccess)
+
   const accessUser = userAccess.find(
     (item) => item.componentName === "CreateChildForms"
   )

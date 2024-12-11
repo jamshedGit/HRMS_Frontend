@@ -60,7 +60,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   //   }
   // }, [actionsLoading === true]);
 
-  //console.log("action", action);
+
 
   useEffect(() => {
     dispatch(actions.fetchUser(id));
@@ -69,33 +69,33 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   }, [id, dispatch]);
 
   // useEffect(() => {
-  //   console.log("UseEffect call");
+
   //   if (actionsLoading === false) {
-  //     console.log("UseEffect call inside function");
+
   //     disbaleLoading();
   //   }
   // }, [actionsLoading]);
-  //console.log("userForEdit", userForEdit);
+
 
   const saveReligion = async (user) => {
 
     if (!id) {
-      console.log("relegion save");
-      console.log(user);
+ 
+
       
-      console.log("party",formDetails.currentId);
+  
       
       user.parentFormID = formDetails.currentId
       const finalObject = { user }
      await dispatch(actions.createform(user, disbaleLoading, onHide));
-      console.log("create form details", finalObject);
+    
      await dispatch(actions.customfetchFormDetail(formDetails.currentId));
     } else {
       // const getUserStatus = userStatusTypes.find((item) => {
       //   return item.value === +user.status;
       // });
 
-      console.log("getUserStatus", user);
+
       
       const formUpdatedFields = {
         Id: user.Id,
@@ -104,16 +104,16 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         parentFormID: user.parentFormID
       };
       const parentId = user.parentFormID;
-      console.log("formUpdatedFields", formUpdatedFields);
+  
       await dispatch(actions.updateForm(formUpdatedFields, disbaleLoading, onHide));
       dispatch(actions.customfetchFormDetail(parentId));
       // const parentId = user.parentFormID;
       // const response = await axios.post(`${USERS_URL}/formdetails/read-all-child-forms`, { parentId });
 
-      // console.log("child jason data 1", response);
+  
       //setData(response?.data?.data?.rows || []);
       
-    //  console.log("test", entities);
+
     }
   };
 

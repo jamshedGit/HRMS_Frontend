@@ -4,7 +4,7 @@ export const USERS_URL = process.env.REACT_APP_API_URL;
 
 //Create user
 export function createform(body) {
-  console.log("create formdetails details step 1", body)
+  
   
   // body.Name = body.txtbankName;
   // delete body.txtbankName
@@ -14,33 +14,33 @@ export function createform(body) {
 }
 // Read
 export function getAllForm(body) {
-  console.log("body",body);
+
   return axios.post(`${USERS_URL}/formdetails/read-all-parent-forms`, body);
 }
 
 // Get Child By ParentId
 export function getAllChildFormById(id) {
-  console.log("body",id);
+
   return axios.post(`${USERS_URL}/formdetails/read-all-child-forms`, {id});
 }
 
 
 export function getFormById(body) {
-   console.log("form id 1", body.Id)
+ 
   //return axios.post(`${USERS_URL}/formdetails/read-all-parent-forms`, body.Id);
   return axios.post(`${USERS_URL}/form/read-form`, body);
 }
 
 //Update
 export function updateForm(form) {
-   console.log("updateUser 12", form)
+
   return axios.put(`${USERS_URL}/formdetails/update-child-forms`, form);
 }
 
 //Delete
 export function deleteForm(body) {
-  console.log("body")
-  console.log(body);
+
+
   return axios.patch(`${USERS_URL}/formdetails/delete-child-forms`, body);
 }
 
