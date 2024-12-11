@@ -9,9 +9,6 @@ import { FormDeleteDialog } from "./form-delete-dialog/FormDeleteDialog";
 import { FormActiveDialog } from "./form-active-dialog/FormActiveDialog";
 import { FormCard } from "./form-card/FormCard";
 
-// dispatch(actions.fetchRoles());
-//     dispatch(actions.fetchCenters());
-
 export function Payroll_Policy({ history }) {
   const [defRecordId, setDefaultRecordId] = useState(0);
 
@@ -23,8 +20,6 @@ export function Payroll_Policy({ history }) {
       history.push("/payroll_process_policy/read-all-payroll-process-policy/new");
     },
     openEditFormDialog: (id) => {
-      console.log("my::",id);
-      
       setDefaultRecordId(id);
     
       history.push(`/payroll_process_policy/read-all-payroll-process-policy/${id}/edit`);

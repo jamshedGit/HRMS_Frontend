@@ -15,18 +15,14 @@ import {
 } from "../../../../../../_metronic/_helpers";
 import * as uiHelpers from "../FormUIHelpers";
 import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatter";
-import { Checkbox, Input, Pagination, Select } from "../../../../../../_metronic/_partials/controls";
+import { Input, Pagination, Select } from "../../../../../../_metronic/_partials/controls";
 import { useFormUIContext } from "../FormUIContext";
-import { DatetimeColumnFormatter } from "../../../../Dashboard/pages/dashboard/last-trips-vehicles-table/column-formatter/CreatedColumnFormatter";
-import { fetchAllActiveEmployeesSalaryForDDL, fetchAllBanks, fetchAllDeductionList, fetchAllEarningList, fetchAllFormsMenu } from "../../../../../../_metronic/redux/dashboardActions";
-import { Formik, Field } from "formik";
-import { Form, Modal } from "react-bootstrap";
+import { fetchAllActiveEmployeesSalaryForDDL, fetchAllBanks, fetchAllDeductionList, fetchAllEarningList, fetchAllFormsMenu, fetchAllSubsidiaryData } from "../../../../../../_metronic/redux/dashboardActions";
+import { Formik, Field, ErrorMessage } from "formik";
+import { Form } from "react-bootstrap";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
-import { toast } from "react-toastify";
 import * as Yup from "yup";
-
-
-
+import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 
 export function FormTable(user
   , isUserForRead
@@ -54,10 +50,6 @@ export function FormTable(user
     };
   }, [formUIContext]);
 
-  // console.log("queryparms", usersUIProps.queryparms)
-
-  console.log("::temp::", user);
-
   const { currentState, userAccess } = useSelector(
     (state) => {
       return {
@@ -68,9 +60,8 @@ export function FormTable(user
     },
     shallowEqual
   );
-  console.log("::currentState::::: ", currentState.userForEdit);
 
-  const { totalCount, entities, listLoading } = currentState;
+  const { totalCount, entities, listLoading, actionsLoading } = currentState;
 
   const { dashboard } = useSelector((state) => state);
   const [defSubsidiary = null, setDefualtSubsidiaryList] = useState(null);
@@ -89,12 +80,7 @@ export function FormTable(user
   const [defBank, setDefaultBanks] = useState({});
   const dispatch = useDispatch();
 
-
-
-
   useEffect(() => {
-
-
     FormUIProps.setIds([]);
     dispatch(actions.fetchUsers(FormUIProps.queryParams));
   }, [FormUIProps.queryParams, dispatch, totalCount]);
@@ -138,8 +124,7 @@ export function FormTable(user
   useEffect(() => {
 
     if (!user.formid) {
-
-      dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsisidaries
+      dispatch(fetchAllSubsidiaryData("allSubidiaryList")) // For All Subsisidaries
       dispatch(fetchAllActiveEmployeesSalaryForDDL(null)); // For Getting Salaried Employees
       dispatch(fetchAllFormsMenu(127, "allChildMenus")); // For Payroll Group
       dispatch(fetchAllFormsMenu(45, "allPayrollAccounts")); // For Basic Pay Accounts
@@ -153,7 +138,7 @@ export function FormTable(user
 
   useEffect(() => {
 
-    const emailList = currentState.userForEdit?.tran_email_recipents_setups.map((x) => {
+    const emailList = currentState.userForEdit?.tran_email_recipents_setups?.map((x) => {
       return x.employeeId
     }) || [];
     setDefaultEmailRecipents(
@@ -163,7 +148,7 @@ export function FormTable(user
 
   useEffect(() => {
 
-    const bankInfoList = currentState.userForEdit?.tran_payroll_policy_bank_infos.map((x) => {
+    const bankInfoList = currentState.userForEdit?.tran_payroll_policy_bank_infos?.map((x) => {
       return x
     }) || [];
     setDefaultBankInfoList(
@@ -173,7 +158,7 @@ export function FormTable(user
 
 
   useEffect(() => {
-    const eobiAllowance = currentState.userForEdit?.tran_payroll_policy_eobiAllowances.map((x) => {
+    const eobiAllowance = currentState.userForEdit?.tran_payroll_policy_eobiAllowances?.map((x) => {
       return x.earningId
     }) || [];
     setDefaultEOBIAllowances(
@@ -183,7 +168,7 @@ export function FormTable(user
 
   // FOR SESSI List Configuration
   useEffect(() => {
-    const sessiAllowance = currentState.userForEdit?.tran_payroll_policy_sessiAllowances.map((x) => {
+    const sessiAllowance = currentState.userForEdit?.tran_payroll_policy_sessiAllowances?.map((x) => {
       return x.earningId
     }) || [];
     setDefaultSESSIAllowances(
@@ -228,7 +213,7 @@ export function FormTable(user
 
 
   const addRowBankInfo = (element) => {
-    
+
 
     setDefaultBankInfoList([...defBankInfoList, { transactionType: element.target.id }])
 
@@ -244,14 +229,14 @@ export function FormTable(user
     const key = el.target.id.split('-')[0];
 
     const updatedBankInfoList = defBankInfoList.map((val, ind) => {
-     
-      if (ind === parseInt(index, 10)) { 
+
+      if (ind === parseInt(index, 10)) {
         return {
-          ...val, 
-          [key]:  key == "isDefault" ? el.target.checked : el.target.value 
+          ...val,
+          [key]: key == "isDefault" ? el.target.checked : el.target.value
         };
       }
-      return val; 
+      return val;
     });
 
     setDefaultBankInfoList(updatedBankInfoList); // Update the state
@@ -262,31 +247,8 @@ export function FormTable(user
   // Table columns
   const columns = [
     {
-      dataField: "Id",
-      text: "ID",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
-
-    {
-      dataField: "subsidiaryId",
+      dataField: "t_subsidiary.name",
       text: "Subsidiary",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
-
-
-    {
-      dataField: "isActive",
-      text: "Active",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -326,12 +288,110 @@ export function FormTable(user
         .required("Required*"),
       payroll_approverId: Yup.string()
         .required("Required*"),
-      payroll_groupId: Yup.string()
+      basicSalaryId: Yup.string()
         .required("Required*"),
-      // journalBankAccountId: Yup.string()
-      //   .required("Required*"),
-      // bankCode: Yup.string()
-      //   .required("Required*"),
+      basic_pay_accountId: Yup.number()
+        .when('isEnableAccounting', {
+          is: true, // if select value is 2
+          then: Yup.number().required(VALIDATION_MESSAGES.required),
+          otherwise: Yup.number().notRequired(),
+        }),
+      payroll_payable_accountId: Yup.number()
+        .when('isEnableAccounting', {
+          is: true, // if select value is 2
+          then: Yup.number().required(VALIDATION_MESSAGES.required),
+          otherwise: Yup.number().notRequired(),
+        }),
+      payrollTax_DeductionTypeId: Yup.number()
+        .when('isEnableTax', {
+          is: true, // if select value is 2
+          then: Yup.number().required(VALIDATION_MESSAGES.required),
+          otherwise: Yup.number().notRequired(),
+        }),
+      arrearTaxDeductionId: Yup.number()
+        .when('isEnableTax', {
+          is: true, // if select value is 2
+          then: Yup.number().required(VALIDATION_MESSAGES.required),
+          otherwise: Yup.number().notRequired(),
+        }),
+      leaveDeductionId: Yup.number()
+        .when('isEnableAttandanceIntegration', {
+          is: true, // if select value is 2
+          then: Yup.number().required(VALIDATION_MESSAGES.required),
+          otherwise: Yup.number().notRequired(),
+        }),
+      lateCountPerDaySalaryDeduction: Yup.number()
+        .when('isEnableAttandanceIntegration', {
+          is: true, // if select value is 2
+          then: Yup.number().required(VALIDATION_MESSAGES.required),
+          otherwise: Yup.number().notRequired(),
+        }),
+      leaveEnchashment_EarningId: Yup.number()
+        .when('isEnableAttandanceIntegration', {
+          is: true, // if select value is 2
+          then: Yup.number().required(VALIDATION_MESSAGES.required),
+          otherwise: Yup.number().notRequired(),
+        }),
+      lateDeductionId: Yup.number()
+        .when('isEnableAttandanceIntegration', {
+          is: true, // if select value is 2
+          then: Yup.number().required(VALIDATION_MESSAGES.required),
+          otherwise: Yup.number().notRequired(),
+        }),
+      overTimeEarningId: Yup.number()
+        .when('isEnableAttandanceIntegration', {
+          is: true, // if select value is 2
+          then: Yup.number().required(VALIDATION_MESSAGES.required),
+          otherwise: Yup.number().notRequired(),
+        }),
+      eobi_deductionId: Yup.number()
+        .when('isEnableEOBI', {
+          is: true, // if select value is 2
+          then: Yup.number().required(VALIDATION_MESSAGES.required),
+          otherwise: Yup.number().notRequired(),
+        }),
+      eobi_basis: Yup.number()
+        .when('isEnableEOBI', {
+          is: true, // if select value is 2
+          then: Yup.number().required(VALIDATION_MESSAGES.required),
+          otherwise: Yup.number().notRequired(),
+        }),
+      eobi_employeer_value_in_percent: Yup.number()
+        .when('isEnableEOBI', {
+          is: true, // if select value is 2
+          then: Yup.number().required(VALIDATION_MESSAGES.required),
+          otherwise: Yup.number().notRequired(),
+        }),
+      eobi_employee_value_in_percent: Yup.number()
+        .when('isEnableEOBI', {
+          is: true, // if select value is 2
+          then: Yup.number().required(VALIDATION_MESSAGES.required),
+          otherwise: Yup.number().notRequired(),
+        }),
+      sessi_deductionId: Yup.number()
+        .when('isEnableSESSI', {
+          is: true, // if select value is 2
+          then: Yup.number().required(VALIDATION_MESSAGES.required),
+          otherwise: Yup.number().notRequired(),
+        }),
+      sessi_basis: Yup.number()
+        .when('isEnableSESSI', {
+          is: true, // if select value is 2
+          then: Yup.number().required(VALIDATION_MESSAGES.required),
+          otherwise: Yup.number().notRequired(),
+        }),
+      sessi_employeer_value_in_percent: Yup.number()
+        .when('isEnableSESSI', {
+          is: true, // if select value is 2
+          then: Yup.number().required(VALIDATION_MESSAGES.required),
+          otherwise: Yup.number().notRequired(),
+        }),
+      sessi_employee_value_in_percent: Yup.number()
+        .when('isEnableSESSI', {
+          is: true, // if select value is 2
+          then: Yup.number().required(VALIDATION_MESSAGES.required),
+          otherwise: Yup.number().notRequired(),
+        }),
     },
 
   );
@@ -345,12 +405,14 @@ export function FormTable(user
     employer_uniqueId: "",
     payroll_approverId: "",
     payroll_groupId: "",
+    basicSalaryId: "",
 
     //-- Email Sender ------------
     sender_emailId: "",
     employee_email_recipentId: "",
 
     // -- Accounting Impact ----
+    isEnableAccounting: false,
     basic_pay_accountId: "",
     payroll_payable_accountId: "",
     isGroupEarningOnAccount: "",
@@ -358,12 +420,13 @@ export function FormTable(user
     isAccrueGratuityOnPayroll: "",
 
     //-- Tax Integration
+    isEnableTax: false,
     payrollTax_DeductionTypeId: "",
     arrearTaxDeductionId: "",
     isTrackDeductionHistory: "",
 
     // -- Leave / AAtteandance Integraion
-    isEnableAttandanceIntegration: "",
+    isEnableAttandanceIntegration: false,
     isEnableLeaveManagemenent: "",
     isEnableOverTimeCalc: "",
     leaveDeductionId: "",
@@ -378,13 +441,20 @@ export function FormTable(user
     loanDeductionId: "",
 
     // --  EOBI Configuration
-    isEnableEOBI: "",
+    isEnableEOBI: false,
+    eobi_basis: "",
     eobi_deductionId: "",
     eobi_earningId: "",
     isIncludeBasic: "",
     eobi_employeer_value_in_percent: "",
     eobi_employee_value_in_percent: "",
-    bankCode: ""
+    bankCode: "",
+
+    isEnableSESSI: false,
+    sessi_deductionId: "",
+    sessi_basis: "",
+    sessi_employeer_value_in_percent: "",
+    sessi_employee_value_in_percent: "",
     //-- Other
   };
 
@@ -398,7 +468,7 @@ export function FormTable(user
   };
 
   const SavePayrollPolicy = async (user, emailRecipentList, eobiAllowances, bankInfoList, sessiAllowanceList) => {
-    
+
     if (!user.Id) {
 
       await dispatch(actions.create_Payroll_Policy(user, emailRecipentList, eobiAllowances, bankInfoList, sessiAllowanceList));
@@ -407,7 +477,7 @@ export function FormTable(user
 
     } else {
 
-    
+
 
       const payrollUpdateObj = {
         Id: user.Id,
@@ -419,12 +489,14 @@ export function FormTable(user
         employer_uniqueId: user.employer_uniqueId,
         payroll_approverId: user.payroll_approverId,
         payroll_groupId: user.payroll_groupId,
+        basicSalaryId: user.basicSalaryId,
 
         // -- Email Sender ------------
         sender_emailId: user.sender_emailId,
         employee_email_recipentId: user.employee_email_recipentId,
 
         // -- Accounting Impact ----
+        isEnableAccounting: user.isEnableAccounting,
         basic_pay_accountId: user.basic_pay_accountId,
         payroll_payable_accountId: user.payroll_payable_accountId,
         isGroupEarningOnAccount: user.isGroupEarningOnAccount,
@@ -432,12 +504,13 @@ export function FormTable(user
         isAccrueGratuityOnPayroll: user.isAccrueGratuityOnPayroll,
 
         // -- Tax : user.companyIdegration
+        isEnableTax: user.isEnableTax,
         payrollTax_DeductionTypeId: user.payrollTax_DeductionTypeId,
         arrearTaxDeductionId: user.arrearTaxDeductionId,
         isTrackDeductionHistory: user.isTrackDeductionHistory,
 
         //-- Leave / AAtteandance : user.companyIdegraion
-        isEnableAttandance: user.isEnableAttandance,
+        isEnableAttandanceIntegration: user.isEnableAttandanceIntegration,
         isEnableLeaveManagemenent: user.isEnableLeaveManagemenent,
         isEnableOverTimeCalc: user.isEnableOverTimeCalc,
         leaveDeductionId: user.leaveDeductionId,
@@ -453,6 +526,7 @@ export function FormTable(user
 
         //--  EOBI Configuration
         isEnableEOBI: user.isEnableEOBI,
+        eobi_basis: user.eobi_basis,
         eobi_deductionId: user.eobi_deductionId,
         eobi_earningId: user.eobi_earningId,
         //isIncludeBasicisIncludeBasic, user.isIncludeBasicisIncludeBasic,
@@ -462,18 +536,21 @@ export function FormTable(user
         // --  SESSI Configuration
         isEnableSESSI: user.isEnableSESSI,
         sessi_deductionId: user.sessi_deductionId,
+        sessi_basis: user.sessi_basis,
         sessi_earningId: user.sessi_earningId,
         sessi_employeer_value_in_percent: user.sessi_employeer_value_in_percent,
         sessi_employee_value_in_percent: user.sessi_employee_value_in_percent,
       };
 
-      console.log("payrollUpdateObj", payrollUpdateObj);
       await dispatch(actions.update_Payroll_Policy(payrollUpdateObj, emailRecipentList, eobiAllowances, bankInfoList, sessiAllowanceList));
       // await dispatch(actions.fetchUsers(usersUIProps.queryParams));
     }
   };
 
-  console.log("::::::11", userAccess)
+  const allEarningsMap = useMemo(() => {
+    return new Map(dashboard.allEarnings?.map(item => [item.value, item]));
+  }, [dashboard.allEarnings]);
+
 
   return (
     <>
@@ -518,8 +595,6 @@ export function FormTable(user
 
         onSubmit={async (values) => {
 
-
-          console.log("::values::", values);
           SavePayrollPolicy(values, defEmailRecipents, defEOBIAllowances, defBankInfoList, defSESSIAllowances);
 
           if (user.formid) {
@@ -574,7 +649,7 @@ export function FormTable(user
 
                   </div>
 
-                  <div className="col-12 col-md-4 mt-3">
+                  {/*<div className="col-12 col-md-4 mt-3">
                     <SearchSelect
                       name="payroll_groupId"
                       label={<span> Payroll Group<span style={{ color: 'red' }}>*</span></span>}
@@ -594,7 +669,7 @@ export function FormTable(user
                       touched={touched.payroll_groupId}
                       options={dashboard.allChildMenus}
                     />
-                  </div>
+                  </div>*/}
 
                   <div className="col-12 col-md-4 mt-3">
 
@@ -624,6 +699,7 @@ export function FormTable(user
                     <Field
                       name="employer_uniqueId"
                       component={Input}
+                      type="number"
                       placeholder="Employee Unique ID"
                       label={<span> Employee Unique ID<span style={{ color: 'red' }}>*</span></span>}
                       autoComplete="off"
@@ -653,12 +729,23 @@ export function FormTable(user
 
                   </div>
 
-
+                  <div className="col-12 col-md-4 mt-3">
+                    <SearchSelect
+                      name="basicSalaryId"
+                      label={<span> Basic Salary <span style={{ color: 'red' }}>*</span></span>}
+                      onChange={(e) => {
+                        setFieldValue("basicSalaryId", e.value || null);
+                      }}
+                      value={allEarningsMap?.get(values?.basicSalaryId || '') || ''}
+                      error={errors.basicSalaryId}
+                      touched={touched.basicSalaryId}
+                      options={dashboard.allEarnings}
+                    />
+                  </div>
                 </div>
               </div>
               <br></br>
               <h6>Email Preferences</h6>
-              {console.log("obj", defPayrollGroupId)}
               <div style={{ height: "250px", zIndex: "1", width: "100%", backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
 
 
@@ -702,7 +789,6 @@ export function FormTable(user
                               {option.label}
                             </div>
                           ))}
-                          {console.log("pak::", defEmailRecipents)}
                         </div>
 
                       </div>
@@ -717,19 +803,30 @@ export function FormTable(user
 
                 <div className="from-group row">
                   <div className="col-12 col-md-4 mt-3">
+                    <input style={{ backgroundColor: "#ffffff", padding: "10px", width: "20px" }}
+                      name="isEnableAccounting"
+                      type="checkbox"
+                      onChange={(e) => {
+                        setFieldValue('isEnableAccounting', e.target.checked)
+                      }}
+                      checked={values.isEnableAccounting}
+
+                    />
+                    Enable Accounting Impact
+                    <br></br>
+                  </div>
+                </div>
+
+                <div className="from-group row">
+                  <div className="col-12 col-md-4 mt-3">
                     <SearchSelect
                       name="basic_pay_accountId"
-                      label={<span> Basic Pay Journal Account<span style={{ color: 'red' }}>*</span></span>}
-                      // isDisabled={isUserForRead}
-                      onBlur={() => {
-                        // handleBlur({ target: { name: "countryId" } });
-                      }}
+                      label={<span> Basic Pay Journal Account{Boolean(values.isEnableAccounting) && <span style={{ color: 'red' }}>*</span>}</span>}
+                      isDisabled={!Boolean(values.isEnableAccounting)}
                       onChange={(e) => {
                         setFieldValue("basic_pay_accountId", e.value || null);
                         setDefaultBasicPayAccount(e);
-                        // dispatch(fetchAllFormsMenu(e.value));
                       }}
-                      // value={(defBasicPayGeneralAccount || null)}
                       value={
                         dashboard.allPayrollAccounts.find(
                           (option) => option.value === values.basic_pay_accountId
@@ -743,17 +840,12 @@ export function FormTable(user
                   <div className="col-12 col-md-4 mt-3">
                     <SearchSelect
                       name="payroll_payable_accountId"
-                      label={<span> Payroll Payable Account<span style={{ color: 'red' }}>*</span></span>}
-                      // isDisabled={isUserForRead}
-                      onBlur={() => {
-                        // handleBlur({ target: { name: "countryId" } });
-                      }}
+                      label={<span> Payroll Payable Account{Boolean(values.isEnableAccounting) && <span style={{ color: 'red' }}>*</span>}</span>}
+                      isDisabled={!Boolean(values.isEnableAccounting)}
                       onChange={(e) => {
                         setFieldValue("payroll_payable_accountId", e.value || null);
                         setDefaultPaybleAccount(e);
-                        // dispatch(fetchAllFormsMenu(e.value));
                       }}
-                      //  value={(defPayrollPayableccount || null)}
                       value={
                         dashboard.allPayrollPayableAccounts.find(
                           (option) => option.value === values.payroll_payable_accountId
@@ -768,7 +860,7 @@ export function FormTable(user
                     <Select
                       className="form-control"
                       name="isGroupEarningOnAccount"
-
+                      disabled={!Boolean(values.isEnableAccounting)}
                       label={<span> Group Earning Account</span>}
                       onChange={(e) => {
                         setFieldValue("isGroupEarningOnAccount", e.target.value);
@@ -781,7 +873,6 @@ export function FormTable(user
                       <option value="false">No</option>
 
                     </Select>
-
                   </div>
 
                   <div className="col-12 col-md-4 mt-3">
@@ -789,7 +880,7 @@ export function FormTable(user
                     <Select
                       className="form-control"
                       name="isGroupDeduductionOnAccount"
-
+                      disabled={!Boolean(values.isEnableAccounting)}
                       label={<span> Group Deduction Account</span>}
                       onChange={(e) => {
                         setFieldValue("isGroupDeduductionOnAccount", e.target.value);
@@ -802,13 +893,12 @@ export function FormTable(user
                       <option value="false">No</option>
 
                     </Select>
-
                   </div>
                   <div className="col-12 col-md-4 mt-3">
                     <Select
                       className="form-control"
                       name="isAccrueGratuityOnPayroll"
-
+                      disabled={!Boolean(values.isEnableAccounting)}
                       label={<span> Accrue Gratuity On Payroll</span>}
                       onChange={(e) => {
                         setFieldValue("isAccrueGratuityOnPayroll", e.target.value);
@@ -829,11 +919,26 @@ export function FormTable(user
               <div style={{ height: "250px", zIndex: "1", width: "100%", backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
 
                 <div className="from-group row">
-
                   <div className="col-12 col-md-4 mt-3">
-                    {<span> Payroll Tax Deduction Type<span style={{ color: 'red' }}>*</span></span>}
-                    <select className="form-control"
+                    <input style={{ backgroundColor: "#ffffff", padding: "10px", width: "20px" }}
+                      name="isEnableTax"
+                      type="checkbox"
+                      onChange={(e) => {
+                        setFieldValue('isEnableTax', e.target.checked)
+                      }}
+                      checked={values.isEnableTax}
 
+                    />
+                    Enable Tax Integration
+                    <br></br>
+                  </div>
+                </div>
+
+                <div className="from-group row">
+                  <div className="col-12 col-md-4 mt-3">
+                    {<span> Payroll Tax Deduction Type{Boolean(values.isEnableTax) && <span style={{ color: 'red' }}>*</span>}</span>}
+                    <select className="form-control"
+                      disabled={!Boolean(values.isEnableTax)}
                       onChange={(e) => {
                         setFieldValue('payrollTax_DeductionTypeId', e.target.value)
                       }}
@@ -845,11 +950,12 @@ export function FormTable(user
                           return <option disabled={defMapEarningDeductionList.find(el => el.earning_deduction_id == x.value) ? true : false} value={x.value}> {x.label} </option>
                         })}
                     </select>
+                    {errors.payrollTax_DeductionTypeId && touched.payrollTax_DeductionTypeId && <ErrorMessage className="form-feedBack" name="payrollTax_DeductionTypeId" component="div" />}
                   </div>
                   <div className="col-12 col-md-4 mt-3">
-                    {<span> Arrears Tax Deduction <span style={{ color: 'red' }}>*</span></span>}
+                    {<span> Arrears Tax Deduction{Boolean(values.isEnableTax) && <span style={{ color: 'red' }}>*</span>}</span>}
                     <select className="form-control"
-
+                      disabled={!Boolean(values.isEnableTax)}
                       onChange={(e) => {
                         setFieldValue('arrearTaxDeductionId', e.target.value)
                       }}
@@ -861,6 +967,7 @@ export function FormTable(user
                           return <option disabled={defMapEarningDeductionList.find(el => el.earning_deduction_id == x.value) ? true : false} value={x.value}> {x.label} </option>
                         })}
                     </select>
+                    {errors.arrearTaxDeductionId && touched.arrearTaxDeductionId && <ErrorMessage className="form-feedBack" name="arrearTaxDeductionId" component="div" />}
                   </div>
                   <div className="col-12 col-md-4 mt-2">
 
@@ -868,6 +975,7 @@ export function FormTable(user
                       className="form-control"
                       name="isTrackDeductionHistory"
                       value={values.isTrackDeductionHistory}
+                      disabled={!Boolean(values.isEnableTax)}
                       label={<span> Track Tax Deduction History</span>}
                       onChange={(e) => {
                         setFieldValue("isTrackDeductionHistory", e.target.value);
@@ -899,7 +1007,7 @@ export function FormTable(user
                       checked={values.isEnableAttandanceIntegration}
 
                     />
-                    Enable Attendance Integaration
+                    Enable Attendance Integration
                     <br></br>
 
 
@@ -910,11 +1018,13 @@ export function FormTable(user
                         setFieldValue('isEnableLeaveManagemenent', e.target.checked)
                       }}
                       checked={values.isEnableLeaveManagemenent}
+                      disabled={!Boolean(values.isEnableAttandanceIntegration)}
                     />
                     Enable Leave Management
                     <br></br>
 
                     <input style={{ backgroundColor: "#ffffff", padding: "10px", width: "20px" }}
+                      disabled={!Boolean(values.isEnableAttandanceIntegration)}
                       type="checkbox"
                       name="isEnableOverTimeCalc"
                       onChange={(e) => {
@@ -926,9 +1036,9 @@ export function FormTable(user
                   </div>
 
                   <div className="col-12 col-md-4 mt-3">
-                    {<span> Leave Deduction<span style={{ color: 'red' }}>*</span></span>}
+                    {<span> Leave Deduction{Boolean(values.isEnableAttandanceIntegration) && <span style={{ color: 'red' }}>*</span>}</span>}
                     <select className="form-control"
-
+                      disabled={!Boolean(values.isEnableAttandanceIntegration)}
                       onChange={(e) => {
                         setFieldValue('leaveDeductionId', e.target.value)
                       }}
@@ -940,6 +1050,7 @@ export function FormTable(user
                           return <option value={x.value}> {x.label} </option>
                         })}
                     </select>
+                    {errors.leaveDeductionId && touched.leaveDeductionId && <ErrorMessage className="form-feedBack" name="leaveDeductionId" component="div" />}
                   </div>
 
                   <div className="col-12 col-md-4 mt-1">
@@ -949,10 +1060,11 @@ export function FormTable(user
                         //setGrossSalaryDB(e.target.value);
                         setFieldValue("lateCountPerDaySalaryDeduction", e.target.value);
                       }}
+                      disabled={!Boolean(values.isEnableAttandanceIntegration)}
                       value={values.lateCountPerDaySalaryDeduction}
                       component={Input}
                       placeholder="Enter value"
-                      label={<span> Late Count Per Day Salary Deduction<span style={{ color: 'red' }}>*</span></span>}
+                      label={<span> Late Count Per Day Salary Deduction{Boolean(values.isEnableAttandanceIntegration) && <span style={{ color: 'red' }}>*</span>}</span>}
                       autoComplete="off"
                     />
                   </div>
@@ -964,11 +1076,12 @@ export function FormTable(user
                   </div>
 
                   <div className="col-12 col-md-4 mt-3">
-                    {<span> Encashment Allowance<span style={{ color: 'red' }}>*</span></span>}
+                    {<span> Encashment Allowance{Boolean(values.isEnableAttandanceIntegration) && <span style={{ color: 'red' }}>*</span>}</span>}
                     <select className="form-control"
                       onChange={(e) => {
                         setFieldValue('leaveEnchashment_EarningId', e.target.value)
                       }}
+                      disabled={!Boolean(values.isEnableAttandanceIntegration)}
                       value={values.leaveEnchashment_EarningId}
                       name="leaveEnchashment_EarningId">
                       <option value="-1"> --Select--</option>
@@ -977,13 +1090,15 @@ export function FormTable(user
                           return <option value={x.value}> {x.label} </option>
                         })}
                     </select>
+                    {errors.leaveEnchashment_EarningId && touched.leaveEnchashment_EarningId && <ErrorMessage className="form-feedBack" name="leaveEnchashment_EarningId" component="div" />}
                   </div>
                   <div className="col-12 col-md-4 mt-3">
-                    {<span> Late Deduction<span style={{ color: 'red' }}>*</span></span>}
+                    {<span> Late Deduction{Boolean(values.isEnableAttandanceIntegration) && <span style={{ color: 'red' }}>*</span>}</span>}
                     <select className="form-control"
                       onChange={(e) => {
                         setFieldValue('lateDeductionId', e.target.value)
                       }}
+                      disabled={!Boolean(values.isEnableAttandanceIntegration)}
                       value={values.lateDeductionId}
                       name="lateDeductionId">
                       <option value="-1"> --Select--</option>
@@ -992,6 +1107,7 @@ export function FormTable(user
                           return <option value={x.value}> {x.label} </option>
                         })}
                     </select>
+                    {errors.lateDeductionId && touched.lateDeductionId && <ErrorMessage className="form-feedBack" name="lateDeductionId" component="div" />}
                   </div>
                 </div>
 
@@ -1010,6 +1126,7 @@ export function FormTable(user
                         setFieldValue("isEnableSandwichLeavePolicy", e.target.value);
 
                       }}
+                      disabled={!Boolean(values.isEnableAttandanceIntegration)}
                       onBlur={handleBlur}
                     >
                       <option value="-1">--Select--</option>
@@ -1020,12 +1137,13 @@ export function FormTable(user
 
                   </div>
                   <div className="col-12 col-md-4 mt-5">
-                    {<span> Overtime Allowance<span style={{ color: 'red' }}>*</span></span>}
+                    {<span> Overtime Allowance{Boolean(values.isEnableAttandanceIntegration) && <span style={{ color: 'red' }}>*</span>}</span>}
                     <select className="form-control"
                       onChange={(e) => {
                         setFieldValue('overTimeEarningId', e.target.value)
                       }}
                       value={values.overTimeEarningId}
+                      disabled={!Boolean(values.isEnableAttandanceIntegration)}
                       name="overTimeEarningId">
                       <option value="-1"> --Select--</option>
                       {
@@ -1033,12 +1151,14 @@ export function FormTable(user
                           return <option value={x.value}> {x.label} </option>
                         })}
                     </select>
+                    {errors.overTimeEarningId && touched.overTimeEarningId && <ErrorMessage className="form-feedBack" name="overTimeEarningId" component="div" />}
                   </div>
                 </div>
               </div>
               <br>
               </br>
-              <h6>Loan Integration </h6>
+
+              {/* <h6>Loan Integration </h6>
               <div style={{ height: "200px", zIndex: "1", width: "100%", backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
 
                 <div className="from-group row">
@@ -1072,7 +1192,8 @@ export function FormTable(user
                   </div>
                 </div>
               </div>
-              <br></br>
+              <br></br> */}
+
               <h6>EOBI Configuration </h6>
               <div style={{ height: "350px", zIndex: "1", width: "100%", backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
 
@@ -1101,9 +1222,9 @@ export function FormTable(user
                     Include Basic
                   </div> */}
                   <div className="col-12 col-md-4 mt-3">
-                    {<span> EOBI Deduction<span style={{ color: 'red' }}>*</span></span>}
+                    {<span> EOBI Deduction{Boolean(values.isEnableEOBI) && <span style={{ color: 'red' }}>*</span>}</span>}
                     <select className="form-control"
-
+                      disabled={!Boolean(values.isEnableEOBI)}
                       onChange={(e) => {
                         setFieldValue('eobi_deductionId', e.target.value)
                       }}
@@ -1115,26 +1236,41 @@ export function FormTable(user
                           return <option value={x.value}> {x.label} </option>
                         })}
                     </select>
+                    {errors.eobi_deductionId && touched.eobi_deductionId && <ErrorMessage className="form-feedBack" name="eobi_deductionId" component="div" />}
                   </div>
+
                   <div className="col-12 col-md-4 mt-3">
                     <Field
+                      disabled={!Boolean(values.isEnableEOBI)}
+                      name="eobi_basis"
+                      component={Input}
+                      type="number"
+                      placeholder="Minimum Wage"
+                      label={<span> Minimum Wage{Boolean(values.isEnableEOBI) && <span style={{ color: 'red' }}>*</span>}</span>}
+                      autoComplete="off"
+                    />
+                  </div>
+
+                  <div className="col-12 col-md-4 mt-3">
+                    <Field
+                      disabled={!Boolean(values.isEnableEOBI)}
                       name="eobi_employeer_value_in_percent"
                       component={Input}
-                      type="Number"
+                      type="number"
                       placeholder="Employeer value"
                       value={values.eobi_employeer_value_in_percent}
-                      label={<span> Employeer(%)<span style={{ color: 'red' }}>*</span></span>}
+                      label={<span> Employeer(%){Boolean(values.isEnableEOBI) && <span style={{ color: 'red' }}>*</span>}</span>}
                       autoComplete="off"
                     />
                   </div>
                   <div className="col-12 col-md-4 mt-3">
                     <Field
+                      disabled={!Boolean(values.isEnableEOBI)}
                       name="eobi_employee_value_in_percent"
                       component={Input}
-                      type="Number"
+                      type="number"
                       placeholder="Employee value"
-                      value={values.eobi_employee_value_in_percent}
-                      label={<span> Employee(%)<span style={{ color: 'red' }}>*</span></span>}
+                      label={<span> Employee(%){Boolean(values.isEnableEOBI) && <span style={{ color: 'red' }}>*</span>}</span>}
                       autoComplete="off"
                     />
                   </div>
@@ -1149,6 +1285,7 @@ export function FormTable(user
                           {dashboard.allEarnings.map((option) => (
                             <div key={option.value} className="dropdown-option">
                               <input style={{ width: "25px" }}
+                                disabled={!Boolean(values.isEnableEOBI)}
                                 name="eobi_earningId"
                                 type="checkbox"
                                 checked={defEOBIAllowances?.includes(option.value)}
@@ -1165,7 +1302,7 @@ export function FormTable(user
                 </div>
               </div>
               <br></br>
-              <h6>SESSI Configuration </h6>
+              <h6>Social Security Configuration </h6>
 
               <div style={{ height: "350px", zIndex: "1", width: "100%", backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
 
@@ -1179,10 +1316,9 @@ export function FormTable(user
                       }}
                       checked={values.isEnableSESSI}
                     />
-                    Enable SESSI
+                    Enable Social Security
                   </div>
-                  <div className="col-12 col-md-4 mt-3">
-                  </div>
+
                   {/* <div className="col-12 col-md-4 mt-3">
                     <input style={{ backgroundColor: "#ffffff", padding: "10px", width: "30px" }}
                       name="isIncludeBasic"
@@ -1196,13 +1332,14 @@ export function FormTable(user
                   </div> */}
 
                   <div className="col-12 col-md-4 mt-3">
-                    {<span> SESSI Deduction<span style={{ color: 'red' }}>*</span></span>}
+                    {<span> Social Security Deduction{Boolean(values.isEnableSESSI) && <span style={{ color: 'red' }}>*</span>}</span>}
                     <select className="form-control"
 
                       onChange={(e) => {
                         setFieldValue('sessi_deductionId', e.target.value)
                       }}
                       value={values.sessi_deductionId}
+                      disabled={!Boolean(values.isEnableSESSI)}
                       name="sessi_deductionId">
                       <option value="-1"> --Select--</option>
                       {
@@ -1210,15 +1347,30 @@ export function FormTable(user
                           return <option value={x.value}> {x.label} </option>
                         })}
                     </select>
+                    {errors.sessi_deductionId && touched.sessi_deductionId && <ErrorMessage className="form-feedBack" name="sessi_deductionId" component="div" />}
                   </div>
+
+                  <div className="col-12 col-md-4 mt-3">
+                    <Field
+                      name="sessi_basis"
+                      component={Input}
+                      disabled={!Boolean(values.isEnableSESSI)}
+                      type="number"
+                      placeholder="Minimum Wage"
+                      label={<span> Minimum Wage{Boolean(values.isEnableSESSI) && <span style={{ color: 'red' }}>*</span>}</span>}
+                      autoComplete="off"
+                    />
+                  </div>
+
                   <div className="col-12 col-md-4 mt-3">
                     <Field
                       name="sessi_employeer_value_in_percent"
                       component={Input}
-                      type="Number"
+                      type="number"
+                      disabled={!Boolean(values.isEnableSESSI)}
                       placeholder="Employeer value"
                       value={values.sessi_employeer_value_in_percent}
-                      label={<span> Employeer(%)<span style={{ color: 'red' }}>*</span></span>}
+                      label={<span> Employeer(%){Boolean(values.isEnableSESSI) && <span style={{ color: 'red' }}>*</span>}</span>}
                       autoComplete="off"
                     />
                   </div>
@@ -1226,15 +1378,16 @@ export function FormTable(user
                     <Field
                       name="sessi_employee_value_in_percent"
                       component={Input}
-                      type="Number"
+                      type="number"
+                      disabled={!Boolean(values.isEnableSESSI)}
                       placeholder="Employee value"
                       value={values.sessi_employee_value_in_percent}
-                      label={<span> Employee(%)<span style={{ color: 'red' }}>*</span></span>}
+                      label={<span> Employee(%){Boolean(values.isEnableSESSI) && <span style={{ color: 'red' }}>*</span>}</span>}
                       autoComplete="off"
                     />
                   </div>
                   <div className="col-12 col-md-4 mt-3">
-                    SESSI Allowances
+                    Social Security Allowances
                     <div style={{ backgroundColor: "#ffffff", height: "170px", padding: "10px", overflow: "scroll" }}>
 
                       <div className="multi-select">
@@ -1246,6 +1399,7 @@ export function FormTable(user
                               <input style={{ width: "25px" }}
                                 name="sessi_earningId"
                                 type="checkbox"
+                                disabled={!Boolean(values.isEnableSESSI)}
                                 checked={defSESSIAllowances?.includes(option.value)}
                                 onChange={() => handleCheckboxChangeFor_SESSIAllowances(option.value)}
                               />
@@ -1282,8 +1436,6 @@ export function FormTable(user
                         <td id={rightindex} >
                           <button id={rightindex} className="btn btn-danger btn-sm" onClick={deleteRowBankInfo}>Delete</button></td>
                         <td>
-
-                          {console.log("::banks::", dashboard.allBanks)}
 
                           <select value={obj.journalBankAccountId} className="form-control" onChange={handleFieldChanged} id={"journalBankAccountId-" + rightindex}>
                             <option value="-1">--SELECT--</option>
@@ -1371,10 +1523,11 @@ export function FormTable(user
                   <button
                     type="submit"
                     onClick={() => handleSubmit()}
+                    disabled={Boolean(actionsLoading)}
                     className="btn btn-primary btn-elevate"
                   >
                     Save
-                    {loading && (
+                    {actionsLoading && (
                       <span className="ml-3 mr-3 spinner spinner-white"></span>
                     )}
                   </button>

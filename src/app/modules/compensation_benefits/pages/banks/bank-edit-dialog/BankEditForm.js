@@ -53,21 +53,21 @@ const formValidation = Yup.object().shape({
   overtime_working_day: Yup.number()
     .max(100, 'Value cannot be greater than 100')
     .when('overtime_allowance', {
-      is: (value) => value === true || value == 1, 
+      is: (value) => value === true || value == 1,
       then: Yup.number().required(VALIDATION_MESSAGES.required),
       otherwise: Yup.number().notRequired(),
     }),
-    overtime_off_day: Yup.number()
+  overtime_off_day: Yup.number()
     .max(100, 'Value cannot be greater than 100')
     .when('overtime_allowance', {
-      is: (value) => value === true || value == 1, 
+      is: (value) => value === true || value == 1,
       then: Yup.number().required(VALIDATION_MESSAGES.required),
       otherwise: Yup.number().notRequired(),
     }),
-    overtime_holiday: Yup.number()
+  overtime_holiday: Yup.number()
     .max(100, 'Value cannot be greater than 100')
     .when('overtime_allowance', {
-      is: (value) => value === true || value == 1, 
+      is: (value) => value === true || value == 1,
       then: Yup.number().required(VALIDATION_MESSAGES.required),
       otherwise: Yup.number().notRequired(),
     })
@@ -449,163 +449,6 @@ export function BankEditForm({
                   <br>
                   </br>
                   <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-                    <h6>Earning Entitlements</h6>
-
-                    <div className="from-group row">
-                      <div className="col-12 col-md-4 mt-3">
-                        <input type="checkbox"
-                          name="gratuity_member"
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.gratuity_member}
-                          checked={values.gratuity_member}
-
-                        /> Gratuity Member
-                      </div>
-                    </div>
-
-                    <div className="from-group row">
-                      <div className="col-12 col-md-3 mt-3">
-                        <input
-                          name="overtime_allowance"
-                          type="checkbox"
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.overtime_allowance}
-                          checked={values.overtime_allowance}
-                        /> Over Time
-
-                      </div>
-
-                      <div className="col-12 col-md-3 mt-3">
-                        <Field
-                          name="overtime_working_day"
-                          disabled={!Boolean(values.overtime_allowance)}
-                          type="number"
-                          component={Input}
-                          maxLength={2}
-                          label={<span> Overtime Factor Working Day{Boolean(values.overtime_allowance) && <span style={{ color: 'red' }}>*</span>}</span>}
-                          autoComplete="off"
-                          value={!Boolean(values.overtime_allowance) ? '' : values.overtime_working_day}
-                        />
-                      </div>
-
-                      <div className="col-12 col-md-3 mt-3">
-                        <Field
-                          name="overtime_off_day"
-                          disabled={!Boolean(values.overtime_allowance)}
-                          type="number"
-                          component={Input}
-                          maxLength={2}
-                          label={<span> Overtime Factor Off day{Boolean(values.overtime_allowance) && <span style={{ color: 'red' }}>*</span>}</span>}
-                          autoComplete="off"
-                          value={!Boolean(values.overtime_allowance) ? '' : values.overtime_off_day}
-                        />
-                      </div>
-
-                      <div className="col-12 col-md-3 mt-3">
-                        <Field
-                          name="overtime_holiday"
-                          disabled={!Boolean(values.overtime_allowance)}
-                          type="number"
-                          component={Input}
-                          maxLength={2}
-                          label={<span> Overtime Factor Holiday{Boolean(values.overtime_allowance) && <span style={{ color: 'red' }}>*</span>}</span>}
-                          autoComplete="off"
-                          value={!Boolean(values.overtime_allowance) ? '' : values.overtime_holiday}
-                        />
-                      </div>
-                      {/* <div className="col-12 col-md-4 mt-3">
-                        <input
-                          type="checkbox"
-                          name="shift_allowance"
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.shift_allowance}
-                          checked={values.shift_allowance}
-                        />  Shift Allowance
-
-                      </div>
-                      <div className="col-12 col-md-4 mt-3">
-                        <input
-                          type="checkbox"
-                          name="regularity_allowance"
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.regularity_allowance}
-                          checked={values.regularity_allowance}
-                        /> Regularity Allowance
-                      </div>
-                      <div className="col-12 col-md-4 mt-3">
-                        <input
-                          type="checkbox"
-                          name="punctuality_allowance"
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          checked={values.punctuality_allowance}
-                          value={values.punctuality_allowance}
-                        /> Punctuality Allowance
-
-                      </div> */}
-                    </div>
-                  </div>
-                  <br></br>
-                  <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-                    <h6>Deduction Entitlements</h6>
-
-
-                    <div className="from-group row">
-                      {/* <div className="col-12 col-md-4 mt-3">
-                        <input
-                          name="pf_member"
-                          type="checkbox"
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          checked={values.pf_member}
-                          value={values.pf_member}
-                        //onChange={handleCheckboxChange}
-                        /> PF Member
-
-                      </div> */}
-                      <div className="col-12 col-md-4 mt-3">
-                        <input
-                          name="eobi_member"
-                          type="checkbox"
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.eobi_member}
-                          checked={values.eobi_member}
-                        /> EOBI Member
-
-                      </div>
-                      <div className="col-12 col-md-4 mt-3">
-                        <input
-                          type="checkbox"
-                          name="social_security_member"
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.social_security_member}
-                          checked={values.social_security_member}
-                        /> Social Security Member
-
-                      </div>
-                      {/* <div className="col-12 col-md-4 mt-3">
-                        <input
-                          type="checkbox"
-
-                          name="pension_member"
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.pension_member}
-                          checked={values.pension_member}
-                        /> Pension Member
-                      </div> */}
-
-                    </div>
-                  </div>
-                  <br>
-                  </br>
-                  <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
                     <h6>Earnings</h6>
                     {/* {<a onClick={ModalUIProps.newButtonEarningTran} href='javascript:void(0)'>+ Add New </a>} */}
                     <table class="table table table-head-custom table-vertical-center overflow-hidden table-hover">
@@ -786,6 +629,165 @@ export function BankEditForm({
 
                     </table>
                     <input type='button' id="Deduction" onClick={addRow} value='+Add'></input>
+                  </div>
+
+                  <br>
+                  </br>
+                  <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
+                    <h6>Earning Entitlements</h6>
+
+                    <div className="from-group row">
+                      <div className="col-12 col-md-4 mt-3">
+                        <input type="checkbox"
+                          name="gratuity_member"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          value={values.gratuity_member}
+                          checked={values.gratuity_member}
+
+                        /> Gratuity Member
+                      </div>
+                    </div>
+
+                    <div className="from-group row">
+                      <div className="col-12 col-md-3 mt-3">
+                        <input
+                          name="overtime_allowance"
+                          type="checkbox"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          value={values.overtime_allowance}
+                          checked={values.overtime_allowance}
+                        /> Over Time
+
+                      </div>
+                    </div>
+                    <div className="from-group row">
+                      <div className="col-12 col-md-4 mt-3">
+                        <Field
+                          name="overtime_working_day"
+                          disabled={!Boolean(values.overtime_allowance)}
+                          type="number"
+                          component={Input}
+                          maxLength={2}
+                          label={<span>Overtime Factor Working Day{Boolean(values.overtime_allowance) && <span style={{ color: 'red' }}>*</span>}</span>}
+                          autoComplete="off"
+                          value={!Boolean(values.overtime_allowance) ? '' : values.overtime_working_day}
+                        />
+                      </div>
+
+                      <div className="col-12 col-md-4 mt-3">
+                        <Field
+                          name="overtime_off_day"
+                          disabled={!Boolean(values.overtime_allowance)}
+                          type="number"
+                          component={Input}
+                          maxLength={2}
+                          label={<span>Overtime Factor Off day{Boolean(values.overtime_allowance) && <span style={{ color: 'red' }}>*</span>}</span>}
+                          autoComplete="off"
+                          value={!Boolean(values.overtime_allowance) ? '' : values.overtime_off_day}
+                        />
+                      </div>
+
+                      <div className="col-12 col-md-4 mt-3">
+                        <Field
+                          name="overtime_holiday"
+                          disabled={!Boolean(values.overtime_allowance)}
+                          type="number"
+                          component={Input}
+                          maxLength={2}
+                          label={<span>Overtime Factor Holiday{Boolean(values.overtime_allowance) && <span style={{ color: 'red' }}>*</span>}</span>}
+                          autoComplete="off"
+                          value={!Boolean(values.overtime_allowance) ? '' : values.overtime_holiday}
+                        />
+                      </div>
+                      {/* <div className="col-12 col-md-4 mt-3">
+                        <input
+                          type="checkbox"
+                          name="shift_allowance"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          value={values.shift_allowance}
+                          checked={values.shift_allowance}
+                        />  Shift Allowance
+
+                      </div>
+                      <div className="col-12 col-md-4 mt-3">
+                        <input
+                          type="checkbox"
+                          name="regularity_allowance"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          value={values.regularity_allowance}
+                          checked={values.regularity_allowance}
+                        /> Regularity Allowance
+                      </div>
+                      <div className="col-12 col-md-4 mt-3">
+                        <input
+                          type="checkbox"
+                          name="punctuality_allowance"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          checked={values.punctuality_allowance}
+                          value={values.punctuality_allowance}
+                        /> Punctuality Allowance
+
+                      </div> */}
+                    </div>
+                  </div>
+                  <br></br>
+                  <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
+                    <h6>Deduction Entitlements</h6>
+
+
+                    <div className="from-group row">
+                      {/* <div className="col-12 col-md-4 mt-3">
+                        <input
+                          name="pf_member"
+                          type="checkbox"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          checked={values.pf_member}
+                          value={values.pf_member}
+                        //onChange={handleCheckboxChange}
+                        /> PF Member
+
+                      </div> */}
+                      <div className="col-12 col-md-4 mt-3">
+                        <input
+                          name="eobi_member"
+                          type="checkbox"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          value={values.eobi_member}
+                          checked={values.eobi_member}
+                        /> EOBI Member
+
+                      </div>
+                      <div className="col-12 col-md-4 mt-3">
+                        <input
+                          type="checkbox"
+                          name="social_security_member"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          value={values.social_security_member}
+                          checked={values.social_security_member}
+                        /> Social Security Member
+
+                      </div>
+                      {/* <div className="col-12 col-md-4 mt-3">
+                        <input
+                          type="checkbox"
+
+                          name="pension_member"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          value={values.pension_member}
+                          checked={values.pension_member}
+                        /> Pension Member
+                      </div> */}
+
+                    </div>
                   </div>
                 </fieldset>
               </Form>

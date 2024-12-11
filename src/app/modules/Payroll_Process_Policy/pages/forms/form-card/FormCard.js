@@ -10,25 +10,24 @@ import { FormTable } from "../form-table/FormTable"
 import { useFormUIContext } from "../FormUIContext"
 import { FormFilter } from "../form-filter/FormFilter"
 import { useSelector, shallowEqual } from "react-redux"
+import CurrentModuleName from "../../../../../utils/common-modules/ModuleName"
 
-export function FormCard({id,setid}) {
+export function FormCard({ id, setid }) {
   const FormUIContext = useFormUIContext()
-  //console.log("FormUIContext", FormUIContext)
   const formUIProps = useMemo(() => {
     return {
       newFormButtonClick: FormUIContext.newFormButtonClick,
       openEditFormDialog: FormUIContext.openEditFormDialog,
     }
   }, [FormUIContext])
-  
+
   const { userAccess } = useSelector(
     (state) => ({
       userAccess: state.auth.userAccess?.Payroll_Process_Policy,
     }),
     shallowEqual
   )
-  console.log("userAccess Temp",userAccess)
-  
+
   const accessUser = userAccess.find(
     (item) => item.componentName === "CreatePayrollProcessPolicy"
   )
@@ -37,42 +36,33 @@ export function FormCard({id,setid}) {
     <>
 
       <Card>
-        <CardHeader title="">
-          <FormFilter />
-          <CardHeaderToolbar>
-            {accessUser ? (
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={formUIProps.newFormButtonClick}
-              >
-                + Add Payroll Policy
-              </button>
-            ) : (
-              <></>
-            )}
-            {/* {userAccess.find((item) => {
-              if (
-                item.componentName === "CreateUser" ||
-                item.isAccess === true
-              ) {
-                return (
+        <CardHeader title={CurrentModuleName()}>
+          <div className="d-flex justify-content-between align-items-center gap-3 m-4">
+            <div className="pt-5">
+              <FormFilter />
+            </div>
+
+            <div className=" p-2">
+              <CardHeaderToolbar>
+                {accessUser ? (
                   <button
                     type="button"
                     className="btn btn-primary"
-                    onClick={FormsUIProps.newUserButtonClick}
+                    onClick={formUIProps.newFormButtonClick}
                   >
-                    Add New User
+                    + Add Payroll Policy
                   </button>
-                )
-              }
-            })} */}
-          </CardHeaderToolbar>
+                ) : (
+                  <></>
+                )}
+              </CardHeaderToolbar>
+            </div>
+          </div>
         </CardHeader>
 
         <CardBody>
 
-          <FormTable formid = {id} setid = {setid} />
+          <FormTable formid={id} setid={setid} />
         </CardBody>
       </Card>
     </>
