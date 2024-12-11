@@ -64,7 +64,8 @@ type="button"
 className="btn btn-primary"
 onClick={DesignationUIProps.newDesignationButtonClick}
 >
-+ Add Employee Policy
++ Add Application Configuration
+
 </button>
 
         )}
