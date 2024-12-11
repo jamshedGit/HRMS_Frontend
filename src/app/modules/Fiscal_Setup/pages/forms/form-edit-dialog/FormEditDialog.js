@@ -139,7 +139,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
       <FormEditDialogHeader id={id} isUserForRead={userForRead} />
       <MasterEditForm
         SaveTaxSetup={SaveTaxSetup}
-        user={userForEdit || userData || formUIProps.initUser}
+        user={userForEdit || formUIProps.initUser}
         onHide={onHide}
         roles={roles}
         centers={centers}

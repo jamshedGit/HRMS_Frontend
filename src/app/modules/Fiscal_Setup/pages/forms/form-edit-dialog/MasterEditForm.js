@@ -16,33 +16,33 @@ import DatePicker from "react-datepicker";
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 
 // Function to check if two dates are exactly 365 days apart
-const validateDateDifference = (startDate, endDate) => {
-  const start = new Date(startDate);
-  const end = new Date(endDate);
+// const validateDateDifference = (startDate, endDate) => {
+//   const start = new Date(startDate);
+//   const end = new Date(endDate);
 
-  // Calculate the difference in milliseconds
-  const timeDiff = end - start;
+//   // Calculate the difference in milliseconds
+//   const timeDiff = end - start;
 
-  // Convert milliseconds to days (1 day = 24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
-  const dayDiff = timeDiff / (1000 * 3600 * 24);
+//   // Convert milliseconds to days (1 day = 24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
+//   const dayDiff = timeDiff / (1000 * 3600 * 24);
 
-  // Check if the difference is exactly 365 days
-  return dayDiff === 365 || dayDiff === 366;
-};
+//   // Check if the difference is exactly 365 days
+//   return dayDiff === 365 || dayDiff === 366;
+// };
 // Validation schema
 const formValidation = Yup.object().shape(
   {
     startDate: Yup.date().nullable().required(VALIDATION_MESSAGES.required),
     endDate: Yup.date().nullable()
-      .required(VALIDATION_MESSAGES.required)
-      .test(
-        'date-difference',
-        'End date must be exactly 365 or 366 days after start date',
-        function (endDate) {
-          const { startDate } = this.parent;
-          return validateDateDifference(startDate, endDate);
-        }
-      ),
+      .required(VALIDATION_MESSAGES.required),
+      // .test(
+      //   'date-difference',
+      //   'End date must be exactly 365 or 366 days after start date',
+      //   function (endDate) {
+      //     const { startDate } = this.parent;
+      //     return validateDateDifference(startDate, endDate);
+      //   }
+      // ),
       subsidiaryId: Yup.number()
       .nullable().required("Required*")
       
@@ -71,7 +71,7 @@ export function MasterEditForm({
   const [defSubsidiary = null, setDefualtSubsidiaryList] = useState(null);
 
   //===== Date Of Joining
-
+console.log("defstartDate111",defstartDate)
 
   useEffect(() => {
 
@@ -110,7 +110,7 @@ export function MasterEditForm({
 
   }, [user?.subsidiaryId, dashboard.subsidiaryId]);
 
-
+console.log("user111",user)
   return (
     <>
       <Formik
@@ -175,6 +175,15 @@ export function MasterEditForm({
                         onChange={(date) => {
                           setFieldValue("startDate", date);
                           setDefaultStartDate(date);
+
+                                   // Add 365 days (considering leap years automatically)
+                                   const endDate = new Date(date);
+                                   endDate.setFullYear(endDate.getFullYear() + 1); // Add one year (365 or 366 days will be calculated automatically)
+         
+                                   // Set the calculated end date
+                                   endDate.setDate(endDate.getDate() - 1);
+                                   setFieldValue("endDate", endDate);
+                                   setDefaultEndDate(endDate);
                         }}
                       
                         timeInputLabel="Time:"
@@ -202,7 +211,7 @@ export function MasterEditForm({
                         dateFormat="dd/MM/yyyy"
                         showTimeInput
                         name="endDate"
-                        disabled={isUserForRead}
+                        disabled={true}
                         autoComplete="off"
                       // value = {values.dateOfJoining}
                       />

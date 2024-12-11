@@ -108,6 +108,7 @@ export function FormTable() {
       style: {
         minWidth: "160px",
       },
+          formatter: (cell) => cell ? "Yes" : "No"
     },
        {
       dataField: "action",

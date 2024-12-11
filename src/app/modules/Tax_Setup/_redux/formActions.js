@@ -20,7 +20,7 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
             ...item,
             startDate: format(new Date(item.startDate), 'dd-MMM-yyyy') ,
             endDate: format(new Date(item.endDate), 'dd-MMM-yyyy') ,
-            isActive: item.isActive == true ? "Yes" : "No"
+            // isActive: item.isActive == true ? "Yes" : "No"
         }));
     };
     
