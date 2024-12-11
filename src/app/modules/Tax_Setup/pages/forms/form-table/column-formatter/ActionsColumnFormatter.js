@@ -20,7 +20,7 @@ export function ActionsColumnFormatter(
   }
 ) {
   const isUserRead = false;
-  console.log("row11",row)
+
   return (
     <>
       <OverlayTrigger

@@ -42,7 +42,7 @@ export const taxSetupSlice = createSlice({
             // 
             
             const entities = action.payload.data?.data.rows;
-            console.log("ent TaxSetup",entities)
+       
             const totalResult = action.payload.data?.data.totalResults;
             
             state.listLoading = false;
@@ -72,14 +72,14 @@ export const taxSetupSlice = createSlice({
 
             state.error = null;
             state.actionsLoading = false;
-            console.log("TaxSetup deleted ")
-            console.log(state.entities);
+         
+          
             state.entities = state.entities.filter(
                 (el) => el.Id !== action.payload.Id
             );
         },
         TaxSetupCreated: (state, action) => {
-             console.log("action payload for TaxSetup", action.payload);
+    
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);

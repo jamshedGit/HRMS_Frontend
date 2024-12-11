@@ -14,7 +14,7 @@ import CurrentModuleName from "../../../../../utils/common-modules/ModuleName"
 
 export function FormCard() {
   const FormUIContext = useFormUIContext()
-  //console.log("FormUIContext", FormUIContext)
+
   const formUIProps = useMemo(() => {
     return {
       newFormButtonClick: FormUIContext.newFormButtonClick,
@@ -28,7 +28,7 @@ export function FormCard() {
     }),
     shallowEqual
   )
-  console.log("userAccess Temp", userAccess)
+
   const accessUser = userAccess.find(
     (item) => item.componentName === "CreateTaxSetup"
   )

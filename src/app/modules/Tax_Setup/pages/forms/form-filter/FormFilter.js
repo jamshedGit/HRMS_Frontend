@@ -74,9 +74,9 @@ export function FormFilter({ listLoading, user, setCity,
 
   async function fetchDonationReport(filterVal) {
     try {
-        console.log("filter",filterVal.receiptDateFrom);
-     // console.log(`${API_URL}/edrs/donation-report`);
-     // console.log("filter value", filterVal)
+ 
+
+
       const response = await axios.post(`${API_URL}/edrs/donation-report`, {
         bookNo: filterVal.txtBookNo,
         cityId: filterVal.cityId || "0",
@@ -86,28 +86,28 @@ export function FormFilter({ listLoading, user, setCity,
         dateTo: filterVal.receiptDateTo,
                
       });
-      console.log("donation report", response);
+
       return response?.data?.data;
     } catch (error) {
-      console.log("Error fetching data:", error);
+    
       console.error("Error fetching data:", error);
     }
   }
 
   function getBase64ImageFromURL(url) {
     return new Promise((resolve, reject) => {
-      var img = new Image();
+      let img = new Image();
       img.setAttribute("crossOrigin", "anonymous");
 
       img.onload = () => {
-        var canvas = document.createElement("canvas");
+        let canvas = document.createElement("canvas");
         canvas.width = img.width;
         canvas.height = img.height;
 
-        var ctx = canvas.getContext("2d");
+        let ctx = canvas.getContext("2d");
         ctx.drawImage(img, 0, 0);
 
-        var dataURL = canvas.toDataURL("image/png");
+        let dataURL = canvas.toDataURL("image/png");
 
         resolve(dataURL);
       };
@@ -121,16 +121,16 @@ export function FormFilter({ listLoading, user, setCity,
   }
 
   async function createPdf(filterVal) {
-    // console.log("e",e)
+
     // setStartDate(e);
     // const getYear = moment(e).format("yyyy");
     //pbookNo = e;
     const pbookNo = filterVal.txtBookNo;
-    console.log("creaet PDF", filterVal)
+  
     if (filterVal != null) {
       setLoading(true);
       const data = await fetchDonationReport(filterVal);
-      console.log("donation report 1", data);
+   
       
       const table = {
         headerRow: [
@@ -161,7 +161,7 @@ export function FormFilter({ listLoading, user, setCity,
       let t = 0;
       data &&
         data.forEach((item, index) => {
-          console.log("index", data.length);
+      
 
           if (data.length - 1 == index) {
             data.forEach((item) => { total += parseFloat(item.amount) })
@@ -309,10 +309,10 @@ export function FormFilter({ listLoading, user, setCity,
 
   function addCommas(nStr) {
     nStr += '';
-    var x = nStr.split('.');
-    var x1 = x[0];
-    var x2 = x.length > 1 ? '.' + x[1] : '';
-    var rgx = /(\d+)(\d{3})/;
+    let x = nStr.split('.');
+    let x1 = x[0];
+    let x2 = x.length > 1 ? '.' + x[1] : '';
+    let rgx = /(\d+)(\d{3})/;
     while (rgx.test(x1)) {
       x1 = x1.replace(rgx, '$1' + ',' + '$2');
     }
@@ -326,8 +326,8 @@ export function FormFilter({ listLoading, user, setCity,
     if (!isEqual(newQueryParams, formUIProps.queryParams)) {
       newQueryParams.pageNumber = 1
       // update list by queryParams
-      console.log("update list by queryParams");
-      console.log(newQueryParams);
+ 
+  
       formUIProps.setQueryParams(newQueryParams)
     }
   }
@@ -346,7 +346,7 @@ export function FormFilter({ listLoading, user, setCity,
           alarmTimeId: [],
         }}
         onSubmit={(values) => {
-          console.log(1);
+     
           // createPdf(values);
           applyFilter(values)
         }}
@@ -398,7 +398,7 @@ export function FormFilter({ listLoading, user, setCity,
         //   alarmTimeId: [],
         // }}
         onSubmit={(values) => {
-           console.log("values", values);
+     
           //createPdf(values);
           //applyFilter(values)
         }}

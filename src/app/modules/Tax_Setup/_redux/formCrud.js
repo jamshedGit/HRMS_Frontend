@@ -13,7 +13,7 @@ export function createTaxSetup(body) {
 
 // Read
 export function getAllTaxSetup(body) {
-  console.log("body",body);
+
   return axios.post(`${USERS_URL}/tax_setup/read-all-tax-setup`, body);
 }
 
@@ -37,8 +37,8 @@ export function updateTaxSetup(body) {
 
 //Delete
 export function deleteTaxSetup(body) {
-  console.log("body")
-  console.log(body);
+
+
   return axios.patch(`${USERS_URL}/tax_setup/delete-tax-setup`, body);
 }
 
