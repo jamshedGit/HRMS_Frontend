@@ -10,6 +10,7 @@ import { FormTable } from "../form-table/FormTable"
 import { useFormUIContext } from "../FormUIContext"
 import { FormFilter } from "../form-filter/FormFilter"
 import { useSelector, shallowEqual } from "react-redux"
+import CurrentModuleName from "../../../../../utils/common-modules/ModuleName"
 
 export function FormCard() {
   const FormUIContext = useFormUIContext()
@@ -20,15 +21,15 @@ export function FormCard() {
       openEditFormDialog: FormUIContext.openEditFormDialog,
     }
   }, [FormUIContext])
-  
+
   const { userAccess } = useSelector(
     (state) => ({
       userAccess: state.auth.userAccess.Payroll_Month,
     }),
     shallowEqual
   )
-  console.log("userAccess Temp",userAccess)
-  
+  console.log("userAccess Temp", userAccess)
+
   const accessUser = userAccess.find(
     (item) => item.componentName === "CreatePayrollMonth"
   )
@@ -36,11 +37,29 @@ export function FormCard() {
   return (
     <>
 
+
+
       <Card>
-        <CardHeader title="">
-          <FormFilter />
-          <CardHeaderToolbar>
-            {accessUser ? (
+
+        <CardHeader title={CurrentModuleName()} >
+
+          <div className="d-flex justify-content-between align-items-center gap-3 m-4">
+
+
+
+            <div className="pt-5">
+
+              <FormFilter />
+
+            </div>
+
+            <div className=" p-2">
+
+              <CardHeaderToolbar>
+
+
+
+              {accessUser ? (
               <button
                 type="button"
                 className="btn btn-primary"
@@ -51,30 +70,33 @@ export function FormCard() {
             ) : (
               <></>
             )}
-            {/* {userAccess.find((item) => {
-              if (
-                item.componentName === "CreateUser" ||
-                item.isAccess === true
-              ) {
-                return (
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={FormsUIProps.newUserButtonClick}
-                  >
-                    Add New User
-                  </button>
-                )
-              }
-            })} */}
-          </CardHeaderToolbar>
+
+
+              </CardHeaderToolbar>
+
+            </div>
+
+
+
+          </div>
+
         </CardHeader>
+
+
 
         <CardBody>
 
+
+
           <FormTable />
+
         </CardBody>
+
       </Card>
+
+
+
+
     </>
   )
 }

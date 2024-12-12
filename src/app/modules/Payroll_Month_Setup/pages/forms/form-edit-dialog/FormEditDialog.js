@@ -80,7 +80,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   //console.log("userForEdit", userForEdit);
 
   const SavePayrollMonthSetup = async (user) => {
-
+    console.log("getUserStatus111", user.month);
     if (!id) {
 
 
