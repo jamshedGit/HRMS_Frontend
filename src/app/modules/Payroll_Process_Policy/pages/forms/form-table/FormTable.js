@@ -542,8 +542,8 @@ export function FormTable(user) {
   }, [dashboard.allEarnings]);
 
   useEffect(() => {
-    dispatch(fetchAllLeaveTypeBySubsidiary("allLeaveTypes", user?.subsidiaryId || ''));
-  }, [user.subsidiaryId])
+    dispatch(fetchAllLeaveTypeBySubsidiary("allLeaveTypes", currentState?.userForEdit?.subsidiaryId || ''));
+  }, [currentState?.userForEdit?.subsidiaryId])
 
   return (
     <>
