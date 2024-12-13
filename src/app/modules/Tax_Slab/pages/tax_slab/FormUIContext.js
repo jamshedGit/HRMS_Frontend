@@ -36,7 +36,8 @@ export function FormUIProvider({ FormUIEvents, children }) {
     to_amount: "",
     percentage: "",
     fixed_amount: "",
-  
+  taxSetupId:"",
+  subsidiaryId:""
   };
 
 

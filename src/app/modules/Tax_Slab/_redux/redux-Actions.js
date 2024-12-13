@@ -144,3 +144,21 @@ export const updateIncomeTaxSlab = (user, disbaleLoading, onHide) => (dispatch) 
       });
     });
 };
+
+
+export const fetchgetAllTaxYearSetup = () => async (dispatch) => {
+
+  
+  return requestFromServer.getAllTaxYearSetup()
+   
+    .then((response) => {
+    
+
+      dispatch(actions.getAllTaxYearSetupFetched(response));
+    })
+    .catch((error) => {
+   
+      error.clientMessage = "Can't find";
+      dispatch(actions.catchError({ error, callType: callTypes.list }));
+    });
+};

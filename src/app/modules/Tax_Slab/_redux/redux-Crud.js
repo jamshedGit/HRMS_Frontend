@@ -33,3 +33,9 @@ export function deleteIncomeTaxSlab(body) {
 
   return axios.patch(`${USERS_URL}/tax_slab/delete-tax-slab`, body);
 }
+
+
+export function getAllTaxYearSetup() {
+
+  return axios.get(`${USERS_URL}/tax_slab/read-all-tax-year-setup`);
+}
