@@ -36,6 +36,8 @@ export function FormTable() {
       openDeleteFormDialog: formUIContext.openDeleteFormDialog,
       openActiveFormDialog: formUIContext.openActiveFormDialog,
       openReadFormDialog: formUIContext.openReadFormDialog,
+      fetchSubsidiaryId: formUIContext?.fetchSubsidiaryId,
+      fetchTaxSetupId: formUIContext?.fetchTaxSetupId,
     };
   }, [formUIContext]);
 
@@ -58,10 +60,12 @@ export function FormTable() {
 
   useEffect(() => {
     formUIProps.setIds([]);
+    formUIProps.queryParams.subsidiaryId=formUIProps.fetchSubsidiaryId
+    formUIProps.queryParams.taxSetupId=formUIProps.fetchTaxSetupId
  
  
     dispatch(actions.fetchIncomeTaxSlabs(formUIProps.queryParams));
-  }, [formUIProps.queryParams, dispatch, totalCount]);
+  }, [formUIProps.queryParams, dispatch, totalCount,formUIProps.fetchSubsidiaryId,formUIProps.fetchTaxSetupId]);
 
   const isAccessForEdit = userAccess?.find(
     (item) => item.componentName === "UpdateTaxSlab"
