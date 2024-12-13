@@ -79,11 +79,11 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   // }, [actionsLoading]);
   //console.log("userForEdit", userForEdit);
 
-  const SavePayrollMonthSetup = async (user) => {
-    console.log("getUserStatus111", user.month);
+  const SavePayrollMonthSetup = async (user,defDays) => {
+    console.log("getUserStatus111", defDays);
     if (!id) {
 
-
+      user.month_days= defDays
       const finalObject = { user }
       await dispatch(actions.createPayrollMonth(user, disbaleLoading, onHide));
       await dispatch(actions.fetchUsers(usersUIProps.queryParams));
@@ -101,7 +101,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         startDate: user.startDate,
         endDate: user.endDate,
         month:user.month,
-        month_days: user.month_days,
+        month_days: defDays,
         shortFormat: user.shortFormat,
         year: user.year,
         subsidiaryId: user.subsidiaryId
