@@ -4,7 +4,7 @@ import { Checkbox, Input, Select } from '../../../../../../_metronic/_partials/c
 import CustomErrorLabel from '../../../../../utils/common-modules/CustomErrorLabel';
 import CustomDropdown from '../../../../../utils/common-modules/CustomDropdown';
 
-function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, touched, dropdownData, handleDelete }) {
+function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, touched, dropdownData, handleDelete, allLeaveTypeMap }) {
   return (
     <>
       <h6>Leave Type Policies</h6>
@@ -17,11 +17,14 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
                 <tr style={{ backgroundColor: "#4d5f7a", color: "#fff" }}>
                   <td>Action</td>
                   <td>Leave Type</td>
-                  <td>Max Allowed</td>
+                  <td>Entitled Days</td>
+                  <td>Entitle At</td>
+                  <td>Encashable</td>
+                  <td>Carry Forwardable</td>
                   <td>Attachment Required</td>
                   <td>Gender</td>
-                  <td>Minimum Experience (Years)</td>
-                  <td>Marital Status</td>
+                  {/* <td>Minimum Experience (Years)</td> */}
+                  {/* <td>Marital Status</td> */}
                 </tr>
               </thead>
               <tbody>
@@ -51,6 +54,11 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
                             `leavetypePolicies[${index}].leaveType`,
                             value
                           )
+                          const leaveType = allLeaveTypeMap.get(value)?.type;
+                          if(leaveType != 1){
+                            setFieldValue(`leavetypePolicies[${index}].encashable`, false);
+                            setFieldValue(`leavetypePolicies[${index}].carryForwardable`, false);
+                          }
                         }}
                         value={row.leaveType}
                         children={createDropdown(dropdownData.allLeaveTypes || [], values?.leavetypePolicies)}
@@ -62,7 +70,7 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
                     </td>
                     {/* Leave Type Field Ends */}
 
-                    {/* Max Allowed Field Starts */}
+                    {/* Entitle Days Field Starts */}
                     <td>
                       <Field
                         name={`leavetypePolicies[${index}].maxAllowed`}
@@ -83,7 +91,105 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
                         <CustomErrorLabel touched={true} error={errors.leavetypePolicies?.[index]?.maxAllowed} />
                       }
                     </td>
-                    {/* Max Allowed Field Ends */}
+                    {/* Entitle Days Field Ends */}
+
+                    {/* Entitle At Field Starts */}
+                    <td>
+                      <Field
+                        name={`leavetypePolicies[${index}].entitledAt`}
+                        component={Select}
+                        className={errors.leavetypePolicies?.[index]?.entitledAt && touched.leavetypePolicies?.[index]?.entitledAt ? 'form-control is-invalid' : 'form-control'}
+                        onChange={(e) => {
+                          const value = e.target.value == '--Select--' ? '' : Number(e.target.value)
+                          setFieldValue(
+                            `leavetypePolicies[${index}].entitledAt`,
+                            value
+                          )
+                        }}
+                        value={row.entitledAt}
+                        children={CustomDropdown({ data: dropdownData.allEntitlementEvents, firstElement: { label: '--Select--', value: null } })}
+                        disabled={!Boolean(allLeaveTypeMap?.get(row?.leaveType || '')?.type == 1)}
+                      />
+                      {errors.leavetypePolicies?.[index]?.entitledAt &&
+                        touched.leavetypePolicies?.[index]?.entitledAt &&
+                        <CustomErrorLabel touched={true} error={errors.leavetypePolicies?.[index]?.entitledAt} />
+                      }
+                    </td>
+                    {/* Entitle At Field Ends */}
+
+                    {/* Encashable Field Starts */}
+                    <td>
+                      <Field
+                        name={`leavetypePolicies[${index}].encashable`}
+                        component={Checkbox}
+                        onChange={(e) => {
+                          setFieldValue(
+                            `leavetypePolicies[${index}].encashable`,
+                            e.target.checked
+                          )
+                        }}
+                        isSelected={row.encashable}
+                        disabled={!Boolean(allLeaveTypeMap?.get(row?.leaveType || '')?.type == 1)}
+                      />
+
+                      <Field
+                        name={`leavetypePolicies[${index}].encashableCount`}
+                        component={Input}
+                        type="number"
+                        min="0"
+                        className={errors.leavetypePolicies?.[index]?.encashableCount && touched.leavetypePolicies?.[index]?.encashableCount ? 'form-control is-invalid' : 'form-control'}
+                        onChange={(e) => {
+                          setFieldValue(
+                            `leavetypePolicies[${index}].encashableCount`,
+                            e.target.value
+                          )
+                        }}
+                        value={Boolean(row.encashable) ? row.encashableCount : ''}
+                        disabled={!Boolean(row.encashable)}
+                      />
+                      {errors.leavetypePolicies?.[index]?.encashableCount &&
+                        touched.leavetypePolicies?.[index]?.encashableCount &&
+                        <CustomErrorLabel touched={true} error={errors.leavetypePolicies?.[index]?.encashableCount} />
+                      }
+                    </td>
+                    {/* Encashable Field End */}
+
+                    {/* Carry Forwardable Field Starts */}
+                    <td>
+                      <Field
+                        name={`leavetypePolicies[${index}].carryForwardable`}
+                        component={Checkbox}
+                        onChange={(e) => {
+                          setFieldValue(
+                            `leavetypePolicies[${index}].carryForwardable`,
+                            e.target.checked
+                          )
+                        }}
+                        isSelected={row.carryForwardable}
+                        disabled={!Boolean(allLeaveTypeMap?.get(row?.leaveType || '')?.type == 1)}
+                      />
+
+                      <Field
+                        name={`leavetypePolicies[${index}].carryForwardableCount`}
+                        component={Input}
+                        type="number"
+                        min="0"
+                        className={errors.leavetypePolicies?.[index]?.carryForwardableCount && touched.leavetypePolicies?.[index]?.carryForwardableCount ? 'form-control is-invalid' : 'form-control'}
+                        onChange={(e) => {
+                          setFieldValue(
+                            `leavetypePolicies[${index}].carryForwardableCount`,
+                            e.target.value
+                          )
+                        }}
+                        value={Boolean(row.carryForwardable) ? row.carryForwardableCount : ''}
+                        disabled={!Boolean(row.carryForwardable)}
+                      />
+                      {errors.leavetypePolicies?.[index]?.carryForwardableCount &&
+                        touched.leavetypePolicies?.[index]?.carryForwardableCount &&
+                        <CustomErrorLabel touched={true} error={errors.leavetypePolicies?.[index]?.carryForwardableCount} />
+                      }
+                    </td>
+                    {/* Carry Forwardable Field End */}
 
                     {/* Attachement Required Field Starts */}
                     <td>
@@ -124,8 +230,9 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
                     </td>
                     {/* Gender Field Ends */}
 
+                    {/* This field will be used later that's why disabled for now */}
                     {/* Min Experience Field Starts */}
-                    <td>
+                    {/* <td>
                       <Field
                         name={`leavetypePolicies[${index}].minExp`}
                         component={Input}
@@ -144,11 +251,13 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
                         touched.leavetypePolicies?.[index]?.minExp &&
                         <CustomErrorLabel touched={true} error={errors.leavetypePolicies?.[index]?.minExp} />
                       }
-                    </td>
+                    </td> */}
                     {/* Min Experience Field Ends */}
+                    {/* This field will be used later that's why disabled for now */}
 
+                    {/* This field will be used later that's why disabled for now */}
                     {/* Marital Status Field Starts */}
-                    <td>
+                    {/* <td>
                       <Field
                         name={`leavetypePolicies[${index}].maritalStatus`}
                         component={Select}
@@ -167,26 +276,32 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
                         touched.leavetypePolicies?.[index]?.maritalStatus &&
                         <CustomErrorLabel touched={true} error={errors.leavetypePolicies?.[index]?.maritalStatus} />
                       }
-                    </td>
+                    </td> */}
                     {/* Marital Status Field Ends */}
-                  
+                    {/* This field will be used later that's why disabled for now */}
+
                     {/* Row Starts */}
                   </tr>
                 ))}
               </tbody>
             </table>
-             {/* Table Ends */}
+            {/* Table Ends */}
 
             {/* Add button Field Starts */}
-           {values.subsidiaryId && /* values.gradeId && values.employeeTypeId &&*/ <button
+            {values.subsidiaryId && /* values.gradeId && values.employeeTypeId &&*/ <button
               type="button"
               onClick={() =>
                 push({
                   leaveType: "",
                   gender: null,
+                  entitledAt: null,
                   minExp: "",
                   maxAllowed: "",
                   attachmentRequired: false,
+                  encashable: false,
+                  encashableCount: "",
+                  carryForwardable: false,
+                  carryForwardableCount: "",
                   maritalStatus: null,
                 })
               }

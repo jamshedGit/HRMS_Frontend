@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
@@ -12,21 +12,42 @@ import { VALIDATION_MESSAGES, WEEK_DAYS } from "../../../../../utils/constants";
 import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
 import { fetchAllLeaveTypeBySubsidiary } from "../../../../../../_metronic/redux/dashboardActions";
 
+/*
 //Validations for Form
 const formValidation = Yup.object().shape({
   subsidiaryId: Yup.number().required(VALIDATION_MESSAGES.required),
   // gradeId: Yup.number().required(VALIDATION_MESSAGES.required),
   // employeeTypeId: Yup.number().required(VALIDATION_MESSAGES.required),
+  // minExp: Yup.number().min(0, VALIDATION_MESSAGES.minZeroValue).max(99, VALIDATION_MESSAGES.maxTwoDigits).optional(),
+  // maritalStatus: Yup.number().nullable(),
   weekend: Yup.array().required(VALIDATION_MESSAGES.required).min(1),
   isSandwich: Yup.boolean().optional(),
   leavetypePolicies: Yup.array().of(
     Yup.object().shape({
       leaveType: Yup.number().required(VALIDATION_MESSAGES.required),
       gender: Yup.number().nullable(),
-      minExp: Yup.number().min(0, VALIDATION_MESSAGES.minZeroValue).max(99, VALIDATION_MESSAGES.maxTwoDigits).optional(),
+      entitledAt: Yup.number().when('leaveType', {
+        is: (leaveType) => {
+          const leaveTypeData = allLeaveTypeMap.get(leaveType);
+          return leaveTypeData && leaveTypeData.type && leaveTypeData.type === 2; // Check if type is 2
+        },
+        then: Yup.number().required(VALIDATION_MESSAGES.required),
+        otherwise: Yup.number().notRequired(),
+      }),
+      encashableCount: Yup.number()
+        .when('encashable', {
+          is: true,
+          then: Yup.number().required(VALIDATION_MESSAGES.required).min(1, VALIDATION_MESSAGES.minOneValue).max(Yup.ref('maxAllowed'), 'Cannot be greater than Entitled Days'),
+          otherwise: Yup.number().notRequired(),
+        }),
+      carryForwardableCount: Yup.number()
+        .when('carryForwardable', {
+          is: true,
+          then: Yup.number().required(VALIDATION_MESSAGES.required).min(1, VALIDATION_MESSAGES.minOneValue).max(Yup.ref('maxAllowed'), 'Cannot be greater than Entitled Days'),
+          otherwise: Yup.number().notRequired(),
+        }),
       maxAllowed: Yup.number().min(0, VALIDATION_MESSAGES.minZeroValue).max(999, VALIDATION_MESSAGES.maxThreeDigit).required(VALIDATION_MESSAGES.required),
       attachmentRequired: Yup.boolean(),
-      maritalStatus: Yup.number().nullable(),
     })
   ),
   leaveTypeSalaryDeductionPolicies: Yup.array().of(
@@ -43,6 +64,7 @@ const formValidation = Yup.object().shape({
     })
   )
 });
+*/
 
 export function MasterEditForm({
   initUser,
@@ -65,7 +87,8 @@ export function MasterEditForm({
     allGenderList,
     allLeaveStatus,
     allMaritalStatus,
-    allLeaveTypes
+    allLeaveTypes,
+    allEntitlementEvents
   } = useSelector((state) => state.dashboard);
 
   //Get Leave Type Dropdown data on Edit when subisidary is present
@@ -73,7 +96,67 @@ export function MasterEditForm({
     if (user.subsidiaryId) {
       dispatch(fetchAllLeaveTypeBySubsidiary("allLeaveTypes", user.subsidiaryId));
     }
-  }, [user.subsidiaryId])
+  }, [user.subsidiaryId]);
+
+
+  const allLeaveTypeMap = useMemo(() => {
+    return new Map(allLeaveTypes?.map(item => [item.value, item]));
+  }, [allLeaveTypes]);
+
+  const formValidation = useMemo(() => {
+    return Yup.object().shape({
+      subsidiaryId: Yup.number().required(VALIDATION_MESSAGES.required),
+      // gradeId: Yup.number().required(VALIDATION_MESSAGES.required),
+      // employeeTypeId: Yup.number().required(VALIDATION_MESSAGES.required),
+      // minExp: Yup.number().min(0, VALIDATION_MESSAGES.minZeroValue).max(99, VALIDATION_MESSAGES.maxTwoDigits).optional(),
+      // maritalStatus: Yup.number().nullable(),
+      weekend: Yup.array().required(VALIDATION_MESSAGES.required).min(1),
+      isSandwich: Yup.boolean().optional(),
+      leavetypePolicies: Yup.array().of(
+        Yup.object().shape({
+          leaveType: Yup.number().required(VALIDATION_MESSAGES.required),
+          gender: Yup.number().nullable(),
+          entitledAt: Yup.number().nullable().when('leaveType', {
+            is: (leaveType) => {
+              const leaveTypeData = allLeaveTypeMap.get(leaveType);
+              return leaveTypeData && leaveTypeData.type && leaveTypeData.type == 1; // Check if type is 1
+            },
+            then: Yup.number().required(VALIDATION_MESSAGES.required),
+            otherwise: Yup.number().notRequired()
+          }),
+          encashableCount: Yup.number()
+            .when('encashable', {
+              is: true,
+              then: Yup.number().required(VALIDATION_MESSAGES.required).min(1, VALIDATION_MESSAGES.minOneValue).max(Yup.ref('maxAllowed'), 'Cannot be greater than Entitled Days'),
+              otherwise: Yup.number().notRequired(),
+            }),
+          carryForwardableCount: Yup.number()
+            .when('carryForwardable', {
+              is: true,
+              then: Yup.number().required(VALIDATION_MESSAGES.required).min(1, VALIDATION_MESSAGES.minOneValue).max(Yup.ref('maxAllowed'), 'Cannot be greater than Entitled Days'),
+              otherwise: Yup.number().notRequired(),
+            }),
+          maxAllowed: Yup.number().min(0, VALIDATION_MESSAGES.minZeroValue).max(999, VALIDATION_MESSAGES.maxThreeDigit).required(VALIDATION_MESSAGES.required),
+          attachmentRequired: Yup.boolean(),
+        })
+      ),
+      leaveTypeSalaryDeductionPolicies: Yup.array().of(
+        Yup.object().shape({
+          leaveType: Yup.number().required(VALIDATION_MESSAGES.required),
+          minLeave: Yup.number().min(0, VALIDATION_MESSAGES.minZeroValue).max(999, VALIDATION_MESSAGES.maxThreeDigit).required(VALIDATION_MESSAGES.required),
+          maxLeave: Yup.number().min(Yup.ref('minLeave'), 'Max leave should be more than min leave').max(999, VALIDATION_MESSAGES.maxThreeDigit).required(VALIDATION_MESSAGES.required),
+          deduction: Yup.number().min(0, VALIDATION_MESSAGES.minZeroValue).max(100, VALIDATION_MESSAGES.maxHundredValue).test(
+            'max-decimals',
+            'Deduction should be up to max 3 digits before and max 2 digits after the decimal',
+            (value) => /^\d{1,3}(\.\d{1,2})?$/.test(value?.toString())
+          ).required(VALIDATION_MESSAGES.required),
+          leaveStatus: Yup.number().nullable(),
+        })
+      )
+    });
+  }, [allLeaveTypeMap]);
+
+  
 
   //Create Dropdown HTML from data for Select Components.
   //when leaveTypeData is provided it will check one of leave type is already selected then it will not allow it to be selected again.
@@ -302,8 +385,10 @@ export function MasterEditForm({
                       dropdownData={{
                         allGenderList,
                         allMaritalStatus,
-                        allLeaveTypes
+                        allLeaveTypes,
+                        allEntitlementEvents
                       }}
+                      allLeaveTypeMap={allLeaveTypeMap}
                       handleDelete={deleteTableRow}
                     />
                   </div>

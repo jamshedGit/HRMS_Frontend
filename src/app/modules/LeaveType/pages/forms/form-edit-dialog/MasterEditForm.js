@@ -9,6 +9,10 @@ import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect"
 
 //Validation for Form
 const formValidation = Yup.object().shape({
+  subsidiaryId: Yup.array()
+  .of(Yup.string().required(VALIDATION_MESSAGES.required))
+  .required(VALIDATION_MESSAGES.required)
+  .min(1, "At least one subsidiary ID is required"),
   type: Yup.number().required(VALIDATION_MESSAGES.required),
   name: Yup.string().required(VALIDATION_MESSAGES.required),
   code: Yup.string().required(VALIDATION_MESSAGES.required).matches(/^[A-Za-z]{1,3}$/, 'Code must contain only letters (A-Z)'),
@@ -70,28 +74,27 @@ export function MasterEditForm({
                   <div className="from-group row">
 
                     <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="subsidiaryId"
-                        component={SearchSelect}
-                        className={errors?.subsidiaryId && touched?.subsidiaryId ? 'form-control is-invalid' : 'form-control'}
-                        onBlur={handleBlur}
-                        onChange={(e) => {
-                          const value = e.value == '--Select--' ? '' : Number(e.value)
-                          setFieldValue('subsidiaryId', value)
-                        }}
-                        label={
-                          <span>
-                            {" "}
-                            Employee<span style={{ color: "red" }}>*</span>
-                          </span>
-                        }
-                        value={allSubsidiaryMap?.get(values?.subsidiaryId || '') || ''}
-                        autoComplete="off"
-                        options={allSubsidiaryList}
-                      />
-                      {
-                        errors.subsidiaryId && touched.subsidiaryId && <CustomErrorLabel touched={true} error={errors.subsidiaryId} />
-                      }
+                      Subsidiary
+                      <div style={{ backgroundColor: "#ffffff", height: "170px", padding: "10px", overflow: "scroll" }}>
+
+                        <div className="multi-select">
+                          <div className="dropdown-label"></div>
+                          <div className="dropdown-options" style={{ fontSize: "12px", fontWeight: "bold", padding: "5px" }}>
+                            {allSubsidiaryList.map((option) => (
+                              <div key={option.value} className="dropdown-option">
+                                <input style={{ width: "25px" }}
+                                  name="subsidiaryId"
+                                  type="checkbox"
+                                  value={option.value}
+                                  checked={Boolean(values?.subsidiaryId?.includes(option?.value?.toString()))}
+                                  onChange={handleChange}
+                                />
+                                {option.label}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
