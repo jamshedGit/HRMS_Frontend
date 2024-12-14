@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
 import { isEqual, isFunction } from "lodash";
 import { initialFilter } from "./FormUIHelpers";
+import { object } from "prop-types";
 
 const FormUIContext = createContext();
 
@@ -18,7 +19,7 @@ export function FormUIProvider({ FormUIEvents, children }) {
   const [queryParams, setQueryParamsBase] = useState(initialFilter);
   const [ids, setIds] = useState([]);
     const [fetchSubsidiaryId,setFetchSubsidiaryId]=useState(null)
-    const [fetchTaxSetupId,setFetchTaxSetupId]=useState(null)
+    const [fetchTaxSetupId,setFetchTaxSetupId]=useState({})
   
   const setQueryParams = useCallback((nextQueryParams) => {
     setQueryParamsBase((prevQueryParams) => {

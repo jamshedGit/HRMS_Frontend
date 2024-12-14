@@ -76,7 +76,7 @@ export function FormEditForm({
   
     
     const { taxYearSetup,  } = currentState;
-console.log("fetchgetAllTaxYearSetup111",taxYearSetup)
+
 
   return (
     <Formik
@@ -94,7 +94,7 @@ console.log("fetchgetAllTaxYearSetup111",taxYearSetup)
       onSubmit={(values) => {
 
         enableLoading();
-        saveForm(values,taxYearSetup);
+        saveForm(values);
       }}
     >
       {({ handleSubmit,errors,touched, values, setFieldValue }) => (
@@ -109,65 +109,7 @@ console.log("fetchgetAllTaxYearSetup111",taxYearSetup)
               <fieldset disabled={isUserForRead}>
                 <div className="form-group row">
 
-                  <div className="col-12 col-md-6 mt-3">
-                    <SearchSelect
-                      name="subsidiaryId"
-                      label={
-                        <span>
-                          Subsidiary<span style={{ color: "red" }}>*</span>
-                        </span>
-                      }
-                      isDisabled={isUserForRead}
-                      onChange={(e) => {
-                        setFieldValue("subsidiaryId", e.value || null);
-                    
-                      }}
-                      value={
-                        dashboard?.allSubsidiaryList?.find(
-                          (option) => option?.value === values?.subsidiaryId
-                        ) || null
-                      }
-                      options={dashboard?.allSubsidiaryList}
-                      // options={dashboard.allAccountList.map((option) => ({
-                      //   label: `${option.mergeLabel}`, // Adding the value to the label
-                      //   value: option.value,
-                      // }))}
 
-
-                      error={errors.subsidiaryId}
-                      touched={touched.subsidiaryId}
-                    />
-                  </div>
-
-                  {/* <div className="col-12 col-md-6 mt-3">
-                    <SearchSelect
-                      name="taxSetupId"
-                      label={
-                        <span>
-                          Tax Year Setup<span style={{ color: "red" }}>*</span>
-                        </span>
-                      }
-                      isDisabled={isUserForRead}
-                      onChange={(e) => {
-                        setFieldValue("taxSetupId", e.value || null);
-                    
-                      }}
-                      value={
-                        taxYearSetup?.find(
-                          (option) => option?.subsidiaryId === values?.subsidiaryId
-                        ) || null
-                      }
-                      options={taxYearSetup}
-                      // options={dashboard.allAccountList.map((option) => ({
-                      //   label: `${option.mergeLabel}`, // Adding the value to the label
-                      //   value: option.value,
-                      // }))}
-
-
-                      error={errors.taxSetupId}
-                      touched={touched.taxSetupId}
-                    />
-                  </div> */}
 
 
                   <div className="col-12 col-md-4 mt-3">

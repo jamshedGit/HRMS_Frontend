@@ -17,16 +17,18 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   const FormUIContext = useFormUIContext();
 
 
-  const usersUIProps = useMemo(() => {
-    return {
-      queryParams: FormUIContext.queryParams,
-    };
-  }, [FormUIContext]);
+  // const usersUIProps = useMemo(() => {
+  //   return {
+  //     queryParams: FormUIContext.queryParams,
+  //   };
+  // }, [FormUIContext]);
 
   const formUIProps = useMemo(() => {
     return {
       initUser: FormUIContext.initUser,
       queryParams: FormUIContext.queryParams,
+      fetchSubsidiaryId: FormUIContext.fetchSubsidiaryId,
+      fetchTaxSetupId: FormUIContext.fetchTaxSetupId,
     };
   }, [FormUIContext]);
 
@@ -67,19 +69,18 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   }, [id, dispatch]);
 
 
-  const saveForm = async (user, taxYearSetup) => {
+  const saveForm = async (user) => {
+   
 
-    let updateTaxSetupYear = taxYearSetup?.find(
-      (option) => option?.subsidiaryId == user?.subsidiaryId
-    )
-    user.taxSetupId = updateTaxSetupYear.Id
     if (!id) {
 
-
+      user.subsidiaryId = formUIProps?.fetchSubsidiaryId
+      user.taxSetupId = (formUIProps?.fetchTaxSetupId?.isActive) ? formUIProps?.fetchTaxSetupId?.value : null
+  
       const finalObject = { user }
-      dispatch(actions.createIncomeTaxSlab(user, disbaleLoading, onHide));
+      await dispatch(actions.createIncomeTaxSlab(user, disbaleLoading, onHide));
 
-
+      await dispatch(actions?.fetchIncomeTaxSlabs(formUIProps?.queryParams));
 
     } else {
 
@@ -87,19 +88,19 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
 
 
       const formUpdatedFields = {
-        Id: user.Id,
-        from_amount: user.from_amount,
-        to_amount: user.to_amount,
-        percentage: user.percentage,
-        fixed_amount: user.fixed_amount,
-        subsidiaryId: user.subsidiaryId,
-        taxSetupId: user.taxSetupId
+        Id: user?.Id,
+        from_amount: user?.from_amount,
+        to_amount: user?.to_amount,
+        percentage: user?.percentage,
+        fixed_amount: user?.fixed_amount,
+        subsidiaryId: user?.subsidiaryId,
+        taxSetupId: user?.taxSetupId
       };
 
 
 
-      await dispatch(actions.updateIncomeTaxSlab(formUpdatedFields, disbaleLoading, onHide));
-      await dispatch(actions.fetchIncomeTaxSlabs(usersUIProps.queryParams));
+      await dispatch(actions?.updateIncomeTaxSlab(formUpdatedFields, disbaleLoading, onHide));
+      await dispatch(actions?.fetchIncomeTaxSlabs(formUIProps?.queryParams));
 
     }
   };

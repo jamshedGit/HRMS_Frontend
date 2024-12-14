@@ -7,7 +7,7 @@ const { actions } = tax_slabSlice;
 
 export const fetchIncomeTaxSlabs = (queryparm) => async (dispatch) => {
 
-  console.log("queryparm111",queryparm)
+
   return requestFromServer.getAllIncomeTaxSlab(queryparm)
    
     .then((response) => {

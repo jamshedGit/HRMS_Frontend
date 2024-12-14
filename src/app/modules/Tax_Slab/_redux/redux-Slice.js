@@ -71,6 +71,7 @@ export const tax_slabSlice = createSlice({
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);
+            state.totalCount +=1
         },
         incomeTaxSlabUpdated: (state, action) => {
             state.error = null;

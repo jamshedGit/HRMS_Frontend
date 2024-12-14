@@ -2,30 +2,18 @@ import React, { useEffect } from "react";
 import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import { Select } from "../../../../../../_metronic/_partials/controls";
-import { useDispatch, useSelector, shallowEqual } from "react-redux"
-import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
-import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLabel";
-import CurrentModuleName from "../../../../../utils/common-modules/ModuleName";
-import { Card, CardHeader } from "@material-ui/core";
+
+import { useDispatch, useSelector } from "react-redux"
 import { fetchAllSubsidiaryData } from "../../../../../../_metronic/redux/dashboardActions";
 import * as actions from "../../../_redux/redux-Actions";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 export function SelectTaxSetup({
     actionsLoading,
-    fetchSubsidiaryId,
     setFetchSubsidiaryId,
-    fetchTaxSetupId,
+
     setFetchTaxSetupId,
 }) {
 
-    //Get all Employee list from dashboard global state
-    const { allEmployees } = useSelector(
-        (state) => ({
-            allEmployees: state.dashboard.allEmployees
-        }),
-        shallowEqual
-    )
     const dispatch = useDispatch();
     const { dashboard } = useSelector((state) => state);
 
@@ -37,7 +25,7 @@ export function SelectTaxSetup({
     }, [dispatch]);
 
 
-    const { currentState, userAccess } = useSelector(
+    const { currentState, } = useSelector(
         (state) => {
             return {
 
@@ -50,7 +38,9 @@ export function SelectTaxSetup({
 
 
     const { taxYearSetup, } = currentState;
-    console.log("taxYearSetup", taxYearSetup)
+
+
+
     return (
         <>
             {/* Formik Starts */}
@@ -91,18 +81,13 @@ export function SelectTaxSetup({
                                             onChange={(e) => {
                                                 setFieldValue("subsidiaryId", e.value || null);
                                                 setFetchSubsidiaryId(e.value)
+                                                setFetchTaxSetupId(null)
+                                                setFieldValue("taxSetupId",null);
+
 
                                             }}
-                                            //    value={
-                                            //      dashboard?.allSubsidiaryList?.find(
-                                            //        (option) => option?.value === values?.subsidiaryId
-                                            //      ) || null
-                                            //    }
+
                                             options={dashboard?.allSubsidiaryList}
-                                            // options={dashboard.allAccountList.map((option) => ({
-                                            //   label: `${option.mergeLabel}`, // Adding the value to the label
-                                            //   value: option.value,
-                                            // }))}
 
 
                                             error={errors.subsidiaryId}
@@ -120,22 +105,26 @@ export function SelectTaxSetup({
                                             }
                                             isDisabled={!values.subsidiaryId}
                                             onChange={(e) => {
+
                                                 setFieldValue("taxSetupId", e.value || null);
-                                                setFetchTaxSetupId(e.value)
+
+                                                setFetchTaxSetupId(e)
+
                                             }}
 
-                                            // value={
-                                            //     taxYearSetup?.find(
-                                            //         (option) => option?.subsidiaryId === values?.subsidiaryId
-                                            //     ) || null
-                                            // }
-                                            // options={taxYearSetup}
+                                    
+                                            // options={taxYearSetup
+                                            //     ?.filter(option => option?.subsidiaryId === values?.subsidiaryId) // Filtering by subsidiaryId
+                                            //     .map(option => ({
+                                            //         label: `${option?.startDate} - ${option?.endDate} ${option?.isActive ? "Active" : ""}`, // Adding Active status
+                                            //         value: option?.Id, // Use Id as the value
+                                            //         isActive: option?.isActive,
+                                            //     })) || []}
+
+
                                             options={taxYearSetup
                                                 ?.filter(option => option?.subsidiaryId === values?.subsidiaryId) // Filtering by subsidiaryId
-                                                .map(option => ({
-                                                    label: `${option?.startDate} - ${option?.endDate} ${option?.isActive ? "Active" : ""}`, // Adding Active status
-                                                    value: option?.Id, // Use Id as the value
-                                                })) || []}
+                                            }
 
 
                                             error={errors.taxSetupId}

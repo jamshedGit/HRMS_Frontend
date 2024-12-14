@@ -13,7 +13,7 @@ import { useSelector, shallowEqual } from "react-redux"
 import CurrentModuleName from "../../../../../utils/common-modules/ModuleName"
 import { SelectTaxSetup } from "./Select-tax-setup"
 
-export function FormCard(fetchSubsidiaryId,fetchTaxSetupId) {
+export function FormCard(fetchSubsidiaryId, fetchTaxSetupId) {
 
   const FormUIContext = useFormUIContext()
 
@@ -21,6 +21,10 @@ export function FormCard(fetchSubsidiaryId,fetchTaxSetupId) {
     return {
       newFormButtonClick: FormUIContext.newFormButtonClick,
       openEditFormDialog: FormUIContext.openEditFormDialog,
+      fetchTaxSetupId: FormUIContext?.fetchTaxSetupId,
+      fetchSubsidiaryId: FormUIContext?.fetchSubsidiaryId,
+      setFetchSubsidiaryId: FormUIContext?.setFetchSubsidiaryId,
+      setFetchTaxSetupId: FormUIContext?.setFetchTaxSetupId,
     }
   }, [FormUIContext])
 
@@ -49,26 +53,13 @@ export function FormCard(fetchSubsidiaryId,fetchTaxSetupId) {
   );
 
 
-
-  const { entities } = currentState;
-
-
-  
-    const fetchTaxSlabProps = useMemo(() => {
-      return {
-        fetchSubsidiaryId: FormUIContext?.fetchSubsidiaryId,
-        fetchTaxSetupId: FormUIContext?.fetchTaxSetupId,
-        setFetchSubsidiaryId: FormUIContext?.setFetchSubsidiaryId,
-        setFetchTaxSetupId: FormUIContext?.setFetchTaxSetupId,
-      };
-    }, [FormUIContext]);
   return (
     <>
 
 
       <Card>
         <CardHeader title={CurrentModuleName()} >
-            
+
           <div className="d-flex justify-content-between align-items-center gap-3 m-4">
 
             {/* <div className="pt-5">
@@ -76,14 +67,25 @@ export function FormCard(fetchSubsidiaryId,fetchTaxSetupId) {
             </div> */}
             <div className=" p-2">
               <CardHeaderToolbar>
+                {FormUIProps?.fetchTaxSetupId?.isActive ? (
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={FormUIProps.newFormButtonClick}
+                  >
+                    + Add Income Tax Slab
+                  </button>
+                ) : null}
 
-                <button
+
+
+                {/* <button
                   type="button"
                   className="btn btn-primary "
                   onClick={FormUIProps.newFormButtonClick}
                 >
-                  + Add Tax Slab
-                </button>
+                  + Add Income Tax Slab
+                </button> */}
 
 
               </CardHeaderToolbar>
@@ -91,15 +93,15 @@ export function FormCard(fetchSubsidiaryId,fetchTaxSetupId) {
 
           </div>
         </CardHeader>
-        <SelectTaxSetup 
-          
-                
-          setFetchSubsidiaryId={fetchTaxSlabProps?.setFetchSubsidiaryId}
-         
-          setFetchTaxSetupId={fetchTaxSlabProps?.setFetchTaxSetupId}
-        
-          />
-          {console.log("fetchSubsidiaryId111", FormUIContext?.fetchSubsidiaryId,FormUIContext?.fetchTaxSetupId,)}
+        <SelectTaxSetup
+
+
+          setFetchSubsidiaryId={FormUIProps?.setFetchSubsidiaryId}
+
+          setFetchTaxSetupId={FormUIProps?.setFetchTaxSetupId}
+
+        />
+       
 
         {/* <CardBody>
 
@@ -107,15 +109,15 @@ export function FormCard(fetchSubsidiaryId,fetchTaxSetupId) {
           <FormTable />
         </CardBody> */}
 
-{
-  FormUIContext?.fetchSubsidiaryId && FormUIContext?.fetchTaxSetupId ? (
-    <CardBody>
-      <FormTable />
-    </CardBody>
-  ) : (
-   <></>
-  )
-}
+        {
+          FormUIContext?.fetchSubsidiaryId && FormUIContext?.fetchTaxSetupId ? (
+            <CardBody>
+              <FormTable />
+            </CardBody>
+          ) : (
+            <></>
+          )
+        }
 
       </Card>
     </>
