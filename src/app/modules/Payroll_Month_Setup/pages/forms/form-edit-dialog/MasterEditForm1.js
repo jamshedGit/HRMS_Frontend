@@ -166,13 +166,13 @@ export function MasterEditForm({
       // else
       //   month = getmonth + 1;
 
-//uncmment
+      //uncmment
 
       setDefaulMonth(getmonth)
       setFieldValue("month", getmonth);
 
-   
- 
+
+
 
       setDefaultYear(setDaysInDate.getFullYear());
       setFieldValue("year", setDaysInDate.getFullYear());
@@ -183,7 +183,7 @@ export function MasterEditForm({
 
       setFieldValue("shortFormat", t);
       const daysDiff = getDateDiffInDays(get_startDate, setDaysInDate)
-console.log("testdaysDiff1",daysDiff)
+      console.log("testdaysDiff1", daysDiff)
       setDefaultDays(daysDiff);
       setFieldValue("month_days", daysDiff);
 
@@ -266,9 +266,9 @@ console.log("testdaysDiff1",daysDiff)
   }, []);
 
   useEffect(() => {
-    console.log("testdaysDiff3",getDateDiffInDays(defstartDate, defendDate))
+    console.log("testdaysDiff3", getDateDiffInDays(defstartDate, defendDate))
     setDefaultDays(getDateDiffInDays(defstartDate, defendDate))
-  
+
   }, [defstartDate, defendDate]);
 
   useEffect(() => {
@@ -328,12 +328,12 @@ console.log("testdaysDiff1",daysDiff)
       <Formik
         enableReinitialize={true}
         initialValues={user}
-      
+
         validationSchema={formValidation}
         onSubmit={(values) => {
 
           enableLoading();
-          SavePayrollMonthSetup(values,defDays);
+          SavePayrollMonthSetup(values, defDays);
         }}
       >
         {({
@@ -425,7 +425,7 @@ console.log("testdaysDiff1",daysDiff)
 
                           setFieldValue("month", e.target.value);
                           setDefaulMonth(e.target.value);
-let short=(e.target.value > 9 ? e.target.value + "" + shortFormatGlobal : +"0" + e.target.value + "" + shortFormatGlobal)
+                          let short = (e.target.value > 9 ? e.target.value + "" + shortFormatGlobal : +"0" + e.target.value + "" + shortFormatGlobal)
                           setDefaulShortFormat(short)
                           handleMonthChange(e.target.value);
                           setFieldValue("shortFormat", short);
@@ -611,9 +611,9 @@ let short=(e.target.value > 9 ? e.target.value + "" + shortFormatGlobal : +"0" +
                           setFieldValue("endDate", endDate);
                           setDefaultEndDate(endDate);
                           setDefaultDays()
-                          console.log("month_days111",defDays)
+                          console.log("month_days111", defDays)
                           setFieldValue("month_days", getDateDiffInDays(values.startDate, values.endDate));
-                          console.log("month_days111",values.startDate, defendDate)
+                          console.log("month_days111", values.startDate, defendDate)
                         }}
 
                         timeInputLabel="Time:"

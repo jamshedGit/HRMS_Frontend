@@ -5,7 +5,7 @@ export const USERS_URL = process.env.REACT_APP_API_URL;
 //Create user
 export function createPayrollMonthSetup(body) {
   
-
+console.log("body111",body)
   return axios.post(`${USERS_URL}/payroll_month/create-payroll-month`, body);
   
 }

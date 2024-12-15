@@ -18,18 +18,27 @@ import {
 import DatePicker from "react-datepicker";
 import axios from "axios";
 import { USERS_URL } from "../../../_redux/formCrud";
-import { amountLimit, amountLimitDynamic, formatDates, formatDatesGlobal, getDateDiffInDays } from "../../../../../utils/common";
-import { addMonths, getMonth } from "date-fns";
-// Phone Number Regex
-const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
-// CNIC Regex
-const cnicRegExp = /^[0-9]{5}-[0-9]{7}-[0-9]$/;
-// Password Regex
-const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+import { getDateDiffInDays } from "../../../../../utils/common";;
 // Validation schema
 const formValidation = Yup.object().shape(
   {
     subsidiaryId: Yup.mixed()
+      .nullable().
+      required("Required*"),
+
+      month: Yup.number()
+      .nullable().
+      required("Required*"),
+
+      month_days: Yup.number()
+      .nullable().
+      required("Required*"),
+
+      year: Yup.number()
+      .nullable().
+      required("Required*"),
+
+      shortFormat: Yup.number()
       .nullable().
       required("Required*"),
 
@@ -61,20 +70,12 @@ export function MasterEditForm({
   const dispatch = useDispatch();
   const { dashboard } = useSelector((state) => state);
 
-
-
-
-
-
-
   // Get User Details
   const { auth } = useSelector((state) => state);
-
-
-
-
-
-
+  const [defstartDate, setDefaultStartDate] = useState(null);
+  const [defendDate, setDefaultEndDate] = useState(null);
+  const [responseData, setResponseData] = useState(null);
+  const [flag, setFlag] = useState(false)
   useEffect(() => {
 
     if (!user.Id) {
@@ -84,31 +85,87 @@ export function MasterEditForm({
 
 
 
-
-
-
-
-
-  const [flag, setFlag] = useState(false)
   const getActivePreviousPayrollMonth = async (subsidiaryId, setFieldValue) => {
+    try {
+      const response = await axios.post(`${USERS_URL}/payroll_month/get-payroll-month-previous-date`, { subsidiaryId: subsidiaryId });
 
-    const response = await axios.post(`${USERS_URL}/payroll_month/get-payroll-month-previous-date`, { subsidiaryId: subsidiaryId });
+      if (response?.data?.data) {
+        setResponseData(response?.data?.data)
+        setFlag(true)
+
+        const month = response?.data?.data?.month && response?.data?.data?.month === 12 ? 1 : response?.data?.data?.month + 1;
+        const year = response?.data?.data?.year  && response?.data?.data?.month === 12 ? response?.data?.data?.year +1 : response?.data?.data?.year;
+
+        setFieldValue(
+          "month",month
+          
+        );
+        setFieldValue(
+          "year",year
+          
+        );
+        
+        // const formattedMonth = month && month < 10 ? `0${month}` : `${month}`;
+        // const formattedYear = year && year.toString().slice(-2); // Extract last 2 digits of the year
+
+        // const shortFormat = `${formattedMonth}${formattedYear}`;
+        setShortDormat(month,year,setFieldValue)
 
 
+        // setFieldValue("shortFormat", shortformat);
+        console.log("nextStartDate")
 
-
-
-
-    // const t = formatDates(get_startDate, 'MMyy')
-
-
-
-
+        const nextStartDate = new Date(response?.data?.data?.endDate);
+   
+       let date=new Date(nextStartDate.setDate(nextStartDate.getDate() + 1))
+        // setDefaultStartDate(date);
+        setFieldValue("startDate",date)
+        setEndDate(date,setFieldValue)
+     
+      }
+    } catch (error) {
+      setFlag(false)
+     
+      setFieldValue("month", "-1")
+      setFieldValue("year", "")
+      setFieldValue("shortFormat", "")
+      setFieldValue("startDate","")
+      setFieldValue("endDate","")
+      setFieldValue("month_days","")
+    }
 
   }
 
+const setEndDate =(date,setFieldValue)=>{
+  setDefaultStartDate(date);
+
+  const endDate = new Date(date);
+  endDate.setMonth(endDate.getMonth() + 1); // Add one year (365 or 366 days will be calculated automatically)
+
+  endDate.setDate(endDate.getDate() - 1);
+  setFieldValue("endDate", endDate);
+  setDefaultEndDate(endDate);
+ 
+  setFieldValue("month_days", getDateDiffInDays(date,endDate));
+
+}
+
+const setShortDormat=(month,year,setFieldValue)=>{
+  const formattedMonth = month && month < 10 ? `0${month}` : `${month}`;
+  const formattedYear = year && year.toString().slice(-2); // Extract last 2 digits of the year
+
+  const shortFormat = `${formattedMonth}${formattedYear}`;
 
 
+  setFieldValue("shortFormat", shortFormat);
+}
+
+  // useEffect(() => {
+  //   if (user.Id) {
+  //     setDefaultStartDate(new Date(user.startDate));  // Convert startDate from string to Date
+  //     setDefaultEndDate(new Date(user.endDate));      // Convert endDate from string to Date
+  //   }
+  // }, [user]);
 
   const monthOptions = [
     { value: "-1", label: "Select..." },
@@ -134,8 +191,9 @@ export function MasterEditForm({
 
         validationSchema={formValidation}
         onSubmit={(values) => {
-
-          enableLoading();
+          console.log('values in onSubmit:', values);
+          // enableLoading();
+          SavePayrollMonthSetup(values);
 
         }}
       >
@@ -151,7 +209,7 @@ export function MasterEditForm({
         }) => (
 
           <>
-            {console.log("values111", values)}
+
             <Modal.Body className="overlay overlay-block cursor-default">
               {actionsLoading && (
                 <div className="overlay-layer bg-transparent">
@@ -203,14 +261,15 @@ export function MasterEditForm({
                             <span style={{ color: "red" }}>*</span>
                           </span>
                         }
-                        // isDisabled={isEdit}
+
+                        isDisabled={isUserForRead || flag}
                         onChange={(e) => {
                           setFieldValue("month", e.value || null);
 
                         }}
                         value={
                           monthOptions?.find(
-                            (option) => option.value === values.month
+                            (option) => option.value == values.month
                           ) || null
                         }
                         options={monthOptions}
@@ -234,12 +293,14 @@ export function MasterEditForm({
                         name="year"
                         component={Input}
                         placeholder="Enter year"
-
+                        disabled={isUserForRead || flag}
                         type="number"
                         min="1000"  // Minimum 4-digit year (e.g., 1000)
                         max="9999"  // Maximum 4-digit year (e.g., 9999)
                         maxLength="4"  // Limit to 4 digits
                         onInput={(e) => e.target.value = e.target.value.slice(0, 4)} // Ensure user can't type more than 4 digits
+
+
 
                       />
                     </div>
@@ -268,10 +329,12 @@ export function MasterEditForm({
 
                     </div>
                   </div>
-                  {/* <div className="from-group row">
+                  <div className="from-group row">
 
 
-   <div className="col-12 col-md-4 mt-3">
+
+
+  <div className="col-12 col-md-4 mt-3">
 
                       <span> Start Date<span style={{ color: 'red' }}>*</span></span>
                       <DatePicker
@@ -280,26 +343,31 @@ export function MasterEditForm({
                         selected={defstartDate}
                         onChange={(date) => {
                           setFieldValue("startDate", date);
-                          setDefaultStartDate(date);
+                          setEndDate(date,setFieldValue)
+                          // setDefaultStartDate(date);
 
-                                   // Add 365 days (considering leap years automatically)
-                                   const endDate = new Date(date);
-                                   endDate.setFullYear(endDate.getFullYear() + 1); // Add one year (365 or 366 days will be calculated automatically)
-         
-                                   // Set the calculated end date
-                                   endDate.setDate(endDate.getDate() - 1);
-                                   setFieldValue("endDate", endDate);
-                                   setDefaultEndDate(endDate);
+                          // // Add 365 days (considering leap years automatically)
+                          // const endDate = new Date(date);
+                          // endDate.setMonth(endDate.getMonth() + 1); // Add one year (365 or 366 days will be calculated automatically)
+
+                          // // Set the calculated end date
+                          // endDate.setDate(endDate.getDate() - 1);
+                          // setFieldValue("endDate", endDate);
+                          // setDefaultEndDate(endDate);
+                          // // setDefaultDays()
+                          // // console.log("month_days111", defDays)
+                          // setFieldValue("month_days", getDateDiffInDays(values.startDate, values.endDate));
+                          // console.log("month_days111", values.startDate, defendDate)
                         }}
-                      
+
                         timeInputLabel="Time:"
                         dateFormat="dd/MM/yyyy"
                         showTimeInput
                         name="startDate"
-                        disabled={isUserForRead}
+                        disabled={isUserForRead || flag}
                         autoComplete="off"
                       />
-                    <ErrorMessage className="form-feedBack" name="startDate" component="div" />
+                      <ErrorMessage className="form-feedBack" name="startDate" component="div" />
                     </div>
 
                     <div className="col-12 col-md-4 mt-3">
@@ -313,6 +381,7 @@ export function MasterEditForm({
                           setDefaultEndDate(date);
                         }}
 
+
                         timeInputLabel="Time:"
                         dateFormat="dd/MM/yyyy"
                         showTimeInput
@@ -321,14 +390,11 @@ export function MasterEditForm({
                         autoComplete="off"
                       // value = {values.dateOfJoining}
                       />
-                     <ErrorMessage className="form-feedBack" name="endDate" component="div" />
+                      <ErrorMessage className="form-feedBack" name="endDate" component="div" />
                     </div>
-                   
 
 
-
-
-                  </div> */}
+                  </div>
 
                   <div className="from-group row">
                     <div className="col-12 col-md-4 mt-3">
