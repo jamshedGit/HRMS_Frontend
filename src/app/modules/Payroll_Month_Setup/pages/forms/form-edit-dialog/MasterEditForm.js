@@ -26,19 +26,19 @@ const formValidation = Yup.object().shape(
       .nullable().
       required("Required*"),
 
-      month: Yup.number()
+    month: Yup.number()
       .nullable().
       required("Required*"),
 
-      month_days: Yup.number()
+    month_days: Yup.number()
       .nullable().
       required("Required*"),
 
-      year: Yup.number()
+    year: Yup.number()
       .nullable().
       required("Required*"),
 
-      shortFormat: Yup.number()
+    shortFormat: Yup.number()
       .nullable().
       required("Required*"),
 
@@ -94,78 +94,73 @@ export function MasterEditForm({
         setFlag(true)
 
         const month = response?.data?.data?.month && response?.data?.data?.month === 12 ? 1 : response?.data?.data?.month + 1;
-        const year = response?.data?.data?.year  && response?.data?.data?.month === 12 ? response?.data?.data?.year +1 : response?.data?.data?.year;
+        const year = response?.data?.data?.year && response?.data?.data?.month === 12 ? response?.data?.data?.year + 1 : response?.data?.data?.year;
 
         setFieldValue(
-          "month",month
-          
+          "month", month
+
         );
         setFieldValue(
-          "year",year
-          
+          "year", year
+
         );
-        
+
         // const formattedMonth = month && month < 10 ? `0${month}` : `${month}`;
         // const formattedYear = year && year.toString().slice(-2); // Extract last 2 digits of the year
 
         // const shortFormat = `${formattedMonth}${formattedYear}`;
-        setShortDormat(month,year,setFieldValue)
+        setShortDormat(month, year, setFieldValue)
 
 
         // setFieldValue("shortFormat", shortformat);
         console.log("nextStartDate")
 
         const nextStartDate = new Date(response?.data?.data?.endDate);
-   
-       let date=new Date(nextStartDate.setDate(nextStartDate.getDate() + 1))
+
+        let date = new Date(nextStartDate.setDate(nextStartDate.getDate() + 1))
         // setDefaultStartDate(date);
-        setFieldValue("startDate",date)
-        setEndDate(date,setFieldValue)
-     
+        setFieldValue("startDate", date)
+        setEndDate(date, setFieldValue)
+
       }
     } catch (error) {
       setFlag(false)
-     
+
       setFieldValue("month", "-1")
       setFieldValue("year", "")
       setFieldValue("shortFormat", "")
-      setFieldValue("startDate","")
-      setFieldValue("endDate","")
-      setFieldValue("month_days","")
+      setFieldValue("startDate", "")
+      setFieldValue("endDate", "")
+      setFieldValue("month_days", "")
     }
 
   }
 
-const setEndDate =(date,setFieldValue)=>{
-  setDefaultStartDate(date);
+  const setEndDate = (date, setFieldValue) => {
+    setDefaultStartDate(date);
 
-  const endDate = new Date(date);
-  endDate.setMonth(endDate.getMonth() + 1); // Add one year (365 or 366 days will be calculated automatically)
+    const endDate = new Date(date);
+    endDate.setMonth(endDate.getMonth() + 1); // Add one year (365 or 366 days will be calculated automatically)
 
-  endDate.setDate(endDate.getDate() - 1);
-  setFieldValue("endDate", endDate);
-  setDefaultEndDate(endDate);
- 
-  setFieldValue("month_days", getDateDiffInDays(date,endDate));
+    endDate.setDate(endDate.getDate() - 1);
+    setFieldValue("endDate", endDate);
+    setDefaultEndDate(endDate);
 
-}
+    setFieldValue("month_days", getDateDiffInDays(date, endDate));
 
-const setShortDormat=(month,year,setFieldValue)=>{
-  const formattedMonth = month && month < 10 ? `0${month}` : `${month}`;
-  const formattedYear = year && year.toString().slice(-2); // Extract last 2 digits of the year
+  }
 
-  const shortFormat = `${formattedMonth}${formattedYear}`;
+  const setShortDormat = (month, year, setFieldValue) => {
+    const formattedMonth = month && month < 10 ? `0${month}` : `${month}`;
+    const formattedYear = year && year.toString().slice(-2); // Extract last 2 digits of the year
+
+    const shortFormat = `${formattedMonth}${formattedYear}`;
 
 
-  setFieldValue("shortFormat", shortFormat);
-}
+    setFieldValue("shortFormat", shortFormat);
+  }
 
-  // useEffect(() => {
-  //   if (user.Id) {
-  //     setDefaultStartDate(new Date(user.startDate));  // Convert startDate from string to Date
-  //     setDefaultEndDate(new Date(user.endDate));      // Convert endDate from string to Date
-  //   }
-  // }, [user]);
+
 
   const monthOptions = [
     { value: "-1", label: "Select..." },
@@ -334,7 +329,7 @@ const setShortDormat=(month,year,setFieldValue)=>{
 
 
 
-  <div className="col-12 col-md-4 mt-3">
+                    <div className="col-12 col-md-4 mt-3">
 
                       <span> Start Date<span style={{ color: 'red' }}>*</span></span>
                       <DatePicker
@@ -343,7 +338,7 @@ const setShortDormat=(month,year,setFieldValue)=>{
                         selected={defstartDate}
                         onChange={(date) => {
                           setFieldValue("startDate", date);
-                          setEndDate(date,setFieldValue)
+                          setEndDate(date, setFieldValue)
                           // setDefaultStartDate(date);
 
                           // // Add 365 days (considering leap years automatically)
