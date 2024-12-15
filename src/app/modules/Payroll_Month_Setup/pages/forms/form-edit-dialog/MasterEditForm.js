@@ -110,7 +110,7 @@ export function MasterEditForm({
 
 
 
-  const basisOptions = [
+  const monthOptions = [
     { value: "-1", label: "Select..." },
     { value: "1", label: "Jan" },
     { value: "2", label: "Feb" },
@@ -136,7 +136,7 @@ export function MasterEditForm({
         onSubmit={(values) => {
 
           enableLoading();
-   
+
         }}
       >
         {({
@@ -175,10 +175,7 @@ export function MasterEditForm({
                         onChange={(e) => {
                           setFieldValue("subsidiaryId", e.value || null);
                           getActivePreviousPayrollMonth(e.value, setFieldValue);
-                   
-                         
-                 
-                    
+
 
                         }}
                         value={
@@ -191,73 +188,40 @@ export function MasterEditForm({
                         touched={touched.subsidiaryId}
                       />
                     </div>
+
                   </div>
+
+
                   <div className="from-group row">
+
                     <div className="col-12 col-md-4 mt-3">
-                      <span> Month<span style={{ color: 'red' }}>*</span></span>
-                      <select className="form-control"
+                      <SearchSelect
                         name="month"
-                        disabled={flag}
-                   
-                        onChange={(e) => {
-
-                          setFieldValue("month", e.target.value);
-               
-              
-            
-
-                        }}>
-                        <option value="-1" label="Select..." />
-                        <option value="1" label="Jan" />
-                        <option value="2" label="Feb" />
-                        <option value="3" label="Mar" />
-                        <option value="4" label="Apr" />
-                        <option value="5" label="May" />
-                        <option value="6" label="Jun" />
-                        <option value="7" label="Jul" />
-                        <option value="8" label="Aug" />
-                        <option value="9" label="Sept" />
-                        <option value="10" label="Oct" />
-                        <option value="11" label="Nov" />
-                        <option value="12" label="Dec" />
-                      </select>
-                      {/* <Select
-                        label={<span> Month<span style={{ color: 'red' }}>*</span></span>}
-                        name="month"
-               
-                        
+                        label={
+                          <span>
+                            Select Month
+                            <span style={{ color: "red" }}>*</span>
+                          </span>
+                        }
+                        // isDisabled={isEdit}
                         onChange={(e) => {
                           setFieldValue("month", e.value || null);
-            
-                          handleChanged(e,setFieldValue)
-                        }}
-                        onBlur={handleBlur}
-                        style={{ display: "block" }}
-                        autoComplete="off"
-                      >
-                        
-                      </Select> */}
-                    </div>
-                  </div>
-                  <div className="from-group row">
-                    {/* <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="year"
-                        disabled={flag}
-                        component={Input}
-                        // onChange={handleChange}
-                        placeholder="Enter Year"
-                        label="Year"
-                        // value={defYear}
-                        // autoComplete="off"
-                        onChange={(year) => {
-                          setFieldValue("year", year);
-                       
 
                         }}
-       
+                        value={
+                          monthOptions?.find(
+                            (option) => option.value === values.month
+                          ) || null
+                        }
+                        options={monthOptions}
+                        error={errors.month}
+                        touched={touched.month}
                       />
-                    </div> */}
+                    </div>
+
+                  </div>
+                  <div className="from-group row">
+
 
 
 
@@ -270,31 +234,19 @@ export function MasterEditForm({
                         name="year"
                         component={Input}
                         placeholder="Enter year"
-                        // label="To Amount"
-                        type="number"
 
-                        onInput={(e) => {
-                          e.target.value = amountLimitDynamic(e.target.value, 4); // Limit to 3 digits
-                        }}
+                        type="number"
+                        min="1000"  // Minimum 4-digit year (e.g., 1000)
+                        max="9999"  // Maximum 4-digit year (e.g., 9999)
+                        maxLength="4"  // Limit to 4 digits
+                        onInput={(e) => e.target.value = e.target.value.slice(0, 4)} // Ensure user can't type more than 4 digits
+
                       />
                     </div>
 
                   </div>
                   <div className="from-group row">
                     <div className="col-12 col-md-4 mt-3">
-                      {/* <Field
-                        name="shortFormat"
-                        disabled={flag}
-                        component={Input}
-                        onChange={handleChange}
-                        placeholder="Enter Short Format"
-                        label="Short Format"
-               
-                        autoComplete="off"
-                        onChange={(e) => {
-                          setFieldValue("shortFormat", e.target.value);
-                        }}
-                      /> */}
 
 
                       <Field
@@ -302,40 +254,52 @@ export function MasterEditForm({
                         disabled={flag}
                         component={Input}
                         onChange={(e) => {
-                          handleChange(e); // Call the original handleChange (if necessary)
+
                           setFieldValue("shortFormat", e.target.value); // Update the form field value
                         }}
-                        placeholder="Enter Short Format"
+                        placeholder="Enter Short Format 0125"
                         label="Short Format"
-                
-                        autoComplete="off"
+
+                        min="1000"  // Minimum 4-digit year (e.g., 1000)
+                        max="9999"  // Maximum 4-digit year (e.g., 9999)
+                        maxLength="4"  // Limit to 4 digits
+                        onInput={(e) => e.target.value = e.target.value.slice(0, 4)}
                       />
 
                     </div>
                   </div>
-                  <div className="from-group row">
-                    {/* <div className="col-12 col-md-4 mt-3">
+                  {/* <div className="from-group row">
+
+
+   <div className="col-12 col-md-4 mt-3">
+
                       <span> Start Date<span style={{ color: 'red' }}>*</span></span>
                       <DatePicker
                         className="form-control"
-                       
                         placeholder="Enter Start Date"
-                  
-                    
-                        onChange={(e) => {
-                          setFieldValue("startDate", e);
-            
+                        selected={defstartDate}
+                        onChange={(date) => {
+                          setFieldValue("startDate", date);
+                          setDefaultStartDate(date);
+
+                                   // Add 365 days (considering leap years automatically)
+                                   const endDate = new Date(date);
+                                   endDate.setFullYear(endDate.getFullYear() + 1); // Add one year (365 or 366 days will be calculated automatically)
+         
+                                   // Set the calculated end date
+                                   endDate.setDate(endDate.getDate() - 1);
+                                   setFieldValue("endDate", endDate);
+                                   setDefaultEndDate(endDate);
                         }}
+                      
                         timeInputLabel="Time:"
                         dateFormat="dd/MM/yyyy"
                         showTimeInput
                         name="startDate"
-                        disabled={isUserForRead || flag}
-                    
+                        disabled={isUserForRead}
                         autoComplete="off"
-                      // value = {values.dateOfJoining}
                       />
-                      <ErrorMessage className="form-feedBack" name="startDate" component="div" />
+                    <ErrorMessage className="form-feedBack" name="startDate" component="div" />
                     </div>
 
                     <div className="col-12 col-md-4 mt-3">
@@ -344,72 +308,9 @@ export function MasterEditForm({
                         className="form-control"
                         placeholder="Enter End Date"
                         selected={defendDate}
-                   
                         onChange={(date) => {
                           setFieldValue("endDate", date);
-                
-                    
-                  
-                          // daysDiff()
-                        }}
-
-                        timeInputLabel="Time:"
-                        dateFormat="dd/MM/yyyy"
-                        showTimeInput
-                        name="endDate"
-                        disabled={isUserForRead || flag}
-                        autoComplete="off"
-
-                      // value = {values.dateOfJoining}
-                      />
-                      <ErrorMessage className="form-feedBack" name="endDate" component="div" />
-                    </div> */}
-
-
-                    <div className="col-12 col-md-4 mt-3">
-
-                      <span> Start Date<span style={{ color: 'red' }}>*</span></span>
-                      <DatePicker
-                        className="form-control"
-                        placeholder="Enter Start Date"
-              
-                        onChange={(date) => {
-                          setFieldValue("startDate", date);
-                 
-
-                          // Add 365 days (considering leap years automatically)
-                          const endDate = new Date(date);
-                          endDate.setMonth(endDate.getMonth() + 1); // Add one year (365 or 366 days will be calculated automatically)
-
-                          // Set the calculated end date
-                          endDate.setDate(endDate.getDate() - 1);
-                          setFieldValue("endDate", endDate);
-                  
-                    
-                  
-                          setFieldValue("month_days", getDateDiffInDays(values.startDate, values.endDate));
-              
-                        }}
-
-                        timeInputLabel="Time:"
-                        dateFormat="dd/MM/yyyy"
-                        showTimeInput
-                        name="startDate"
-                        disabled={isUserForRead || flag}
-                        autoComplete="off"
-                      />
-                      <ErrorMessage className="form-feedBack" name="startDate" component="div" />
-                    </div>
-
-                    <div className="col-12 col-md-4 mt-3">
-                      <span> End Date<span style={{ color: 'red' }}>*</span></span>
-                      <DatePicker
-                        className="form-control"
-                        placeholder="Enter End Date"
-               
-                        onChange={(date) => {
-                          setFieldValue("endDate", date);
-                 
+                          setDefaultEndDate(date);
                         }}
 
                         timeInputLabel="Time:"
@@ -420,9 +321,14 @@ export function MasterEditForm({
                         autoComplete="off"
                       // value = {values.dateOfJoining}
                       />
-                      <ErrorMessage className="form-feedBack" name="endDate" component="div" />
+                     <ErrorMessage className="form-feedBack" name="endDate" component="div" />
                     </div>
-                  </div>
+                   
+
+
+
+
+                  </div> */}
 
                   <div className="from-group row">
                     <div className="col-12 col-md-4 mt-3">
@@ -433,7 +339,7 @@ export function MasterEditForm({
                         placeholder="Enter Days"
                         label="Days"
                         autoComplete="off"
-                      
+
 
                       />
                     </div>
