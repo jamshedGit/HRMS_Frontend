@@ -100,7 +100,7 @@ export function SelectTaxSetup({
                                             name="taxSetupId"
                                             label={
                                                 <span>
-                                                    Select Tax Year<span style={{ color: "red" }}>*</span>
+                                                 Tax Year<span style={{ color: "red" }}>*</span>
                                                 </span>
                                             }
                                             isDisabled={!values.subsidiaryId}
