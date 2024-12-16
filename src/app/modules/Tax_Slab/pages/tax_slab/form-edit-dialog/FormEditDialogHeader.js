@@ -17,9 +17,9 @@ export function FormEditDialogHeader({ id, isUserForRead }) {
   );
 
   useEffect(() => {
-    let _title = id ? "" : "Add Tax Slab";
+    let _title = id ? "" : "Add Income Tax Slab";
     if (id) {
-      _title = `Edit Tax Slab`;
+      _title = `Edit Income Tax Slab`;
     } //else if (isUserForRead) {
     //   _title = `Read user '}'`
     // }
@@ -31,7 +31,7 @@ export function FormEditDialogHeader({ id, isUserForRead }) {
       {actionsLoading && <ModalProgressBar />}
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-lg">
-          {!isUserForRead ? title : "View Tax Slab"}
+          {!isUserForRead ? title : "View Income Tax Slab"}
         </Modal.Title>
       </Modal.Header>
     </>

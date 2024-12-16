@@ -17,26 +17,16 @@ import * as uiHelpers from "../FormUIHelpers";
 import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatter";
 import { Input, Pagination, Select } from "../../../../../../_metronic/_partials/controls";
 import { useFormUIContext } from "../FormUIContext";
-import { fetchAllActiveEmployeesSalaryForDDL, fetchAllBanks, fetchAllDeductionList, fetchAllEarningList, fetchAllFormsMenu, fetchAllSubsidiaryData } from "../../../../../../_metronic/redux/dashboardActions";
+import { fetchAllActiveEmployeesSalaryForDDL, fetchAllBanks, fetchAllDeductionList, fetchAllEarningList, fetchAllFormsMenu, fetchAllLeaveTypeBySubsidiary, fetchAllSubsidiaryData } from "../../../../../../_metronic/redux/dashboardActions";
 import { Formik, Field, ErrorMessage } from "formik";
 import { Form } from "react-bootstrap";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import * as Yup from "yup";
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 
-export function FormTable(user
-  , isUserForRead
-  , loading,
-
-  usersUIProps,
-  onHide,
-  id
-
-
-) {
+export function FormTable(user) {
   //Users UI Context
   const formUIContext = useFormUIContext();
-
   const FormUIProps = useMemo(() => {
     return {
       ids: formUIContext.ids,
@@ -551,6 +541,9 @@ export function FormTable(user
     return new Map(dashboard.allEarnings?.map(item => [item.value, item]));
   }, [dashboard.allEarnings]);
 
+  useEffect(() => {
+    dispatch(fetchAllLeaveTypeBySubsidiary("allLeaveTypes", currentState?.userForEdit?.subsidiaryId || ''));
+  }, [currentState?.userForEdit?.subsidiaryId])
 
   return (
     <>
@@ -634,6 +627,7 @@ export function FormTable(user
                       onChange={(e) => {
                         setFieldValue("subsidiaryId", e.value || null);
                         setDefualtSubsidiaryList(e);
+                        dispatch(fetchAllLeaveTypeBySubsidiary("allLeaveTypes", e.value));
                         //handlePaymenModeChanged(e)
                       }}
 
@@ -994,165 +988,182 @@ export function FormTable(user
               </div>
               <br></br>
               <h6>Leave/Attendance Integration </h6>
-              <div style={{ height: "350px", zIndex: "1", width: "100%", backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
+              <div style={{ zIndex: "1", width: "100%", backgroundColor: "rgb(235 243 255)", padding: "10px", borderRadius: "5px", border: '2px solid #adceff' }}>
+                <div className="col-12 col-md-12 mt-3">
+                  <div className="from-group row">
+                    <div className="col-12 col-md-4 mt-3">
+                      <input style={{ backgroundColor: "#ffffff", padding: "10px", width: "20px" }}
+                        name="isEnableAttandanceIntegration"
+                        type="checkbox"
+                        onChange={(e) => {
+                          setFieldValue('isEnableAttandanceIntegration', e.target.checked)
+                        }}
+                        checked={values.isEnableAttandanceIntegration}
 
-                <div className="from-group row">
-                  <div className="col-12 col-md-4 mt-3">
-                    <input style={{ backgroundColor: "#ffffff", padding: "10px", width: "20px" }}
-                      name="isEnableAttandanceIntegration"
-                      type="checkbox"
-                      onChange={(e) => {
-                        setFieldValue('isEnableAttandanceIntegration', e.target.checked)
-                      }}
-                      checked={values.isEnableAttandanceIntegration}
-
-                    />
-                    Enable Attendance Integration
-                    <br></br>
-
-
-                    <input style={{ backgroundColor: "#ffffff", padding: "10px", width: "20px" }}
-                      type="checkbox"
-                      name="isEnableLeaveManagemenent"
-                      onChange={(e) => {
-                        setFieldValue('isEnableLeaveManagemenent', e.target.checked)
-                      }}
-                      checked={values.isEnableLeaveManagemenent}
-                      disabled={!Boolean(values.isEnableAttandanceIntegration)}
-                    />
-                    Enable Leave Management
-                    <br></br>
-
-                    <input style={{ backgroundColor: "#ffffff", padding: "10px", width: "20px" }}
-                      disabled={!Boolean(values.isEnableAttandanceIntegration)}
-                      type="checkbox"
-                      name="isEnableOverTimeCalc"
-                      onChange={(e) => {
-                        setFieldValue('isEnableOverTimeCalc', e.target.checked)
-                      }}
-                      checked={values.isEnableOverTimeCalc}
-                    />
-                    Enable Overtime Calculation
+                      />
+                      Enable Attendance Integration
+                    </div>
                   </div>
 
-                  <div className="col-12 col-md-4 mt-3">
-                    {<span> Leave Deduction{Boolean(values.isEnableAttandanceIntegration) && <span style={{ color: 'red' }}>*</span>}</span>}
-                    <select className="form-control"
-                      disabled={!Boolean(values.isEnableAttandanceIntegration)}
-                      onChange={(e) => {
-                        setFieldValue('leaveDeductionId', e.target.value)
-                      }}
-                      value={values.leaveDeductionId}
-                      name="leaveDeductionId">
-                      <option value="-1"> --Select--</option>
-                      {
-                        dashboard.allDeductions?.map((x) => {
-                          return <option value={x.value}> {x.label} </option>
-                        })}
-                    </select>
-                    {errors.leaveDeductionId && touched.leaveDeductionId && <ErrorMessage className="form-feedBack" name="leaveDeductionId" component="div" />}
+                  <br></br>
+
+                  <div style={{ height: "30%", zIndex: "1", width: "100%", backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid rgb(178 184 193)' }}>
+                    <h6>Late Deduction</h6>
+                    <div className="from-group row">
+
+                      <div className="col-12 col-md-4 mt-1">
+                        <Field
+                          name="lateCountPerDaySalaryDeduction"
+                          onChange={(e) => {
+                            //setGrossSalaryDB(e.target.value);
+                            setFieldValue("lateCountPerDaySalaryDeduction", e.target.value);
+                          }}
+                          disabled={!Boolean(values.isEnableAttandanceIntegration)}
+                          value={values.lateCountPerDaySalaryDeduction}
+                          component={Input}
+                          placeholder="Enter value"
+                          label={<span> Late Count Per Day Salary Deduction{Boolean(values.isEnableAttandanceIntegration) && <span style={{ color: 'red' }}>*</span>}</span>}
+                          autoComplete="off"
+                        />
+                      </div>
+
+                      <div className="col-12 col-md-4 mt-3">
+                        {<span> Leave Deduction{Boolean(values.isEnableAttandanceIntegration) && <span style={{ color: 'red' }}>*</span>}</span>}
+                        <select className="form-control"
+                          disabled={!Boolean(values.isEnableAttandanceIntegration)}
+                          onChange={(e) => {
+                            const value = e.target.value == '--Select--' ? '' : Number(e.target.value);
+                            setFieldValue('leaveDeductionId', value)
+                          }}
+                          value={values.leaveDeductionId}
+                          name="leaveDeductionId">
+                          {
+                            dashboard.allLeaveTypes?.map((x) => {
+                              return <option value={x.value}> {x.label} </option>
+                            })}
+                        </select>
+                        {errors.leaveDeductionId && touched.leaveDeductionId && <ErrorMessage className="form-feedBack" name="leaveDeductionId" component="div" />}
+                      </div>
+
+                      <div className="col-12 col-md-4 mt-3">
+                        {<span> Late Deduction{Boolean(values.isEnableAttandanceIntegration) && <span style={{ color: 'red' }}>*</span>}</span>}
+                        <select className="form-control"
+                          onChange={(e) => {
+                            setFieldValue('lateDeductionId', e.target.value)
+                          }}
+                          disabled={!Boolean(values.isEnableAttandanceIntegration)}
+                          value={values.lateDeductionId}
+                          name="lateDeductionId">
+                          <option value="-1"> --Select--</option>
+                          {
+                            dashboard.allDeductions?.map((x) => {
+                              return <option value={x.value}> {x.label} </option>
+                            })}
+                        </select>
+                        {errors.lateDeductionId && touched.lateDeductionId && <ErrorMessage className="form-feedBack" name="lateDeductionId" component="div" />}
+                      </div>
+
+                    </div>
                   </div>
 
-                  <div className="col-12 col-md-4 mt-1">
-                    <Field
-                      name="lateCountPerDaySalaryDeduction"
-                      onChange={(e) => {
-                        //setGrossSalaryDB(e.target.value);
-                        setFieldValue("lateCountPerDaySalaryDeduction", e.target.value);
-                      }}
-                      disabled={!Boolean(values.isEnableAttandanceIntegration)}
-                      value={values.lateCountPerDaySalaryDeduction}
-                      component={Input}
-                      placeholder="Enter value"
-                      label={<span> Late Count Per Day Salary Deduction{Boolean(values.isEnableAttandanceIntegration) && <span style={{ color: 'red' }}>*</span>}</span>}
-                      autoComplete="off"
-                    />
+                  <br></br>
+
+                  <div style={{ height: "30%", zIndex: "1", width: "100%", backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid rgb(178 184 193)' }}>
+                    <h6>Overtime / Leave Encashment</h6>
+                    <div className="from-group row">
+                      <div className="col-12 col-md-4 mt-3">
+                        <input style={{ backgroundColor: "#ffffff", padding: "10px", width: "20px" }}
+                          disabled={!Boolean(values.isEnableAttandanceIntegration)}
+                          type="checkbox"
+                          name="isEnableOverTimeCalc"
+                          onChange={(e) => {
+                            setFieldValue('isEnableOverTimeCalc', e.target.checked)
+                          }}
+                          checked={values.isEnableOverTimeCalc}
+                        />
+                        Enable Overtime Calculation
+                      </div>
+                      <div className="col-12 col-md-4 mt-5">
+                        {<span> Overtime Allowance{Boolean(values.isEnableAttandanceIntegration) && <span style={{ color: 'red' }}>*</span>}</span>}
+                        <select className="form-control"
+                          onChange={(e) => {
+                            setFieldValue('overTimeEarningId', e.target.value)
+                          }}
+                          value={values.overTimeEarningId}
+                          disabled={!Boolean(values.isEnableAttandanceIntegration)}
+                          name="overTimeEarningId">
+                          <option value="-1"> --Select--</option>
+                          {
+                            dashboard.allEarnings?.map((x) => {
+                              return <option value={x.value}> {x.label} </option>
+                            })}
+                        </select>
+                        {errors.overTimeEarningId && touched.overTimeEarningId && <ErrorMessage className="form-feedBack" name="overTimeEarningId" component="div" />}
+                      </div>
+                      <div className="col-12 col-md-4 mt-3">
+                        {<span> Encashment Allowance{Boolean(values.isEnableAttandanceIntegration) && <span style={{ color: 'red' }}>*</span>}</span>}
+                        <select className="form-control"
+                          onChange={(e) => {
+                            setFieldValue('leaveEnchashment_EarningId', e.target.value)
+                          }}
+                          disabled={!Boolean(values.isEnableAttandanceIntegration)}
+                          value={values.leaveEnchashment_EarningId}
+                          name="leaveEnchashment_EarningId">
+                          <option value="-1"> --Select--</option>
+                          {
+                            dashboard.allEarnings?.map((x) => {
+                              return <option value={x.value}> {x.label} </option>
+                            })}
+                        </select>
+                        {errors.leaveEnchashment_EarningId && touched.leaveEnchashment_EarningId && <ErrorMessage className="form-feedBack" name="leaveEnchashment_EarningId" component="div" />}
+                      </div>
+
+                    </div>
                   </div>
 
-                </div>
-                <div className="from-group row">
-                  <div className="col-12 col-md-4 mt-3">
+                  <br></br>
 
+                  <div style={{ height: "30%", zIndex: "1", width: "100%", backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid rgb(178 184 193)' }}>
+                    <h6>Leave Management</h6>
+                    <div className="from-group row">
+
+
+                      <div className="col-12 col-md-4 mt-3">
+                        <input style={{ backgroundColor: "#ffffff", padding: "10px", width: "20px" }}
+                          type="checkbox"
+                          name="isEnableLeaveManagemenent"
+                          onChange={(e) => {
+                            setFieldValue('isEnableLeaveManagemenent', e.target.checked)
+                          }}
+                          checked={values.isEnableLeaveManagemenent}
+                          disabled={!Boolean(values.isEnableAttandanceIntegration)}
+                        />
+                        Enable Leave Management
+                      </div>
+                      <div className="col-12 col-md-4 mt-3">
+                        <Select
+                          className="form-control"
+                          name="isEnableSandwichLeavePolicy"
+                          value={values.isEnableSandwichLeavePolicy}
+                          label={<span> Enable Sandwich Policy For Leave</span>}
+                          onChange={(e) => {
+                            setFieldValue("isEnableSandwichLeavePolicy", e.target.value);
+
+                          }}
+                          disabled={!Boolean(values.isEnableAttandanceIntegration)}
+                          onBlur={handleBlur}
+                        >
+                          <option value="-1">--Select--</option>
+                          <option value="true">Yes</option>
+                          <option value="false">No</option>
+
+                        </Select>
+
+                      </div>
+
+                    </div>
                   </div>
 
-                  <div className="col-12 col-md-4 mt-3">
-                    {<span> Encashment Allowance{Boolean(values.isEnableAttandanceIntegration) && <span style={{ color: 'red' }}>*</span>}</span>}
-                    <select className="form-control"
-                      onChange={(e) => {
-                        setFieldValue('leaveEnchashment_EarningId', e.target.value)
-                      }}
-                      disabled={!Boolean(values.isEnableAttandanceIntegration)}
-                      value={values.leaveEnchashment_EarningId}
-                      name="leaveEnchashment_EarningId">
-                      <option value="-1"> --Select--</option>
-                      {
-                        dashboard.allEarnings?.map((x) => {
-                          return <option value={x.value}> {x.label} </option>
-                        })}
-                    </select>
-                    {errors.leaveEnchashment_EarningId && touched.leaveEnchashment_EarningId && <ErrorMessage className="form-feedBack" name="leaveEnchashment_EarningId" component="div" />}
-                  </div>
-                  <div className="col-12 col-md-4 mt-3">
-                    {<span> Late Deduction{Boolean(values.isEnableAttandanceIntegration) && <span style={{ color: 'red' }}>*</span>}</span>}
-                    <select className="form-control"
-                      onChange={(e) => {
-                        setFieldValue('lateDeductionId', e.target.value)
-                      }}
-                      disabled={!Boolean(values.isEnableAttandanceIntegration)}
-                      value={values.lateDeductionId}
-                      name="lateDeductionId">
-                      <option value="-1"> --Select--</option>
-                      {
-                        dashboard.allDeductions?.map((x) => {
-                          return <option value={x.value}> {x.label} </option>
-                        })}
-                    </select>
-                    {errors.lateDeductionId && touched.lateDeductionId && <ErrorMessage className="form-feedBack" name="lateDeductionId" component="div" />}
-                  </div>
-                </div>
-
-
-                <div className="from-group row">
-                  <div className="col-12 col-md-4 mt-3">
-
-                  </div>
-                  <div className="col-12 col-md-4 mt-3">
-                    <Select
-                      className="form-control"
-                      name="isEnableSandwichLeavePolicy"
-                      value={values.isEnableSandwichLeavePolicy}
-                      label={<span> Enable Sandwich Policy For Leave</span>}
-                      onChange={(e) => {
-                        setFieldValue("isEnableSandwichLeavePolicy", e.target.value);
-
-                      }}
-                      disabled={!Boolean(values.isEnableAttandanceIntegration)}
-                      onBlur={handleBlur}
-                    >
-                      <option value="-1">--Select--</option>
-                      <option value="true">Yes</option>
-                      <option value="false">No</option>
-
-                    </Select>
-
-                  </div>
-                  <div className="col-12 col-md-4 mt-5">
-                    {<span> Overtime Allowance{Boolean(values.isEnableAttandanceIntegration) && <span style={{ color: 'red' }}>*</span>}</span>}
-                    <select className="form-control"
-                      onChange={(e) => {
-                        setFieldValue('overTimeEarningId', e.target.value)
-                      }}
-                      value={values.overTimeEarningId}
-                      disabled={!Boolean(values.isEnableAttandanceIntegration)}
-                      name="overTimeEarningId">
-                      <option value="-1"> --Select--</option>
-                      {
-                        dashboard.allEarnings?.map((x) => {
-                          return <option value={x.value}> {x.label} </option>
-                        })}
-                    </select>
-                    {errors.overTimeEarningId && touched.overTimeEarningId && <ErrorMessage className="form-feedBack" name="overTimeEarningId" component="div" />}
-                  </div>
                 </div>
               </div>
               <br>
