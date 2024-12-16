@@ -164,7 +164,7 @@ export function FormEditForm({
                         component={Input}
                         maxLength={6}
                         placeholder="Enter Form Code"
-                        label={<span> Form Code<span style={{ color: 'red' }}>*</span></span>}
+                        label={<span>Code<span style={{ color: 'red' }}>*</span></span>}
                         value={values.formCode || defFormCode}
                       />
                     </div>}
@@ -174,7 +174,7 @@ export function FormEditForm({
                         maxLength={30}
                         component={Input}
                         placeholder="Enter Form Name"
-                        label={<span> Form Name<span style={{ color: 'red' }}>*</span></span>}
+                        label={<span> Name<span style={{ color: 'red' }}>*</span></span>}
 
                       />
                     </div>}
