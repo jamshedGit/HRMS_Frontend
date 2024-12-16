@@ -63,19 +63,19 @@ const profileValidation = Yup.object().shape(
       .required("Required*"),
     departmentId: Yup.string()
       .required("Required*"),
-    teamId: Yup.string()
-      .required("Required*"),
+    // teamId: Yup.string()
+    //   .required("Required*"),
     payrollGroupId: Yup.string()
       .required("Required*"),
-    regionId: Yup.string()
-      .required("Required*"),
+    // regionId: Yup.string()
+    //   .required("Required*"),
     maritalStatus: Yup.string()
       .nullable() // Allows null values
       .required("Required*"),
     religionId: Yup.string()
       .required("Required*"),
-    nationality: Yup.string()
-      .required("Required*"),
+    // nationality: Yup.string()
+    //   .required("Required*"),
 
     gender: Yup.string()
       .required("Required*"),
@@ -84,11 +84,11 @@ const profileValidation = Yup.object().shape(
     locationId: Yup.string()
       .required("Required*"),
 
-    countryId: Yup.string()
-      .required("Required*"),
+    // countryId: Yup.string()
+    //   .required("Required*"),
 
-    cityId: Yup.string()
-      .required("Required*"),
+    // cityId: Yup.string()
+    //   .required("Required*"),
 
 
     employeeTypeId: Yup.string()
