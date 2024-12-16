@@ -5,7 +5,7 @@ export const USERS_URL = process.env.REACT_APP_API_URL;
 //Create user
 export function createPayrollMonthSetup(body) {
   
-console.log("body111",body)
+
   return axios.post(`${USERS_URL}/payroll_month/create-payroll-month`, body);
   
 }
@@ -13,7 +13,7 @@ console.log("body111",body)
 
 // Read
 export function getAllPayrollMonthSetup(body) {
-  console.log("body",body);
+
   return axios.post(`${USERS_URL}/payroll_month/read-all-payroll-month`, body);
 }
 
@@ -33,8 +33,8 @@ export function updatePayrollMonthSetup(body) {
 
 //Delete
 export function deletePayrollMonthSetup(body) {
-  console.log("body")
-  console.log(body);
+
+ 
   return axios.patch(`${USERS_URL}/payroll_month/delete-payroll-month`, body);
 }
 

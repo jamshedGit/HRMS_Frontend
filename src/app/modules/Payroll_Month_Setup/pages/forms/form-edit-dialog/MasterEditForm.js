@@ -113,7 +113,7 @@ export function MasterEditForm({
 
 
         // setFieldValue("shortFormat", shortformat);
-        console.log("nextStartDate")
+      
 
         const nextStartDate = new Date(response?.data?.data?.endDate);
 
@@ -186,7 +186,7 @@ export function MasterEditForm({
 
         validationSchema={formValidation}
         onSubmit={(values) => {
-          console.log('values in onSubmit:', values);
+       
           // enableLoading();
           SavePayrollMonthSetup(values);
 
@@ -350,9 +350,9 @@ export function MasterEditForm({
                           // setFieldValue("endDate", endDate);
                           // setDefaultEndDate(endDate);
                           // // setDefaultDays()
-                          // // console.log("month_days111", defDays)
+                      
                           // setFieldValue("month_days", getDateDiffInDays(values.startDate, values.endDate));
-                          // console.log("month_days111", values.startDate, defendDate)
+                        
                         }}
 
                         timeInputLabel="Time:"
@@ -398,7 +398,7 @@ export function MasterEditForm({
                         name="month_days"
                         disabled={true}
                         component={Input}
-                        placeholder="Enter Days"
+                        placeholder=""
                         label="Days"
                         autoComplete="off"
 

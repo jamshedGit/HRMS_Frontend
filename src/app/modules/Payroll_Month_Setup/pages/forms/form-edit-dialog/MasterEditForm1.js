@@ -183,7 +183,7 @@ export function MasterEditForm({
 
       setFieldValue("shortFormat", t);
       const daysDiff = getDateDiffInDays(get_startDate, setDaysInDate)
-      console.log("testdaysDiff1", daysDiff)
+ 
       setDefaultDays(daysDiff);
       setFieldValue("month_days", daysDiff);
 
@@ -236,7 +236,7 @@ export function MasterEditForm({
       setFieldValue("year", getYear);
       //  setDefaultYear(setDaysInDate.getFullYear());
       //  setFieldValue("year", setDaysInDate.getFullYear());
-      // console.log("testdaysDiff2",daysDiff)
+    
       // setDefaultDays(daysDiff);
       // setFieldValue("month_days", daysDiff);
 
@@ -266,7 +266,7 @@ export function MasterEditForm({
   }, []);
 
   useEffect(() => {
-    console.log("testdaysDiff3", getDateDiffInDays(defstartDate, defendDate))
+  
     setDefaultDays(getDateDiffInDays(defstartDate, defendDate))
 
   }, [defstartDate, defendDate]);
@@ -348,7 +348,7 @@ export function MasterEditForm({
         }) => (
 
           <>
-            {console.log("values111", values)}
+      
             <Modal.Body className="overlay overlay-block cursor-default">
               {actionsLoading && (
                 <div className="overlay-layer bg-transparent">
@@ -398,7 +398,7 @@ export function MasterEditForm({
                           const bb = (getCurrentMonth() > 9 ? getCurrentMonth() + "" + shortFormatGlobal : +"0" + getCurrentMonth() + "" + shortFormatGlobal)
                           setDefaulShortFormat(bb)
                           // handleMonthChange(getCurrentMonth());
-                          { console.log("abc defShortFormat", bb, defShortFormat) }
+                       
                           setFieldValue("shortFormat", defShortFormat);
 
                           // })
@@ -611,9 +611,9 @@ export function MasterEditForm({
                           setFieldValue("endDate", endDate);
                           setDefaultEndDate(endDate);
                           setDefaultDays()
-                          console.log("month_days111", defDays)
+                    
                           setFieldValue("month_days", getDateDiffInDays(values.startDate, values.endDate));
-                          console.log("month_days111", values.startDate, defendDate)
+                       
                         }}
 
                         timeInputLabel="Time:"
