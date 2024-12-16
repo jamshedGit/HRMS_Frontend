@@ -17,7 +17,7 @@ import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatte
 import { Pagination } from "../../../../../../_metronic/_partials/controls";
 import { useFormUIContext } from "../FormUIContext";
 import { DatetimeColumnFormatter } from "../../../../Dashboard/pages/dashboard/last-trips-vehicles-table/column-formatter/CreatedColumnFormatter";
-import {formatNumberWithCommas} from "../../../../../utils/common"
+import { formatNumberWithCommas } from "../../../../../utils/common"
 
 
 
@@ -36,20 +36,24 @@ export function FormTable() {
       openDeleteFormDialog: formUIContext.openDeleteFormDialog,
       openActiveFormDialog: formUIContext.openActiveFormDialog,
       openReadFormDialog: formUIContext.openReadFormDialog,
+      fetchSubsidiaryId: formUIContext?.fetchSubsidiaryId,
+      fetchTaxSetupId: formUIContext?.fetchTaxSetupId,
     };
   }, [formUIContext]);
 
 
   const { currentState, userAccess } = useSelector(
-    (state) => { return {
-      
-      currentState: state.tax_slab,
-      userAccess: state?.auth?.userAccess["tax_slab"],
-    }},
+    (state) => {
+      return {
+
+        currentState: state.tax_slab,
+        userAccess: state?.auth?.userAccess["tax_slab"],
+      }
+    },
     shallowEqual
   );
 
-  
+
   const { totalCount, entities, listLoading } = currentState;
 
   //totalCount = 10
@@ -57,11 +61,14 @@ export function FormTable() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+
     formUIProps.setIds([]);
- 
- 
+    formUIProps.queryParams.subsidiaryId = formUIProps.fetchSubsidiaryId
+    formUIProps.queryParams.taxSetupId = formUIProps.fetchTaxSetupId.value
+
+
     dispatch(actions.fetchIncomeTaxSlabs(formUIProps.queryParams));
-  }, [formUIProps.queryParams, dispatch, totalCount]);
+  }, [formUIProps.queryParams, dispatch, totalCount, formUIProps.fetchSubsidiaryId, formUIProps.fetchTaxSetupId]);
 
   const isAccessForEdit = userAccess?.find(
     (item) => item.componentName === "UpdateTaxSlab"
@@ -72,6 +79,7 @@ export function FormTable() {
   );
   // Table columns
   const columns = [
+
 
     {
       dataField: "from_amount",
@@ -86,28 +94,28 @@ export function FormTable() {
       headerStyle: {
         textAlign: "center", // Align header text to the left
       },
-      formatter: (cell) => formatNumberWithCommas(cell), 
+      formatter: (cell) => formatNumberWithCommas(cell),
     },
 
 
 
-{
-  dataField: "to_amount",
-  text: "To Amount",
-  sort: false,
-  sortCaret: sortCaret,
-  headerSortingClasses,
-  style: {
-    minWidth: "10px",
-    textAlign: "center",
-  },
-  headerStyle: {
-    textAlign: "center", // Align header text to the left
-  },
-  formatter: (cell) => formatNumberWithCommas(cell), 
+    {
+      dataField: "to_amount",
+      text: "To Amount",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "10px",
+        textAlign: "center",
+      },
+      headerStyle: {
+        textAlign: "center", // Align header text to the left
+      },
+      formatter: (cell) => formatNumberWithCommas(cell),
 
- 
-},
+
+    },
 
 
     {
@@ -123,7 +131,7 @@ export function FormTable() {
       headerStyle: {
         textAlign: "center", // Center header text
       },
-     
+
     },
 
     {
@@ -139,17 +147,18 @@ export function FormTable() {
       headerStyle: {
         textAlign: "center", // Align header text to the left
       },
-      formatter: (cell) => formatNumberWithCommas(cell), 
+      formatter: (cell) => formatNumberWithCommas(cell),
     },
 
 
 
-       {
+    {
       dataField: "action",
       text: "Actions",
       isDummyField: true,
       formatter: ActionsColumnFormatter,
       formatExtraData: {
+        fetchTaxSetupId: formUIProps?.fetchTaxSetupId,
         openEditFormDialog: formUIProps.openEditFormDialog,
         openDeleteFormDialog: formUIProps.openDeleteFormDialog,
         openActiveFormDialog: formUIProps.openActiveFormDialog,
@@ -176,7 +185,7 @@ export function FormTable() {
     page: formUIProps.queryParams.pageNumber,
   };
 
-    return (
+  return (
     <>
       <PaginationProvider pagination={paginationFactory(paginationOptions)}>
         {({ paginationProps, paginationTableProps }) => {

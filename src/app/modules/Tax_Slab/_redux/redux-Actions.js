@@ -7,7 +7,7 @@ const { actions } = tax_slabSlice;
 
 export const fetchIncomeTaxSlabs = (queryparm) => async (dispatch) => {
 
-  
+
   return requestFromServer.getAllIncomeTaxSlab(queryparm)
    
     .then((response) => {
@@ -142,5 +142,23 @@ export const updateIncomeTaxSlab = (user, disbaleLoading, onHide) => (dispatch) 
         draggable: true,
         progress: undefined,
       });
+    });
+};
+
+
+export const fetchgetAllTaxYearSetup = () => async (dispatch) => {
+
+  
+  return requestFromServer.getAllTaxYearSetup()
+   
+    .then((response) => {
+    
+
+      dispatch(actions.getAllTaxYearSetupFetched(response));
+    })
+    .catch((error) => {
+   
+      error.clientMessage = "Can't find";
+      dispatch(actions.catchError({ error, callType: callTypes.list }));
     });
 };

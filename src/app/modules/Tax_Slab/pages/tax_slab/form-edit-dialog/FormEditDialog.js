@@ -16,17 +16,19 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   const title = "FormEditDialog";
   const FormUIContext = useFormUIContext();
 
- 
-  const usersUIProps = useMemo(() => {
-    return {
-      queryParams: FormUIContext.queryParams,
-    };
-  }, [FormUIContext]);
 
-  const formUIProps  = useMemo(() => {
+  // const usersUIProps = useMemo(() => {
+  //   return {
+  //     queryParams: FormUIContext.queryParams,
+  //   };
+  // }, [FormUIContext]);
+
+  const formUIProps = useMemo(() => {
     return {
       initUser: FormUIContext.initUser,
       queryParams: FormUIContext.queryParams,
+      fetchSubsidiaryId: FormUIContext.fetchSubsidiaryId,
+      fetchTaxSetupId: FormUIContext.fetchTaxSetupId,
     };
   }, [FormUIContext]);
 
@@ -47,8 +49,8 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     userStatusTypes,
     isuserForRead,
   } = useSelector((state) => ({
-    
-    
+
+
     actionsLoading: state.users.actionsLoading,
     user: state.users, // change for users to receipt
     userForEdit: state.tax_slab.userForEdit,
@@ -68,34 +70,38 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
 
 
   const saveForm = async (user) => {
-
-
+   
 
     if (!id) {
- 
+
+      user.subsidiaryId = formUIProps?.fetchSubsidiaryId
+      user.taxSetupId = (formUIProps?.fetchTaxSetupId?.isActive) ? formUIProps?.fetchTaxSetupId?.value : null
   
       const finalObject = { user }
-      dispatch(actions.createIncomeTaxSlab(user, disbaleLoading, onHide));
-      
-      
+      await dispatch(actions.createIncomeTaxSlab(user, disbaleLoading, onHide));
+
+      await dispatch(actions?.fetchIncomeTaxSlabs(formUIProps?.queryParams));
 
     } else {
 
-     
-  
+
+
 
       const formUpdatedFields = {
-        Id: user.Id,
-        from_amount: user.from_amount,
-        to_amount: user.to_amount,
-        percentage: user.percentage,
-        fixed_amount: user.fixed_amount,
+        Id: user?.Id,
+        from_amount: user?.from_amount,
+        to_amount: user?.to_amount,
+        percentage: user?.percentage,
+        fixed_amount: user?.fixed_amount,
+        subsidiaryId: user?.subsidiaryId,
+        taxSetupId: user?.taxSetupId
       };
 
-      
 
-     await dispatch(actions.updateIncomeTaxSlab(formUpdatedFields, disbaleLoading, onHide));
-     await dispatch(actions.fetchIncomeTaxSlabs(usersUIProps.queryParams));
+
+      await dispatch(actions?.updateIncomeTaxSlab(formUpdatedFields, disbaleLoading, onHide));
+      await dispatch(actions?.fetchIncomeTaxSlabs(formUIProps?.queryParams));
+
     }
   };
 
@@ -109,7 +115,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
       <FormEditDialogHeader id={id} isUserForRead={userForRead} />
       <FormEditForm
         saveForm={saveForm}
-        user={userForEdit || formUIProps .initUser}
+        user={userForEdit || formUIProps.initUser}
         onHide={onHide}
         roles={roles}
         centers={centers}

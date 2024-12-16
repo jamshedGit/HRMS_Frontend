@@ -37,6 +37,9 @@ export const initialFilter = {
 
 
     sortOrder: "asc",
-    pageSize: 5,
-    pageNumber: 1
+    pageSize: 10,
+    pageNumber: 1,
+    subsidiaryId:'',
+    taxSetupId:''
+
 }

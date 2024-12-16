@@ -1,18 +1,20 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FormUIProvider } from "./FormUIContext";
+import { FormUIProvider, useFormUIContext } from "./FormUIContext";
 import { FormEditDialog } from "./form-edit-dialog/FormEditDialog";
 import { FormDeleteDialog } from "./form-delete-dialog/FormDeleteDialog";
 
 import { FormCard } from "./form-card/FormCard";
-import {} from "../../_redux/redux-Actions";
+import { } from "../../_redux/redux-Actions";
+import { SelectTaxSetup } from "./form-card/Select-tax-setup";
 
 
 
 export function FormPage({ history }) {
+
 
 
   const dispatch = useDispatch();
@@ -32,14 +34,14 @@ export function FormPage({ history }) {
       history.push(`/tax_slab/read-all-tax-slab/${id}/active`);
     },
     openReadFormDialog: (id, isUserRead) => {
-      
-      
+
+
       history.push(`/tax_slab/read-all-tax-slab/${id}/read`);
     },
   };
   return (
 
-    
+
     <FormUIProvider FormUIEvents={FormUIEvents}>
       <Route exact path="/tax_slab/read-all-tax-slab/new">
         {({ history, match }) => (
@@ -86,8 +88,8 @@ export function FormPage({ history }) {
           />
         )}
       </Route>
-    
-      <FormCard />
+ 
+      <FormCard/>
       <ToastContainer
         position="top-right"
         autoClose={5000}
