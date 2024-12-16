@@ -88,3 +88,13 @@ export function deletleaveTypePolicySetup(id) {
 export function deletleaveTypeDeductionPolicySetup(id) {
   return axios.delete(`${USERS_URL}/leave_management_configuration/delete-leave-type-salary-deduction-policy/${id}`);
 }
+
+/**
+ * Create Allocate Leaves
+ * 
+ * @param {Object} body 
+ * @returns res
+ */
+export function createAllocateLeavesSetup(body) {
+  return axios.post(`${USERS_URL}/allocate_leaves/create-allocate-leaves`, body);
+}

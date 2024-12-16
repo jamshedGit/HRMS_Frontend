@@ -10,7 +10,7 @@ import LeaveTypeSalaryDeductionTable from "./LeaveTypeSalaryDeductionTable";
 import * as actions from "../../../_redux/formActions";
 import { VALIDATION_MESSAGES, WEEK_DAYS } from "../../../../../utils/constants";
 import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
-import { fetchAllLeaveTypeBySubsidiary } from "../../../../../../_metronic/redux/dashboardActions";
+import { fetchAllLeaveTypeBySubsidiary, getActiveFiscalYear } from "../../../../../../_metronic/redux/dashboardActions";
 
 /*
 //Validations for Form
@@ -88,7 +88,8 @@ export function MasterEditForm({
     allLeaveStatus,
     allMaritalStatus,
     allLeaveTypes,
-    allEntitlementEvents
+    allEntitlementEvents,
+    activeFiscalYear
   } = useSelector((state) => state.dashboard);
 
   //Get Leave Type Dropdown data on Edit when subisidary is present
@@ -156,7 +157,7 @@ export function MasterEditForm({
     });
   }, [allLeaveTypeMap]);
 
-  
+
 
   //Create Dropdown HTML from data for Select Components.
   //when leaveTypeData is provided it will check one of leave type is already selected then it will not allow it to be selected again.
@@ -190,6 +191,15 @@ export function MasterEditForm({
 
     }
   }
+
+  const allocateLeaves = (subsidiaryId, leavetypePolicies) => {
+    dispatch(actions.allocateLeaves({ subsidiaryId, list: leavetypePolicies }));
+  }
+
+  useEffect(() => {
+    dispatch(getActiveFiscalYear("activeFiscalYear", user?.subsidiaryId || ''));
+  }, [user.subsidiaryId])
+
   return (
     <>
       <Formik
@@ -233,6 +243,7 @@ export function MasterEditForm({
                         onBlur={handleBlur}
                         onChange={(e) => {
                           const value = e.target.value == '--Select--' ? '' : e.target.value
+                          dispatch(getActiveFiscalYear("activeFiscalYear", value));
                           dispatch(fetchAllLeaveTypeBySubsidiary("allLeaveTypes", value)); //When subsidiary is updated then fetch leave types dropdown data according to the subsidiary selected
                           setFieldValue('subsidiaryId', value)
                           const filter = { subsidiaryId: value,/* gradeId: values.gradeId, employeeTypeId: values.employeeTypeId*/ }
@@ -394,13 +405,10 @@ export function MasterEditForm({
                   </div>
                   {/* Leave Type Policy Table End */}
 
-
-                  <br />
-                  <br />
-
                   {/* Leave Type Deduction Table Start */}
                   <div
                     style={{
+                      display: 'none',
                       backgroundColor: "rgb(235 243 255)",
                       padding: "20px",
                       borderRadius: "5px",
@@ -421,6 +429,40 @@ export function MasterEditForm({
                     />
                   </div>
                   {/* Leave Type Deduction Table End */}
+
+                  {/* Leave Allocation Section Start */}
+                  {Boolean(values.Id) && Boolean(activeFiscalYear?.label) &&
+                    <>
+                      <br />
+                      <br />
+
+                      <div
+                        style={{
+                          backgroundColor: "rgb(235 243 255)",
+                          padding: "20px",
+                          borderRadius: "5px",
+                          border: "2px solid #adceff",
+                        }}
+                      >
+                        <div className="from-group row">
+
+                          <div className="col-12 col-md-10 mt-3">
+                            <b><label>{activeFiscalYear?.label}</label></b>
+                          </div>
+
+                          <div className="col-12 col-md-2 mt-3">
+                            <button
+                              type="button"
+                              onClick={() => allocateLeaves(values.subsidiaryId, values.leavetypePolicies)}
+                              className="btn btn-primary btn-elevate"
+                            >
+                              Allocate Leave
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </>}
+                  {/* Leave Allocation Section End */}
 
                 </fieldset>
               </Form>
