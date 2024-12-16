@@ -361,6 +361,7 @@ export function MasterEditForm({
                         name="startDate"
                         disabled={isUserForRead || flag}
                         autoComplete="off"
+                        value={values.startDate}
                       />
                       <ErrorMessage className="form-feedBack" name="startDate" component="div" />
                     </div>
@@ -383,7 +384,7 @@ export function MasterEditForm({
                         name="endDate"
                         disabled={true}
                         autoComplete="off"
-                      // value = {values.dateOfJoining}
+                        value={values.endDate}
                       />
                       <ErrorMessage className="form-feedBack" name="endDate" component="div" />
                     </div>
