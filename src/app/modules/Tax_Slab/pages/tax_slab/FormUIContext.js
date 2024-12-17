@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
 import { isEqual, isFunction } from "lodash";
 import { initialFilter } from "./FormUIHelpers";
+import { object } from "prop-types";
 
 const FormUIContext = createContext();
 
@@ -17,6 +18,9 @@ export const ReceiptUIConsumer = FormUIContext.Consumer;
 export function FormUIProvider({ FormUIEvents, children }) {
   const [queryParams, setQueryParamsBase] = useState(initialFilter);
   const [ids, setIds] = useState([]);
+    const [fetchSubsidiaryId,setFetchSubsidiaryId]=useState(null)
+    const [fetchTaxSetupId,setFetchTaxSetupId]=useState({})
+  
   const setQueryParams = useCallback((nextQueryParams) => {
     setQueryParamsBase((prevQueryParams) => {
       if (isFunction(nextQueryParams)) {
@@ -36,7 +40,8 @@ export function FormUIProvider({ FormUIEvents, children }) {
     to_amount: "",
     percentage: "",
     fixed_amount: "",
-  
+  taxSetupId:"",
+  subsidiaryId:""
   };
 
 
@@ -53,6 +58,9 @@ export function FormUIProvider({ FormUIEvents, children }) {
     openDeleteFormDialog: FormUIEvents.openDeleteFormDialog,
     openActiveFormDialog: FormUIEvents.openActiveFormDialog,
     openReadFormDialog: FormUIEvents.openReadFormDialog,
+    fetchSubsidiaryId,setFetchSubsidiaryId,
+    fetchTaxSetupId,setFetchTaxSetupId,
+
   };
   return (
     <FormUIContext.Provider value={value}>{children}</FormUIContext.Provider>

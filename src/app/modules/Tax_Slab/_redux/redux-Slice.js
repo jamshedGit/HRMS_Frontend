@@ -11,6 +11,7 @@ const initialIncomeTaxSlabState = {
     userForEdit: undefined,
     lastError: null,
     userForRead: false,
+    taxYearSetup:null
 };
 
 
@@ -70,6 +71,7 @@ export const tax_slabSlice = createSlice({
             state.actionsLoading = false;
             state.error = null;
             state.entities.unshift(action.payload);
+            state.totalCount +=1
         },
         incomeTaxSlabUpdated: (state, action) => {
             state.error = null;
@@ -90,6 +92,19 @@ export const tax_slabSlice = createSlice({
                 return entity;
             });
            
+        },
+
+        getAllTaxYearSetupFetched: (state, action) => {
+       
+    
+            const taxYearSetup = action.payload.data?.data.rows;
+           
+            const totalResult = action.payload.data?.data.totalResults;
+          
+            state.listLoading = false;
+            state.error = null;
+            state.taxYearSetup = taxYearSetup;
+            state.totalCount = totalResult;
         },
 
 

@@ -10,6 +10,7 @@ export function ActionsColumnFormatter(
   rowIndex,
 
   {
+    fetchTaxSetupId,
     openEditFormDialog,
     openDeleteFormDialog,
     openActiveFormDialog,
@@ -36,7 +37,7 @@ export function ActionsColumnFormatter(
           </span>
         </a>
       </OverlayTrigger>
-      {isAccessForEdit && row.isActive && (
+      {isAccessForEdit && fetchTaxSetupId?.isActive && (
         <OverlayTrigger
           overlay={<Tooltip id="products-edit-tooltip">Edit</Tooltip>}
         >
@@ -56,7 +57,7 @@ export function ActionsColumnFormatter(
 
       <> </>
 
-      {isAccessForDelete && (
+      {isAccessForDelete && fetchTaxSetupId?.isActive && (
         <OverlayTrigger
           overlay={
             <Tooltip id="products-edit-tooltip">
