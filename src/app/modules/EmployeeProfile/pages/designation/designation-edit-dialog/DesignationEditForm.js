@@ -202,6 +202,10 @@ const profileValidation = Yup.object().shape(
       .max(minDate, 'You must be at least 18 years old')
       .min(minYearDate, 'Date of birth cannot be earlier than January 1, 1900'),
 
+
+      defaultShiftId: Yup.string().required('Required'),
+      reportTo: Yup.string().required('Required'),
+
   },
 
 
@@ -327,67 +331,69 @@ export function DesignationEditForm({
   const [defProbationPolicyMonth, setDefaultProbationPolicyMonth] = useState({});
   const [defContractExpiryPolicy, setDefaultCnotractExpiryPolicy] = useState({});
 
-  useEffect(() => {
-    if (user.Id) {
 
-      if (user.employeeTypeId == 148) // WHEN Select Permanet value
-      {
-        // For Empty Object
+  //off for temp
+  // useEffect(() => {
+  //   if (user.Id) {
 
-        setContractExpiryDate('');
-        setConfirmationDate('');
-        // setConfirmationDueDate('');
-        //   setConfirmationEnterDate('');
+  //     if (user.employeeTypeId == 148) // WHEN Select Permanet value
+  //     {
+  //       // For Empty Object
 
-        setDisbledConfirmationDueDate(true);
-        setDisabledContractExpiryDate(true);
-        setDisbledConfirmationEnterDate(true);
-      }
-      else if (user.employeeTypeId == 93) // Probation Type
-      {
+  //       setContractExpiryDate('');
+  //       setConfirmationDate('');
+  //       // setConfirmationDueDate('');
+  //       //   setConfirmationEnterDate('');
 
-        setDisabledConfirmationDate(true);
-        setDisabledContractExpiryDate(true);
+  //       setDisbledConfirmationDueDate(true);
+  //       setDisabledContractExpiryDate(true);
+  //       setDisbledConfirmationEnterDate(true);
+  //     }
+  //     else if (user.employeeTypeId == 93) // Probation Type
+  //     {
 
-        setContractExpiryDate('');
-        setConfirmationDate('');
-        setConfirmationEnterDate('');
-        // setConfirmationDueDate(addMonths(values.dateOfJoining || null, defProbationPolicyMonth))
+  //       setDisabledConfirmationDate(true);
+  //       setDisabledContractExpiryDate(true);
 
-      }
-      else if (user.employeeTypeId == 147) // Contract Type
-      {
+  //       setContractExpiryDate('');
+  //       setConfirmationDate('');
+  //       setConfirmationEnterDate('');
+  //       // setConfirmationDueDate(addMonths(values.dateOfJoining || null, defProbationPolicyMonth))
 
-        //  setContractExpiryDate('');
-        setConfirmationDate('');
-        setConfirmationDueDate('');
-        setConfirmationEnterDate('');
+  //     }
+  //     else if (user.employeeTypeId == 147) // Contract Type
+  //     {
 
-
-        // setFieldValue("dateOfContractExpiry", '');
-
-        // For Disabled Object
-        setDisbledConfirmationEnterDate(true);
-        setDisabledConfirmationDate(true);
-        setDisbledConfirmationDueDate(true);
-        //  setDisabledContractExpiryDate(true);
-
-        // setContractExpiryDate(addMonths(user.dateOfJoining || null, defProbationPolicyMonth))
-
-      }
+  //       //  setContractExpiryDate('');
+  //       setConfirmationDate('');
+  //       setConfirmationDueDate('');
+  //       setConfirmationEnterDate('');
 
 
-      else {
+  //       // setFieldValue("dateOfContractExpiry", '');
+
+  //       // For Disabled Object
+  //       setDisbledConfirmationEnterDate(true);
+  //       setDisabledConfirmationDate(true);
+  //       setDisbledConfirmationDueDate(true);
+  //       //  setDisabledContractExpiryDate(true);
+
+  //       // setContractExpiryDate(addMonths(user.dateOfJoining || null, defProbationPolicyMonth))
+
+  //     }
 
 
-        setContractExpiryDate(new Date());
-        setConfirmationDate(new Date());
-        setConfirmationDueDate(new Date());
-        setConfirmationEnterDate(new Date());
+  //     else {
 
-      }
-    }
-  }, user.Id);
+
+  //       setContractExpiryDate(new Date());
+  //       setConfirmationDate(new Date());
+  //       setConfirmationDueDate(new Date());
+  //       setConfirmationEnterDate(new Date());
+
+  //     }
+  //   }
+  // }, user.Id);
 
   useEffect(() => {
     // Get the current date in YYYY-MM-DD format
@@ -508,11 +514,13 @@ export function DesignationEditForm({
   //=========== END
 
   //===== Date Of Confirmation
-  useEffect(() => {
-    if (user.dateOfConfirmation) {
-      setConfirmationDate(new Date(user.dateOfConfirmation));
-    }
-  }, [user.dateOfConfirmation]);
+
+  //off
+  // useEffect(() => {
+  //   if (user.dateOfConfirmation) {
+  //     setConfirmationDate(new Date(user.dateOfConfirmation));
+  //   }
+  // }, [user.dateOfConfirmation]);
 
   //=========== END
 
@@ -567,11 +575,12 @@ export function DesignationEditForm({
   }, [user?.maritalStatus, dashboard.maritalStatus]);
 
   //===== Date Of Confirmation Due
-  useEffect(() => {
-    if (user.dateOfConfirmationDue) {
-      setConfirmationDueDate(new Date(user.dateOfConfirmationDue));
-    }
-  }, [user.dateOfConfirmationDue]);
+  //off
+  // useEffect(() => {
+  //   if (user.dateOfConfirmationDue) {
+  //     setConfirmationDueDate(new Date(user.dateOfConfirmationDue));
+  //   }
+  // }, [user.dateOfConfirmationDue]);
 
   //=========== END
 
@@ -1492,6 +1501,10 @@ export function DesignationEditForm({
                             setDisabledConfirmationDate(false);
                             setDisbledConfirmationDueDate(false);
                             setDisabledContractExpiryDate(false);
+
+
+
+
                             // if (e.value == 148) // WHEN Select Permanet value
                             // {
                             //   // For Empty Object
@@ -1568,15 +1581,20 @@ export function DesignationEditForm({
 
                             // else {
 
-                            setFieldValue("dateOfContractExpiry", contractExpirtyDateSelected || new Date())
-                            setFieldValue("dateOfConfirmationEnter", confirmationEnterDateSelected || new Date())
-                            setFieldValue("dateOfConfirmationDue", confirmationDueDateSelected || new Date())
-                            setFieldValue("dateOfConfirmation", confirmationDateSelected || new Date())
 
-                            setContractExpiryDate(new Date());
-                            setConfirmationDate(new Date());
-                            setConfirmationDueDate(new Date());
-                            setConfirmationEnterDate(new Date());
+                            //off for temp
+                            // *********************************************************************************************************
+                            // setFieldValue("dateOfContractExpiry", contractExpirtyDateSelected || new Date())
+                            // setFieldValue("dateOfConfirmationEnter", confirmationEnterDateSelected || new Date())
+                            // setFieldValue("dateOfConfirmationDue", confirmationDueDateSelected || new Date())
+                            // setFieldValue("dateOfConfirmation", confirmationDateSelected || new Date())
+
+                            // setContractExpiryDate(new Date());
+                            // setConfirmationDate(new Date());
+                            // setConfirmationDueDate(new Date());
+                            // setConfirmationEnterDate(new Date());
+
+                            // *********************************************************************************************************                          
 
                             // }
 
@@ -1619,19 +1637,24 @@ export function DesignationEditForm({
                             setFieldValue("dateOfJoining", date);
                             setJoiningDate(date);
 
-                            if (values?.employeeTypeId == "93" && !isNaN(defContractExpiryPolicy)) // Probation
+                            // *********************************************************************************************************
 
-                            {
+                            // if (values?.employeeTypeId == "93" && !isNaN(defContractExpiryPolicy)) // Probation
 
-                              setConfirmationDueDate(addMonths(date, defProbationPolicyMonth))
-                              setFieldValue("dateOfConfirmationDue", addMonths(date, defProbationPolicyMonth))
-                            }
-                            if (values?.employeeTypeId == "147" && !isNaN(defContractExpiryPolicy)) // Contract Type
-                            {
-                              setContractExpiryDate(addMonths(date, defContractExpiryPolicy))
-                              setFieldValue("dateOfContractExpiry", addMonths(date, defContractExpiryPolicy))
+                            // {
 
-                            }
+                            //   setConfirmationDueDate(addMonths(date, defProbationPolicyMonth))
+                            //   setFieldValue("dateOfConfirmationDue", addMonths(date, defProbationPolicyMonth))
+                            // }
+                            // if (values?.employeeTypeId == "147" && !isNaN(defContractExpiryPolicy)) // Contract Type
+                            // {
+                            //   setContractExpiryDate(addMonths(date, defContractExpiryPolicy))
+                            //   setFieldValue("dateOfContractExpiry", addMonths(date, defContractExpiryPolicy))
+
+                            // }
+
+
+                            // *********************************************************************************************************                           
                           }}
                           showYearDropdown
                           scrollableMonthYearDropdown
@@ -1654,8 +1677,9 @@ export function DesignationEditForm({
 
 
                       <div className="col-12 col-md-4 mt-3">
+                        <label>Default Shift<span style={{ color: 'red' }}>*</span></label>
                         <Select
-                          label="Default Shift"
+                          // label="Default Shift"
                           name="defaultShiftId"
                           value={values.defaultShiftId}
                           onChange={handleChange}
@@ -1745,9 +1769,10 @@ export function DesignationEditForm({
 
 
                       <div className="col-12 col-md-4 mt-3">
+                        <label>Report To<span style={{ color: 'red' }}>*</span></label>
                         <SearchSelect
                           name="reportTo"
-                          label={<span> Report To</span>}
+
                           isDisabled={isUserForRead && true}
                           // onBlur={() => {
                           //   handleBlur({ target: { name: "countryId" } });
@@ -1762,6 +1787,7 @@ export function DesignationEditForm({
                           touched={touched.reportTo}
                           options={dashboard.allEmployees.filter(x => x.value != values.Id)}
                         />
+                        
                       </div>
 
                     </div>
@@ -2017,7 +2043,7 @@ export function DesignationEditForm({
                   <br></br>
 
 
-                  <div style={{ backgroundColor: "#0093DD",color:"white", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
+                  <div style={{ backgroundColor: "#0093DD", color: "white", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
                     <h6>Additional Information</h6>
 
                   </div>
@@ -2175,7 +2201,9 @@ export function DesignationEditForm({
                           name="dateOfConfirmationEnter"
                           disabled={disbaledConfirmationEnterDateSelected}
                           autoComplete="off"
-                          minDate={values.dateOfConfirmationDue ? new Date(values.dateOfConfirmationDue) : new Date(values.dateOfJoining)}
+                          // minDate={values.dateOfConfirmationDue ? new Date(values.dateOfConfirmationDue) : new Date(values.dateOfJoining)}
+
+                          minDate={values.dateOfJoining ? new Date(values.dateOfJoining) : null}
                         />
                         <ErrorMessage className="form-feedBack" name="dateOfConfirmationEnter" component="div" />
                       </div>
@@ -2234,7 +2262,7 @@ export function DesignationEditForm({
                           style={{ display: "block" }}
                           autoComplete="off"
                         >
-                          <option value="-1" label="Select Attendance Type" />
+                          {/* <option value="-1" label="Select Attendance Type" /> */}
                           <option value="1" label="Regular Attendance" />
                           <option value="2" label="Auto Present Attendance" />
 
@@ -2560,19 +2588,19 @@ export function DesignationEditForm({
 
 
                   </div>
-               
+
                   <br></br>
-                  <div style={{ backgroundColor: "#0093DD",color:"white", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-                  <h6>Employee Extended Information</h6>
+                  <div style={{ backgroundColor: "#0093DD", color: "white", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
+                    <h6>Employee Extended Information</h6>
 
                   </div>
                   <br></br>
 
 
                   <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-                  
 
-                  
+
+
                     <div className="from-group row">
 
 
