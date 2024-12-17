@@ -32,39 +32,54 @@ const formValidation = Yup.object().shape({
       /^(?:[01]\d|2[0-3])[0-5]\d$/,
       'Time must be in HHMM format and valid 24-hour format'
     )
-    .when('startTime', {
-      // Check that endTime is greater than or equal to startTime
-      is: (startTime) => startTime && startTime !== '',
-      then: Yup.string().test('end-time-validation', 'End Time cannot be less than Start Time', function (endTime) {
-        const { startTime } = this.parent; // Access startTime from parent values
-        if (startTime && endTime && startTime > endTime) {
-          return false; // Validation fails if endTime is less than startTime
-        }
-        return true;
-      })
+    .test('times-not-equal', 'Start time and end time cannot be the same', function (value) {
+      const { startTime } = this.parent; // Access startTime from the parent object
+      if (startTime && value) {
+        return value !== startTime; // Ensure endTime is not the same as startTime
+      }
+      return true; // If either startTime or endTime is not defined, the validation passes
     }),
+    // .when('startTime', {
+    //   // Check that endTime is greater than or equal to startTime
+    //   is: (startTime) => startTime && startTime !== '',
+    //   then: Yup.string().test('end-time-validation', 'End Time cannot be less than Start Time', function (endTime) {
+    //     const { startTime } = this.parent; // Access startTime from parent values
+    //     if (startTime && endTime && startTime > endTime) {
+    //       return false; // Validation fails if endTime is less than startTime
+    //     }
+    //     return true;
+    //   })
+    // }),
 
   earlyIn: Yup.string()
     // .required('Required*')
     .matches(
       /^(?:[01]\d|2[0-3])[0-5]\d$/,
       'Time must be in HHMM format and valid 24-hour format'),
+      // .test('is-not-less-than-start', 'Late in timecannot be less than startTime', function (value) {
+      //   const { startTime } = this.parent; // Access startTime from the parent object
+      //   if (startTime && value) {
+      //     // Compare the two times as strings (HHMM format is lexicographically comparable)
+      //     return value >= startTime;
+      //   }
+      //   return true; // If either startTime or earlyIn is not defined, the validation passes
+      // }),
 
   earlyOut: Yup.string()
     // .required('Required*')
     .matches(
       /^(?:[01]\d|2[0-3])[0-5]\d$/,
-      'Time must be in HHMM format and valid 24-hour format')
-    .when('earlyIn', {
-      is: (earlyIn) => earlyIn && earlyIn !== '',
-      then: Yup.string().test('early-out-validation', 'Early Out Time cannot be less than Early In Time', function (earlyOut) {
-        const { earlyIn } = this.parent;
-        if (earlyIn && earlyOut && earlyIn > earlyOut) {
-          return false; // Validation fails if earlyOut is less than earlyIn
-        }
-        return true;
-      })
-    }),
+      'Time must be in HHMM format and valid 24-hour format'),
+    // .when('earlyIn', {
+    //   is: (earlyIn) => earlyIn && earlyIn !== '',
+    //   then: Yup.string().test('early-out-validation', 'Early Out Time cannot be less than Early In Time', function (earlyOut) {
+    //     const { earlyIn } = this.parent;
+    //     if (earlyIn && earlyOut && earlyIn > earlyOut) {
+    //       return false; // Validation fails if earlyOut is less than earlyIn
+    //     }
+    //     return true;
+    //   })
+    // }),
 
   halfDayStart: Yup.string()
     // .required('Required*')
@@ -130,6 +145,21 @@ const formValidation = Yup.object().shape({
           })
       })
       .nullable(),
+
+
+      markAbsent: Yup.string()
+
+      .matches(
+        /^(?:[01]\d|2[0-3])[0-5]\d$/,
+        'Time must be in HHMM format and valid 24-hour format'
+      ),
+
+      markHalfDay: Yup.string()
+
+      .matches(
+        /^(?:[01]\d|2[0-3])[0-5]\d$/,
+        'Time must be in HHMM format and valid 24-hour format'
+      ),
 
 });
 
@@ -241,17 +271,17 @@ export function MasterEditForm({
   };
 
   const handleOverTimeStartChange = (e, setFieldValue, values) => {
-    console.log('::::::::::', values);
+  
     
     if (values.endTime) {
       const gap = calculateTimeDifference(values.endTime, values.overTimeStart);
-      console.log('::::::::gap::::::',gap);
+  
       setFieldValue("interShiftGap",gap || 0);
      setInterShiftGapTime(gap || 0);
     }
   };
 
-  console.log("defWeekDays", user)
+
   return (
     <>
       <Formik
@@ -275,7 +305,7 @@ export function MasterEditForm({
           setFieldValue,
         }) => (
           <>
-          {console.log("dsddd",values)}
+         
             <Modal.Body className="overlay overlay-block cursor-default">
               {actionsLoading && (
                 <div className="overlay-layer bg-transparent">
@@ -349,7 +379,7 @@ export function MasterEditForm({
                         name="shiftCode"
                         component={Input}
                         placeholder="Enter shift code"
-                        maxLength={6}
+                        maxLength={3}
                         onChange={handleChange}
                         onBlur={handleBlur}
                         label={
@@ -501,14 +531,14 @@ export function MasterEditForm({
                   <div className="from-group row">
                     <div className="col-12 col-md-4 mt-3">
                       <label>
-                      Mark Employee as Absent if Working Hours are less than (x) hours
+                      Mark Employee as Absent if Working Hours are less than selected hours
                       </label>
                       <Field
-                        name="breakTimeStart"
+                        name="markAbsent"
                          component={Input}
                         placeholder="Enter Min:hours"
                         maxLength={4}
-                        error={errors.breakTimeStart}
+                        error={errors.markAbsent}
                         autoComplete="off"
                       
                       />
@@ -516,14 +546,14 @@ export function MasterEditForm({
 
                     <div className="col-12 col-md-4 mt-3">
                       <label>
-                      Mark Employee as Half Day if Working Hours are less than (x) hours
+                      Mark Employee as Half Day if Working Hours are less than selected hours
                       </label>
                       <Field
-                        name="breakTimeEnd"
+                        name="markHalfDay"
                           component={Input}
                         placeholder="Enter Min:hours"
                         maxLength={4}
-                        error={errors.breakTimeEnd}
+                        error={errors.markHalfDay}
                         autoComplete="off"
                     
                       />

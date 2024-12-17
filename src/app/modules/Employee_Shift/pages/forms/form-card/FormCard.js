@@ -31,7 +31,7 @@ export function FormCard() {
   const accessUser = userAccess.find(
     (item) => item.componentName === "CreateEmployeeShift"
   )
-  console.log("card here")
+
   return (
     <>
       <Card>

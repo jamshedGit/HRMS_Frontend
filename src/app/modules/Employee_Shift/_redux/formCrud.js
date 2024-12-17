@@ -20,7 +20,7 @@ export function createEmployeeShiftSetup(body) {
  * @returns res
  */
 export async function getAllEmployeeShiftSetup(body) {
-  console.log("aal:")
+
   return axios.post(`${USERS_URL}/employee_shift/read-all-employee-shift`, body);
 }
 

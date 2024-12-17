@@ -16,7 +16,7 @@ export const fetchEmployeeShift = (queryparm) => async (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.list }));
   return requestFromServer.getAllEmployeeShiftSetup(queryparm)
     .then((response) => {
-      console.log("shift_res:",response)
+    
       
     
     dispatch(actions.EmployeeshiftFetched(response));
@@ -166,7 +166,7 @@ export const saveRecord = (data, id, disableLoading, onHide) => (dispatch) => {
 export const deleteRecord = (id, disableLoading, onHide) => (dispatch) => {
   return requestFromServer.deleteEmployeeShiftSetup(id)
     .then((res) => {
-      dispatch(actions.EmployeeShiftDeleted({ id }));
+      dispatch(actions.EmployeeshiftDeleted({ id }));
       disableLoading();
       toast.success(SERVER_MESSAGES.deletedSuccess, {
         position: "top-right",
