@@ -34,7 +34,7 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
 
                     {/* Delete Button Starts */}
                     <td>
-                      <button type="button" onClick={() => {
+                      <button type="button" className="btn btn-danger btn-elevate" onClick={() => {
                         handleDelete('LeaveTypePolicyTable', values?.leavetypePolicies?.[index]?.Id, remove, index)
                       }}>
                         Delete
@@ -290,6 +290,7 @@ function LeaveTypePolicyTable({ values, setFieldValue, createDropdown, errors, t
             {/* Add button Field Starts */}
             {values.subsidiaryId && /* values.gradeId && values.employeeTypeId &&*/ <button
               type="button"
+              className="btn btn-primary btn-elevate"
               onClick={() =>
                 push({
                   leaveType: "",

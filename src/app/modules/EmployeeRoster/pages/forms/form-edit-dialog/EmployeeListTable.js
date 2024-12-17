@@ -31,7 +31,7 @@ function EmployeeListTable({ values, setFieldValue, errors, touched, dropdownDat
 
                     {/* Delete Button Starts */}
                     <td>
-                      <button disabled={isEdit} type="button" onClick={() => {
+                      <button disabled={isEdit} className="btn btn-danger btn-elevate" type="button" onClick={() => {
                         remove(index)
                       }}>
                         Delete
@@ -73,6 +73,7 @@ function EmployeeListTable({ values, setFieldValue, errors, touched, dropdownDat
             {/* Add button Field Starts */}
             {!isEdit && <button
               type="button"
+              className="btn btn-primary btn-elevate"
               onClick={() =>
                 push({
                   employeeId: "",
