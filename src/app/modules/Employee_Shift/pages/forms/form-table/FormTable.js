@@ -60,7 +60,7 @@ export function FormTable() {
   const isAccessForDelete = userAccess?.find(
     (item) => item.componentName === "DeleteEmployeeShift"
   );
-  console.log("pak::",isAccessForEdit,isAccessForDelete)
+
   // Table columns
   const columns = [
     {
@@ -85,9 +85,32 @@ export function FormTable() {
       },
     },
 
+    // {
+    //   dataField: "shiftType",
+    //   text: "Shift Type",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "160px",
+    //   },
+    // },
+
+        {
+      dataField: "startTime",
+      text: "start Time",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
+    
+    
     {
-      dataField: "shiftType",
-      text: "Shift Type",
+      dataField: "endTime",
+      text: "end Time",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,

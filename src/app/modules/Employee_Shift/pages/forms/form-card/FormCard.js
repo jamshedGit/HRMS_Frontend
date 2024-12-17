@@ -9,6 +9,7 @@ import { FormTable } from "../form-table/FormTable"
 import { useFormUIContext } from "../FormUIContext"
 import { FormFilter } from "../form-filter/FormFilter"
 import { useSelector, shallowEqual } from "react-redux"
+import CurrentModuleName from "../../../../../utils/common-modules/ModuleName"
 
 export function FormCard() {
   const FormUIContext = useFormUIContext()
@@ -30,31 +31,73 @@ export function FormCard() {
   const accessUser = userAccess.find(
     (item) => item.componentName === "CreateEmployeeShift"
   )
-console.log("card here")
+
   return (
     <>
-
       <Card>
-        <CardHeader title={null}>
-          <FormFilter />
-          <CardHeaderToolbar>
-            {accessUser && (
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={formUIProps.newFormButtonClick}
-              >
-                + Add Employee Shift
-              </button>
-            )}
-          </CardHeaderToolbar>
+
+        <CardHeader title={CurrentModuleName()} >
+
+          <div className="d-flex justify-content-between align-items-center gap-3 m-4">
+
+
+
+            <div className="pt-5">
+
+              <FormFilter />
+
+            </div>
+
+            <div className=" p-2">
+
+              <CardHeaderToolbar>
+
+
+
+                {accessUser && (
+
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={formUIProps.newFormButtonClick}
+                  >
+                    + Add Shift
+                  </button>
+
+                )}
+
+
+
+
+
+              </CardHeaderToolbar>
+
+            </div>
+
+
+
+          </div>
+
         </CardHeader>
+
+
 
         <CardBody>
 
+
+
           <FormTable />
+
         </CardBody>
+
       </Card>
+
+
+
+
+
+
+
     </>
   )
 }
