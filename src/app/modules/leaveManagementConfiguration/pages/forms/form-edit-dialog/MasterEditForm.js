@@ -111,7 +111,14 @@ export function MasterEditForm({
       // employeeTypeId: Yup.number().required(VALIDATION_MESSAGES.required),
       // minExp: Yup.number().min(0, VALIDATION_MESSAGES.minZeroValue).max(99, VALIDATION_MESSAGES.maxTwoDigits).optional(),
       // maritalStatus: Yup.number().nullable(),
-      weekend: Yup.array().required(VALIDATION_MESSAGES.required).min(1),
+      weekend: Yup.array()
+        .when('isSandwich', {
+          is: true, // Condition to check
+          then: Yup.array()
+            .required(VALIDATION_MESSAGES.required)
+            .min(1, VALIDATION_MESSAGES.min), // Minimum 1 item
+          otherwise: Yup.array().notRequired(), // Not required if isSandwich is false
+        }),
       isSandwich: Yup.boolean().optional(),
       leavetypePolicies: Yup.array().of(
         Yup.object().shape({
@@ -340,7 +347,7 @@ export function MasterEditForm({
                         label={
                           <span>
                             {" "}
-                            Weekends<span style={{ color: "red" }}>*</span>
+                            Weekends{Boolean(values.isSandwich) && <span style={{ color: "red" }}>*</span>}
                           </span>
                         }
                         value={values.weekend}
