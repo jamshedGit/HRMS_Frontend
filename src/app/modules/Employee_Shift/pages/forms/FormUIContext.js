@@ -28,7 +28,7 @@ export function FormUIProvider({ FormUIEvents, children }) {
 
   const initUser = {
     subsidiaryId: "",
-    companyId: "",
+    companyId:1,
     name: "",
     shiftCode: "",
     shiftType: "",
@@ -45,7 +45,8 @@ export function FormUIProvider({ FormUIEvents, children }) {
     overTimeStart: "",
     interShiftGap: "",
     isIncludeInterShifGap: "",
-    companyId: "1",
+    markAbsent:"",
+    markHalfDay:""
   };
 
 
