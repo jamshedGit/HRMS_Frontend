@@ -45,13 +45,13 @@ const formValidation = Yup.object().shape({
     }),
 
   earlyIn: Yup.string()
-    .required('Required*')
+    // .required('Required*')
     .matches(
       /^(?:[01]\d|2[0-3])[0-5]\d$/,
       'Time must be in HHMM format and valid 24-hour format'),
 
   earlyOut: Yup.string()
-    .required('Required*')
+    // .required('Required*')
     .matches(
       /^(?:[01]\d|2[0-3])[0-5]\d$/,
       'Time must be in HHMM format and valid 24-hour format')
@@ -67,13 +67,13 @@ const formValidation = Yup.object().shape({
     }),
 
   halfDayStart: Yup.string()
-    .required('Required*')
+    // .required('Required*')
     .matches(
       /^(?:[01]\d|2[0-3])[0-5]\d$/,
       'Time must be in HHMM format and valid 24-hour format'),
 
   halfDayEnd: Yup.string()
-    .required('Required*')
+    // .required('Required*')
     .matches(
       /^(?:[01]\d|2[0-3])[0-5]\d$/,
       'Time must be in HHMM format and valid 24-hour format')
@@ -88,13 +88,13 @@ const formValidation = Yup.object().shape({
       })
     }),
   breakTimeStart: Yup.string()
-    .required('Required*')
+    // .required('Required*')
     .matches(
       /^(?:[01]\d|2[0-3])[0-5]\d$/,
       'Time must be in HHMM format and valid 24-hour format'),
 
   breakTimeEnd: Yup.string()
-    .required('Required*')
+    // .required('Required*')
     .matches(
       /^(?:[01]\d|2[0-3])[0-5]\d$/,
       'Time must be in HHMM format and valid 24-hour format')
@@ -396,7 +396,7 @@ export function MasterEditForm({
                   <div className="from-group row">
                     <div className="col-12 col-md-4 mt-3">
                       <label>
-                        Early Time (In) <span style={{ color: "red" }}>*</span>
+                      Late In Time
                       </label>
                       <Field
                         name="earlyIn"
@@ -411,7 +411,7 @@ export function MasterEditForm({
 
                     <div className="col-12 col-md-4 mt-3">
                       <label>
-                        Early Time (Out) <span style={{ color: "red" }}>*</span>
+                      Early Out Time
                       </label>
                       <Field
                         name="earlyOut"
@@ -430,7 +430,7 @@ export function MasterEditForm({
                   <div className="from-group row">
                     <div className="col-12 col-md-4 mt-3">
                       <label>
-                        Half Day Start <span style={{ color: "red" }}>*</span>
+                        Half Day Start
                       </label>
                       <Field
                         name="halfDayStart"
@@ -445,7 +445,7 @@ export function MasterEditForm({
 
                     <div className="col-12 col-md-4 mt-3">
                       <label>
-                        Early Time (Out) <span style={{ color: "red" }}>*</span>
+                      Half Day End
                       </label>
                       <Field
                         name="halfDayEnd"
@@ -463,7 +463,7 @@ export function MasterEditForm({
                   <div className="from-group row">
                     <div className="col-12 col-md-4 mt-3">
                       <label>
-                        Break Time Start <span style={{ color: "red" }}>*</span>
+                        Break Time Start 
                       </label>
                       <Field
                         name="breakTimeStart"
@@ -478,7 +478,7 @@ export function MasterEditForm({
 
                     <div className="col-12 col-md-4 mt-3">
                       <label>
-                        Break Time End <span style={{ color: "red" }}>*</span>
+                        Break Time End 
                       </label>
                       <Field
                         name="breakTimeEnd"
@@ -492,6 +492,49 @@ export function MasterEditForm({
                     </div>
 
                   </div>
+
+
+             
+
+
+
+                  <div className="from-group row">
+                    <div className="col-12 col-md-4 mt-3">
+                      <label>
+                      Mark Employee as Absent if Working Hours are less than (x) hours
+                      </label>
+                      <Field
+                        name="breakTimeStart"
+                         component={Input}
+                        placeholder="Enter Min:hours"
+                        maxLength={4}
+                        error={errors.breakTimeStart}
+                        autoComplete="off"
+                      
+                      />
+                    </div>
+
+                    <div className="col-12 col-md-4 mt-3">
+                      <label>
+                      Mark Employee as Half Day if Working Hours are less than (x) hours
+                      </label>
+                      <Field
+                        name="breakTimeEnd"
+                          component={Input}
+                        placeholder="Enter Min:hours"
+                        maxLength={4}
+                        error={errors.breakTimeEnd}
+                        autoComplete="off"
+                    
+                      />
+                    </div>
+
+                  </div>
+
+
+
+
+
                   <div className="from-group row">
                     <div className="col-12 col-md-4 mt-3">
                       Working Days
