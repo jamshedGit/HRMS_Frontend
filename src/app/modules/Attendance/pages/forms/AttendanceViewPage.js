@@ -7,6 +7,8 @@ import { FormFilter } from "./form-filter/FormFilter";
 import { Card } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAllActiveEmployees, fetchAllDept, fetchAllFormsMenu, fetchAllSubsidiaryData } from "../../../../../_metronic/redux/dashboardActions";
+import { CardHeader } from "../../../../../_metronic/_partials/controls";
+import CurrentModuleName from "../../../../utils/common-modules/ModuleName";
 
 export function AttendanceViewPage() {
   const dispatch = useDispatch();
@@ -44,6 +46,9 @@ export function AttendanceViewPage() {
     <FormUIProvider FormUIEvents={{}}>
       < Card>
         {/* Card Starts */}
+
+        <CardHeader title={CurrentModuleName()}>
+        </CardHeader>
 
         {/* Filter Form Starts */}
         <FormFilter loading={listLoading} />
