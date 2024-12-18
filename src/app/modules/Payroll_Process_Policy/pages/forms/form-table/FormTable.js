@@ -283,31 +283,31 @@ export function FormTable(user) {
       basic_pay_accountId: Yup.number()
         .when('isEnableAccounting', {
           is: true, // if select value is 2
-          then: Yup.number().required(VALIDATION_MESSAGES.required),
+          then: Yup.number().min(1, VALIDATION_MESSAGES.required).required(VALIDATION_MESSAGES.required),
           otherwise: Yup.number().notRequired(),
         }),
       payroll_payable_accountId: Yup.number()
         .when('isEnableAccounting', {
           is: true, // if select value is 2
-          then: Yup.number().required(VALIDATION_MESSAGES.required),
+          then: Yup.number().min(1, VALIDATION_MESSAGES.required).required(VALIDATION_MESSAGES.required),
           otherwise: Yup.number().notRequired(),
         }),
       payrollTax_DeductionTypeId: Yup.number()
         .when('isEnableTax', {
           is: true, // if select value is 2
-          then: Yup.number().required(VALIDATION_MESSAGES.required),
+          then: Yup.number().min(1, VALIDATION_MESSAGES.required).required(VALIDATION_MESSAGES.required),
           otherwise: Yup.number().notRequired(),
         }),
       arrearTaxDeductionId: Yup.number()
         .when('isEnableTax', {
           is: true, // if select value is 2
-          then: Yup.number().required(VALIDATION_MESSAGES.required),
+          then: Yup.number().min(1, VALIDATION_MESSAGES.required).required(VALIDATION_MESSAGES.required),
           otherwise: Yup.number().notRequired(),
         }),
       leaveDeductionId: Yup.number()
         .when('isEnableAttandanceIntegration', {
           is: true, // if select value is 2
-          then: Yup.number().required(VALIDATION_MESSAGES.required),
+          then: Yup.number().min(1, VALIDATION_MESSAGES.required).required(VALIDATION_MESSAGES.required),
           otherwise: Yup.number().notRequired(),
         }),
       lateCountPerDaySalaryDeduction: Yup.number()
@@ -319,25 +319,25 @@ export function FormTable(user) {
       leaveEnchashment_EarningId: Yup.number()
         .when('isEnableAttandanceIntegration', {
           is: true, // if select value is 2
-          then: Yup.number().required(VALIDATION_MESSAGES.required),
+          then: Yup.number().min(1, VALIDATION_MESSAGES.minOneValue).required(VALIDATION_MESSAGES.required),
           otherwise: Yup.number().notRequired(),
         }),
       lateDeductionId: Yup.number()
         .when('isEnableAttandanceIntegration', {
           is: true, // if select value is 2
-          then: Yup.number().required(VALIDATION_MESSAGES.required),
+          then: Yup.number().min(1, VALIDATION_MESSAGES.required).required(VALIDATION_MESSAGES.required),
           otherwise: Yup.number().notRequired(),
         }),
       overTimeEarningId: Yup.number()
         .when('isEnableAttandanceIntegration', {
           is: true, // if select value is 2
-          then: Yup.number().required(VALIDATION_MESSAGES.required),
+          then: Yup.number().min(1, VALIDATION_MESSAGES.required).required(VALIDATION_MESSAGES.required),
           otherwise: Yup.number().notRequired(),
         }),
       eobi_deductionId: Yup.number()
         .when('isEnableEOBI', {
           is: true, // if select value is 2
-          then: Yup.number().required(VALIDATION_MESSAGES.required),
+          then: Yup.number().min(1, VALIDATION_MESSAGES.required).required(VALIDATION_MESSAGES.required),
           otherwise: Yup.number().notRequired(),
         }),
       eobi_basis: Yup.number()
@@ -361,7 +361,7 @@ export function FormTable(user) {
       sessi_deductionId: Yup.number()
         .when('isEnableSESSI', {
           is: true, // if select value is 2
-          then: Yup.number().required(VALIDATION_MESSAGES.required),
+          then: Yup.number().min(1, VALIDATION_MESSAGES.required).required(VALIDATION_MESSAGES.required),
           otherwise: Yup.number().notRequired(),
         }),
       sessi_basis: Yup.number()
@@ -612,6 +612,9 @@ export function FormTable(user) {
         validationSchema={formValidation}
 
         onSubmit={async (values) => {
+
+          console.log('::::values:::::',values);
+          
           const validationErrors = validate();
           if (Object.keys(validationErrors).length > 0) {
             setotherErrors(validationErrors);
