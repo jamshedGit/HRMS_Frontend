@@ -166,9 +166,9 @@ export function MasterEditForm({
                     </div>
                     {/* Time In Field End */}
 
-                    </div>
+                  </div>
 
-                    <div className="from-group row">
+                  <div className="from-group row">
 
                     {/* Date Out Field Start */}
                     <div className="col-12 col-md-4 mt-3">
@@ -204,9 +204,9 @@ export function MasterEditForm({
                     </div>
                     {/* Time Out Field End */}
 
-                    </div>
+                  </div>
 
-                    <div className="from-group row">
+                  <div className="from-group row">
 
                     {/* Comments Field Start */}
                     <div className="col-12 col-md-8 mt-3">
@@ -249,7 +249,7 @@ export function MasterEditForm({
                             <div className="col-12 col-md-4 mt-3">
                               <Field
                                 name="shiftCode"
-                                component={Select}
+                                component={Input}
                                 className='form-control'
                                 disabled
                                 label={
@@ -258,30 +258,10 @@ export function MasterEditForm({
                                     Employee Shift
                                   </span>
                                 }
-                                value={values.shiftCode}
                                 autoComplete="off"
-                                children={CustomDropdown({ data: allEmployeeShifts, firstElement: { label: '', value: null } })}
                               />
                             </div>
                             {/* Shift Field End */}
-
-                            {/* inter Shift Gap Field Start */}
-                            <div className="col-12 col-md-4 mt-3">
-                              <Field
-                                name="interShifGap"
-                                component={Input}
-                                className='form-control'
-                                disabled
-                                label={
-                                  <span>
-                                    {" "}
-                                    inter Shift Gap
-                                  </span>
-                                }
-                                autoComplete="off"
-                              />
-                            </div>
-                            {/* inter Shift Gap Field End */}
 
                             {/* Shift Start Time Field Start */}
                             <div className="col-12 col-md-4 mt-3">
@@ -444,6 +424,24 @@ export function MasterEditForm({
                               <span>Include Inter-Shift Gap</span>
                             </div>
                             {/* Include Inter-Shift Gap Field End */}
+
+                            {/* inter Shift Gap Field Start */}
+                            <div className="col-12 col-md-4 mt-3">
+                              <Field
+                                name="interShifGap"
+                                component={Input}
+                                className='form-control'
+                                disabled
+                                label={
+                                  <span>
+                                    {" "}
+                                    inter Shift Gap
+                                  </span>
+                                }
+                                autoComplete="off"
+                              />
+                            </div>
+                            {/* inter Shift Gap Field End */}
 
                             {/* Late By Hours Field Start */}
                             <div className="col-12 col-md-4 mt-3">

@@ -7,6 +7,8 @@ import { FormFilter } from "./form-filter/FormFilter";
 import { fetchAllActiveEmployees, fetchAllDept, fetchAllFormsMenu, fetchAllSubsidiaryData } from "../../../../../_metronic/redux/dashboardActions";
 import { useSelector, useDispatch } from "react-redux";
 import { FormUIProvider } from "./FormUIContext";
+import { CardHeader } from "../../../../../_metronic/_partials/controls";
+import CurrentModuleName from "../../../../utils/common-modules/ModuleName";
 
 export function LeaveRegisterPage() {
   const dispatch = useDispatch();
@@ -47,6 +49,9 @@ export function LeaveRegisterPage() {
     <FormUIProvider FormUIEvents={{}}>
       < Card>
         {/* Card Starts */}
+
+        <CardHeader title={CurrentModuleName()}>
+        </CardHeader>
 
         {/* Filter Form Starts */}
         <FormFilter loading={listLoading} pdfLoading={pdfLoading} dispatch={dispatch} />

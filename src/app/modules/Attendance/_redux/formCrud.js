@@ -55,3 +55,15 @@ export function getAttendanceSetupByFilters(filters) {
 export function updateAttendanceSetup(body) {
   return axios.put(`${USERS_URL}/attendance/update-attendance`, body);
 }
+
+/**
+ *
+ * Process Attendance
+ *  
+ * @param {Object} body 
+ * @returns 
+ */
+export function processAttendance(body) {
+  return axios.post(`${USERS_URL}/attendance/process-all-attendance`, body);
+}
+

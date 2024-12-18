@@ -29,7 +29,7 @@ export function ActionsColumnFormatter(
         >
           <a
             title=""
-            className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
+            className="btn btn-icon edit-button"
             onClick={() => editRecord(row.Id)}
           >
             <span className="svg-icon svg-icon-md svg-icon-primary">
@@ -54,7 +54,7 @@ export function ActionsColumnFormatter(
           (
             <a
               title=""
-              className="btn btn-icon btn-light btn-hover-danger btn-sm mx-3"
+              className="btn btn-icon delete-button"
               onClick={() => openDeleteFormDialog(row.Id)}
             >
               <span className="svg-icon svg-icon-md svg-icon-danger">
