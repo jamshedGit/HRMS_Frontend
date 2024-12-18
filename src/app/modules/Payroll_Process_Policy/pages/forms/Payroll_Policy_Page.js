@@ -11,26 +11,29 @@ import { FormCard } from "./form-card/FormCard";
 
 export function Payroll_Policy({ history }) {
   const [defRecordId, setDefaultRecordId] = useState(0);
+  const [readOnly, setreadOnly] = useState(false)
 
   const dispatch = useDispatch();
  
   const FormUIEvents = {
     newFormButtonClick: () => {
-   
+      setreadOnly(false)
       history.push("/payroll_process_policy/read-all-payroll-process-policy/new");
     },
     openEditFormDialog: (id) => {
       setDefaultRecordId(id);
-    
+      setreadOnly(false)
       history.push(`/payroll_process_policy/read-all-payroll-process-policy/${id}/edit`);
     },
     openDeleteFormDialog: (id, status) => {
       history.push(`/payroll_process_policy/read-all-payroll-process-policy/${id}/${status}/delete`);
     },
     openActiveFormDialog: (id) => {
+      setreadOnly(false)
       history.push(`/payroll_process_policy/read-all-payroll-process-policy/${id}/active`);
     },
     openReadFormDialog: (id, isUserRead) => {
+      setreadOnly(true)
       history.push(`/payroll_process_policy/read-all-payroll-process-policy/${id}/read`);
     },
   };
@@ -49,14 +52,13 @@ export function Payroll_Policy({ history }) {
       </Route>
       <Route path="/payroll_process_policy/read-all-payroll-process-policy/:id/edit">
         {({ history, match }) => (
-          // <FormEditDialog
-          //   show={match != null}
-          //   id={match && match.params.id}
-          //   onHide={() => {
-          //     history.push("/payroll_process_policy/read-all-payroll-process-policy");
-          //   }}
-          // />
-          <></>
+          <FormEditDialog
+            show={match != null}
+            id={match && match.params.id}
+            onHide={() => {
+              history.push("/payroll_process_policy/read-all-payroll-process-policy");
+            }}
+          />
         )}
       </Route>
       <Route path="/payroll_process_policy/read-all-payroll-process-policy/:id/read">
@@ -95,7 +97,7 @@ export function Payroll_Policy({ history }) {
           />
         )}
       </Route>
-      <FormCard id={defRecordId} setid = {setDefaultRecordId}/>
+      <FormCard id={defRecordId} setid = {setDefaultRecordId} readOnly={readOnly}/>
       <ToastContainer
         position="top-right"
         autoClose={5000}
