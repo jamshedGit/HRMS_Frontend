@@ -40,13 +40,13 @@ export function DesignationUIProvider({ DesignationUIEvents, children }) {
     gradeId: '',
     designationId : '',
     departmentId : '',
-    teamId: '',
+    teamId: null,
     payrollGroupId: '',
-    regionId: '',
+    regionId: null,
     employeeTypeId: '',
     locationId: '',
-    countryId: '',
-    cityId: '',
+    countryId:null,
+    cityId: null,
     dateOfJoining: '',
     dateOfBirth: null,
     nic_no:'',
@@ -81,8 +81,10 @@ export function DesignationUIProvider({ DesignationUIEvents, children }) {
     contractTypeId: '',
     cycleTypeId: '',
     requireDeligation: '',
-   
+    reportTo:"",
+    defaultShiftId:"",
     //defContactList: []
+    attendanceType:1
     
 
   };
