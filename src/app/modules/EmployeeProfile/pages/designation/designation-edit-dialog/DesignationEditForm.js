@@ -141,9 +141,9 @@ const profileValidation = Yup.object().shape(
       }),
     dateOfConfirmationDue: Yup.date()
       .nullable()
-      .when('dateOfConfirmation', (dateOfConfirmation, schema) => {
-        return dateOfConfirmation
-          ? schema.min(dateOfConfirmation, 'Date confirmation due cannot be earlier than date confirmation')
+      .when('dateOfJoining', (dateOfJoining, schema) => {
+        return dateOfJoining
+          ? schema.min(dateOfJoining, 'Date confirmation due cannot be earlier than date Of Joining')
           : schema;
       }),
     dateOfConfirmationEnter: Yup.date()
