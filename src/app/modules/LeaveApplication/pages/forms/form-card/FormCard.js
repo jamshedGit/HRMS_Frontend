@@ -55,6 +55,7 @@ export function FormCard() {
   useEffect(() => {
     dispatch(actions.fetchLeaveBalances(formUIProps.employeeId))
     dispatch(fetchAllLeaveType("allLeaveTypes", formUIProps.employeeId));
+    dispatch(actions.getPayrollMonth(formUIProps.employeeId));
 
   }, [dispatch, formUIProps.employeeId, entities])
 
