@@ -14,7 +14,8 @@ import {
   fetchAllDept,
   fetchAllFormsMenu,
   fetchAllActiveEmployees,
-  fetchAllSubsidiaryData
+  fetchAllSubsidiaryData,
+  fetchAllEmployeeShifts
 } from "../../../../../../_metronic/redux/dashboardActions";
 import DatePicker from "react-datepicker";
 import axios from 'axios';
@@ -435,6 +436,10 @@ export function DesignationEditForm({
       dispatch(fetchAllFormsMenu(108, "allDegreeTitle")); // For Degree Title
       dispatch(fetchAllFormsMenu(205, "allCycleTypeList")); // For Degree Title
       dispatch(fetchAllFormsMenu(184, "allContractTypeList")); // For Degree Title
+
+      dispatch(fetchAllEmployeeShifts('allEmployeeShifts'));
+
+
     }
   }, [dispatch]);
 
@@ -1235,15 +1240,15 @@ export function DesignationEditForm({
   const toggleBasicInfoVisibility = () => {
     setIsBasicInfoVisible(!isBasicInfoVisible);
   };
-  
-  
+
+
   const [isExtendedfoVisible, setIsExtendedfoInfoVisible] = useState(false);
 
   // Step 2: Function to toggle visibility
   const toggleExtendedfoVisibility = () => {
     setIsExtendedfoInfoVisible(!isExtendedfoVisible);
   };
-  
+
 
 
   return (
@@ -1436,6 +1441,57 @@ export function DesignationEditForm({
                           options={dashboard.allEmployeeGradeList}
                         />
 
+                      </div>
+
+                      <div className="col-12 col-md-4 mt-3">
+                        {/* <label>Default Shift<span style={{ color: 'red' }}>*</span></label>
+                        <Select
+                          // label="Default Shift"
+                          name="defaultShiftId"
+                          value={values.defaultShiftId}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          style={{ display: "block" }}
+                          autoComplete="off"
+                        >
+                          <option value="-1" label="Select Shift" />
+                          <option value="1" label="Morning Shift-A" />
+                          <option value="2" label="Evening Shift-B" />
+                          <option value="3" label="Night Shift-C" />
+
+
+                        </Select>
+                        {errors.defaultShiftId && touched.defaultShiftId && (
+                          <div className="invalid-text">{errors.defaultShiftId}</div>
+                        )} */}
+
+
+                        <label>Default Shift<span style={{ color: 'red' }}>*</span></label>
+
+                        <SearchSelect
+                          name="defaultShiftId"
+                          // label={<span> defaultShif<span style={{ color: 'red' }}>*</span></span>}
+                          isDisabled={isUserForRead && true}
+                          onBlur={() => {
+                            // handleBlur({ target: { name: "countryId" } });
+                          }}
+                          onChange={(e) => {
+                            setFieldValue("defaultShiftId", e.value || null);
+                            // setDefualtSubsidiaryList(e);
+                            // fetchEmployeePolicyBySubsidiaryId(e.value);
+                            //handlePaymenModeChanged(e)
+                          }}
+
+                          // value={(defSubsidiary || null)}
+                          value={
+                            dashboard?.allEmployeeShifts?.find(
+                              (option) => option.value === values.defaultShiftId
+                            ) || null
+                          }
+                          error={errors.defaultShiftId}
+                          touched={touched.defaultShiftId}
+                          options={dashboard.allEmployeeShifts}
+                        />
                       </div>
                     </div>
                     <div className="form-group row">
@@ -1694,28 +1750,7 @@ export function DesignationEditForm({
 
 
 
-                      <div className="col-12 col-md-4 mt-3">
-                        <label>Default Shift<span style={{ color: 'red' }}>*</span></label>
-                        <Select
-                          // label="Default Shift"
-                          name="defaultShiftId"
-                          value={values.defaultShiftId}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          style={{ display: "block" }}
-                          autoComplete="off"
-                        >
-                          <option value="-1" label="Select Shift" />
-                          <option value="1" label="Morning Shift-A" />
-                          <option value="2" label="Evening Shift-B" />
-                          <option value="3" label="Night Shift-C" />
 
-
-                        </Select>
-                        {errors.defaultShiftId && touched.defaultShiftId && (
-                          <div className="invalid-text">{errors.defaultShiftId}</div>
-                        )}
-                      </div>
 
                     </div>
 
@@ -2071,9 +2106,9 @@ export function DesignationEditForm({
                     }}
                     onClick={toggleBasicInfoVisibility}
                   >
-                  
-                  <div className="flex row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <h6>Additional Information</h6>
+
+                    <div className="flex row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <h6>Additional Information</h6>
                       <KeyboardArrowDown />
 
                     </div>
@@ -2081,557 +2116,557 @@ export function DesignationEditForm({
                   <br></br>
                   {isBasicInfoVisible && (
                     <div>
-                    <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-                      <h6>  Basic Information</h6>
+                      <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
+                        <h6>  Basic Information</h6>
 
-                      <div className="from-group row">
-                        <div className="col-12 col-md-4 mt-3">
-                          <SearchSelect
-                            name="teamId"
-                            label={<span> Team</span>}
-                            isDisabled={isUserForRead && true}
-                            onBlur={() => {
-                              // handleBlur({ target: { name: "countryId" } });
-                            }}
-                            onChange={(e) => {
-                              setFieldValue("teamId", e.value || null);
-                              setDefaultChildTeamsMenus(e);
-                              // dispatch(fetchAllFormsMenu(e.value));
-                            }}
-                            value={(defchildTeamMenus || null)}
-                            error={errors.teamId}
-                            touched={touched.teamId}
-                            options={dashboard.allTeamsChildMenus}
-                          />
+                        <div className="from-group row">
+                          <div className="col-12 col-md-4 mt-3">
+                            <SearchSelect
+                              name="teamId"
+                              label={<span> Team</span>}
+                              isDisabled={isUserForRead && true}
+                              onBlur={() => {
+                                // handleBlur({ target: { name: "countryId" } });
+                              }}
+                              onChange={(e) => {
+                                setFieldValue("teamId", e.value || null);
+                                setDefaultChildTeamsMenus(e);
+                                // dispatch(fetchAllFormsMenu(e.value));
+                              }}
+                              value={(defchildTeamMenus || null)}
+                              error={errors.teamId}
+                              touched={touched.teamId}
+                              options={dashboard.allTeamsChildMenus}
+                            />
+                          </div>
+
+                          <div className="col-12 col-md-4 mt-3">
+
+                            <SearchSelect
+                              name="regionId"
+                              label={<span> Region</span>}
+                              isDisabled={isUserForRead && true}
+                              onBlur={() => {
+                                // handleBlur({ target: { name: "countryId" } });
+                              }}
+                              onChange={(e) => {
+                                setFieldValue("regionId", e.value || null);
+                                setDefaultChildRegionMenus(e);
+                                // dispatch(fetchAllFormsMenu(e.value));
+                              }}
+                              value={(defchildRegionMenus || null)}
+                              error={errors.regionId}
+                              touched={touched.regionId}
+                              options={dashboard.allRegionChildMenus}
+                            />
+                          </div>
+
+                          <div className="col-12 col-md-4 mt-3">
+                            <SearchSelect
+                              name="countryId"
+                              label={<span> Country</span>}
+                              isDisabled={isUserForRead && true}
+                              onBlur={() => {
+                                // handleBlur({ target: { name: "countryId" } });
+                              }}
+                              onChange={(e) => {
+                                setFieldValue("countryId", e.value);
+                                setDefaultCountry(e);
+                                setDefaultCity({});
+                                // dispatch(fetchAllCity(e.value));
+                              }}
+                              value={defCountry}
+                              error={errors.countryId}
+                              touched={touched.countryId}
+                              options={dashboard.allCountry}
+                            />
+                          </div>
+
+                          <div className="col-12 col-md-4 mt-3">
+                            <SearchSelect
+                              name="cityId"
+                              label={<span> City</span>}
+                              isDisabled={isUserForRead && true}
+                              onBlur={() => {
+                                //   handleBlur({ target: { name: "cityId" } });
+                              }}
+                              onChange={(e) => {
+                                setFieldValue("cityId", e.value);
+                                setDefaultCity(e);
+
+                              }}
+                              value={defCity}
+                              error={errors.cityId}
+                              touched={touched.cityId}
+                              options={dashboard.allCity.filter(x => x.code == values.countryId)}
+                            />
+                          </div>
+
+                          <div className="col-12 col-md-4 mt-3">
+                            <label>Date Of Confirmation</label>
+                            <DatePicker
+                              className="form-control"
+                              placeholder=" Date Of Confirmation"
+                              selected={confirmationDateSelected}
+                              showYearDropdown
+                              scrollableMonthYearDropdown
+                              onChange={(date) => {
+                                setFieldValue("dateOfConfirmation", date);
+                                setConfirmationDate(date);
+                              }}
+                              timeInputLabel="Time:"
+                              dateFormat="dd/MM/yyyy"
+                              showTimeInput
+                              name="dateOfConfirmation"
+                              // disabled={disabledConfirmationDateSelected}
+                              autoComplete="off"
+
+                              minDate={values.dateOfJoining ? new Date(values.dateOfJoining) : null}
+                            />
+                            <ErrorMessage className="form-feedBack" name="dateOfConfirmation" component="div" />
+                          </div>
+
+
+                        </div>
+                        <div className="from-group row">
+
+                          <div className="col-12 col-md-4 mt-3">
+                            <label>Date Confirmation Due </label>
+                            <DatePicker
+                              className="form-control"
+                              placeholder=" Date Of Confirmation Due"
+                              selected={confirmationDueDateSelected}
+                              onChange={(date) => {
+                                setFieldValue("dateOfConfirmationDue", date);
+                                setConfirmationDueDate(date);
+                              }}
+                              timeInputLabel="Time:"
+                              dateFormat="dd/MM/yyyy"
+                              showTimeInput
+                              name="dateOfConfirmationDue"
+                              disabled={disbaledConfirmationDueDateSelected}
+                              autoComplete="off"
+
+
+                              minDate={values.dateOfJoining ? new Date(values.dateOfJoining) : null}
+                            />
+                            <ErrorMessage className="form-feedBack" name="dateOfConfirmationDue" component="div" />
+                          </div>
+
+                          <div className="col-12 col-md-4 mt-3">
+                            <label>Date Confirmation Extended  </label>
+                            <DatePicker
+                              className="form-control"
+                              placeholder=" Confirmation  Date"
+                              selected={confirmationEnterDateSelected}
+                              onChange={(date) => {
+                                setFieldValue("dateOfConfirmationEnter", date);
+                                setConfirmationEnterDate(date);
+                              }}
+                              timeInputLabel="Time:"
+                              dateFormat="dd/MM/yyyy"
+                              showTimeInput
+                              name="dateOfConfirmationEnter"
+                              disabled={disbaledConfirmationEnterDateSelected}
+                              autoComplete="off"
+                              // minDate={values.dateOfConfirmationDue ? new Date(values.dateOfConfirmationDue) : new Date(values.dateOfJoining)}
+
+                              minDate={values.dateOfJoining ? new Date(values.dateOfJoining) : null}
+                            />
+                            <ErrorMessage className="form-feedBack" name="dateOfConfirmationEnter" component="div" />
+                          </div>
+
+                          <div className="col-12 col-md-4 mt-3">
+                            <label>Contract Expiry </label>
+                            <DatePicker
+                              className="form-control"
+                              placeholder=" Contract Expiry"
+                              selected={contractExpirtyDateSelected}
+                              onChange={(date) => {
+                                setFieldValue("dateOfContractExpiry", date);
+                                setContractExpiryDate(date);
+                              }}
+                              timeInputLabel="Time:"
+                              dateFormat="dd/MM/yyyy"
+                              showTimeInput
+                              name="dateOfContractExpiry"
+                              // disabled={disabledContractExpirtyDateSelected}
+                              autoComplete="off"
+                              minDate={values.dateOfJoining ? new Date(values.dateOfJoining) : null}
+                            />
+                            <ErrorMessage className="form-feedBack" name="dateOfContractExpiry" component="div" />
+                          </div>
+
                         </div>
 
-                        <div className="col-12 col-md-4 mt-3">
+                        <div className="from-group row">
 
-                          <SearchSelect
-                            name="regionId"
-                            label={<span> Region</span>}
-                            isDisabled={isUserForRead && true}
-                            onBlur={() => {
-                              // handleBlur({ target: { name: "countryId" } });
-                            }}
-                            onChange={(e) => {
-                              setFieldValue("regionId", e.value || null);
-                              setDefaultChildRegionMenus(e);
-                              // dispatch(fetchAllFormsMenu(e.value));
-                            }}
-                            value={(defchildRegionMenus || null)}
-                            error={errors.regionId}
-                            touched={touched.regionId}
-                            options={dashboard.allRegionChildMenus}
-                          />
+                          <div className="col-12 col-md-4 mt-3">
+                            <Select
+                              label={<span> Nationality</span>}
+                              name="nationality"
+                              value={values.nationality}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              style={{ display: "block" }}
+                            >
+                              <option value="-1" label="Select Nationality" />
+                              <option value="Pakistani" label="Pakistani" />
+                              <option value="Other" label="Other" />
+
+                            </Select>
+                            {errors.nationality && touched.nationality && (
+                              <div className="invalid-text">{errors.nationality}</div>
+                            )}
+                          </div>
+
+                          <div className="col-12 col-md-4 mt-3">
+                            <Select
+                              label="Attendance Type"
+                              name="attendanceType"
+                              value={values.attendanceType}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              style={{ display: "block" }}
+                              autoComplete="off"
+                            >
+                              {/* <option value="-1" label="Select Attendance Type" /> */}
+                              <option value={1} label="Regular Attendance" selected />
+                              <option value={2} label="Auto Present Attendance" />
+
+                            </Select>
+                            {errors.attendanceType && touched.attendanceType && (
+                              <div className="invalid-text">{errors.attendanceType}</div>
+                            )}
+                          </div>
+
+                          <div className="col-12 col-md-4 mt-3">
+                            {<span> Last Review Date</span>}
+                            <DatePicker
+                              className="form-control"
+                              placeholder="Last Review Date"
+                              selected={deflastReviewDate}
+                              //value={values.dateOfBirth}
+                              showYearDropdown
+                              scrollableMonthYearDropdown
+                              onChange={(date) => {
+                                setFieldValue("lastReviewDate", date);
+                                setlastReviewDate(date);
+                              }}
+                              timeInputLabel="Time:"
+                              dateFormat="dd/MM/yyyy"
+                              showTimeInput
+                              name="lastReviewDate"
+                              disabled={isUserForRead}
+                              autoComplete="off"
+                              maxDate={new Date()}
+                              minDate={values.dateOfJoining ? new Date(values.dateOfJoining) : null}
+                            />
+                            <ErrorMessage className="form-feedBack" name="lastReviewDate" component="div" />
+                          </div>
+
+                          <div className="col-12 col-md-4 mt-3">
+                            <label>Next Review Date</label>
+                            <DatePicker
+                              className="form-control"
+                              placeholder="Next Review Date"
+                              selected={defnextReviewDate}
+
+                              showYearDropdown
+                              scrollableMonthYearDropdown
+                              onChange={(date) => {
+                                setFieldValue("nextReviewDate", date);
+                                setnextReviewDate(date);
+                              }}
+                              timeInputLabel="Time:"
+                              dateFormat="dd/MM/yyyy"
+                              showTimeInput
+                              name="nextReviewDate"
+                              minDate={new Date()}
+                              autoComplete="off"
+                            // minDate={values.dateOfJoining ? new Date(values.dateOfJoining):  null}
+                            />
+                            <ErrorMessage className="form-feedBack" name="nextReviewDate" component="div" />
+                          </div>
+
+
+
+
                         </div>
 
-                        <div className="col-12 col-md-4 mt-3">
-                          <SearchSelect
-                            name="countryId"
-                            label={<span> Country</span>}
-                            isDisabled={isUserForRead && true}
-                            onBlur={() => {
-                              // handleBlur({ target: { name: "countryId" } });
-                            }}
-                            onChange={(e) => {
-                              setFieldValue("countryId", e.value);
-                              setDefaultCountry(e);
-                              setDefaultCity({});
-                              // dispatch(fetchAllCity(e.value));
-                            }}
-                            value={defCountry}
-                            error={errors.countryId}
-                            touched={touched.countryId}
-                            options={dashboard.allCountry}
-                          />
+
+                        <div className="from-group row">
+                          <div className="col-12 col-md-4 mt-3">
+                            <Field
+                              name="sourceOfHire"
+                              maxLength="20"
+                              component={Input}
+                              placeholder="Source of hire"
+                              label="Source Of Hire"
+                              autoComplete="off"
+                            />
+                          </div>
+
+                          <div className="col-12 col-md-4 mt-3">
+                            <input
+                              name="salesRep"
+                              type="checkbox"
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              value={values.salesRep}
+                              checked={values.salesRep}
+                              label="Sales Representative"
+                            />
+                            <label><span>Sales Representative</span></label>
+                          </div>
+                          <div className="col-12 col-md-4 mt-3">
+                            <input
+                              name="supportRep"
+                              type="checkbox"
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              value={values.supportRep}
+                              checked={values.supportRep}
+                              label="Support Representative"
+                            />
+                            <label><span>Support Representative</span></label>
+                          </div>
+
                         </div>
 
-                        <div className="col-12 col-md-4 mt-3">
-                          <SearchSelect
-                            name="cityId"
-                            label={<span> City</span>}
-                            isDisabled={isUserForRead && true}
-                            onBlur={() => {
-                              //   handleBlur({ target: { name: "cityId" } });
-                            }}
-                            onChange={(e) => {
-                              setFieldValue("cityId", e.value);
-                              setDefaultCity(e);
-
-                            }}
-                            value={defCity}
-                            error={errors.cityId}
-                            touched={touched.cityId}
-                            options={dashboard.allCity.filter(x => x.code == values.countryId)}
-                          />
-                        </div>
-
-                        <div className="col-12 col-md-4 mt-3">
-                          <label>Date Of Confirmation</label>
-                          <DatePicker
-                            className="form-control"
-                            placeholder=" Date Of Confirmation"
-                            selected={confirmationDateSelected}
-                            showYearDropdown
-                            scrollableMonthYearDropdown
-                            onChange={(date) => {
-                              setFieldValue("dateOfConfirmation", date);
-                              setConfirmationDate(date);
-                            }}
-                            timeInputLabel="Time:"
-                            dateFormat="dd/MM/yyyy"
-                            showTimeInput
-                            name="dateOfConfirmation"
-                            // disabled={disabledConfirmationDateSelected}
-                            autoComplete="off"
-
-                            minDate={values.dateOfJoining ? new Date(values.dateOfJoining) : null}
-                          />
-                          <ErrorMessage className="form-feedBack" name="dateOfConfirmation" component="div" />
-                        </div>
 
 
                       </div>
-                      <div className="from-group row">
-
-                        <div className="col-12 col-md-4 mt-3">
-                          <label>Date Confirmation Due </label>
-                          <DatePicker
-                            className="form-control"
-                            placeholder=" Date Of Confirmation Due"
-                            selected={confirmationDueDateSelected}
-                            onChange={(date) => {
-                              setFieldValue("dateOfConfirmationDue", date);
-                              setConfirmationDueDate(date);
-                            }}
-                            timeInputLabel="Time:"
-                            dateFormat="dd/MM/yyyy"
-                            showTimeInput
-                            name="dateOfConfirmationDue"
-                            disabled={disbaledConfirmationDueDateSelected}
-                            autoComplete="off"
 
 
-                            minDate={values.dateOfJoining ? new Date(values.dateOfJoining) : null}
-                          />
-                          <ErrorMessage className="form-feedBack" name="dateOfConfirmationDue" component="div" />
+
+                      <br></br>
+
+                      <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
+                        <h6>Personal Information</h6>
+
+                        <div className="from-group row">
+
+                          <div className="col-12 col-md-4 mt-14">
+                            <input
+                              name="requireDeligation"
+                              type="checkbox"
+                              onChange={(e) => {
+                                const { checked } = e.target;
+                                setFieldValue('requireDeligation', checked); // Update the checkbox state
+                                if (!checked) {
+                                  setFieldValue('deligation', ''); // Clear deligation field when unchecked
+                                }
+                              }}
+                              onBlur={handleBlur}
+                              value={values.requireDeligation}
+                              checked={values.requireDeligation}
+                              label="Require Deligation"
+
+                            />
+                            <label>Require Deligation</label>
+                          </div>
+
+                          <div className="col-12 col-md-4 mt-3">
+                            <Field
+                              name="deligation"
+                              maxLength="20"
+                              component={Input}
+                              placeholder="Enter Deligation"
+                              label="Deligation"
+                              autoComplete="off"
+                              disabled={!values.requireDeligation}
+                            />
+
+                          </div>
+
+
+                          <div className="col-12 col-md-4 mt-3">
+                            <Field
+                              name="passportNo"
+                              maxLength="15"
+                              component={Input}
+                              placeholder=" Passport No"
+                              label=" Passport No"
+                              autoComplete="off"
+                            />
+                          </div>
+
+                        </div>
+                        <div className="from-group row">
+
+                          <div className="col-12 col-md-4 mt-3">
+                            <label>Passport Expiry Date</label>
+                            <DatePicker
+                              className="form-control"
+                              placeholder="Passport Expiry Date"
+                              selected={defpassportExpiry}
+
+                              showYearDropdown
+                              scrollableMonthYearDropdown
+                              onChange={(date) => {
+                                setFieldValue("passportExpiry", date);
+                                setpassportExpiry(date);
+                              }}
+                              timeInputLabel="Time:"
+                              dateFormat="dd/MM/yyyy"
+                              showTimeInput
+                              name="passportExpiry"
+
+                              autoComplete="off"
+                              minDate={new Date()}
+
+                            />
+                            <ErrorMessage className="form-feedBack" name="passportExpiry" component="div" />
+                          </div>
+
+                          <div className="col-12 col-md-4 mt-3">
+                            <label>Driving License Expiry</label>
+                            <DatePicker
+                              className="form-control"
+                              placeholder="Driving License Expiry Date"
+                              selected={defdrivingLicenseExpiry}
+
+                              showYearDropdown
+                              scrollableMonthYearDropdown
+                              onChange={(date) => {
+                                setFieldValue("drivingLicenseExpiry", date);
+                                setdrivingLicenseExpiry(date);
+                              }}
+                              timeInputLabel="Time:"
+                              dateFormat="dd/MM/yyyy"
+                              showTimeInput
+                              name="drivingLicenseExpiry"
+
+                              autoComplete="off"
+                              minDate={new Date()}
+                            />
+                            <ErrorMessage className="form-feedBack" name="drivingLicenseExpiry" component="div" />
+                          </div>
+
+                          <div className="col-12 col-md-4 mt-3">
+                            <Field
+                              name="laborCardNo"
+                              maxLength="20"
+                              component={Input}
+                              placeholder="Enter "
+                              label={<span> Labour Card No</span>}
+                              autoComplete="off"
+                            />
+                            {/* <ErrorMessage style={{color:"red"}} name="nic_no" component="div" /> */}
+                          </div>
+
                         </div>
 
-                        <div className="col-12 col-md-4 mt-3">
-                          <label>Date Confirmation Extended  </label>
-                          <DatePicker
-                            className="form-control"
-                            placeholder=" Confirmation  Date"
-                            selected={confirmationEnterDateSelected}
-                            onChange={(date) => {
-                              setFieldValue("dateOfConfirmationEnter", date);
-                              setConfirmationEnterDate(date);
-                            }}
-                            timeInputLabel="Time:"
-                            dateFormat="dd/MM/yyyy"
-                            showTimeInput
-                            name="dateOfConfirmationEnter"
-                            disabled={disbaledConfirmationEnterDateSelected}
-                            autoComplete="off"
-                            // minDate={values.dateOfConfirmationDue ? new Date(values.dateOfConfirmationDue) : new Date(values.dateOfJoining)}
+                        <div className="from-group row">
 
-                            minDate={values.dateOfJoining ? new Date(values.dateOfJoining) : null}
-                          />
-                          <ErrorMessage className="form-feedBack" name="dateOfConfirmationEnter" component="div" />
+                          <div className="col-12 col-md-4 mt-3">
+                            <Field
+                              name="emiratesNo"
+                              maxLength="20"
+                              component={Input}
+                              placeholder="Enter "
+                              label={<span> Emirates Id Number</span>}
+                              autoComplete="off"
+                            />
+                            {/* <ErrorMessage style={{color:"red"}} name="nic_no" component="div" /> */}
+                          </div>
+
+                          <div className="col-12 col-md-4 mt-3">
+                            <Field
+                              name="routingCode"
+                              maxLength="20"
+                              component={Input}
+                              placeholder="Enter "
+                              label={<span> Routing Code</span>}
+                              autoComplete="off"
+                            />
+                            {/* <ErrorMessage style={{color:"red"}} name="nic_no" component="div" /> */}
+                          </div>
+
+                          <div className="col-12 col-md-4 mt-3">
+                            <SearchSelect
+                              name="contractTypeId"
+                              label={<span> Contract Type</span>}
+                              isDisabled={isUserForRead && true}
+                              onBlur={() => {
+                                // handleBlur({ target: { name: "countryId" } });
+                              }}
+                              onChange={(e) => {
+
+                                setFieldValue("contractTypeId", e.value || null);
+                                setcontractType(e);
+
+                                // dispatch(fetchAllFormsMenu(e.value));
+                              }}
+                              value={(defcontractType || values.contractTypeId)}
+                              error={errors.contractTypeId}
+                              touched={touched.contractTypeId}
+                              options={dashboard.allContractTypeList}
+                            />
+                          </div>
+
+
+
+
                         </div>
 
-                        <div className="col-12 col-md-4 mt-3">
-                          <label>Contract Expiry </label>
-                          <DatePicker
-                            className="form-control"
-                            placeholder=" Contract Expiry"
-                            selected={contractExpirtyDateSelected}
-                            onChange={(date) => {
-                              setFieldValue("dateOfContractExpiry", date);
-                              setContractExpiryDate(date);
-                            }}
-                            timeInputLabel="Time:"
-                            dateFormat="dd/MM/yyyy"
-                            showTimeInput
-                            name="dateOfContractExpiry"
-                            // disabled={disabledContractExpirtyDateSelected}
-                            autoComplete="off"
-                            minDate={values.dateOfJoining ? new Date(values.dateOfJoining) : null}
-                          />
-                          <ErrorMessage className="form-feedBack" name="dateOfContractExpiry" component="div" />
+
+                        <div className="from-group row">
+                          <div className="col-12 col-md-4 mt-3">
+                            <SearchSelect
+                              name="cycleTypeId"
+                              label={<span> Cycle Type</span>}
+                              isDisabled={isUserForRead && true}
+                              onBlur={() => {
+                                // handleBlur({ target: { name: "countryId" } });
+                              }}
+                              onChange={(e) => {
+                                setFieldValue("cycleTypeId", e.value || null);
+                                setcycleType(e);
+                                // dispatch(fetchAllFormsMenu(e.value));
+                              }}
+                              value={(defcycleType || null)}
+                              error={errors.cycleTypeId}
+                              touched={touched.cycleTypeId}
+                              options={dashboard.allCycleTypeList}
+                            />
+                          </div>
+
+                          <div className="col-12 col-md-4 mt-3">
+                            <Field
+                              name="professional_summary"
+                              component={TextArea}
+                              placeholder="Enter Professional Summary"
+                              label="Professional Summary"
+                              autoComplete="off"
+                            />
+                          </div>
+
+
+                          <div className="col-12 col-md-4 mt-3">
+                            <Field
+                              name="additional_summary"
+                              component={TextArea}
+                              placeholder="Enter Additional Notes"
+                              label="Additional Notes"
+                              autoComplete="off"
+                            />
+                          </div>
+
                         </div>
+
+
 
                       </div>
-
-                      <div className="from-group row">
-
-                        <div className="col-12 col-md-4 mt-3">
-                          <Select
-                            label={<span> Nationality</span>}
-                            name="nationality"
-                            value={values.nationality}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            style={{ display: "block" }}
-                          >
-                            <option value="-1" label="Select Nationality" />
-                            <option value="Pakistani" label="Pakistani" />
-                            <option value="Other" label="Other" />
-
-                          </Select>
-                          {errors.nationality && touched.nationality && (
-                            <div className="invalid-text">{errors.nationality}</div>
-                          )}
-                        </div>
-
-                        <div className="col-12 col-md-4 mt-3">
-                          <Select
-                            label="Attendance Type"
-                            name="attendanceType"
-                            value={values.attendanceType}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            style={{ display: "block" }}
-                            autoComplete="off"
-                          >
-                            {/* <option value="-1" label="Select Attendance Type" /> */}
-                            <option value="1" label="Regular Attendance" />
-                            <option value="2" label="Auto Present Attendance" />
-
-                          </Select>
-                          {errors.attendanceType && touched.attendanceType && (
-                            <div className="invalid-text">{errors.attendanceType}</div>
-                          )}
-                        </div>
-
-                        <div className="col-12 col-md-4 mt-3">
-                          {<span> Last Review Date</span>}
-                          <DatePicker
-                            className="form-control"
-                            placeholder="Last Review Date"
-                            selected={deflastReviewDate}
-                            //value={values.dateOfBirth}
-                            showYearDropdown
-                            scrollableMonthYearDropdown
-                            onChange={(date) => {
-                              setFieldValue("lastReviewDate", date);
-                              setlastReviewDate(date);
-                            }}
-                            timeInputLabel="Time:"
-                            dateFormat="dd/MM/yyyy"
-                            showTimeInput
-                            name="lastReviewDate"
-                            disabled={isUserForRead}
-                            autoComplete="off"
-                            maxDate={new Date()}
-                            minDate={values.dateOfJoining ? new Date(values.dateOfJoining) : null}
-                          />
-                          <ErrorMessage className="form-feedBack" name="lastReviewDate" component="div" />
-                        </div>
-
-                        <div className="col-12 col-md-4 mt-3">
-                          <label>Next Review Date</label>
-                          <DatePicker
-                            className="form-control"
-                            placeholder="Next Review Date"
-                            selected={defnextReviewDate}
-
-                            showYearDropdown
-                            scrollableMonthYearDropdown
-                            onChange={(date) => {
-                              setFieldValue("nextReviewDate", date);
-                              setnextReviewDate(date);
-                            }}
-                            timeInputLabel="Time:"
-                            dateFormat="dd/MM/yyyy"
-                            showTimeInput
-                            name="nextReviewDate"
-                            minDate={new Date()}
-                            autoComplete="off"
-                          // minDate={values.dateOfJoining ? new Date(values.dateOfJoining):  null}
-                          />
-                          <ErrorMessage className="form-feedBack" name="nextReviewDate" component="div" />
-                        </div>
-
-
-
-
-                      </div>
-
-
-                      <div className="from-group row">
-                        <div className="col-12 col-md-4 mt-3">
-                          <Field
-                            name="sourceOfHire"
-                            maxLength="20"
-                            component={Input}
-                            placeholder="Source of hire"
-                            label="Source Of Hire"
-                            autoComplete="off"
-                          />
-                        </div>
-
-                        <div className="col-12 col-md-4 mt-3">
-                          <input
-                            name="salesRep"
-                            type="checkbox"
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            value={values.salesRep}
-                            checked={values.salesRep}
-                            label="Sales Representative"
-                          />
-                          <label><span>Sales Representative</span></label>
-                        </div>
-                        <div className="col-12 col-md-4 mt-3">
-                          <input
-                            name="supportRep"
-                            type="checkbox"
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            value={values.supportRep}
-                            checked={values.supportRep}
-                            label="Support Representative"
-                          />
-                          <label><span>Support Representative</span></label>
-                        </div>
-
-                      </div>
-
-
-
                     </div>
-               
 
+                  )}
 
                   <br></br>
 
-                  <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-                    <h6>Personal Information</h6>
 
-                    <div className="from-group row">
-
-                      <div className="col-12 col-md-4 mt-14">
-                        <input
-                          name="requireDeligation"
-                          type="checkbox"
-                          onChange={(e) => {
-                            const { checked } = e.target;
-                            setFieldValue('requireDeligation', checked); // Update the checkbox state
-                            if (!checked) {
-                              setFieldValue('deligation', ''); // Clear deligation field when unchecked
-                            }
-                          }}
-                          onBlur={handleBlur}
-                          value={values.requireDeligation}
-                          checked={values.requireDeligation}
-                          label="Require Deligation"
-
-                        />
-                        <label>Require Deligation</label>
-                      </div>
-
-                      <div className="col-12 col-md-4 mt-3">
-                        <Field
-                          name="deligation"
-                          maxLength="20"
-                          component={Input}
-                          placeholder="Enter Deligation"
-                          label="Deligation"
-                          autoComplete="off"
-                          disabled={!values.requireDeligation}
-                        />
-
-                      </div>
-
-
-                      <div className="col-12 col-md-4 mt-3">
-                        <Field
-                          name="passportNo"
-                          maxLength="15"
-                          component={Input}
-                          placeholder=" Passport No"
-                          label=" Passport No"
-                          autoComplete="off"
-                        />
-                      </div>
-
-                    </div>
-                    <div className="from-group row">
-
-                      <div className="col-12 col-md-4 mt-3">
-                        <label>Passport Expiry Date</label>
-                        <DatePicker
-                          className="form-control"
-                          placeholder="Passport Expiry Date"
-                          selected={defpassportExpiry}
-
-                          showYearDropdown
-                          scrollableMonthYearDropdown
-                          onChange={(date) => {
-                            setFieldValue("passportExpiry", date);
-                            setpassportExpiry(date);
-                          }}
-                          timeInputLabel="Time:"
-                          dateFormat="dd/MM/yyyy"
-                          showTimeInput
-                          name="passportExpiry"
-
-                          autoComplete="off"
-                          minDate={new Date()}
-
-                        />
-                        <ErrorMessage className="form-feedBack" name="passportExpiry" component="div" />
-                      </div>
-
-                      <div className="col-12 col-md-4 mt-3">
-                        <label>Driving License Expiry</label>
-                        <DatePicker
-                          className="form-control"
-                          placeholder="Driving License Expiry Date"
-                          selected={defdrivingLicenseExpiry}
-
-                          showYearDropdown
-                          scrollableMonthYearDropdown
-                          onChange={(date) => {
-                            setFieldValue("drivingLicenseExpiry", date);
-                            setdrivingLicenseExpiry(date);
-                          }}
-                          timeInputLabel="Time:"
-                          dateFormat="dd/MM/yyyy"
-                          showTimeInput
-                          name="drivingLicenseExpiry"
-
-                          autoComplete="off"
-                          minDate={new Date()}
-                        />
-                        <ErrorMessage className="form-feedBack" name="drivingLicenseExpiry" component="div" />
-                      </div>
-
-                      <div className="col-12 col-md-4 mt-3">
-                        <Field
-                          name="laborCardNo"
-                          maxLength="20"
-                          component={Input}
-                          placeholder="Enter "
-                          label={<span> Labour Card No</span>}
-                          autoComplete="off"
-                        />
-                        {/* <ErrorMessage style={{color:"red"}} name="nic_no" component="div" /> */}
-                      </div>
-
-                    </div>
-
-                    <div className="from-group row">
-
-                      <div className="col-12 col-md-4 mt-3">
-                        <Field
-                          name="emiratesNo"
-                          maxLength="20"
-                          component={Input}
-                          placeholder="Enter "
-                          label={<span> Emirates Id Number</span>}
-                          autoComplete="off"
-                        />
-                        {/* <ErrorMessage style={{color:"red"}} name="nic_no" component="div" /> */}
-                      </div>
-
-                      <div className="col-12 col-md-4 mt-3">
-                        <Field
-                          name="routingCode"
-                          maxLength="20"
-                          component={Input}
-                          placeholder="Enter "
-                          label={<span> Routing Code</span>}
-                          autoComplete="off"
-                        />
-                        {/* <ErrorMessage style={{color:"red"}} name="nic_no" component="div" /> */}
-                      </div>
-
-                      <div className="col-12 col-md-4 mt-3">
-                        <SearchSelect
-                          name="contractTypeId"
-                          label={<span> Contract Type</span>}
-                          isDisabled={isUserForRead && true}
-                          onBlur={() => {
-                            // handleBlur({ target: { name: "countryId" } });
-                          }}
-                          onChange={(e) => {
-
-                            setFieldValue("contractTypeId", e.value || null);
-                            setcontractType(e);
-
-                            // dispatch(fetchAllFormsMenu(e.value));
-                          }}
-                          value={(defcontractType || values.contractTypeId)}
-                          error={errors.contractTypeId}
-                          touched={touched.contractTypeId}
-                          options={dashboard.allContractTypeList}
-                        />
-                      </div>
-
-
-
-
-                    </div>
-
-
-                    <div className="from-group row">
-                      <div className="col-12 col-md-4 mt-3">
-                        <SearchSelect
-                          name="cycleTypeId"
-                          label={<span> Cycle Type</span>}
-                          isDisabled={isUserForRead && true}
-                          onBlur={() => {
-                            // handleBlur({ target: { name: "countryId" } });
-                          }}
-                          onChange={(e) => {
-                            setFieldValue("cycleTypeId", e.value || null);
-                            setcycleType(e);
-                            // dispatch(fetchAllFormsMenu(e.value));
-                          }}
-                          value={(defcycleType || null)}
-                          error={errors.cycleTypeId}
-                          touched={touched.cycleTypeId}
-                          options={dashboard.allCycleTypeList}
-                        />
-                      </div>
-
-                      <div className="col-12 col-md-4 mt-3">
-                        <Field
-                          name="professional_summary"
-                          component={TextArea}
-                          placeholder="Enter Professional Summary"
-                          label="Professional Summary"
-                          autoComplete="off"
-                        />
-                      </div>
-
-
-                      <div className="col-12 col-md-4 mt-3">
-                        <Field
-                          name="additional_summary"
-                          component={TextArea}
-                          placeholder="Enter Additional Notes"
-                          label="Additional Notes"
-                          autoComplete="off"
-                        />
-                      </div>
-
-                    </div>
-
-
-
-                  </div>
-                  </div>
-
-)} 
-
-                  <br></br>
-
-          
-                 <div
+                  <div
                     style={{
                       backgroundColor: "#0093DD",
                       color: "white",
@@ -2641,31 +2676,31 @@ export function DesignationEditForm({
                     }}
                     onClick={toggleExtendedfoVisibility}
                   >
-                  <div className="flex row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <h6>Employee Extended Information</h6>
+                    <div className="flex row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <h6>Employee Extended Information</h6>
                       <KeyboardArrowDown />
 
                     </div>
-             
+
                   </div>
                   <br></br>
 
-                  
+
                   {isExtendedfoVisible && (
-                  <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
+                    <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
 
 
 
-                    <div className="from-group row">
+                      <div className="from-group row">
 
 
-                    </div>
+                      </div>
 
-                    <div className="from-group row">
+                      <div className="from-group row">
 
 
-                    </div>
-                    {/* {<><button className="btn btn-light btn-elevate" type="button" onClick={handleChildModalShow}>
+                      </div>
+                      {/* {<><button className="btn btn-light btn-elevate" type="button" onClick={handleChildModalShow}>
                       Open Child Modal
                     </button>
 
@@ -2679,282 +2714,124 @@ export function DesignationEditForm({
                           Close Child Modal
                         </button>
                       </Modal></>} */}
-                    <hr></hr>
+                      {/* <hr></hr> */}
 
-                    <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-                      <h3>Contact Information</h3>
-                      <table class="table table table-head-custom table-vertical-center overflow-hidden table-hover">
-                        <tr style={{ backgroundColor: '#4d5f7a', color: '#fff' }}>
-                          <td></td>
-                          <td>Relation Name</td>
-                          <td>Relation</td>
-                          <td>Contact No</td>
-                        </tr>
-
-                        {defContactList?.map((obj, rightindex) => (
-                          <><tr>
-                            <td > <button id={rightindex} onClick={deleteRowContact} className="btn btn-danger btn-sm"> Delete</button></td>
-                            <td>
-
-                              <input
-                                className="form-control"
-                                type="text"
-                                onChange={(e) => {
-                                  handleFieldChangedContact(rightindex, 'relation_name', e.target.value);
-                                  setErrors((prev) => ({ ...prev, [`relation_name-${rightindex}`]: '' })); // Clear error on change
-                                }}
-                                value={obj.relation_name}
-                              />
-                              {deferrors[`relation_name-${rightindex}`] && <div className="form-feedBack">{deferrors[`relation_name-${rightindex}`]}</div>}
-                            </td>
-                            <td>
-                              <select className="form-control" value={obj.relation}
-                                onChange={(e) => {
-                                  handleFieldChangedContact(rightindex, 'relation', e.target.value);
-                                  setErrors((prev) => ({ ...prev, [`relation-${rightindex}`]: '' })); // Clear error on change
-                                }}
-                                id={'relation-' + rightindex} >
-                                {
-                                  dashboard.allRelationCodeList?.map((x) => {
-                                    return <option value={x.value}> {x.label} </option>
-                                  })}
-
-                                {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
-                              </select>
-                              {deferrors[`relation-${rightindex}`] && <div className="form-feedBack">{deferrors[`relation-${rightindex}`]}</div>}
-                            </td>
-                            <td>
-                              <input className="form-control" type="text"
-                                onChange={(e) => {
-                                  handleFieldChangedContact(rightindex, 'contactNo', e.target.value);
-                                  setErrors((prev) => ({ ...prev, [`contactNo-${rightindex}`]: '' })); // Clear error on change
-                                }}
-                                value={obj.contactNo} ></input>
-                              {deferrors[`contactNo-${rightindex}`] && <div className="form-feedBack">{deferrors[`contactNo-${rightindex}`]}</div>}
-
-                            </td>
-                            {/* <td>{obj.relation_emp}</td>
-                            <td>{obj.contactNo}</td> */}
+                      <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
+                        <h3>Contact Information</h3>
+                        <table class="table table table-head-custom table-vertical-center overflow-hidden table-hover">
+                          <tr style={{ backgroundColor: '#4d5f7a', color: '#fff' }}>
+                            <td></td>
+                            <td>Name</td>
+                            <td>Relation</td>
+                            <td>Contact No</td>
                           </tr>
-                          </>
 
-                        ))}
-
-                      </table>
-                      {<> <div className="from-group row">
-                        <div className="col-12 col-md-4 mt-3">
-                          <input className="btn btn-success btn-sm" type='button' id="Contact" onClick={addRowContact} value='+Add'></input>
-                        </div>
-
-                      </div>
-                      </>}
-                    </div>
-                    <br></br>
-                    <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-
-                      <h3>Work Experience</h3>
-                      <table class="table table table-head-custom table-vertical-center overflow-hidden table-hover">
-                        <tr style={{ backgroundColor: '#4d5f7a', color: '#fff' }}>
-                          <td></td>
-                          <td>Company</td>
-                          <td>Position Held</td>
-                          <td>Country</td>
-                          <td>City</td>
-                          <td>Start Date</td>
-                          <td>End Date</td>
-                        </tr>
-
-                        {workExperienceList?.map((obj, rightindex) => (
-
-                          <><tr>
-                            <td id={rightindex} onClick={deleteRowExperience}> <span className="btn btn-danger btn-sm"> Delete</span></td>
-                            <td>
-                              <input className="form-control" type="text"
-                                onChange={(e) => {
-                                  handleFieldChangedExperience(rightindex, 'companyName', e.target.value);
-                                  setErrors((prev) => ({ ...prev, [`companyName-${rightindex}`]: '' })); // Clear error on change
-                                }}
-
-                                value={obj.companyName} id={'companyName-' + rightindex}></input>
-                              {deferrors[`companyName-${rightindex}`] && <div className="form-feedBack">{deferrors[`companyName-${rightindex}`]}</div>}
-
-                            </td>
-                            <td>
-                              <input className="form-control" type="text"
-                                onChange={(e) => {
-                                  handleFieldChangedExperience(rightindex, 'positionHeld', e.target.value);
-                                  setErrors((prev) => ({ ...prev, [`positionHeld-${rightindex}`]: '' })); // Clear error on change
-                                }}
-                                value={obj.positionHeld} id={'positionHeld-' + rightindex}></input>
-                              {deferrors[`positionHeld-${rightindex}`] && <div className="form-feedBack">{deferrors[`positionHeld-${rightindex}`]}</div>}
-                            </td>
-                            <td>
-                              <select className="form-control" value={obj.countryId}
-                                onChange={(e) => {
-                                  handleFieldChangedExperience(rightindex, 'countryId', e.target.value);
-                                  setErrors((prev) => ({ ...prev, [`countryId-${rightindex}`]: '' })); // Clear error on change
-                                }}
-
-                                id={'countryId-' + rightindex} >
-                                <option value="-1"> --Select--</option>
-                                {
-                                  dashboard.allCountry?.map((x) => {
-                                    return <option value={x.value}> {x.label} </option>
-                                  })}
-
-                                {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
-                              </select>
-                              {deferrors[`countryId-${rightindex}`] && <div className="form-feedBack">{deferrors[`countryId-${rightindex}`]}</div>}
-                            </td>
-                            <td>
-                              <select className="form-control" value={obj.cityId}
-
-                                onChange={(e) => {
-                                  handleFieldChangedExperience(rightindex, 'cityId', e.target.value);
-                                  setErrors((prev) => ({ ...prev, [`cityId-${rightindex}`]: '' })); // Clear error on change
-                                }}
-
-                                id={'cityId-' + rightindex} >
-                                <option value="-1"> --Select--</option>
-                                {
-
-                                  dashboard.allCity?.map((x) => {
-                                    if (x.code == obj.countryId) {
-                                      return <option value={x.value}> {x.label} </option>
-                                    }
-                                  })}
-
-                                {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
-                              </select>
-                              {deferrors[`cityId-${rightindex}`] && <div className="form-feedBack">{deferrors[`cityId-${rightindex}`]}</div>}
-                            </td>
-
-                            <td>
-                              <DatePicker
-                                className="form-control"
-                                placeholder="Start Date"
-                                selected={new Date(obj.startDate || currentDate)}
-                                showYearDropdown
-                                scrollableMonthYearDropdown
-                                onChange={(el) => {
-                                  handleDatePicker(el, 'startDate', rightindex, '');
-                                  setErrors((prev) => ({ ...prev, [`startDate_W-${rightindex}`]: '' })); // Clear error on change
-                                }
-                                }
-                                id={"endDate_W-" + rightindex}
-                                timeInputLabel="Time:"
-                                dateFormat="dd/MM/yyyy"
-                                showTimeInput
-                                name="startDate"
-                                disabled={isUserForRead}
-                                autoComplete="off"
-                                maxDate={new Date()}
-                                minDate={values.dateOfBirth ? new Date(values.dateOfBirth) : null}
-                              />
-                              {deferrors[`startDate_W-${rightindex}`] && <div className="form-feedBack">{deferrors[`startDate_W-${rightindex}`]}</div>}
-                            </td>
-                            <td>
-                              <DatePicker
-                                className="form-control"
-                                placeholder="End Date"
-                                selected={new Date(obj.endDate || currentDate)}
-                                showYearDropdown
-                                scrollableMonthYearDropdown
-                                onChange={(el) => {
-                                  handleDatePicker(el, 'endDate', rightindex, '');
-                                  setErrors((prev) => ({ ...prev, [`endDate_W-${rightindex}`]: '' })); // Clear error on change
-                                }
-                                }
-                                id={"endDate_W" + rightindex}
-                                timeInputLabel="Time:"
-                                dateFormat="dd/MM/yyyy"
-                                showTimeInput
-                                name="endDate"
-                                disabled={isUserForRead}
-                                autoComplete="off"
-                                maxDate={new Date()}
-                                minDate={values.dateOfBirth ? new Date(values.dateOfBirth) : null}
-                              />
-                              {deferrors[`endDate_W-${rightindex}`] && <div className="form-feedBack">{deferrors[`endDate_W-${rightindex}`]}</div>}
-                            </td>
-                          </tr>
-                          </>
-                        ))}
-
-
-                      </table>
-                      {<> <div className="from-group row">
-                        <div className="col-12 col-md-4 mt-3">
-                          <input className="btn btn-success btn-sm" type='button' id="Experience" onClick={addRowExprerience} value='+Add'></input>
-                        </div>
-
-                      </div>
-                      </>}
-                    </div>
-                    <br></br>
-                    <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-                      <h3>Academic Info</h3>
-                      <table class="table table table-head-custom table-vertical-center overflow-hidden table-hover">
-                        <tr style={{ backgroundColor: '#4d5f7a', color: '#fff' }}>
-                          <td></td>
-                          <td>Institution</td>
-                          <td>Degree</td>
-                          <td>Country</td>
-                          <td>City</td>
-                          <td>CGPA</td>
-                          <td>Start Date</td>
-                          <td>End Date</td>
-                        </tr>
-
-                        {academicList?.map((obj, rightindex) => (
-                          <>
-
-                            <tr>
-                              <td id={rightindex} onClick={deleteRowAcademic}> <span className="btn btn-danger btn-sm"> Delete</span></td>
+                          {defContactList?.map((obj, rightindex) => (
+                            <><tr>
+                              <td > <button id={rightindex} onClick={deleteRowContact} className="btn btn-danger btn-sm"> Delete</button></td>
                               <td>
-                                <select className="form-control" value={obj.institutionId}
 
+                                <input
+                                  className="form-control"
+                                  type="text"
                                   onChange={(e) => {
-                                    handleFieldChangedAcademic(rightindex, 'institutionId', e.target.value);
-                                    setErrors((prev) => ({ ...prev, [`institutionId-${rightindex}`]: '' })); // Clear error on change
+                                    handleFieldChangedContact(rightindex, 'relation_name', e.target.value);
+                                    setErrors((prev) => ({ ...prev, [`relation_name-${rightindex}`]: '' })); // Clear error on change
                                   }}
-
-                                  id={'institutionId-' + rightindex} >
-                                  {
-                                    dashboard.allInstitution?.map((x) => {
-                                      return <option value={x.value}> {x.label} </option>
-                                    })}
-                                  {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
-                                </select>
-                                {deferrors[`institutionId-${rightindex}`] && <div className="form-feedBack">{deferrors[`institutionId-${rightindex}`]}</div>}
+                                  value={obj.relation_name}
+                                />
+                                {deferrors[`relation_name-${rightindex}`] && <div className="form-feedBack">{deferrors[`relation_name-${rightindex}`]}</div>}
                               </td>
                               <td>
-                                <select className="form-control" value={obj.degreeId}
-
+                                <select className="form-control" value={obj.relation}
                                   onChange={(e) => {
-                                    handleFieldChangedAcademic(rightindex, 'degreeId', e.target.value);
-                                    setErrors((prev) => ({ ...prev, [`degreeId-${rightindex}`]: '' })); // Clear error on change
+                                    handleFieldChangedContact(rightindex, 'relation', e.target.value);
+                                    setErrors((prev) => ({ ...prev, [`relation-${rightindex}`]: '' })); // Clear error on change
                                   }}
-
-                                  id={'degreeId-' + rightindex} >
+                                  id={'relation-' + rightindex} >
                                   {
-                                    dashboard.allDegreeTitle?.map((x) => {
+                                    dashboard.allRelationCodeList?.map((x) => {
                                       return <option value={x.value}> {x.label} </option>
                                     })}
+
                                   {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
                                 </select>
-                                {deferrors[`degreeId-${rightindex}`] && <div className="form-feedBack">{deferrors[`degreeId-${rightindex}`]}</div>}
+                                {deferrors[`relation-${rightindex}`] && <div className="form-feedBack">{deferrors[`relation-${rightindex}`]}</div>}
+                              </td>
+                              <td>
+                                <input className="form-control" type="text"
+                                  onChange={(e) => {
+                                    handleFieldChangedContact(rightindex, 'contactNo', e.target.value);
+                                    setErrors((prev) => ({ ...prev, [`contactNo-${rightindex}`]: '' })); // Clear error on change
+                                  }}
+                                  value={obj.contactNo} ></input>
+                                {deferrors[`contactNo-${rightindex}`] && <div className="form-feedBack">{deferrors[`contactNo-${rightindex}`]}</div>}
+
+                              </td>
+                              {/* <td>{obj.relation_emp}</td>
+                            <td>{obj.contactNo}</td> */}
+                            </tr>
+                            </>
+
+                          ))}
+
+                        </table>
+                        {<> <div className="from-group row">
+                          <div className="col-12 col-md-4 mt-3">
+                            <input className="btn btn-success btn-sm" type='button' id="Contact" onClick={addRowContact} value='+Add'></input>
+                          </div>
+
+                        </div>
+                        </>}
+                      </div>
+                      <br></br>
+                      <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
+
+                        <h3>Work Experience</h3>
+                        <table class="table table table-head-custom table-vertical-center overflow-hidden table-hover">
+                          <tr style={{ backgroundColor: '#4d5f7a', color: '#fff' }}>
+                            <td></td>
+                            <td>Company</td>
+                            <td>Position Held</td>
+                            <td>Country</td>
+                            <td>City</td>
+                            <td>Start Date</td>
+                            <td>End Date</td>
+                          </tr>
+
+                          {workExperienceList?.map((obj, rightindex) => (
+
+                            <><tr>
+                              <td id={rightindex} onClick={deleteRowExperience}> <span className="btn btn-danger btn-sm"> Delete</span></td>
+                              <td>
+                                <input className="form-control" type="text"
+                                  onChange={(e) => {
+                                    handleFieldChangedExperience(rightindex, 'companyName', e.target.value);
+                                    setErrors((prev) => ({ ...prev, [`companyName-${rightindex}`]: '' })); // Clear error on change
+                                  }}
+
+                                  value={obj.companyName} id={'companyName-' + rightindex}></input>
+                                {deferrors[`companyName-${rightindex}`] && <div className="form-feedBack">{deferrors[`companyName-${rightindex}`]}</div>}
+
+                              </td>
+                              <td>
+                                <input className="form-control" type="text"
+                                  onChange={(e) => {
+                                    handleFieldChangedExperience(rightindex, 'positionHeld', e.target.value);
+                                    setErrors((prev) => ({ ...prev, [`positionHeld-${rightindex}`]: '' })); // Clear error on change
+                                  }}
+                                  value={obj.positionHeld} id={'positionHeld-' + rightindex}></input>
+                                {deferrors[`positionHeld-${rightindex}`] && <div className="form-feedBack">{deferrors[`positionHeld-${rightindex}`]}</div>}
                               </td>
                               <td>
                                 <select className="form-control" value={obj.countryId}
-
                                   onChange={(e) => {
-                                    handleFieldChangedAcademic(rightindex, 'countryId', e.target.value);
+                                    handleFieldChangedExperience(rightindex, 'countryId', e.target.value);
                                     setErrors((prev) => ({ ...prev, [`countryId-${rightindex}`]: '' })); // Clear error on change
                                   }}
 
                                   id={'countryId-' + rightindex} >
-                                  <option value="-1">--Select--</option>
+                                  <option value="-1"> --Select--</option>
                                   {
                                     dashboard.allCountry?.map((x) => {
                                       return <option value={x.value}> {x.label} </option>
@@ -2966,14 +2843,14 @@ export function DesignationEditForm({
                               </td>
                               <td>
                                 <select className="form-control" value={obj.cityId}
+
                                   onChange={(e) => {
-                                    handleFieldChangedAcademic(rightindex, 'cityId', e.target.value);
+                                    handleFieldChangedExperience(rightindex, 'cityId', e.target.value);
                                     setErrors((prev) => ({ ...prev, [`cityId-${rightindex}`]: '' })); // Clear error on change
                                   }}
 
                                   id={'cityId-' + rightindex} >
                                   <option value="-1"> --Select--</option>
-
                                   {
 
                                     dashboard.allCity?.map((x) => {
@@ -2988,278 +2865,447 @@ export function DesignationEditForm({
                               </td>
 
                               <td>
-                                <input className="form-control" type="text"
-                                  onChange={(e) => {
-                                    handleFieldChangedAcademic(rightindex, 'gpa', e.target.value);
-                                    setErrors((prev) => ({ ...prev, [`gpa-${rightindex}`]: '' })); // Clear error on change
-                                  }}
-                                  value={obj.gpa} id={'gpa-' + rightindex}></input>
-                                {deferrors[`gpa-${rightindex}`] && <div className="form-feedBack">{deferrors[`gpa-${rightindex}`]}</div>}
-                              </td>
-                              <td>
                                 <DatePicker
                                   className="form-control"
                                   placeholder="Start Date"
                                   selected={new Date(obj.startDate || currentDate)}
                                   showYearDropdown
                                   scrollableMonthYearDropdown
-                                  onChange={(el) => handleDatePickerAcademic(el, 'startDate', rightindex, '')}
-                                  id={"startDate_A-" + rightindex}
-                                  timeInputLabel="Time:"
-                                  dateFormat="dd/MM/yyyy"
-                                  showTimeInput
-                                  name="startDate"
-                                  disabled={isUserForRead}
-                                  autoComplete="off"
-                                />
-                                {deferrors[`startDate_A-${rightindex}`] && <div className="form-feedBack">{deferrors[`startDate_A-${rightindex}`]}</div>}
-                              </td>
-                              <td>
-                                <DatePicker
-                                  className="form-control"
-                                  placeholder="End Date"
-                                  selected={new Date(obj.endDate || currentDate)}
-                                  showYearDropdown
-                                  scrollableMonthYearDropdown
-                                  onChange={(el) => handleDatePickerAcademic(el, 'endDate', rightindex, '')}
-                                  id={"endDate_A-" + rightindex}
-                                  timeInputLabel="Time:"
-                                  dateFormat="dd/MM/yyyy"
-                                  showTimeInput
-                                  name="endDate"
-                                  disabled={isUserForRead}
-                                  autoComplete="off"
-                                />
-                                {deferrors[`endDate_A-${rightindex}`] && <div className="form-feedBack">{deferrors[`endDate_A-${rightindex}`]}</div>}
-                              </td>
-                            </tr>
-                          </>
-                        ))}
-
-                      </table>
-                      {<> <div className="from-group row">
-                        <div className="col-12 col-md-4 mt-3">
-                          <input className="btn btn-success btn-sm" type='button' id="Academic" onClick={addRowAcademic} value='+Add'></input>
-                        </div>
-
-                      </div>
-                      </>}
-                    </div>
-                    <br></br>
-                    <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-
-                      <h3>Employee Skills</h3>
-                      <table class="table table table-head-custom table-vertical-center overflow-hidden table-hover">
-                        <tr style={{ backgroundColor: '#4d5f7a', color: '#fff' }}>
-
-                          <td></td>
-                          <td>Skill</td>
-                          <td>Description</td>
-
-                          <td>Rating</td>
-                          <td>Start Date</td>
-                          <td>End Date</td>
-                        </tr>
-                        {skillsList?.map((obj, rightindex) => (
-                          <>
-                            <tr>
-                              <td id={rightindex} onClick={deleteRowSkills}> <span className="btn btn-danger btn-sm"> Delete</span></td>
-
-                              <td>
-                                <input className="form-control" type="text"
-                                  onChange={(e) => {
-                                    handleFieldChangedSkills(rightindex, 'skill', e.target.value);
-                                    setErrors((prev) => ({ ...prev, [`skill-${rightindex}`]: '' })); // Clear error on change
-                                  }}
-
-                                  value={obj.skill} id={'skill-' + rightindex}></input>
-                                {deferrors[`skill-${rightindex}`] && <div className="form-feedBack">{deferrors[`skill-${rightindex}`]}</div>}
-                              </td>
-                              <td>
-                                <input className="form-control" type="text"
-                                  onChange={(e) => {
-                                    handleFieldChangedSkills(rightindex, 'description', e.target.value);
-                                    setErrors((prev) => ({ ...prev, [`description-${rightindex}`]: '' })); // Clear error on change
-                                  }}
-                                  value={obj.description} id={'description-' + rightindex}></input>
-                                {deferrors[`description-${rightindex}`] && <div className="form-feedBack">{deferrors[`description-${rightindex}`]}</div>}
-                              </td>
-                              <td>
-                                <Select
-                                  name="ratingScale"
-                                  value={obj.ratingScale}
-                                  onChange={(e) => {
-                                    handleFieldChangedSkills(rightindex, 'ratingScale', e.target.value);
-                                    setErrors((prev) => ({ ...prev, [`ratingScale-${rightindex}`]: '' })); // Clear error on change
-                                  }}
-                                  onBlur={handleBlur}
-                                  style={{ display: "block" }}
-                                  id={'ratingScale-' + rightindex}
-                                >
-                                  <option value="-1" label="Select Rating Scale" />
-                                  <option value="1" label="1" />
-                                  <option value="2" label="2" />
-                                  <option value="3" label="3" />
-                                  <option value="4" label="4" />
-                                  <option value="5" label="5" />
-                                  <option value="6" label="6" />
-                                  <option value="7" label="7" />
-                                  <option value="8" label="8" />
-                                  <option value="9" label="9" />
-                                  <option value="10" label="10" />
-                                </Select>
-                                {deferrors[`ratingScale-${rightindex}`] && <div className="form-feedBack">{deferrors[`ratingScale-${rightindex}`]}</div>}
-                              </td>
-                              <td>
-                                <DatePicker
-                                  className="form-control"
-                                  placeholder="Start Date"
-                                  selected={new Date(obj.startDate || currentDate)}
-                                  showYearDropdown
-                                  scrollableMonthYearDropdown
-                                  onChange={(el) => handleDatePickerSkills(el, 'startDate', rightindex, '')}
-                                  id={"startDate-" + rightindex}
-                                  timeInputLabel="Time:"
-                                  dateFormat="dd/MM/yyyy"
-                                  showTimeInput
-                                  name="startDate"
-                                  disabled={isUserForRead}
-                                  autoComplete="off"
-                                />
-                                {deferrors[`startDate-${rightindex}`] && <div className="form-feedBack">{deferrors[`startDate-${rightindex}`]}</div>}
-                              </td>
-                              <td>
-                                <DatePicker
-                                  className="form-control"
-                                  placeholder="End Date"
-                                  selected={new Date(obj.endDate || currentDate)}
-                                  showYearDropdown
-                                  scrollableMonthYearDropdown
-                                  onChange={(el) => handleDatePickerSkills(el, 'endDate', rightindex, '')}
-                                  id={"endDate-" + rightindex}
-                                  timeInputLabel="Time:"
-                                  dateFormat="dd/MM/yyyy"
-                                  showTimeInput
-                                  name="endDate"
-                                  disabled={isUserForRead}
-                                  autoComplete="off"
-                                />
-                                {deferrors[`endDate-${rightindex}`] && <div className="form-feedBack">{deferrors[`endDate-${rightindex}`]}</div>}
-                              </td>
-                            </tr>
-                          </>
-                        ))}
-
-                      </table>
-                      {<> <div className="from-group row">
-                        <div className="col-12 col-md-4 mt-3">
-                          <input className="btn btn-success btn-sm" type='button' id="Academic" onClick={addRowSkills} value='+Add'></input>
-                        </div>
-
-                      </div>
-                      </>}
-                    </div>
-
-                    <br></br>
-                    <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-
-                      <h3>Incident Info</h3>
-                      <table class="table table table-head-custom table-vertical-center overflow-hidden table-hover">
-                        <tr style={{ backgroundColor: '#4d5f7a', color: '#fff' }}>
-
-                          <td></td>
-
-                          <td>Incident</td>
-                          <td>Action Taken</td>
-                          <td>Action Taken By</td>
-                          <td>Incident Date</td>
-
-                        </tr>
-                        {incidentList?.map((obj, rightindex) => (
-                          <>
-
-                            <tr>
-                              <td id={rightindex} onClick={deleteRowIncident}> <span className="btn btn-danger btn-sm"> Delete</span></td>
-                              <td>
-                                <input className="form-control" type="text"
-                                  onChange={(e) => {
-                                    handleFieldChangedIncident(rightindex, 'incidentDetail', e.target.value);
-                                    setErrors((prev) => ({ ...prev, [`incidentDetail-${rightindex}`]: '' })); // Clear error on change
-                                  }}
-                                  value={obj.incidentDetail} id={'incidentDetail-' + rightindex}>
-
-                                </input>
-                                {deferrors[`incidentDetail-${rightindex}`] && <div className="form-feedBack">{deferrors[`incidentDetail-${rightindex}`]}</div>}
-                              </td>
-                              <td>
-                                <input className="form-control" type="text"
-
-                                  onChange={(e) => {
-                                    handleFieldChangedIncident(rightindex, 'actionTaken', e.target.value);
-                                    setErrors((prev) => ({ ...prev, [`actionTaken-${rightindex}`]: '' })); // Clear error on change
-                                  }}
-                                  value={obj.actionTaken} id={'actionTaken-' + rightindex}></input>
-                                {deferrors[`incidentDetail-${rightindex}`] && <div className="form-feedBack">{deferrors[`actionTaken-${rightindex}`]}</div>}
-                              </td>
-
-                              <td>
-                                <select className="form-control"
-                                  value={obj.actionTakenBy}
-                                  onChange={(e) => {
-                                    handleFieldChangedIncident(rightindex, 'actionTakenBy', e.target.value);
-                                    setErrors((prev) => ({ ...prev, [`actionTakenBy-${rightindex}`]: '' })); // Clear error on change
-                                  }}
-
-                                  id={'actionTakenBy-' + rightindex} >
-                                  <option value='-1'>--Select--</option>
-                                  {
-                                    dashboard.allEmployees?.filter(x => x.value != values.Id).map((x) => {
-                                      return <option value={x.value}> {x.label} </option>
-                                    })
-
+                                  onChange={(el) => {
+                                    handleDatePicker(el, 'startDate', rightindex, '');
+                                    setErrors((prev) => ({ ...prev, [`startDate_W-${rightindex}`]: '' })); // Clear error on change
                                   }
-                                  {/* options={dashboard.allEmployees.filter(x => x.value != values.Id)} */}
-
-                                  {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
-                                </select>
-                                {deferrors[`actionTakenBy-${rightindex}`] && <div className="form-feedBack">{deferrors[`actionTakenBy-${rightindex}`]}</div>}
+                                  }
+                                  id={"endDate_W-" + rightindex}
+                                  timeInputLabel="Time:"
+                                  dateFormat="dd/MM/yyyy"
+                                  showTimeInput
+                                  name="startDate"
+                                  disabled={isUserForRead}
+                                  autoComplete="off"
+                                  maxDate={new Date()}
+                                  minDate={values.dateOfBirth ? new Date(values.dateOfBirth) : null}
+                                />
+                                {deferrors[`startDate_W-${rightindex}`] && <div className="form-feedBack">{deferrors[`startDate_W-${rightindex}`]}</div>}
                               </td>
                               <td>
                                 <DatePicker
                                   className="form-control"
-                                  placeholder="Date"
-                                  selected={new Date(obj.incidentDate || currentDate)}
+                                  placeholder="End Date"
+                                  selected={new Date(obj.endDate || currentDate)}
                                   showYearDropdown
                                   scrollableMonthYearDropdown
-                                  onChange={(el) => handleDatePickerIncident(el, 'incidentDate', rightindex, '')}
-                                  id={"incidentDate-" + rightindex}
+                                  onChange={(el) => {
+                                    handleDatePicker(el, 'endDate', rightindex, '');
+                                    setErrors((prev) => ({ ...prev, [`endDate_W-${rightindex}`]: '' })); // Clear error on change
+                                  }
+                                  }
+                                  id={"endDate_W" + rightindex}
                                   timeInputLabel="Time:"
                                   dateFormat="dd/MM/yyyy"
                                   showTimeInput
-                                  name="incidentDate"
+                                  name="endDate"
                                   disabled={isUserForRead}
                                   autoComplete="off"
+                                  maxDate={new Date()}
+                                  minDate={values.dateOfBirth ? new Date(values.dateOfBirth) : null}
                                 />
-                                {deferrors[`incidentDate-${rightindex}`] && <div className="form-feedBack">{deferrors[`incidentDate-${rightindex}`]}</div>}
+                                {deferrors[`endDate_W-${rightindex}`] && <div className="form-feedBack">{deferrors[`endDate_W-${rightindex}`]}</div>}
                               </td>
-
-
                             </tr>
-                          </>
-                        ))}
+                            </>
+                          ))}
 
-                      </table>
-                      {<> <div className="from-group row">
-                        <div className="col-12 col-md-4 mt-3">
-                          <input className="btn btn-success btn-sm" type='button' id="Incident" onClick={addRowIncident} value='+Add'></input>
+
+                        </table>
+                        {<> <div className="from-group row">
+                          <div className="col-12 col-md-4 mt-3">
+                            <input className="btn btn-success btn-sm" type='button' id="Experience" onClick={addRowExprerience} value='+Add'></input>
+                          </div>
+
                         </div>
-
+                        </>}
                       </div>
-                      </>}
-                    </div>
-                  </div>
+                      <br></br>
+                      <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
+                        <h3>Academic Info</h3>
+                        <table class="table table table-head-custom table-vertical-center overflow-hidden table-hover">
+                          <tr style={{ backgroundColor: '#4d5f7a', color: '#fff' }}>
+                            <td></td>
+                            <td>Institution</td>
+                            <td>Degree</td>
+                            <td>Country</td>
+                            <td>City</td>
+                            <td>CGPA</td>
+                            <td>Start Date</td>
+                            <td>End Date</td>
+                          </tr>
 
-                      )}
+                          {academicList?.map((obj, rightindex) => (
+                            <>
+
+                              <tr>
+                                <td id={rightindex} onClick={deleteRowAcademic}> <span className="btn btn-danger btn-sm"> Delete</span></td>
+                                <td>
+                                  <select className="form-control" value={obj.institutionId}
+
+                                    onChange={(e) => {
+                                      handleFieldChangedAcademic(rightindex, 'institutionId', e.target.value);
+                                      setErrors((prev) => ({ ...prev, [`institutionId-${rightindex}`]: '' })); // Clear error on change
+                                    }}
+
+                                    id={'institutionId-' + rightindex} >
+                                    {
+                                      dashboard.allInstitution?.map((x) => {
+                                        return <option value={x.value}> {x.label} </option>
+                                      })}
+                                    {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
+                                  </select>
+                                  {deferrors[`institutionId-${rightindex}`] && <div className="form-feedBack">{deferrors[`institutionId-${rightindex}`]}</div>}
+                                </td>
+                                <td>
+                                  <select className="form-control" value={obj.degreeId}
+
+                                    onChange={(e) => {
+                                      handleFieldChangedAcademic(rightindex, 'degreeId', e.target.value);
+                                      setErrors((prev) => ({ ...prev, [`degreeId-${rightindex}`]: '' })); // Clear error on change
+                                    }}
+
+                                    id={'degreeId-' + rightindex} >
+                                    {
+                                      dashboard.allDegreeTitle?.map((x) => {
+                                        return <option value={x.value}> {x.label} </option>
+                                      })}
+                                    {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
+                                  </select>
+                                  {deferrors[`degreeId-${rightindex}`] && <div className="form-feedBack">{deferrors[`degreeId-${rightindex}`]}</div>}
+                                </td>
+                                <td>
+                                  <select className="form-control" value={obj.countryId}
+
+                                    onChange={(e) => {
+                                      handleFieldChangedAcademic(rightindex, 'countryId', e.target.value);
+                                      setErrors((prev) => ({ ...prev, [`countryId-${rightindex}`]: '' })); // Clear error on change
+                                    }}
+
+                                    id={'countryId-' + rightindex} >
+                                    <option value="-1">--Select--</option>
+                                    {
+                                      dashboard.allCountry?.map((x) => {
+                                        return <option value={x.value}> {x.label} </option>
+                                      })}
+
+                                    {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
+                                  </select>
+                                  {deferrors[`countryId-${rightindex}`] && <div className="form-feedBack">{deferrors[`countryId-${rightindex}`]}</div>}
+                                </td>
+                                <td>
+                                  <select className="form-control" value={obj.cityId}
+                                    onChange={(e) => {
+                                      handleFieldChangedAcademic(rightindex, 'cityId', e.target.value);
+                                      setErrors((prev) => ({ ...prev, [`cityId-${rightindex}`]: '' })); // Clear error on change
+                                    }}
+
+                                    id={'cityId-' + rightindex} >
+                                    <option value="-1"> --Select--</option>
+
+                                    {
+
+                                      dashboard.allCity?.map((x) => {
+                                        if (x.code == obj.countryId) {
+                                          return <option value={x.value}> {x.label} </option>
+                                        }
+                                      })}
+
+                                    {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
+                                  </select>
+                                  {deferrors[`cityId-${rightindex}`] && <div className="form-feedBack">{deferrors[`cityId-${rightindex}`]}</div>}
+                                </td>
+
+                                <td>
+                                  <input className="form-control" type="text"
+                                    onChange={(e) => {
+                                      handleFieldChangedAcademic(rightindex, 'gpa', e.target.value);
+                                      setErrors((prev) => ({ ...prev, [`gpa-${rightindex}`]: '' })); // Clear error on change
+                                    }}
+                                    value={obj.gpa} id={'gpa-' + rightindex}></input>
+                                  {deferrors[`gpa-${rightindex}`] && <div className="form-feedBack">{deferrors[`gpa-${rightindex}`]}</div>}
+                                </td>
+                                <td>
+                                  <DatePicker
+                                    className="form-control"
+                                    placeholder="Start Date"
+                                    selected={new Date(obj.startDate || currentDate)}
+                                    showYearDropdown
+                                    scrollableMonthYearDropdown
+                                    onChange={(el) => handleDatePickerAcademic(el, 'startDate', rightindex, '')}
+                                    id={"startDate_A-" + rightindex}
+                                    timeInputLabel="Time:"
+                                    dateFormat="dd/MM/yyyy"
+                                    showTimeInput
+                                    name="startDate"
+                                    disabled={isUserForRead}
+                                    autoComplete="off"
+                                    minDate={values.dateOfBirth ? new Date(values.dateOfBirth) : null}
+                                    maxDate={ new Date()}
+                                  />
+                                  {deferrors[`startDate_A-${rightindex}`] && <div className="form-feedBack">{deferrors[`startDate_A-${rightindex}`]}</div>}
+                                </td>
+                                <td>
+                                  <DatePicker
+                                    className="form-control"
+                                    placeholder="End Date"
+                                    selected={new Date(obj.endDate || currentDate)}
+                                    showYearDropdown
+                                    scrollableMonthYearDropdown
+                                    onChange={(el) => handleDatePickerAcademic(el, 'endDate', rightindex, '')}
+                                    id={"endDate_A-" + rightindex}
+                                    timeInputLabel="Time:"
+                                    dateFormat="dd/MM/yyyy"
+                                    showTimeInput
+                                    name="endDate"
+                                    disabled={isUserForRead}
+                                    autoComplete="off"
+                                    minDate={values.dateOfBirth ? new Date(values.dateOfBirth) : null}
+                                  
+                                  />
+                                  {deferrors[`endDate_A-${rightindex}`] && <div className="form-feedBack">{deferrors[`endDate_A-${rightindex}`]}</div>}
+                                </td>
+                              </tr>
+                            </>
+                          ))}
+
+                        </table>
+                        {<> <div className="from-group row">
+                          <div className="col-12 col-md-4 mt-3">
+                            <input className="btn btn-success btn-sm" type='button' id="Academic" onClick={addRowAcademic} value='+Add'></input>
+                          </div>
+
+                        </div>
+                        </>}
+                      </div>
+                      <br></br>
+                      <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
+
+                        <h3>Employee Skills</h3>
+                        <table class="table table table-head-custom table-vertical-center overflow-hidden table-hover">
+                          <tr style={{ backgroundColor: '#4d5f7a', color: '#fff' }}>
+
+                            <td></td>
+                            <td>Skill</td>
+                            <td>Description</td>
+
+                            <td>Rating</td>
+                            <td>Start Date</td>
+                            <td>End Date</td>
+                          </tr>
+                          {skillsList?.map((obj, rightindex) => (
+                            <>
+                              <tr>
+                                <td id={rightindex} onClick={deleteRowSkills}> <span className="btn btn-danger btn-sm"> Delete</span></td>
+
+                                <td>
+                                  <input className="form-control" type="text"
+                                    onChange={(e) => {
+                                      handleFieldChangedSkills(rightindex, 'skill', e.target.value);
+                                      setErrors((prev) => ({ ...prev, [`skill-${rightindex}`]: '' })); // Clear error on change
+                                    }}
+
+                                    value={obj.skill} id={'skill-' + rightindex}></input>
+                                  {deferrors[`skill-${rightindex}`] && <div className="form-feedBack">{deferrors[`skill-${rightindex}`]}</div>}
+                                </td>
+                                <td>
+                                  <input className="form-control" type="text"
+                                    onChange={(e) => {
+                                      handleFieldChangedSkills(rightindex, 'description', e.target.value);
+                                      setErrors((prev) => ({ ...prev, [`description-${rightindex}`]: '' })); // Clear error on change
+                                    }}
+                                    value={obj.description} id={'description-' + rightindex}></input>
+                                  {deferrors[`description-${rightindex}`] && <div className="form-feedBack">{deferrors[`description-${rightindex}`]}</div>}
+                                </td>
+                                <td>
+                                  <Select
+                                    name="ratingScale"
+                                    value={obj.ratingScale}
+                                    onChange={(e) => {
+                                      handleFieldChangedSkills(rightindex, 'ratingScale', e.target.value);
+                                      setErrors((prev) => ({ ...prev, [`ratingScale-${rightindex}`]: '' })); // Clear error on change
+                                    }}
+                                    onBlur={handleBlur}
+                                    style={{ display: "block" }}
+                                    id={'ratingScale-' + rightindex}
+                                  >
+                                    <option value="-1" label="Select Rating Scale" />
+                                    <option value="1" label="1" />
+                                    <option value="2" label="2" />
+                                    <option value="3" label="3" />
+                                    <option value="4" label="4" />
+                                    <option value="5" label="5" />
+                                    <option value="6" label="6" />
+                                    <option value="7" label="7" />
+                                    <option value="8" label="8" />
+                                    <option value="9" label="9" />
+                                    <option value="10" label="10" />
+                                  </Select>
+                                  {deferrors[`ratingScale-${rightindex}`] && <div className="form-feedBack">{deferrors[`ratingScale-${rightindex}`]}</div>}
+                                </td>
+                                <td>
+                                  <DatePicker
+                                    className="form-control"
+                                    placeholder="Start Date"
+                                    selected={new Date(obj.startDate || currentDate)}
+                                    showYearDropdown
+                                    scrollableMonthYearDropdown
+                                    onChange={(el) => handleDatePickerSkills(el, 'startDate', rightindex, '')}
+                                    id={"startDate-" + rightindex}
+                                    timeInputLabel="Time:"
+                                    dateFormat="dd/MM/yyyy"
+                                    showTimeInput
+                                    name="startDate"
+                                    disabled={isUserForRead}
+                                    autoComplete="off"
+                                    minDate={values.dateOfBirth ? new Date(values.dateOfBirth) : null}
+                                    maxDate={ new Date()}
+                                  />
+                                  {deferrors[`startDate-${rightindex}`] && <div className="form-feedBack">{deferrors[`startDate-${rightindex}`]}</div>}
+                                </td>
+                                <td>
+                                  <DatePicker
+                                    className="form-control"
+                                    placeholder="End Date"
+                                    selected={new Date(obj.endDate || currentDate)}
+                                    showYearDropdown
+                                    scrollableMonthYearDropdown
+                                    onChange={(el) => handleDatePickerSkills(el, 'endDate', rightindex, '')}
+                                    id={"endDate-" + rightindex}
+                                    timeInputLabel="Time:"
+                                    dateFormat="dd/MM/yyyy"
+                                    showTimeInput
+                                    name="endDate"
+                                    disabled={isUserForRead}
+                                    autoComplete="off"
+                                    minDate={values.dateOfBirth ? new Date(values.dateOfBirth) : null}
+                                   
+                                  />
+                                  {deferrors[`endDate-${rightindex}`] && <div className="form-feedBack">{deferrors[`endDate-${rightindex}`]}</div>}
+                                </td>
+                              </tr>
+                            </>
+                          ))}
+
+                        </table>
+                        {<> <div className="from-group row">
+                          <div className="col-12 col-md-4 mt-3">
+                            <input className="btn btn-success btn-sm" type='button' id="Academic" onClick={addRowSkills} value='+Add'></input>
+                          </div>
+
+                        </div>
+                        </>}
+                      </div>
+
+                      <br></br>
+                      <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
+
+                        <h3>Incident Info</h3>
+                        <table class="table table table-head-custom table-vertical-center overflow-hidden table-hover">
+                          <tr style={{ backgroundColor: '#4d5f7a', color: '#fff' }}>
+
+                            <td></td>
+
+                            <td>Incident</td>
+                            <td>Action Taken</td>
+                            <td>Action Taken By</td>
+                            <td>Incident Date</td>
+
+                          </tr>
+                          {incidentList?.map((obj, rightindex) => (
+                            <>
+
+                              <tr>
+                                
+                                <td id={rightindex} onClick={deleteRowIncident} > <span className="btn btn-danger btn-sm"> Delete</span></td>
+                                <td>
+                                  <input className="form-control" type="text"
+                                    onChange={(e) => {
+                                      handleFieldChangedIncident(rightindex, 'incidentDetail', e.target.value);
+                                      setErrors((prev) => ({ ...prev, [`incidentDetail-${rightindex}`]: '' })); // Clear error on change
+                                    }}
+                                    value={obj.incidentDetail} id={'incidentDetail-' + rightindex}>
+
+                                  </input>
+                                  {deferrors[`incidentDetail-${rightindex}`] && <div className="form-feedBack">{deferrors[`incidentDetail-${rightindex}`]}</div>}
+                                </td>
+                                <td>
+                                  <input className="form-control" type="text"
+
+                                    onChange={(e) => {
+                                      handleFieldChangedIncident(rightindex, 'actionTaken', e.target.value);
+                                      setErrors((prev) => ({ ...prev, [`actionTaken-${rightindex}`]: '' })); // Clear error on change
+                                    }}
+                                    value={obj.actionTaken} id={'actionTaken-' + rightindex}></input>
+                                  {deferrors[`incidentDetail-${rightindex}`] && <div className="form-feedBack">{deferrors[`actionTaken-${rightindex}`]}</div>}
+                                </td>
+
+                                <td>
+                                  <select className="form-control"
+                                    value={obj.actionTakenBy}
+                                    onChange={(e) => {
+                                      handleFieldChangedIncident(rightindex, 'actionTakenBy', e.target.value);
+                                      setErrors((prev) => ({ ...prev, [`actionTakenBy-${rightindex}`]: '' })); // Clear error on change
+                                    }}
+
+                                    id={'actionTakenBy-' + rightindex} >
+                                    <option value='-1'>--Select--</option>
+                                    {
+                                      dashboard.allEmployees?.filter(x => x.value != values.Id).map((x) => {
+                                        return <option value={x.value}> {x.label} </option>
+                                      })
+
+                                    }
+                                    {/* options={dashboard.allEmployees.filter(x => x.value != values.Id)} */}
+
+                                    {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
+                                  </select>
+                                  {deferrors[`actionTakenBy-${rightindex}`] && <div className="form-feedBack">{deferrors[`actionTakenBy-${rightindex}`]}</div>}
+                                </td>
+                                <td>
+                                  <DatePicker
+                                    className="form-control"
+                                    placeholder="Date"
+                                    selected={new Date(obj.incidentDate || currentDate)}
+                                    showYearDropdown
+                                    scrollableMonthYearDropdown
+                                    onChange={(el) => handleDatePickerIncident(el, 'incidentDate', rightindex, '')}
+                                    id={"incidentDate-" + rightindex}
+                                    timeInputLabel="Time:"
+                                    dateFormat="dd/MM/yyyy"
+                                    showTimeInput
+                                    name="incidentDate"
+                                    disabled={isUserForRead}
+                                    autoComplete="off"
+                                    minDate={values.dateOfBirth ? new Date(values.dateOfBirth) : null}
+                                    maxDate={ new Date()}
+                                  />
+                                  {deferrors[`incidentDate-${rightindex}`] && <div className="form-feedBack">{deferrors[`incidentDate-${rightindex}`]}</div>}
+                                </td>
+
+
+                              </tr>
+                            </>
+                          ))}
+
+                        </table>
+                        {<> <div className="from-group row">
+                          <div className="col-12 col-md-4 mt-3">
+                            <input className="btn btn-success btn-sm" type='button' id="Incident" onClick={addRowIncident} value='+Add'></input>
+                          </div>
+
+                        </div>
+                        </>}
+                      </div>
+                    </div>
+
+                  )}
                   <div className="from-group row">
                   </div>
                 </fieldset>

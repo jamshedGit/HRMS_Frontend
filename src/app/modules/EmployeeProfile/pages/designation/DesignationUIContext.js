@@ -82,8 +82,9 @@ export function DesignationUIProvider({ DesignationUIEvents, children }) {
     cycleTypeId: '',
     requireDeligation: '',
     reportTo:"",
-    defaultShiftId:""
+    defaultShiftId:"",
     //defContactList: []
+    attendanceType:1
     
 
   };
