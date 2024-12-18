@@ -14,10 +14,12 @@ export function AttendanceViewPage() {
   const dispatch = useDispatch();
   const {
     dashboard,
-    listLoading
+    listLoading,
+    processLoading
   } = useSelector((state) => ({
     dashboard: state.dashboard,
-    listLoading: state.attendance.listLoading
+    listLoading: state.attendance.listLoading,
+    processLoading: state.attendance.processLoading
   }
   ));
 
@@ -51,7 +53,7 @@ export function AttendanceViewPage() {
         </CardHeader>
 
         {/* Filter Form Starts */}
-        <FormFilter loading={listLoading} />
+        <FormFilter dispatch={dispatch} loading={listLoading} processLoading={processLoading}/>
         {/* Filter Form Ends */}
 
         {/* Table Starts */}
