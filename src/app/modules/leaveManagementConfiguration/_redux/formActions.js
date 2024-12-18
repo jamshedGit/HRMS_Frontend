@@ -236,3 +236,47 @@ export const deleteLeaveTypeDeductionPolicyRecord = (id, remove, index) => (disp
       });
     });
 }
+
+
+/**
+ * 
+ * Save Allocate Leaves Record
+ * 
+ * @param {Object} data 
+ * @param {Function} disableLoading 
+ * @param {Function} onHide 
+ * @returns 
+ */
+export const allocateLeaves = (data, disableLoading, onHide) => (dispatch) => {
+  dispatch(actions.startCall({ callType: callTypes.allocation }));
+  return requestFromServer.createAllocateLeavesSetup(data)
+    .then((res) => {
+      const AllocateLeavesData = res.data?.data;
+      if (AllocateLeavesData) {
+        dispatch(actions.AllocateLeavesCreated(AllocateLeavesData));
+        toast.success("Successfully Allocated", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        onHide();
+      }
+    })
+    .catch((error) => {
+      dispatch(actions.catchError({ error, callType: callTypes.allocation }));
+      error.clientMessage = "Can't Allocate Leaves";
+      toast.error(error?.response?.data?.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    });
+};

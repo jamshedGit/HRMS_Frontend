@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Formik, Form, Field } from "formik";
 import { Select } from "../../../../../../_metronic/_partials/controls";
 import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
 import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLabel";
 import { Modal } from "react-bootstrap";
 import { fetchAllLeaveType } from "../../../../../../_metronic/redux/dashboardActions";
+import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 
 export function FilterForm({
   filters,
@@ -12,6 +13,11 @@ export function FilterForm({
   dropdownData,
   dispatch
 }) {
+
+  //Create Maps for every dropdown data so setting value in dropdown can be fast optimized (Start)
+  const allEmployeesMap = useMemo(() => {
+    return new Map(dropdownData?.allEmployees?.map(item => [item.value, item]));
+  }, [dropdownData?.allEmployees]);
 
   return (
     <>
@@ -36,12 +42,10 @@ export function FilterForm({
                     <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="employeeId"
-                        component={Select}
-                        className={errors.employeeId && touched.employeeId ? 'form-control is-invalid' : 'form-control'}
-                        placeholder=""
+                        component={SearchSelect}
                         onBlur={handleBlur}
                         onChange={(e) => {
-                          const value = e.target.value == '--Select--' ? '' : Number(e.target.value)
+                          const value = e.value == '--Select--' ? '' : Number(e.value)
                           if (value) {
                             dispatch(fetchAllLeaveType("allLeaveTypes", value));
                           }
@@ -54,9 +58,9 @@ export function FilterForm({
                             Employee<span style={{ color: "red" }}>*</span>
                           </span>
                         }
-                        value={values.employeeId}
+                        value={allEmployeesMap?.get(values?.employeeId || '') || ''}
                         autoComplete="off"
-                        children={CustomDropdown({ data: dropdownData.allEmployees, firstElement: { label: '--Select--', value: null } })}
+                        options={dropdownData.allEmployees}
                       />
                       {
                         errors.employeeId && touched.employeeId && <CustomErrorLabel touched={true} error={errors.employeeId} />

@@ -26,6 +26,7 @@ export function FormUIProvider({ FormUIEvents, children }) {
   }, []);
 
   const initUser = {
+    subsidiaryId: [],
     type: "",
     name: "",
     code: "",

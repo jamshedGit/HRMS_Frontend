@@ -54,6 +54,8 @@ export function FormEditDialog({ id, show, onHide, userForRead, isEdit }) {
       dispatch(fetchAllFormsMenu(191, "allLeaveStatus", 'All'));
     if (!dashboard?.allMaritalStatus || !dashboard?.allMaritalStatus?.length)
       dispatch(fetchAllFormsMenu(190, "allMaritalStatus", 'All'));
+    if (!dashboard?.allEntitlementEvents || !dashboard?.allEntitlementEvents?.length)
+      dispatch(fetchAllFormsMenu(270, "allEntitlementEvents", 'All'));
   }, [id, dispatch, show]);
 
   //Create or Update record according to values from dialog

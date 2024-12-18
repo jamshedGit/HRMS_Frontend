@@ -11,11 +11,13 @@ const initialState = {
     userForEdit: undefined,
     lastError: null,
     userForRead: false,
+    processLoading: false
 };
 
 export const callTypes = {
     list: "list",
     action: "action",
+    process: "process"
 };
 
 export const AttendanceSlice = createSlice({
@@ -26,7 +28,11 @@ export const AttendanceSlice = createSlice({
             state.error = `${action.type}: ${action.payload.error}`;
             if (action.payload.callType === callTypes.list) {
                 state.listLoading = false;
-            } else {
+            } 
+            else if(action.payload.callType === callTypes.process){
+                state.processLoading = false;
+            }
+            else {
                 state.actionsLoading = false;
             }
         },
@@ -34,8 +40,24 @@ export const AttendanceSlice = createSlice({
             state.error = null;
             if (action.payload.callType === callTypes.list) {
                 state.listLoading = true;
-            } else {
+            } 
+            else if(action.payload.callType === callTypes.process){
+                state.processLoading = true;
+            }
+            else {
                 state.actionsLoading = true;
+            }
+        },
+        stopCall: (state, action) => {
+            state.error = null;
+            if (action.payload.callType === callTypes.list) {
+                state.listLoading = false;
+            } 
+            else if(action.payload.callType === callTypes.process){
+                state.processLoading = false;
+            }
+            else {
+                state.actionsLoading = false;
             }
         },
         AttendanceFetched: (state, action) => {
