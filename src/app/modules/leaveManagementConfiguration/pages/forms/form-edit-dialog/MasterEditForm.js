@@ -451,9 +451,10 @@ export function MasterEditForm({
                           border: "2px solid #adceff",
                         }}
                       >
+                        <h6>Leave Allocation</h6>
                         <div className="from-group row">
 
-                          <div className="col-12 col-md-10 mt-3">
+                          <div className="col-12 col-md-10 mt-5">
                             <b><label>{activeFiscalYear?.label}</label></b>
                           </div>
 
