@@ -69,7 +69,7 @@ export const LeaveEncashmentSlice = createSlice({
             state.totalCount++;
         },
         PayrollMonthFetched: (state, action) => {
-            const payrollData = action?.payload?.payrollData?.[0];
+            const payrollData = action?.payload?.payrollData;
             state.error = null;
             state.payrollData = payrollData;
         },
