@@ -39,14 +39,14 @@ export const employeeShiftSlice = createSlice({
             }
         },
         EmployeeshiftFetched: (state, action) => {
-            console.log("kkk::",action.payload)
+        
             const entities = action.payload?.data?.data?.rows;
             const totalResult = action.payload?.data?.data.totalResults;
             state.listLoading = false;
             state.error = null;
             state.entities = entities || [];
             state.totalCount = totalResult;
-            console.log("entities::",entities)
+         
 
         },
         typeDropdownFetched: (state, action) => {
