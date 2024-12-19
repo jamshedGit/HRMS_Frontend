@@ -120,7 +120,7 @@ export function MasterEditForm({
         let date = new Date(nextStartDate.setDate(nextStartDate.getDate() + 1))
         // setDefaultStartDate(date);
         setFieldValue("startDate", date)
-        setEndDate(date, setFieldValue)
+        setEndDate(year,month,date, setFieldValue)
 
       }
     } catch (error) {
@@ -136,34 +136,70 @@ export function MasterEditForm({
 
   }
 
-  const setEndDate = (date, setFieldValue) => {
-    setDefaultStartDate(date);
+ const getTotalDaysInMonth=(year, month)=> {
+ 
+    const lastDayOfMonth = new Date(year, month, 0);
+   return lastDayOfMonth.getDate();
+}
 
-    const endDate = new Date(date);
-    endDate.setMonth(endDate.getMonth() + 1); // Add one year (365 or 366 days will be calculated automatically)
+const setEndDate = (year,month,date, setFieldValue) => {
+   
+  const totalDays = getTotalDaysInMonth(year,month); // 1 is February (months are 0-indexed)
 
-    endDate.setDate(endDate.getDate() - 1);
-    setFieldValue("endDate", endDate);
-    setDefaultEndDate(endDate);
 
-    setFieldValue("month_days", getDateDiffInDays(date, endDate));
+  setDefaultStartDate(date);
 
-  }
+  const endDate = new Date(date);
+  endDate.setDate(endDate.getDate() + totalDays-1); // Add total days to the start date
+
+  setFieldValue("endDate", new Date (endDate));
+  setDefaultEndDate(endDate);
+
+  setFieldValue("month_days", totalDays);
+
+}
+
+
+  // const setEndDate = (date, setFieldValue) => {
+   
+  //   setDefaultStartDate(date);
+
+  //   const endDate = new Date(date);
+  //   endDate.setMonth(endDate.getMonth() + 1); // Add one year (365 or 366 days will be calculated automatically)
+
+  //   endDate.setDate(endDate.getDate() - 1);
+  //   setFieldValue("endDate", endDate);
+  //   setDefaultEndDate(endDate);
+
+  //   setFieldValue("month_days", getDateDiffInDays(date, endDate));
+
+  // }
+
+
+
+
+
 
   const setShortDormat = (month, year, setFieldValue) => {
-    const formattedMonth = month && month < 10 ? `0${month}` : `${month}`;
-    const formattedYear = year && year.toString().slice(-2); // Extract last 2 digits of the year
+  
+    if(month && year){
+      const formattedMonth = month && month < 10 ? `0${month}` : `${month}`;
+      const formattedYear = year && year.toString().slice(-2); // Extract last 2 digits of the year
+  
+      const shortFormat = `${formattedMonth}${formattedYear}`;
+  
+  
+      setFieldValue("shortFormat", shortFormat);
+    }
 
-    const shortFormat = `${formattedMonth}${formattedYear}`;
-
-
-    setFieldValue("shortFormat", shortFormat);
   }
+
+
 
 
 
   const monthOptions = [
-    { value: "-1", label: "Select..." },
+    // { value: "-1", label: "Select..." },
     { value: "1", label: "Jan" },
     { value: "2", label: "Feb" },
     { value: "3", label: "Mar" },
@@ -260,7 +296,7 @@ export function MasterEditForm({
                         isDisabled={isUserForRead || flag}
                         onChange={(e) => {
                           setFieldValue("month", e.value || null);
-
+                          setShortDormat(e.value, values.year, setFieldValue) 
                         }}
                         value={
                           monthOptions?.find(
@@ -288,13 +324,30 @@ export function MasterEditForm({
                         name="year"
                         component={Input}
                         placeholder="Enter year"
-                        disabled={isUserForRead || flag}
+                      
+                        disabled={isUserForRead || flag || !values.month }
                         type="number"
                         min="1000"  // Minimum 4-digit year (e.g., 1000)
                         max="9999"  // Maximum 4-digit year (e.g., 9999)
                         maxLength="4"  // Limit to 4 digits
-                        onInput={(e) => e.target.value = e.target.value.slice(0, 4)} // Ensure user can't type more than 4 digits
+                        // onChange={(e) => {
+                        //   setFieldValue("year", e.value || null);
+                        //   setShortDormat(values.month, values.year, setFieldValue) 
+                        // }}
 
+                        onChange={(e) => {
+                          // Use onChange to update the form's state with the input value
+                          let value = e.target.value;
+                    
+                          // Ensure the value is numeric and only 4 digits
+                          if (/^\d{0,4}$/.test(value)) {
+                            setFieldValue("year", value); // Update the form field
+                            setShortDormat(values.month,value, setFieldValue) 
+                          }
+                        }}
+                       
+                        onInput={(e) => e.target.value = e.target.value.slice(0, 4)} // Ensure user can't type more than 4 digits
+                        
 
 
                       />
@@ -307,13 +360,13 @@ export function MasterEditForm({
 
                       <Field
                         name="shortFormat"
-                        disabled={flag}
+                        disabled={true}
                         component={Input}
                         onChange={(e) => {
 
                           setFieldValue("shortFormat", e.target.value); // Update the form field value
                         }}
-                        placeholder="Enter Short Format 0125"
+                        placeholder="Short Format 0125"
                         label="Short Format"
 
                         min="1000"  // Minimum 4-digit year (e.g., 1000)
@@ -338,7 +391,7 @@ export function MasterEditForm({
                         selected={defstartDate}
                         onChange={(date) => {
                           setFieldValue("startDate", date);
-                          setEndDate(date, setFieldValue)
+                          setEndDate(values.year,values.month,date, setFieldValue)
                           // setDefaultStartDate(date);
 
                           // // Add 365 days (considering leap years automatically)
@@ -359,7 +412,7 @@ export function MasterEditForm({
                         dateFormat="dd/MM/yyyy"
                         showTimeInput
                         name="startDate"
-                        disabled={isUserForRead || flag}
+                        disabled={isUserForRead || flag || !values.year}
                         autoComplete="off"
                         value={values.startDate}
                       />
@@ -367,7 +420,7 @@ export function MasterEditForm({
                     </div>
 
                     <div className="col-12 col-md-4 mt-3">
-                      <span> End Date<span style={{ color: 'red' }}>*</span></span>
+                      <span> End Date</span>
                       <DatePicker
                         className="form-control"
                         placeholder="Enter End Date"
