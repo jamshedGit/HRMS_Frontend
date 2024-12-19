@@ -77,11 +77,24 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   //     disbaleLoading();
   //   }
   // }, [actionsLoading]);
- 
+
 
   const SavePayrollMonthSetup = async (user) => {
 
+    if (user.endDate) {
+      const fullYear = user.endDate.getFullYear();
+      const month = user.endDate.getMonth() + 1;
+    
+  
+      if (fullYear != user.year || month != user.month) {
+        // Trigger a toast notification (use the toast method)
+        toast.error("The year or month does not match the user's data.");
+        return
+      }
+    }
+
     if (!id) {
+   
 
       // user.month_days= defDays
       const finalObject = { user }
@@ -94,20 +107,20 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
       //   return item.value === +user.status;
       // });
 
-    
+
 
       const payrollMonthSetupUpdatedFields = {
         Id: user.Id,
         startDate: user.startDate,
         endDate: user.endDate,
-        month:user.month,
+        month: user.month,
         month_days: user.month_days,
         shortFormat: user.shortFormat,
         year: user.year,
         subsidiaryId: user.subsidiaryId
       };
 
- 
+
       await dispatch(actions.updatePayrollMonth(payrollMonthSetupUpdatedFields, disbaleLoading, onHide));
       await dispatch(actions.fetchUsers(usersUIProps.queryParams));
     }
