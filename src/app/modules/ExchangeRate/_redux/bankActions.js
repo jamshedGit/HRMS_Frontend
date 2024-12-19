@@ -100,8 +100,6 @@ export const activeUser = (id) => (dispatch) => {
 export const createExchangeRate = (bankForCreation, disbaleLoading, onHide) => (
   dispatch
 ) => {
-  // bankForCreation.phNo = bankForCreation.phNo.toString();
-  // bankForCreation.cnic = bankForCreation.cnic.toString();
 
 
   return requestFromServer
@@ -151,7 +149,7 @@ export const updateExchangeRate = (user, disbaleLoading, onHide) => (dispatch) =
       dispatch(actions.startCall({ callType: callTypes.action }));
       disbaleLoading();
       onHide();
-      toast.success(response.data.message + " Updated", {
+      toast.success(response.data.message , {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
