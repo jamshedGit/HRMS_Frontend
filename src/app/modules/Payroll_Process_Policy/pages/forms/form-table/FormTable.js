@@ -1470,7 +1470,7 @@ export function FormTable(user) {
                       <td>Journal Bank Acc#</td>
                       <td>Bank Code Employer</td>
                       <td>Bank Account No</td>
-                      <td>IsDefault</td>
+                      <td>Default</td>
                       <td>Bank Name</td>
                     </tr>
                     {defBankInfoList?.map((obj, rightindex) => (
