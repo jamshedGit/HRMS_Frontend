@@ -288,7 +288,7 @@ const setEndDate = (year,month,date, setFieldValue) => {
                         name="month"
                         label={
                           <span>
-                            Select Month
+                            Month
                             <span style={{ color: "red" }}>*</span>
                           </span>
                         }
