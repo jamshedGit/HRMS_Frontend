@@ -613,8 +613,6 @@ export function FormTable(user) {
 
         onSubmit={async (values) => {
 
-          console.log('::::values:::::',values);
-          
           const validationErrors = validate();
           if (Object.keys(validationErrors).length > 0) {
             setotherErrors(validationErrors);
