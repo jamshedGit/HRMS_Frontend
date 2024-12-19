@@ -181,14 +181,20 @@ const setEndDate = (year,month,date, setFieldValue) => {
 
 
   const setShortDormat = (month, year, setFieldValue) => {
-    const formattedMonth = month && month < 10 ? `0${month}` : `${month}`;
-    const formattedYear = year && year.toString().slice(-2); // Extract last 2 digits of the year
+    console.log("month && year",month , year)
+    if(month && year){
+      const formattedMonth = month && month < 10 ? `0${month}` : `${month}`;
+      const formattedYear = year && year.toString().slice(-2); // Extract last 2 digits of the year
+  
+      const shortFormat = `${formattedMonth}${formattedYear}`;
+  
+  
+      setFieldValue("shortFormat", shortFormat);
+    }
 
-    const shortFormat = `${formattedMonth}${formattedYear}`;
-
-
-    setFieldValue("shortFormat", shortFormat);
   }
+
+
 
 
 
@@ -290,7 +296,7 @@ const setEndDate = (year,month,date, setFieldValue) => {
                         isDisabled={isUserForRead || flag}
                         onChange={(e) => {
                           setFieldValue("month", e.value || null);
-
+                          setShortDormat(e.value, values.year, setFieldValue) 
                         }}
                         value={
                           monthOptions?.find(
@@ -318,13 +324,30 @@ const setEndDate = (year,month,date, setFieldValue) => {
                         name="year"
                         component={Input}
                         placeholder="Enter year"
-                        disabled={isUserForRead || flag }
+                      
+                        disabled={isUserForRead || flag || !values.month }
                         type="number"
                         min="1000"  // Minimum 4-digit year (e.g., 1000)
                         max="9999"  // Maximum 4-digit year (e.g., 9999)
                         maxLength="4"  // Limit to 4 digits
-                        onInput={(e) => e.target.value = e.target.value.slice(0, 4)} // Ensure user can't type more than 4 digits
+                        // onChange={(e) => {
+                        //   setFieldValue("year", e.value || null);
+                        //   setShortDormat(values.month, values.year, setFieldValue) 
+                        // }}
 
+                        onChange={(e) => {
+                          // Use onChange to update the form's state with the input value
+                          let value = e.target.value;
+                    
+                          // Ensure the value is numeric and only 4 digits
+                          if (/^\d{0,4}$/.test(value)) {
+                            setFieldValue("year", value); // Update the form field
+                            setShortDormat(values.month,value, setFieldValue) 
+                          }
+                        }}
+                       
+                        onInput={(e) => e.target.value = e.target.value.slice(0, 4)} // Ensure user can't type more than 4 digits
+                        
 
 
                       />
@@ -337,13 +360,13 @@ const setEndDate = (year,month,date, setFieldValue) => {
 
                       <Field
                         name="shortFormat"
-                        disabled={flag}
+                        disabled={true}
                         component={Input}
                         onChange={(e) => {
 
                           setFieldValue("shortFormat", e.target.value); // Update the form field value
                         }}
-                        placeholder="Enter Short Format 0125"
+                        placeholder="Short Format 0125"
                         label="Short Format"
 
                         min="1000"  // Minimum 4-digit year (e.g., 1000)
@@ -397,7 +420,7 @@ const setEndDate = (year,month,date, setFieldValue) => {
                     </div>
 
                     <div className="col-12 col-md-4 mt-3">
-                      <span> End Date<span style={{ color: 'red' }}>*</span></span>
+                      <span> End Date</span>
                       <DatePicker
                         className="form-control"
                         placeholder="Enter End Date"
