@@ -84,7 +84,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     if (user.endDate) {
       const fullYear = user.endDate.getFullYear();
       const month = user.endDate.getMonth() + 1;
-      console.log("fullYear, month", fullYear, month, user.year, user.month);
+    
   
       if (fullYear != user.year || month != user.month) {
         // Trigger a toast notification (use the toast method)

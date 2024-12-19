@@ -181,7 +181,7 @@ const setEndDate = (year,month,date, setFieldValue) => {
 
 
   const setShortDormat = (month, year, setFieldValue) => {
-    console.log("month && year",month , year)
+  
     if(month && year){
       const formattedMonth = month && month < 10 ? `0${month}` : `${month}`;
       const formattedYear = year && year.toString().slice(-2); // Extract last 2 digits of the year
