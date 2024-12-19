@@ -1,3 +1,4 @@
+import { SERVER_MESSAGES } from "../../../utils/constants";
 import * as requestFromServer from "./bankCrud";
 import { exchangeRateSlice, callTypes } from "./exchangeRateSlice";
 import { toast } from "react-toastify";
@@ -58,7 +59,7 @@ export const deleteExchangeRate = (id) => (dispatch) => {
     .then((response) => {
 
       dispatch(actions.exchangeRateDeleted({ Id: id }));
-      toast.success("Successfully Deleted", {
+      toast.success(SERVER_MESSAGES.deletedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -111,7 +112,7 @@ export const createExchangeRate = (bankForCreation, disbaleLoading, onHide) => (
     
       dispatch(actions.exchangeRateCreated(user));
       disbaleLoading();
-      toast.success("Successfully Created", {
+      toast.success(SERVER_MESSAGES.insertedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -149,7 +150,7 @@ export const updateExchangeRate = (user, disbaleLoading, onHide) => (dispatch) =
       dispatch(actions.startCall({ callType: callTypes.action }));
       disbaleLoading();
       onHide();
-      toast.success(response.data.message , {
+      toast.success(SERVER_MESSAGES.updatedSuccess , {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
