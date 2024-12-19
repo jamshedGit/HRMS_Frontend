@@ -378,7 +378,7 @@ export function FormFilter({ listLoading, user, setCity,
                   }}
                 />
                 <small className="form-text text-muted">
-                  <b>Search</b> in all fields
+                  <b>Search</b> by year
                 </small>
               </div>
             </div>
