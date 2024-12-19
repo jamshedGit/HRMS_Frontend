@@ -117,7 +117,7 @@ export function BankEditForm({
         initialValues={user}
         validationSchema={formValidation}
         onSubmit={(values) => {
-     
+
           enableLoading();
           if (values.mappedAllowance == "-1")
             values.mappedAllowance = ""
@@ -145,7 +145,9 @@ export function BankEditForm({
               <Form className="form form-label-right">
                 <fieldset disabled={isUserForRead}>
 
-                  <div className="from-group row">
+
+                  {/* old subsidiary */}
+                  {/* <div className="from-group row">
 
                     <div className="col-12 col-md-4 mt-3">
                       <SearchSelect
@@ -170,7 +172,36 @@ export function BankEditForm({
                     </div>
 
 
+                  </div> */}
+
+
+                  <div className="from-group row">
+
+                    <div className="col-12 col-md-4 mt-3">
+                      Subsidiary
+                      <div style={{ backgroundColor: "#ffffff", height: "170px", padding: "10px", overflow: "scroll" }}>
+
+                        <div className="multi-select">
+                          <div className="dropdown-label"></div>
+                          <div className="dropdown-options" style={{ fontSize: "12px", fontWeight: "bold", padding: "5px" }}>
+                            {dashboard?.allSubsidiaryList?.map((option) => (
+                              <div key={option.value} className="dropdown-option">
+                                <input style={{ width: "25px" }}
+                                  name="subsidiaryId"
+                                  type="checkbox"
+                                  value={option.value}
+                                  checked={Boolean(values?.subsidiaryId?.includes(option?.value?.toString()))}
+                                  onChange={handleChange}
+                                />
+                                {option.label}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
+
                   <div className="from-group row">
                     {
                       <div className="col-12 col-md-4 mt-3">

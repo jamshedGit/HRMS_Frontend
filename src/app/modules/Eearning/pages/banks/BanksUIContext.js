@@ -32,7 +32,7 @@ export function BanksUIProvider({ BanksUIEvents, children }) {
   }, []);
   const initUser = {
 
-    earningCode: "",
+    earningCode: "111",
     earningName: "",
     linkedAttendance: "",
     isTaxable: "",
