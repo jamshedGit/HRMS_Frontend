@@ -30,7 +30,7 @@ function LeaveTypeSalaryDeductionTable({ values, setFieldValue, createDropdown, 
 
                     {/* Delete Button Starts */}
                     <td>
-                      <button type="button" onClick={() => {
+                      <button type="button" className="btn btn-danger btn-elevate" onClick={() => {
                         handleDelete('LeaveTypeSalaryDeductionTable', values?.leaveTypeSalaryDeductionPolicies?.[index]?.Id, remove, index)
                       }}>
                         Delete
@@ -163,6 +163,7 @@ function LeaveTypeSalaryDeductionTable({ values, setFieldValue, createDropdown, 
             {/* Add Button Field Starts */}
             {values.subsidiaryId /*&& values.gradeId && values.employeeTypeId*/ && <button
               type="button"
+              className="btn btn-primary btn-elevate"
               onClick={() =>
                 push({
                   leaveType: "",

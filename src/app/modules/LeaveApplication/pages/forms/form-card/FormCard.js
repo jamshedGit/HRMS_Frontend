@@ -2,6 +2,7 @@ import React, { useEffect, useMemo } from "react"
 import {
   Card,
   CardBody,
+  CardHeader
 } from "../../../../../../_metronic/_partials/controls"
 import { LeaveApplicationTable } from "../form-table/LeaveApplicationTable"
 import { useFormUIContext } from "../FormUIContext"
@@ -14,6 +15,7 @@ import { FormEditDialog } from "../form-edit-dialog/FormEditDialog"
 import { LeaveBalanceTable } from "../form-table/LeaveBalanceTable"
 import { PendingLeaveTable } from "../form-table/PendingLeaveTable"
 import '../../../../../utils/common-modules/form.css'
+import CurrentModuleName from "../../../../../utils/common-modules/ModuleName"
 
 export function FormCard() {
   const FormUIContext = useFormUIContext()
@@ -53,6 +55,7 @@ export function FormCard() {
   useEffect(() => {
     dispatch(actions.fetchLeaveBalances(formUIProps.employeeId))
     dispatch(fetchAllLeaveType("allLeaveTypes", formUIProps.employeeId));
+    dispatch(actions.getPayrollMonth(formUIProps.employeeId));
 
   }, [dispatch, formUIProps.employeeId, entities])
 
@@ -63,27 +66,36 @@ export function FormCard() {
       {/* Card Starts */}
 
       <CardBody>
+        <CardHeader title={CurrentModuleName()} >
+        </CardHeader>
 
-        {/* EmployeeSelect Starts */}
-        <EmployeeSelect setId={formUIProps.setId} setemployeeId={formUIProps.setemployeeId} />
-        {/* EmployeeSelect Ends */}
+          <div className="justify-content-between align-items-center gap-3 m-4">
+            <div className="pt-5">
 
+              {/* EmployeeSelect Starts */}
+              <EmployeeSelect setId={formUIProps.setId} setemployeeId={formUIProps.setemployeeId} />
+              {/* EmployeeSelect Ends */}
+
+              <br />
+              <hr />
+
+            </div>
+
+
+            {/* EmployeeProfile Starts */}
+            <EmployeeProfile employeeId={formUIProps.employeeId} />
+            {/* EmployeeProfile Ends */}
+            <br />
+            <hr />
+
+
+
+            {/* FormEditDialog Starts */}
+            <FormEditDialog id={formUIProps.id} employeeId={formUIProps.employeeId} />
+            {/* FormEditDialog Ends */}
+
+          </div>
         <br />
-        <hr />
-
-        {/* EmployeeProfile Starts */}
-        <EmployeeProfile employeeId={formUIProps.employeeId} />
-        {/* EmployeeProfile Ends */}
-
-        <br />
-        <hr />
-
-        {/* FormEditDialog Starts */}
-        <FormEditDialog id={formUIProps.id} employeeId={formUIProps.employeeId} />
-        {/* FormEditDialog Ends */}
-
-        <br />
-        <hr />
 
         {/* LeaveApplicationTable Starts */}
         <LeaveApplicationTable />

@@ -44,9 +44,7 @@ export function FormEditDialog({ id, employeeId }) {
   //Fetch record to edit when an Id is selected from table
   useEffect(() => {
     dispatch(actions.fetchEditRecord(id));
-
-    if(!payrollData)
-      dispatch(actions.getPayrollMonth());
+      
   }, [id, dispatch]);
   
 

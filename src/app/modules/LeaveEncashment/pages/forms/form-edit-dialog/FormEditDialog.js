@@ -34,7 +34,6 @@ export function FormEditDialog({ id, employeeId, yearId }) {
   //Get data from leave encashment state
   const {
     userForEdit,
-    payrollData
   } = useSelector((state) => ({
     userForEdit: state.leave_encashment.userForEdit,
     payrollData: state.leave_encashment.payrollData
@@ -45,8 +44,6 @@ export function FormEditDialog({ id, employeeId, yearId }) {
   useEffect(() => {
     dispatch(actions.fetchEditRecord(id));
 
-    if (!payrollData)
-      dispatch(actions.getPayrollMonth());
   }, [id, dispatch]);
 
 

@@ -152,3 +152,23 @@ export const saveRecord = (data, disableLoading, initialValues) => (dispatch) =>
       });
   }
 };
+
+/**
+ * 
+ * Run Process
+ * 
+ * @param {Object} values 
+ * @returns
+ */
+export const runProcess = (values) => (dispatch) => {
+  dispatch(actions.startCall({ callType: callTypes.process }));
+  return requestFromServer
+    .processAttendance(values)
+    .then((response) => {
+      dispatch(actions.stopCall({ callType: callTypes.process }));
+    })
+    .catch((error) => {
+      error.clientMessage = "Can't process Attendance";
+      dispatch(actions.catchError({ error, callType: callTypes.process }));
+    });
+};

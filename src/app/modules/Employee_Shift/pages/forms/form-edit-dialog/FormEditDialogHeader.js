@@ -17,7 +17,7 @@ export function FormEditDialogHeader({ id, isUserForRead }) {
   );
 
   useEffect(() => {
-    let _title = id ? "Edit Employee Shift" : "Add Employee Shift";
+    let _title = id ? "Edit  Shift" : "Add  Shift";
     setTitle(_title);
   }, [userForEdit, actionsLoading]);
 
@@ -26,7 +26,7 @@ export function FormEditDialogHeader({ id, isUserForRead }) {
       {actionsLoading && <ModalProgressBar />}
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-lg">
-          {!isUserForRead ? title : "View Employee Shift"}
+          {!isUserForRead ? title : "View  Shift"}
         </Modal.Title>
       </Modal.Header>
     </>

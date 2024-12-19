@@ -263,6 +263,24 @@ export const getPayrollMonth = (key) => (dispatch) => {
 
 /**
  * 
+ * Get Current Active Fiscal Year data from server and set it in state on the key provided in argument
+ * 
+ * @param {String} key 
+ * @returns 
+ */
+export const getActiveFiscalYear = (key, subsidiaryId) => (dispatch) => {
+  return requestFromServer.getActiveFiscalYear({subsidiaryId})
+    .then((res) => {
+      const fiscalData = res.data?.data;
+      dispatch(actions.AllChildMenusFetch({ entities: fiscalData, key }));
+    })
+    .catch((error) => {
+      toast.error("Something went wrong");
+    });
+}
+
+/**
+ * 
  * Get All Subsidiaries Data from Server and set it in state on the key provided in argument
  * 
  * @param {String} key 

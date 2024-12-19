@@ -78,13 +78,14 @@ export function ActionsColumnFormatter(
               </span>
             </a>
           ) : (
-            <a
-              title=""
-              className="btn btn-icon btn-light btn-hover-success btn-sm mx-3"
-              onClick={() => openActiveBankDialog(row.Id, row.isActive)}
-            >
-              <span className="svg-icon svg-icon-md svg-icon-success">A</span>
-            </a>
+            <div></div>
+            // <a
+            //   title=""
+            //   className="btn btn-icon btn-light btn-hover-success btn-sm mx-3"
+            //   onClick={() => openActiveBankDialog(row.Id, row.isActive)}
+            // >
+            //   <span className="svg-icon svg-icon-md svg-icon-success">A</span>
+            // </a>
           )}
         </OverlayTrigger>
       )}

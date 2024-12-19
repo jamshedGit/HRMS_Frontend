@@ -8,8 +8,8 @@ export const USERS_URL = process.env.REACT_APP_API_URL;
  * @param {Object} body 
  * @returns res
  */
-export function getPayrollMonth() {
-  return axios.post(`${USERS_URL}/payroll_month/get-payroll-month-previous-date`);
+export function getPayrollMonth(body) {
+  return axios.post(`${USERS_URL}/payroll_month/get-payroll-month-previous-date`, body);
 }
 
 /**

@@ -2,6 +2,7 @@ import React, { useEffect, useMemo } from "react"
 import {
   Card,
   CardBody,
+  CardHeader
 } from "../../../../../../_metronic/_partials/controls"
 import { LeaveEncashmentTable } from "../form-table/LeaveEncashmentTable"
 import { useFormUIContext } from "../FormUIContext"
@@ -14,6 +15,7 @@ import { FormEditDialog } from "../form-edit-dialog/FormEditDialog"
 import { LeaveBalanceTable } from "../form-table/LeaveBalanceTable"
 import { PendingLeaveTable } from "../form-table/PendingLeaveEncTable"
 import '../../../../../utils/common-modules/form.css'
+import CurrentModuleName from "../../../../../utils/common-modules/ModuleName"
 
 export function FormCard() {
   const FormUIContext = useFormUIContext()
@@ -57,6 +59,7 @@ export function FormCard() {
   useEffect(() => {
     dispatch(actions.fetchLeaveBalances(formUIProps.employeeId))
     dispatch(fetchEncashmentLeaveType("allLeaveTypes", formUIProps.employeeId, formUIProps.yearId));
+    dispatch(actions.getPayrollMonth(formUIProps.employeeId));
 
   }, [dispatch, formUIProps.employeeId, formUIProps.yearId, entities])
 
@@ -68,26 +71,34 @@ export function FormCard() {
 
       <CardBody>
 
-        {/* EmployeeSelect Starts */}
-        <EmployeeSelect setId={formUIProps.setId} setemployeeId={formUIProps.setemployeeId} setyearId={formUIProps.setyearId} />
-        {/* EmployeeSelect Ends */}
+        <CardHeader title={CurrentModuleName()} >
+        </CardHeader>
 
+        <div className="justify-content-between align-items-center gap-3 m-4">
+          <div className="pt-5">
+
+            {/* EmployeeSelect Starts */}
+            <EmployeeSelect setId={formUIProps.setId} setemployeeId={formUIProps.setemployeeId} setyearId={formUIProps.setyearId} />
+            {/* EmployeeSelect Ends */}
+
+            <br />
+            <hr />
+
+          </div>
+
+          {/* EmployeeProfile Starts */}
+          <EmployeeProfile employeeId={formUIProps.employeeId} />
+          {/* EmployeeProfile Ends */}
+
+          <br />
+          <hr />
+
+          {/* FormEditDialog Starts */}
+          <FormEditDialog id={formUIProps.id} employeeId={formUIProps.employeeId} yearId={formUIProps.yearId} />
+          {/* FormEditDialog Ends */}
+
+        </div>
         <br />
-        <hr />
-
-        {/* EmployeeProfile Starts */}
-        <EmployeeProfile employeeId={formUIProps.employeeId} />
-        {/* EmployeeProfile Ends */}
-
-        <br />
-        <hr />
-
-        {/* FormEditDialog Starts */}
-        <FormEditDialog id={formUIProps.id} employeeId={formUIProps.employeeId} yearId={formUIProps.yearId} />
-        {/* FormEditDialog Ends */}
-
-        <br />
-        <hr />
 
         {/* LeaveEncashmentTable Starts */}
         <LeaveEncashmentTable />

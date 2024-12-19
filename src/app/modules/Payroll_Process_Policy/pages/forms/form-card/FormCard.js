@@ -12,7 +12,7 @@ import { FormFilter } from "../form-filter/FormFilter"
 import { useSelector, shallowEqual } from "react-redux"
 import CurrentModuleName from "../../../../../utils/common-modules/ModuleName"
 
-export function FormCard({ id, setid }) {
+export function FormCard({ id, setid, readOnly }) {
   const FormUIContext = useFormUIContext()
   const formUIProps = useMemo(() => {
     return {
@@ -62,7 +62,7 @@ export function FormCard({ id, setid }) {
 
         <CardBody>
 
-          <FormTable formid={id} setid={setid} />
+          <FormTable formid={id} setid={setid} readOnly={readOnly} />
         </CardBody>
       </Card>
     </>

@@ -100,6 +100,10 @@ export function getPayrollMonth() {
   return axios.post(`${USERS_URL}/payroll_month/get-payroll-month-previous-date`);
 }
 
+export function getActiveFiscalYear(body) {
+  return axios.post(`${USERS_URL}/settings/read-current-fiscal-year`,body);
+}
+
 export const getAllEncashmentLeaveTypes = async (body) => {
   return await axios.post(`${USERS_URL}/settings/read-encashment-leave-types`,body);
 };

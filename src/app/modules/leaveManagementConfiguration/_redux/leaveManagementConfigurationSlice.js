@@ -16,6 +16,7 @@ const initialState = {
 export const callTypes = {
     list: "list",
     action: "action",
+    allocation: "allocation"
 };
 
 export const leaveManagementConfigurationSlice = createSlice({
@@ -26,6 +27,8 @@ export const leaveManagementConfigurationSlice = createSlice({
             state.error = `${action.type}: ${action.payload.error}`;
             if (action.payload.callType === callTypes.list) {
                 state.listLoading = false;
+            } else if (action.payload.callType === callTypes.allocation) {
+                state.allocationLoading = false;
             } else {
                 state.actionsLoading = false;
             }
@@ -34,6 +37,9 @@ export const leaveManagementConfigurationSlice = createSlice({
             state.error = null;
             if (action.payload.callType === callTypes.list) {
                 state.listLoading = true;
+            }
+            else if (action.payload.callType === callTypes.allocation) {
+                state.allocationLoading = true;
             } else {
                 state.actionsLoading = true;
             }
@@ -80,6 +86,10 @@ export const leaveManagementConfigurationSlice = createSlice({
                 }
                 return el;
             });
+        },
+        AllocateLeavesCreated: (state, action) => {
+            state.allocationLoading = false;
+            state.error = null;
         }
     },
 });

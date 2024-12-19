@@ -62,16 +62,6 @@ export function FormTable() {
   // Table columns
   const columns = [
     {
-      dataField: "t_subsidiary.name",
-      text: "Subsidiary",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
-    {
       dataField: "name",
       text: "Name",
       sort: false,
