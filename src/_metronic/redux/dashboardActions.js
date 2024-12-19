@@ -254,7 +254,7 @@ export const getPayrollMonth = (key) => (dispatch) => {
   return requestFromServer.getPayrollMonth()
     .then((res) => {
       const payrollData = res.data?.data;
-      dispatch(actions.AllChildMenusFetch({ entities: payrollData[0], key }));
+      dispatch(actions.AllChildMenusFetch({ entities: payrollData, key }));
     })
     .catch((error) => {
       toast.error("Something went wrong");

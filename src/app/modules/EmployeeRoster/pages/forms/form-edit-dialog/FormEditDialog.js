@@ -47,8 +47,8 @@ export function FormEditDialog() {
       dispatch(fetchAllActiveEmployees());
     if (!dashboard.allEmployeeShifts || !dashboard.allEmployeeShifts.length)
       dispatch(fetchAllEmployeeShifts('allEmployeeShifts'));
-    if(!dashboard.payrollData)
-      dispatch(getPayrollMonth('payrollData'));
+    // if(!dashboard.payrollData)
+      // dispatch(getPayrollMonth('payrollData'));
   }, [formUIProps.id, dispatch]);
 
   //Create or Update record according to values from dialog
