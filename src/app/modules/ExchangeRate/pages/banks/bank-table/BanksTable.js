@@ -78,6 +78,17 @@ export function BanksTable() {
     //     minWidth: "160px",
     //   },
     // },
+
+    {
+      dataField: "Subsidiary",
+      text: "Subsidiary",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+    },
    
     {
       dataField: "Base_Currency",
@@ -102,16 +113,7 @@ export function BanksTable() {
     },
 
     
-    {
-      dataField: "Subsidiary",
-      text: "Subsidiary",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
+  
     {
       dataField: "exchange_rate",
       text: "Exchange Rate",

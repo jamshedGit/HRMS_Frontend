@@ -372,12 +372,12 @@ export const VALIDATION_MESSAGES = {
 
 //Server Response Messages
 export const SERVER_MESSAGES = {
-  insertedSuccess: 'Inserted Successfully!',
+  insertedSuccess: 'Record created Successfully!',
   insertedFail: 'Unable to Insert',
-  updatedSuccess: 'Updated Successfully!',
+  updatedSuccess: 'Record updated Successfully!',
   updatedFail: 'Unable to Update',
-  deletedSuccess: 'Deleted Successfully',
-  deletedFail: 'Unable to Delete',
+  deletedSuccess: 'Record deleted Successfully!',
+  deletedFail: 'Unable to Delete: This record is already used in Transaction forms',
 }
 
 export const WEEK_DAY_STRING = {

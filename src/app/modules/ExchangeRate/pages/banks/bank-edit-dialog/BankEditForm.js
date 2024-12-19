@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { Input, Select, TextArea } from "../../../../../../_metronic/_partials/controls";
+import { DatePickerField, Input, Select, TextArea } from "../../../../../../_metronic/_partials/controls";
 import { useDispatch, useSelector } from "react-redux";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import {
@@ -17,6 +17,7 @@ import {
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
+import { format } from "date-fns";
 
 
 // Phone Number Regex
@@ -27,46 +28,46 @@ const cnicRegExp = /^[0-9]{5}-[0-9]{7}-[0-9]$/;
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 // Validation schema
 
-const currentDate = new Date(); 
+const currentDate = new Date();
 currentDate.setHours(0, 0, 0, 0); // Reset time to 00:00:00 for comparison purposes
 
 const formValidation = Yup.object().shape(
   {
 
     subsidiaryId: Yup.string()
-     .required(VALIDATION_MESSAGES.required),
+      .required(VALIDATION_MESSAGES.required),
     base_currency_id: Yup.string()
-     .required(VALIDATION_MESSAGES.required)
-     .test(
-      "not-same-as-convert-currency",
-      "Base Currency and Currency To Convert must not be the same.",
-      function(value) {
-        const { currency_to_convert_id } = this.parent; // Access other values in the same object
-        return value !== currency_to_convert_id; // Check if they are different
-      }
-    ),
+      .required(VALIDATION_MESSAGES.required),
+      // .test(
+      //   "not-same-as-convert-currency",
+      //   "Base Currency and Currency To Convert must not be the same.",
+      //   function (value) {
+      //     const { currency_to_convert_id } = this.parent; // Access other values in the same object
+      //     return value !== currency_to_convert_id; // Check if they are different
+      //   }
+      // ),
 
     currency_to_convert_id: Yup.string()
-     .required(VALIDATION_MESSAGES.required)
-     .test(
-      "not-same-as-base-currency",
-      "Currency To Convert and Base Currency must not be the same.",
-      function(value) {
-        const { base_currency_id } = this.parent; // Access other values in the same object
-        return value !== base_currency_id; // Check if they are different
-      }
-    ),
+      .required(VALIDATION_MESSAGES.required)
+      .test(
+        "not-same-as-base-currency",
+        "Currency To Convert and Base Currency must not be the same.",
+        function (value) {
+          const { base_currency_id } = this.parent; // Access other values in the same object
+          return value !== base_currency_id; // Check if they are different
+        }
+      ),
     exchange_rate: Yup.string()
-    .required(VALIDATION_MESSAGES.required)
-    .matches(/^\d+(\.\d+)?$/, "Must contain only digits or a decimal point") // Ensures the value is a number (integer or decimal)
-    .test('greaterThanZero', 'Exchange rate must be greater than zero', (value) => {
-      return parseFloat(value) > 0; // Checks if the parsed value is greater than zero
-    }),
+      .required(VALIDATION_MESSAGES.required)
+      .matches(/^\d+(\.\d+)?$/, "Must contain only digits or a decimal point") // Ensures the value is a number (integer or decimal)
+      .test('greaterThanZero', 'Exchange rate must be greater than zero', (value) => {
+        return parseFloat(value) > 0; // Checks if the parsed value is greater than zero
+      }),
     effective_date: Yup.date()
-    .nullable()
-    .min(currentDate, 'Effective date must be a future date')
-    .required(VALIDATION_MESSAGES.required)
-      
+      .nullable()
+      // .min(currentDate, 'Effective date must be a future date')
+      .required(VALIDATION_MESSAGES.required)
+
   },
 
 );
@@ -96,8 +97,8 @@ export function BankEditForm({
     if (!user.Id) {
       // dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsidiaries
       dispatch(fetchAllSubsidiaryData("allSubsidiaryList"));
-  
-     
+
+
 
     }
   }, [dispatch, user.Id]);
@@ -134,14 +135,24 @@ export function BankEditForm({
 
 
   //===== Date Of End Date
-  useEffect(() => {
+  // useEffect(() => {
 
-    if (user.effective_date) {
-      setEffectiveDate(new Date(user.effective_date));
-    }
-  }, [user.effective_date]);
+  //   if (user.effective_date) {
+  //     setEffectiveDate(new Date(user.effective_date));
+  //   }
+  // }, [user.effective_date]);
 
   //=========== END
+
+  // useEffect(() => {
+  //   // Check if there's an existing date
+  //   if (user.effective_date) {
+  //     setEffectiveDate(new Date(user.effective_date));
+  //   } else {
+  //     // For a new record, initialize to the current UTC date
+  //     setEffectiveDate(new Date(new Date().toISOString())); // This sets the date to the current UTC time
+  //   }
+  // }, [user.effective_date]);
 
   return (
     <>
@@ -150,7 +161,7 @@ export function BankEditForm({
         initialValues={user}
         validationSchema={formValidation}
         onSubmit={(values) => {
-     
+
           enableLoading();
           saveIncident(values);
         }}
@@ -201,46 +212,46 @@ export function BankEditForm({
 
                     } */}
 
-<div className="col-12 col-md-4 mt-3">
-                    <SearchSelect
-                      name="subsidiaryId"
-                      label={
-                        <span>
-                          Subsidiary<span style={{ color: "red" }}>*</span>
-                        </span>
-                      }
-                      isDisabled={isUserForRead}
-                      onChange={(e) => {
-                        setFieldValue("subsidiaryId", e.value || null);
-                        const selectedSubsidiary = dashboard?.allSubsidiaryList?.find(
-                          (option) => option.value === e.value
-                        );
-                    
-                        // If a corresponding subsidiary is found, set the base_currency_id
-                        if (selectedSubsidiary) {
-                          setFieldValue("base_currency_id", selectedSubsidiary.currencyId || null);
-                        } else {
-                          setFieldValue("base_currency_id", null); // Reset base_currency_id if no subsidiary is found
+                    <div className="col-12 col-md-4 mt-3">
+                      <SearchSelect
+                        name="subsidiaryId"
+                        label={
+                          <span>
+                            Subsidiary<span style={{ color: "red" }}>*</span>
+                          </span>
                         }
-                    
-                        // Optionally, you can call additional functions like setDefaultCurrencyChildMenus
-                        setDefaultCurrencyChildMenus(e);
-                      }}
-                      value={
-                        dashboard?.allSubsidiaryList?.find(
-                          (option) => option.value === values.subsidiaryId
-                        ) || null
-                      }
+                        isDisabled={isUserForRead}
+                        onChange={(e) => {
+                          setFieldValue("subsidiaryId", e.value || null);
+                          const selectedSubsidiary = dashboard?.allSubsidiaryList?.find(
+                            (option) => option.value === e.value
+                          );
 
-                      options={dashboard?.allSubsidiaryList}
-                      // options={dashboard.allSubidiaryList.map(option => ({
-                      //   label: `${option.label} (${option.value})`, // Adding the value to the label
-                      //   value: option.value,
-                      // }))}
-                      error={errors.subsidiaryId}
-                      touched={touched.subsidiaryId}
-                    />
-                  </div>
+                          // If a corresponding subsidiary is found, set the base_currency_id
+                          if (selectedSubsidiary) {
+                            setFieldValue("base_currency_id", selectedSubsidiary.currencyId || null);
+                          } else {
+                            setFieldValue("base_currency_id", null); // Reset base_currency_id if no subsidiary is found
+                          }
+
+                          // Optionally, you can call additional functions like setDefaultCurrencyChildMenus
+                          setDefaultCurrencyChildMenus(e);
+                        }}
+                        value={
+                          dashboard?.allSubsidiaryList?.find(
+                            (option) => option.value === values.subsidiaryId
+                          ) || null
+                        }
+
+                        options={dashboard?.allSubsidiaryList}
+                        // options={dashboard.allSubidiaryList.map(option => ({
+                        //   label: `${option.label} (${option.value})`, // Adding the value to the label
+                        //   value: option.value,
+                        // }))}
+                        error={errors.subsidiaryId}
+                        touched={touched.subsidiaryId}
+                      />
+                    </div>
 
 
                   </div>
@@ -275,17 +286,17 @@ export function BankEditForm({
                           )?.currencyId
                             // Then find the corresponding currency in allCurrencyCodeList
                             ? dashboard.allCurrencyCodeList?.find(
-                                (currency) => currency.value === 
+                              (currency) => currency.value ===
                                 dashboard.allSubsidiaryList?.find(
                                   (subsidiary) => subsidiary.value === values.subsidiaryId
                                 )?.currencyId
-                              )?.label 
+                            )?.label
                             : values.subsidiaryId
                         }
-                        
+
                         error={errors.base_currency_id}
                         touched={touched.base_currency_id}
-                  
+
                       />
                     </div>
 
@@ -328,32 +339,29 @@ export function BankEditForm({
                     }
                   </div>
                   <div className="from-group row">
-                    {
-                      <div className="col-12 col-md-4 mt-3">
-                        {<span> Effective Date<span style={{ color: 'red' }}>*</span></span>}
-                        <DatePicker
-                          className="form-control"
-                          placeholder="Enter Effective Date"
-                          selected={defEffectiveDate}
-                          onChange={(date) => {
-                            setFieldValue("effective_date", date);
-                            setEffectiveDate(date);
-                          }}
-                          timeInputLabel="Time:"
-                          dateFormat="dd/MM/yyyy"
-                          showTimeInput
-                          name="effective_date"
-                          autoComplete="off"
-                          disabled={isUserForRead}
-                          error={errors.effective_date}
-                          touched={touched.effective_date}
-                          
-                        // value = {values.dateOfJoining}
 
-                        />
-                        <ErrorMessage className="form-feedBack" name="effective_date" component="div" />
-                      </div>
-                    }
+
+                    <div className="col-12 col-md-4 mt-3">
+                      <label>
+                        Effective Date
+                        <span style={{ color: "red" }}>*</span>
+                      </label>
+                      <Field
+                        name="effective_date"
+                        component={DatePickerField}
+                        dateFormat="dd/MM/yyyy"
+                        placeholder="Select Date"
+                        type="date"
+                        disabled={isUserForRead}
+                        value={values.effective_date ? format(new Date(values.effective_date), 'dd-MM-yyyy') : setFieldValue("effective_date",new Date ())}
+
+                      />
+                      
+                    </div>
+
+
+
+
 
 
                   </div>
