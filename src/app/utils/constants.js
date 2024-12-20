@@ -378,6 +378,7 @@ export const SERVER_MESSAGES = {
   updatedFail: 'Unable to Update',
   deletedSuccess: 'Record deleted Successfully!',
   deletedFail: 'Unable to Delete: This record is already used in Transaction forms',
+  processSuccessful: 'Process executed Successfully!'
 }
 
 export const WEEK_DAY_STRING = {
