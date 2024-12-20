@@ -1,6 +1,7 @@
 import * as requestFromServer from "./formCrud";
 import { EmployeeLeaveBalanceSlice, callTypes } from "./EmployeeLeaveBalanceSlice";
 import { toast } from "react-toastify";
+import { SERVER_MESSAGES } from "../../../utils/constants";
 const { actions } = EmployeeLeaveBalanceSlice;
 
 /**
@@ -62,7 +63,7 @@ export const saveRecord = (data, disableLoading) => (dispatch) => {
         if (EmployeeLeaveBalanceData) {
           dispatch(actions.EmployeeLeaveBalanceCreated(EmployeeLeaveBalanceData));
           disableLoading();
-          toast.success("Successfully Created", {
+          toast.success(SERVER_MESSAGES.insertedSuccess, {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
