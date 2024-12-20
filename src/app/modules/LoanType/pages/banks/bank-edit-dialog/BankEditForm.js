@@ -67,14 +67,14 @@ export function BankEditForm({
   const [defSubsidiary = null, setDefualtSubsidiaryList] = useState(null);
 
   const [defCode = null, setDefaultCode] = useState(null);
-    //=========== END
-    useEffect(() => {
+  //=========== END
+  useEffect(() => {
 
-      if (!user.Id) {
-        dispatch(fetchAllFormsMenu(45, "allAccountList")); // For All Grade Codes
-        dispatch(fetchAllSubsidiaryData("allSubsidiaryList"))
-      }
-    }, [dispatch]);
+    if (!user.Id) {
+      dispatch(fetchAllFormsMenu(45, "allAccountList")); // For All Grade Codes
+      dispatch(fetchAllSubsidiaryData("allSubsidiaryList"))
+    }
+  }, [dispatch]);
 
   useEffect(() => {
 
@@ -89,7 +89,7 @@ export function BankEditForm({
 
   }, [user?.employeeId, dashboard.employeeId]);
 
-  
+
   useEffect(() => {
 
     const subsidiaryId = defSubsidiary?.value ? defSubsidiary.value : user.subsidiaryId;
@@ -103,12 +103,19 @@ export function BankEditForm({
 
   }, [user?.subsidiaryId, dashboard.subsidiaryId]);
 
-  const fetchData = async (subsidiaryId, setValue) => {
-   
-    if (subsidiaryId) {
-      dispatch(getLatestTableId("t_loan_type_setup", "Id", " subsidiaryId = "+ subsidiaryId, setValue));
-    }
-};
+  const fetchData = async (setValue) => {
+
+    // if (subsidiaryId) {
+      // dispatch(getLatestTableId("t_loan_type_setup", "Id", " subsidiaryId = " + subsidiaryId, setValue));
+      dispatch(getLatestTableId("t_employee_earning", "Id", " 1 = 1 ",setValue));
+    // }
+  };
+
+useEffect (()=>{
+  fetchData(setDefaultCode)
+},[])
+
+
 
   return (
     <>
@@ -117,10 +124,10 @@ export function BankEditForm({
         initialValues={user}
         validationSchema={formValidation}
         onSubmit={(values) => {
-      
+
 
           enableLoading();
-          saveLoanType({...values,code: defCode ? defCode : user.code });
+          saveLoanType({ ...values, code: defCode ? defCode : user.code });
         }}
       >
         {({
@@ -142,8 +149,8 @@ export function BankEditForm({
               )}
               <Form className="form form-label-right">
                 <fieldset disabled={isUserForRead}>
-                <div className="from-group row">
-                    <div className="col-12 col-md-4 mt-3">
+                  <div className="from-group row">
+                    {/* <div className="col-12 col-md-4 mt-3">
                       <SearchSelect
                         name="subsidiaryId"
                         label={<span> Subsidiary<span style={{ color: 'red' }}>*</span></span>}
@@ -163,8 +170,42 @@ export function BankEditForm({
                         touched={touched.subsidiaryId}
                         options={dashboard.allSubsidiaryList}
                       />
+                    </div> */}
+
+
+
+
+                    <div className="col-12 col-md-4 mt-3">
+                      Subsidiary
+                      <div style={{ backgroundColor: "#ffffff", height: "170px", padding: "10px", overflow: "scroll" }}>
+
+                        <div className="multi-select">
+                          <div className="dropdown-label"></div>
+                          <div className="dropdown-options" style={{ fontSize: "12px", fontWeight: "bold", padding: "5px" }}>
+                            {dashboard?.allSubsidiaryList?.map((option) => (
+                              <div key={option.value} className="dropdown-option">
+                                <input style={{ width: "25px" }}
+                                  name="subsidiaryId"
+                                  type="checkbox"
+                                  value={option.value}
+                                  checked={Boolean(values?.subsidiaryId?.includes(option?.value?.toString()))}
+                                  onChange={handleChange}
+                                />
+                                {option.label}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                 </div>
+                  </div>
+
+
+
+
+
+
+
                   <div className="from-group row">
                     {
                       <div className="col-12 col-md-4 mt-3">
@@ -196,9 +237,9 @@ export function BankEditForm({
 
                   </div>
                   <div className="from-group row">
-                    
 
-                      {/* <div className="col-12 col-md-4 mt-3">
+
+                    {/* <div className="col-12 col-md-4 mt-3">
                         <Select
                           label={<span> Linked With Attendance<span style={{ color: 'red' }}>*</span></span>}
                           name="linkedAttendance"
@@ -225,45 +266,45 @@ export function BankEditForm({
                           <div className="invalid-text">{errors.linkedAttendance}</div>
                         )}
                       </div> */}
-                      
-                      <div className="col-12 col-md-4 mt-3">
-                                          
-                                          <SearchSelect
-                                            name="accountId"
-                                            label={
-                                              <span>
-                                                Account<span style={{ color: "red" }}>*</span>
-                                              </span>
-                                            }
-                                            isDisabled={isUserForRead}
-                                            onChange={(e) => {
-                                              setFieldValue("accountId", e.value || null);
-                                            }}
-                                            value={
-                                              dashboard.allAccountList.find(
-                                                (option) => option.value == values.accountId
-                                              ) || null
-                                            }
-                                            // options={dashboard.allAccountList}
-                                            options={dashboard.allAccountList.map((option) => ({
-                                              label: `${option.mergeLabel}`, // Adding the value to the label
-                                              value: option.value,
-                                            }))}
-                
-                                            error={errors.accountId}
-                                            touched={touched.accountId}
-                                          />
-                
-                
-                                      </div>
-                    
 
-                  </div> 
+                    <div className="col-12 col-md-4 mt-3">
+
+                      <SearchSelect
+                        name="accountId"
+                        label={
+                          <span>
+                            Account<span style={{ color: "red" }}>*</span>
+                          </span>
+                        }
+                        isDisabled={isUserForRead}
+                        onChange={(e) => {
+                          setFieldValue("accountId", e.value || null);
+                        }}
+                        value={
+                          dashboard.allAccountList.find(
+                            (option) => option.value == values.accountId
+                          ) || null
+                        }
+                        // options={dashboard.allAccountList}
+                        options={dashboard.allAccountList.map((option) => ({
+                          label: `${option.mergeLabel}`, // Adding the value to the label
+                          value: option.value,
+                        }))}
+
+                        error={errors.accountId}
+                        touched={touched.accountId}
+                      />
+
+
+                    </div>
+
+
+                  </div>
 
                   <div className="from-group row">
-                  
+
                     {
-                   
+
                     }
                   </div>
 
