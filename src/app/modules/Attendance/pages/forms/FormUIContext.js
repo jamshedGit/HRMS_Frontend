@@ -51,6 +51,8 @@ export function FormUIProvider({ FormUIEvents, children }) {
     overtimeStart: "",
     oT: "",
     approvedOT: "",
+    workedHours: "",
+    attendanceStatus: ""
   };
 
 
