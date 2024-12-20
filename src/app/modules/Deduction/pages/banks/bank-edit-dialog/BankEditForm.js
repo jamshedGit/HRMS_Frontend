@@ -60,7 +60,7 @@ export function BankEditForm({
 }) {
   const { dashboard } = useSelector((state) => state);
   const [defEmployee = null, setEmployeeDefault] = useState(null);
-  const [defDeductionCode = null, setDefDeductionCode] = useState('');
+  const [defDeductionCode = null, setDefaultDeductionCode] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
   const dispatch = useDispatch();
   const [defSubsidiary = null, setDefualtSubsidiaryList] = useState(null);
@@ -109,13 +109,17 @@ export function BankEditForm({
 
   // };
 
-  const fetchData = async ( setValue) => {
+  const fetchData = async (setDefaultDeductionCode) => {
 
     // if (subsidiaryId) {
-      dispatch(getLatestTableId("t_employee_deduction", "Id", " 1 = 1 ",setValue));
+    console.log("t_employee_deduction111",setDefaultDeductionCode)
+    dispatch(getLatestTableId("t_employee_deduction", "Id", " 1 = 1 ", setDefaultDeductionCode));
     // }
   };
 
+  useEffect(()=>{
+    fetchData(setDefaultDeductionCode)
+  },[])
 
   // useEffect(() => {
   //   // Define an async function within useEffect
@@ -196,15 +200,34 @@ export function BankEditForm({
 
 
 
+                      // <div className="col-12 col-md-4 mt-3">
+                      //   <Field
+                      //     name="deductionCode"
+                      //     component={Input}
+                      //     maxLength={6}
+
+                      //     disabled
+                      //     placeholder="Deduction Code"
+
+                      //     value={defDeductionCode || values.deductionCode}
+                      //     label={<span> Deduction Code</span>}
+                      //     autoComplete="off"
+                      //   />
+                      // </div>
+
                       <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="deductionCode"
                           component={Input}
                           maxLength={6}
+                          onChange={(e) => {
+                            setFieldValue("deductionCode", e.target.value || null);
+                            setDefaultDeductionCode(e);
 
+
+                          }}
                           disabled
-                          placeholder="Enter Deduction Code"
-
+                          placeholder="Deduction Code"
                           value={defDeductionCode || values.deductionCode}
                           label={<span> Deduction Code</span>}
                           autoComplete="off"
@@ -264,6 +287,7 @@ export function BankEditForm({
                           isDisabled={isUserForRead}
                           onChange={(e) => {
                             setFieldValue("account", e.value || null);
+                            // fetchData(setDefaultDeductionCode)
                           }}
                           value={
                             dashboard.allAccountList.find(
