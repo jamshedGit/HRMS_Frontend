@@ -72,7 +72,7 @@ export function BankEditForm({
 
   const [defEarningCode = null, setDefaultEarningCode] = useState(null);
   const [defSubsidiary = null, setDefualtSubsidiaryList] = useState(null);
-
+  const [defFormCode = null, setDefaultFormCode] = useState(null);
   useEffect(() => {
 
     if (!user.Id) {
@@ -86,6 +86,7 @@ export function BankEditForm({
     if (!user.Id) {
       dispatch(fetchAllFormsMenu(45, "allAccountList")); // For All Grade Codes
       dispatch(fetchAllSubsidiaryData("allSubsidiaryList"))
+      // dispatch(getLatestTableId("t_employee_earning", "Id", " 1 = 1 ", setValue));
     }
   }, [dispatch]);
 
@@ -103,12 +104,15 @@ export function BankEditForm({
 
   }, [user?.subsidiaryId, dashboard.subsidiaryId]);
 
-  const fetchData = async (subsidiaryId, setValue) => {
+  const fetchData = async ( setValue) => {
 
-    if (subsidiaryId) {
-      dispatch(getLatestTableId("t_employee_earning", "Id", " subsidiaryId = " + subsidiaryId, setValue));
-    }
+    // if (subsidiaryId) {
+      // dispatch(getLatestTableId("t_employee_earning", "Id", " subsidiaryId = " + subsidiaryId, setValue));
+      dispatch(getLatestTableId("t_employee_earning", "Id", " 1 = 1 ",setValue));
+    // }
   };
+
+
 
   return (
     <>
@@ -212,12 +216,13 @@ export function BankEditForm({
                           onChange={(e) => {
                             setFieldValue("earningCode", e.target.value || null);
                             setDefaultEarningCode(e);
+                           
 
                           }}
                           disabled
-                          placeholder="Enter Earning Code"
+                          placeholder="Earning Code"
                           value={defEarningCode || values.earningCode}
-                          label={<span> Earning Code<span style={{ color: 'red' }}>*</span></span>}
+                          label={<span> Earning Code</span>}
                           autoComplete="off"
                         />
                       </div>
@@ -274,6 +279,7 @@ export function BankEditForm({
                           isDisabled={isUserForRead}
                           onChange={(e) => {
                             setFieldValue("account", e.value || null);
+                            fetchData( setDefaultEarningCode)
                           }}
                           value={
                             dashboard.allAccountList.find(
