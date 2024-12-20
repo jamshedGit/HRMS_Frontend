@@ -84,7 +84,7 @@ export const saveRecord = (data, disableLoading, onHide) => (dispatch) => {
       .catch((error) => {
         disableLoading();
         error.clientMessage = "Can't Create Leave Configurations";
-        toast.error(SERVER_MESSAGES.insertedFail, {
+        toast.error(error?.response?.data?.message, {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
