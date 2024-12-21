@@ -101,12 +101,24 @@ export function DeptEditForm({
 
 
 
-  const fetchData = async (subsidiaryId, setValue) => {
-    if (subsidiaryId) {
-      dispatch(getLatestTableId("t_department", "deptCode", " subsidiaryId = " + subsidiaryId, setValue));
-    }
+  // const fetchData = async (subsidiaryId, setValue) => {
+  //   if (subsidiaryId) {
+  //     dispatch(getLatestTableId("t_department", "deptCode", " subsidiaryId = " + subsidiaryId, setValue));
+  //   }
+  // };
+
+
+  const fetchData = async (setValue) => {
+
+    // if (subsidiaryId) {
+      // dispatch(getLatestTableId("t_loan_type_setup", "Id", " subsidiaryId = " + subsidiaryId, setValue));
+      dispatch(getLatestTableId("t_department", "deptCode", " 1 = 1 ",setValue));
+    // }
   };
 
+useEffect (()=>{
+  fetchData(setDefaultDepartmentCode)
+},[])
 
 
   return (
@@ -177,15 +189,15 @@ export function DeptEditForm({
                             <div className="dropdown-label"></div>
                             <div className="dropdown-options" style={{ fontSize: "12px", fontWeight: "bold", padding: "5px" }}>
                               {dashboard?.allSubsidiaryList?.map((option) => (
-                                <div key={option.value} className="dropdown-option">
+                                <div key={option?.value} className="dropdown-option">
                                   <input style={{ width: "25px" }}
                                     name="subsidiaryId"
                                     type="checkbox"
-                                    value={option.value}
+                                    value={option?.value}
                                     checked={Boolean(values?.subsidiaryId?.includes(option?.value?.toString()))}
                                     onChange={handleChange}
                                   />
-                                  {option.label}
+                                  {option?.label}
                                 </div>
                               ))}
                             </div>
@@ -237,13 +249,13 @@ export function DeptEditForm({
                               value={(defDept || null)}
                               error={errors.parentDept}
                               touched={touched.parentDept}
-                              // options={dashboard.allDept}
-                              options={
+                              options={dashboard.allDept}
+                              // options={
 
-                                dashboard?.allDept?.filter(
-                                  (option) => option.subsidiaryId == values.subsidiaryId
-                                ) || []
-                              }
+                              //   dashboard?.allDept?.filter(
+                              //     (option) => option.subsidiaryId == values.subsidiaryId
+                              //   ) || []
+                              // }
                             />
 
 

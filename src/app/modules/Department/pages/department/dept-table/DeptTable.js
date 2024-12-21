@@ -67,16 +67,16 @@ export function DeptTable() {
   );
   // Table columns
   const columns = [
-    {
-      dataField: "Subsidiary",
-      text: "Subsidiary",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
+    // {
+    //   dataField: "Subsidiary",
+    //   text: "Subsidiary",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "160px",
+    //   },
+    // },
 
    
    
