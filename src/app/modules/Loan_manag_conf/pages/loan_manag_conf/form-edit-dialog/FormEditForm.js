@@ -431,6 +431,7 @@ useEffect(()=>{
                                   })} */}
                                    <option value="">Select--</option>
 
+
                                   {loan_type
                                     ?.filter((x) => x.subsidiaryId?.includes(String(values.subsidiaryId))) // Filter options based on subsidiaryId
                                     .map((x) => (
