@@ -57,6 +57,7 @@ export function BankEditForm({
   enableLoading,
   loading,
   userForEdit,
+  id,
 }) {
   const { dashboard } = useSelector((state) => state);
   const [defEmployee = null, setEmployeeDefault] = useState(null);
@@ -111,10 +112,10 @@ export function BankEditForm({
 
   const fetchData = async (setDefaultDeductionCode) => {
 
-    // if (subsidiaryId) {
-    console.log("t_employee_deduction111",setDefaultDeductionCode)
+    if (!id) {
+  
     dispatch(getLatestTableId("t_employee_deduction", "Id", " 1 = 1 ", setDefaultDeductionCode));
-    // }
+    }
   };
 
   useEffect(()=>{
@@ -190,6 +191,9 @@ export function BankEditForm({
                                 {option.label}
                               </div>
                             ))}
+                              {errors.subsidiaryId && touched.subsidiaryId && (
+                          <div className="invalid-text">{errors.subsidiaryId}</div>
+                        )}
                           </div>
                         </div>
                       </div>
