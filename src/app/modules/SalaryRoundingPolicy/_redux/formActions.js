@@ -103,7 +103,7 @@ export const saveRecord = (data, id, disableLoading, onHide) => (dispatch) => {
       .catch((error) => {
         disableLoading();
         error.clientMessage = "Can't Update Rounding Policy";
-        toast.error(SERVER_MESSAGES.insertedFail, {
+        toast.error(error?.response?.data?.message, {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -136,7 +136,7 @@ export const saveRecord = (data, id, disableLoading, onHide) => (dispatch) => {
       .catch((error) => {
         disableLoading();
         error.clientMessage = "Can't Update Rounding Policy";
-        toast.error(SERVER_MESSAGES.updatedFail, {
+        toast.error(error?.response?.data?.message, {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,

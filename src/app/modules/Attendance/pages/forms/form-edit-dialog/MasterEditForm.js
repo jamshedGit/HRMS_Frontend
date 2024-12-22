@@ -5,11 +5,13 @@ import * as Yup from "yup";
 import { Checkbox, DatePickerField, Input, Select, TextArea } from "../../../../../../_metronic/_partials/controls";
 import { useSelector, shallowEqual } from "react-redux";
 import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLabel";
-import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 import EmployeeProfile from "../../../../../utils/common-modules/EmployeeProfile";
 import { KeyboardArrowDown } from "@material-ui/icons";
+import { addDays } from "date-fns";
+import { formatDates } from "../../../../../utils/common";
+import ActivePayrollMonthLabel from "../../../../../utils/common-modules/ActivePayrollMonthLabel";
 
 //Validations for Form
 const formValidation = Yup.object().shape({
@@ -37,13 +39,77 @@ export function MasterEditForm({
   setfilters
 }) {
 
-  const { allEmployees, allEmployeeShifts } = useSelector(
+  const { allEmployees, allEmployeeShifts, payrollData } = useSelector(
     (state) => ({
       allEmployees: state.dashboard.allEmployees,
-      allEmployeeShifts: state.dashboard.allEmployeeShifts
+      allEmployeeShifts: state.dashboard.allEmployeeShifts,
+      payrollData: state.attendance.payrollData
     }),
     shallowEqual
   )
+
+
+  //Validation for Form.
+  //If payroll month is available then form should not allow to add date for before payroll month end date.
+  //else just normal validation for form
+  const formValidation = useMemo(() => {
+    if (payrollData && payrollData.endDate) {
+      return Yup.object().shape({
+        employeeId: Yup.number().required(VALIDATION_MESSAGES.required),
+        attDateIn: Yup.date().required(VALIDATION_MESSAGES.required).min(payrollData.startDate, `Date cannot be before ${formatDates(payrollData.startDate)}`),
+        attDateOut: Yup.date().required(VALIDATION_MESSAGES.required).min(Yup.ref('attDateIn'), 'Date Out cannot be before Date in date')
+          .test(
+            'max-3-days',
+            'Date Out cannot be more than 3 days after Date In',
+            function (value) {
+              const { attDateIn } = this.parent;
+              if (!value || !attDateIn) return true; // If either value is missing, let other validations handle it
+              const dateIn = new Date(formatDates(attDateIn, 'yyyy-MM-dd'));
+              const dateOut = new Date(formatDates(value, 'yyyy-MM-dd'));
+              const diffInDays = (dateOut - dateIn) / (1000 * 60 * 60 * 24);
+              return diffInDays <= 2;
+            }
+          ),
+        timeIn: Yup.string().required(VALIDATION_MESSAGES.required).matches(
+          /^(?:[01]\d|2[0-3])[0-5]\d$/,
+          'Time must be in HHMM format and valid 24-hour format'
+        ),
+        timeOut: Yup.string().required(VALIDATION_MESSAGES.required).matches(
+          /^(?:[01]\d|2[0-3])[0-5]\d$/,
+          'Time must be in HHMM format and valid 24-hour format'
+        ),
+        comments: Yup.string().required(VALIDATION_MESSAGES.required),
+      })
+    }
+    else {
+      return Yup.object().shape({
+        employeeId: Yup.number().required(VALIDATION_MESSAGES.required),
+        attDateIn: Yup.date().required(VALIDATION_MESSAGES.required),
+        attDateOut: Yup.date().required(VALIDATION_MESSAGES.required).min(Yup.ref('attDateIn'), 'Date Out cannot be before Date in date')
+          .test(
+            'max-3-days',
+            'Date Out cannot be more than 3 days after Date In',
+            function (value) {
+              const { attDateIn } = this.parent;
+              if (!value || !attDateIn) return true; // If either value is missing, let other validations handle it
+              const dateIn = new Date(formatDates(attDateIn, 'yyyy-MM-dd'));
+              const dateOut = new Date(formatDates(value, 'yyyy-MM-dd'));
+              const diffInDays = (dateOut - dateIn) / (1000 * 60 * 60 * 24);
+              return diffInDays <= 2;
+            }
+          ),
+        timeIn: Yup.string().required(VALIDATION_MESSAGES.required).matches(
+          /^(?:[01]\d|2[0-3])[0-5]\d$/,
+          'Time must be in HHMM format and valid 24-hour format'
+        ),
+        timeOut: Yup.string().required(VALIDATION_MESSAGES.required).matches(
+          /^(?:[01]\d|2[0-3])[0-5]\d$/,
+          'Time must be in HHMM format and valid 24-hour format'
+        ),
+        comments: Yup.string().required(VALIDATION_MESSAGES.required),
+      })
+    }
+  }, [payrollData])
 
   const allEmployeesMap = useMemo(() => {
     return new Map(allEmployees?.map(item => [item.value, item]));
@@ -57,7 +123,7 @@ export function MasterEditForm({
         validationSchema={formValidation}
         onSubmit={(values) => {
           enableLoading();
-          submitForm(values)
+          submitForm(values);
         }}
       >
         {({
@@ -68,7 +134,7 @@ export function MasterEditForm({
           handleChange,
           setFieldValue,
           touched,
-          handleReset
+          handleReset,
         }) => (
           <>
             <Modal.Body className="overlay overlay-block cursor-default">
@@ -80,17 +146,21 @@ export function MasterEditForm({
               <Form className="form form-label-right">
                 <fieldset disabled={isUserForRead}>
                   <div className="from-group row">
-
                     {/* Employee Field Start */}
                     <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="employeeId"
                         component={SearchSelect}
-                        className={errors?.employeeId && touched?.employeeId ? 'form-control is-invalid' : 'form-control'}
+                        className={
+                          errors?.employeeId && touched?.employeeId
+                            ? "form-control is-invalid"
+                            : "form-control"
+                        }
                         onBlur={handleBlur}
                         onChange={(e) => {
-                          const value = e.value == '--Select--' ? '' : Number(e.value)
-                          setFieldValue('employeeId', value)
+                          const value =
+                            e.value == "--Select--" ? "" : Number(e.value);
+                          setFieldValue("employeeId", value);
                           setfilters((prevState) => ({
                             ...prevState,
                             employeeId: value,
@@ -102,15 +172,43 @@ export function MasterEditForm({
                             Employee<span style={{ color: "red" }}>*</span>
                           </span>
                         }
-                        value={allEmployeesMap?.get(values?.employeeId || '') || ''}
+                        value={
+                          allEmployeesMap?.get(values?.employeeId || "") || ""
+                        }
                         autoComplete="off"
                         options={allEmployees}
                       />
-                      {
-                        errors.employeeId && touched.employeeId && <CustomErrorLabel touched={true} error={errors.employeeId} />
-                      }
+                      {errors.employeeId && touched.employeeId && (
+                        <CustomErrorLabel
+                          touched={true}
+                          error={errors.employeeId}
+                        />
+                      )}
                     </div>
                     {/* Employee Field End */}
+
+                    <div className="col-12 col-md-2 mt-3"></div>
+
+                    {payrollData &&
+                      payrollData.startDate &&
+                      payrollData.endDate && (
+                        <div className="col-12 col-md-6 mt-8">
+                          <div className="row">
+                              <span >
+                                <b>Active Payroll Month:</b>{"  "}
+                              </span>
+                              <span>
+                                <ActivePayrollMonthLabel
+                                  className="date"
+                                  month={payrollData.month}
+                                  year={payrollData.year}
+                                  startDate={payrollData.startDate}
+                                  endDate={payrollData.endDate}
+                                />
+                              </span>
+                          </div>
+                        </div>
+                      )}
                   </div>
 
                   <br />
@@ -124,7 +222,6 @@ export function MasterEditForm({
                   <br />
 
                   <div className="from-group row">
-
                     {/* Date In Field Start */}
                     <div className="col-12 col-md-4 mt-3">
                       <Field
@@ -132,7 +229,7 @@ export function MasterEditForm({
                         component={DatePickerField}
                         dateFormat="dd/MM/yyyy"
                         onChange={(date) => {
-                          setFieldValue('attDateIn', date)
+                          setFieldValue("attDateIn", date);
                           setfilters((prevState) => ({
                             ...prevState,
                             attDateIn: date,
@@ -165,11 +262,9 @@ export function MasterEditForm({
                       />
                     </div>
                     {/* Time In Field End */}
-
                   </div>
 
                   <div className="from-group row">
-
                     {/* Date Out Field Start */}
                     <div className="col-12 col-md-4 mt-3">
                       <Field
@@ -203,11 +298,37 @@ export function MasterEditForm({
                       />
                     </div>
                     {/* Time Out Field End */}
-
                   </div>
 
                   <div className="from-group row">
+                    {/* Worked Hours Field Start */}
+                    <div className="col-12 col-md-4 mt-3">
+                      <Field
+                        name="workedHours"
+                        component={Input}
+                        className="form-control"
+                        disabled
+                        label={<span> Worked Hours</span>}
+                        autoComplete="off"
+                      />
+                    </div>
+                    {/* Worked Hours Field End */}
 
+                    {/* Attendance Status Field Start */}
+                    <div className="col-12 col-md-4 mt-3">
+                      <Field
+                        name="attendanceStatus"
+                        component={Input}
+                        className="form-control"
+                        disabled
+                        label={<span> Attendance Status</span>}
+                        autoComplete="off"
+                      />
+                    </div>
+                    {/* Attendance Status Field End */}
+                  </div>
+
+                  <div className="from-group row">
                     {/* Comments Field Start */}
                     <div className="col-12 col-md-8 mt-3">
                       <Field
@@ -234,7 +355,7 @@ export function MasterEditForm({
                   <Accordion defaultActiveKey="0">
                     <Card>
                       <Card.Header>
-                        <div className='accordion-header-btn'>
+                        <div className="accordion-header-btn">
                           <Accordion.Toggle as={Button} eventKey="0">
                             Shift Details
                             <KeyboardArrowDown />
@@ -243,21 +364,15 @@ export function MasterEditForm({
                       </Card.Header>
                       <Accordion.Collapse eventKey="0">
                         <Card.Body>
-
                           <div className="from-group row">
                             {/* Shift Field Start */}
                             <div className="col-12 col-md-4 mt-3">
                               <Field
                                 name="shiftCode"
                                 component={Input}
-                                className='form-control'
+                                className="form-control"
                                 disabled
-                                label={
-                                  <span>
-                                    {" "}
-                                    Employee Shift
-                                  </span>
-                                }
+                                label={<span> Employee Shift</span>}
                                 autoComplete="off"
                               />
                             </div>
@@ -268,14 +383,9 @@ export function MasterEditForm({
                               <Field
                                 name="shiftStartTime"
                                 component={Input}
-                                className='form-control'
+                                className="form-control"
                                 disabled
-                                label={
-                                  <span>
-                                    {" "}
-                                    Shift Start Time
-                                  </span>
-                                }
+                                label={<span> Shift Start Time</span>}
                                 autoComplete="off"
                               />
                             </div>
@@ -286,14 +396,9 @@ export function MasterEditForm({
                               <Field
                                 name="shiftEndTime"
                                 component={Input}
-                                className='form-control'
+                                className="form-control"
                                 disabled
-                                label={
-                                  <span>
-                                    {" "}
-                                    Shift End Time
-                                  </span>
-                                }
+                                label={<span> Shift End Time</span>}
                                 autoComplete="off"
                               />
                             </div>
@@ -304,14 +409,9 @@ export function MasterEditForm({
                               <Field
                                 name="shiftWorkingHours"
                                 component={Input}
-                                className='form-control'
+                                className="form-control"
                                 disabled
-                                label={
-                                  <span>
-                                    {" "}
-                                    Shift Hours
-                                  </span>
-                                }
+                                label={<span> Shift Hours</span>}
                                 autoComplete="off"
                               />
                             </div>
@@ -323,13 +423,8 @@ export function MasterEditForm({
                                 name="shiftLateIn"
                                 component={Input}
                                 disabled
-                                className='form-control'
-                                label={
-                                  <span>
-                                    {" "}
-                                    Late In Time
-                                  </span>
-                                }
+                                className="form-control"
+                                label={<span> Late In Time</span>}
                                 autoComplete="off"
                               />
                             </div>
@@ -340,14 +435,9 @@ export function MasterEditForm({
                               <Field
                                 name="shiftEarlyOut"
                                 component={Input}
-                                className='form-control'
+                                className="form-control"
                                 disabled
-                                label={
-                                  <span>
-                                    {" "}
-                                    Early Out Time
-                                  </span>
-                                }
+                                label={<span> Early Out Time</span>}
                                 autoComplete="off"
                               />
                             </div>
@@ -358,14 +448,9 @@ export function MasterEditForm({
                               <Field
                                 name="shiftHalfDayStart"
                                 component={Input}
-                                className='form-control'
+                                className="form-control"
                                 disabled
-                                label={
-                                  <span>
-                                    {" "}
-                                    Half day Start
-                                  </span>
-                                }
+                                label={<span> Half day Start</span>}
                                 autoComplete="off"
                               />
                             </div>
@@ -376,14 +461,9 @@ export function MasterEditForm({
                               <Field
                                 name="shiftHalfDayEnd"
                                 component={Input}
-                                className='form-control'
+                                className="form-control"
                                 disabled
-                                label={
-                                  <span>
-                                    {" "}
-                                    Half Day End
-                                  </span>
-                                }
+                                label={<span> Half Day End</span>}
                                 autoComplete="off"
                               />
                             </div>
@@ -396,10 +476,7 @@ export function MasterEditForm({
                                 component={Checkbox}
                                 disabled
                                 onChange={(e) => {
-                                  setFieldValue(
-                                    `isOverTime`,
-                                    e.target.checked
-                                  )
+                                  setFieldValue(`isOverTime`, e.target.checked);
                                 }}
                                 isSelected={values.isOverTime}
                               />
@@ -416,7 +493,7 @@ export function MasterEditForm({
                                   setFieldValue(
                                     `isIncludeInterShifGap`,
                                     e.target.checked
-                                  )
+                                  );
                                 }}
                                 disabled
                                 isSelected={values.isIncludeInterShifGap}
@@ -430,14 +507,9 @@ export function MasterEditForm({
                               <Field
                                 name="interShifGap"
                                 component={Input}
-                                className='form-control'
+                                className="form-control"
                                 disabled
-                                label={
-                                  <span>
-                                    {" "}
-                                    inter Shift Gap
-                                  </span>
-                                }
+                                label={<span> inter Shift Gap</span>}
                                 autoComplete="off"
                               />
                             </div>
@@ -448,13 +520,8 @@ export function MasterEditForm({
                               <Field
                                 name="lateInHours"
                                 component={Input}
-                                className='form-control'
-                                label={
-                                  <span>
-                                    {" "}
-                                    Late By Hours
-                                  </span>
-                                }
+                                className="form-control"
+                                label={<span> Late By Hours</span>}
                                 disabled
                                 autoComplete="off"
                               />
@@ -466,13 +533,8 @@ export function MasterEditForm({
                               <Field
                                 name="overtimeStart"
                                 component={Input}
-                                className='form-control'
-                                label={
-                                  <span>
-                                    {" "}
-                                    Overtime Start Time
-                                  </span>
-                                }
+                                className="form-control"
+                                label={<span> Overtime Start Time</span>}
                                 disabled
                                 autoComplete="off"
                               />
@@ -484,13 +546,8 @@ export function MasterEditForm({
                               <Field
                                 name="oT"
                                 component={Input}
-                                className='form-control'
-                                label={
-                                  <span>
-                                    {" "}
-                                    Overtime Hours
-                                  </span>
-                                }
+                                className="form-control"
+                                label={<span> Overtime Hours</span>}
                                 disabled
                                 autoComplete="off"
                               />
@@ -502,13 +559,8 @@ export function MasterEditForm({
                               <Field
                                 name="approvedOT"
                                 component={Input}
-                                className='form-control'
-                                label={
-                                  <span>
-                                    {" "}
-                                    Actual Overtime
-                                  </span>
-                                }
+                                className="form-control"
+                                label={<span> Actual Overtime</span>}
                                 disabled
                                 autoComplete="off"
                               />
@@ -527,8 +579,8 @@ export function MasterEditForm({
                 <button
                   type="button"
                   onClick={() => {
-                    setfilters({ employeeId: '', attDateIn: '' })
-                    handleReset()
+                    setfilters({ employeeId: "", attDateIn: "" });
+                    handleReset();
                   }}
                   className="btn btn-light btn-elevate"
                 >

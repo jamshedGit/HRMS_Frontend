@@ -2,6 +2,7 @@ import * as requestFromServer from "./bankCrud";
 import { compensationBenefitsSlice, callTypes } from "./compensationBenefitsSlice";
 import { toast } from "react-toastify";
 import axios from 'axios';
+import { SERVER_MESSAGES } from "../../../utils/constants";
 export const USERS_URL = process.env.REACT_APP_API_URL;
 
 const { actions } = compensationBenefitsSlice;
@@ -46,7 +47,7 @@ export const deleteCompensationBenefits = (id) => (dispatch) => {
     .deleteCompensationBenefits({ Id: id })
     .then((response) => {
       dispatch(actions.compensationBenefitsDeleted({ Id: id }));
-      toast.success("Successfully Deleted", {
+      toast.success(SERVER_MESSAGES.deletedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -58,7 +59,7 @@ export const deleteCompensationBenefits = (id) => (dispatch) => {
     })
     .catch((error) => {
       dispatch(actions.catchError({ error, callType: callTypes.action }));
-      toast.error(error.response.data.message);
+      toast.error(SERVER_MESSAGES.deletedFail);
     });
 };
 
@@ -111,7 +112,7 @@ export const createCompensationBenefits = (bankForCreation, earning_deduction_Ob
 
       dispatch(actions.compensationBenefitsCreated(obj));
       disbaleLoading();
-      toast.success("Successfully Created", {
+      toast.success(SERVER_MESSAGES.insertedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -147,7 +148,7 @@ export const updateCompensationBenefits = (user, disbaleLoading, onHide) => (dis
       dispatch(actions.startCall({ callType: callTypes.action }));
       disbaleLoading();
       onHide();
-      toast.success(response.data.message + " Updated", {
+      toast.success(SERVER_MESSAGES.updatedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
