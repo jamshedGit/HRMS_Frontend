@@ -36,30 +36,30 @@ const loanManagementSchema = Yup.object().shape({
   details: Yup.array().of(
     Yup.object().shape({
       loan_typeId: Yup.number()
-      .nullable()
-      .required(VALIDATION_MESSAGES.required)
-      .notOneOf([''], "Type is required"), 
+        .nullable()
+        .required(VALIDATION_MESSAGES.required)
+        .notOneOf([''], "Type is required"),
 
       max_loan_amount: Yup.number()
         .min(1, "Must be at least 1")
         .required(VALIDATION_MESSAGES.required),
       basis: Yup.number().required(VALIDATION_MESSAGES.required),
-      
-        salary_count: Yup.number()
-  .min(1, VALIDATION_MESSAGES.minOneValue)
-  .max(99, "Must be at most 99")
-  .required(VALIDATION_MESSAGES.required)
-  .test(
-    "salary-count-ge-max-loan-amount", // Name of the test
-    "Can't be greater", // Error message
-    function (value) {
-      const { max_loan_amount } = this.parent; // Accessing max_loan_amount from the parent object
-      if (value > max_loan_amount) {
-        return false; // Validation fails
-      }
-      return true; // Validation passes
-    }
-  ),
+
+      salary_count: Yup.number()
+        .min(1, VALIDATION_MESSAGES.minOneValue)
+        .max(99, "Must be at most 99")
+        .required(VALIDATION_MESSAGES.required)
+        .test(
+          "salary-count-ge-max-loan-amount", // Name of the test
+          "Can't be greater", // Error message
+          function (value) {
+            const { max_loan_amount } = this.parent; // Accessing max_loan_amount from the parent object
+            if (value > max_loan_amount) {
+              return false; // Validation fails
+            }
+            return true; // Validation passes
+          }
+        ),
     })
   ),
 });
@@ -81,7 +81,7 @@ export function FormEditForm({
     if (!user.Id) {
       dispatch(fetchAllSubsidiaryData("allSubsidiaryList"));
       // dispatch(fetchAllFormsMenu(45, "allAccountList")); // For All Accounts
-      dispatch(fetchAllFormsMenu(45, "allAccountList",null,true));
+      dispatch(fetchAllFormsMenu(45, "allAccountList", null, true));
       dispatch(actions.getAllLoanType()); // For All Loan Types
       dispatch(fetchAllHumanResourceRole("allHumanResourceRoleList"));
     }
@@ -100,11 +100,11 @@ export function FormEditForm({
     };
   }, shallowEqual);
 
-  const { entities,loan_type } = currentState;
+  const { entities, loan_type } = currentState;
 
   let existedId = 0;
   const check_Existed_Data = (subsidiaryId) => {
-   
+
     entities.forEach((i) => {
       if (i.subsidiaryId == subsidiaryId) {
         existedId = i.Id;
@@ -115,6 +115,18 @@ export function FormEditForm({
       }
     });
   };
+
+  const filterLoanType = (subsidiaryId) => {
+    console.log("loan_type",loan_type);
+    const filteredOptions = loan_type?.filter((option) =>
+      option.subsidiaryId?.includes(String(subsidiaryId)) // Ensure both are the same type (string)
+    );
+    console.log(filteredOptions);
+  };
+
+useEffect(()=>{
+  filterLoanType(4)
+},[])
 
   return (
     <Formik
@@ -139,33 +151,33 @@ export function FormEditForm({
                 <div className="form-group row">
                   {/* Subsidiary Field */}
                   <div className="col-12 col-md-12  p-0 m-0">
-                  <div className="col-12 col-md-6">
-                    <SearchSelect
-                      name="subsidiaryId"
-                      label={
-                        <span>
-                          Subsidiary<span style={{ color: "red" }}>*</span>
-                        </span>
-                      }
-                      isDisabled={isUserForRead}
-                      onChange={(e) => {
-                        setFieldValue("subsidiaryId", e.value || null);
-                        check_Existed_Data(e.value);
-                      }}
-                      value={
-                        dashboard?.allSubsidiaryList?.find(
-                          (option) => option?.value === values?.subsidiaryId
-                        ) || null
-                      }
-                      options={dashboard?.allSubsidiaryList}
-                      // options={dashboard.allSubidiaryList.map(option => ({
-                      //   label: `${option.label} (${option.value})`, // Adding the value to the label
-                      //   value: option.value,
-                      // }))}
-                      error={errors.subsidiaryId}
-                      touched={touched.subsidiaryId}
-                    />
-                  </div>
+                    <div className="col-12 col-md-6">
+                      <SearchSelect
+                        name="subsidiaryId"
+                        label={
+                          <span>
+                            Subsidiary<span style={{ color: "red" }}>*</span>
+                          </span>
+                        }
+                        isDisabled={isUserForRead}
+                        onChange={(e) => {
+                          setFieldValue("subsidiaryId", e.value || null);
+                          check_Existed_Data(e.value);
+                        }}
+                        value={
+                          dashboard?.allSubsidiaryList?.find(
+                            (option) => option?.value === values?.subsidiaryId
+                          ) || null
+                        }
+                        options={dashboard?.allSubsidiaryList}
+                        // options={dashboard.allSubidiaryList.map(option => ({
+                        //   label: `${option.label} (${option.value})`, // Adding the value to the label
+                        //   value: option.value,
+                        // }))}
+                        error={errors.subsidiaryId}
+                        touched={touched.subsidiaryId}
+                      />
+                    </div>
                   </div>
 
                   {/* Account Field */}
@@ -267,18 +279,18 @@ export function FormEditForm({
                       component={Input}
                       placeholder="Enter installment deduction percentage"
                       label={
-                      <span>
-                      Installment Deduction (%)
-                      <span style={{ color: "red" }}>*</span>
-                    </span>
+                        <span>
+                          Installment Deduction (%)
+                          <span style={{ color: "red" }}>*</span>
+                        </span>
                       }
                       type="number"
                       disabled={isUserForRead}
                       onChange={(e) => {
-                        if (Number (e.target.value) <= 100) {
+                        if (Number(e.target.value) <= 100) {
                           // e.target.value = e.target.value.slice(0,5);
-                          if(/^\d{0,3}(\.\d{1,2})?$/.test(e.target.value?.toString())){
-                            setFieldValue("installment_deduction_percentage",e.target.value)
+                          if (/^\d{0,3}(\.\d{1,2})?$/.test(e.target.value?.toString())) {
+                            setFieldValue("installment_deduction_percentage", e.target.value)
 
                           }
                         }
@@ -325,10 +337,10 @@ export function FormEditForm({
                         setFieldValue(
                           "installment_deduction_basis_type",
                           e.target.value
-                        ); 
+                        );
                       }}
 
-                   
+
                     >
                       <option value="">Select</option>
                       {basisOptions.map((option) => (
@@ -367,7 +379,7 @@ export function FormEditForm({
                         >
                           <th>Action</th>
 
-                          
+
                           <th>Loan Type</th>
                           <th>Max Loan Amount</th>
                           <th>Basis</th>
@@ -398,19 +410,9 @@ export function FormEditForm({
                                   className="form-control"
                                   disabled={isUserForRead}
                                 >
-                                  {/* <option value="">Select Loan Type</option> */}
-                                  {/* {dashboard.allLoanTypeList?.map(
-                                    (loanType) => (
-                                      <option
-                                        key={loanType.value}
-                                        value={loanType.value}
-                                      >
-                                        {loanType.label}
-                                      </option>
-                                    )
-                                  )} */}
 
-                                  {loan_type?.map((x) => {
+
+                                  {/* {loan_type?.map((x) => {
                                     return (
                                       <option
                                         disabled={
@@ -426,7 +428,20 @@ export function FormEditForm({
                                         {x.label}{" "}
                                       </option>
                                     );
-                                  })}
+                                  })} */}
+                                   <option value="">Select--</option>
+
+                                  {loan_type
+                                    ?.filter((x) => x.subsidiaryId?.includes(String(values.subsidiaryId))) // Filter options based on subsidiaryId
+                                    .map((x) => (
+                                      <option
+                                        key={x.value} // Ensure each option has a unique key
+                                        disabled={values.details.find((el) => el.loan_typeId === x.value) ? true : false}
+                                        value={x.value}
+                                      >
+                                        {x.label}
+                                      </option>
+                                    ))}
                                 </Field>
                                 {errors.details?.[index]?.loan_typeId &&
                                   touched.details?.[index]?.loan_typeId && (
