@@ -43,8 +43,8 @@ const formValidation = Yup.object().shape(
     // mappedAllowance: Yup.string()
     //   .required(VALIDATION_MESSAGES.required),
     account: Yup.string()
-      .matches(/^\d+$/, "Must contain only digits")
-    //.required(VALIDATION_MESSAGES.required),
+      // .matches(/^\d+$/, "Must contain only digits")
+    .required(VALIDATION_MESSAGES.required),
 
 
   },
@@ -62,7 +62,8 @@ export function BankEditForm({
   values,
   enableLoading,
   loading,
-  userForEdit
+  userForEdit,
+  id
 }) {
   const { dashboard } = useSelector((state) => state);
   // Get User Details
@@ -72,7 +73,7 @@ export function BankEditForm({
 
   const [defEarningCode = null, setDefaultEarningCode] = useState(null);
   const [defSubsidiary = null, setDefualtSubsidiaryList] = useState(null);
-
+  const [defFormCode = null, setDefaultFormCode] = useState(null);
   useEffect(() => {
 
     if (!user.Id) {
@@ -86,6 +87,7 @@ export function BankEditForm({
     if (!user.Id) {
       dispatch(fetchAllFormsMenu(45, "allAccountList")); // For All Grade Codes
       dispatch(fetchAllSubsidiaryData("allSubsidiaryList"))
+      // dispatch(getLatestTableId("t_employee_earning", "Id", " 1 = 1 ", setValue));
     }
   }, [dispatch]);
 
@@ -103,12 +105,18 @@ export function BankEditForm({
 
   }, [user?.subsidiaryId, dashboard.subsidiaryId]);
 
-  const fetchData = async (subsidiaryId, setValue) => {
+  const fetchData = async ( setValue) => {
 
-    if (subsidiaryId) {
-      dispatch(getLatestTableId("t_employee_earning", "Id", " subsidiaryId = " + subsidiaryId, setValue));
+    // if (subsidiaryId) {
+      // dispatch(getLatestTableId("t_employee_earning", "Id", " subsidiaryId = " + subsidiaryId, setValue));
+      if (!id) {
+      dispatch(getLatestTableId("t_employee_earning", "Id", " 1 = 1 ",setValue));
     }
   };
+
+useEffect (()=>{
+  fetchData(setDefaultEarningCode)
+},[])
 
   return (
     <>
@@ -117,7 +125,7 @@ export function BankEditForm({
         initialValues={user}
         validationSchema={formValidation}
         onSubmit={(values) => {
-     
+
           enableLoading();
           if (values.mappedAllowance == "-1")
             values.mappedAllowance = ""
@@ -145,7 +153,9 @@ export function BankEditForm({
               <Form className="form form-label-right">
                 <fieldset disabled={isUserForRead}>
 
-                  <div className="from-group row">
+
+                  {/* old subsidiary */}
+                  {/* <div className="from-group row">
 
                     <div className="col-12 col-md-4 mt-3">
                       <SearchSelect
@@ -170,7 +180,39 @@ export function BankEditForm({
                     </div>
 
 
+                  </div> */}
+
+
+                  <div className="from-group row">
+
+                    <div className="col-12 col-md-4 mt-3">
+                      Subsidiary
+                      <div style={{ backgroundColor: "#ffffff", height: "170px", padding: "10px", overflow: "scroll" }}>
+
+                        <div className="multi-select">
+                          <div className="dropdown-label"></div>
+                          <div className="dropdown-options" style={{ fontSize: "12px", fontWeight: "bold", padding: "5px" }}>
+                            {dashboard?.allSubsidiaryList?.map((option) => (
+                              <div key={option.value} className="dropdown-option">
+                                <input style={{ width: "25px" }}
+                                  name="subsidiaryId"
+                                  type="checkbox"
+                                  value={option.value}
+                                  checked={Boolean(values?.subsidiaryId?.includes(option?.value?.toString()))}
+                                  onChange={handleChange}
+                                />
+                                {option.label}
+                              </div>
+                            ))}
+                                        {errors.subsidiaryId && touched.subsidiaryId && (
+                          <div className="invalid-text">{errors.subsidiaryId}</div>
+                        )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
+
                   <div className="from-group row">
                     {
                       <div className="col-12 col-md-4 mt-3">
@@ -181,12 +223,13 @@ export function BankEditForm({
                           onChange={(e) => {
                             setFieldValue("earningCode", e.target.value || null);
                             setDefaultEarningCode(e);
+                           
 
                           }}
                           disabled
-                          placeholder="Enter Earning Code"
+                          placeholder="Earning Code"
                           value={defEarningCode || values.earningCode}
-                          label={<span> Earning Code<span style={{ color: 'red' }}>*</span></span>}
+                          label={<span> Earning Code</span>}
                           autoComplete="off"
                         />
                       </div>
@@ -235,14 +278,11 @@ export function BankEditForm({
 
                         <SearchSelect
                           name="account"
-                          label={
-                            <span>
-                              Account
-                            </span>
-                          }
+                          label={<span> Account<span style={{ color: 'red' }}>*</span></span>}
                           isDisabled={isUserForRead}
                           onChange={(e) => {
                             setFieldValue("account", e.value || null);
+                          
                           }}
                           value={
                             dashboard.allAccountList.find(

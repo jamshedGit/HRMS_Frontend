@@ -1,3 +1,4 @@
+import { SERVER_MESSAGES } from "../../../utils/constants";
 import * as requestFromServer from "./bankCrud";
 import { earningSlice, callTypes } from "./earningSlice";
 import { toast } from "react-toastify";
@@ -52,7 +53,7 @@ export const deleteEarning = (id) => (dispatch) => {
     .then((response) => {
      
       dispatch(actions.earningDeleted({ Id: id }));
-      toast.success("Successfully Deleted", {
+      toast.success(SERVER_MESSAGES.deletedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -64,7 +65,7 @@ export const deleteEarning = (id) => (dispatch) => {
     })
     .catch((error) => {
       dispatch(actions.catchError({ error, callType: callTypes.action }));
-      toast.error(error.response.data.message);
+      toast.error(SERVER_MESSAGES.deletedFail);
     });
 };
 
@@ -106,7 +107,7 @@ export const createEarning = (bankForCreation, disbaleLoading, onHide) => (
      
       dispatch(actions.earningCreated(user));
       disbaleLoading();
-      toast.success("Successfully Created", {
+      toast.success(SERVER_MESSAGES.insertedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -145,7 +146,7 @@ export const updatedearning = (user, disbaleLoading, onHide) => (dispatch) => {
       dispatch(actions.startCall({ callType: callTypes.action }));
       disbaleLoading();
       onHide();
-      toast.success(response.data.message + " Updated", {
+      toast.success(SERVER_MESSAGES.updatedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
