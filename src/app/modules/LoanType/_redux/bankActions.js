@@ -1,3 +1,4 @@
+import { SERVER_MESSAGES } from "../../../utils/constants";
 import * as requestFromServer from "./bankCrud";
 import { LoanTypeSlice, callTypes } from "./LoanTypeSlice";
 import { toast } from "react-toastify";
@@ -69,7 +70,7 @@ export const deleteLoanType = (id) => (dispatch) => {
     .then((response) => {
   
       dispatch(actions.loan_type_Deleted({ Id: id }));
-      toast.success("Successfully Deleted", {
+      toast.success(SERVER_MESSAGES.deletedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -81,7 +82,7 @@ export const deleteLoanType = (id) => (dispatch) => {
     })
     .catch((error) => {
       dispatch(actions.catchError({ error, callType: callTypes.action }));
-      toast.error(error.response.data.message);
+      toast.error(SERVER_MESSAGES.deletedFail);
     });
 };
 
@@ -123,7 +124,7 @@ export const createLoanType = (bankForCreation, disbaleLoading, onHide) => (
   
       dispatch(actions.loan_type_Created(user));
       disbaleLoading();
-      toast.success("Successfully Created", {
+      toast.success(SERVER_MESSAGES.insertedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -161,7 +162,7 @@ export const updatedLoanType = (user, disbaleLoading, onHide) => (dispatch) => {
       dispatch(actions.startCall({ callType: callTypes.action }));
       disbaleLoading();
       onHide();
-      toast.success(response.data.message + " Updated", {
+      toast.success(SERVER_MESSAGES.updatedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

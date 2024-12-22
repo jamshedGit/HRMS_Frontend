@@ -1,3 +1,4 @@
+import { SERVER_MESSAGES } from "../../../utils/constants";
 import * as requestFromServer from "./redux-Crud";
 import {loan_manag_confSlice, callTypes } from "./redux-Slice";
 import { toast } from "react-toastify";
@@ -51,7 +52,7 @@ export const deleteLoanManagConfig = (id) => (dispatch) => {
     .then((response) => {
    
       dispatch(actions.LoanManagConfigDeleted({ Id: id }));
-      toast.success("Successfully Deleted", {
+      toast.success(SERVER_MESSAGES.deletedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -63,7 +64,7 @@ export const deleteLoanManagConfig = (id) => (dispatch) => {
     })
     .catch((error) => {
       dispatch(actions.catchError({ error, callType: callTypes.action }));
-      toast.error(error.response.data.message);
+      toast.error(SERVER_MESSAGES.deletedFail);
     });
 };
 
@@ -82,7 +83,7 @@ export const createLoanManagConfig = (loanManagConfigForCreation, disbaleLoading
 
       dispatch(actions.loanManagConfigCreated(user));
       disbaleLoading();
-      toast.success("Successfully Created", {
+      toast.success(SERVER_MESSAGES.insertedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -120,7 +121,7 @@ export const updateLoanManagConfig = (user, disbaleLoading, onHide) => (dispatch
      
       disbaleLoading();
       onHide();
-      toast.success(response.data.message + " Updated", {
+      toast.success(SERVER_MESSAGES.updatedSuccess,{
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

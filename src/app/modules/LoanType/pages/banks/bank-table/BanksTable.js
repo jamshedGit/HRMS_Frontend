@@ -80,16 +80,16 @@ export function BanksTable() {
     //     minWidth: "160px",
     //   },
     // },
-    {
-      dataField: "subsList.subsName",
-      text: "Subsidiary",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
+    // {
+    //   dataField: "subsList.subsName",
+    //   text: "Subsidiary",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "160px",
+    //   },
+    // },
     {
       dataField: "code",
       text: "Loan Type Code",

@@ -43,11 +43,11 @@ export const loan_manag_confSlice = createSlice({
                 const combinedEntities = entities.map(item => ({
                     ...item,
                     account: item.Account 
-                        ? `${item.Account.formCode}-${item.Account.formName}` 
+                        ? `${item.Account.formCode} - ${item.Account.formName}` 
                         : null,
 
                         empLoanAccount: item.EmpLoanAccount 
-                        ? `${item.EmpLoanAccount.formCode}-${item.EmpLoanAccount.formName}` 
+                        ? `${item.EmpLoanAccount.formCode} - ${item.EmpLoanAccount.formName}` 
                         : null,   
                 }));
         
@@ -103,11 +103,11 @@ export const loan_manag_confSlice = createSlice({
             const combinedEntity = {
                 ...newEntity,
                 account: newEntity.Account 
-                ? `${newEntity.Account.formCode}-${newEntity.Account.formName}` 
+                ? `${newEntity.Account.formCode} - ${newEntity.Account.formName}` 
                 : null,
 
                 empLoanAccount: newEntity.EmpLoanAccount 
-                ? `${newEntity.EmpLoanAccount.formCode}-${newEntity.EmpLoanAccount.formName}` 
+                ? `${newEntity.EmpLoanAccount.formCode} - ${newEntity.EmpLoanAccount.formName}` 
                 : null,   
                
             };
