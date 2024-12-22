@@ -114,7 +114,7 @@ export function FormTable() {
       },
     },
     {
-      dataField: "dayStatus",
+      dataField: "attendanceStatus",
       text: "Attendance Status",
       sort: false,
       sortCaret: sortCaret,

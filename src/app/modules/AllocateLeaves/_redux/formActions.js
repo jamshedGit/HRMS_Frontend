@@ -1,6 +1,7 @@
 import * as requestFromServer from "./formCrud";
 import { AllocateLeavesSlice, callTypes } from "./AllocateLeavesSlice";
 import { toast } from "react-toastify";
+import { SERVER_MESSAGES } from "../../../utils/constants";
 const { actions } = AllocateLeavesSlice;
 
 /**
@@ -59,7 +60,7 @@ export const saveRecord = (data, disableLoading, onHide) => (dispatch) => {
       if (AllocateLeavesData) {
         dispatch(actions.AllocateLeavesCreated(AllocateLeavesData));
         disableLoading();
-        toast.success("Successfully Created", {
+        toast.success(SERVER_MESSAGES.insertedSuccess, {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,

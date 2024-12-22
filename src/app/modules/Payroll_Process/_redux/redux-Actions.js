@@ -1,3 +1,4 @@
+import { SERVER_MESSAGES } from "../../../utils/constants";
 import * as requestFromServer from "./redux-Crud";
 import { payroll_processSlice, callTypes } from "./redux-Slice";
 import { toast } from "react-toastify";
@@ -52,7 +53,7 @@ export const deletePayrollProcess= (id) => (dispatch) => {
     .then((response) => {
 
       dispatch(actions.PayrollProcessDeleted({ Id: id }));
-      toast.success("Successfully Deleted", {
+      toast.success(SERVER_MESSAGES.deletedSuccess, {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
@@ -64,7 +65,7 @@ export const deletePayrollProcess= (id) => (dispatch) => {
     })
     .catch((error) => {
       dispatch(actions.catchError({ error, callType: callTypes.action }));
-      toast.error(error.response.data.message);
+      toast.error(SERVER_MESSAGES.deletedFail);
     });
 };
 
@@ -82,7 +83,7 @@ export const createPayrollProcess = (payrollProcessForCreation, disbaleLoading, 
 
       dispatch(actions.payrollProcessCreated(user));
       disbaleLoading();
-      toast.success("Successfully Created", {
+      toast.success(SERVER_MESSAGES.insertedSuccess, {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,

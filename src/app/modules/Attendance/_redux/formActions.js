@@ -166,9 +166,45 @@ export const runProcess = (values) => (dispatch) => {
     .processAttendance(values)
     .then((response) => {
       dispatch(actions.stopCall({ callType: callTypes.process }));
+      toast.success(SERVER_MESSAGES.processSuccessful, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     })
     .catch((error) => {
       error.clientMessage = "Can't process Attendance";
       dispatch(actions.catchError({ error, callType: callTypes.process }));
+      toast.error(error?.response?.data?.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     });
 };
+
+
+export const getPayrollMonth = (employeeId) => (dispatch) => {
+  if (!employeeId) {
+    dispatch(actions.PayrollMonthFetched({ payrollData: null }));
+  }
+  else {
+    return requestFromServer.getPayrollMonth({ employeeId })
+      .then((res) => {
+        const payrollData = res.data?.data;
+        dispatch(actions.PayrollMonthFetched({ payrollData }));
+      })
+      .catch((error) => {
+        dispatch(actions.PayrollMonthFetched({ payrollData: null }));
+        error.clientMessage = "Can't Get Payroll Data";
+      });
+  }
+}

@@ -57,10 +57,11 @@ export function BankEditForm({
   enableLoading,
   loading,
   userForEdit,
+  id,
 }) {
   const { dashboard } = useSelector((state) => state);
   const [defEmployee = null, setEmployeeDefault] = useState(null);
-  const [defDeductionCode = null, setDefDeductionCode] = useState('');
+  const [defDeductionCode = null, setDefaultDeductionCode] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
   const dispatch = useDispatch();
   const [defSubsidiary = null, setDefualtSubsidiaryList] = useState(null);
@@ -101,13 +102,25 @@ export function BankEditForm({
 
   }, [user?.subsidiaryId, dashboard.subsidiaryId]);
 
-  const fetchData = async (subsidiaryId, setValue) => {
-    if (subsidiaryId) {
-      dispatch(getLatestTableId("t_employee_deduction", "Id", " subsidiaryId = " + subsidiaryId, setValue));
+  // const fetchData = async (subsidiaryId, setValue) => {
+  //   if (subsidiaryId) {
+  //     dispatch(getLatestTableId("t_employee_deduction", "Id", " subsidiaryId = " + subsidiaryId, setValue));
 
+  //   }
+
+  // };
+
+  const fetchData = async (setDefaultDeductionCode) => {
+
+    if (!id) {
+  
+    dispatch(getLatestTableId("t_employee_deduction", "Id", " 1 = 1 ", setDefaultDeductionCode));
     }
-
   };
+
+  useEffect(()=>{
+    fetchData(setDefaultDeductionCode)
+  },[])
 
   // useEffect(() => {
   //   // Define an async function within useEffect
@@ -131,7 +144,7 @@ export function BankEditForm({
         initialValues={{ ...user }}
         validationSchema={formValidation}
         onSubmit={(values) => {
-          
+
 
           enableLoading();
           saveIncident({ ...values, deductionCode: defDeductionCode ? defDeductionCode : values.deductionCode });
@@ -148,7 +161,7 @@ export function BankEditForm({
           formik,
         }) => (
           <>
-   
+
             <Modal.Body className="overlay overlay-block cursor-default">
               {actionsLoading && (
                 <div className="overlay-layer bg-transparent">
@@ -158,26 +171,32 @@ export function BankEditForm({
               <Form className="form form-label-right">
                 <fieldset disabled={isUserForRead}>
                   <div className="from-group row">
-                    <div className="col-12 col-md-4 mt-3">
-                      <SearchSelect
-                        name="subsidiaryId"
-                        label={<span> Subsidiary<span style={{ color: 'red' }}>*</span></span>}
-                        isDisabled={isUserForRead || userForEdit}
-                        onBlur={() => {
-                          // handleBlur({ target: { name: "countryId" } });
-                        }}
-                        onChange={(e) => {
-                          setFieldValue("subsidiaryId", e.value || null);
-                          setDefualtSubsidiaryList(e);
-                          fetchData(e.value, setDefDeductionCode)
-                          //handlePaymenModeChanged(e)
-                        }}
 
-                        value={(defSubsidiary || null)}
-                        error={errors.subsidiaryId}
-                        touched={touched.subsidiaryId}
-                        options={dashboard.allSubsidiaryList}
-                      />
+                    <div className="col-12 col-md-4 mt-3">
+                      Subsidiary
+                      <div style={{ backgroundColor: "#ffffff", height: "170px", padding: "10px", overflow: "scroll" }}>
+
+                        <div className="multi-select">
+                          <div className="dropdown-label"></div>
+                          <div className="dropdown-options" style={{ fontSize: "12px", fontWeight: "bold", padding: "5px" }}>
+                            {dashboard?.allSubsidiaryList?.map((option) => (
+                              <div key={option.value} className="dropdown-option">
+                                <input style={{ width: "25px" }}
+                                  name="subsidiaryId"
+                                  type="checkbox"
+                                  value={option.value}
+                                  checked={Boolean(values?.subsidiaryId?.includes(option?.value?.toString()))}
+                                  onChange={handleChange}
+                                />
+                                {option.label}
+                              </div>
+                            ))}
+                              {errors.subsidiaryId && touched.subsidiaryId && (
+                          <div className="invalid-text">{errors.subsidiaryId}</div>
+                        )}
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div className="from-group row">
@@ -185,15 +204,34 @@ export function BankEditForm({
 
 
 
+                      // <div className="col-12 col-md-4 mt-3">
+                      //   <Field
+                      //     name="deductionCode"
+                      //     component={Input}
+                      //     maxLength={6}
+
+                      //     disabled
+                      //     placeholder="Deduction Code"
+
+                      //     value={defDeductionCode || values.deductionCode}
+                      //     label={<span> Deduction Code</span>}
+                      //     autoComplete="off"
+                      //   />
+                      // </div>
+
                       <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="deductionCode"
                           component={Input}
                           maxLength={6}
+                          onChange={(e) => {
+                            setFieldValue("deductionCode", e.target.value || null);
+                            setDefaultDeductionCode(e);
 
+
+                          }}
                           disabled
-                          placeholder="Enter Deduction Code"
-
+                          placeholder="Deduction Code"
                           value={defDeductionCode || values.deductionCode}
                           label={<span> Deduction Code</span>}
                           autoComplete="off"
@@ -253,6 +291,7 @@ export function BankEditForm({
                           isDisabled={isUserForRead}
                           onChange={(e) => {
                             setFieldValue("account", e.value || null);
+                            // fetchData(setDefaultDeductionCode)
                           }}
                           value={
                             dashboard.allAccountList.find(
@@ -288,7 +327,7 @@ export function BankEditForm({
                           value={values.linkedAttendance}
                           // onChange={handleLinkedAttendanceChange}
                           onChange={(e) => {
-                      
+
                             setFieldValue("linkedAttendance", e.target.value);
                             if (e.target.value === "true") {
                               setFieldValue("loan", false);
