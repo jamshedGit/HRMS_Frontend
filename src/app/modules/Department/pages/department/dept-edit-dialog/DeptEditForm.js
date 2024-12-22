@@ -47,6 +47,7 @@ export function DeptEditForm({
   values,
   enableLoading,
   loading,
+  id,
 }) {
 
   const dispatch = useDispatch();
@@ -56,7 +57,7 @@ export function DeptEditForm({
   const [defCity, setDefaultCity] = useState({});
   // Get User Details
   const { auth } = useSelector((state) => state);
- 
+
   const [defDept = null, setDefaultDept] = useState(null);
   const [defSubsidiary = null, setDefualtSubsidiaryList] = useState(null);
   const [defDepartmentCode = null, setDefaultDepartmentCode] = useState(null);
@@ -81,10 +82,10 @@ export function DeptEditForm({
     );
   }, [user?.parentDept, dashboard.parentDept]);
 
-  
 
 
-  
+
+
   useEffect(() => {
 
     const subsidiaryId = defSubsidiary?.value ? defSubsidiary.value : user.subsidiaryId;
@@ -98,15 +99,28 @@ export function DeptEditForm({
 
   }, [user?.subsidiaryId, dashboard.subsidiaryId]);
 
-  
 
 
-  const fetchData = async (subsidiaryId, setValue) => {
-    if (subsidiaryId) {
-      dispatch(getLatestTableId("t_department", "deptCode", " subsidiaryId = " + subsidiaryId, setValue));
+
+  // const fetchData = async (subsidiaryId, setValue) => {
+  //   if (subsidiaryId) {
+  //     dispatch(getLatestTableId("t_department", "deptCode", " subsidiaryId = " + subsidiaryId, setValue));
+  //   }
+  // };
+
+
+  const fetchData = async (setValue) => {
+
+    // if (subsidiaryId) {
+      // dispatch(getLatestTableId("t_loan_type_setup", "Id", " subsidiaryId = " + subsidiaryId, setValue));
+      if (!id) {
+      dispatch(getLatestTableId("t_department", "deptCode", " 1 = 1 ",setValue));
     }
   };
 
+useEffect (()=>{
+  fetchData(setDefaultDepartmentCode)
+},[])
 
 
   return (
@@ -116,10 +130,10 @@ export function DeptEditForm({
         initialValues={user}
         validationSchema={userEditSchema_2}
         onSubmit={(values) => {
-      
-          
+
+
           enableLoading();
-          saveDept({...values, deptCode: defDepartmentCode ? defDepartmentCode : values.deptCode});
+          saveDept({ ...values, deptCode: defDepartmentCode ? defDepartmentCode : values.deptCode });
         }}
       >
         {({
@@ -142,121 +156,137 @@ export function DeptEditForm({
               <Form className="form form-label-right">
                 <fieldset disabled={isUserForRead}>
                   <div className="from-group row">
-                  {
-                      <>
-                       <div className="col-12 col-md-4 mt-3">
-                        <SearchSelect
-                          name="subsidiaryId"
-                          label={<span> Subsidiary<span style={{ color: 'red' }}>*</span></span>}
-                          isDisabled={isUserForRead && true}
-                          onBlur={() => {
-                            // handleBlur({ target: { name: "countryId" } });
-                          }}
-                          onChange={(e) => {
-                            setFieldValue("subsidiaryId", e.value || null);
-                            setDefualtSubsidiaryList(e);
-                            fetchData(e.value, setDefaultDepartmentCode)
-                          }}
+                    {
+                      // <>
+                      //  <div className="col-12 col-md-4 mt-3">
+                      //   <SearchSelect
+                      //     name="subsidiaryId"
+                      //     label={<span> Subsidiary<span style={{ color: 'red' }}>*</span></span>}
+                      //     isDisabled={isUserForRead && true}
+                      //     onBlur={() => {
+                      //       // handleBlur({ target: { name: "countryId" } });
+                      //     }}
+                      //     onChange={(e) => {
+                      //       setFieldValue("subsidiaryId", e.value || null);
+                      //       setDefualtSubsidiaryList(e);
+                      //       fetchData(e.value, setDefaultDepartmentCode)
+                      //     }}
 
-                          value={(defSubsidiary || null)}
-                          error={errors.subsidiaryId}
-                          touched={touched.subsidiaryId}
-                          options={dashboard.allSubsidiaryList}
-                        />
+                      //     value={(defSubsidiary || null)}
+                      //     error={errors.subsidiaryId}
+                      //     touched={touched.subsidiaryId}
+                      //     options={dashboard.allSubsidiaryList}
+                      //   />
+                      //   </div>
+                      //   </>
+
+
+
+ <div className="col-12 col-md-12 mt-3">
+                      <div className="col-12 col-md-4 mt-3">
+                        Subsidiary
+                        <div style={{ backgroundColor: "#ffffff", height: "170px", padding: "10px", overflow: "scroll" }}>
+
+                          <div className="multi-select">
+                            <div className="dropdown-label"></div>
+                            <div className="dropdown-options" style={{ fontSize: "12px", fontWeight: "bold", padding: "5px" }}>
+                              {dashboard?.allSubsidiaryList?.map((option) => (
+                                <div key={option?.value} className="dropdown-option">
+                                  <input style={{ width: "25px" }}
+                                    name="subsidiaryId"
+                                    type="checkbox"
+                                    value={option?.value}
+                                    checked={Boolean(values?.subsidiaryId?.includes(option?.value?.toString()))}
+                                    onChange={handleChange}
+                                  />
+                                  {option?.label}
+                                </div>
+                              ))}
+                               {errors.subsidiaryId && touched.subsidiaryId && (
+                          <div className="invalid-text">{errors.subsidiaryId}</div>
+                        )}
+                            </div>
+                          </div>
                         </div>
-                        </>
+                   
 
+                        </div>
+
+                        </div>
                     }
-                      <div className="col-12 col-md-4 mt-3">
-                        <Field
-                          name="deptCode"
-                          disabled
-                          maxLength={6}
-                          component={Input}
-                          placeholder="Enter Department Code"
-                          value={defDepartmentCode || values.deptCode}
-                          label={<span> Department Code<span style={{ color: 'red' }}>*</span></span>}
-                        />
+
+                        <div className="col-12 col-md-4 mt-3">
+                          <Field
+                            name="deptCode"
+                            disabled
+                            maxLength={6}
+                            component={Input}
+                            placeholder="Enter Department Code"
+                            value={defDepartmentCode || values.deptCode}
+                            label={<span> Department Code<span style={{ color: 'red' }}>*</span></span>}
+                          />
+                        </div>
+
+                        <div className="col-12 col-md-4 mt-3">
+                          <Field
+                            name="deptName"
+                            maxLength={100}
+                            component={Input}
+                            placeholder="Enter Department Name"
+                            label={<span> Department Name<span style={{ color: 'red' }}>*</span></span>}
+                          />
+                        </div>
+
+                        {
+                          <div className="col-12 col-md-4 mt-3">
+                            <SearchSelect
+                              name="parentDept"
+                              label={<span> Parent Dept</span>}
+                              isDisabled={isUserForRead && true}
+                              onBlur={() => {
+                                // handleBlur({ target: { name: "countryId" } });
+                              }}
+                              onChange={(e) => {
+                                setFieldValue("parentDept", e.value || null);
+                                setDefaultDept(e);
+                                //  dispatch(fetchAllDept(e.value));
+                              }}
+                              value={(defDept || null)}
+                              error={errors.parentDept}
+                              touched={touched.parentDept}
+                              options={dashboard.allDept}
+                              // options={
+
+                              //   dashboard?.allDept?.filter(
+                              //     (option) => option.subsidiaryId == values.subsidiaryId
+                              //   ) || []
+                              // }
+                            />
+
+
+                          </div>
+
+                        }
+                        {
+                          <div className="col-12 col-md-4 mt-3">
+                            <Field
+                              name="budgetStrength"
+                              maxLength={6}
+                              component={Input}
+                              placeholder="Enter budgetStrength"
+                              label={<span> Bugdet Strength<span style={{ color: 'red' }}>*</span></span>}
+
+                            />
+                          </div>
+                        }
+
+
+
+
+
+
                       </div>
-                    
-                    <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="deptName"
-                        maxLength={100}
-                        component={Input}
-                        placeholder="Enter Department Name"
-                        label={<span> Department Name<span style={{ color: 'red' }}>*</span></span>}
-                      />
-                    </div>
-                    
-                    {
-                      <div className="col-12 col-md-4 mt-3">
-                        <SearchSelect
-                          name="parentDept"
-                          label={<span> Parent Dept</span>}
-                          isDisabled={isUserForRead && true}
-                          onBlur={() => {
-                            // handleBlur({ target: { name: "countryId" } });
-                          }}
-                          onChange={(e) => {
-                            setFieldValue("parentDept", e.value || null);
-                            setDefaultDept(e);
-                          //  dispatch(fetchAllDept(e.value));
-                          }}
-                          value={(defDept || null)}
-                          error={errors.parentDept}
-                          touched={touched.parentDept}
-                          // options={dashboard.allDept}
-                          options={
-
-                            dashboard?.allDept?.filter(
-                              (option) => option.subsidiaryId == values.subsidiaryId
-                            ) || []
-                          }
-                        />
-                        
-
-                      </div>
-
-                    }
-                    {
-                      <div className="col-12 col-md-4 mt-3">
-                        <Field
-                          name="budgetStrength"
-                          maxLength={6}
-                          component={Input}
-                          placeholder="Enter budgetStrength"
-                          label={<span> Bugdet Strength<span style={{ color: 'red' }}>*</span></span>}
-                          
-                        />
-                      </div>
-                    }
-                  
-                  
-
-                    {/* {<div className="col-12 col-md-4 mt-3">
-                      <SearchSelect
-                        name="countryId"
-                        label="Select Country*"
-                        isDisabled={isUserForRead && true}
-                        onBlur={() => {
-                          // handleBlur({ target: { name: "countryId" } });
-                        }}
-                        onChange={(e) => {
-                          setFieldValue("countryId", e.value);
-                          setDefaultCountry(e);
-                          dispatch(fetchAllCity(e.value));
-                        }}
-                        value={defCountry}
-                        error={errors.countryId}
-                        touched={touched.countryId}
-                        options={dashboard.allCountry}
-                      />
-                    </div>} */}
-
-
-
-                  </div>
+                
                   <div className="form-group row"></div>
                 </fieldset>
               </Form>

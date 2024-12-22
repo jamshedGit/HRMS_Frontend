@@ -31,10 +31,10 @@ export function FormEditDialog({ onHide, userForRead }) {
   const dispatch = useDispatch();
   const {
     userForEdit,
-    dashboard
+    dashboard,
   } = useSelector((state) => ({
     userForEdit: state.attendance.userForEdit,
-    dashboard: state.dashboard
+    dashboard: state.dashboard,
   }
   ), shallowEqual);
 
@@ -53,6 +53,11 @@ export function FormEditDialog({ onHide, userForRead }) {
     dispatch(actions.fetchRecordByFilters(formUIProps.filters))
   }, [formUIProps.filters, dispatch])
 
+  useEffect(() => {
+    dispatch(actions.getPayrollMonth(formUIProps?.filters?.employeeId));
+  
+  }, [formUIProps?.filters?.employeeId])
+  
   return (
     <>
       <MasterEditForm

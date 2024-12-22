@@ -102,7 +102,7 @@ export function DeptEditDialog({ id, show, onHide, userForRead }) {
         deptId: dept.deptId,
         deptName: dept.deptName,
         deptCode: dept.deptCode,
-        //parentDept: dept.parentDept,
+        parentDept: dept.parentDept,
         subsidiaryId: dept.subsidiaryId,
         budgetStrength: dept.budgetStrength,
         chkParent: dept.parentDept == null ? true : false
@@ -132,6 +132,7 @@ export function DeptEditDialog({ id, show, onHide, userForRead }) {
         isUserForRead={userForRead}
         enableLoading={enableLoading}
         loading={loading}
+        id={id}
       />
       <ToastContainer
         position="top-right"

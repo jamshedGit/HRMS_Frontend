@@ -70,16 +70,16 @@ export function BanksTable() {
   );
   // Table columns
   const columns = [
-    {
-      dataField: "subsidiary",
-      text: "Subsidiary",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
+    // {
+    //   dataField: "subsidiary",
+    //   text: "Subsidiary",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "160px",
+    //   },
+    // },
 
     {
       dataField: "deductionCode",

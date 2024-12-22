@@ -190,3 +190,21 @@ export const runProcess = (values) => (dispatch) => {
       });
     });
 };
+
+
+export const getPayrollMonth = (employeeId) => (dispatch) => {
+  if (!employeeId) {
+    dispatch(actions.PayrollMonthFetched({ payrollData: null }));
+  }
+  else {
+    return requestFromServer.getPayrollMonth({ employeeId })
+      .then((res) => {
+        const payrollData = res.data?.data;
+        dispatch(actions.PayrollMonthFetched({ payrollData }));
+      })
+      .catch((error) => {
+        dispatch(actions.PayrollMonthFetched({ payrollData: null }));
+        error.clientMessage = "Can't Get Payroll Data";
+      });
+  }
+}
