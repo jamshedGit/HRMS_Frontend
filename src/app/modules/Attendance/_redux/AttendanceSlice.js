@@ -11,7 +11,8 @@ const initialState = {
     userForEdit: undefined,
     lastError: null,
     userForRead: false,
-    processLoading: false
+    processLoading: false,
+    payrollData: null,
 };
 
 export const callTypes = {
@@ -97,6 +98,11 @@ export const AttendanceSlice = createSlice({
                 entities.attDateOut = new Date(entities.attDateOut)
             }
             state.userForEdit = entities;
-        }
+        },
+        PayrollMonthFetched: (state, action) => {
+            const payrollData = action?.payload?.payrollData;
+            state.error = null;
+            state.payrollData = payrollData;
+        },
     },
 });

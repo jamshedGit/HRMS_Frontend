@@ -67,3 +67,12 @@ export function processAttendance(body) {
   return axios.post(`${USERS_URL}/attendance/process-all-attendance`, body);
 }
 
+/**
+ * Get Last Payroll Month
+ * 
+ * @param {Object} body 
+ * @returns res
+ */
+export function getPayrollMonth(body) {
+  return axios.post(`${USERS_URL}/payroll_month/get-payroll-month-previous-date`, body);
+}
