@@ -43,8 +43,8 @@ const formValidation = Yup.object().shape(
     // mappedAllowance: Yup.string()
     //   .required(VALIDATION_MESSAGES.required),
     account: Yup.string()
-      .matches(/^\d+$/, "Must contain only digits")
-    //.required(VALIDATION_MESSAGES.required),
+      // .matches(/^\d+$/, "Must contain only digits")
+    .required(VALIDATION_MESSAGES.required),
 
 
   },
@@ -62,7 +62,8 @@ export function BankEditForm({
   values,
   enableLoading,
   loading,
-  userForEdit
+  userForEdit,
+  id
 }) {
   const { dashboard } = useSelector((state) => state);
   // Get User Details
@@ -108,11 +109,14 @@ export function BankEditForm({
 
     // if (subsidiaryId) {
       // dispatch(getLatestTableId("t_employee_earning", "Id", " subsidiaryId = " + subsidiaryId, setValue));
+      if (!id) {
       dispatch(getLatestTableId("t_employee_earning", "Id", " 1 = 1 ",setValue));
-    // }
+    }
   };
 
-
+useEffect (()=>{
+  fetchData(setDefaultEarningCode)
+},[])
 
   return (
     <>
@@ -200,6 +204,9 @@ export function BankEditForm({
                                 {option.label}
                               </div>
                             ))}
+                                        {errors.subsidiaryId && touched.subsidiaryId && (
+                          <div className="invalid-text">{errors.subsidiaryId}</div>
+                        )}
                           </div>
                         </div>
                       </div>
@@ -271,15 +278,11 @@ export function BankEditForm({
 
                         <SearchSelect
                           name="account"
-                          label={
-                            <span>
-                              Account
-                            </span>
-                          }
+                          label={<span> Account<span style={{ color: 'red' }}>*</span></span>}
                           isDisabled={isUserForRead}
                           onChange={(e) => {
                             setFieldValue("account", e.value || null);
-                            fetchData( setDefaultEarningCode)
+                          
                           }}
                           value={
                             dashboard.allAccountList.find(
