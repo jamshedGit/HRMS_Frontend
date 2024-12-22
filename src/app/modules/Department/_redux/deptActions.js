@@ -1,3 +1,4 @@
+import { SERVER_MESSAGES } from "../../../utils/constants";
 import * as requestFromServer from "./deptCrud";
 import { deptSlice, callTypes } from "./deptSlice";
 import { toast } from "react-toastify";
@@ -59,7 +60,7 @@ export const deleteDept = (id) => (dispatch) => {
     .then((response) => {
   
       dispatch(actions.deptDeleted({ Id: id }));
-      toast.success("Successfully Deleted", {
+      toast.success(SERVER_MESSAGES.deletedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -114,7 +115,7 @@ export const createDept = (deptForCreation, disbaleLoading, onHide) => (
    
       dispatch(actions.deptCreated(user));
       disbaleLoading();
-      toast.success("Successfully Created", {
+      toast.success(SERVER_MESSAGES.insertedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -152,7 +153,7 @@ export const updateDept = (user, disbaleLoading, onHide) => (dispatch) => {
       dispatch(actions.startCall({ callType: callTypes.action }));
       disbaleLoading();
       onHide();
-      toast.success(response.data.message + " Updated", {
+      toast.success(SERVER_MESSAGES.updatedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
