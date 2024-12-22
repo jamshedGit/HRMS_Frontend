@@ -1,3 +1,4 @@
+import { SERVER_MESSAGES } from "../../../utils/constants";
 import * as requestFromServer from "./bankCrud";
 import { deductionSlice, callTypes } from "./deductionSlice";
 import { toast } from "react-toastify";
@@ -52,7 +53,7 @@ export const deleteDeduction = (id) => (dispatch) => {
     .then((response) => {
      
       dispatch(actions.deductionDeleted({ Id: id }));
-      toast.success("Successfully Deleted", {
+      toast.success(SERVER_MESSAGES.deletedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -106,7 +107,7 @@ export const createDeduction = (bankForCreation, disbaleLoading, onHide) => (
    
       dispatch(actions.deductionCreated(user));
       disbaleLoading();
-      toast.success("Successfully Created", {
+      toast.success(SERVER_MESSAGES.insertedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -144,7 +145,7 @@ export const updatedDeduction = (user, disbaleLoading, onHide) => (dispatch) => 
       dispatch(actions.startCall({ callType: callTypes.action }));
       disbaleLoading();
       onHide();
-      toast.success(response.data.message + " Updated", {
+      toast.success(SERVER_MESSAGES.updatedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -161,7 +162,7 @@ export const updatedDeduction = (user, disbaleLoading, onHide) => (dispatch) => 
       //error.clientMessage = "Can't update User"
       dispatch(actions.catchError({ error, callType: callTypes.action }));
       disbaleLoading();
-      toast.error(error?.response?.data?.message, {
+      toast.error(SERVER_MESSAGES.deletedFail, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
