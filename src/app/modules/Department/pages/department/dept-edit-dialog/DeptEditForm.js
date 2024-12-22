@@ -47,6 +47,7 @@ export function DeptEditForm({
   values,
   enableLoading,
   loading,
+  id,
 }) {
 
   const dispatch = useDispatch();
@@ -112,8 +113,9 @@ export function DeptEditForm({
 
     // if (subsidiaryId) {
       // dispatch(getLatestTableId("t_loan_type_setup", "Id", " subsidiaryId = " + subsidiaryId, setValue));
+      if (!id) {
       dispatch(getLatestTableId("t_department", "deptCode", " 1 = 1 ",setValue));
-    // }
+    }
   };
 
 useEffect (()=>{
@@ -200,6 +202,9 @@ useEffect (()=>{
                                   {option?.label}
                                 </div>
                               ))}
+                               {errors.subsidiaryId && touched.subsidiaryId && (
+                          <div className="invalid-text">{errors.subsidiaryId}</div>
+                        )}
                             </div>
                           </div>
                         </div>
