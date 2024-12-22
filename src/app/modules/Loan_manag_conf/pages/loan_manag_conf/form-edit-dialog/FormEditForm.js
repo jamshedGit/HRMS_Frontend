@@ -117,11 +117,11 @@ export function FormEditForm({
   };
 
   const filterLoanType = (subsidiaryId) => {
-    console.log("loan_type",loan_type);
+    
     const filteredOptions = loan_type?.filter((option) =>
       option.subsidiaryId?.includes(String(subsidiaryId)) // Ensure both are the same type (string)
     );
-    console.log(filteredOptions);
+    
   };
 
 useEffect(()=>{
