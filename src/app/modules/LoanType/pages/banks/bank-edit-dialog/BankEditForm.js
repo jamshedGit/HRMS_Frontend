@@ -58,6 +58,7 @@ export function BankEditForm({
   enableLoading,
   loading,
   userForEdit,
+  id,
 }) {
   const { dashboard } = useSelector((state) => state);
   const [defEmployee = null, setEmployeeDefault] = useState(null);
@@ -107,8 +108,9 @@ export function BankEditForm({
 
     // if (subsidiaryId) {
       // dispatch(getLatestTableId("t_loan_type_setup", "Id", " subsidiaryId = " + subsidiaryId, setValue));
-      dispatch(getLatestTableId("t_employee_earning", "Id", " 1 = 1 ",setValue));
-    // }
+      if(!id){
+      dispatch(getLatestTableId("t_loan_type_setup", "Id", " 1 = 1 ",setValue));
+    }
   };
 
 useEffect (()=>{
@@ -194,6 +196,9 @@ useEffect (()=>{
                                 {option.label}
                               </div>
                             ))}
+                                     {errors.subsidiaryId && touched.subsidiaryId && (
+                          <div className="invalid-text">{errors.subsidiaryId}</div>
+                        )}
                           </div>
                         </div>
                       </div>

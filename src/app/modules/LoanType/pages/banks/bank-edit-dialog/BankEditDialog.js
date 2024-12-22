@@ -141,6 +141,7 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
         enableLoading={enableLoading}
         loading={loading}
         userForEdit={userForEdit}
+        id={id}
       />
       <ToastContainer
         position="top-right"
