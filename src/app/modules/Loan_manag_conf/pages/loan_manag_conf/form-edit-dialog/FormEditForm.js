@@ -116,17 +116,7 @@ export function FormEditForm({
     });
   };
 
-  const filterLoanType = (subsidiaryId) => {
-    
-    const filteredOptions = loan_type?.filter((option) =>
-      option.subsidiaryId?.includes(String(subsidiaryId)) // Ensure both are the same type (string)
-    );
-    
-  };
 
-// useEffect(()=>{
-//   filterLoanType(4)
-// },[])
 
   return (
     <Formik
@@ -162,7 +152,6 @@ export function FormEditForm({
                         isDisabled={isUserForRead}
                         onChange={(e) => {
                           setFieldValue("subsidiaryId", e.value || null);
-                          filterLoanType(e.value)
                           check_Existed_Data(e.value);
                         }}
                         value={
