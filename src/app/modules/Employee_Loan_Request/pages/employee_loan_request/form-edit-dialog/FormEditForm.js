@@ -99,6 +99,7 @@ export function FormEditForm({
 
   useEffect(() => {
     if (changeLoanType) {
+  
       let loandetails = currentState?.loan_config_details_permission?.loanDetails?.details?.find(
         (item) => item.loan_typeId === changeLoanType
       );
@@ -136,8 +137,9 @@ export function FormEditForm({
         joiningDate.setHours(0, 0, 0, 0);
         setDateOfJoining(joiningDate); // Update state with the valid date
       }
-
+      setPayrollMonth(null);
       if (payroll?.startDate) {
+        console.log("payroll?.startDate111",payroll?.startDate)
         const payrollDate = new Date(payroll?.startDate);
         payrollDate.setHours(0, 0, 0, 0);
         setPayrollMonth(payrollDate); // Update state with the valid date
@@ -307,8 +309,9 @@ export function FormEditForm({
                       dateFormat="dd/MM/yyyy"
                       placeholder="Select Date"
                       type="date"
-                      minDate={payrollMonth}
-                      disabled={userForEdit?.details[0]?.is_deducted}
+                      // maxDate={new Date()}
+                      minDate={payrollMonth ? payrollMonth : undefined}
+                      disabled={!payrollMonth || userForEdit?.details[0]?.is_deducted || !values.loan_typeId }
                     />
                   </div>
 
