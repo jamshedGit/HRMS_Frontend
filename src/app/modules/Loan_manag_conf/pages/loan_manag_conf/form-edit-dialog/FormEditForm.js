@@ -124,9 +124,9 @@ export function FormEditForm({
     
   };
 
-useEffect(()=>{
-  filterLoanType(4)
-},[])
+// useEffect(()=>{
+//   filterLoanType(4)
+// },[])
 
   return (
     <Formik
@@ -162,6 +162,7 @@ useEffect(()=>{
                         isDisabled={isUserForRead}
                         onChange={(e) => {
                           setFieldValue("subsidiaryId", e.value || null);
+                          filterLoanType(e.value)
                           check_Existed_Data(e.value);
                         }}
                         value={
