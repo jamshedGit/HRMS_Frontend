@@ -139,7 +139,7 @@ export function FormEditForm({
       }
       setPayrollMonth(null);
       if (payroll?.startDate) {
-        console.log("payroll?.startDate111",payroll?.startDate)
+      
         const payrollDate = new Date(payroll?.startDate);
         payrollDate.setHours(0, 0, 0, 0);
         setPayrollMonth(payrollDate); // Update state with the valid date
