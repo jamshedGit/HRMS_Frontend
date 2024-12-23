@@ -126,6 +126,7 @@ export const reimbursement_claimSlice = createSlice({
             // Add the new entity to the start of the entities array
        
             state.entities.unshift(newEntity);
+            state.totalCount +=1;
         },
         
       

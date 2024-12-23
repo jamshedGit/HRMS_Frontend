@@ -68,10 +68,15 @@ export function FormEditForm({
   useEffect(() => {
     if (!user.Id) {
       dispatch(fetchAllFormsMenu(202, "allReimbursementTypeList"));
-      dispatch(fetchAllPayrollMonthYearList("allPayrollMonthYearList"));
+      const key = "allPayrollMonthYearList";  // The key parameter
+      if(employeeId){
+        dispatch(fetchAllPayrollMonthYearList(employeeId, key));
+      }
+
+      // dispatch(fetchAllPayrollMonthYearList("allPayrollMonthYearList"));
     }
     //allPayrolGroupList
-  }, [dispatch, user.Id]);
+  }, [dispatch, user.Id,employeeId]);
 
   const { currentState, userAccess } = useSelector((state) => {
     return {

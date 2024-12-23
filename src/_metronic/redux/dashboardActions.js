@@ -477,9 +477,10 @@ export const fetchAllReimbursementConfigList = (key) => async (dispatch) => {
 
 };
 
-export const fetchAllPayrollMonthYearList = (key) => async (dispatch) => {
+export const fetchAllPayrollMonthYearList = (employeeId, key) => async (dispatch) => {
+
   return await requestFromServer
-    .getAllPayrollMonthYearList()
+    .getAllPayrollMonthYearList(employeeId, key)
     .then((response) => {
       const entities = [...response.data?.data];
 
