@@ -1,3 +1,4 @@
+import { SERVER_MESSAGES } from "../../../utils/constants";
 import * as requestFromServer from "./redux-Crud";
 import {accrue_gratuity_configurationSlice, callTypes } from "./redux-Slice";
 import { toast } from "react-toastify";
@@ -48,7 +49,7 @@ export const deleteAccrueGratuityConfig = (id) => (dispatch) => {
     .then((response) => {
 
       dispatch(actions.AccrueGratuityConfigDeleted({ Id: id }));
-      toast.success("Successfully Deleted", {
+      toast.success(SERVER_MESSAGES.deletedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -60,7 +61,7 @@ export const deleteAccrueGratuityConfig = (id) => (dispatch) => {
     })
     .catch((error) => {
       dispatch(actions.catchError({ error, callType: callTypes.action }));
-      toast.error(error.response.data.message);
+      toast.error(SERVER_MESSAGES.deletedFail);
     });
 };
 
@@ -78,7 +79,7 @@ export const createAccrueGratuityConfig = (accrueGratuityConfigForCreation, disb
 
       dispatch(actions.accrueGratuityConfigCreated(user));
       disbaleLoading();
-      toast.success("Successfully Created", {
+      toast.success(SERVER_MESSAGES.insertedSuccess,{
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -116,7 +117,7 @@ export const updateAccrueGratuityConfig = (user, disbaleLoading, onHide) => (dis
     
       disbaleLoading();
       onHide();
-      toast.success(response.data.message , {
+      toast.success(SERVER_MESSAGES.updatedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
