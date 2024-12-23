@@ -1,3 +1,4 @@
+import { SERVER_MESSAGES } from "../../../utils/constants";
 import * as requestFromServer from "./redux-Crud";
 import { reimbursement_claimSlice, callTypes } from "./redux-Slice";
 import { toast } from "react-toastify";
@@ -52,7 +53,7 @@ export const deleteReimbursementClaim= (id) => (dispatch) => {
     .then((response) => {
 
       dispatch(actions.ReimbursementClaimDeleted({ Id: id }));
-      toast.success("Successfully Deleted", {
+      toast.success(SERVER_MESSAGES.deletedSuccess, {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
@@ -64,7 +65,7 @@ export const deleteReimbursementClaim= (id) => (dispatch) => {
     })
     .catch((error) => {
       dispatch(actions.catchError({ error, callType: callTypes.action }));
-      toast.error(error.response.data.message);
+      toast.error(SERVER_MESSAGES.deletedFail);
     });
 };
 
@@ -96,7 +97,7 @@ export const createReimbursementClaim = (reimbursementClaimForCreation, disbaleL
 
       dispatch(actions.reimbursementClaimCreated(user));
       disbaleLoading();
-      toast.success("Successfully Created", {
+      toast.success(SERVER_MESSAGES.insertedSuccess, {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
@@ -181,7 +182,7 @@ export const updateReimbursementClaim = (user, disbaleLoading, onHide) => (dispa
     
       disbaleLoading();
       onHide();
-      toast.success(response.data.message, {
+      toast.success(SERVER_MESSAGES.updatedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

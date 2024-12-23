@@ -114,6 +114,7 @@ export const loan_manag_confSlice = createSlice({
         
             // Add the combined entity to the beginning of the entities array
             state.entities.unshift(combinedEntity);
+            state.totalCount +=1;
           
         },
         loanManagConfigUpdated: (state, action) => {

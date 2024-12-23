@@ -143,7 +143,7 @@ export function MasterEditForm({
 }
 
 const setEndDate = (year,month,date, setFieldValue) => {
-   
+
   const totalDays = getTotalDaysInMonth(year,month); // 1 is February (months are 0-indexed)
 
 
@@ -156,6 +156,7 @@ const setEndDate = (year,month,date, setFieldValue) => {
   setDefaultEndDate(endDate);
 
   setFieldValue("month_days", totalDays);
+
 
 }
 
@@ -297,6 +298,11 @@ const setEndDate = (year,month,date, setFieldValue) => {
                         onChange={(e) => {
                           setFieldValue("month", e.value || null);
                           setShortDormat(e.value, values.year, setFieldValue) 
+                          if(values.year && values.month && values.startDate){
+                         
+                            setEndDate(values.year, e.value,values.startDate, setFieldValue)
+                          }
+                          
                         }}
                         value={
                           monthOptions?.find(

@@ -128,7 +128,7 @@ export const updatePayrollProcess = (user, disbaleLoading, onHide) => (dispatch)
     
       disbaleLoading();
       onHide();
-      toast.success(response.data.message, {
+      toast.success(SERVER_MESSAGES.updatedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
