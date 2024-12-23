@@ -128,6 +128,26 @@ export function BanksTable() {
         textAlign: "center", // Align header text to the left
       },
     },
+
+
+    {
+      dataField: "effective_date",
+      text: "effective date",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "10px",
+        textAlign: "center",
+      },
+      formatter: (cell) => {
+        const date = new Date(cell);
+        return date.toLocaleDateString("en-GB"); // This will format as dd-mm-yyyy
+      },
+      headerStyle: {
+        textAlign: "center", // Align header text to the left
+      },
+    },
    
        {
       dataField: "action",

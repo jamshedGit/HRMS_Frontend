@@ -340,7 +340,6 @@ export function BankEditForm({
                   </div>
                   <div className="from-group row">
 
-
                     <div className="col-12 col-md-4 mt-3">
                       <label>
                         Effective Date
