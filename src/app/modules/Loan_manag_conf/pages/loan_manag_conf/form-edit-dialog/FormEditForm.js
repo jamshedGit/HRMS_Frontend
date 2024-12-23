@@ -116,17 +116,7 @@ export function FormEditForm({
     });
   };
 
-  const filterLoanType = (subsidiaryId) => {
-    
-    const filteredOptions = loan_type?.filter((option) =>
-      option.subsidiaryId?.includes(String(subsidiaryId)) // Ensure both are the same type (string)
-    );
-    
-  };
 
-useEffect(()=>{
-  filterLoanType(4)
-},[])
 
   return (
     <Formik
