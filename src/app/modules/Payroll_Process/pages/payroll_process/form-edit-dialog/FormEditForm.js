@@ -54,7 +54,9 @@ export function FormEditForm({
       // dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsidiaries
       dispatch(fetchAllSubsidiaryData("allSubsidiaryList"));
       dispatch(fetchAllFormsMenu(127, "allPayrolGroupList"));
-      dispatch(fetchAllPayrollMonthYearList("allPayrollMonthYearList"));
+      // const key = "allPayrollMonthYearList";  // The key parameter
+      // dispatch(fetchAllPayrollMonthYearList("allPayrollMonthYearList"));
+      //  dispatch(fetchAllPayrollMonthYearList(employeeId, key));
 
 
     }
@@ -89,7 +91,12 @@ export function FormEditForm({
     }
   }, [currentState?.payroll_group_details]); 
 
+const getPayroll=(subsidiaryId)=>{
+  const key = "allPayrollMonthYearList";  // The key parameter
 
+       dispatch(fetchAllPayrollMonthYearList({subsidiaryId:subsidiaryId,employeeId:null}, key));
+
+}
   return (
     <Formik
       enableReinitialize={true}
@@ -129,6 +136,7 @@ export function FormEditForm({
                         onChange={(e) => {
                           setFieldValue("subsidiaryId", e.value || null);
                           payrollGroupDetails(e.value,values.payroll_groupId)
+                          getPayroll( e.value)
                         }}
                         value={
                           dashboard?.allSubsidiaryList?.find(
@@ -182,10 +190,10 @@ export function FormEditForm({
                       name="religionId"
                       label={
                         <span>
-                          Select Payroll Month<span style={{ color: "red" }}>*</span>
+                          Payroll Month<span style={{ color: "red" }}>*</span>
                         </span>
                       }
-                      
+
                       isDisabled={isUserForRead}
                       onChange={(e) => {
                         setFieldValue("payroll_monthId", e.value || null);

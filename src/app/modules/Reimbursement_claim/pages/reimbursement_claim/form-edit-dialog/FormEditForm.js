@@ -70,7 +70,8 @@ export function FormEditForm({
       dispatch(fetchAllFormsMenu(202, "allReimbursementTypeList"));
       const key = "allPayrollMonthYearList";  // The key parameter
       if(employeeId){
-        dispatch(fetchAllPayrollMonthYearList(employeeId, key));
+        // dispatch(fetchAllPayrollMonthYearList(employeeId, key));
+          dispatch(fetchAllPayrollMonthYearList({subsidiaryId:null,employeeId:employeeId}, key));
       }
 
       // dispatch(fetchAllPayrollMonthYearList("allPayrollMonthYearList"));

@@ -208,7 +208,7 @@ export const getAllReimbursementConfigList = async () => {
 export const getAllPayrollMonthYearList  = async (body) => {
   return await axios.post(
     `${USERS_URL}/reimbursement_claim/read-payroll-month`,{
-      employeeId:body
+      body
     });
 };
 
