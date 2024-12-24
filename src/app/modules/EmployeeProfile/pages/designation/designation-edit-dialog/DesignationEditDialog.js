@@ -139,7 +139,8 @@ export function DesignationEditDialog({ id, show, onHide, userForRead }) {
         routingCode: user.routingCode,
         contractTypeId: user.contractTypeId,
         cycleTypeId: user.cycleTypeId,
-        requireDeligation: user.requireDeligation
+        requireDeligation: user.requireDeligation,
+        employeeStatusId:user.employeeStatusId,
       };
 
     

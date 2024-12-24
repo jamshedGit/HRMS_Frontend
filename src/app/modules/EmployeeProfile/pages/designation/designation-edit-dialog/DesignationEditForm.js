@@ -327,12 +327,12 @@ export function DesignationEditForm({
 
   const [defEmployeeReportTo = null, setEmployeeReportToDefault] = useState(null);
   const [defEmployeeGrade = null, setDefualtEmployeeGrade] = useState(null);
-  const [defContactList = null, setDefaultContactList] = useState([{ relation_name: '', relation: '', contactNo: '' }]);
+  const [defContactList = null, setDefaultContactList] = useState([{ relation_name: '', contactNo: '',relation_text:'' }]);
   const [currentDate, setCurrentDate] = useState('');
   const [deferrors, setErrors] = useState({});
   const [defProbationPolicyMonth, setDefaultProbationPolicyMonth] = useState({});
   const [defContractExpiryPolicy, setDefaultCnotractExpiryPolicy] = useState({});
-
+  const [defemployeeStatus = null, setDefemployeeStatus] = useState(null);
 
   //off for temp
   // useEffect(() => {
@@ -427,7 +427,7 @@ export function DesignationEditForm({
       dispatch(fetchAllActiveEmployees());
       dispatch(fetchAllFormsMenu(158, "allDesignations")); // For All Designations
       //   dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsisidaries
-
+      dispatch(fetchAllFormsMenu(315, "allEmployeeStatus"));
       dispatch(fetchAllSubsidiaryData("allSubsidiaryList"))
       dispatch(fetchAllFormsMenu(190, "allMaritalStatus")); // For All Subsisidaries, "allMaritalStatus")); // For All Marital Status
       // dispatch(fetchAllFormsMenu(87));
@@ -470,6 +470,7 @@ export function DesignationEditForm({
   useEffect(() => {
     if (user.dateOfJoining) {
       setJoiningDate(new Date(user.dateOfJoining));
+     
     }
   }, [user.dateOfJoining]);
 
@@ -734,6 +735,20 @@ export function DesignationEditForm({
     );
 
   }, [user?.employeeTypeId, dashboard.employeeTypeId]);
+
+
+  useEffect(() => {
+    const empStatusId = defemployeeStatus?.value ? defemployeeStatus.value : user.employeeStatusId;
+
+
+    setDefemployeeStatus(
+      dashboard.allEmployeeStatus &&
+      dashboard.allEmployeeStatus.filter((item) => {
+        return item.value === empStatusId;
+      })
+    );
+
+  }, [user?.employeeStatusId]);
   //======================= End
 
   useEffect(() => {
@@ -1108,8 +1123,8 @@ export function DesignationEditForm({
       if (!contact.relation_name) {
         newErrors[`relation_name-${index}`] = 'Relation Name is required';
       }
-      if (!contact.relation) {
-        newErrors[`relation-${index}`] = 'Relation is required';
+      if (!contact.relation_text) {
+        newErrors[`relation_text-${index}`] = 'Relation is required';
       }
       if (!contact.contactNo || !/^\d{11}$/.test(contact.contactNo)) {
         newErrors[`contactNo-${index}`] = 'Contact No must be exactly 11 digits';
@@ -1327,6 +1342,9 @@ export function DesignationEditForm({
                     </div>
 
                     <div className="from-group row">
+
+                    </div>
+                    <div className="from-group row">
                       <div className="col-12 col-md-4 mt-3">
                         <SearchSelect
                           name="subsidiaryId"
@@ -1340,6 +1358,7 @@ export function DesignationEditForm({
                             setDefualtSubsidiaryList(e);
                             fetchEmployeePolicyBySubsidiaryId(e.value);
                             //handlePaymenModeChanged(e)
+                        
                           }}
 
                           value={(defSubsidiary || null)}
@@ -1349,11 +1368,25 @@ export function DesignationEditForm({
                         />
 
                       </div>
+
+                      {
+                        <div className="col-12 col-md-4 mt-3">
+                          <Field
+                            name="employeeCode"
+                            component={Input}
+                            maxLength="10"
+                            placeholder=" Employee Code"
+                            label={<span> Employee Code<span style={{ color: 'red' }}>*</span></span>}
+                            autoComplete="off"
+                          />
+                        </div>
+                      }
+
                     </div>
                     <div className="from-group row">
                       {
 
-                        <div className="col-12 col-md-4 mt-3">
+                        <div className="col-12 col-md-1 mt-3">
                           <Select
                             label={<span> Title<span style={{ color: 'red' }}>*</span></span>}
                             name="title"
@@ -1377,22 +1410,7 @@ export function DesignationEditForm({
                         </div>
 
                       }
-                      {
-                        <div className="col-12 col-md-4 mt-3">
-                          <Field
-                            name="employeeCode"
-                            component={Input}
-                            maxLength="10"
-                            placeholder=" Employee Code"
-                            label={<span> Employee Code<span style={{ color: 'red' }}>*</span></span>}
-                            autoComplete="off"
-                          />
-                        </div>
-                      }
-
-                    </div>
-                    <div className="from-group row">
-                      <div className="col-12 col-md-4 mt-3">
+                      <div className="col-12 col-md-3 mt-3">
                         <Field
                           name="firstName"
                           component={Input}
@@ -1401,7 +1419,7 @@ export function DesignationEditForm({
                           autoComplete="off"
                         />
                       </div>
-                      <div className="col-12 col-md-4 mt-3">
+                      <div className="col-12 col-md-3 mt-3">
                         <Field
                           name="middleName"
                           component={Input}
@@ -1410,7 +1428,7 @@ export function DesignationEditForm({
                           autoComplete="off"
                         />
                       </div>
-                      <div className="col-12 col-md-4 mt-3">
+                      <div className="col-12 col-md-3 mt-3">
                         <Field
                           name="lastName"
                           component={Input}
@@ -1678,6 +1696,33 @@ export function DesignationEditForm({
                           error={errors.employeeTypeId}
                           touched={touched.employeeTypeId}
                           options={dashboard.allEmpTypeChildMenus}
+                        />
+                      </div>
+
+
+                      <div className="col-12 col-md-4 mt-3">
+                        <SearchSelect
+                          name="employeeTypeId"
+                          label={<span> Employee Status<span style={{ color: 'red' }}>*</span></span>}
+                          isDisabled={isUserForRead && true}
+                          onBlur={() => {
+                            // handleBlur({ target: { name: "countryId" } });
+                          }}
+                          onChange={(e) => {
+
+                            setFieldValue("employeeStatusId", e.value || null);
+
+
+                            setDefemployeeStatus(e);
+                     
+
+                     
+                          }}
+
+                          value={(defemployeeStatus || null)}
+                          error={errors.employeeStatusId}
+                          touched={touched.employeeStatusId}
+                          options={dashboard?.allEmployeeStatus}
                         />
                       </div>
                       <div className="col-12 col-md-4 mt-3">
@@ -2743,7 +2788,7 @@ export function DesignationEditForm({
                                 {deferrors[`relation_name-${rightindex}`] && <div className="form-feedBack">{deferrors[`relation_name-${rightindex}`]}</div>}
                               </td>
                               <td>
-                                <select className="form-control" value={obj.relation}
+                                {/* <select className="form-control" value={obj.relation}
                                   onChange={(e) => {
                                     handleFieldChangedContact(rightindex, 'relation', e.target.value);
                                     setErrors((prev) => ({ ...prev, [`relation-${rightindex}`]: '' })); // Clear error on change
@@ -2754,9 +2799,20 @@ export function DesignationEditForm({
                                       return <option value={x.value}> {x.label} </option>
                                     })}
 
-                                  {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
-                                </select>
-                                {deferrors[`relation-${rightindex}`] && <div className="form-feedBack">{deferrors[`relation-${rightindex}`]}</div>}
+                                 
+                                </select> */}
+
+<input
+                                  className="form-control"
+                                  type="text"
+                                  onChange={(e) => {
+                                    handleFieldChangedContact(rightindex, 'relation_text', e.target.value);
+                                    setErrors((prev) => ({ ...prev, [`relation_text-${rightindex}`]: '' })); // Clear error on change
+                                  }}
+                                  value={obj.relation_text}
+                                />
+
+                                {deferrors[`relation_text-${rightindex}`] && <div className="form-feedBack">{deferrors[`relation_text-${rightindex}`]}</div>}
                               </td>
                               <td>
                                 <input className="form-control" type="text"
@@ -3047,7 +3103,7 @@ export function DesignationEditForm({
                                     disabled={isUserForRead}
                                     autoComplete="off"
                                     minDate={values.dateOfBirth ? new Date(values.dateOfBirth) : null}
-                                    maxDate={ new Date()}
+                                    maxDate={new Date()}
                                   />
                                   {deferrors[`startDate_A-${rightindex}`] && <div className="form-feedBack">{deferrors[`startDate_A-${rightindex}`]}</div>}
                                 </td>
@@ -3067,7 +3123,7 @@ export function DesignationEditForm({
                                     disabled={isUserForRead}
                                     autoComplete="off"
                                     minDate={values.dateOfBirth ? new Date(values.dateOfBirth) : null}
-                                  
+
                                   />
                                   {deferrors[`endDate_A-${rightindex}`] && <div className="form-feedBack">{deferrors[`endDate_A-${rightindex}`]}</div>}
                                 </td>
@@ -3165,7 +3221,7 @@ export function DesignationEditForm({
                                     disabled={isUserForRead}
                                     autoComplete="off"
                                     minDate={values.dateOfBirth ? new Date(values.dateOfBirth) : null}
-                                    maxDate={ new Date()}
+                                    maxDate={new Date()}
                                   />
                                   {deferrors[`startDate-${rightindex}`] && <div className="form-feedBack">{deferrors[`startDate-${rightindex}`]}</div>}
                                 </td>
@@ -3185,7 +3241,7 @@ export function DesignationEditForm({
                                     disabled={isUserForRead}
                                     autoComplete="off"
                                     minDate={values.dateOfBirth ? new Date(values.dateOfBirth) : null}
-                                   
+
                                   />
                                   {deferrors[`endDate-${rightindex}`] && <div className="form-feedBack">{deferrors[`endDate-${rightindex}`]}</div>}
                                 </td>
@@ -3222,7 +3278,7 @@ export function DesignationEditForm({
                             <>
 
                               <tr>
-                                
+
                                 <td id={rightindex} onClick={deleteRowIncident} > <span className="btn btn-danger btn-sm"> Delete</span></td>
                                 <td>
                                   <input className="form-control" type="text"
@@ -3284,7 +3340,7 @@ export function DesignationEditForm({
                                     disabled={isUserForRead}
                                     autoComplete="off"
                                     minDate={values.dateOfBirth ? new Date(values.dateOfBirth) : null}
-                                    maxDate={ new Date()}
+                                    maxDate={new Date()}
                                   />
                                   {deferrors[`incidentDate-${rightindex}`] && <div className="form-feedBack">{deferrors[`incidentDate-${rightindex}`]}</div>}
                                 </td>
