@@ -31,9 +31,6 @@ export function LeaveRegisterPage() {
     if (!dashboard?.allSubsidiaryList?.length)
       dispatch(fetchAllSubsidiaryData("allSubsidiaryList"));
 
-    if (!dashboard.allEmployees || !dashboard.allEmployees.length)
-      dispatch(fetchAllActiveEmployees());
-
     if (!dashboard?.allDesignations || !dashboard?.allDesignations?.length)
       dispatch(fetchAllFormsMenu(158, "allDesignations"));
 

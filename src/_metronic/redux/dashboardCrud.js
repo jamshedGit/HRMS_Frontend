@@ -32,6 +32,10 @@ export const getAllActiveEmployees = async () => {
   return await axios.post(`${USERS_URL}/settings/read-all-profile`);
 };
 
+export const getAllActiveEmployeesBySubsidiary = async (body) => {
+  return await axios.post(`${USERS_URL}/settings/read-all-profile-by-subsidiary`,body);
+};
+
 export const getAllEmployeeSalaryReviewForDDL = async (employeeId) => {
   return await axios.post(
     `${USERS_URL}/settings/read-salary-revision-by-employeeId`,

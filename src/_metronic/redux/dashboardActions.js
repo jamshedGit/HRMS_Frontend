@@ -32,6 +32,19 @@ export const fetchAllActiveEmployees = () => async (dispatch) => {
     });
 };
 
+export const fetchAllActiveEmployeesBySubsidiary = (subsidiaryId) => async (dispatch) => {
+  return await requestFromServer
+    .getAllActiveEmployeesBySubsidiary({subsidiaryId})
+    .then((response) => {
+      const entities = response.data?.data;
+
+      dispatch(actions.AllActiveEmployeeFetch(entities));
+    })
+    .catch((error) => {
+      toast.error("Something went wrong");
+    });
+};
+
 export const fetchEmpSalaryRevisionByEmployeeId = (employeeId) => async (dispatch) => {
   return await requestFromServer
     .getAllEmployeeSalaryReviewForDDL(employeeId)
