@@ -611,13 +611,19 @@ export function DesignationEditForm({
 
   //===== Date Of Retirement
   useEffect(() => {
-    if (user.retirementAgeFemale) {
+    if (user?.gender=="Female") {
       const retirementDate = new Date(user.dateOfBirth);
       retirementDate.setFullYear(retirementDate.getFullYear() + user.retirementAgeFemale);
 
       setDRetirmentDate(new Date(retirementDate));
     }
-  }, [user.retirementAgeFemale]);
+    if (user?.gender=="Male") {
+      const retirementDate = new Date(user.dateOfBirth);
+      retirementDate.setFullYear(retirementDate.getFullYear() + user.retirementAgeMale);
+
+      setDRetirmentDate(new Date(retirementDate));
+    }
+  }, [user?.retirementAgeFemale || user.retirementAgeMale]);
 
   //=========== END
 
@@ -972,7 +978,7 @@ export function DesignationEditForm({
     try {
       const response = await axios.post(`${USERS_URL}/policy/read-policy-by-subsidiaryId`, { subsidiaryId: subsidiaryId || 0 });
 
-
+console.log("response_poliocy",response)
       setDefaultProbationPolicyMonth(response?.data?.data[0].probationPolicyInMonth)
       setDefaultCnotractExpiryPolicy(response?.data?.data[0].contractualPolicyInMonth)
       // const currentDate = new Date(user.dateOfJoining); // Current date
