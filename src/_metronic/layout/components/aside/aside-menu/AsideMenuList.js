@@ -96,7 +96,7 @@ export function AsideMenuList({ layoutProps }) {
 
 
       <div style={{ position: "fixed", width: "100%",marginTop:"45px" }}>
-        <Navbar className="navbar" bg="light" expand="lg">
+        <Navbar className="navbar" bg="light" expand="lg" variant="dark">
           {/* <Navbar.Brand href="#home">MyApp</Navbar.Brand> */}
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
