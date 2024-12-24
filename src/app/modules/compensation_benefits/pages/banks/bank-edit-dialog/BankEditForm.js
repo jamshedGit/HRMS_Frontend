@@ -106,8 +106,8 @@ export function BankEditForm({
       dispatch(fetchAllFormsMenu(126, "allCurrencyCodeList")); // For All currecy Codes
       dispatch(fetchAllFormsMenu(143, "allEmployeeGradeList")); // For All Grade Codes
       dispatch(fetchAllFormsMenu(88, "allEmpTypeChildMenus")); // For EmployeeType
-      dispatch(fetchAllEarningList(1)); // For Earning
-      dispatch(fetchAllDeductionList(2)); // For deduction
+      // dispatch(fetchAllEarningList(1)); // For Earning
+      // dispatch(fetchAllDeductionList(2)); // For deduction
       // dispatch(fetchAllFormsMenu(133, "allSubsidiaryList")); // For All Subsisidaries
     }
   }, [dispatch]);
@@ -140,6 +140,8 @@ export function BankEditForm({
   useEffect(() => {
 
     const subsidiaryId = defSubsidiary?.value ? defSubsidiary.value : user.subsidiaryId;
+    dispatch(fetchAllEarningList(1, subsidiaryId)); // For Earning
+    dispatch(fetchAllDeductionList(2, subsidiaryId)); // For deduction
     setDefualtSubsidiaryList(
       dashboard.allSubsidiaryList &&
       dashboard.allSubsidiaryList.filter((item) => {
@@ -328,6 +330,9 @@ export function BankEditForm({
                           onChange={(e) => {
                             setFieldValue("subsidiaryId", e.value || null);
                             setDefualtSubsidiaryList(e);
+                            dispatch(fetchAllEarningList(1, e.value)); // For Earning
+                            dispatch(fetchAllDeductionList(2, e.value));
+                            setDefaultEarningList([])
                             //handlePaymenModeChanged(e)
 
                           }}

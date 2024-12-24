@@ -250,8 +250,6 @@ export function BankEditForm({
       dispatch(fetchAllActiveEmployeesSalaryForDDL(null));
       dispatch(fetchAllFormsMenu(126, "allCurrencyCodeList")); // For All currecy Codes
       //dispatch(fetchAllFormsMenu(158, "allDesignations")); // For All Designations
-      dispatch(fetchAllEarningList(1));
-      dispatch(fetchAllDeductionList(2));
       dispatch(fetchAllEmpCompensationBenefitsForDDL(2));
       dispatch(fetchAllFormsMenu(150, "allPaymentModeList")); // For All Payment Codes
 
@@ -337,7 +335,8 @@ export function BankEditForm({
 
   useEffect(() => {
     const employeeId = user.employeeId; // defEmployee?.value ? defEmployee.value : user.employeeId;
-
+    dispatch(fetchAllEarningList(1, '', employeeId));
+    dispatch(fetchAllDeductionList(2, '', employeeId));
     dispatch(fetchAllActiveEmployeesSalaryForDDL(employeeId));
     setEmployeeDefault(
       dashboard.allEmployeesSalaryDDL &&
@@ -671,6 +670,8 @@ export function BankEditForm({
                           setFieldValue("employeeId", e.value || null);
                           setEmployeeDefault(e);
                           handleChanged(e, setFieldValue)
+                          dispatch(fetchAllEarningList(1, '', e.value));
+                          dispatch(fetchAllDeductionList(2, '', e.value));
                           //  dispatch(fetchAllActiveEmployees(e.value));
                         }}
                         value={(user.employeeId && (dashboard.allEmployeesSalaryDDL &&

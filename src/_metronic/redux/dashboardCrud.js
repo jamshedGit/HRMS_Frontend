@@ -14,9 +14,11 @@ export const getAllCountry = async () => {
   );
 };
 
-export const getAllEarningDeductionList = async (Id) => {
+export const getAllEarningDeductionList = async (Id, subsidiaryId, employeeId) => {
   return await axios.post(`${USERS_URL}/stoppage/read-earning-deduction-list`, {
     flag: Id,
+    subsidiaryId: subsidiaryId,
+    employeeId: employeeId
   });
 };
 
