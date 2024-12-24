@@ -306,9 +306,9 @@ export const fetchAllSubsidiaryData = (key) => async (dispatch) => {
  * @param {String} key 
  * @returns 
  */
-export const fetchAllFiscalYearData = (key) => async (dispatch) => {
+export const fetchAllFiscalYearData = (key, employeeId) => async (dispatch) => {
   return await requestFromServer
-    .getAllFiscalYear()
+    .getAllFiscalYear({employeeId})
     .then((response) => {
       const entities = [...response.data?.data];
       dispatch(actions.AllChildMenusFetch({ entities, key }));
