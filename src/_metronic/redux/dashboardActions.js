@@ -83,9 +83,9 @@ export const fetchAllEarningDeductionList = (Id) => async (dispatch) => {
     });
 };
 
-export const fetchAllEarningList = (Id) => async (dispatch) => {
+export const fetchAllEarningList = (Id, subsidiaryId, employeeId = '') => async (dispatch) => {
   return await requestFromServer
-    .getAllEarningDeductionList(Id)
+    .getAllEarningDeductionList(Id, subsidiaryId, employeeId)
     .then((response) => {
       const entities = response.data?.data;
       dispatch(actions.AllEarningHeadsFetch(entities));
@@ -96,9 +96,9 @@ export const fetchAllEarningList = (Id) => async (dispatch) => {
 };
 
 
-export const fetchAllDeductionList = (Id) => async (dispatch) => {
+export const fetchAllDeductionList = (Id, subsidiaryId, employeeId = '') => async (dispatch) => {
   return await requestFromServer
-    .getAllEarningDeductionList(Id)
+    .getAllEarningDeductionList(Id, subsidiaryId, employeeId)
     .then((response) => {
       const entities = response.data?.data;
       dispatch(actions.AllDeductionHeadsFetch(entities));
