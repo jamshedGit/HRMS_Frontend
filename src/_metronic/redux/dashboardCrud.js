@@ -114,8 +114,8 @@ export const getAllSubsidiary = async (Id) => {
   return await axios.get(`${USERS_URL}/settings/read-all-subsidiaries`);
 };
 
-export const getAllFiscalYear = async (Id) => {
-  return await axios.get(`${USERS_URL}/settings/read-all-fiscal-year`);
+export const getAllFiscalYear = async (body) => {
+  return await axios.post(`${USERS_URL}/settings/read-all-fiscal-year`,body);
 };
 
 export const getAllParentDepartments = async (Id) => {

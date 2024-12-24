@@ -49,22 +49,22 @@ export function FormCard() {
 
     if (!dashboard.allEmployees || !dashboard.allEmployees.length)
       dispatch(fetchAllActiveEmployees());
-    if (!dashboard?.allFiscalYears?.length)
-      dispatch(fetchAllFiscalYearData("allFiscalYears"));
   }, [dispatch, formUIProps.employeeId, formUIProps.yearId, formUIProps.queryParamsLeaveEnc])
 
 
   //Update Leave Balances whenever employee Id is changed or leave encashment table is updated
   //Also update dropdown of leave type when employee is selected
   useEffect(() => {
-    dispatch(actions.fetchLeaveBalances(formUIProps.employeeId))
     dispatch(fetchEncashmentLeaveType("allLeaveTypes", formUIProps.employeeId, formUIProps.yearId));
-    dispatch(actions.getPayrollMonth(formUIProps.employeeId));
-
   }, [dispatch, formUIProps.employeeId, formUIProps.yearId, entities])
 
 
-
+  useEffect(() => {
+    dispatch(actions.fetchLeaveBalances(formUIProps.employeeId))
+    dispatch(actions.getPayrollMonth(formUIProps.employeeId));
+    dispatch(fetchAllFiscalYearData("allFiscalYears", formUIProps.employeeId));
+  }, [formUIProps.employeeId])
+  
   return (
     < Card >
       {/* Card Starts */}
