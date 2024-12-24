@@ -71,7 +71,7 @@ export const getAllEarningHeads = async (Id) => {
 };
 
 export const getAllDepartments = async (Id) => {
-  return await axios.get(`${USERS_URL}/settings/read-all-dept`, {
+  return await axios.post(`${USERS_URL}/settings/read-all-dept`, {
     Id: Id,
   });
 };

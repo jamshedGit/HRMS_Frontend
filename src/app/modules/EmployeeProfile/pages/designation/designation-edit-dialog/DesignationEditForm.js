@@ -327,7 +327,7 @@ export function DesignationEditForm({
 
   const [defEmployeeReportTo = null, setEmployeeReportToDefault] = useState(null);
   const [defEmployeeGrade = null, setDefualtEmployeeGrade] = useState(null);
-  const [defContactList = null, setDefaultContactList] = useState([{ relation_name: '', contactNo: '',relation_text:'' }]);
+  const [defContactList = null, setDefaultContactList] = useState([{ relation_name: '', contactNo: '', relation_text: '' }]);
   const [currentDate, setCurrentDate] = useState('');
   const [deferrors, setErrors] = useState({});
   const [defProbationPolicyMonth, setDefaultProbationPolicyMonth] = useState({});
@@ -414,7 +414,7 @@ export function DesignationEditForm({
 
 
 
-      dispatch(fetchAllDept(1));
+      // dispatch(fetchAllDept(1));
       dispatch(fetchAllFormsMenu(143, "allEmployeeGradeList")); // For All Grade Codes
       dispatch(fetchAllFormsMenu(127, "allChildMenus")); // For Payroll Group
       dispatch(fetchAllFormsMenu(174, "allTeamsChildMenus")); // For Teams
@@ -470,7 +470,7 @@ export function DesignationEditForm({
   useEffect(() => {
     if (user.dateOfJoining) {
       setJoiningDate(new Date(user.dateOfJoining));
-     
+
     }
   }, [user.dateOfJoining]);
 
@@ -1264,6 +1264,13 @@ export function DesignationEditForm({
     setIsExtendedfoInfoVisible(!isExtendedfoVisible);
   };
 
+  const fetchDepartment=(subsidiaryId)=>{
+    dispatch(fetchAllDept(subsidiaryId));
+  }
+
+  useEffect (()=>{
+    fetchDepartment(user?.subsidiaryId)
+  },[user?.subsidiaryId])
 
 
   return (
@@ -1358,7 +1365,8 @@ export function DesignationEditForm({
                             setDefualtSubsidiaryList(e);
                             fetchEmployeePolicyBySubsidiaryId(e.value);
                             //handlePaymenModeChanged(e)
-                        
+                            fetchDepartment(e.value)
+
                           }}
 
                           value={(defSubsidiary || null)}
@@ -1544,13 +1552,24 @@ export function DesignationEditForm({
                           onChange={(e) => {
                             setFieldValue("departmentId", e.value || null);
                             setDefaultDept(e);
-                            dispatch(fetchAllDept(e.value));
+                            // dispatch(fetchAllDept(e.value));
                           }}
-                          value={(defDept || null)}
+                          // value={(defDept || null)}
+                          value={
+                            dashboard.allDept?.find(
+                              (option) => option?.value === values?.departmentId
+                            ) || null
+                          }
                           error={errors.departmentId}
                           touched={touched.departmentId}
                           options={dashboard.allDept}
+                  
                         />
+
+
+
+                      
+
                       </div>
 
                       <div className="col-12 col-md-4 mt-3">
@@ -1714,9 +1733,9 @@ export function DesignationEditForm({
 
 
                             setDefemployeeStatus(e);
-                     
 
-                     
+
+
                           }}
 
                           value={(defemployeeStatus || null)}
@@ -2802,7 +2821,7 @@ export function DesignationEditForm({
                                  
                                 </select> */}
 
-<input
+                                <input
                                   className="form-control"
                                   type="text"
                                   onChange={(e) => {
