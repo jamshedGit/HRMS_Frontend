@@ -120,8 +120,6 @@ export function FormTable(user) {
       dispatch(fetchAllFormsMenu(127, "allChildMenus")); // For Payroll Group
       dispatch(fetchAllFormsMenu(45, "allPayrollAccounts")); // For Basic Pay Accounts
       dispatch(fetchAllFormsMenu(45, "allPayrollPayableAccounts")); // For Payable Accounts
-      dispatch(fetchAllDeductionList(2)); //  For Getting All Deduction Heads
-      dispatch(fetchAllEarningList(1));
     }
   }, [dispatch]);
 
@@ -275,7 +273,8 @@ export function FormTable(user) {
         .required(VALIDATION_MESSAGES.required),
       payroll_templateId: Yup.string(),
       employer_uniqueId: Yup.string()
-        .required(VALIDATION_MESSAGES.required),
+        .required(VALIDATION_MESSAGES.required)
+        .max(20, 'Max 20 Characters'),
       payroll_approverId: Yup.string()
         .required(VALIDATION_MESSAGES.required),
       basicSalaryId: Yup.string()
@@ -343,7 +342,7 @@ export function FormTable(user) {
       eobi_basis: Yup.number()
         .when('isEnableEOBI', {
           is: true, // if select value is 2
-          then: Yup.number().min(0, VALIDATION_MESSAGES.minZeroValue).required(VALIDATION_MESSAGES.required),
+          then: Yup.number().min(0, VALIDATION_MESSAGES.minZeroValue).required(VALIDATION_MESSAGES.required).max(999999999, 'Max 9 Characters') ,
           otherwise: Yup.number().notRequired(),
         }),
       eobi_employeer_value_in_percent: Yup.number()
@@ -367,7 +366,7 @@ export function FormTable(user) {
       sessi_basis: Yup.number()
         .when('isEnableSESSI', {
           is: true, // if select value is 2
-          then: Yup.number().min(0, VALIDATION_MESSAGES.minZeroValue).required(VALIDATION_MESSAGES.required),
+          then: Yup.number().min(0, VALIDATION_MESSAGES.minZeroValue).required(VALIDATION_MESSAGES.required).max(999999999, 'Max 9 Characters'),
           otherwise: Yup.number().notRequired(),
         }),
       sessi_employeer_value_in_percent: Yup.number()
@@ -543,6 +542,8 @@ export function FormTable(user) {
 
   useEffect(() => {
     dispatch(fetchAllLeaveTypeBySubsidiary("allLeaveTypes", currentState?.userForEdit?.subsidiaryId || ''));
+    dispatch(fetchAllDeductionList(2, currentState?.userForEdit?.subsidiaryId || '', ''));
+    dispatch(fetchAllEarningList(1, currentState?.userForEdit?.subsidiaryId || '', ''));
   }, [currentState?.userForEdit?.subsidiaryId])
 
   const validate = () => {
@@ -551,19 +552,22 @@ export function FormTable(user) {
     defBankInfoList.forEach((objValidate, index) => {
 
       if (!objValidate.journalBankAccountId || objValidate.journalBankAccountId == "-1") {
-        newErrors[`journalBankAccountId-${index}`] = 'Required*';
+        newErrors[`journalBankAccountId-${index}`] = VALIDATION_MESSAGES.required;
       }
       if (!objValidate.bankCode) {
-        newErrors[`bankCode-${index}`] = 'Required*';
+        newErrors[`bankCode-${index}`] = VALIDATION_MESSAGES.required;
       }
       // Check if factorValue is required
       if (!objValidate.bankAccountNo) {
-        newErrors[`bankAccountNo-${index}`] = 'Required*';
+        newErrors[`bankAccountNo-${index}`] = VALIDATION_MESSAGES.required;
+      }
+      else if(objValidate.bankAccountNo?.toString()?.trim()?.length > 20){
+        newErrors[`bankAccountNo-${index}`] = `Max 20 Characters`
       }
 
       // Check if amount is required
       if (!objValidate.bankName) {
-        newErrors[`bankName-${index}`] = 'Required*';
+        newErrors[`bankName-${index}`] = VALIDATION_MESSAGES.required;
       }
     });
 
@@ -657,6 +661,8 @@ export function FormTable(user) {
                         setFieldValue("subsidiaryId", e.value || null);
                         setDefualtSubsidiaryList(e);
                         dispatch(fetchAllLeaveTypeBySubsidiary("allLeaveTypes", e.value));
+                        dispatch(fetchAllDeductionList(2,  e.value, ''));
+                        dispatch(fetchAllEarningList(1,  e.value, ''));
                         //handlePaymenModeChanged(e)
                       }}
 
@@ -723,8 +729,8 @@ export function FormTable(user) {
                       name="employer_uniqueId"
                       component={Input}
                       type="number"
-                      placeholder="Employee Unique ID"
-                      label={<span>Employee Unique ID<span style={{ color: 'red' }}>*</span></span>}
+                      placeholder="Employer Unique ID"
+                      label={<span>Employer Unique ID<span style={{ color: 'red' }}>*</span></span>}
                       autoComplete="off"
                     />
                   </div>
