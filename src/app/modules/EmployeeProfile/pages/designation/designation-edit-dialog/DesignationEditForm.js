@@ -333,7 +333,7 @@ export function DesignationEditForm({
   const [defProbationPolicyMonth, setDefaultProbationPolicyMonth] = useState({});
   const [defContractExpiryPolicy, setDefaultCnotractExpiryPolicy] = useState({});
   const [defemployeeStatus = null, setDefemployeeStatus] = useState(null);
-
+  const [profilePolicy, setProfilePolicy] = useState(null);
   //off for temp
   // useEffect(() => {
   //   if (user.Id) {
@@ -484,6 +484,24 @@ export function DesignationEditForm({
     }
   }, [user.dateOfBirth]);
 
+
+  useEffect(() => {
+
+    if (user?.dateOfRetirement) {
+      setDRetirmentDate(new Date(user?.dateOfRetirement));
+
+    }
+  }, [user?.dateOfRetirement]);
+
+
+  useEffect(() => {
+
+    if (user?.dateOfConfirmationDue) {
+      setConfirmationDueDate(new Date(user?.dateOfConfirmationDue));
+
+    }
+  }, [user?.dateOfConfirmationDue]);
+
   //===== lastReviewDate
   useEffect(() => {
 
@@ -611,17 +629,17 @@ export function DesignationEditForm({
 
   //===== Date Of Retirement
   useEffect(() => {
-    if (user?.gender=="Female") {
+    if (user?.gender == "Female") {
       const retirementDate = new Date(user.dateOfBirth);
-      retirementDate.setFullYear(retirementDate.getFullYear() + user.retirementAgeFemale);
+      // retirementDate.setFullYear(retirementDate.getFullYear() + user.retirementAgeFemale);
 
-      setDRetirmentDate(new Date(retirementDate));
+      // setDRetirmentDate(new Date(retirementDate));
     }
-    if (user?.gender=="Male") {
+    if (user?.gender == "Male") {
       const retirementDate = new Date(user.dateOfBirth);
-      retirementDate.setFullYear(retirementDate.getFullYear() + user.retirementAgeMale);
+      // retirementDate.setFullYear(retirementDate.getFullYear() + user.retirementAgeMale);
 
-      setDRetirmentDate(new Date(retirementDate));
+      // setDRetirmentDate(new Date(retirementDate));
     }
   }, [user?.retirementAgeFemale || user.retirementAgeMale]);
 
@@ -977,8 +995,8 @@ export function DesignationEditForm({
   const fetchEmployeePolicyBySubsidiaryId = async (subsidiaryId) => {
     try {
       const response = await axios.post(`${USERS_URL}/policy/read-policy-by-subsidiaryId`, { subsidiaryId: subsidiaryId || 0 });
-
-console.log("response_poliocy",response)
+      setProfilePolicy(response)
+      console.log("response_poliocy", response)
       setDefaultProbationPolicyMonth(response?.data?.data[0].probationPolicyInMonth)
       setDefaultCnotractExpiryPolicy(response?.data?.data[0].contractualPolicyInMonth)
       // const currentDate = new Date(user.dateOfJoining); // Current date
@@ -994,7 +1012,65 @@ console.log("response_poliocy",response)
     }
   }
 
+  const updateRetirmentPolicy = (setFieldValue, dateOfBirth, gender) => {
 
+    const retirementAge = gender === "Female"
+      ? profilePolicy?.data?.data[0]?.retirementAgeFemale
+      : profilePolicy?.data?.data[0]?.retirementAgeMale;
+
+    const retirementDate = new Date(dateOfBirth);
+    retirementDate.setFullYear(retirementDate.getFullYear() + retirementAge);
+
+    setDRetirmentDate(new Date(retirementDate));
+    setFieldValue("dateOfRetirement", new Date(retirementDate));
+
+  };
+
+  const updateConfirmationDuePolicy = (setFieldValue, employeeTypeId, employeeStatusId, dateOfJoining) => {
+
+    const probationPolicyInMonth = employeeTypeId == 148 && employeeStatusId == 316 && dateOfJoining
+      ? profilePolicy?.data?.data[0]?.probationPolicyInMonth
+      : null;
+
+    if (!probationPolicyInMonth) {
+      setFieldValue("dateOfConfirmationDue", null);
+      return; // Exit the function early if condition is not true
+    }
+
+
+    const confirmationDueDate = new Date(dateOfJoining);
+    confirmationDueDate.setFullYear(confirmationDueDate.getFullYear() + Math.floor(probationPolicyInMonth / 12));  // Add full years
+    confirmationDueDate.setMonth(confirmationDueDate.getMonth() + (probationPolicyInMonth % 12));  // Add the remaining months
+
+
+    setConfirmationDueDate(new Date(confirmationDueDate - 1))
+    setFieldValue("dateOfConfirmationDue", new Date(confirmationDueDate - 1));
+
+
+  };
+
+  const updateContractExpiryPolicy = (setFieldValue, employeeTypeId, employeeStatusId, dateOfJoining) => {
+
+    const contractualPolicyInMonth = employeeTypeId == 147 && employeeStatusId == 316 && dateOfJoining
+      ? profilePolicy?.data?.data[0]?.contractualPolicyInMonth
+      : null;
+
+    if (!contractualPolicyInMonth) {
+      setFieldValue("dateOfContractExpiry", null);
+      return; // Exit the function early if condition is not true
+    }
+
+
+    const ContractExpiryDate = new Date(dateOfJoining);
+    ContractExpiryDate.setFullYear(ContractExpiryDate.getFullYear() + Math.floor(contractualPolicyInMonth / 12));  // Add full years
+    ContractExpiryDate.setMonth(ContractExpiryDate.getMonth() + (contractualPolicyInMonth % 12));  // Add the remaining months
+
+
+    setContractExpiryDate(new Date(ContractExpiryDate - 1))
+    setFieldValue("dateOfContractExpiry", new Date(ContractExpiryDate - 1));
+
+
+  };
   // const handleFieldChangedAcademic = (el) => {
 
   //   const index = el.target.id.split('-')[1]
@@ -1270,13 +1346,13 @@ console.log("response_poliocy",response)
     setIsExtendedfoInfoVisible(!isExtendedfoVisible);
   };
 
-  const fetchDepartment=(subsidiaryId)=>{
+  const fetchDepartment = (subsidiaryId) => {
     dispatch(fetchAllDept(subsidiaryId));
   }
 
-  useEffect (()=>{
+  useEffect(() => {
     fetchDepartment(user?.subsidiaryId)
-  },[user?.subsidiaryId])
+  }, [user?.subsidiaryId])
 
 
   return (
@@ -1569,12 +1645,12 @@ console.log("response_poliocy",response)
                           error={errors.departmentId}
                           touched={touched.departmentId}
                           options={dashboard.allDept}
-                  
+
                         />
 
 
 
-                      
+
 
                       </div>
 
@@ -1604,7 +1680,7 @@ console.log("response_poliocy",response)
                         <SearchSelect
                           name="employeeTypeId"
                           label={<span> Employee Type<span style={{ color: 'red' }}>*</span></span>}
-                          isDisabled={isUserForRead && true}
+                          isDisabled={isUserForRead && true || !values?.subsidiaryId} 
                           onBlur={() => {
                             // handleBlur({ target: { name: "countryId" } });
                           }}
@@ -1618,6 +1694,25 @@ console.log("response_poliocy",response)
                             setDisabledConfirmationDate(false);
                             setDisbledConfirmationDueDate(false);
                             setDisabledContractExpiryDate(false);
+                            //contract type
+                            if (e.value == 147) {
+                              console.log("")
+                              setFieldValue("dateOfRetirement", null)
+                              setDRetirmentDate(null)
+                              updateContractExpiryPolicy(setFieldValue, e.value, values?.employeeStatusId, values?.dateOfJoining)
+                              console.log("dateOfRetirement1112",RetirementSelected)
+                            }
+                            // Permanent
+                            if (e.value == 148) {
+                              updateConfirmationDuePolicy(setFieldValue, e.value, values?.employeeStatusId, values?.dateOfJoining)
+
+                            }
+                            else {
+                              updateRetirmentPolicy(setFieldValue, values?.dateOfBirth, values?.gender)
+                              setFieldValue("dateOfConfirmationDue", null)
+                              setConfirmationDueDate(null)
+                            }
+
 
 
 
@@ -1727,9 +1822,9 @@ console.log("response_poliocy",response)
 
                       <div className="col-12 col-md-4 mt-3">
                         <SearchSelect
-                          name="employeeTypeId"
+                          name="employeeStatusId"
                           label={<span> Employee Status<span style={{ color: 'red' }}>*</span></span>}
-                          isDisabled={isUserForRead && true}
+                          isDisabled={isUserForRead && true  || !values?.subsidiaryId}
                           onBlur={() => {
                             // handleBlur({ target: { name: "countryId" } });
                           }}
@@ -1741,6 +1836,16 @@ console.log("response_poliocy",response)
                             setDefemployeeStatus(e);
 
 
+                            if (e.value == 316) {
+                              updateConfirmationDuePolicy(setFieldValue, values?.employeeTypeId, e.value, values?.dateOfJoining)
+                              updateContractExpiryPolicy(setFieldValue, values?.employeeTypeId, e.value, values?.dateOfJoining)
+                            }
+                            else {
+                              setFieldValue("dateOfConfirmationDue", null)
+                              setConfirmationDueDate(null)
+                              setContractExpiryDate(null)
+                              setFieldValue("dateOfContractExpiry",null);
+                            }
 
                           }}
 
@@ -1776,11 +1881,12 @@ console.log("response_poliocy",response)
                         <DatePicker
                           className="form-control"
                           placeholder=" Date Of Joining"
-                          selected={joiningDateSelected}
+                          selected={joiningDateSelected }
                           onChange={(date) => {
                             setFieldValue("dateOfJoining", date);
                             setJoiningDate(date);
-
+                            updateConfirmationDuePolicy(setFieldValue, values.employeeTypeId, values.employeeStatusId, date)
+                            updateContractExpiryPolicy(setFieldValue, values.employeeTypeId, values.employeeStatusId, date)
                             // *********************************************************************************************************
 
                             // if (values?.employeeTypeId == "93" && !isNaN(defContractExpiryPolicy)) // Probation
@@ -1807,7 +1913,7 @@ console.log("response_poliocy",response)
                           showTimeInput
                           autoComplete="off"
                           name="dateOfJoining"
-                          disabled={isUserForRead}
+                          disabled={isUserForRead  || !values?.subsidiaryId }
                           error={errors.dateOfJoining}
                           touched={touched.dateOfJoining}
 
@@ -1850,10 +1956,18 @@ console.log("response_poliocy",response)
                           label={<span> Gender<span style={{ color: 'red' }}>*</span></span>}
                           name="gender"
                           value={values.gender}
-                          onChange={handleChange}
+                          // onChange={handleChange}
                           onBlur={handleBlur}
                           style={{ display: "block" }}
                           autoComplete="off"
+                          onChange={(e) => {
+                            setFieldValue("gender", e.target.value)
+                            if (!id && values.subsidiaryId) {
+
+                              updateRetirmentPolicy(setFieldValue, values.dateOfBirth, e.target.value)
+                            }
+
+                          }}
 
                         >
                           <option value="-1" label="Select Gender" />
@@ -1951,12 +2065,17 @@ console.log("response_poliocy",response)
                           onChange={(date) => {
                             setFieldValue("dateOfBirth", date);
                             setDOBDate(date);
+                            if (!id) {
+
+                              updateRetirmentPolicy(setFieldValue, date, values?.gender)
+                            }
+
                           }}
                           timeInputLabel="Time:"
                           dateFormat="dd/MM/yyyy"
                           showTimeInput
                           name="dateOfBirth"
-                          disabled={isUserForRead}
+                          disabled={isUserForRead || !values?.subsidiaryId}
                           autoComplete="off"
                           maxDate={new Date()}
                           minDate={new Date(1900, 0, 1)}
