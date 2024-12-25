@@ -996,7 +996,7 @@ export function DesignationEditForm({
     try {
       const response = await axios.post(`${USERS_URL}/policy/read-policy-by-subsidiaryId`, { subsidiaryId: subsidiaryId || 0 });
       setProfilePolicy(response)
-      console.log("response_poliocy", response)
+     
       setDefaultProbationPolicyMonth(response?.data?.data[0].probationPolicyInMonth)
       setDefaultCnotractExpiryPolicy(response?.data?.data[0].contractualPolicyInMonth)
       // const currentDate = new Date(user.dateOfJoining); // Current date
