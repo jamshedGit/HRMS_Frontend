@@ -1696,21 +1696,26 @@ export function DesignationEditForm({
                             setDisabledContractExpiryDate(false);
                             //contract type
                             if (e.value == 147) {
-                              console.log("")
+                             
                               setFieldValue("dateOfRetirement", null)
                               setDRetirmentDate(null)
+                           
                               updateContractExpiryPolicy(setFieldValue, e.value, values?.employeeStatusId, values?.dateOfJoining)
-                              console.log("dateOfRetirement1112",RetirementSelected)
+                             
                             }
                             // Permanent
-                            if (e.value == 148) {
+                           else if (e.value == 148) {
                               updateConfirmationDuePolicy(setFieldValue, e.value, values?.employeeStatusId, values?.dateOfJoining)
-
+                              setContractExpiryDate(null)
+                              setFieldValue("dateOfContractExpiry", null);
                             }
                             else {
+                            
                               updateRetirmentPolicy(setFieldValue, values?.dateOfBirth, values?.gender)
                               setFieldValue("dateOfConfirmationDue", null)
                               setConfirmationDueDate(null)
+                              setContractExpiryDate(null)
+                              setFieldValue("dateOfContractExpiry", null);
                             }
 
 
