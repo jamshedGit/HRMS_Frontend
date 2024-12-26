@@ -199,10 +199,10 @@ const profileValidation = Yup.object().shape(
     dateOfBirth: Yup.date()
       .nullable()
       .typeError('Invalid date format')
-      .required('*Required')
-      .max(currentDate, 'Date of birth cannot be in the future')
-      .max(minDate, 'You must be at least 18 years old')
-      .min(minYearDate, 'Date of birth cannot be earlier than January 1, 1900'),
+      .required('*Required'),
+    // .max(currentDate, 'Date of birth cannot be in the future')
+    // .max(minDate, 'You must be at least 18 years old')
+    // .min(minYearDate, 'Date of birth cannot be earlier than January 1, 1900'),
 
 
     defaultShiftId: Yup.string().required('Required'),
@@ -334,6 +334,10 @@ export function DesignationEditForm({
   const [defContractExpiryPolicy, setDefaultCnotractExpiryPolicy] = useState({});
   const [defemployeeStatus = null, setDefemployeeStatus] = useState(null);
   const [profilePolicy, setProfilePolicy] = useState(null);
+  const [minAgeLimin, setMinAgeLimin] = useState(null);
+  const [maxAgeLimin, setMaxAgeLimin] = useState(null);
+  const [hidehideRetirementAgeDate, setHidehideRetirementAgeDate] = useState(false);
+  const [hideContractExpDate, setHideContractExpDate] = useState(true);
   //off for temp
   // useEffect(() => {
   //   if (user.Id) {
@@ -993,16 +997,21 @@ export function DesignationEditForm({
 
 
   const fetchEmployeePolicyBySubsidiaryId = async (subsidiaryId) => {
+    console.log("minDate1")
     try {
       const response = await axios.post(`${USERS_URL}/policy/read-policy-by-subsidiaryId`, { subsidiaryId: subsidiaryId || 0 });
       setProfilePolicy(response)
-     
+
       setDefaultProbationPolicyMonth(response?.data?.data[0].probationPolicyInMonth)
       setDefaultCnotractExpiryPolicy(response?.data?.data[0].contractualPolicyInMonth)
       // const currentDate = new Date(user.dateOfJoining); // Current date
       // const newDate = addMonths(currentDate,user.probationPolicyInMonth);
+      const minAge = response?.data?.data[0]?.minimumAge;
+      const maxAge = response?.data?.data[0]?.maximumAge;
+      setMinAgeLimin(minAge > 0 ? minAge : null); // No limit if 0 or not present
 
-
+      // Set max age limit, if zero or not present, set no limit (e.g., null)
+      setMaxAgeLimin(maxAge > 0 ? maxAge : null);
       // setDefaultProbationPolicyMonth(new Date(newDate));
 
 
@@ -1056,6 +1065,7 @@ export function DesignationEditForm({
       : null;
 
     if (!contractualPolicyInMonth) {
+
       setFieldValue("dateOfContractExpiry", null);
       return; // Exit the function early if condition is not true
     }
@@ -1068,6 +1078,7 @@ export function DesignationEditForm({
 
     setContractExpiryDate(new Date(ContractExpiryDate - 1))
     setFieldValue("dateOfContractExpiry", new Date(ContractExpiryDate - 1));
+
 
 
   };
@@ -1598,7 +1609,8 @@ export function DesignationEditForm({
                           }
                           error={errors.defaultShiftId}
                           touched={touched.defaultShiftId}
-                          options={dashboard.allEmployeeShifts}
+                          // options={dashboard.allEmployeeShifts}
+                             options={dashboard.allEmployeeShifts?.filter(shift => shift?.subsidiaryId == values?.subsidiaryId)}
                         />
                       </div>
                     </div>
@@ -1680,7 +1692,7 @@ export function DesignationEditForm({
                         <SearchSelect
                           name="employeeTypeId"
                           label={<span> Employee Type<span style={{ color: 'red' }}>*</span></span>}
-                          isDisabled={isUserForRead && true || !values?.subsidiaryId} 
+                          isDisabled={isUserForRead && true || !values?.subsidiaryId}
                           onBlur={() => {
                             // handleBlur({ target: { name: "countryId" } });
                           }}
@@ -1696,26 +1708,37 @@ export function DesignationEditForm({
                             setDisabledContractExpiryDate(false);
                             //contract type
                             if (e.value == 147) {
-                             
-                              setFieldValue("dateOfRetirement", null)
-                              setDRetirmentDate(null)
-                           
-                              updateContractExpiryPolicy(setFieldValue, e.value, values?.employeeStatusId, values?.dateOfJoining)
-                             
+
+                              // setFieldValue("dateOfRetirement", null)
+                              // setDRetirmentDate(null)
+                              if (!id) {
+                                updateContractExpiryPolicy(setFieldValue, e.value, values?.employeeStatusId, values?.dateOfJoining)
+                              }
+
+
+                              setHidehideRetirementAgeDate(true)
+                              setHideContractExpDate(false)
                             }
                             // Permanent
-                           else if (e.value == 148) {
-                              updateConfirmationDuePolicy(setFieldValue, e.value, values?.employeeStatusId, values?.dateOfJoining)
-                              setContractExpiryDate(null)
-                              setFieldValue("dateOfContractExpiry", null);
+                            else if (e.value == 148) {
+                              if (!id) {
+                                updateConfirmationDuePolicy(setFieldValue, e.value, values?.employeeStatusId, values?.dateOfJoining)
+
+                              }
+                              // setContractExpiryDate(null)
+                              // setFieldValue("dateOfContractExpiry", null);
+                              setHidehideRetirementAgeDate(false)
+                              setHideContractExpDate(true)
                             }
                             else {
-                            
+
                               updateRetirmentPolicy(setFieldValue, values?.dateOfBirth, values?.gender)
-                              setFieldValue("dateOfConfirmationDue", null)
-                              setConfirmationDueDate(null)
-                              setContractExpiryDate(null)
-                              setFieldValue("dateOfContractExpiry", null);
+                              // setFieldValue("dateOfConfirmationDue", null)
+                              // setConfirmationDueDate(null)
+                              // setContractExpiryDate(null)
+                              // setFieldValue("dateOfContractExpiry", null);
+                              setHidehideRetirementAgeDate(true)
+                              setHideContractExpDate(true)
                             }
 
 
@@ -1829,7 +1852,7 @@ export function DesignationEditForm({
                         <SearchSelect
                           name="employeeStatusId"
                           label={<span> Employee Status<span style={{ color: 'red' }}>*</span></span>}
-                          isDisabled={isUserForRead && true  || !values?.subsidiaryId}
+                          isDisabled={isUserForRead && true || !values?.subsidiaryId}
                           onBlur={() => {
                             // handleBlur({ target: { name: "countryId" } });
                           }}
@@ -1842,14 +1865,21 @@ export function DesignationEditForm({
 
 
                             if (e.value == 316) {
-                              updateConfirmationDuePolicy(setFieldValue, values?.employeeTypeId, e.value, values?.dateOfJoining)
-                              updateContractExpiryPolicy(setFieldValue, values?.employeeTypeId, e.value, values?.dateOfJoining)
+                              if (!id) {
+                                updateConfirmationDuePolicy(setFieldValue, values?.employeeTypeId, e.value, values?.dateOfJoining)
+                                updateContractExpiryPolicy(setFieldValue, values?.employeeTypeId, e.value, values?.dateOfJoining)
+                              }
+
+
                             }
                             else {
-                              setFieldValue("dateOfConfirmationDue", null)
-                              setConfirmationDueDate(null)
+                              if (!id) {
+                                setFieldValue("dateOfConfirmationDue", null)
+                                setConfirmationDueDate(null)
+                              }
+
                               setContractExpiryDate(null)
-                              setFieldValue("dateOfContractExpiry",null);
+                              setFieldValue("dateOfContractExpiry", null);
                             }
 
                           }}
@@ -1886,12 +1916,15 @@ export function DesignationEditForm({
                         <DatePicker
                           className="form-control"
                           placeholder=" Date Of Joining"
-                          selected={joiningDateSelected }
+                          selected={joiningDateSelected}
                           onChange={(date) => {
                             setFieldValue("dateOfJoining", date);
                             setJoiningDate(date);
-                            updateConfirmationDuePolicy(setFieldValue, values.employeeTypeId, values.employeeStatusId, date)
-                            updateContractExpiryPolicy(setFieldValue, values.employeeTypeId, values.employeeStatusId, date)
+                            if (!id) {
+                              updateConfirmationDuePolicy(setFieldValue, values.employeeTypeId, values.employeeStatusId, date)
+                              updateContractExpiryPolicy(setFieldValue, values.employeeTypeId, values.employeeStatusId, date)
+                            }
+
                             // *********************************************************************************************************
 
                             // if (values?.employeeTypeId == "93" && !isNaN(defContractExpiryPolicy)) // Probation
@@ -1918,7 +1951,7 @@ export function DesignationEditForm({
                           showTimeInput
                           autoComplete="off"
                           name="dateOfJoining"
-                          disabled={isUserForRead  || !values?.subsidiaryId }
+                          disabled={isUserForRead || !values?.subsidiaryId}
                           error={errors.dateOfJoining}
                           touched={touched.dateOfJoining}
 
@@ -2082,9 +2115,11 @@ export function DesignationEditForm({
                           name="dateOfBirth"
                           disabled={isUserForRead || !values?.subsidiaryId}
                           autoComplete="off"
-                          maxDate={new Date()}
-                          minDate={new Date(1900, 0, 1)}
-
+                          // maxDate={new Date()}
+                          // minDate={new Date(1900, 0, 1)}
+                          // const currentDate = new Date();
+                          minDate={maxAgeLimin !== null ? new Date(new Date().getFullYear() - maxAgeLimin, new Date().getMonth(), new Date().getDate()) : null}
+                          maxDate={minAgeLimin !== null ? new Date(new Date().getFullYear() - minAgeLimin, new Date().getMonth(), new Date().getDate()) : new Date()}
                         />
                         <ErrorMessage className="form-feedBack" name="dateOfBirth" component="div" />
                       </div>
@@ -2116,8 +2151,7 @@ export function DesignationEditForm({
                         />
                         {/* <ErrorMessage style={{color:"red"}} name="nic_no" component="div" /> */}
                       </div>
-
-                      <div className="col-12 col-md-4 mt-3">
+                      {!hidehideRetirementAgeDate ? (<div className="col-12 col-md-4 mt-3">
                         <label>Date Of Retirement</label>
                         <DatePicker
                           className="form-control"
@@ -2134,11 +2168,13 @@ export function DesignationEditForm({
                           dateFormat="dd/MM/yyyy"
                           showTimeInput
                           name="dateOfRetirement"
-                          disabled={true}
+                          disabled={isUserForRead || !values?.subsidiaryId}
                           autoComplete="off"
                         />
                         <ErrorMessage className="form-feedBack" name="dateOfRetirement" component="div" />
-                      </div>
+                      </div>) : (null)}
+
+
                     </div>
                     <div className="from-group row">
 
@@ -2470,7 +2506,7 @@ export function DesignationEditForm({
                             <ErrorMessage className="form-feedBack" name="dateOfConfirmationEnter" component="div" />
                           </div>
 
-                          <div className="col-12 col-md-4 mt-3">
+                          {!hideContractExpDate ?(     <div className="col-12 col-md-4 mt-3">
                             <label>Contract Expiry </label>
                             <DatePicker
                               className="form-control"
@@ -2489,7 +2525,9 @@ export function DesignationEditForm({
                               minDate={values.dateOfJoining ? new Date(values.dateOfJoining) : null}
                             />
                             <ErrorMessage className="form-feedBack" name="dateOfContractExpiry" component="div" />
-                          </div>
+                          </div>):(null)}
+
+                     
 
                         </div>
 
