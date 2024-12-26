@@ -11,6 +11,7 @@ import { ATTENDANCE_TYPE } from "../../../../../utils/constants";
 import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
 import { initialFilter } from "../FormUIHelpers";
 import { runProcess } from "../../../_redux/formActions";
+import { fetchAllActiveEmployeesBySubsidiary } from "../../../../../../_metronic/redux/dashboardActions";
 
 //Validation for date fields
 const formValidation = Yup.object().shape({
@@ -114,6 +115,8 @@ export function FormFilter({ loading, dispatch, processLoading }) {
                         onChange={(e) => {
                           const value = e.value == '--Select--' ? '' : Number(e.value)
                           setFieldValue('subsidiaryId', value)
+                          dispatch(fetchAllActiveEmployeesBySubsidiary(value));
+                          setFieldValue('employeeId', '')
                         }}
                         label={
                           <span>
