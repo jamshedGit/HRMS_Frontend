@@ -4,7 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Card } from "react-bootstrap";
 import { FormTable } from "./form-table/FormTable";
 import { FormFilter } from "./form-filter/FormFilter";
-import { fetchAllActiveEmployees, fetchAllDept, fetchAllFormsMenu, fetchAllSubsidiaryData } from "../../../../../_metronic/redux/dashboardActions";
+import { fetchAllDept, fetchAllFormsMenu, fetchAllSubsidiaryData } from "../../../../../_metronic/redux/dashboardActions";
 import { useSelector, useDispatch } from "react-redux";
 import { FormUIProvider } from "./FormUIContext";
 import { CardHeader } from "../../../../../_metronic/_partials/controls";
