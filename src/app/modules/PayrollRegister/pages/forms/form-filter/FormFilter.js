@@ -1,17 +1,24 @@
 import React, { useMemo } from "react"
 import { Field, Formik } from "formik"
 import { isEqual } from "lodash"
+import * as Yup from "yup";
 import { useFormUIContext } from "../FormUIContext"
 import { Form, Modal } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import { Select } from "../../../../../../_metronic/_partials/controls";
-import { ATTENDANCE_TYPE } from "../../../../../utils/constants";
+import { ATTENDANCE_TYPE, VALIDATION_MESSAGES } from "../../../../../utils/constants";
 import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
 import { initialFilter } from "../FormUIHelpers";
 import * as actions from "../../../_redux/formActions";
 import { formatDates } from "../../../../../utils/common";
 import { fetchAllActiveEmployeesBySubsidiary, fetchAllPayrollMonthYearList } from "../../../../../../_metronic/redux/dashboardActions";
+
+//Validation for date fields
+const formValidation = Yup.object().shape({
+  subsidiaryId: Yup.date().required(VALIDATION_MESSAGES.required),
+  employeeId: Yup.date().required(VALIDATION_MESSAGES.required)
+})
 
 //Prepare new Filter
 const prepareFilter = (queryParams, values) => {
@@ -106,6 +113,7 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
       <Formik
         enableReinitialize={true}
         initialValues={initialFilter.filter}
+        validationSchema={formValidation}
         onSubmit={(values) => {
           applyFilter(values)
         }}
@@ -115,7 +123,9 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
           handleSubmit,
           handleBlur,
           setFieldValue,
-          handleReset
+          handleReset,
+          errors,
+          touched
         }) => (
           <>
             <Modal.Body className="overlay overlay-block cursor-default">
@@ -139,9 +149,11 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                         label={
                           <span>
                             {" "}
-                            Subsidiary
+                            Subsidiary<span style={{ color: "red" }}>*</span>
                           </span>
                         }
+                        error={errors.subsidiaryId}
+                        touched={touched.subsidiaryId}
                         value={allSubsidiaryMap?.get(values?.subsidiaryId || '') || ''}
                         autoComplete="off"
                         options={allSubsidiaryList}
@@ -149,8 +161,10 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                     </div>
                     {/* Subsidiary Field End */}
 
+
+                    {/* These fields are hidden and not removed because might come in use later on */}
                     {/* Deparment Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
+                    {/* <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="departmentId"
                         component={SearchSelect}
@@ -169,11 +183,11 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                         autoComplete="off"
                         options={allDept}
                       />
-                    </div>
+                    </div> */}
                     {/* Deparment Field End */}
 
                     {/* Report To Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
+                    {/* <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="reportTo"
                         component={SearchSelect}
@@ -192,11 +206,11 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                         autoComplete="off"
                         options={allEmployees}
                       />
-                    </div>
+                    </div> */}
                     {/* Report To Field End */}
 
                     {/* Grade Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
+                    {/* <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="gradeId"
                         component={SearchSelect}
@@ -215,11 +229,11 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                         autoComplete="off"
                         options={allEmployeeGradeList}
                       />
-                    </div>
+                    </div> */}
                     {/* Grade Field End */}
 
                     {/* Designation Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
+                    {/* <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="designationId"
                         component={SearchSelect}
@@ -238,11 +252,11 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                         autoComplete="off"
                         options={allDesignations}
                       />
-                    </div>
+                    </div> */}
                     {/* Designation Field End */}
 
                     {/* Location Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
+                    {/* <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="locationId"
                         component={SearchSelect}
@@ -261,11 +275,11 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                         autoComplete="off"
                         options={allLocationChildMenus}
                       />
-                    </div>
+                    </div> */}
                     {/* Location Field End */}
 
                     {/* Attendance Type Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
+                    {/* <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="attendanceType"
                         component={Select}
@@ -284,12 +298,10 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                         autoComplete="off"
                         children={CustomDropdown({ data: ATTENDANCE_TYPE })}
                       />
-                    </div>
+                    </div> */}
                     {/* Attendance Type Field End */}
+                    {/* These fields are hidden and not removed because might come in use later on */}
 
-                  </div>
-
-                  <div className="from-group row">
                     {/* Employee Field Start */}
                     <div className="col-12 col-md-4 mt-3">
                       <Field
@@ -303,9 +315,11 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                         label={
                           <span>
                             {" "}
-                            Employee
+                            Employee<span style={{ color: "red" }}>*</span>
                           </span>
                         }
+                        error={errors.employeeId}
+                        touched={touched.employeeId}
                         value={allEmployeesMap?.get(values?.employeeId || '') || ''}
                         autoComplete="off"
                         options={allEmployees}
@@ -313,9 +327,6 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                     </div>
                     {/* Employee Field End */}
 
-                  </div>
-
-                  <div className="from-group row">
                     {/* Payroll Month Field Start */}
                     <div className="col-12 col-md-4 mt-3">
                       <Field

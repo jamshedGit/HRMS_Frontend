@@ -48,6 +48,7 @@ export function FormTable() {
 
   // Table columns
   const columns = [
+    /*
     {
       dataField: "EmployeeCode",
       text: "Emp. Code",
@@ -80,6 +81,7 @@ export function FormTable() {
         minWidth: "160px",
       },
     },
+    */
     {
       dataField: "TransactionType",
       text: "Transaction Type",
