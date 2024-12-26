@@ -6,7 +6,7 @@ import { FormTable } from "./form-table/FormTable";
 import { FormFilter } from "./form-filter/FormFilter";
 import { Card } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchAllActiveEmployees, fetchAllDept, fetchAllFormsMenu, fetchAllSubsidiaryData } from "../../../../../_metronic/redux/dashboardActions";
+import { fetchAllActiveEmployees, fetchAllActiveEmployeesBySubsidiary, fetchAllDept, fetchAllFormsMenu, fetchAllSubsidiaryData } from "../../../../../_metronic/redux/dashboardActions";
 import { CardHeader } from "../../../../../_metronic/_partials/controls";
 import CurrentModuleName from "../../../../utils/common-modules/ModuleName";
 
@@ -30,9 +30,6 @@ export function AttendanceViewPage() {
 
     if (!dashboard?.allSubsidiaryList?.length)
       dispatch(fetchAllSubsidiaryData("allSubsidiaryList"));
-
-    if (!dashboard.allEmployees || !dashboard.allEmployees.length)
-      dispatch(fetchAllActiveEmployees());
 
     if (!dashboard?.allDesignations || !dashboard?.allDesignations?.length)
       dispatch(fetchAllFormsMenu(158, "allDesignations"));
