@@ -114,7 +114,7 @@ export function BankEditForm({
 
     if (!id) {
   
-    dispatch(getLatestTableId("t_employee_deduction", "Id", " 1 = 1 ", setDefaultDeductionCode));
+    dispatch(getLatestTableId("t_employee_deduction", "deductionCode", " 1 = 1 ", setDefaultDeductionCode));
     }
   };
 
