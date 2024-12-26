@@ -49,7 +49,7 @@ export function FormTable() {
   // Table columns
   const columns = [
     {
-      dataField: "employeeCode",
+      dataField: "EmployeeCode",
       text: "Emp. Code",
       sort: false,
       sortCaret: sortCaret,
@@ -60,7 +60,7 @@ export function FormTable() {
       },
     },
     {
-      dataField: "fullName",
+      dataField: "EmployeeName",
       text: "Name",
       sort: false,
       sortCaret: sortCaret,
@@ -71,8 +71,8 @@ export function FormTable() {
       },
     },
     {
-      dataField: "name",
-      text: "Leave Type",
+      dataField: "MonthName",
+      text: "Month",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -81,19 +81,8 @@ export function FormTable() {
       },
     },
     {
-      dataField: "from",
-      text: "Date From",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-        maxWidth: "160px",
-      },
-    },
-    {
-      dataField: "to",
-      text: "Date To",
+      dataField: "TransactionType",
+      text: "Transaction Type",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -103,8 +92,8 @@ export function FormTable() {
       },
     },
     {
-      dataField: "days",
-      text: "Leave Days",
+      dataField: "EarningName",
+      text: "Earning Name",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -114,19 +103,8 @@ export function FormTable() {
       },
     },
     {
-      dataField: "remarks",
-      text: "Remarks",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-        maxWidth: "160px",
-      },
-    },
-    {
-      dataField: "fileStatus",
-      text: "Attachment",
+      dataField: "Amount_Actual",
+      text: "Amount",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,

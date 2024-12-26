@@ -1,23 +1,17 @@
 import React, { useMemo } from "react"
 import { Field, Formik } from "formik"
-import * as Yup from "yup";
 import { isEqual } from "lodash"
 import { useFormUIContext } from "../FormUIContext"
 import { Form, Modal } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
-import { DatePickerField, Select } from "../../../../../../_metronic/_partials/controls";
+import { Select } from "../../../../../../_metronic/_partials/controls";
 import { ATTENDANCE_TYPE } from "../../../../../utils/constants";
 import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
 import { initialFilter } from "../FormUIHelpers";
 import * as actions from "../../../_redux/formActions";
 import { formatDates } from "../../../../../utils/common";
-
-//Validation for date fields
-const formValidation = Yup.object().shape({
-  from: Yup.date().optional(),
-  to: Yup.date().optional().min(Yup.ref('from'), 'Date to date cannot be before Date from date'),
-})
+import { fetchAllActiveEmployeesBySubsidiary, fetchAllPayrollMonthYearList } from "../../../../../../_metronic/redux/dashboardActions";
 
 //Prepare new Filter
 const prepareFilter = (queryParams, values) => {
@@ -31,7 +25,7 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
   const FormUIContext = useFormUIContext()
 
   //Get All dropdown data from state
-  const { allEmployees, allSubsidiaryList, allEmployeeGradeList, allDept, allLocationChildMenus, allDesignations } = useSelector(
+  const { allEmployees, allSubsidiaryList, allEmployeeGradeList, allDept, allLocationChildMenus, allDesignations, allPayrollMonthYearList } = useSelector(
     (state) => (state.dashboard),
   )
 
@@ -59,6 +53,10 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
   const allDesignationsMap = useMemo(() => {
     return new Map(allDesignations?.map(item => [item.value, item]));
   }, [allDesignations]);
+
+  const allPayrollMonthMap = useMemo(() => {
+    return new Map(allPayrollMonthYearList?.map(item => [item.value, item]));
+  }, [allPayrollMonthYearList]);
   //Create Maps for every dropdown data so setting value in dropdown can be fast optimized (End)
 
   //Fetch Params from Context
@@ -108,7 +106,6 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
       <Formik
         enableReinitialize={true}
         initialValues={initialFilter.filter}
-        validationSchema={formValidation}
         onSubmit={(values) => {
           applyFilter(values)
         }}
@@ -135,6 +132,9 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                         onChange={(e) => {
                           const value = e.value == '--Select--' ? '' : Number(e.value)
                           setFieldValue('subsidiaryId', value)
+                          dispatch(fetchAllPayrollMonthYearList({ subsidiaryId: value }, "allPayrollMonthYearList"));
+                          dispatch(fetchAllActiveEmployeesBySubsidiary(value));
+                          setFieldValue('employeeId', '')
                         }}
                         label={
                           <span>
@@ -316,50 +316,28 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                   </div>
 
                   <div className="from-group row">
-                    {/* Date from Field Start */}
+                    {/* Payroll Month Field Start */}
                     <div className="col-12 col-md-4 mt-3">
                       <Field
-                        name="from"
-                        component={DatePickerField}
-                        dateFormat="dd/MM/yyyy"
-                        className="form-control"
-                        label={
-                          <span>
-                            {" "}
-                            Date From
-                          </span>
-                        }
-                        onChange={(date) => {
-                          setFieldValue('from', date)
-                          setFieldValue('to', date)
-                        }}
-                        autoComplete="off"
-                      />
-                    </div>
-                    {/* Date from Field End */}
-
-                    {/* Date to Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="to"
-                        component={DatePickerField}
+                        name="monthId"
+                        component={SearchSelect}
                         onBlur={handleBlur}
-                        className="form-control"
-                        dateFormat="dd/MM/yyyy"
+                        onChange={(e) => {
+                          const value = e.value == '--Select--' ? '' : Number(e.value)
+                          setFieldValue('monthId', value)
+                        }}
                         label={
                           <span>
                             {" "}
-                            Date To
+                            Payroll Month
                           </span>
                         }
-                        onChange={(date) => {
-                          setFieldValue('to', date)
-                        }}
+                        value={allPayrollMonthMap?.get(values?.monthId || '') || ''}
                         autoComplete="off"
+                        options={allPayrollMonthYearList}
                       />
                     </div>
-                    {/* Date to Field End */}
-
+                    {/* Payroll Month Field End */}
                   </div>
                 </fieldset>
               </Form>
