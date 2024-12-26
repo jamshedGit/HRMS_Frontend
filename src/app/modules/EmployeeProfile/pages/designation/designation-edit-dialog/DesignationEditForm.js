@@ -15,7 +15,8 @@ import {
   fetchAllFormsMenu,
   fetchAllActiveEmployees,
   fetchAllSubsidiaryData,
-  fetchAllEmployeeShifts
+  fetchAllEmployeeShifts,
+  getLatestTableId
 } from "../../../../../../_metronic/redux/dashboardActions";
 import DatePicker from "react-datepicker";
 import axios from 'axios';
@@ -208,6 +209,13 @@ const profileValidation = Yup.object().shape(
     defaultShiftId: Yup.string().required('Required'),
     reportTo: Yup.string().required('Required'),
 
+    // profile_image: Yup.string().required('Required'),
+    profile_image: Yup.string().when('imagePolicy', {
+      is: true, // If imagePolicy is true, apply 'required'
+      then: Yup.string().required('Profile image is required'),
+      otherwise: Yup.string(),
+    }),
+
   },
 
 
@@ -338,6 +346,10 @@ export function DesignationEditForm({
   const [maxAgeLimin, setMaxAgeLimin] = useState(null);
   const [hidehideRetirementAgeDate, setHidehideRetirementAgeDate] = useState(false);
   const [hideContractExpDate, setHideContractExpDate] = useState(true);
+  const [disableConfDueDate, setDisableConfDueDate] = useState(false);
+    const [defEmployeeCode, setEmployeeCode] = useState('');
+
+    const [imagePolicy,setImagePolicy]=useState(false)
   //off for temp
   // useEffect(() => {
   //   if (user.Id) {
@@ -996,8 +1008,8 @@ export function DesignationEditForm({
   }
 
 
-  const fetchEmployeePolicyBySubsidiaryId = async (subsidiaryId) => {
-    console.log("minDate1")
+  const fetchEmployeePolicyBySubsidiaryId = async (subsidiaryId,setFieldValue) => {
+   
     try {
       const response = await axios.post(`${USERS_URL}/policy/read-policy-by-subsidiaryId`, { subsidiaryId: subsidiaryId || 0 });
       setProfilePolicy(response)
@@ -1013,6 +1025,22 @@ export function DesignationEditForm({
       // Set max age limit, if zero or not present, set no limit (e.g., null)
       setMaxAgeLimin(maxAge > 0 ? maxAge : null);
       // setDefaultProbationPolicyMonth(new Date(newDate));
+
+      if (!id && response?.data?.data[0].isEmployeeCodeGenerationAuto ) {
+  
+        // dispatch(getLatestTableId("t_employee_profile", "employeeCode", " 1 = 1 ", setEmployeeCode));
+        // console.log("defEmployeeCode111",setEmployeeCode)
+        // setFieldValue("employeeCode",defEmployeeCode)
+
+
+        dispatch(getLatestTableId("t_employee_profile", "employeeCode", " 1 = 1 ", (setEmployee) => {
+          console.log("defEmployeeCode111",setEmployee)
+        setFieldValue("employeeCode",setEmployee)
+        setEmployeeCode(setEmployee)
+        }));
+      
+      };
+    
 
 
 
@@ -1042,7 +1070,7 @@ export function DesignationEditForm({
       : null;
 
     if (!probationPolicyInMonth) {
-      setFieldValue("dateOfConfirmationDue", null);
+      // setFieldValue("dateOfConfirmationDue", null);
       return; // Exit the function early if condition is not true
     }
 
@@ -1052,9 +1080,9 @@ export function DesignationEditForm({
     confirmationDueDate.setMonth(confirmationDueDate.getMonth() + (probationPolicyInMonth % 12));  // Add the remaining months
 
 
-    setConfirmationDueDate(new Date(confirmationDueDate - 1))
-    setFieldValue("dateOfConfirmationDue", new Date(confirmationDueDate - 1));
-
+    setConfirmationDueDate(new Date(confirmationDueDate))
+    setFieldValue("dateOfConfirmationDue", new Date(confirmationDueDate));
+    setHideContractExpDate(true)
 
   };
 
@@ -1066,7 +1094,7 @@ export function DesignationEditForm({
 
     if (!contractualPolicyInMonth) {
 
-      setFieldValue("dateOfContractExpiry", null);
+      // setFieldValue("dateOfContractExpiry", null);
       return; // Exit the function early if condition is not true
     }
 
@@ -1208,7 +1236,33 @@ export function DesignationEditForm({
 
   // End Academic
 
+  const seEmpCodeEditMode = async () => {
+  
 
+
+    
+      setEmployeeCode(user?.employeeCode)
+  console.log("user?.employeeCode",user?.employeeCode)
+  };
+
+  useEffect(()=>{
+    seEmpCodeEditMode()
+  },[user])
+
+
+  const updateImagePolicy = async (setImagePolicy) => {
+   
+
+    if (!id && profilePolicy?.data?.data[0]?.empPictureIsMandatory ) {
+  
+      setImagePolicy(true)
+    }
+
+  };
+
+  useEffect(()=>{
+    updateImagePolicy(setImagePolicy)
+  },[profilePolicy])
 
   const validate = () => {
     const newErrors = {};
@@ -1431,8 +1485,9 @@ export function DesignationEditForm({
                         <div>
                           <div>
                             <div>
+                         
                               <img name='profile_image' width={120} height={120} src={profile_image} />
-                              <h4>Select Image</h4>
+                              <h4>Select Image   {imagePolicy && <span style={{ color: "red" }}>*</span>}</h4>
                               <input type="file" name="myImage" accept=".jpg, .jpeg, .png" onChange={onImageChange} />
                               <ErrorMessage className="form-feedBack" name="myImage" component="div" />
                             </div>
@@ -1456,7 +1511,7 @@ export function DesignationEditForm({
                           onChange={(e) => {
                             setFieldValue("subsidiaryId", e.value || null);
                             setDefualtSubsidiaryList(e);
-                            fetchEmployeePolicyBySubsidiaryId(e.value);
+                            fetchEmployeePolicyBySubsidiaryId(e.value,setFieldValue);
                             //handlePaymenModeChanged(e)
                             fetchDepartment(e.value)
 
@@ -1479,6 +1534,15 @@ export function DesignationEditForm({
                             placeholder=" Employee Code"
                             label={<span> Employee Code<span style={{ color: 'red' }}>*</span></span>}
                             autoComplete="off"
+                            onChange={(e) => {
+                              setFieldValue("employeeCode", e.target.value || null);
+                              setEmployeeCode(e.target.value || defEmployeeCode);
+  
+  
+                            }}
+                            value={defEmployeeCode || null}
+                       
+                            disabled={isUserForRead || id || profilePolicy?.data?.data[0]?.isEmployeeCodeGenerationAuto  }
                           />
                         </div>
                       }
@@ -1862,7 +1926,7 @@ export function DesignationEditForm({
 
 
                             setDefemployeeStatus(e);
-
+//probation
 
                             if (e.value == 316) {
                               if (!id) {
@@ -1872,15 +1936,15 @@ export function DesignationEditForm({
 
 
                             }
-                            else {
-                              if (!id) {
-                                setFieldValue("dateOfConfirmationDue", null)
-                                setConfirmationDueDate(null)
-                              }
+                            // else {
+                            //   if (!id) {
+                            //     setFieldValue("dateOfConfirmationDue", null)
+                            //     setConfirmationDueDate(null)
+                            //   }
 
-                              setContractExpiryDate(null)
-                              setFieldValue("dateOfContractExpiry", null);
-                            }
+                            //   setContractExpiryDate(null)
+                            //   setFieldValue("dateOfContractExpiry", null);
+                            // }
 
                           }}
 
