@@ -350,6 +350,7 @@ export function DesignationEditForm({
     const [defEmployeeCode, setEmployeeCode] = useState('');
 
     const [imagePolicy,setImagePolicy]=useState(false)
+    const [isImageReq,setIsImageReq]=useState(false)
   //off for temp
   // useEffect(() => {
   //   if (user.Id) {
@@ -838,6 +839,7 @@ export function DesignationEditForm({
       setFile(img);
 
       setImage(URL.createObjectURL(img));
+      setIsImageReq(false)
     }
   };
 
@@ -1029,12 +1031,12 @@ export function DesignationEditForm({
       if (!id && response?.data?.data[0].isEmployeeCodeGenerationAuto ) {
   
         // dispatch(getLatestTableId("t_employee_profile", "employeeCode", " 1 = 1 ", setEmployeeCode));
-        // console.log("defEmployeeCode111",setEmployeeCode)
+      
         // setFieldValue("employeeCode",defEmployeeCode)
 
 
         dispatch(getLatestTableId("t_employee_profile", "employeeCode", " 1 = 1 ", (setEmployee) => {
-          console.log("defEmployeeCode111",setEmployee)
+          
         setFieldValue("employeeCode",setEmployee)
         setEmployeeCode(setEmployee)
         }));
@@ -1050,7 +1052,7 @@ export function DesignationEditForm({
   }
 
   const updateRetirmentPolicy = (setFieldValue, dateOfBirth, gender) => {
-
+    setDisableConfDueDate(false)
     const retirementAge = gender === "Female"
       ? profilePolicy?.data?.data[0]?.retirementAgeFemale
       : profilePolicy?.data?.data[0]?.retirementAgeMale;
@@ -1064,7 +1066,7 @@ export function DesignationEditForm({
   };
 
   const updateConfirmationDuePolicy = (setFieldValue, employeeTypeId, employeeStatusId, dateOfJoining) => {
-
+    setDisableConfDueDate(false)
     const probationPolicyInMonth = employeeTypeId == 148 && employeeStatusId == 316 && dateOfJoining
       ? profilePolicy?.data?.data[0]?.probationPolicyInMonth
       : null;
@@ -1087,7 +1089,7 @@ export function DesignationEditForm({
   };
 
   const updateContractExpiryPolicy = (setFieldValue, employeeTypeId, employeeStatusId, dateOfJoining) => {
-
+    setDisableConfDueDate(true)
     const contractualPolicyInMonth = employeeTypeId == 147 && employeeStatusId == 316 && dateOfJoining
       ? profilePolicy?.data?.data[0]?.contractualPolicyInMonth
       : null;
@@ -1104,10 +1106,19 @@ export function DesignationEditForm({
     ContractExpiryDate.setMonth(ContractExpiryDate.getMonth() + (contractualPolicyInMonth % 12));  // Add the remaining months
 
 
-    setContractExpiryDate(new Date(ContractExpiryDate - 1))
-    setFieldValue("dateOfContractExpiry", new Date(ContractExpiryDate - 1));
+    setContractExpiryDate(new Date(ContractExpiryDate))
+    setFieldValue("dateOfContractExpiry", new Date(ContractExpiryDate));
 
 
+    const probationPolicyInMonth =  profilePolicy?.data?.data[0]?.probationPolicyInMonth ;
+    const confirmationDueDate = new Date(dateOfJoining);
+    confirmationDueDate.setFullYear(confirmationDueDate.getFullYear() + Math.floor(probationPolicyInMonth / 12));  // Add full years
+    confirmationDueDate.setMonth(confirmationDueDate.getMonth() + (probationPolicyInMonth % 12));  // Add the remaining months
+
+
+    setConfirmationDueDate(new Date(confirmationDueDate))
+    setFieldValue("dateOfConfirmationDue", new Date(confirmationDueDate));
+    setDisableConfDueDate(true)
 
   };
   // const handleFieldChangedAcademic = (el) => {
@@ -1242,7 +1253,7 @@ export function DesignationEditForm({
 
     
       setEmployeeCode(user?.employeeCode)
-  console.log("user?.employeeCode",user?.employeeCode)
+ 
   };
 
   useEffect(()=>{
@@ -1256,6 +1267,7 @@ export function DesignationEditForm({
     if (!id && profilePolicy?.data?.data[0]?.empPictureIsMandatory ) {
   
       setImagePolicy(true)
+      setIsImageReq(true)
     }
 
   };
@@ -1448,12 +1460,12 @@ export function DesignationEditForm({
                 .post(`${USERS_URL}/profile/image-upload`, formData)
                 .then((res) => {
                   setImage(res.data.imageUrl)
-                  saveEmployeeProfile(values, res.data.imageUrl, defContactList, workExperienceList, academicList, skillsList, incidentList);
+                  saveEmployeeProfile(values, res.data.imageUrl, defContactList, workExperienceList, academicList, skillsList, incidentList,imagePolicy,isImageReq);
                 });
             }
             else {
 
-              saveEmployeeProfile(values, profile_image, defContactList, workExperienceList, academicList, skillsList, incidentList);
+              saveEmployeeProfile(values, profile_image, defContactList, workExperienceList, academicList, skillsList, incidentList,imagePolicy,isImageReq);
             }
           }
 
@@ -1551,7 +1563,7 @@ export function DesignationEditForm({
                     <div className="from-group row">
                       {
 
-                        <div className="col-12 col-md-1 mt-3">
+                        <div className="col-12 col-md-2 mt-3">
                           <Select
                             label={<span> Title<span style={{ color: 'red' }}>*</span></span>}
                             name="title"
@@ -2524,6 +2536,8 @@ export function DesignationEditForm({
                         </div>
                         <div className="from-group row">
 
+              
+
                           <div className="col-12 col-md-4 mt-3">
                             <label>Date Confirmation Due </label>
                             <DatePicker
@@ -2538,7 +2552,7 @@ export function DesignationEditForm({
                               dateFormat="dd/MM/yyyy"
                               showTimeInput
                               name="dateOfConfirmationDue"
-                              disabled={disbaledConfirmationDueDateSelected}
+                              disabled={disableConfDueDate}
                               autoComplete="off"
 
 
@@ -2561,7 +2575,7 @@ export function DesignationEditForm({
                               dateFormat="dd/MM/yyyy"
                               showTimeInput
                               name="dateOfConfirmationEnter"
-                              disabled={disbaledConfirmationEnterDateSelected}
+                              disabled={disableConfDueDate}
                               autoComplete="off"
                               // minDate={values.dateOfConfirmationDue ? new Date(values.dateOfConfirmationDue) : new Date(values.dateOfJoining)}
 

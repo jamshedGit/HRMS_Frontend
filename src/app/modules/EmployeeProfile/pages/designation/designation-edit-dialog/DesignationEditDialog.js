@@ -65,9 +65,23 @@ export function DesignationEditDialog({ id, show, onHide, userForRead }) {
   }, [id, dispatch]);
 
 
-  const saveEmployeeProfile = async (user, image,contactList,workExperienceList,academicList,skillsList,incidentList) => {
+  const saveEmployeeProfile = async (user, image,contactList,workExperienceList,academicList,skillsList,incidentList,imagePolicy,isImageReq) => {
 
-    if (!id) {
+    if (imagePolicy && isImageReq) {
+      disbaleLoading();
+    
+       toast.error("Profile image is required.", {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+    }
+
+   else if (!id) {
 
    
       const finalObject = { user }
