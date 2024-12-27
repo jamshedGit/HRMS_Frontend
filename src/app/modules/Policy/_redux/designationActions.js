@@ -1,3 +1,4 @@
+import { SERVER_MESSAGES } from "../../../utils/constants";
 import * as requestFromServer from "./policyCrud";
 import { policySlice, callTypes } from "./policySlice";
 import { toast } from "react-toastify";
@@ -51,7 +52,7 @@ export const deletePolicy = (id) => (dispatch) => {
     .then((response) => {
     
       dispatch(actions.policyDeleted({ Id: id }));
-      toast.success("Successfully Deleted", {
+      toast.success(SERVER_MESSAGES.deletedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -63,7 +64,7 @@ export const deletePolicy = (id) => (dispatch) => {
     })
     .catch((error) => {
       dispatch(actions.catchError({ error, callType: callTypes.action }));
-      toast.error(error.response.data.message);
+      toast.error(SERVER_MESSAGES.deletedFail);
     });
 };
 
@@ -106,7 +107,7 @@ export const createPolicy = (religionForCreation, disbaleLoading, onHide) => (
     
       dispatch(actions.policyCreated(list));
       disbaleLoading();
-      toast.success("Successfully Created", {
+      toast.success(SERVER_MESSAGES.insertedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -144,7 +145,7 @@ export const updatePolicy = (user, disbaleLoading, onHide) => (dispatch) => {
       dispatch(actions.startCall({ callType: callTypes.action }));
       disbaleLoading();
       onHide();
-      toast.success(response.data.message + " Updated", {
+      toast.success(SERVER_MESSAGES.updatedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
