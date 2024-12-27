@@ -1,3 +1,4 @@
+import { SERVER_MESSAGES } from "../../../utils/constants";
 import * as requestFromServer from "./designationCrud";
 import { empProfileSlice, callTypes } from "./employeeProfileSlice";
 import { toast } from "react-toastify";
@@ -69,7 +70,7 @@ export const deleteEmpProfile = (id) => (dispatch) => {
     .then((response) => {
   
       dispatch(actions.emp_profileDeleted({ Id: id }));
-      toast.success("Successfully Deleted", {
+      toast.success(SERVER_MESSAGES.deletedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -81,7 +82,7 @@ export const deleteEmpProfile = (id) => (dispatch) => {
     })
     .catch((error) => {
       dispatch(actions.catchError({ error, callType: callTypes.action }));
-      toast.error(error.response.data.message);
+      toast.error(SERVER_MESSAGES.deletedFail);
     });
 };
 
@@ -122,7 +123,7 @@ export const createEmpProfile = (BodyObj, disbaleLoading, onHide) => (
 
       dispatch(actions.emp_profileCreated(user));
       disbaleLoading();
-      toast.success("Successfully Created", {
+      toast.success(SERVER_MESSAGES.insertedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -160,7 +161,7 @@ export const updateEmpProfile = (user,contactList,workExperienceList,academicLis
       dispatch(actions.startCall({ callType: callTypes.action }));
       disbaleLoading();
       onHide();
-      toast.success(response.data.message + " Updated", {
+      toast.success(SERVER_MESSAGES.updatedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
