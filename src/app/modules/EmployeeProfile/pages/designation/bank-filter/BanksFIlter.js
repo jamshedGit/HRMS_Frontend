@@ -384,7 +384,7 @@ export function BanksFilter({ listLoading, user, setCity,
                   }}
                 />
                 <small className="form-text text-muted">
-                  <b>Search</b> in all fields
+                  <b>Search</b> by name
                 </small>
               </div>
             </div>

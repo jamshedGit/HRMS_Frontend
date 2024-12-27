@@ -55,6 +55,7 @@ const initialDashboardState = {
   allReimbursementConfigList:[],
   allPayrollMonthYearList:[],
   allHolidayTypeList:[],
+  allEmployeeStatus:[],
 };
 
 export const callTypes = {

@@ -110,7 +110,7 @@ export function BankEditForm({
     // if (subsidiaryId) {
       // dispatch(getLatestTableId("t_employee_earning", "Id", " subsidiaryId = " + subsidiaryId, setValue));
       if (!id) {
-      dispatch(getLatestTableId("t_employee_earning", "Id", " 1 = 1 ",setValue));
+      dispatch(getLatestTableId("t_employee_earning", "earningCode", " 1 = 1 ",setValue));
     }
   };
 

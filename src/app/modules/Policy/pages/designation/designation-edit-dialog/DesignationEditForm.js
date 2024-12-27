@@ -43,35 +43,53 @@ const formValidationSchema = Yup.object().shape(
       .required("Required*"),
 
     minimumAge: Yup.number()
-    .min(1, 'At least 1')
-    .max(99, 'At most 99')
-      .required("Required*"),
+    .nullable() 
+    .min(0, 'At least 1')
+    .max(99, 'At most 99'),
+      // .required("Required*"),
 
-    maximumAge: Yup.number()
-    .min(1, 'At least 1')
-    .max(99, 'At most 99')
-    .test('minimumAge', 'Maximum Age must be greater than Minimum Age', function (value) {
-      const { minimumAge } = this.parent; 
-      return value > minimumAge;
-    })
-      .required("Required*"),
+    // maximumAge: Yup.number()
+    // .nullable() 
+    // .min(1, 'At least 1')
+    // .max(99, 'At most 99')
+    // .test('minimumAge', 'Maximum Age must be equal or greater than Minimum Age', function (value) {
+    //   const { minimumAge } = this.parent; 
+    //   return value > minimumAge;
+    // }),
+      // .required("Required*"),
 
+      maximumAge: Yup.number()
+  .min(0, 'At least 1')
+  .max(99, 'At most 99')
+  .nullable() // Allow null or undefined
+  .test('minimumAge', 'Maximum Age must be equal or greater than Minimum Age', function (value) {
+    const { minimumAge } = this.parent;
+
+    // Check if both minimumAge and maximumAge are valid, if not allow them to be unset
+    if (minimumAge === null || minimumAge === undefined || value === null || value === undefined) {
+      return true; // No limit is set, no need for validation
+    }
+
+    // Ensure maximumAge is greater than or equal to minimumAge
+    return value >= minimumAge;
+  }),
     pictureSizeLimit: Yup.number()
-    .min(1, 'At least 1')
-    .max(99, 'At most 99')
-      .required("Required*"),
+    .nullable()
+    .min(0, 'At least 1')
+    .max(99, 'At most 99'),
+      // .required("Required*"),
 
 
-    pictureFilesSupport: Yup.string()
-      .required("Required*"),
+    // pictureFilesSupport: Yup.string()
+    //   .required("Required*"),
 
     documentSizeLimit: Yup.number()
-    .min(1, 'At least 1')
-    .max(99, 'At most 99')
-      .required("Required*"),
+    .min(0, 'At least 1')
+    .max(99, 'At most 99'),
+      // .required("Required*"),
 
-    documentFilesSupport: Yup.string()
-      .required("Required*"),
+    // documentFilesSupport: Yup.string()
+    //   .required("Required*"),
 
 
     contractualPolicyInMonth: Yup.number()
@@ -87,8 +105,8 @@ const formValidationSchema = Yup.object().shape(
       .max(12, 'Value should not be greater than 12')  // Ensure the number is <= 12
       .required('Required*'),  // Field is required
 
-    empPictureIsMandatory: Yup.boolean()
-      .required('Required*'),  // Field is required
+    // empPictureIsMandatory: Yup.boolean()
+    //   .required('Required*'),  // Field is required
 
       isEmployeeCodeGenerationAuto :Yup.boolean()
       .required('Required*'),  // Field is required
@@ -444,13 +462,13 @@ export function DesignationEditForm({
 
                   </div>
                   <hr></hr>
-                  <div><h5>Employee Age</h5></div>
+                  <div><h5>Hiring age Limit</h5></div>
                   <div className="form-group row">
 
                     {
                       <div className="col-12 col-md-4 mt-3">
                                          <label >
-                                         Minimum Age<span style={{ color: "red" }}>*</span>
+                                         Minimum Age
 
 
                           </label>
@@ -472,7 +490,7 @@ export function DesignationEditForm({
                     {
                       <div className="col-12 col-md-4 mt-3">
                                           <label >
-                                          Maximum Age<span style={{ color: "red" }}>*</span>
+                                          Maximum Age
 
 
                           </label>
@@ -498,7 +516,7 @@ export function DesignationEditForm({
                     {
                       <div className="col-12 col-md-4 mt-3">
                                <label >
-                               Picture Size Limit (MB)<span style={{ color: "red" }}>*</span>
+                               Picture Size Limit (MB)
 
 
                           </label>
@@ -520,7 +538,7 @@ export function DesignationEditForm({
                     {
                       <div className="col-12 col-md-4 mt-3">
                             <label >
-                            File Support Extension<span style={{ color: "red" }}>*</span>
+                            File Support Extension
 
 
                           </label>
@@ -544,7 +562,7 @@ export function DesignationEditForm({
                     {
                       <div className="col-12 col-md-4 mt-3">
                               <label >
-                              Document Size Limit (MB)<span style={{ color: "red" }}>*</span>
+                              Document Size Limit (MB)
 
 
                           </label>
@@ -566,7 +584,7 @@ export function DesignationEditForm({
                     {
                       <div className="col-12 col-md-4 mt-3">
                                 <label >
-                                File Support Extension<span style={{ color: "red" }}>*</span>
+                                File Support Extension
 
 
                           </label>
