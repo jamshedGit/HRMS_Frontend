@@ -444,7 +444,7 @@ export function DesignationEditForm({
       dispatch(fetchAllActiveEmployees());
       dispatch(fetchAllFormsMenu(158, "allDesignations")); // For All Designations
       //   dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsisidaries
-      dispatch(fetchAllFormsMenu(315, "allEmployeeStatus"));
+      dispatch(fetchAllFormsMenu(275, "allEmployeeStatus"));
       dispatch(fetchAllSubsidiaryData("allSubsidiaryList"))
       dispatch(fetchAllFormsMenu(190, "allMaritalStatus")); // For All Subsisidaries, "allMaritalStatus")); // For All Marital Status
       // dispatch(fetchAllFormsMenu(87));
@@ -1067,7 +1067,7 @@ export function DesignationEditForm({
 
   const updateConfirmationDuePolicy = (setFieldValue, employeeTypeId, employeeStatusId, dateOfJoining) => {
     setDisableConfDueDate(false)
-    const probationPolicyInMonth = employeeTypeId == 148 && employeeStatusId == 316 && dateOfJoining
+    const probationPolicyInMonth = employeeTypeId == 148 && employeeStatusId == 276 && dateOfJoining
       ? profilePolicy?.data?.data[0]?.probationPolicyInMonth
       : null;
 
@@ -1090,7 +1090,7 @@ export function DesignationEditForm({
 
   const updateContractExpiryPolicy = (setFieldValue, employeeTypeId, employeeStatusId, dateOfJoining) => {
     setDisableConfDueDate(true)
-    const contractualPolicyInMonth = employeeTypeId == 147 && employeeStatusId == 316 && dateOfJoining
+    const contractualPolicyInMonth = employeeTypeId == 147 && employeeStatusId == 276 && dateOfJoining
       ? profilePolicy?.data?.data[0]?.contractualPolicyInMonth
       : null;
 
@@ -1940,7 +1940,7 @@ export function DesignationEditForm({
                             setDefemployeeStatus(e);
 //probation
 
-                            if (e.value == 316) {
+                            if (e.value == 276) {
                               if (!id) {
                                 updateConfirmationDuePolicy(setFieldValue, values?.employeeTypeId, e.value, values?.dateOfJoining)
                                 updateContractExpiryPolicy(setFieldValue, values?.employeeTypeId, e.value, values?.dateOfJoining)
