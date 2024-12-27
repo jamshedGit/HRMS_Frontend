@@ -54,6 +54,7 @@ const profileValidation = Yup.object().shape(
     middleName: Yup.string()
       .required("Required*"),
     employeeCode: Yup.string()
+    .nullable() 
       .required("Required*")
       .max(10, "Employee code must be at most 10 characters long"),
     title: Yup.string()
@@ -1030,9 +1031,7 @@ export function DesignationEditForm({
 
       if (!id && response?.data?.data[0].isEmployeeCodeGenerationAuto ) {
   
-        // dispatch(getLatestTableId("t_employee_profile", "employeeCode", " 1 = 1 ", setEmployeeCode));
-      
-        // setFieldValue("employeeCode",defEmployeeCode)
+       
 
 
         dispatch(getLatestTableId("t_employee_profile", "employeeCode", " 1 = 1 ", (setEmployee) => {
@@ -1522,8 +1521,14 @@ export function DesignationEditForm({
                           }}
                           onChange={(e) => {
                             setFieldValue("subsidiaryId", e.value || null);
+                            setEmployeeCode(null)
                             setDefualtSubsidiaryList(e);
-                            fetchEmployeePolicyBySubsidiaryId(e.value,setFieldValue);
+                            if(!id){
+                              fetchEmployeePolicyBySubsidiaryId(e.value,setFieldValue);
+                              setEmployeeCode("")
+                              setFieldValue("employeeCode","")
+                            }
+                            
                             //handlePaymenModeChanged(e)
                             fetchDepartment(e.value)
 
@@ -1617,7 +1622,15 @@ export function DesignationEditForm({
 
                     </div>
                     <div className="from-group row">
-                      <div className="col-12 col-md-4 mt-3">
+
+                   
+
+                   
+                    </div>
+                    <div className="form-group row">
+
+
+                    <div className="col-12 col-md-4 mt-3">
                         <SearchSelect
                           name="gradeId"
                           label={<span> Grade<span style={{ color: 'red' }}>*</span></span>}
@@ -1637,61 +1650,12 @@ export function DesignationEditForm({
                         />
 
                       </div>
-
                       <div className="col-12 col-md-4 mt-3">
-                        {/* <label>Default Shift<span style={{ color: 'red' }}>*</span></label>
-                        <Select
-                          // label="Default Shift"
-                          name="defaultShiftId"
-                          value={values.defaultShiftId}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          style={{ display: "block" }}
-                          autoComplete="off"
-                        >
-                          <option value="-1" label="Select Shift" />
-                          <option value="1" label="Morning Shift-A" />
-                          <option value="2" label="Evening Shift-B" />
-                          <option value="3" label="Night Shift-C" />
 
 
-                        </Select>
-                        {errors.defaultShiftId && touched.defaultShiftId && (
-                          <div className="invalid-text">{errors.defaultShiftId}</div>
-                        )} */}
 
 
-                        <label>Default Shift<span style={{ color: 'red' }}>*</span></label>
 
-                        <SearchSelect
-                          name="defaultShiftId"
-                          // label={<span> defaultShif<span style={{ color: 'red' }}>*</span></span>}
-                          isDisabled={isUserForRead && true}
-                          onBlur={() => {
-                            // handleBlur({ target: { name: "countryId" } });
-                          }}
-                          onChange={(e) => {
-                            setFieldValue("defaultShiftId", e.value || null);
-                            // setDefualtSubsidiaryList(e);
-                            // fetchEmployeePolicyBySubsidiaryId(e.value);
-                            //handlePaymenModeChanged(e)
-                          }}
-
-                          // value={(defSubsidiary || null)}
-                          value={
-                            dashboard?.allEmployeeShifts?.find(
-                              (option) => option.value === values.defaultShiftId
-                            ) || null
-                          }
-                          error={errors.defaultShiftId}
-                          touched={touched.defaultShiftId}
-                          // options={dashboard.allEmployeeShifts}
-                             options={dashboard.allEmployeeShifts?.filter(shift => shift?.subsidiaryId == values?.subsidiaryId)}
-                        />
-                      </div>
-                    </div>
-                    <div className="form-group row">
-                      <div className="col-12 col-md-4 mt-3">
                         <SearchSelect
                           name="designationId"
                           label={<span> Designation<span style={{ color: 'red' }}>*</span></span>}
@@ -1742,25 +1706,7 @@ export function DesignationEditForm({
 
                       </div>
 
-                      <div className="col-12 col-md-4 mt-3">
-                        <SearchSelect
-                          name="payrollGroupId"
-                          label={<span> Payroll Group<span style={{ color: 'red' }}>*</span></span>}
-                          isDisabled={isUserForRead && true}
-                          onBlur={() => {
-                            // handleBlur({ target: { name: "countryId" } });
-                          }}
-                          onChange={(e) => {
-                            setFieldValue("payrollGroupId", e.value || null);
-                            setDefaultChildMenus(e);
-                            // dispatch(fetchAllFormsMenu(e.value));
-                          }}
-                          value={(defchildMenus || null)}
-                          error={errors.payrollGroupId}
-                          touched={touched.payrollGroupId}
-                          options={dashboard.allChildMenus}
-                        />
-                      </div>
+                
 
 
 
@@ -1821,100 +1767,7 @@ export function DesignationEditForm({
 
 
 
-                            // if (e.value == 148) // WHEN Select Permanet value
-                            // {
-                            //   // For Empty Object
-
-                            //   setContractExpiryDate('');
-                            //   setConfirmationDate('');
-                            // //  setConfirmationDueDate('');
-                            //  // setConfirmationEnterDate('');
-
-                            //   //  setFieldValue("dateOfConfirmation", '');
-                            //   // setFieldValue("dateOfConfirmationDue", '');
-                            //   // setFieldValue("dateOfConfirmationEnter", '');
-                            //   // setFieldValue("dateOfContractExpiry", '');
-
-                            //   // For Disabled Object
-                            //   //  setDisbledConfirmationEnterDate(true);
-                            //   //   setDisabledConfirmationDate(true);
-                            //   setDisbledConfirmationDueDate(true);
-                            //   setDisabledContractExpiryDate(true);
-                            //   setDisbledConfirmationEnterDate(true);
-
-
-                            // }
-                            // else if (e.value == 93) // Probation Type
-                            // {
-                            //   // setFieldValue("dateOfConfirmation", '');
-                            //   // setFieldValue("dateOfContractExpiry", '');
-
-                            //   setDisabledConfirmationDate(true);
-                            //   setDisabledContractExpiryDate(true);
-
-                            //   // setContractExpiryDate('');
-                            //   // setConfirmationDate('');
-                            //   // setConfirmationEnterDate('');
-
-
-                            //   // setFieldValue("dateOfConfirmationDue", defProbationPolicyMonth || null)
-                            //   // setConfirmationDueDate(addMonths(values.dateOfJoining || null, defProbationPolicyMonth))
-
-                            //   const a = addMonths(values.dateOfJoining, defProbationPolicyMonth);
-
-
-                            //   setConfirmationDueDate(a)
-                            //   setFieldValue("dateOfConfirmationDue",new Date(a))
-
-
-                            // }
-                            // else if (e.value == 147) // Contract Type
-                            // {
-
-                            //   //  setContractExpiryDate('');
-                            //   // setConfirmationDate('');
-                            //   // setConfirmationDueDate('');
-                            //   // setConfirmationEnterDate('');
-
-                            //   // setFieldValue("dateOfConfirmation", '');
-                            //   // setFieldValue("dateOfConfirmationDue", '');
-                            //   // setFieldValue("dateOfConfirmationEnter", '');
-                            //   // // setFieldValue("dateOfContractExpiry", '');
-
-                            //   // For Disabled Object
-                            //   setDisbledConfirmationEnterDate(true);
-                            //   setDisabledConfirmationDate(true);
-                            //   setDisbledConfirmationDueDate(true);
-                            //   //  setDisabledContractExpiryDate(true);
-                            //   // setFieldValue("dateOfContractExpiry", defContractExpiryPolicy)
-                            //   // setContractExpiryDate(addMonths(values.dateOfJoining || null, defProbationPolicyMonth))
-
-                            //   setContractExpiryDate(addMonths(values.dateOfJoining, defContractExpiryPolicy))
-                            //   setFieldValue("dateOfContractExpiry", addMonths(values.dateOfJoining, defContractExpiryPolicy))
-
-                            // }
-
-
-                            // else {
-
-
-                            //off for temp
-                            // *********************************************************************************************************
-                            // setFieldValue("dateOfContractExpiry", contractExpirtyDateSelected || new Date())
-                            // setFieldValue("dateOfConfirmationEnter", confirmationEnterDateSelected || new Date())
-                            // setFieldValue("dateOfConfirmationDue", confirmationDueDateSelected || new Date())
-                            // setFieldValue("dateOfConfirmation", confirmationDateSelected || new Date())
-
-                            // setContractExpiryDate(new Date());
-                            // setConfirmationDate(new Date());
-                            // setConfirmationDueDate(new Date());
-                            // setConfirmationEnterDate(new Date());
-
-                            // *********************************************************************************************************                          
-
-                            // }
-
-                            // dispatch(fetchAllFormsMenu(e.value));
+                           
                           }}
                           value={(defchildEmptypeMenus || null)}
                           error={errors.employeeTypeId}
@@ -1966,6 +1819,27 @@ export function DesignationEditForm({
                           options={dashboard?.allEmployeeStatus}
                         />
                       </div>
+
+                      <div className="col-12 col-md-4 mt-3">
+                        <SearchSelect
+                          name="payrollGroupId"
+                          label={<span> Payroll Group<span style={{ color: 'red' }}>*</span></span>}
+                          isDisabled={isUserForRead && true}
+                          onBlur={() => {
+                            // handleBlur({ target: { name: "countryId" } });
+                          }}
+                          onChange={(e) => {
+                            setFieldValue("payrollGroupId", e.value || null);
+                            setDefaultChildMenus(e);
+                            // dispatch(fetchAllFormsMenu(e.value));
+                          }}
+                          value={(defchildMenus || null)}
+                          error={errors.payrollGroupId}
+                          touched={touched.payrollGroupId}
+                          options={dashboard.allChildMenus}
+                        />
+                      </div>
+                
                       <div className="col-12 col-md-4 mt-3">
                         <SearchSelect
                           name="locationId"
@@ -1984,6 +1858,114 @@ export function DesignationEditForm({
                           touched={touched.locationId}
                           options={dashboard.allLocationChildMenus}
                         />
+                      </div>
+
+                      <div className="col-12 col-md-4 mt-3">
+                        {/* <label>Default Shift<span style={{ color: 'red' }}>*</span></label>
+                        <Select
+                          // label="Default Shift"
+                          name="defaultShiftId"
+                          value={values.defaultShiftId}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          style={{ display: "block" }}
+                          autoComplete="off"
+                        >
+                          <option value="-1" label="Select Shift" />
+                          <option value="1" label="Morning Shift-A" />
+                          <option value="2" label="Evening Shift-B" />
+                          <option value="3" label="Night Shift-C" />
+
+
+                        </Select>
+                        {errors.defaultShiftId && touched.defaultShiftId && (
+                          <div className="invalid-text">{errors.defaultShiftId}</div>
+                        )} */}
+
+
+                        <label>Default Shift<span style={{ color: 'red' }}>*</span></label>
+
+                        <SearchSelect
+                          name="defaultShiftId"
+                          // label={<span> defaultShif<span style={{ color: 'red' }}>*</span></span>}
+                          isDisabled={isUserForRead && true}
+                          onBlur={() => {
+                            // handleBlur({ target: { name: "countryId" } });
+                          }}
+                          onChange={(e) => {
+                            setFieldValue("defaultShiftId", e.value || null);
+                            // setDefualtSubsidiaryList(e);
+                            // fetchEmployeePolicyBySubsidiaryId(e.value);
+                            //handlePaymenModeChanged(e)
+                          }}
+
+                          // value={(defSubsidiary || null)}
+                          value={
+                            dashboard?.allEmployeeShifts?.find(
+                              (option) => option.value === values.defaultShiftId
+                            ) || null
+                          }
+                          error={errors.defaultShiftId}
+                          touched={touched.defaultShiftId}
+                          // options={dashboard.allEmployeeShifts}
+                             options={dashboard.allEmployeeShifts?.filter(shift => shift?.subsidiaryId == values?.subsidiaryId)}
+                        />
+                      </div>
+
+                      <div className="col-12 col-md-4 mt-3">
+                        <label>Report To<span style={{ color: 'red' }}>*</span></label>
+                        <SearchSelect
+                          name="reportTo"
+
+                          isDisabled={isUserForRead && true}
+                          // onBlur={() => {
+                          //   handleBlur({ target: { name: "countryId" } });
+                          // }}
+                          onChange={(e) => {
+                            setFieldValue("reportTo", e.value || null);
+                            setEmployeeReportToDefault(e);
+                            //dispatch(fetchAllActiveEmployees(e.value));
+                          }}
+                          value={(defEmployeeReportTo || null)}
+                          error={errors.reportTo}
+                          touched={touched.reportTo}
+                          options={dashboard.allEmployees.filter(x => x.value != values.Id)}
+                        />
+
+                      </div>
+
+
+                      <div className="col-12 col-md-4 mt-3">
+                        {<span> Date Of Birth<span style={{ color: 'red' }}>*</span></span>}
+                        <DatePicker
+                          className="form-control"
+                          placeholder=" Date Of Birth"
+                          selected={DOBDateSelected}
+                          //value={values.dateOfBirth}
+                          showYearDropdown
+                          scrollableMonthYearDropdown
+                          onChange={(date) => {
+                            setFieldValue("dateOfBirth", date);
+                            setDOBDate(date);
+                            if (!id) {
+
+                              updateRetirmentPolicy(setFieldValue, date, values?.gender)
+                            }
+
+                          }}
+                          timeInputLabel="Time:"
+                          dateFormat="dd/MM/yyyy"
+                          showTimeInput
+                          name="dateOfBirth"
+                          disabled={isUserForRead || !values?.subsidiaryId}
+                          autoComplete="off"
+                          // maxDate={new Date()}
+                          // minDate={new Date(1900, 0, 1)}
+                          // const currentDate = new Date();
+                          minDate={maxAgeLimin !== null ? new Date(new Date().getFullYear() - maxAgeLimin, new Date().getMonth(), new Date().getDate()) : null}
+                          maxDate={minAgeLimin !== null ? new Date(new Date().getFullYear() - minAgeLimin, new Date().getMonth(), new Date().getDate()) : new Date()}
+                        />
+                        <ErrorMessage className="form-feedBack" name="dateOfBirth" component="div" />
                       </div>
 
 
@@ -2037,7 +2019,28 @@ export function DesignationEditForm({
                       </div>
 
 
+                      {!hidehideRetirementAgeDate ? (<div className="col-12 col-md-4 mt-3">
+                        <label>Date Of Retirement</label>
+                        <DatePicker
+                          className="form-control"
+                          placeholder=" Date Of Retirement"
+                          selected={RetirementSelected}
 
+                          showYearDropdown
+                          scrollableMonthYearDropdown
+                          onChange={(date) => {
+                            setFieldValue("dateOfRetirement", date);
+                            setDRetirmentDate(date);
+                          }}
+                          timeInputLabel="Time:"
+                          dateFormat="dd/MM/yyyy"
+                          showTimeInput
+                          name="dateOfRetirement"
+                          disabled={isUserForRead || !values?.subsidiaryId}
+                          autoComplete="off"
+                        />
+                        <ErrorMessage className="form-feedBack" name="dateOfRetirement" component="div" />
+                      </div>) : (null)}
 
 
 
@@ -2119,27 +2122,7 @@ export function DesignationEditForm({
 
 
 
-                      <div className="col-12 col-md-4 mt-3">
-                        <label>Report To<span style={{ color: 'red' }}>*</span></label>
-                        <SearchSelect
-                          name="reportTo"
-
-                          isDisabled={isUserForRead && true}
-                          // onBlur={() => {
-                          //   handleBlur({ target: { name: "countryId" } });
-                          // }}
-                          onChange={(e) => {
-                            setFieldValue("reportTo", e.value || null);
-                            setEmployeeReportToDefault(e);
-                            //dispatch(fetchAllActiveEmployees(e.value));
-                          }}
-                          value={(defEmployeeReportTo || null)}
-                          error={errors.reportTo}
-                          touched={touched.reportTo}
-                          options={dashboard.allEmployees.filter(x => x.value != values.Id)}
-                        />
-
-                      </div>
+                   
 
                     </div>
 
@@ -2167,38 +2150,7 @@ export function DesignationEditForm({
                     <h6>Personal Information</h6>
 
                     <div className="from-group row">
-                      <div className="col-12 col-md-4 mt-3">
-                        {<span> Date Of Birth<span style={{ color: 'red' }}>*</span></span>}
-                        <DatePicker
-                          className="form-control"
-                          placeholder=" Date Of Birth"
-                          selected={DOBDateSelected}
-                          //value={values.dateOfBirth}
-                          showYearDropdown
-                          scrollableMonthYearDropdown
-                          onChange={(date) => {
-                            setFieldValue("dateOfBirth", date);
-                            setDOBDate(date);
-                            if (!id) {
-
-                              updateRetirmentPolicy(setFieldValue, date, values?.gender)
-                            }
-
-                          }}
-                          timeInputLabel="Time:"
-                          dateFormat="dd/MM/yyyy"
-                          showTimeInput
-                          name="dateOfBirth"
-                          disabled={isUserForRead || !values?.subsidiaryId}
-                          autoComplete="off"
-                          // maxDate={new Date()}
-                          // minDate={new Date(1900, 0, 1)}
-                          // const currentDate = new Date();
-                          minDate={maxAgeLimin !== null ? new Date(new Date().getFullYear() - maxAgeLimin, new Date().getMonth(), new Date().getDate()) : null}
-                          maxDate={minAgeLimin !== null ? new Date(new Date().getFullYear() - minAgeLimin, new Date().getMonth(), new Date().getDate()) : new Date()}
-                        />
-                        <ErrorMessage className="form-feedBack" name="dateOfBirth" component="div" />
-                      </div>
+                     
                       <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="nic_no"
@@ -2227,33 +2179,7 @@ export function DesignationEditForm({
                         />
                         {/* <ErrorMessage style={{color:"red"}} name="nic_no" component="div" /> */}
                       </div>
-                      {!hidehideRetirementAgeDate ? (<div className="col-12 col-md-4 mt-3">
-                        <label>Date Of Retirement</label>
-                        <DatePicker
-                          className="form-control"
-                          placeholder=" Date Of Retirement"
-                          selected={RetirementSelected}
-
-                          showYearDropdown
-                          scrollableMonthYearDropdown
-                          onChange={(date) => {
-                            setFieldValue("dateOfRetirement", date);
-                            setDRetirmentDate(date);
-                          }}
-                          timeInputLabel="Time:"
-                          dateFormat="dd/MM/yyyy"
-                          showTimeInput
-                          name="dateOfRetirement"
-                          disabled={isUserForRead || !values?.subsidiaryId}
-                          autoComplete="off"
-                        />
-                        <ErrorMessage className="form-feedBack" name="dateOfRetirement" component="div" />
-                      </div>) : (null)}
-
-
-                    </div>
-                    <div className="from-group row">
-
+                     
 
                       <div className="col-12 col-md-4 mt-3">
                         <Field
@@ -2277,6 +2203,11 @@ export function DesignationEditForm({
                       </div>
 
                     </div>
+                    <div className="from-group row">
+
+
+
+                    </div>
 
                     <div className="from-group row">
 
@@ -2288,7 +2219,7 @@ export function DesignationEditForm({
                           name="phone_home"
                           component={Input}
                           placeholder="03151110002"
-                          label="Phone Home"
+                          label="Phone (Home)"
                           maxLength="15"
                           autoComplete="off"
                         />
@@ -2299,7 +2230,7 @@ export function DesignationEditForm({
                           component={Input}
                           maxLength="15"
                           placeholder="03151110002"
-                          label="Offical Phone"
+                          label="Phone (Offical) "
                           autoComplete="off"
                         />
                       </div>
@@ -2426,25 +2357,7 @@ export function DesignationEditForm({
                         <h6>  Basic Information</h6>
 
                         <div className="from-group row">
-                          <div className="col-12 col-md-4 mt-3">
-                            <SearchSelect
-                              name="teamId"
-                              label={<span> Team</span>}
-                              isDisabled={isUserForRead && true}
-                              onBlur={() => {
-                                // handleBlur({ target: { name: "countryId" } });
-                              }}
-                              onChange={(e) => {
-                                setFieldValue("teamId", e.value || null);
-                                setDefaultChildTeamsMenus(e);
-                                // dispatch(fetchAllFormsMenu(e.value));
-                              }}
-                              value={(defchildTeamMenus || null)}
-                              error={errors.teamId}
-                              touched={touched.teamId}
-                              options={dashboard.allTeamsChildMenus}
-                            />
-                          </div>
+                        
 
                           <div className="col-12 col-md-4 mt-3">
 
@@ -2508,7 +2421,12 @@ export function DesignationEditForm({
                             />
                           </div>
 
-                          <div className="col-12 col-md-4 mt-3">
+                       
+
+                        </div>
+                        <div className="from-group row">
+
+                        <div className="col-12 col-md-4 mt-3">
                             <label>Date Of Confirmation</label>
                             <DatePicker
                               className="form-control"
@@ -2532,11 +2450,6 @@ export function DesignationEditForm({
                             <ErrorMessage className="form-feedBack" name="dateOfConfirmation" component="div" />
                           </div>
 
-
-                        </div>
-                        <div className="from-group row">
-
-              
 
                           <div className="col-12 col-md-4 mt-3">
                             <label>Date Confirmation Due </label>
@@ -2582,72 +2495,6 @@ export function DesignationEditForm({
                               minDate={values.dateOfJoining ? new Date(values.dateOfJoining) : null}
                             />
                             <ErrorMessage className="form-feedBack" name="dateOfConfirmationEnter" component="div" />
-                          </div>
-
-                          {!hideContractExpDate ?(     <div className="col-12 col-md-4 mt-3">
-                            <label>Contract Expiry </label>
-                            <DatePicker
-                              className="form-control"
-                              placeholder=" Contract Expiry"
-                              selected={contractExpirtyDateSelected}
-                              onChange={(date) => {
-                                setFieldValue("dateOfContractExpiry", date);
-                                setContractExpiryDate(date);
-                              }}
-                              timeInputLabel="Time:"
-                              dateFormat="dd/MM/yyyy"
-                              showTimeInput
-                              name="dateOfContractExpiry"
-                              // disabled={disabledContractExpirtyDateSelected}
-                              autoComplete="off"
-                              minDate={values.dateOfJoining ? new Date(values.dateOfJoining) : null}
-                            />
-                            <ErrorMessage className="form-feedBack" name="dateOfContractExpiry" component="div" />
-                          </div>):(null)}
-
-                     
-
-                        </div>
-
-                        <div className="from-group row">
-
-                          <div className="col-12 col-md-4 mt-3">
-                            <Select
-                              label={<span> Nationality</span>}
-                              name="nationality"
-                              value={values.nationality}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              style={{ display: "block" }}
-                            >
-                              <option value="-1" label="Select Nationality" />
-                              <option value="Pakistani" label="Pakistani" />
-                              <option value="Other" label="Other" />
-
-                            </Select>
-                            {errors.nationality && touched.nationality && (
-                              <div className="invalid-text">{errors.nationality}</div>
-                            )}
-                          </div>
-
-                          <div className="col-12 col-md-4 mt-3">
-                            <Select
-                              label="Attendance Type"
-                              name="attendanceType"
-                              value={values.attendanceType}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              style={{ display: "block" }}
-                              autoComplete="off"
-                            >
-                              {/* <option value="-1" label="Select Attendance Type" /> */}
-                              <option value={1} label="Regular Attendance" selected />
-                              <option value={2} label="Auto Present Attendance" />
-
-                            </Select>
-                            {errors.attendanceType && touched.attendanceType && (
-                              <div className="invalid-text">{errors.attendanceType}</div>
-                            )}
                           </div>
 
                           <div className="col-12 col-md-4 mt-3">
@@ -2700,10 +2547,99 @@ export function DesignationEditForm({
                           </div>
 
 
+                          {!hideContractExpDate ?(     <div className="col-12 col-md-4 mt-3">
+                            <label>Contract Expiry </label>
+                            <DatePicker
+                              className="form-control"
+                              placeholder=" Contract Expiry"
+                              selected={contractExpirtyDateSelected}
+                              onChange={(date) => {
+                                setFieldValue("dateOfContractExpiry", date);
+                                setContractExpiryDate(date);
+                              }}
+                              timeInputLabel="Time:"
+                              dateFormat="dd/MM/yyyy"
+                              showTimeInput
+                              name="dateOfContractExpiry"
+                              // disabled={disabledContractExpirtyDateSelected}
+                              autoComplete="off"
+                              minDate={values.dateOfJoining ? new Date(values.dateOfJoining) : null}
+                            />
+                            <ErrorMessage className="form-feedBack" name="dateOfContractExpiry" component="div" />
+                          </div>):(null)}
+
+                     
+
+                        </div>
+
+                        <div className="from-group row">
+
+                          <div className="col-12 col-md-4 mt-3">
+                            <Select
+                              label={<span> Nationality</span>}
+                              name="nationality"
+                              value={values.nationality}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              style={{ display: "block" }}
+                            >
+                              <option value="-1" label="Select Nationality" />
+                              <option value="Pakistani" label="Pakistani" />
+                              <option value="Other" label="Other" />
+
+                            </Select>
+                            {errors.nationality && touched.nationality && (
+                              <div className="invalid-text">{errors.nationality}</div>
+                            )}
+                          </div>
+
+                          <div className="col-12 col-md-4 mt-3">
+                            <SearchSelect
+                              name="teamId"
+                              label={<span> Team</span>}
+                              isDisabled={isUserForRead && true}
+                              onBlur={() => {
+                                // handleBlur({ target: { name: "countryId" } });
+                              }}
+                              onChange={(e) => {
+                                setFieldValue("teamId", e.value || null);
+                                setDefaultChildTeamsMenus(e);
+                                // dispatch(fetchAllFormsMenu(e.value));
+                              }}
+                              value={(defchildTeamMenus || null)}
+                              error={errors.teamId}
+                              touched={touched.teamId}
+                              options={dashboard.allTeamsChildMenus}
+                            />
+                          </div>
+
+                          <div className="col-12 col-md-4 mt-3">
+                            <Select
+                              label="Attendance Type"
+                              name="attendanceType"
+                              value={values.attendanceType}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              style={{ display: "block" }}
+                              autoComplete="off"
+                            >
+                              {/* <option value="-1" label="Select Attendance Type" /> */}
+                              <option value={1} label="Regular Attendance" selected />
+                              <option value={2} label="Auto Present Attendance" />
+
+                            </Select>
+                            {errors.attendanceType && touched.attendanceType && (
+                              <div className="invalid-text">{errors.attendanceType}</div>
+                            )}
+                          </div>
+
+                 
+
 
 
                         </div>
 
+                   
 
                         <div className="from-group row">
                           <div className="col-12 col-md-4 mt-3">
@@ -2717,7 +2653,7 @@ export function DesignationEditForm({
                             />
                           </div>
 
-                          <div className="col-12 col-md-4 mt-3">
+                          <div className="col-12 col-md-4 mt-5">
                             <input
                               name="salesRep"
                               type="checkbox"
@@ -2729,7 +2665,7 @@ export function DesignationEditForm({
                             />
                             <label><span>Sales Representative</span></label>
                           </div>
-                          <div className="col-12 col-md-4 mt-3">
+                          <div className="col-12 col-md-4 mt-5">
                             <input
                               name="supportRep"
                               type="checkbox"
@@ -2790,8 +2726,33 @@ export function DesignationEditForm({
 
                           </div>
 
-
                           <div className="col-12 col-md-4 mt-3">
+                            <SearchSelect
+                              name="cycleTypeId"
+                              label={<span> Cycle Type</span>}
+                              isDisabled={isUserForRead && true}
+                              onBlur={() => {
+                                // handleBlur({ target: { name: "countryId" } });
+                              }}
+                              onChange={(e) => {
+                                setFieldValue("cycleTypeId", e.value || null);
+                                setcycleType(e);
+                                // dispatch(fetchAllFormsMenu(e.value));
+                              }}
+                              value={(defcycleType || null)}
+                              error={errors.cycleTypeId}
+                              touched={touched.cycleTypeId}
+                              options={dashboard.allCycleTypeList}
+                            />
+                          </div>
+
+
+                       
+
+                        </div>
+                        <div className="from-group row">
+
+                        <div className="col-12 col-md-4 mt-3">
                             <Field
                               name="passportNo"
                               maxLength="15"
@@ -2801,9 +2762,6 @@ export function DesignationEditForm({
                               autoComplete="off"
                             />
                           </div>
-
-                        </div>
-                        <div className="from-group row">
 
                           <div className="col-12 col-md-4 mt-3">
                             <label>Passport Expiry Date</label>
@@ -2854,7 +2812,13 @@ export function DesignationEditForm({
                             <ErrorMessage className="form-feedBack" name="drivingLicenseExpiry" component="div" />
                           </div>
 
-                          <div className="col-12 col-md-4 mt-3">
+                        
+                        </div>
+
+                        <div className="from-group row">
+                          
+
+                        <div className="col-12 col-md-4 mt-3">
                             <Field
                               name="laborCardNo"
                               maxLength="20"
@@ -2866,9 +2830,6 @@ export function DesignationEditForm({
                             {/* <ErrorMessage style={{color:"red"}} name="nic_no" component="div" /> */}
                           </div>
 
-                        </div>
-
-                        <div className="from-group row">
 
                           <div className="col-12 col-md-4 mt-3">
                             <Field
@@ -2923,27 +2884,9 @@ export function DesignationEditForm({
 
 
                         <div className="from-group row">
-                          <div className="col-12 col-md-4 mt-3">
-                            <SearchSelect
-                              name="cycleTypeId"
-                              label={<span> Cycle Type</span>}
-                              isDisabled={isUserForRead && true}
-                              onBlur={() => {
-                                // handleBlur({ target: { name: "countryId" } });
-                              }}
-                              onChange={(e) => {
-                                setFieldValue("cycleTypeId", e.value || null);
-                                setcycleType(e);
-                                // dispatch(fetchAllFormsMenu(e.value));
-                              }}
-                              value={(defcycleType || null)}
-                              error={errors.cycleTypeId}
-                              touched={touched.cycleTypeId}
-                              options={dashboard.allCycleTypeList}
-                            />
-                          </div>
+                   
 
-                          <div className="col-12 col-md-4 mt-3">
+                          <div className="col-12 col-md-12 mt-3">
                             <Field
                               name="professional_summary"
                               component={TextArea}
@@ -2952,9 +2895,9 @@ export function DesignationEditForm({
                               autoComplete="off"
                             />
                           </div>
-
-
-                          <div className="col-12 col-md-4 mt-3">
+                          </div>
+                          <div className="from-group row">
+                          <div className="col-12 col-md-12 mt-3">
                             <Field
                               name="additional_summary"
                               component={TextArea}
