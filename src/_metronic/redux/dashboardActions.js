@@ -32,6 +32,19 @@ export const fetchAllActiveEmployees = () => async (dispatch) => {
     });
 };
 
+export const fetchAllActiveEmployeesBySubsidiary = (subsidiaryId) => async (dispatch) => {
+  return await requestFromServer
+    .getAllActiveEmployeesBySubsidiary({subsidiaryId})
+    .then((response) => {
+      const entities = response.data?.data;
+
+      dispatch(actions.AllActiveEmployeeFetch(entities));
+    })
+    .catch((error) => {
+      toast.error("Something went wrong");
+    });
+};
+
 export const fetchEmpSalaryRevisionByEmployeeId = (employeeId) => async (dispatch) => {
   return await requestFromServer
     .getAllEmployeeSalaryReviewForDDL(employeeId)
@@ -83,9 +96,9 @@ export const fetchAllEarningDeductionList = (Id) => async (dispatch) => {
     });
 };
 
-export const fetchAllEarningList = (Id) => async (dispatch) => {
+export const fetchAllEarningList = (Id, subsidiaryId, employeeId = '') => async (dispatch) => {
   return await requestFromServer
-    .getAllEarningDeductionList(Id)
+    .getAllEarningDeductionList(Id, subsidiaryId, employeeId)
     .then((response) => {
       const entities = response.data?.data;
       dispatch(actions.AllEarningHeadsFetch(entities));
@@ -96,9 +109,9 @@ export const fetchAllEarningList = (Id) => async (dispatch) => {
 };
 
 
-export const fetchAllDeductionList = (Id) => async (dispatch) => {
+export const fetchAllDeductionList = (Id, subsidiaryId, employeeId = '') => async (dispatch) => {
   return await requestFromServer
-    .getAllEarningDeductionList(Id)
+    .getAllEarningDeductionList(Id, subsidiaryId, employeeId)
     .then((response) => {
       const entities = response.data?.data;
       dispatch(actions.AllDeductionHeadsFetch(entities));
@@ -306,9 +319,9 @@ export const fetchAllSubsidiaryData = (key) => async (dispatch) => {
  * @param {String} key 
  * @returns 
  */
-export const fetchAllFiscalYearData = (key) => async (dispatch) => {
+export const fetchAllFiscalYearData = (key, employeeId) => async (dispatch) => {
   return await requestFromServer
-    .getAllFiscalYear()
+    .getAllFiscalYear({employeeId})
     .then((response) => {
       const entities = [...response.data?.data];
       dispatch(actions.AllChildMenusFetch({ entities, key }));

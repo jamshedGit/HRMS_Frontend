@@ -1,25 +1,25 @@
 import React, { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FormUIProvider } from "./FormUIContext";
+import { Card } from "react-bootstrap";
 import { FormTable } from "./form-table/FormTable";
 import { FormFilter } from "./form-filter/FormFilter";
-import { Card } from "react-bootstrap";
+import { fetchAllActiveEmployees, fetchAllDept, fetchAllFormsMenu, fetchAllPayrollMonthYearList, fetchAllSubsidiaryData } from "../../../../../_metronic/redux/dashboardActions";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchAllActiveEmployees, fetchAllActiveEmployeesBySubsidiary, fetchAllDept, fetchAllFormsMenu, fetchAllSubsidiaryData } from "../../../../../_metronic/redux/dashboardActions";
+import { FormUIProvider } from "./FormUIContext";
 import { CardHeader } from "../../../../../_metronic/_partials/controls";
 import CurrentModuleName from "../../../../utils/common-modules/ModuleName";
 
-export function AttendanceViewPage() {
+export function PayrollRegisterPage() {
   const dispatch = useDispatch();
   const {
     dashboard,
     listLoading,
-    processLoading
+    pdfLoading
   } = useSelector((state) => ({
     dashboard: state.dashboard,
-    listLoading: state.attendance.listLoading,
-    processLoading: state.attendance.processLoading
+    listLoading: state.payroll_register.listLoading,
+    pdfLoading: state.payroll_register.pdfLoading
   }
   ));
 
@@ -42,6 +42,7 @@ export function AttendanceViewPage() {
   }, [dispatch]);
 
   return (
+
     <FormUIProvider FormUIEvents={{}}>
       < Card>
         {/* Card Starts */}
@@ -50,7 +51,7 @@ export function AttendanceViewPage() {
         </CardHeader>
 
         {/* Filter Form Starts */}
-        <FormFilter dispatch={dispatch} loading={listLoading} processLoading={processLoading}/>
+        <FormFilter loading={listLoading} pdfLoading={pdfLoading} dispatch={dispatch} />
         {/* Filter Form Ends */}
 
         {/* Table Starts */}
@@ -59,7 +60,6 @@ export function AttendanceViewPage() {
 
         {/* Card Ends */}
       </Card >
-
       <ToastContainer
         position="top-right"
         autoClose={5000}

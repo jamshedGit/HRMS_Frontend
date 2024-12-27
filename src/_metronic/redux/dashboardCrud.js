@@ -14,9 +14,11 @@ export const getAllCountry = async () => {
   );
 };
 
-export const getAllEarningDeductionList = async (Id) => {
+export const getAllEarningDeductionList = async (Id, subsidiaryId, employeeId) => {
   return await axios.post(`${USERS_URL}/stoppage/read-earning-deduction-list`, {
     flag: Id,
+    subsidiaryId: subsidiaryId,
+    employeeId: employeeId
   });
 };
 
@@ -28,6 +30,10 @@ export const getAllEmp_Compensation_Benefits_DDL = async () => {
 
 export const getAllActiveEmployees = async () => {
   return await axios.post(`${USERS_URL}/settings/read-all-profile`);
+};
+
+export const getAllActiveEmployeesBySubsidiary = async (body) => {
+  return await axios.post(`${USERS_URL}/settings/read-all-profile-by-subsidiary`,body);
 };
 
 export const getAllEmployeeSalaryReviewForDDL = async (employeeId) => {
@@ -112,8 +118,8 @@ export const getAllSubsidiary = async (Id) => {
   return await axios.get(`${USERS_URL}/settings/read-all-subsidiaries`);
 };
 
-export const getAllFiscalYear = async (Id) => {
-  return await axios.get(`${USERS_URL}/settings/read-all-fiscal-year`);
+export const getAllFiscalYear = async (body) => {
+  return await axios.post(`${USERS_URL}/settings/read-all-fiscal-year`,body);
 };
 
 export const getAllParentDepartments = async (Id) => {

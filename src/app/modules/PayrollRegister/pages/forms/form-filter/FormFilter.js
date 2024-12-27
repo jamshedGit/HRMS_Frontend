@@ -1,23 +1,23 @@
 import React, { useMemo } from "react"
 import { Field, Formik } from "formik"
-import * as Yup from "yup";
 import { isEqual } from "lodash"
+import * as Yup from "yup";
 import { useFormUIContext } from "../FormUIContext"
 import { Form, Modal } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
-import { DatePickerField, Select } from "../../../../../../_metronic/_partials/controls";
-import { ATTENDANCE_TYPE } from "../../../../../utils/constants";
+import { Select } from "../../../../../../_metronic/_partials/controls";
+import { ATTENDANCE_TYPE, VALIDATION_MESSAGES } from "../../../../../utils/constants";
 import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
 import { initialFilter } from "../FormUIHelpers";
 import * as actions from "../../../_redux/formActions";
 import { formatDates } from "../../../../../utils/common";
-import { fetchAllActiveEmployeesBySubsidiary } from "../../../../../../_metronic/redux/dashboardActions";
+import { fetchAllActiveEmployeesBySubsidiary, fetchAllPayrollMonthYearList } from "../../../../../../_metronic/redux/dashboardActions";
 
 //Validation for date fields
 const formValidation = Yup.object().shape({
-  from: Yup.date().optional(),
-  to: Yup.date().optional().min(Yup.ref('from'), 'Date to date cannot be before Date from date'),
+  subsidiaryId: Yup.date().required(VALIDATION_MESSAGES.required),
+  employeeId: Yup.date().required(VALIDATION_MESSAGES.required)
 })
 
 //Prepare new Filter
@@ -32,7 +32,7 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
   const FormUIContext = useFormUIContext()
 
   //Get All dropdown data from state
-  const { allEmployees, allSubsidiaryList, allEmployeeGradeList, allDept, allLocationChildMenus, allDesignations } = useSelector(
+  const { allEmployees, allSubsidiaryList, allEmployeeGradeList, allDept, allLocationChildMenus, allDesignations, allPayrollMonthYearList } = useSelector(
     (state) => (state.dashboard),
   )
 
@@ -60,6 +60,10 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
   const allDesignationsMap = useMemo(() => {
     return new Map(allDesignations?.map(item => [item.value, item]));
   }, [allDesignations]);
+
+  const allPayrollMonthMap = useMemo(() => {
+    return new Map(allPayrollMonthYearList?.map(item => [item.value, item]));
+  }, [allPayrollMonthYearList]);
   //Create Maps for every dropdown data so setting value in dropdown can be fast optimized (End)
 
   //Fetch Params from Context
@@ -119,7 +123,9 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
           handleSubmit,
           handleBlur,
           setFieldValue,
-          handleReset
+          handleReset,
+          errors,
+          touched
         }) => (
           <>
             <Modal.Body className="overlay overlay-block cursor-default">
@@ -136,15 +142,18 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                         onChange={(e) => {
                           const value = e.value == '--Select--' ? '' : Number(e.value)
                           setFieldValue('subsidiaryId', value)
+                          dispatch(fetchAllPayrollMonthYearList({ subsidiaryId: value }, "allPayrollMonthYearList"));
                           dispatch(fetchAllActiveEmployeesBySubsidiary(value));
                           setFieldValue('employeeId', '')
                         }}
                         label={
                           <span>
                             {" "}
-                            Subsidiary
+                            Subsidiary<span style={{ color: "red" }}>*</span>
                           </span>
                         }
+                        error={errors.subsidiaryId}
+                        touched={touched.subsidiaryId}
                         value={allSubsidiaryMap?.get(values?.subsidiaryId || '') || ''}
                         autoComplete="off"
                         options={allSubsidiaryList}
@@ -152,8 +161,10 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                     </div>
                     {/* Subsidiary Field End */}
 
+
+                    {/* These fields are hidden and not removed because might come in use later on */}
                     {/* Deparment Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
+                    {/* <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="departmentId"
                         component={SearchSelect}
@@ -172,11 +183,11 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                         autoComplete="off"
                         options={allDept}
                       />
-                    </div>
+                    </div> */}
                     {/* Deparment Field End */}
 
                     {/* Report To Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
+                    {/* <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="reportTo"
                         component={SearchSelect}
@@ -195,11 +206,11 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                         autoComplete="off"
                         options={allEmployees}
                       />
-                    </div>
+                    </div> */}
                     {/* Report To Field End */}
 
                     {/* Grade Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
+                    {/* <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="gradeId"
                         component={SearchSelect}
@@ -218,11 +229,11 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                         autoComplete="off"
                         options={allEmployeeGradeList}
                       />
-                    </div>
+                    </div> */}
                     {/* Grade Field End */}
 
                     {/* Designation Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
+                    {/* <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="designationId"
                         component={SearchSelect}
@@ -241,11 +252,11 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                         autoComplete="off"
                         options={allDesignations}
                       />
-                    </div>
+                    </div> */}
                     {/* Designation Field End */}
 
                     {/* Location Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
+                    {/* <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="locationId"
                         component={SearchSelect}
@@ -264,11 +275,11 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                         autoComplete="off"
                         options={allLocationChildMenus}
                       />
-                    </div>
+                    </div> */}
                     {/* Location Field End */}
 
                     {/* Attendance Type Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
+                    {/* <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="attendanceType"
                         component={Select}
@@ -287,12 +298,10 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                         autoComplete="off"
                         children={CustomDropdown({ data: ATTENDANCE_TYPE })}
                       />
-                    </div>
+                    </div> */}
                     {/* Attendance Type Field End */}
+                    {/* These fields are hidden and not removed because might come in use later on */}
 
-                  </div>
-
-                  <div className="from-group row">
                     {/* Employee Field Start */}
                     <div className="col-12 col-md-4 mt-3">
                       <Field
@@ -306,9 +315,11 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                         label={
                           <span>
                             {" "}
-                            Employee
+                            Employee<span style={{ color: "red" }}>*</span>
                           </span>
                         }
+                        error={errors.employeeId}
+                        touched={touched.employeeId}
                         value={allEmployeesMap?.get(values?.employeeId || '') || ''}
                         autoComplete="off"
                         options={allEmployees}
@@ -316,53 +327,28 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                     </div>
                     {/* Employee Field End */}
 
-                  </div>
-
-                  <div className="from-group row">
-                    {/* Date from Field Start */}
+                    {/* Payroll Month Field Start */}
                     <div className="col-12 col-md-4 mt-3">
                       <Field
-                        name="from"
-                        component={DatePickerField}
-                        dateFormat="dd/MM/yyyy"
-                        className="form-control"
-                        label={
-                          <span>
-                            {" "}
-                            Date From
-                          </span>
-                        }
-                        onChange={(date) => {
-                          setFieldValue('from', date)
-                          setFieldValue('to', date)
-                        }}
-                        autoComplete="off"
-                      />
-                    </div>
-                    {/* Date from Field End */}
-
-                    {/* Date to Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="to"
-                        component={DatePickerField}
+                        name="monthId"
+                        component={SearchSelect}
                         onBlur={handleBlur}
-                        className="form-control"
-                        dateFormat="dd/MM/yyyy"
+                        onChange={(e) => {
+                          const value = e.value == '--Select--' ? '' : Number(e.value)
+                          setFieldValue('monthId', value)
+                        }}
                         label={
                           <span>
                             {" "}
-                            Date To
+                            Payroll Month
                           </span>
                         }
-                        onChange={(date) => {
-                          setFieldValue('to', date)
-                        }}
+                        value={allPayrollMonthMap?.get(values?.monthId || '') || ''}
                         autoComplete="off"
+                        options={allPayrollMonthYearList}
                       />
                     </div>
-                    {/* Date to Field End */}
-
+                    {/* Payroll Month Field End */}
                   </div>
                 </fieldset>
               </Form>

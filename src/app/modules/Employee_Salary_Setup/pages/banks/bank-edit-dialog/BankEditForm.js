@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Modal } from "react-bootstrap";
+import { Accordion, Button, Card, Modal } from "react-bootstrap";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Input } from "../../../../../../_metronic/_partials/controls";
@@ -22,6 +22,7 @@ import DatePicker from "react-datepicker";
 import axios from 'axios';
 import { amountLimit, amountLimitDynamic } from "../../../../../utils/common";
 import { DEFAULT_CALCULATION_TYPE_DROPDOWN, DROPDOWN, VALIDATION_MESSAGES } from "../../../../../utils/constants";
+import { KeyboardArrowDown } from "@material-ui/icons";
 export const USERS_URL = process.env.REACT_APP_API_URL;
 
 const formValidation = Yup.object().shape(
@@ -250,8 +251,6 @@ export function BankEditForm({
       dispatch(fetchAllActiveEmployeesSalaryForDDL(null));
       dispatch(fetchAllFormsMenu(126, "allCurrencyCodeList")); // For All currecy Codes
       //dispatch(fetchAllFormsMenu(158, "allDesignations")); // For All Designations
-      dispatch(fetchAllEarningList(1));
-      dispatch(fetchAllDeductionList(2));
       dispatch(fetchAllEmpCompensationBenefitsForDDL(2));
       dispatch(fetchAllFormsMenu(150, "allPaymentModeList")); // For All Payment Codes
 
@@ -337,7 +336,8 @@ export function BankEditForm({
 
   useEffect(() => {
     const employeeId = user.employeeId; // defEmployee?.value ? defEmployee.value : user.employeeId;
-
+    dispatch(fetchAllEarningList(1, '', employeeId));
+    dispatch(fetchAllDeductionList(2, '', employeeId));
     dispatch(fetchAllActiveEmployeesSalaryForDDL(employeeId));
     setEmployeeDefault(
       dashboard.allEmployeesSalaryDDL &&
@@ -671,6 +671,8 @@ export function BankEditForm({
                           setFieldValue("employeeId", e.value || null);
                           setEmployeeDefault(e);
                           handleChanged(e, setFieldValue)
+                          dispatch(fetchAllEarningList(1, '', e.value));
+                          dispatch(fetchAllDeductionList(2, '', e.value));
                           //  dispatch(fetchAllActiveEmployees(e.value));
                         }}
                         value={(user.employeeId && (dashboard.allEmployeesSalaryDDL &&
@@ -764,7 +766,8 @@ export function BankEditForm({
                   </div>}
                   { /* For Earning WIth Payroll Include ByDefault Yes  */}
                   <br>
-                  </br>
+                  </br>                  
+
                   <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
                     <h6>Earnings </h6>
                     {/* {<a onClick={ModalUIProps.newButtonEarningTran} href='javascript:void(0)'>+ Add New </a>} */}
@@ -1111,379 +1114,6 @@ export function BankEditForm({
                   <br>
                   </br>
                   <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-                    <h6>Earning Entitlements</h6>
-
-                    <div className="from-group row">
-                      <div className="col-12 col-md-4 mt-12">
-                        <input type="checkbox"
-                          name="gratuity_member"
-                          onChange={(e) => {
-                            setFieldValue('gratuity_member', e.target.checked)
-                          }}
-                          onBlur={handleBlur}
-                          value={values.gratuity_member}
-                          checked={values.gratuity_member}
-
-                        /> Gratuity Member
-                      </div>
-
-                      <div className="col-12 col-md-4 mt-3">
-
-                        {<span> Date Of Registration{Boolean(values.gratuity_member) && <span style={{ color: 'red' }}>*</span>} </span>}
-                        <DatePicker
-                          className="form-control"
-                          placeholder="Enter Gratuity Reg Date"
-                          selected={values.gratuity_member && defGrauityDate}
-                          onChange={(date) => {
-                            setFieldValue("gratuity_startDate", date);
-                            setGrauityDate(date);
-                          }}
-                          timeInputLabel="Time:"
-                          dateFormat="dd/MM/yyyy"
-                          showTimeInput
-                          name="gratuity_startDate"
-                          autoComplete="off"
-                          disabled={!values.gratuity_member}
-                        // value = {values.dateOfJoining}
-                        />
-                        <ErrorMessage className="form-feedBack" name="gratuity_startDate" component="div" />
-                      </div>
-
-                    </div>
-                    <br></br>
-                    <div className="from-group row">
-
-                      <div className="col-12 col-md-3 mt-3">
-                        <input
-                          name="overtime_allowance"
-                          type="checkbox"
-                          onChange={(e) => {
-                            setFieldValue('overtime_allowance', e.target.checked)
-                          }}
-                          onBlur={handleBlur}
-                          value={values.overtime_allowance}
-                          checked={values.overtime_allowance}
-                        /> Over Time
-                      </div>
-                    </div>
-
-                    <div className="from-group row">
-                      <div className="col-12 col-md-4 mt-3">
-                        <Field
-                          name="overtime_working_day"
-                          disabled={!Boolean(values.overtime_allowance)}
-                          type="number"
-                          component={Input}
-                          maxLength={2}
-                          label={<span> Overtime Factor Working Day{Boolean(values.overtime_allowance) && <span style={{ color: 'red' }}>*</span>}</span>}
-                          autoComplete="off"
-                          value={!Boolean(values.overtime_allowance) ? '' : values.overtime_working_day}
-                        />
-                      </div>
-
-                      <div className="col-12 col-md-4 mt-3">
-                        <Field
-                          name="overtime_off_day"
-                          disabled={!Boolean(values.overtime_allowance)}
-                          type="number"
-                          component={Input}
-                          maxLength={2}
-                          label={<span> Overtime Factor Off day{Boolean(values.overtime_allowance) && <span style={{ color: 'red' }}>*</span>}</span>}
-                          autoComplete="off"
-                          value={!Boolean(values.overtime_allowance) ? '' : values.overtime_off_day}
-                        />
-                      </div>
-
-                      <div className="col-12 col-md-4 mt-3">
-                        <Field
-                          name="overtime_holiday"
-                          disabled={!Boolean(values.overtime_allowance)}
-                          type="number"
-                          component={Input}
-                          maxLength={2}
-                          label={<span> Overtime Factor Holiday{Boolean(values.overtime_allowance) && <span style={{ color: 'red' }}>*</span>}</span>}
-                          autoComplete="off"
-                          value={!Boolean(values.overtime_allowance) ? '' : values.overtime_holiday}
-                        />
-                      </div>
-
-                      {/* <div className="col-12 col-md-4 mt-3">
-                        <input
-                          type="checkbox"
-                          name="shift_allowance"
-                          onChange={(e)=> {
-                            setFieldValue('shift_allowance', e.target.checked)
-                          }}
-                          onBlur={handleBlur}
-                          value={values.shift_allowance}
-                          checked={values.shift_allowance}
-                        />  Shift Allowance
-
-                      </div> */}
-                      {/* <div className="col-12 col-md-4 mt-3">
-                        <input
-                          type="checkbox"
-                          name="regularity_allowance"
-                          onChange={(e)=> {
-                            setFieldValue('regularity_allowance', e.target.checked)
-                          }}
-                          onBlur={handleBlur}
-                          value={values.regularity_allowance}
-                          checked={values.regularity_allowance}
-                        /> Regularity Allowance
-
-                      </div> */}
-                      {/* <div className="col-12 col-md-4 mt-3">
-                        <input
-                          type="checkbox"
-                          name="punctuality_allowance"
-                          onChange={(e)=> {
-                            setFieldValue('punctuality_allowance', e.target.checked)
-                          }}
-                          onBlur={handleBlur}
-                          checked={values.punctuality_allowance}
-                          value={values.punctuality_allowance}
-                        /> Punctuality Allowance
-
-                      </div> */}
-                    </div>
-                  </div>
-                  <br></br>
-                  <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-                    <h6>Deduction Entitlements</h6>
-
-                    {/* <div className="from-group row">
-                      <div className="col-12 col-md-4 mt-12">
-                        <input
-                          name="eobi_member"
-                          type="checkbox"
-                          onChange={(e)=> {
-                            setFieldValue('eobi_member', e.target.checked)
-                          }}
-                          onBlur={handleBlur}
-                          value={values.eobi_member}
-                          checked={values.eobi_member}
-                        /> EOBI Member
-
-                      </div>
-                      <div className="col-12 col-md-4 mt-5">
-                        {<span> Date Of Registration{Boolean(values.eobi_member) && <span style={{ color: 'red' }}>*</span>} </span>}
-
-                        <DatePicker
-                          className="form-control"
-                          placeholder="Enter EOBI Reg Date"
-
-                          selected={values.eobi_member && defEOBIDate}
-                          label='EOBI Reg Date'
-                          onChange={(date) => {
-                            setFieldValue("eobi_reg_date", date);
-                            setEOBIDate(date);
-                          }}
-                          timeInputLabel="Time:"
-                          dateFormat="dd/MM/yyyy"
-                          showTimeInput
-                          name="eobi_reg_date"
-                          autoComplete="off"
-
-                          disabled={!values.eobi_member}
-                        />
-                        <ErrorMessage className="form-feedBack" name="eobi_reg_date" component="div" />
-                      </div>
-
-                      <div className="col-12 col-md-4 mt-3">
-                        <Field
-                          name="eobi_accNo"
-                          type='number'
-                          component={Input}
-                          onInput={(e) => {
-                            e.target.value = amountLimitDynamic(e.target.value, 15); // Limit to 3 digits
-                          }}
-
-                          placeholder="Enter EOBI Account No"
-                          label={<span> EOBI Account No{Boolean(values.eobi_member) && <span style={{ color: 'red' }}>*</span>} </span>}
-                          autoComplete="off"
-                          disabled={!values.eobi_member}
-                        />
-                      </div>
-                    </div> */}
-                    {/* <div className="from-group row">
-
-                      <div className="col-12 col-md-4 mt-12">
-                        <input
-                          name="pf_member"
-                          type="checkbox"
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          checked={values.pf_member}
-                          value={values.pf_member}
-                        //onChange={handleCheckboxChange}
-                        /> PF Member
-
-                      </div>
-
-                      <div className="col-12 col-md-4 mt-5">
-                        {<span> Date Of Registration{Boolean(values.pf_member) && <span style={{ color: 'red' }}>*</span>}</span>}
-                        <DatePicker
-                          className="form-control"
-                          placeholder="Enter PF Reg Date"
-
-                          selected={values.pf_member && defProvidenFund}
-                          onChange={(date) => {
-                            setFieldValue("pf_reg_date", date);
-                            setProvidentFundDate(date);
-                          }}
-                          timeInputLabel="Time:"
-                          dateFormat="dd/MM/yyyy"
-                          showTimeInput
-                          name="pf_reg_date"
-                          autoComplete="off"
-                          disabled={!values.pf_member}
-                        // value = {values.dateOfJoining}
-                        />
-                        <ErrorMessage className="form-feedBack" name="pf_reg_date" component="div" />
-                      </div>
-
-                      <div className="col-12 col-md-4 mt-3">
-
-                        <Field
-                          name="pf_accNo"
-
-                          component={Input}
-                          type='number'
-                          onInput={(e) => {
-                            e.target.value = amountLimitDynamic(e.target.value, 15); // Limit to 3 digits
-                          }}
-                          placeholder="Enter PF Acc No"
-                          label={<span> PF Account No{Boolean(values.pf_member) && <span style={{ color: 'red' }}>*</span>}</span>}
-                          autoComplete="off"
-                          disabled={!values.pf_member}
-                        />
-                      </div>
-                    </div>
-                    <div className="from-group row">
-                      <div className="col-12 col-md-4 mt-12">
-                        <input
-                          type="checkbox"
-                          disabled={!values.pf_member}
-                          name="profit_member"
-                          onChange={(e)=> {
-                            setFieldValue('profit_member', e.target.checked)
-                          }}
-                          onBlur={handleBlur}
-                          value={values.profit_member}
-                          checked={values.profit_member}
-                        /> Profit Member
-                      </div>
-                    </div> */}
-                    <div className="from-group row">
-
-                      <div className="col-12 col-md-4 mt-12">
-                        <input
-                          type="checkbox"
-                          name="social_security_member"
-                          onChange={(e) => {
-                            setFieldValue('social_security_member', e.target.checked)
-                          }}
-                          onBlur={handleBlur}
-                          value={values.social_security_member}
-                          checked={values.social_security_member}
-                        /> Social Security Member
-
-                      </div>
-                      <div className="col-12 col-md-4 mt-5">
-                        {<span> Date Of Registration{Boolean(values.social_security_member) && <span style={{ color: 'red' }}>*</span>}</span>}
-                        <DatePicker
-                          className="form-control"
-                          placeholder="Enter Social Security Reg Date"
-                          selected={values.social_security_member && defSocialSecurity}
-                          onChange={(date) => {
-                            setFieldValue("social_security_reg_date", date);
-                            setSocialSecurityDate(date);
-                          }}
-                          timeInputLabel="Time:"
-                          dateFormat="dd/MM/yyyy"
-                          showTimeInput
-                          name="social_security_reg_date"
-                          autoComplete="off"
-                          disabled={!values.social_security_member}
-                        // value = {values.dateOfJoining}
-                        />
-                        <ErrorMessage className="form-feedBack" name="social_security_reg_date" component="div" />
-                      </div>
-
-                      <div className="col-12 col-md-4 mt-3">
-
-                        <Field
-                          onInput={(e) => {
-                            e.target.value = amountLimitDynamic(e.target.value, 15); // Limit to 3 digits
-                          }}
-                          name="social_security_accNo"
-                          component={Input}
-                          type='number'
-                          placeholder="Enter Social Security AccNo"
-                          label={<span> Social Security Account No{Boolean(values.social_security_member) && <span style={{ color: 'red' }}>*</span>}</span>}
-                          autoComplete="off"
-                          disabled={!values.social_security_member}
-                        />
-                      </div>
-                    </div>
-                    {/* <div className="from-group row">
-                      <div className="col-12 col-md-4 mt-12">
-                        <input
-                          type="checkbox"
-
-                          name="pension_member"
-                          onChange={(e)=> {
-                            setFieldValue('pension_member', e.target.checked)
-                          }}
-                          onBlur={handleBlur}
-                          value={values.pension_member}
-                          checked={values.pension_member}
-                        /> Pension Member
-                      </div>
-                      <div className="col-12 col-md-4 mt-5">
-                        {<span> Pension Reg Date{Boolean(values.pension_member) && <span style={{ color: 'red' }}>*</span>}</span>}
-                        <DatePicker
-                          className="form-control"
-                          placeholder="Enter Pension Reg Date"
-                          selected={values.pension_member && defPension}
-                          onChange={(date) => {
-                            setFieldValue("pension_reg_date", date);
-                            setPensionDate(date);
-                          }}
-                          timeInputLabel="Time:"
-                          dateFormat="dd/MM/yyyy"
-                          showTimeInput
-                          name="pension_reg_date"
-                          autoComplete="off"
-                          disabled={!values.pension_member}
-                        />
-                        <ErrorMessage className="form-feedBack" name="pension_reg_date" component="div" />
-                      </div>
-
-                      <div className="col-12 col-md-4 mt-3">
-
-                        <Field
-
-                          type="number"
-                          name="pension_accNo"
-                          onInput={(e) => {
-                            e.target.value = amountLimitDynamic(e.target.value, 15); // Limit to 3 digits
-                          }}
-                          component={Input}
-                          placeholder="Enter Pension AccNo"
-                          label={<span> Pension Account No{Boolean(values.pension_member) && <span style={{ color: 'red' }}>*</span>}</span>}
-                          autoComplete="off"
-                          disabled={!values.pension_member}
-                        />
-                      </div>
-
-                    </div> */}
-
-                  </div>
-                  <br>
-                  </br>
-                  <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
                     <div className="from-group row">
                       <div className="col-12 col-md-4 mt-3">
                         <SearchSelect
@@ -1670,6 +1300,403 @@ export function BankEditForm({
                       </div>
                     </div>
                   </div>
+
+
+                  <br>
+                  </br>
+
+
+                  <Accordion defaultActiveKey="">
+                    <Card>
+                      <Card.Header>
+                        <div className='accordion-header-btn'>
+                          <Accordion.Toggle as={Button} eventKey="0">
+                            Entitlements
+                            <KeyboardArrowDown />
+                          </Accordion.Toggle>
+                        </div>
+                      </Card.Header>
+                      <Accordion.Collapse eventKey="0">
+                        <Card.Body>
+
+                          <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
+                            <h6>Earning Entitlements</h6>
+
+                            <div className="from-group row">
+                              <div className="col-12 col-md-4 mt-12">
+                                <input type="checkbox"
+                                  name="gratuity_member"
+                                  onChange={(e) => {
+                                    setFieldValue('gratuity_member', e.target.checked)
+                                  }}
+                                  onBlur={handleBlur}
+                                  value={values.gratuity_member}
+                                  checked={values.gratuity_member}
+
+                                /> Gratuity Member
+                              </div>
+
+                              <div className="col-12 col-md-4 mt-3">
+
+                                {<span> Date Of Registration{Boolean(values.gratuity_member) && <span style={{ color: 'red' }}>*</span>} </span>}
+                                <DatePicker
+                                  className="form-control"
+                                  placeholder="Enter Gratuity Reg Date"
+                                  selected={values.gratuity_member && defGrauityDate}
+                                  onChange={(date) => {
+                                    setFieldValue("gratuity_startDate", date);
+                                    setGrauityDate(date);
+                                  }}
+                                  timeInputLabel="Time:"
+                                  dateFormat="dd/MM/yyyy"
+                                  showTimeInput
+                                  name="gratuity_startDate"
+                                  autoComplete="off"
+                                  disabled={!values.gratuity_member}
+                                // value = {values.dateOfJoining}
+                                />
+                                <ErrorMessage className="form-feedBack" name="gratuity_startDate" component="div" />
+                              </div>
+
+                            </div>
+                            <br></br>
+                            <div className="from-group row">
+
+                              <div className="col-12 col-md-3 mt-3">
+                                <input
+                                  name="overtime_allowance"
+                                  type="checkbox"
+                                  onChange={(e) => {
+                                    setFieldValue('overtime_allowance', e.target.checked)
+                                  }}
+                                  onBlur={handleBlur}
+                                  value={values.overtime_allowance}
+                                  checked={values.overtime_allowance}
+                                /> Over Time
+                              </div>
+                            </div>
+
+                            <div className="from-group row">
+                              <div className="col-12 col-md-4 mt-3">
+                                <Field
+                                  name="overtime_working_day"
+                                  disabled={!Boolean(values.overtime_allowance)}
+                                  type="number"
+                                  component={Input}
+                                  maxLength={2}
+                                  label={<span> Overtime Factor Working Day{Boolean(values.overtime_allowance) && <span style={{ color: 'red' }}>*</span>}</span>}
+                                  autoComplete="off"
+                                  value={!Boolean(values.overtime_allowance) ? '' : values.overtime_working_day}
+                                />
+                              </div>
+
+                              <div className="col-12 col-md-4 mt-3">
+                                <Field
+                                  name="overtime_off_day"
+                                  disabled={!Boolean(values.overtime_allowance)}
+                                  type="number"
+                                  component={Input}
+                                  maxLength={2}
+                                  label={<span> Overtime Factor Off day{Boolean(values.overtime_allowance) && <span style={{ color: 'red' }}>*</span>}</span>}
+                                  autoComplete="off"
+                                  value={!Boolean(values.overtime_allowance) ? '' : values.overtime_off_day}
+                                />
+                              </div>
+
+                              <div className="col-12 col-md-4 mt-3">
+                                <Field
+                                  name="overtime_holiday"
+                                  disabled={!Boolean(values.overtime_allowance)}
+                                  type="number"
+                                  component={Input}
+                                  maxLength={2}
+                                  label={<span> Overtime Factor Holiday{Boolean(values.overtime_allowance) && <span style={{ color: 'red' }}>*</span>}</span>}
+                                  autoComplete="off"
+                                  value={!Boolean(values.overtime_allowance) ? '' : values.overtime_holiday}
+                                />
+                              </div>
+
+                              {/* <div className="col-12 col-md-4 mt-3">
+                        <input
+                          type="checkbox"
+                          name="shift_allowance"
+                          onChange={(e)=> {
+                            setFieldValue('shift_allowance', e.target.checked)
+                          }}
+                          onBlur={handleBlur}
+                          value={values.shift_allowance}
+                          checked={values.shift_allowance}
+                        />  Shift Allowance
+
+                      </div> */}
+                              {/* <div className="col-12 col-md-4 mt-3">
+                        <input
+                          type="checkbox"
+                          name="regularity_allowance"
+                          onChange={(e)=> {
+                            setFieldValue('regularity_allowance', e.target.checked)
+                          }}
+                          onBlur={handleBlur}
+                          value={values.regularity_allowance}
+                          checked={values.regularity_allowance}
+                        /> Regularity Allowance
+
+                      </div> */}
+                              {/* <div className="col-12 col-md-4 mt-3">
+                        <input
+                          type="checkbox"
+                          name="punctuality_allowance"
+                          onChange={(e)=> {
+                            setFieldValue('punctuality_allowance', e.target.checked)
+                          }}
+                          onBlur={handleBlur}
+                          checked={values.punctuality_allowance}
+                          value={values.punctuality_allowance}
+                        /> Punctuality Allowance
+
+                      </div> */}
+                            </div>
+                          </div>
+                          <br></br>
+                          <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
+                            <h6>Deduction Entitlements</h6>
+
+                            {/* <div className="from-group row">
+                      <div className="col-12 col-md-4 mt-12">
+                        <input
+                          name="eobi_member"
+                          type="checkbox"
+                          onChange={(e)=> {
+                            setFieldValue('eobi_member', e.target.checked)
+                          }}
+                          onBlur={handleBlur}
+                          value={values.eobi_member}
+                          checked={values.eobi_member}
+                        /> EOBI Member
+
+                      </div>
+                      <div className="col-12 col-md-4 mt-5">
+                        {<span> Date Of Registration{Boolean(values.eobi_member) && <span style={{ color: 'red' }}>*</span>} </span>}
+
+                        <DatePicker
+                          className="form-control"
+                          placeholder="Enter EOBI Reg Date"
+
+                          selected={values.eobi_member && defEOBIDate}
+                          label='EOBI Reg Date'
+                          onChange={(date) => {
+                            setFieldValue("eobi_reg_date", date);
+                            setEOBIDate(date);
+                          }}
+                          timeInputLabel="Time:"
+                          dateFormat="dd/MM/yyyy"
+                          showTimeInput
+                          name="eobi_reg_date"
+                          autoComplete="off"
+
+                          disabled={!values.eobi_member}
+                        />
+                        <ErrorMessage className="form-feedBack" name="eobi_reg_date" component="div" />
+                      </div>
+
+                      <div className="col-12 col-md-4 mt-3">
+                        <Field
+                          name="eobi_accNo"
+                          type='number'
+                          component={Input}
+                          onInput={(e) => {
+                            e.target.value = amountLimitDynamic(e.target.value, 15); // Limit to 3 digits
+                          }}
+
+                          placeholder="Enter EOBI Account No"
+                          label={<span> EOBI Account No{Boolean(values.eobi_member) && <span style={{ color: 'red' }}>*</span>} </span>}
+                          autoComplete="off"
+                          disabled={!values.eobi_member}
+                        />
+                      </div>
+                    </div> */}
+                            {/* <div className="from-group row">
+
+                      <div className="col-12 col-md-4 mt-12">
+                        <input
+                          name="pf_member"
+                          type="checkbox"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          checked={values.pf_member}
+                          value={values.pf_member}
+                        //onChange={handleCheckboxChange}
+                        /> PF Member
+
+                      </div>
+
+                      <div className="col-12 col-md-4 mt-5">
+                        {<span> Date Of Registration{Boolean(values.pf_member) && <span style={{ color: 'red' }}>*</span>}</span>}
+                        <DatePicker
+                          className="form-control"
+                          placeholder="Enter PF Reg Date"
+
+                          selected={values.pf_member && defProvidenFund}
+                          onChange={(date) => {
+                            setFieldValue("pf_reg_date", date);
+                            setProvidentFundDate(date);
+                          }}
+                          timeInputLabel="Time:"
+                          dateFormat="dd/MM/yyyy"
+                          showTimeInput
+                          name="pf_reg_date"
+                          autoComplete="off"
+                          disabled={!values.pf_member}
+                        // value = {values.dateOfJoining}
+                        />
+                        <ErrorMessage className="form-feedBack" name="pf_reg_date" component="div" />
+                      </div>
+
+                      <div className="col-12 col-md-4 mt-3">
+
+                        <Field
+                          name="pf_accNo"
+
+                          component={Input}
+                          type='number'
+                          onInput={(e) => {
+                            e.target.value = amountLimitDynamic(e.target.value, 15); // Limit to 3 digits
+                          }}
+                          placeholder="Enter PF Acc No"
+                          label={<span> PF Account No{Boolean(values.pf_member) && <span style={{ color: 'red' }}>*</span>}</span>}
+                          autoComplete="off"
+                          disabled={!values.pf_member}
+                        />
+                      </div>
+                    </div>
+                    <div className="from-group row">
+                      <div className="col-12 col-md-4 mt-12">
+                        <input
+                          type="checkbox"
+                          disabled={!values.pf_member}
+                          name="profit_member"
+                          onChange={(e)=> {
+                            setFieldValue('profit_member', e.target.checked)
+                          }}
+                          onBlur={handleBlur}
+                          value={values.profit_member}
+                          checked={values.profit_member}
+                        /> Profit Member
+                      </div>
+                    </div> */}
+                            <div className="from-group row">
+
+                              <div className="col-12 col-md-4 mt-12">
+                                <input
+                                  type="checkbox"
+                                  name="social_security_member"
+                                  onChange={(e) => {
+                                    setFieldValue('social_security_member', e.target.checked)
+                                  }}
+                                  onBlur={handleBlur}
+                                  value={values.social_security_member}
+                                  checked={values.social_security_member}
+                                /> Social Security Member
+
+                              </div>
+                              <div className="col-12 col-md-4 mt-5">
+                                {<span> Date Of Registration{Boolean(values.social_security_member) && <span style={{ color: 'red' }}>*</span>}</span>}
+                                <DatePicker
+                                  className="form-control"
+                                  placeholder="Enter Social Security Reg Date"
+                                  selected={values.social_security_member && defSocialSecurity}
+                                  onChange={(date) => {
+                                    setFieldValue("social_security_reg_date", date);
+                                    setSocialSecurityDate(date);
+                                  }}
+                                  timeInputLabel="Time:"
+                                  dateFormat="dd/MM/yyyy"
+                                  showTimeInput
+                                  name="social_security_reg_date"
+                                  autoComplete="off"
+                                  disabled={!values.social_security_member}
+                                // value = {values.dateOfJoining}
+                                />
+                                <ErrorMessage className="form-feedBack" name="social_security_reg_date" component="div" />
+                              </div>
+
+                              <div className="col-12 col-md-4 mt-3">
+
+                                <Field
+                                  onInput={(e) => {
+                                    e.target.value = amountLimitDynamic(e.target.value, 15); // Limit to 3 digits
+                                  }}
+                                  name="social_security_accNo"
+                                  component={Input}
+                                  type='number'
+                                  placeholder="Enter Social Security AccNo"
+                                  label={<span> Social Security Account No{Boolean(values.social_security_member) && <span style={{ color: 'red' }}>*</span>}</span>}
+                                  autoComplete="off"
+                                  disabled={!values.social_security_member}
+                                />
+                              </div>
+                            </div>
+                            {/* <div className="from-group row">
+                      <div className="col-12 col-md-4 mt-12">
+                        <input
+                          type="checkbox"
+
+                          name="pension_member"
+                          onChange={(e)=> {
+                            setFieldValue('pension_member', e.target.checked)
+                          }}
+                          onBlur={handleBlur}
+                          value={values.pension_member}
+                          checked={values.pension_member}
+                        /> Pension Member
+                      </div>
+                      <div className="col-12 col-md-4 mt-5">
+                        {<span> Pension Reg Date{Boolean(values.pension_member) && <span style={{ color: 'red' }}>*</span>}</span>}
+                        <DatePicker
+                          className="form-control"
+                          placeholder="Enter Pension Reg Date"
+                          selected={values.pension_member && defPension}
+                          onChange={(date) => {
+                            setFieldValue("pension_reg_date", date);
+                            setPensionDate(date);
+                          }}
+                          timeInputLabel="Time:"
+                          dateFormat="dd/MM/yyyy"
+                          showTimeInput
+                          name="pension_reg_date"
+                          autoComplete="off"
+                          disabled={!values.pension_member}
+                        />
+                        <ErrorMessage className="form-feedBack" name="pension_reg_date" component="div" />
+                      </div>
+
+                      <div className="col-12 col-md-4 mt-3">
+
+                        <Field
+
+                          type="number"
+                          name="pension_accNo"
+                          onInput={(e) => {
+                            e.target.value = amountLimitDynamic(e.target.value, 15); // Limit to 3 digits
+                          }}
+                          component={Input}
+                          placeholder="Enter Pension AccNo"
+                          label={<span> Pension Account No{Boolean(values.pension_member) && <span style={{ color: 'red' }}>*</span>}</span>}
+                          autoComplete="off"
+                          disabled={!values.pension_member}
+                        />
+                      </div>
+
+                    </div> */}
+
+                          </div>
+                        </Card.Body>
+                      </Accordion.Collapse>
+                    </Card>
+                  </Accordion>
+
+                 
+                 
                 </fieldset>
               </Form>
             </Modal.Body>

@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useMemo } from "react";
-import { Modal } from "react-bootstrap";
+import { Accordion, Button, Card, Modal } from "react-bootstrap";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Input, Select } from "../../../../../../_metronic/_partials/controls";
 import { useDispatch, useSelector } from "react-redux";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
-
 import {
   fetchAllFormsMenu,
   fetchAllDeductionList,
@@ -13,11 +12,11 @@ import {
   fetchAllSubsidiaryData
 
 } from "../../../../../../_metronic/redux/dashboardActions";
-import { useBanksUIContext } from "../BanksUIContext";
 // // import { CheckBox } from "@material-ui/icons";
 import axios from 'axios';
 import { amountLimit } from "../../../../../utils/common";
 import { DROPDOWN, VALIDATION_MESSAGES } from "../../../../../utils/constants";
+import { KeyboardArrowDown } from "@material-ui/icons";
 export const USERS_URL = process.env.REACT_APP_API_URL;
 
 const formValidation = Yup.object().shape({
@@ -106,8 +105,8 @@ export function BankEditForm({
       dispatch(fetchAllFormsMenu(126, "allCurrencyCodeList")); // For All currecy Codes
       dispatch(fetchAllFormsMenu(143, "allEmployeeGradeList")); // For All Grade Codes
       dispatch(fetchAllFormsMenu(88, "allEmpTypeChildMenus")); // For EmployeeType
-      dispatch(fetchAllEarningList(1)); // For Earning
-      dispatch(fetchAllDeductionList(2)); // For deduction
+      // dispatch(fetchAllEarningList(1)); // For Earning
+      // dispatch(fetchAllDeductionList(2)); // For deduction
       // dispatch(fetchAllFormsMenu(133, "allSubsidiaryList")); // For All Subsisidaries
     }
   }, [dispatch]);
@@ -140,6 +139,8 @@ export function BankEditForm({
   useEffect(() => {
 
     const subsidiaryId = defSubsidiary?.value ? defSubsidiary.value : user.subsidiaryId;
+    dispatch(fetchAllEarningList(1, subsidiaryId)); // For Earning
+    dispatch(fetchAllDeductionList(2, subsidiaryId)); // For deduction
     setDefualtSubsidiaryList(
       dashboard.allSubsidiaryList &&
       dashboard.allSubsidiaryList.filter((item) => {
@@ -328,6 +329,9 @@ export function BankEditForm({
                           onChange={(e) => {
                             setFieldValue("subsidiaryId", e.value || null);
                             setDefualtSubsidiaryList(e);
+                            dispatch(fetchAllEarningList(1, e.value)); // For Earning
+                            dispatch(fetchAllDeductionList(2, e.value));
+                            setDefaultEarningList([])
                             //handlePaymenModeChanged(e)
 
                           }}
@@ -633,75 +637,88 @@ export function BankEditForm({
 
                   <br>
                   </br>
-                  <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-                    <h6>Earning Entitlements</h6>
 
-                    <div className="from-group row">
-                      <div className="col-12 col-md-4 mt-3">
-                        <input type="checkbox"
-                          name="gratuity_member"
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.gratuity_member}
-                          checked={values.gratuity_member}
+                  <Accordion defaultActiveKey="">
+                    <Card>
+                      <Card.Header>
+                        <div className='accordion-header-btn'>
+                          <Accordion.Toggle as={Button} eventKey="0">
+                            Entitlements
+                            <KeyboardArrowDown />
+                          </Accordion.Toggle>
+                        </div>
+                      </Card.Header>
+                      <Accordion.Collapse eventKey="0">
+                        <Card.Body>
+                          <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
+                            <h6>Earning Entitlements</h6>
 
-                        /> Gratuity Member
-                      </div>
-                    </div>
+                            <div className="from-group row">
+                              <div className="col-12 col-md-4 mt-3">
+                                <input type="checkbox"
+                                  name="gratuity_member"
+                                  onChange={handleChange}
+                                  onBlur={handleBlur}
+                                  value={values.gratuity_member}
+                                  checked={values.gratuity_member}
 
-                    <div className="from-group row">
-                      <div className="col-12 col-md-3 mt-3">
-                        <input
-                          name="overtime_allowance"
-                          type="checkbox"
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.overtime_allowance}
-                          checked={values.overtime_allowance}
-                        /> Over Time
+                                /> Gratuity Member
+                              </div>
+                            </div>
 
-                      </div>
-                    </div>
-                    <div className="from-group row">
-                      <div className="col-12 col-md-4 mt-3">
-                        <Field
-                          name="overtime_working_day"
-                          disabled={!Boolean(values.overtime_allowance)}
-                          type="number"
-                          component={Input}
-                          maxLength={2}
-                          label={<span>Overtime Factor Working Day{Boolean(values.overtime_allowance) && <span style={{ color: 'red' }}>*</span>}</span>}
-                          autoComplete="off"
-                          value={!Boolean(values.overtime_allowance) ? '' : values.overtime_working_day}
-                        />
-                      </div>
+                            <div className="from-group row">
+                              <div className="col-12 col-md-3 mt-3">
+                                <input
+                                  name="overtime_allowance"
+                                  type="checkbox"
+                                  onChange={handleChange}
+                                  onBlur={handleBlur}
+                                  value={values.overtime_allowance}
+                                  checked={values.overtime_allowance}
+                                /> Over Time
 
-                      <div className="col-12 col-md-4 mt-3">
-                        <Field
-                          name="overtime_off_day"
-                          disabled={!Boolean(values.overtime_allowance)}
-                          type="number"
-                          component={Input}
-                          maxLength={2}
-                          label={<span>Overtime Factor Off day{Boolean(values.overtime_allowance) && <span style={{ color: 'red' }}>*</span>}</span>}
-                          autoComplete="off"
-                          value={!Boolean(values.overtime_allowance) ? '' : values.overtime_off_day}
-                        />
-                      </div>
+                              </div>
+                            </div>
+                            <div className="from-group row">
+                              <div className="col-12 col-md-4 mt-3">
+                                <Field
+                                  name="overtime_working_day"
+                                  disabled={!Boolean(values.overtime_allowance)}
+                                  type="number"
+                                  component={Input}
+                                  maxLength={2}
+                                  label={<span>Overtime Factor Working Day{Boolean(values.overtime_allowance) && <span style={{ color: 'red' }}>*</span>}</span>}
+                                  autoComplete="off"
+                                  value={!Boolean(values.overtime_allowance) ? '' : values.overtime_working_day}
+                                />
+                              </div>
 
-                      <div className="col-12 col-md-4 mt-3">
-                        <Field
-                          name="overtime_holiday"
-                          disabled={!Boolean(values.overtime_allowance)}
-                          type="number"
-                          component={Input}
-                          maxLength={2}
-                          label={<span>Overtime Factor Holiday{Boolean(values.overtime_allowance) && <span style={{ color: 'red' }}>*</span>}</span>}
-                          autoComplete="off"
-                          value={!Boolean(values.overtime_allowance) ? '' : values.overtime_holiday}
-                        />
-                      </div>
-                      {/* <div className="col-12 col-md-4 mt-3">
+                              <div className="col-12 col-md-4 mt-3">
+                                <Field
+                                  name="overtime_off_day"
+                                  disabled={!Boolean(values.overtime_allowance)}
+                                  type="number"
+                                  component={Input}
+                                  maxLength={2}
+                                  label={<span>Overtime Factor Off day{Boolean(values.overtime_allowance) && <span style={{ color: 'red' }}>*</span>}</span>}
+                                  autoComplete="off"
+                                  value={!Boolean(values.overtime_allowance) ? '' : values.overtime_off_day}
+                                />
+                              </div>
+
+                              <div className="col-12 col-md-4 mt-3">
+                                <Field
+                                  name="overtime_holiday"
+                                  disabled={!Boolean(values.overtime_allowance)}
+                                  type="number"
+                                  component={Input}
+                                  maxLength={2}
+                                  label={<span>Overtime Factor Holiday{Boolean(values.overtime_allowance) && <span style={{ color: 'red' }}>*</span>}</span>}
+                                  autoComplete="off"
+                                  value={!Boolean(values.overtime_allowance) ? '' : values.overtime_holiday}
+                                />
+                              </div>
+                              {/* <div className="col-12 col-md-4 mt-3">
                         <input
                           type="checkbox"
                           name="shift_allowance"
@@ -733,15 +750,15 @@ export function BankEditForm({
                         /> Punctuality Allowance
 
                       </div> */}
-                    </div>
-                  </div>
-                  <br></br>
-                  <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-                    <h6>Deduction Entitlements</h6>
+                            </div>
+                          </div>
+                          <br></br>
+                          <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
+                            <h6>Deduction Entitlements</h6>
 
 
-                    <div className="from-group row">
-                      {/* <div className="col-12 col-md-4 mt-3">
+                            <div className="from-group row">
+                              {/* <div className="col-12 col-md-4 mt-3">
                         <input
                           name="pf_member"
                           type="checkbox"
@@ -753,29 +770,29 @@ export function BankEditForm({
                         /> PF Member
 
                       </div> */}
-                      <div className="col-12 col-md-4 mt-3">
-                        <input
-                          name="eobi_member"
-                          type="checkbox"
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.eobi_member}
-                          checked={values.eobi_member}
-                        /> EOBI Member
+                              <div className="col-12 col-md-4 mt-3">
+                                <input
+                                  name="eobi_member"
+                                  type="checkbox"
+                                  onChange={handleChange}
+                                  onBlur={handleBlur}
+                                  value={values.eobi_member}
+                                  checked={values.eobi_member}
+                                /> EOBI Member
 
-                      </div>
-                      <div className="col-12 col-md-4 mt-3">
-                        <input
-                          type="checkbox"
-                          name="social_security_member"
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.social_security_member}
-                          checked={values.social_security_member}
-                        /> Social Security Member
+                              </div>
+                              <div className="col-12 col-md-4 mt-3">
+                                <input
+                                  type="checkbox"
+                                  name="social_security_member"
+                                  onChange={handleChange}
+                                  onBlur={handleBlur}
+                                  value={values.social_security_member}
+                                  checked={values.social_security_member}
+                                /> Social Security Member
 
-                      </div>
-                      {/* <div className="col-12 col-md-4 mt-3">
+                              </div>
+                              {/* <div className="col-12 col-md-4 mt-3">
                         <input
                           type="checkbox"
 
@@ -787,8 +804,14 @@ export function BankEditForm({
                         /> Pension Member
                       </div> */}
 
-                    </div>
-                  </div>
+                            </div>
+                          </div>
+
+                        </Card.Body>
+                      </Accordion.Collapse>
+                    </Card>
+                  </Accordion>
+
                 </fieldset>
               </Form>
             </Modal.Body>

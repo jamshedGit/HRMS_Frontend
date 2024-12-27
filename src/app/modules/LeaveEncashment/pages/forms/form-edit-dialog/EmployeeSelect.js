@@ -89,7 +89,7 @@ export function EmployeeSelect({
                     <Field
                       name="yearId"
                       component={Select}
-                      className={!values.yearId ? 'form-control is-invalid' : 'form-control'}
+                      className={values.employeeId && !values.yearId ? 'form-control is-invalid' : 'form-control'}
                       placeholder=""
                       onBlur={handleBlur}
                       onChange={(e) => {
@@ -109,7 +109,7 @@ export function EmployeeSelect({
                       children={CustomDropdown({ data: allFiscalYears, firstElement: { label: '--Select--', value: '' } })}
                     />
                     {
-                      !values.yearId && <CustomErrorLabel touched={true} error={VALIDATION_MESSAGES.required} />
+                      values.employeeId && !values.yearId && <CustomErrorLabel touched={true} error={VALIDATION_MESSAGES.required} />
                     }
                   </div>
                   {/* Employee Id Dropdown Ends */}
