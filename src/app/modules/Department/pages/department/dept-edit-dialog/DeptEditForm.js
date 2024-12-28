@@ -65,7 +65,7 @@ export function DeptEditForm({
   // Department DropDown Load when pageLoad
   useEffect(() => {
     if (!user.deptId) {
-      dispatch(fetchAllDept(1));
+      dispatch(fetchAllDept());
       dispatch(fetchAllSubsidiaryData("allSubsidiaryList"))
     }
   }, [dispatch]);
