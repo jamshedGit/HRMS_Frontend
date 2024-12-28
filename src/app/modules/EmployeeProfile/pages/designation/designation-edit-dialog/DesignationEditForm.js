@@ -1087,7 +1087,7 @@ export function DesignationEditForm({
 
   const updateConfirmationDuePolicy = (setFieldValue, employeeTypeId, employeeStatusId, dateOfJoining) => {
     setDisableConfDueDate(false)
-    const probationPolicyInMonth = employeeTypeId == 148 && employeeStatusId == 276 && dateOfJoining
+    const probationPolicyInMonth = employeeTypeId == 148  && dateOfJoining //&& employeeStatusId == 276
       ? profilePolicy?.data?.data[0]?.probationPolicyInMonth
       : null;
 
@@ -1110,7 +1110,7 @@ export function DesignationEditForm({
 
   const updateContractExpiryPolicy = (setFieldValue, employeeTypeId, employeeStatusId, dateOfJoining) => {
     setDisableConfDueDate(true)
-    const contractualPolicyInMonth = employeeTypeId == 147 && employeeStatusId == 276 && dateOfJoining
+    const contractualPolicyInMonth = employeeTypeId == 147  && dateOfJoining //&& employeeStatusId == 276
       ? profilePolicy?.data?.data[0]?.contractualPolicyInMonth
       : null;
 
@@ -1837,14 +1837,14 @@ export function DesignationEditForm({
                             setDefemployeeStatus(e);
                             //probation
 
-                            if (e.value == 276) {
+                            // if (e.value == 276) {
                               if (!id) {
                                 updateConfirmationDuePolicy(setFieldValue, values?.employeeTypeId, e.value, values?.dateOfJoining)
                                 updateContractExpiryPolicy(setFieldValue, values?.employeeTypeId, e.value, values?.dateOfJoining)
                               }
 
 
-                            }
+                            // }
                             // else {
                             //   if (!id) {
                             //     setFieldValue("dateOfConfirmationDue", null)
