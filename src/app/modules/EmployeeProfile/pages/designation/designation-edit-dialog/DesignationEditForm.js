@@ -100,7 +100,7 @@ const profileValidation = Yup.object().shape(
 
     dateOfJoining: Yup.date()
       // .max(currentDate, 'Date of joining cannot be in the future')
-.nullable()
+      .nullable()
       .test('dateOfBirth', 'Date of joining must be after the date of birth', function (value) {
         const { dateOfBirth } = this.parent; // Access the value of min_year
         return value > dateOfBirth; // Ensure max_year is greater than min_year
@@ -208,12 +208,12 @@ const profileValidation = Yup.object().shape(
 
 
     defaultShiftId: Yup.string()
-    .nullable()
-    .required('Required'),
+      .nullable()
+      .required('Required'),
 
-    departmentId:Yup.string()
-    .nullable()
-    .required('Required'),
+    departmentId: Yup.string()
+      .nullable()
+      .required('Required'),
 
     reportTo: Yup.string().required('Required'),
 
@@ -653,20 +653,20 @@ export function DesignationEditForm({
   //=========== END
 
   //===== Date Of Retirement
-  useEffect(() => {
-    if (user?.gender == "Female") {
-      const retirementDate = new Date(user.dateOfBirth);
-      // retirementDate.setFullYear(retirementDate.getFullYear() + user.retirementAgeFemale);
+  // useEffect(() => {
+  //   if (user?.gender == "Female") {
+  //     const retirementDate = new Date(user.dateOfBirth);
+  //     // retirementDate.setFullYear(retirementDate.getFullYear() + user.retirementAgeFemale);
 
-      // setDRetirmentDate(new Date(retirementDate));
-    }
-    if (user?.gender == "Male") {
-      const retirementDate = new Date(user.dateOfBirth);
-      // retirementDate.setFullYear(retirementDate.getFullYear() + user.retirementAgeMale);
+  //     // setDRetirmentDate(new Date(retirementDate));
+  //   }
+  //   else if (user?.gender == "Male") {
+  //     const retirementDate = new Date(user.dateOfBirth);
+  //     // retirementDate.setFullYear(retirementDate.getFullYear() + user.retirementAgeMale);
 
-      // setDRetirmentDate(new Date(retirementDate));
-    }
-  }, [user?.retirementAgeFemale || user.retirementAgeMale]);
+  //     // setDRetirmentDate(new Date(retirementDate));
+  //   }
+  // }, [user?.retirementAgeFemale || user.retirementAgeMale]);
 
   //=========== END
 
@@ -1058,16 +1058,30 @@ export function DesignationEditForm({
   }
 
   const updateRetirmentPolicy = (setFieldValue, dateOfBirth, gender) => {
-    setDisableConfDueDate(false)
-    const retirementAge = gender === "Female"
-      ? profilePolicy?.data?.data[0]?.retirementAgeFemale
-      : profilePolicy?.data?.data[0]?.retirementAgeMale;
 
+    setDisableConfDueDate(false)
+    // const retirementAge = gender === "Female"
+    //   ? profilePolicy?.data?.data[0]?.retirementAgeFemale
+    //   : profilePolicy?.data?.data[0]?.retirementAgeMale;
+
+    const retirementAge = gender == "Female"
+      ? profilePolicy?.data?.data[0]?.retirementAgeFemale
+      : gender == "Male"
+        ? profilePolicy?.data?.data[0]?.retirementAgeMale
+        : null;
+   console.log("retirementAge111",retirementAge)
+   if(retirementAge){
     const retirementDate = new Date(dateOfBirth);
+
     retirementDate.setFullYear(retirementDate.getFullYear() + retirementAge);
 
     setDRetirmentDate(new Date(retirementDate));
     setFieldValue("dateOfRetirement", new Date(retirementDate));
+   }else{
+    return;
+   }
+
+
 
   };
 
@@ -1537,7 +1551,7 @@ export function DesignationEditForm({
 
                               setFieldValue("dateOfBirth", null);
                               setDOBDate(null);
-                              setFieldValue("dateOfJoining", null );
+                              setFieldValue("dateOfJoining", null);
                               setJoiningDate(null);
                               setFieldValue("dateOfRetirement", null);
                               setDRetirmentDate(null);
@@ -1555,7 +1569,7 @@ export function DesignationEditForm({
                               setContractExpiryDate(null);
 
                               fetchEmployeePolicyBySubsidiaryId(e.value, setFieldValue);
-                             
+
                             }
 
                             //handlePaymenModeChanged(e)
