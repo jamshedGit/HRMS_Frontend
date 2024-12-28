@@ -27,8 +27,10 @@ const FormEditSchema = Yup.object().shape(
     formName: Yup.string()
       .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.')
       .required("Required*"),
-    // formCode: Yup.string()
-    // .required("Required*"),
+    formCode: Yup.string()
+    .required("Required*"),
+
+    
 
   },
   
@@ -62,14 +64,14 @@ export function FormEditForm({
     { value: true, label: "Yes" },
   ];
   // Department DropDown Load when pageLoad
-  useEffect(() => {
+  // useEffect(() => {
 
-    if (!user.formCode) { fetchData("1", setDefaultFormCode); }
-    if (!user.parentFormID) {
+  //   if (!user.formCode) { fetchData("1", setDefaultFormCode); }
+  //   if (!user.parentFormID) {
 
-      dispatch(fetchAllFormsMenu(1));
-    }
-  }, [dispatch]);
+  //     dispatch(fetchAllFormsMenu(1));
+  //   }
+  // }, [dispatch]);
 
 
   // This method is used for when edit record and get selected dept where id save in DB
@@ -129,7 +131,7 @@ export function FormEditForm({
                     {<div className="col-12 col-md-4 mt-3">
                       <Field
                         name="formCode"
-                        disabled
+                        // disabled
                         maxLength={6}
                         component={Input}
                         placeholder="Enter Form Code"
@@ -171,15 +173,16 @@ export function FormEditForm({
                         as="select"
                         className="form-control"
                         disabled={isUserForRead}
-                        label={values.isActive}
+                        // label={values.isActive}
                         onChange={(e) => {
                           setFieldValue("isActive", e.target.value); // Use the raw value
                         }}
-                        value={
-                          isActiveOptions?.find(
-                            (option) => option.value == values.isActive
-                          ) || null
-                        }
+                        // value={
+                        //   isActiveOptions?.find(
+                        //     (option) => option.value == values.isActive
+                        //   ) || null
+                        // }
+                        value={values.isActive}
   
                       >
                         

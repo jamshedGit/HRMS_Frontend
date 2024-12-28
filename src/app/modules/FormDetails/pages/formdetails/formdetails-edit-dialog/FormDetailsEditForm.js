@@ -24,7 +24,7 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 const FormEditSchema = Yup.object().shape(
   {
     formName: Yup.string()
-      .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.')
+      // .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.')
       .required("Required*"),
     //  formCode: Yup.string()
     //    .required("Required*"),
