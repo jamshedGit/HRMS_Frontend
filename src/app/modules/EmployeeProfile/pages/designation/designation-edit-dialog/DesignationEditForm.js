@@ -1069,7 +1069,7 @@ export function DesignationEditForm({
       : gender == "Male" && dateOfBirth
         ? profilePolicy?.data?.data[0]?.retirementAgeMale
         : null;
-   console.log("retirementAge111",retirementAge)
+  
    if(retirementAge){
     const retirementDate = new Date(dateOfBirth);
 
