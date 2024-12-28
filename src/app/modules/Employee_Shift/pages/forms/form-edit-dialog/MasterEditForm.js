@@ -91,18 +91,19 @@ const formValidation = Yup.object().shape({
     // .required('Required*')
     .matches(
       /^(?:[01]\d|2[0-3])[0-5]\d$/,
-      'Time must be in HHMM format and valid 24-hour format')
-    .when('halfDayStart', {
-      is: (halfDayStart) => halfDayStart && halfDayStart !== '',
-      then: Yup.string().test('half-day-end-validation', 'Half Day End cannot be less than Half Day Start', function (halfDayEnd) {
-        const { halfDayStart } = this.parent; // Access halfDayStart from parent values
-        if (halfDayStart && halfDayEnd && halfDayStart > halfDayEnd) {
-          return false; // Validation fails if halfDayEnd is less than halfDayStart
-        }
-        return true;
-      })
-    }),
-  breakTimeStart: Yup.string()
+      'Time must be in HHMM format and valid 24-hour format'),
+    // .when('halfDayStart', {
+    //   is: (halfDayStart) => halfDayStart && halfDayStart !== '',
+    //   then: Yup.string().test('half-day-end-validation', 'Half Day End cannot be less than Half Day Start', function (halfDayEnd) {
+    //     const { halfDayStart } = this.parent; // Access halfDayStart from parent values
+    //     if (halfDayStart && halfDayEnd && halfDayStart > halfDayEnd) {
+    //       return false; // Validation fails if halfDayEnd is less than halfDayStart
+    //     }
+    //     return true;
+    //   })
+    // }),
+
+    breakTimeStart: Yup.string()
     // .required('Required*')
     .matches(
       /^(?:[01]\d|2[0-3])[0-5]\d$/,
@@ -112,17 +113,17 @@ const formValidation = Yup.object().shape({
     // .required('Required*')
     .matches(
       /^(?:[01]\d|2[0-3])[0-5]\d$/,
-      'Time must be in HHMM format and valid 24-hour format')
-    .when('breakTimeStart', {
-      is: (breakTimeStart) => breakTimeStart && breakTimeStart !== '',
-      then: Yup.string().test('break-time-end-validation', 'Break Time End cannot be less than Break Time Start', function (breakTimeEnd) {
-        const { breakTimeStart } = this.parent; // Access breakTimeStart from parent values
-        if (breakTimeStart && breakTimeEnd && breakTimeStart > breakTimeEnd) {
-          return false; // Validation fails if breakTimeEnd is less than breakTimeStart
-        }
-        return true;
-      })
-    }),
+      'Time must be in HHMM format and valid 24-hour format'),
+    // .when('breakTimeStart', {
+    //   is: (breakTimeStart) => breakTimeStart && breakTimeStart !== '',
+    //   then: Yup.string().test('break-time-end-validation', 'Break Time End cannot be less than Break Time Start', function (breakTimeEnd) {
+    //     const { breakTimeStart } = this.parent; // Access breakTimeStart from parent values
+    //     if (breakTimeStart && breakTimeEnd && breakTimeStart > breakTimeEnd) {
+    //       return false; // Validation fails if breakTimeEnd is less than breakTimeStart
+    //     }
+    //     return true;
+    //   })
+    // }),
 
     overTimeStart: Yup.string()
     
