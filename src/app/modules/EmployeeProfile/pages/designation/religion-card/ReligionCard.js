@@ -44,19 +44,35 @@ export function ReligionCard() {
   const usersUIProps = useMemo(() => {
     return {
       queryParams: DesignationUIContext.queryParams,
+      setQueryParams: DesignationUIContext.setQueryParams,
     };
   }, [DesignationUIContext]);
 
 
   const fetchInctive = () => {
-    initialFilter.isActive = false
+    const updatedQueryParams = {
+      ...usersUIProps.queryParams,
+      isActive: false, // Toggle the isActive flag
+    };
 
+    // Set the updated queryParams
+    usersUIProps.setQueryParams(updatedQueryParams);
+    // initialFilter.isActive = false
+console.log("initialFilter111 setQueryParams",usersUIProps.queryParams.isActive)
     dispatch(actions.fetchUsers(usersUIProps.queryParams));
 
   }
 
   const fetchActive = () => {
-    initialFilter.isActive = true
+
+    const updatedQueryParams = {
+      ...usersUIProps.queryParams,
+      isActive: true, // Toggle the isActive flag
+    };
+
+    // Set the updated queryParams
+    usersUIProps.setQueryParams(updatedQueryParams);
+    // initialFilter.isActive = true
 
     dispatch(actions.fetchUsers(usersUIProps.queryParams));
 
@@ -92,22 +108,25 @@ export function ReligionCard() {
 
               <CardHeaderToolbar>
 
-                {initialFilter.isActive ? (
+                {usersUIProps.queryParams.isActive ? (
                   <button
                     type="button"
-                    className="btn btn-primary"
+                    className="btn btn-red   ml-5 mr-5"
                     onClick={fetchInctive}
                   >
                    Inactive Employee
                   </button>
-                ) : (<button
+               ) : ( 
+                  
+                  
+                  <button
                   type="button"
-                  className="btn btn-primary"
+                  className="btn btn-green  ml-5 mr-5"
                   onClick={fetchActive}
                 >
                   Active Employee
                 </button>
-                )}
+               )} 
 
 
 

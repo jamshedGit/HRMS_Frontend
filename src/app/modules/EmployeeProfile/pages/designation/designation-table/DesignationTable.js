@@ -54,7 +54,7 @@ export function DesignationTable() {
 
   useEffect(() => {
     religionUIProps.setIds([]);
- 
+
     dispatch(actions.fetchUsers(religionUIProps.queryParams));
   }, [religionUIProps.queryParams, dispatch, totalCount]);
 
