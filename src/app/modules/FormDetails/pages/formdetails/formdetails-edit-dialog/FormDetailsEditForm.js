@@ -90,7 +90,8 @@ export function FormEditForm({
 
 
   const fetchData = async (subsidiaryId, setValue) => {
-    dispatch(getLatestTableId("t_form_menu", "Id", " 1 = 1 ", setValue));
+  
+    dispatch(getLatestTableId("t_form_menu", "formCode", "parentFormID =" + formDetails.currentId, setValue));
   };
 
 

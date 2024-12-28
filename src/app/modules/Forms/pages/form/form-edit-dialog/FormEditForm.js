@@ -84,7 +84,8 @@ export function FormEditForm({
   }, [user?.parentFormID, dashboard.parentFormID]);
 
   const fetchData = async (subsidiaryId, setValue) => {
-    dispatch(getLatestTableId("t_form_menu", "Id", " 1 = 1 ", setValue));
+  
+    dispatch(getLatestTableId("t_form_menu", "formCode", " parentFormID is " + null   , setValue));
   };
 
 
