@@ -9,14 +9,17 @@ import {
 import { DesignationTable, ReligionTable } from "../designation-table/DesignationTable"
 import { useDesignationUIContext } from "../DesignationUIContext"
 import { BanksFilter } from "../bank-filter/BanksFIlter"
-import { useSelector, shallowEqual } from "react-redux"
+import { useSelector, shallowEqual, useDispatch } from "react-redux"
 import { useModal } from '../../../../../../context/ModalContext';
 import CurrentModuleName from "../../../../../utils/common-modules/ModuleName"
+import { initialFilter } from "../ReligionUIHelpers"
+import * as actions from "../../../_redux/designationActions";
 
 export function ReligionCard() {
   const designationUIContext = useDesignationUIContext()
-
+  const empUIContext = useDesignationUIContext()
   const { openModal } = useModal();
+  const dispatch = useDispatch();
   const DesignationUIProps = useMemo(() => {
     return {
       newAcademicButtonClick: designationUIContext.newAcademicButtonClick,
@@ -35,6 +38,30 @@ export function ReligionCard() {
   const accessUser = userAccess.find(
     (item) => item.componentName === "CreateProfile"
   )
+
+
+  const DesignationUIContext = useDesignationUIContext();
+  const usersUIProps = useMemo(() => {
+    return {
+      queryParams: DesignationUIContext.queryParams,
+    };
+  }, [DesignationUIContext]);
+
+
+  const fetchInctive = () => {
+    initialFilter.isActive = false
+
+    dispatch(actions.fetchUsers(usersUIProps.queryParams));
+
+  }
+
+  const fetchActive = () => {
+    initialFilter.isActive = true
+
+    dispatch(actions.fetchUsers(usersUIProps.queryParams));
+
+  }
+
 
   const handleOpenModal = () => {
     openModal(
@@ -64,6 +91,25 @@ export function ReligionCard() {
             <div className=" p-2">
 
               <CardHeaderToolbar>
+
+                {initialFilter.isActive ? (
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={fetchInctive}
+                  >
+                   Inactive Employee
+                  </button>
+                ) : (<button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={fetchActive}
+                >
+                  Active Employee
+                </button>
+                )}
+
+
 
 
 
