@@ -52,13 +52,14 @@ export function ReligionCard() {
   const fetchInctive = () => {
     const updatedQueryParams = {
       ...usersUIProps.queryParams,
-      isActive: false, // Toggle the isActive flag
+      isActive: false,
+      pageNumber:1, // Toggle the isActive flag
     };
 
     // Set the updated queryParams
     usersUIProps.setQueryParams(updatedQueryParams);
     // initialFilter.isActive = false
-console.log("initialFilter111 setQueryParams",usersUIProps.queryParams.isActive)
+
     dispatch(actions.fetchUsers(usersUIProps.queryParams));
 
   }
@@ -67,7 +68,8 @@ console.log("initialFilter111 setQueryParams",usersUIProps.queryParams.isActive)
 
     const updatedQueryParams = {
       ...usersUIProps.queryParams,
-      isActive: true, // Toggle the isActive flag
+      isActive: true,
+      pageNumber:1, // Toggle the isActive flag
     };
 
     // Set the updated queryParams
@@ -92,7 +94,7 @@ console.log("initialFilter111 setQueryParams",usersUIProps.queryParams.isActive)
     <>
       <Card>
 
-        <CardHeader title={CurrentModuleName()} >
+        <CardHeader title={CurrentModuleName() + (usersUIProps.queryParams.isActive ? "  ( Active )" : "  ( Inactive )")}>
 
           <div className="d-flex justify-content-between align-items-center gap-3 m-4">
 
