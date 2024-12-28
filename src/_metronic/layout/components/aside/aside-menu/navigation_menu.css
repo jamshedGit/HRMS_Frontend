@@ -1,4 +1,4 @@
-.navbar {
+/* .navbar {
     overflow: hidden;
     background-color: #333;
   }
@@ -12,10 +12,6 @@
     text-decoration: none;
   }
   
-  /* .dropdown {
-    float: left;
-    overflow: hidden;
-  } */
   
   .dropdown .dropbtn {
     font-size: 16px;  
@@ -62,4 +58,16 @@
   
   .dropdown:hover .dropdown-content {
     display: block;
+  } */
+
+
+  .custom-nav-dropdown .nav-link {
+    color: #ffffff !important; /* Example: Change color to orange-red */
+    font-weight: bold;
+    font-size: 15px;
+  }
+  
+  .custom-nav-dropdown .nav-link:hover {
+    color: #000000 !important; 
+
   }
