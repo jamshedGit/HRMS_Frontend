@@ -9,7 +9,7 @@ import { toAbsoluteUrl, checkIsActive } from "../../../../_helpers";
 import AsideparentList from "./AsideParentList";
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import './navigation_menu.css'
+import './navigation_menu.css'
 
 export function AsideMenuList({ layoutProps }) {
   const auth = useSelector(({ auth }) => auth, shallowEqual);
@@ -101,7 +101,7 @@ export function AsideMenuList({ layoutProps }) {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <NavDropdown className="colorText" title="Dashboard" id="basic-nav-dropdown">
+              <NavDropdown  title="Dashboard" id="basic-nav-dropdown" className="custom-nav-dropdown">
 
                 <NavDropdown.Item href='/dashboard'>Dashboard</NavDropdown.Item>
 
@@ -110,7 +110,7 @@ export function AsideMenuList({ layoutProps }) {
                 UserAccess && Object.keys(UserAccess)?.map((res) => {
                   return UserAccess[res].sort((a, b) => a.sortOrder - b.sortOrder).some(item => item.isResourceShow) &&
                     <>
-                      <NavDropdown className="colorText" title={res.replace(/_/g, " ")} id="basic-nav-dropdown">
+                      <NavDropdown className="custom-nav-dropdown" title={res.replace(/_/g, " ")} id="basic-nav-dropdown">
                         {UserAccess[res].map((ce) => {
                           return ce.isResourceShow &&
                             <NavDropdown.Item href={`/${ce.url}`}>{ce.name}</NavDropdown.Item>

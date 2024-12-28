@@ -1064,12 +1064,12 @@ export function DesignationEditForm({
     //   ? profilePolicy?.data?.data[0]?.retirementAgeFemale
     //   : profilePolicy?.data?.data[0]?.retirementAgeMale;
 
-    const retirementAge = gender == "Female"
+    const retirementAge = gender == "Female" && dateOfBirth
       ? profilePolicy?.data?.data[0]?.retirementAgeFemale
-      : gender == "Male"
+      : gender == "Male" && dateOfBirth
         ? profilePolicy?.data?.data[0]?.retirementAgeMale
         : null;
-   console.log("retirementAge111",retirementAge)
+  
    if(retirementAge){
     const retirementDate = new Date(dateOfBirth);
 
@@ -1087,7 +1087,7 @@ export function DesignationEditForm({
 
   const updateConfirmationDuePolicy = (setFieldValue, employeeTypeId, employeeStatusId, dateOfJoining) => {
     setDisableConfDueDate(false)
-    const probationPolicyInMonth = employeeTypeId == 148 && employeeStatusId == 276 && dateOfJoining
+    const probationPolicyInMonth = employeeTypeId == 148  && dateOfJoining //&& employeeStatusId == 276
       ? profilePolicy?.data?.data[0]?.probationPolicyInMonth
       : null;
 
@@ -1110,12 +1110,12 @@ export function DesignationEditForm({
 
   const updateContractExpiryPolicy = (setFieldValue, employeeTypeId, employeeStatusId, dateOfJoining) => {
     setDisableConfDueDate(true)
-    const contractualPolicyInMonth = employeeTypeId == 147 && employeeStatusId == 276 && dateOfJoining
+    const contractualPolicyInMonth = employeeTypeId == 147  && dateOfJoining //&& employeeStatusId == 276
       ? profilePolicy?.data?.data[0]?.contractualPolicyInMonth
       : null;
 
     if (!contractualPolicyInMonth) {
-
+      setDisableConfDueDate(false)
       // setFieldValue("dateOfContractExpiry", null);
       return; // Exit the function early if condition is not true
     }
@@ -1837,14 +1837,14 @@ export function DesignationEditForm({
                             setDefemployeeStatus(e);
                             //probation
 
-                            if (e.value == 276) {
+                            // if (e.value == 276) {
                               if (!id) {
                                 updateConfirmationDuePolicy(setFieldValue, values?.employeeTypeId, e.value, values?.dateOfJoining)
                                 updateContractExpiryPolicy(setFieldValue, values?.employeeTypeId, e.value, values?.dateOfJoining)
                               }
 
 
-                            }
+                            // }
                             // else {
                             //   if (!id) {
                             //     setFieldValue("dateOfConfirmationDue", null)
@@ -2534,9 +2534,9 @@ export function DesignationEditForm({
                               name="dateOfConfirmationEnter"
                               disabled={disableConfDueDate}
                               autoComplete="off"
-                              // minDate={values.dateOfConfirmationDue ? new Date(values.dateOfConfirmationDue) : new Date(values.dateOfJoining)}
+                              minDate={values.dateOfConfirmationDue ? new Date(values.dateOfConfirmationDue) : new Date(values.dateOfJoining)}
 
-                              minDate={values.dateOfJoining ? new Date(values.dateOfJoining) : null}
+                              // minDate={values.dateOfJoining ? new Date(values.dateOfJoining) : null}
                             />
                             <ErrorMessage className="form-feedBack" name="dateOfConfirmationEnter" component="div" />
                           </div>

@@ -9,14 +9,17 @@ import {
 import { DesignationTable, ReligionTable } from "../designation-table/DesignationTable"
 import { useDesignationUIContext } from "../DesignationUIContext"
 import { BanksFilter } from "../bank-filter/BanksFIlter"
-import { useSelector, shallowEqual } from "react-redux"
+import { useSelector, shallowEqual, useDispatch } from "react-redux"
 import { useModal } from '../../../../../../context/ModalContext';
 import CurrentModuleName from "../../../../../utils/common-modules/ModuleName"
+import { initialFilter } from "../ReligionUIHelpers"
+import * as actions from "../../../_redux/designationActions";
 
 export function ReligionCard() {
   const designationUIContext = useDesignationUIContext()
-
+  const empUIContext = useDesignationUIContext()
   const { openModal } = useModal();
+  const dispatch = useDispatch();
   const DesignationUIProps = useMemo(() => {
     return {
       newAcademicButtonClick: designationUIContext.newAcademicButtonClick,
@@ -36,6 +39,48 @@ export function ReligionCard() {
     (item) => item.componentName === "CreateProfile"
   )
 
+
+  const DesignationUIContext = useDesignationUIContext();
+  const usersUIProps = useMemo(() => {
+    return {
+      queryParams: DesignationUIContext.queryParams,
+      setQueryParams: DesignationUIContext.setQueryParams,
+    };
+  }, [DesignationUIContext]);
+
+
+  const fetchInctive = () => {
+    const updatedQueryParams = {
+      ...usersUIProps.queryParams,
+      isActive: false,
+      pageNumber:1, // Toggle the isActive flag
+    };
+
+    // Set the updated queryParams
+    usersUIProps.setQueryParams(updatedQueryParams);
+    // initialFilter.isActive = false
+
+    dispatch(actions.fetchUsers(usersUIProps.queryParams));
+
+  }
+
+  const fetchActive = () => {
+
+    const updatedQueryParams = {
+      ...usersUIProps.queryParams,
+      isActive: true,
+      pageNumber:1, // Toggle the isActive flag
+    };
+
+    // Set the updated queryParams
+    usersUIProps.setQueryParams(updatedQueryParams);
+    // initialFilter.isActive = true
+
+    dispatch(actions.fetchUsers(usersUIProps.queryParams));
+
+  }
+
+
   const handleOpenModal = () => {
     openModal(
       <div>
@@ -49,7 +94,7 @@ export function ReligionCard() {
     <>
       <Card>
 
-        <CardHeader title={CurrentModuleName()} >
+        <CardHeader title={CurrentModuleName() + (usersUIProps.queryParams.isActive ? "  ( Active )" : "  ( Inactive )")}>
 
           <div className="d-flex justify-content-between align-items-center gap-3 m-4">
 
@@ -64,6 +109,28 @@ export function ReligionCard() {
             <div className=" p-2">
 
               <CardHeaderToolbar>
+
+                {usersUIProps.queryParams.isActive ? (
+                  <button
+                    type="button"
+                    className="btn btn-red   ml-5 mr-5"
+                    onClick={fetchInctive}
+                  >
+                   Inactive Employee
+                  </button>
+               ) : ( 
+                  
+                  
+                  <button
+                  type="button"
+                  className="btn btn-green  ml-5 mr-5"
+                  onClick={fetchActive}
+                >
+                  Active Employee
+                </button>
+               )} 
+
+
 
 
 

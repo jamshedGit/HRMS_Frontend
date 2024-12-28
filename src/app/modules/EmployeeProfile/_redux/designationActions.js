@@ -7,7 +7,7 @@ const { actions } = empProfileSlice;
 // const { roleActions } = getAllrolesSlice
 
 export const fetchUsers = (queryparm) => async (dispatch) => {
- 
+
   dispatch(actions.startCall({ callType: callTypes.list }));
 
   return requestFromServer.getAllEmpProfile(queryparm)
@@ -19,7 +19,7 @@ export const fetchUsers = (queryparm) => async (dispatch) => {
     })
     .catch((error) => {
   
-      error.clientMessage = "Can't find religion record";
+      error.clientMessage = "Can't find record";
       dispatch(actions.catchError({ error, callType: callTypes.list }));
     });
 };
