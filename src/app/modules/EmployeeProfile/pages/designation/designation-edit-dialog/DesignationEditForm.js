@@ -1064,9 +1064,9 @@ export function DesignationEditForm({
     //   ? profilePolicy?.data?.data[0]?.retirementAgeFemale
     //   : profilePolicy?.data?.data[0]?.retirementAgeMale;
 
-    const retirementAge = gender == "Female"
+    const retirementAge = gender == "Female" && dateOfBirth
       ? profilePolicy?.data?.data[0]?.retirementAgeFemale
-      : gender == "Male"
+      : gender == "Male" && dateOfBirth
         ? profilePolicy?.data?.data[0]?.retirementAgeMale
         : null;
    console.log("retirementAge111",retirementAge)
@@ -1115,7 +1115,7 @@ export function DesignationEditForm({
       : null;
 
     if (!contractualPolicyInMonth) {
-
+      setDisableConfDueDate(false)
       // setFieldValue("dateOfContractExpiry", null);
       return; // Exit the function early if condition is not true
     }
@@ -2534,9 +2534,9 @@ export function DesignationEditForm({
                               name="dateOfConfirmationEnter"
                               disabled={disableConfDueDate}
                               autoComplete="off"
-                              // minDate={values.dateOfConfirmationDue ? new Date(values.dateOfConfirmationDue) : new Date(values.dateOfJoining)}
+                              minDate={values.dateOfConfirmationDue ? new Date(values.dateOfConfirmationDue) : new Date(values.dateOfJoining)}
 
-                              minDate={values.dateOfJoining ? new Date(values.dateOfJoining) : null}
+                              // minDate={values.dateOfJoining ? new Date(values.dateOfJoining) : null}
                             />
                             <ErrorMessage className="form-feedBack" name="dateOfConfirmationEnter" component="div" />
                           </div>
