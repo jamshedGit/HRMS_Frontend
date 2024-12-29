@@ -142,7 +142,7 @@ export function FormEditForm({
                     {<div className="col-12 col-md-4 mt-3">
                       <Field
                         name="formName"
-                        maxLength={30}
+                        maxLength={50}
                         component={Input}
                         placeholder="Enter Form Name"
                         label={<span>  Name<span style={{ color: 'red' }}>*</span></span>}
