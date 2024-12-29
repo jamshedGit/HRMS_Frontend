@@ -1518,8 +1518,8 @@ export function DesignationEditForm({
                           <div>
                             <div>
 
-                              <img name='profile_image' width={120} height={120} src={profile_image} />
-                              <h4>Select Image   {imagePolicy && <span style={{ color: "red" }}>*</span>}</h4>
+                              <img name='profile_image' width={120} height={120} src={user?.profile_image || profile_image} />
+                              <h4>Select Image {imagePolicy && <span style={{ color: "red" }}>*</span>}</h4>
                               <input type="file" name="myImage" accept=".jpg, .jpeg, .png" onChange={onImageChange} />
                               <ErrorMessage className="form-feedBack" name="myImage" component="div" />
                             </div>
@@ -1527,6 +1527,8 @@ export function DesignationEditForm({
                         </div>
                       </div>
                     </div>
+
+
 
                     <div className="from-group row">
 
