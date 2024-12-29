@@ -215,7 +215,7 @@ const profileValidation = Yup.object().shape(
       .nullable()
       .required('Required'),
 
-    reportTo: Yup.string().required('Required'),
+    // reportTo: Yup.string().required('Required'),
 
     // profile_image: Yup.string().required('Required'),
     profile_image: Yup.string().when('imagePolicy', {
@@ -1069,17 +1069,17 @@ export function DesignationEditForm({
       : gender == "Male" && dateOfBirth
         ? profilePolicy?.data?.data[0]?.retirementAgeMale
         : null;
-  
-   if(retirementAge){
-    const retirementDate = new Date(dateOfBirth);
 
-    retirementDate.setFullYear(retirementDate.getFullYear() + retirementAge);
+    if (retirementAge) {
+      const retirementDate = new Date(dateOfBirth);
 
-    setDRetirmentDate(new Date(retirementDate));
-    setFieldValue("dateOfRetirement", new Date(retirementDate));
-   }else{
-    return;
-   }
+      retirementDate.setFullYear(retirementDate.getFullYear() + retirementAge);
+
+      setDRetirmentDate(new Date(retirementDate));
+      setFieldValue("dateOfRetirement", new Date(retirementDate));
+    } else {
+      return;
+    }
 
 
 
@@ -1087,7 +1087,7 @@ export function DesignationEditForm({
 
   const updateConfirmationDuePolicy = (setFieldValue, employeeTypeId, employeeStatusId, dateOfJoining) => {
     setDisableConfDueDate(false)
-    const probationPolicyInMonth = employeeTypeId == 148  && dateOfJoining //&& employeeStatusId == 276
+    const probationPolicyInMonth = employeeTypeId == 148 && dateOfJoining //&& employeeStatusId == 276
       ? profilePolicy?.data?.data[0]?.probationPolicyInMonth
       : null;
 
@@ -1110,7 +1110,7 @@ export function DesignationEditForm({
 
   const updateContractExpiryPolicy = (setFieldValue, employeeTypeId, employeeStatusId, dateOfJoining) => {
     setDisableConfDueDate(true)
-    const contractualPolicyInMonth = employeeTypeId == 147  && dateOfJoining //&& employeeStatusId == 276
+    const contractualPolicyInMonth = employeeTypeId == 147 && dateOfJoining //&& employeeStatusId == 276
       ? profilePolicy?.data?.data[0]?.contractualPolicyInMonth
       : null;
 
@@ -1838,10 +1838,10 @@ export function DesignationEditForm({
                             //probation
 
                             // if (e.value == 276) {
-                              if (!id) {
-                                updateConfirmationDuePolicy(setFieldValue, values?.employeeTypeId, e.value, values?.dateOfJoining)
-                                updateContractExpiryPolicy(setFieldValue, values?.employeeTypeId, e.value, values?.dateOfJoining)
-                              }
+                            if (!id) {
+                              updateConfirmationDuePolicy(setFieldValue, values?.employeeTypeId, e.value, values?.dateOfJoining)
+                              updateContractExpiryPolicy(setFieldValue, values?.employeeTypeId, e.value, values?.dateOfJoining)
+                            }
 
 
                             // }
@@ -1957,7 +1957,7 @@ export function DesignationEditForm({
                       </div>
 
                       <div className="col-12 col-md-4 mt-3">
-                        <label>Report To<span style={{ color: 'red' }}>*</span></label>
+                        <label>Report To</label>
                         <SearchSelect
                           name="reportTo"
 
@@ -1973,218 +1973,201 @@ export function DesignationEditForm({
                           value={(defEmployeeReportTo || null)}
                           error={errors.reportTo}
                           touched={touched.reportTo}
-                          options={dashboard.allEmployees.filter(x => x.value != values.Id)}
+                          // options={dashboard.allEmployees.filter(x => x.value != values.Id)}
+                          options={[
+                            { value: null, label: 'Select' }, // Adding "All" option with value empty string
+                            ...dashboard.allEmployees.filter(x => x.value != values.Id), // Spread the rest of the menu options
+                          ]}
                         />
 
                       </div>
 
+                  
+                        <div className="col-12 col-md-4 mt-3">
 
-                      <div className="col-12 col-md-4 mt-3">
-                        {<span> Date Of Birth<span style={{ color: 'red' }}>*</span></span>}
-                        <DatePicker
-                          className="form-control"
-                          placeholder=" Date Of Birth"
-                          selected={DOBDateSelected}
-                          //value={values.dateOfBirth}
-                          showYearDropdown
-                          scrollableMonthYearDropdown
-                          onChange={(date) => {
-                            setFieldValue("dateOfBirth", date);
-                            setDOBDate(date);
-                            if (!id) {
+                          <SearchSelect
+                            label={<span> Marital Status<span style={{ color: 'red' }}>*</span></span>}
+                            name="maritalStatus"
+                            // value={values.maritalStatus}
+                            isDisabled={isUserForRead && true}
+                            onBlur={handleBlur}
+                            onChange={(e) => {
+                              setFieldValue("maritalStatus", e.value || null);
+                              setDefaultMaritalStatus(e);
+                              // dispatch(fetchAllFormsMenu(e.value));
+                            }}
+                            value={(defMaritalStatus || null)}
+                            error={errors.maritalStatus}
+                            touched={touched.maritalStatus}
+                            options={dashboard.allMaritalStatus}
+                          />
+                          {/* <ErrorMessage style={{ color: "red" }} name="maritalStatus" component="div" /> */}
+                        </div>
+                        <div className="col-12 col-md-4 mt-3">
+                          <Select
+                            label={<span> Gender<span style={{ color: 'red' }}>*</span></span>}
+                            name="gender"
+                            value={values.gender}
+                            // onChange={handleChange}
+                            onBlur={handleBlur}
+                            style={{ display: "block" }}
+                            autoComplete="off"
+                            onChange={(e) => {
+                              setFieldValue("gender", e.target.value)
+                              if (!id && values.subsidiaryId) {
 
-                              updateRetirmentPolicy(setFieldValue, date, values?.gender)
-                            }
+                                updateRetirmentPolicy(setFieldValue, values.dateOfBirth, e.target.value)
+                              }
 
-                          }}
-                          timeInputLabel="Time:"
-                          dateFormat="dd/MM/yyyy"
-                          showTimeInput
-                          name="dateOfBirth"
-                          disabled={isUserForRead || !values?.subsidiaryId}
-                          autoComplete="off"
-                          // maxDate={new Date()}
-                          // minDate={new Date(1900, 0, 1)}
-                          // const currentDate = new Date();
-                          minDate={maxAgeLimin !== null ? new Date(new Date().getFullYear() - maxAgeLimin, new Date().getMonth(), new Date().getDate()) : null}
-                          maxDate={minAgeLimin !== null ? new Date(new Date().getFullYear() - minAgeLimin, new Date().getMonth(), new Date().getDate()) : new Date()}
-                        />
-                        <ErrorMessage className="form-feedBack" name="dateOfBirth" component="div" />
+                            }}
+
+                          >
+                            <option value="-1" label="Select Gender" />
+                            <option value="Male" label="Male" />
+                            <option value="Female" label="Female" />
+
+                          </Select>
+                          {errors.gender && touched.gender && (
+                            <div className="invalid-text">{errors.gender}</div>
+                          )}
+
+                        </div>
+                        <div className="col-12 col-md-4 mt-3">
+                          <SearchSelect
+                            name="religionId"
+                            label={<span> Religion<span style={{ color: 'red' }}>*</span></span>}
+                            isDisabled={isUserForRead && true}
+
+                            onBlur={() => {
+                              // handleBlur({ target: { name: "countryId" } });
+                            }}
+                            onChange={(e) => {
+                              setFieldValue("religionId", e.value || null);
+                              setDefaultChildReligionMenus(e);
+                              // dispatch(fetchAllFormsMenu(e.value));
+                            }}
+                            value={(defchildReligionMenus || null)}
+                            error={errors.religionId}
+                            touched={touched.religionId}
+                            options={dashboard.allReligionChildMenus}
+                          />
+                        </div>
+               
+
+                        <div className="col-12 col-md-4 mt-3">
+                          {<span> Date Of Birth<span style={{ color: 'red' }}>*</span></span>}
+                          <DatePicker
+                            className="form-control  mt-2"
+                            placeholder=" Date Of Birth"
+                            selected={DOBDateSelected}
+                            //value={values.dateOfBirth}
+                            showYearDropdown
+                            scrollableMonthYearDropdown
+                            onChange={(date) => {
+                              setFieldValue("dateOfBirth", date);
+                              setDOBDate(date);
+                              if (!id) {
+
+                                updateRetirmentPolicy(setFieldValue, date, values?.gender)
+                              }
+
+                            }}
+                            timeInputLabel="Time:"
+                            dateFormat="dd/MM/yyyy"
+                            // showTimeInput
+                            name="dateOfBirth"
+                            disabled={isUserForRead || !values?.subsidiaryId}
+                            autoComplete="off"
+                            // maxDate={new Date()}
+                            // minDate={new Date(1900, 0, 1)}
+                            // const currentDate = new Date();
+                            minDate={maxAgeLimin !== null ? new Date(new Date().getFullYear() - maxAgeLimin, new Date().getMonth(), new Date().getDate()) : null}
+                            maxDate={minAgeLimin !== null ? new Date(new Date().getFullYear() - minAgeLimin, new Date().getMonth(), new Date().getDate()) : new Date()}
+                          />
+                          <ErrorMessage className="form-feedBack" name="dateOfBirth" component="div" />
+                        </div>
+
+
+                        <div className="col-12 col-md-4 mt-3">
+                          <label>Date Of Joining<span style={{ color: 'red' }}>*</span></label>
+                          <DatePicker
+                            className="form-control"
+                            placeholder=" Date Of Joining"
+                            selected={joiningDateSelected}
+                            onChange={(date) => {
+                              setFieldValue("dateOfJoining", date);
+                              setJoiningDate(date);
+                              if (!id) {
+                                updateConfirmationDuePolicy(setFieldValue, values.employeeTypeId, values.employeeStatusId, date)
+                                updateContractExpiryPolicy(setFieldValue, values.employeeTypeId, values.employeeStatusId, date)
+                              }
+
+                              // *********************************************************************************************************
+
+                              // if (values?.employeeTypeId == "93" && !isNaN(defContractExpiryPolicy)) // Probation
+
+                              // {
+
+                              //   setConfirmationDueDate(addMonths(date, defProbationPolicyMonth))
+                              //   setFieldValue("dateOfConfirmationDue", addMonths(date, defProbationPolicyMonth))
+                              // }
+                              // if (values?.employeeTypeId == "147" && !isNaN(defContractExpiryPolicy)) // Contract Type
+                              // {
+                              //   setContractExpiryDate(addMonths(date, defContractExpiryPolicy))
+                              //   setFieldValue("dateOfContractExpiry", addMonths(date, defContractExpiryPolicy))
+
+                              // }
+
+
+                              // *********************************************************************************************************                           
+                            }}
+                            showYearDropdown
+                            scrollableMonthYearDropdown
+                            timeInputLabel="Time:"
+                            dateFormat="dd/MM/yyyy"
+                            // showTimeInput
+                            autoComplete="off"
+                            name="dateOfJoining"
+                            disabled={isUserForRead || !values?.subsidiaryId}
+                            error={errors.dateOfJoining}
+                            touched={touched.dateOfJoining}
+
+                            minDate={values.dateOfBirth ? new Date(values.dateOfBirth) : null}
+                          />
+                          <ErrorMessage className="form-feedBack" name="dateOfJoining" component="div" />
+                        </div>
+
+
+                        {!hidehideRetirementAgeDate ? (<div className="col-12 col-md-4 mt-3">
+                          <label>Date Of Retirement</label>
+                          <DatePicker
+                            className="form-control"
+                            placeholder=" Date Of Retirement"
+                            selected={RetirementSelected}
+
+                            showYearDropdown
+                            scrollableMonthYearDropdown
+                            onChange={(date) => {
+                              setFieldValue("dateOfRetirement", date);
+                              setDRetirmentDate(date);
+                            }}
+                            timeInputLabel="Time:"
+                            dateFormat="dd/MM/yyyy"
+                            // showTimeInput
+                            name="dateOfRetirement"
+                            disabled={isUserForRead || !values?.subsidiaryId}
+                            autoComplete="off"
+                          />
+                          <ErrorMessage className="form-feedBack" name="dateOfRetirement" component="div" />
+                        </div>) : (null)}
                       </div>
 
 
-                      <div className="col-12 col-md-4 mt-3">
-                        <label>Date Of Joining<span style={{ color: 'red' }}>*</span></label>
-                        <DatePicker
-                          className="form-control"
-                          placeholder=" Date Of Joining"
-                          selected={joiningDateSelected}
-                          onChange={(date) => {
-                            setFieldValue("dateOfJoining", date);
-                            setJoiningDate(date);
-                            if (!id) {
-                              updateConfirmationDuePolicy(setFieldValue, values.employeeTypeId, values.employeeStatusId, date)
-                              updateContractExpiryPolicy(setFieldValue, values.employeeTypeId, values.employeeStatusId, date)
-                            }
 
-                            // *********************************************************************************************************
+                
+                
 
-                            // if (values?.employeeTypeId == "93" && !isNaN(defContractExpiryPolicy)) // Probation
-
-                            // {
-
-                            //   setConfirmationDueDate(addMonths(date, defProbationPolicyMonth))
-                            //   setFieldValue("dateOfConfirmationDue", addMonths(date, defProbationPolicyMonth))
-                            // }
-                            // if (values?.employeeTypeId == "147" && !isNaN(defContractExpiryPolicy)) // Contract Type
-                            // {
-                            //   setContractExpiryDate(addMonths(date, defContractExpiryPolicy))
-                            //   setFieldValue("dateOfContractExpiry", addMonths(date, defContractExpiryPolicy))
-
-                            // }
-
-
-                            // *********************************************************************************************************                           
-                          }}
-                          showYearDropdown
-                          scrollableMonthYearDropdown
-                          timeInputLabel="Time:"
-                          dateFormat="dd/MM/yyyy"
-                          showTimeInput
-                          autoComplete="off"
-                          name="dateOfJoining"
-                          disabled={isUserForRead || !values?.subsidiaryId}
-                          error={errors.dateOfJoining}
-                          touched={touched.dateOfJoining}
-
-                          minDate={values.dateOfBirth ? new Date(values.dateOfBirth) : null}
-                        />
-                        <ErrorMessage className="form-feedBack" name="dateOfJoining" component="div" />
-                      </div>
-
-
-                      {!hidehideRetirementAgeDate ? (<div className="col-12 col-md-4 mt-3">
-                        <label>Date Of Retirement</label>
-                        <DatePicker
-                          className="form-control"
-                          placeholder=" Date Of Retirement"
-                          selected={RetirementSelected}
-
-                          showYearDropdown
-                          scrollableMonthYearDropdown
-                          onChange={(date) => {
-                            setFieldValue("dateOfRetirement", date);
-                            setDRetirmentDate(date);
-                          }}
-                          timeInputLabel="Time:"
-                          dateFormat="dd/MM/yyyy"
-                          showTimeInput
-                          name="dateOfRetirement"
-                          disabled={isUserForRead || !values?.subsidiaryId}
-                          autoComplete="off"
-                        />
-                        <ErrorMessage className="form-feedBack" name="dateOfRetirement" component="div" />
-                      </div>) : (null)}
-
-
-
-
-                    </div>
-
-                    <div className="from-group row">
-                      <div className="col-12 col-md-4 mt-3">
-
-                        <SearchSelect
-                          label={<span> Marital Status<span style={{ color: 'red' }}>*</span></span>}
-                          name="maritalStatus"
-                          // value={values.maritalStatus}
-                          isDisabled={isUserForRead && true}
-                          onBlur={handleBlur}
-                          onChange={(e) => {
-                            setFieldValue("maritalStatus", e.value || null);
-                            setDefaultMaritalStatus(e);
-                            // dispatch(fetchAllFormsMenu(e.value));
-                          }}
-                          value={(defMaritalStatus || null)}
-                          error={errors.maritalStatus}
-                          touched={touched.maritalStatus}
-                          options={dashboard.allMaritalStatus}
-                        />
-                        {/* <ErrorMessage style={{ color: "red" }} name="maritalStatus" component="div" /> */}
-                      </div>
-                      <div className="col-12 col-md-4 mt-3">
-                        <Select
-                          label={<span> Gender<span style={{ color: 'red' }}>*</span></span>}
-                          name="gender"
-                          value={values.gender}
-                          // onChange={handleChange}
-                          onBlur={handleBlur}
-                          style={{ display: "block" }}
-                          autoComplete="off"
-                          onChange={(e) => {
-                            setFieldValue("gender", e.target.value)
-                            if (!id && values.subsidiaryId) {
-
-                              updateRetirmentPolicy(setFieldValue, values.dateOfBirth, e.target.value)
-                            }
-
-                          }}
-
-                        >
-                          <option value="-1" label="Select Gender" />
-                          <option value="Male" label="Male" />
-                          <option value="Female" label="Female" />
-
-                        </Select>
-                        {errors.gender && touched.gender && (
-                          <div className="invalid-text">{errors.gender}</div>
-                        )}
-
-                      </div>
-                      <div className="col-12 col-md-4 mt-3">
-                        <SearchSelect
-                          name="religionId"
-                          label={<span> Religion<span style={{ color: 'red' }}>*</span></span>}
-                          isDisabled={isUserForRead && true}
-
-                          onBlur={() => {
-                            // handleBlur({ target: { name: "countryId" } });
-                          }}
-                          onChange={(e) => {
-                            setFieldValue("religionId", e.value || null);
-                            setDefaultChildReligionMenus(e);
-                            // dispatch(fetchAllFormsMenu(e.value));
-                          }}
-                          value={(defchildReligionMenus || null)}
-                          error={errors.religionId}
-                          touched={touched.religionId}
-                          options={dashboard.allReligionChildMenus}
-                        />
-                      </div>
-                    </div>
-                    <div className="from-group row">
-
-
-
-
-
-                    </div>
-
-
-                    <div className="from-group row">
-
-
-
-
-                    </div>
-
-                    <div className="from-group row">
-
-
-
-
-
-                    </div>
+  
                     <br></br>
 
                   </div>
@@ -2484,7 +2467,7 @@ export function DesignationEditForm({
                               }}
                               timeInputLabel="Time:"
                               dateFormat="dd/MM/yyyy"
-                              showTimeInput
+                              // showTimeInput
                               name="dateOfConfirmation"
                               // disabled={disabledConfirmationDateSelected}
                               autoComplete="off"
@@ -2507,7 +2490,7 @@ export function DesignationEditForm({
                               }}
                               timeInputLabel="Time:"
                               dateFormat="dd/MM/yyyy"
-                              showTimeInput
+                              // showTimeInput
                               name="dateOfConfirmationDue"
                               disabled={disableConfDueDate}
                               autoComplete="off"
@@ -2530,13 +2513,13 @@ export function DesignationEditForm({
                               }}
                               timeInputLabel="Time:"
                               dateFormat="dd/MM/yyyy"
-                              showTimeInput
+                              // showTimeInput
                               name="dateOfConfirmationEnter"
                               disabled={disableConfDueDate}
                               autoComplete="off"
                               minDate={values.dateOfConfirmationDue ? new Date(values.dateOfConfirmationDue) : new Date(values.dateOfJoining)}
 
-                              // minDate={values.dateOfJoining ? new Date(values.dateOfJoining) : null}
+                            // minDate={values.dateOfJoining ? new Date(values.dateOfJoining) : null}
                             />
                             <ErrorMessage className="form-feedBack" name="dateOfConfirmationEnter" component="div" />
                           </div>
@@ -2556,7 +2539,7 @@ export function DesignationEditForm({
                               }}
                               timeInputLabel="Time:"
                               dateFormat="dd/MM/yyyy"
-                              showTimeInput
+                              // showTimeInput
                               name="lastReviewDate"
                               disabled={isUserForRead}
                               autoComplete="off"
@@ -2581,7 +2564,7 @@ export function DesignationEditForm({
                               }}
                               timeInputLabel="Time:"
                               dateFormat="dd/MM/yyyy"
-                              showTimeInput
+                              // showTimeInput
                               name="nextReviewDate"
                               minDate={new Date()}
                               autoComplete="off"
@@ -2603,7 +2586,7 @@ export function DesignationEditForm({
                               }}
                               timeInputLabel="Time:"
                               dateFormat="dd/MM/yyyy"
-                              showTimeInput
+                              // showTimeInput
                               name="dateOfContractExpiry"
                               // disabled={disabledContractExpirtyDateSelected}
                               autoComplete="off"
@@ -2822,7 +2805,7 @@ export function DesignationEditForm({
                               }}
                               timeInputLabel="Time:"
                               dateFormat="dd/MM/yyyy"
-                              showTimeInput
+                              // showTimeInput
                               name="passportExpiry"
 
                               autoComplete="off"
@@ -2847,7 +2830,7 @@ export function DesignationEditForm({
                               }}
                               timeInputLabel="Time:"
                               dateFormat="dd/MM/yyyy"
-                              showTimeInput
+                              // showTimeInput
                               name="drivingLicenseExpiry"
 
                               autoComplete="off"
@@ -3187,7 +3170,7 @@ export function DesignationEditForm({
                                   id={"endDate_W-" + rightindex}
                                   timeInputLabel="Time:"
                                   dateFormat="dd/MM/yyyy"
-                                  showTimeInput
+                                  // showTimeInput
                                   name="startDate"
                                   disabled={isUserForRead}
                                   autoComplete="off"
@@ -3211,7 +3194,7 @@ export function DesignationEditForm({
                                   id={"endDate_W" + rightindex}
                                   timeInputLabel="Time:"
                                   dateFormat="dd/MM/yyyy"
-                                  showTimeInput
+                                  // showTimeInput
                                   name="endDate"
                                   disabled={isUserForRead}
                                   autoComplete="off"
@@ -3350,7 +3333,7 @@ export function DesignationEditForm({
                                     id={"startDate_A-" + rightindex}
                                     timeInputLabel="Time:"
                                     dateFormat="dd/MM/yyyy"
-                                    showTimeInput
+                                    // showTimeInput
                                     name="startDate"
                                     disabled={isUserForRead}
                                     autoComplete="off"
@@ -3370,7 +3353,7 @@ export function DesignationEditForm({
                                     id={"endDate_A-" + rightindex}
                                     timeInputLabel="Time:"
                                     dateFormat="dd/MM/yyyy"
-                                    showTimeInput
+                                    // showTimeInput
                                     name="endDate"
                                     disabled={isUserForRead}
                                     autoComplete="off"
@@ -3468,7 +3451,7 @@ export function DesignationEditForm({
                                     id={"startDate-" + rightindex}
                                     timeInputLabel="Time:"
                                     dateFormat="dd/MM/yyyy"
-                                    showTimeInput
+                                    // showTimeInput
                                     name="startDate"
                                     disabled={isUserForRead}
                                     autoComplete="off"
@@ -3488,7 +3471,7 @@ export function DesignationEditForm({
                                     id={"endDate-" + rightindex}
                                     timeInputLabel="Time:"
                                     dateFormat="dd/MM/yyyy"
-                                    showTimeInput
+                                    // showTimeInput
                                     name="endDate"
                                     disabled={isUserForRead}
                                     autoComplete="off"
@@ -3587,7 +3570,7 @@ export function DesignationEditForm({
                                     id={"incidentDate-" + rightindex}
                                     timeInputLabel="Time:"
                                     dateFormat="dd/MM/yyyy"
-                                    showTimeInput
+                                    // showTimeInput
                                     name="incidentDate"
                                     disabled={isUserForRead}
                                     autoComplete="off"
