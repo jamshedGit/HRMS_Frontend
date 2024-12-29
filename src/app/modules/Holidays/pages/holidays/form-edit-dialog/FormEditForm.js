@@ -39,8 +39,8 @@ const holidaysEditSchema = Yup.object().shape({
   holiday_typeId: Yup.number()
     .required(VALIDATION_MESSAGES.required),
 
-  religionId: Yup.string()
-    .required(VALIDATION_MESSAGES.required),
+  // religionId: Yup.string()
+  //   .required(VALIDATION_MESSAGES.required),
 
 });
 
@@ -294,13 +294,28 @@ export function FormEditForm({
                       onChange={(e) => {
                         setFieldValue("religionId", e.value || null);
                       }}
-                      value={
-                        dashboard?.allReligionChildMenus?.find(
-                          (option) => option.value === values.religionId
-                        ) || null
-                      }
 
-                      options={dashboard?.allReligionChildMenus}
+                      value={
+                        // Default to "All" if religionId is null or undefined
+                        values.religionId === null
+                          ? { value: null, label: 'All' }
+                          : dashboard?.allReligionChildMenus?.find(
+                              (option) => option.value === values.religionId
+                            ) || null
+                      }
+                      // value={
+                      //   dashboard?.allReligionChildMenus?.find(
+                      //     (option) => option.value === values.religionId
+                      //   ) || null
+                      // }
+
+                      // options={dashboard?.allReligionChildMenus}
+
+                      options={[
+                        { value: null, label: 'All' }, // Adding "All" option with value empty string
+                        ...dashboard?.allReligionChildMenus, // Spread the rest of the menu options
+                      ]}
+                    
                       // options={dashboard.allSubidiaryList.map(option => ({
                       //   label: `${option.label} (${option.value})`, // Adding the value to the label
                       //   value: option.value,
