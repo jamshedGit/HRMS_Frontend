@@ -3,7 +3,7 @@ import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { DatePickerField, Input } from "../../../../../../_metronic/_partials/controls"; // Adjust import as needed
-import {shallowEqual, useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import {
   fetchAllFormsMenu,
@@ -39,8 +39,9 @@ const holidaysEditSchema = Yup.object().shape({
   holiday_typeId: Yup.number()
     .required(VALIDATION_MESSAGES.required),
 
-  // religionId: Yup.string()
-  //   .required(VALIDATION_MESSAGES.required),
+  religionId: Yup.number()
+    .nullable(),
+    
 
 });
 
@@ -80,15 +81,15 @@ export function FormEditForm({
 
   const { userForEdit } = currentState;
 
-  useEffect(()=>{
+  useEffect(() => {
     setStart_date(userForEdit?.from_date)
     setEnd_date(userForEdit?.to_date)
-  },[userForEdit])
+  }, [userForEdit])
   useEffect(() => {
 
     if (start_date && end_date) {
       setDiffInDate(getDateDiffInDays(start_date, end_date))
-  
+
     }
 
   }, [start_date, end_date]);
@@ -109,7 +110,7 @@ export function FormEditForm({
       onSubmit={(values) => {
 
         enableLoading();
-        saveForm(values,diffInDate);
+        saveForm(values, diffInDate);
       }}
     >
       {({ handleSubmit, errors, touched, values, setFieldValue }) => (
@@ -188,8 +189,8 @@ export function FormEditForm({
                       placeholder="Select Date"
                       type="date"
                       onChange={(e) => {
-                 
-                      
+
+
                         setFieldValue("from_date", e);
                         setStart_date(e);
                       }}
@@ -221,7 +222,7 @@ export function FormEditForm({
                   <div className="col-12 col-md-6 mt-3">
                     <label>
                       <span>
-                       Holiday Name<span style={{ color: "red" }}>*</span>
+                        Holiday Name<span style={{ color: "red" }}>*</span>
                       </span>
                     </label>
                     <Field
@@ -247,7 +248,7 @@ export function FormEditForm({
                       disabled={true}
                       type="number"
                       value={diffInDate}
-                     
+
 
 
                     />
@@ -287,7 +288,7 @@ export function FormEditForm({
                       name="religionId"
                       label={
                         <span>
-                          Select Religion<span style={{ color: "red" }}>*</span>
+                          Select Religion
                         </span>
                       }
                       isDisabled={isUserForRead}
@@ -297,11 +298,11 @@ export function FormEditForm({
 
                       value={
                         // Default to "All" if religionId is null or undefined
-                        values.religionId === null
+                        values?.religionId ==null
                           ? { value: null, label: 'All' }
                           : dashboard?.allReligionChildMenus?.find(
-                              (option) => option.value === values.religionId
-                            ) || null
+                            (option) => option.value === values.religionId
+                          ) || null
                       }
                       // value={
                       //   dashboard?.allReligionChildMenus?.find(
@@ -315,7 +316,7 @@ export function FormEditForm({
                         { value: null, label: 'All' }, // Adding "All" option with value empty string
                         ...dashboard?.allReligionChildMenus, // Spread the rest of the menu options
                       ]}
-                    
+
                       // options={dashboard.allSubidiaryList.map(option => ({
                       //   label: `${option.label} (${option.value})`, // Adding the value to the label
                       //   value: option.value,

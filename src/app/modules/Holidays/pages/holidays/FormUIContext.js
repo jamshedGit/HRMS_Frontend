@@ -30,7 +30,7 @@ export function FormUIProvider({ FormUIEvents, children }) {
     Id:"",
     subsidiaryId: "",
     name: "",
-    religionId: "",
+    religionId: null,
     from_date: "",
     to_date:"",
     number_of_days:"",
