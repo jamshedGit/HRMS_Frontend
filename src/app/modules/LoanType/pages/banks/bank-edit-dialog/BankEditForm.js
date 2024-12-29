@@ -30,8 +30,8 @@ const formValidation = Yup.object().shape(
       .required("Required*"),
 
     name: Yup.string()
-      .required("Required*")
-      .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.'),
+      .required("Required*"),
+      // .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.'),
 
     // linkedAttendance: Yup.string()
     //   .required("Required*"),
@@ -109,7 +109,7 @@ export function BankEditForm({
     // if (subsidiaryId) {
       // dispatch(getLatestTableId("t_loan_type_setup", "Id", " subsidiaryId = " + subsidiaryId, setValue));
       if(!id){
-      dispatch(getLatestTableId("t_loan_type_setup", "Id", " 1 = 1 ",setValue));
+      dispatch(getLatestTableId("t_loan_type_setup", "Code", " 1 = 1 ",setValue));
     }
   };
 
@@ -231,7 +231,7 @@ useEffect (()=>{
                       <div className="col-12 col-md-4 mt-3">
                         <Field
                           name="name"
-                          maxLength={30}
+                          maxLength={50}
                           component={Input}
                           placeholder="Enter Deduction Name"
                           autoComplete="off"

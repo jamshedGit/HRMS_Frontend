@@ -81,7 +81,7 @@ export function DesignationUIProvider({ DesignationUIEvents, children }) {
     contractTypeId: '',
     cycleTypeId: '',
     requireDeligation: '',
-    reportTo:"",
+    reportTo:null,
     defaultShiftId:"",
     //defContactList: []
     attendanceType:1,

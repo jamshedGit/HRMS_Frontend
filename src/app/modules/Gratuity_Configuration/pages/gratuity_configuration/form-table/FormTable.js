@@ -80,17 +80,17 @@ export function FormTable() {
       },
     },
 
-{
-  dataField: "Contract_Type.formName",
-  text: "Contract Type",
-  sort: false,
-  sortCaret: sortCaret,
-  headerSortingClasses,
-  style: {
-    minWidth: "10px",
-  },
+// {
+//   dataField: "Contract_Type.formName",
+//   text: "Contract Type",
+//   sort: false,
+//   sortCaret: sortCaret,
+//   headerSortingClasses,
+//   style: {
+//     minWidth: "10px",
+//   },
  
-},
+// },
 
 
     // {

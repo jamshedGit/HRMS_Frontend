@@ -157,7 +157,7 @@ export function FormEditForm({
                         setFieldValue("graduity_expense_accountId", e.value || null);
                       }}
                       value={
-                        dashboard.allAccountList.find(
+                        dashboard?.allAccountList?.find(
                           (option) => option.value === values.graduity_expense_accountId
                         ) || null
                       }
@@ -184,7 +184,7 @@ export function FormEditForm({
                         setFieldValue("graduity_payable_accountId", e.value || null);
                       }}
                       value={
-                        dashboard.allAccountList.find(
+                        dashboard?.allAccountList?.find(
                           (option) => option.value === values.graduity_payable_accountId
                         ) || null
                       }
@@ -211,7 +211,7 @@ export function FormEditForm({
                         setFieldValue("bank_cash_accountId", e.value || null);
                       }}
                       value={
-                        dashboard.allAccountList.find(
+                        dashboard?.allAccountList?.find(
                           (option) => option.value === values.bank_cash_accountId
                         ) || null
                       }

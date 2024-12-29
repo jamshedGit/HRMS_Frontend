@@ -22,8 +22,8 @@ const gratuity_configurationEditSchema = Yup.object().shape({
 
   // to_amount: Yup.string().required("Required*"),
 
-  contract_typeId: Yup.number()
-    .required(VALIDATION_MESSAGES.required),
+  // contract_typeId: Yup.number()
+  //   .required(VALIDATION_MESSAGES.required),
 
   basis_of_gratuityId: Yup.number()
     .required(VALIDATION_MESSAGES.required),
@@ -36,8 +36,8 @@ const gratuity_configurationEditSchema = Yup.object().shape({
     .required(VALIDATION_MESSAGES.required),
 
 
-  gratuity_fraction: Yup.number()
-    .required(VALIDATION_MESSAGES.required),
+  // gratuity_fraction: Yup.number()
+  //   .required(VALIDATION_MESSAGES.required),
 
   // min_year: Yup.number()
   //   .min(1, "Must be at least 1")
@@ -164,7 +164,7 @@ export function FormEditForm({
                       name="contract_typeId"
                       label={
                         <span>
-                          Contract Type<span style={{ color: "red" }}>*</span>
+                          Contract Type
                         </span>
                       }
                       isDisabled={isUserForRead}
@@ -281,7 +281,7 @@ export function FormEditForm({
 
                   <div className="col-12 col-md-6 mt-3">
                     <label htmlFor="basis_of_gratuityId">
-                      Gratuity Fraction <span style={{ color: "red" }}>*</span>
+                      Gratuity Fraction
                     </label>
                     <Field
                       name="gratuity_fraction"

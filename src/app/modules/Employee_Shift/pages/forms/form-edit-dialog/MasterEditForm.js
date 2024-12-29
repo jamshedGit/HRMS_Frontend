@@ -602,7 +602,7 @@ export function MasterEditForm({
                   </div>
                   <hr></hr>
                   <label>
-                    <h3>Over Time</h3>
+                    <h3>OverTime</h3>
                   </label>
 
                   <div className="from-group row">
@@ -617,6 +617,9 @@ export function MasterEditForm({
                           // If unchecked, clear the overTimeStart field
                           if (!checked) {
                             setFieldValue("overTimeStart", ""); // Clear the time field when Overtime is disabled
+                            setFieldValue("interShiftGap", ""); // Clear the time field when Overtime is disabled
+                            setInterShiftGapTime(null)
+                            setFieldValue("isIncludeInterShifGap",0)
                           }
                         }}
                         onBlur={handleBlur}
@@ -630,12 +633,19 @@ export function MasterEditForm({
 
                     <div className="col-12 col-md-4 mt-3">
                       <label>
-                        Over Time Start
+                        OverTime Start
                       </label>
                       <Field
                         name="overTimeStart"
                         component={Input}
                         maxLength={4}
+                         placeholder="Enter Min:hours"
+                         onChange={(e) => {
+                     setFieldValue("overTimeStart",e.target.value)
+                            setFieldValue("interShiftGap", ""); // Clear the time field when Overtime is disabled
+                            setInterShiftGapTime(null)
+                            setFieldValue("isIncludeInterShifGap",0)
+                        }}
                         error={errors.overTimeStart}
                         disabled={!values.isOverTime}
                        autoComplete="off"
@@ -654,7 +664,7 @@ export function MasterEditForm({
                           const { checked } = e.target;
                           
                           // If unchecked, clear the overTimeStart field
-                          if (checked) {
+                          if (checked && values.overTimeStart) {
                             setFieldValue("interShiftGap", handleOverTimeStartChange(e,setFieldValue,values)  ); // Clear the time field when Overtime is disabled
                           }
                         }}
@@ -664,13 +674,13 @@ export function MasterEditForm({
                         label="IsInclude Intershift Gap"
 
                       />
-                      <label>&nbsp;<span>IsInclude InterShift Gap</span></label>
+                      <label>&nbsp;<span>Is Include InterShift Gap</span></label>
                     </div>
                     <div  className="col-12 col-md-4 mt-3">
                       <Field
                         name="interShiftGap"
                         component={Input}
-                        placeholder="Enter shift gap time"
+                        // placeholder="Enter shift gap time"
                         maxLength={4}
                         disabled
                         onBlur={handleBlur}
