@@ -12,7 +12,7 @@ import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
 import { initialFilter } from "../FormUIHelpers";
 import * as actions from "../../../_redux/formActions";
 import { formatDates } from "../../../../../utils/common";
-import { fetchAllActiveEmployeesBySubsidiary } from "../../../../../../_metronic/redux/dashboardActions";
+import { fetchAllActiveEmployeesBySubsidiary, fetchAllDept } from "../../../../../../_metronic/redux/dashboardActions";
 
 //Validation for date fields
 const formValidation = Yup.object().shape({
@@ -137,7 +137,9 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                           const value = e.value == '--Select--' ? '' : Number(e.value)
                           setFieldValue('subsidiaryId', value)
                           dispatch(fetchAllActiveEmployeesBySubsidiary(value));
+                          dispatch(fetchAllDept(value));
                           setFieldValue('employeeId', '')
+                          setFieldValue('departmentId', '')
                         }}
                         label={
                           <span>
