@@ -36,9 +36,6 @@ export function LeaveRegisterPage() {
 
     if (!dashboard?.allLocationChildMenus || !dashboard?.allLocationChildMenus?.length)
       dispatch(fetchAllFormsMenu(89, "allLocationChildMenus"));
-
-    if (!dashboard?.allDept || !dashboard?.allDept?.length)
-      dispatch(fetchAllDept());
   }, [dispatch]);
 
   return (

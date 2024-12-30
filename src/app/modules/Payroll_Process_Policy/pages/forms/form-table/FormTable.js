@@ -273,10 +273,10 @@ export function FormTable(user) {
         .required(VALIDATION_MESSAGES.required),
       payroll_templateId: Yup.string(),
       employer_uniqueId: Yup.string()
-        .required(VALIDATION_MESSAGES.required)
+        .notRequired()
         .max(20, 'Max 20 Characters'),
       payroll_approverId: Yup.string()
-        .required(VALIDATION_MESSAGES.required),
+        .notRequired(),
       basicSalaryId: Yup.string()
         .required(VALIDATION_MESSAGES.required),
       basic_pay_accountId: Yup.number()
@@ -730,7 +730,7 @@ export function FormTable(user) {
                       component={Input}
                       type="number"
                       placeholder="Employer Unique ID"
-                      label={<span>Employer Unique ID<span style={{ color: 'red' }}>*</span></span>}
+                      label={<span>Employer Unique ID</span>}
                       autoComplete="off"
                     />
                   </div>
@@ -738,7 +738,7 @@ export function FormTable(user) {
                   <div className="col-12 col-md-4 mt-3">
                     <SearchSelect
                       name="payroll_approverId"
-                      label={<span>Payroll Approver<span style={{ color: 'red' }}>*</span></span>}
+                      label={<span>Payroll Approver</span>}
                       onBlur={() => {
                         // handleBlur({ target: { name: "countryId" } });
                       }}

@@ -176,7 +176,7 @@ const formValidation = Yup.object().shape(
 
     emp_bank_accountTitle: Yup.string()
       .when('payment_mode_Id', {
-        is: (value) => value == 153 || value === 152, // if select value is 151
+        is: (value) => value === 152, // if select value is 151
         then: Yup.string().required(VALIDATION_MESSAGES.required),
         otherwise: Yup.string().notRequired(),
       }),
@@ -184,7 +184,7 @@ const formValidation = Yup.object().shape(
     company_from_accNo: Yup.number()
       .when('payment_mode_Id', {
         is: 153, // if select value is 153
-        then: Yup.number().required(VALIDATION_MESSAGES.required),
+        then: Yup.number().notRequired(),
         otherwise: Yup.number().notRequired(),
       }),
 
@@ -1461,7 +1461,7 @@ export function BankEditForm({
                           <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
                             <h6>Deduction Entitlements</h6>
 
-                            {/* <div className="from-group row">
+                            <div className="from-group row">
                       <div className="col-12 col-md-4 mt-12">
                         <input
                           name="eobi_member"
@@ -1514,7 +1514,7 @@ export function BankEditForm({
                           disabled={!values.eobi_member}
                         />
                       </div>
-                    </div> */}
+                    </div>
                             {/* <div className="from-group row">
 
                       <div className="col-12 col-md-4 mt-12">
