@@ -1126,8 +1126,10 @@ export function DesignationEditForm({
 
 
     const ContractExpiryDate = new Date(dateOfJoining);
-    ContractExpiryDate.setFullYear(ContractExpiryDate.getFullYear() + Math.floor(contractualPolicyInMonth / 12));  // Add full years
-    ContractExpiryDate.setMonth(ContractExpiryDate.getMonth() + (contractualPolicyInMonth % 12));  // Add the remaining months
+    // ContractExpiryDate.setFullYear(ContractExpiryDate.getFullYear() + Math.floor(contractualPolicyInMonth / 12));  // Add full years
+    // ContractExpiryDate.setMonth(ContractExpiryDate.getMonth() + (contractualPolicyInMonth % 12));  // Add the remaining months
+    ContractExpiryDate.setMonth(ContractExpiryDate.getMonth() + (contractualPolicyInMonth)); 
+    ContractExpiryDate.setDate(ContractExpiryDate.getDate() - 1);
 
 
     setContractExpiryDate(new Date(ContractExpiryDate))
