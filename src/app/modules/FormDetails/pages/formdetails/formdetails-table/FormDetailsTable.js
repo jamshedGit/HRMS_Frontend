@@ -189,6 +189,18 @@ export function FormTable() {
 
   };
 
+  useEffect(() => {
+    
+    if (newdata) {
+      const firstMatchingObj = newdata?.find(obj => obj?.Id);
+      if (firstMatchingObj) {
+        handleClick(firstMatchingObj?.Id, firstMatchingObj?.formName);
+      }
+      // newdata.filter(obj => obj?.Id == 45).forEach(obj => {
+      //   handleClick(obj?.Id, obj?.formName);
+      // });
+    }
+  }, [newdata]);
 
 
   return (
@@ -242,10 +254,10 @@ export function FormTable() {
       <PaginationProvider pagination={paginationFactory(paginationOptions)}>
         {({ paginationProps, paginationTableProps }) => {
           return (
-            <Pagination
-              isLoading={listLoading}
-              paginationProps={paginationProps}
-            >
+            // <Pagination
+            //   isLoading={listLoading}
+            //   paginationProps={paginationProps}
+            // >
               <BootstrapTable
                 wrapperClasses="table-responsive"
                 bordered={false}
@@ -268,7 +280,7 @@ export function FormTable() {
                 <PleaseWaitMessage entities={customList} />
                 <NoRecordsFoundMessage entities={customList} />
               </BootstrapTable>
-            </Pagination>
+            // </Pagination>
           );
         }}
       </PaginationProvider>
