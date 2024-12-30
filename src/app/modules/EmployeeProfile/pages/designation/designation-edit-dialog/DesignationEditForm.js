@@ -2278,6 +2278,19 @@ export function DesignationEditForm({
 
 
                     </div>
+                    <div className="from-group row">
+                          <div className="col-12 col-md-12 mt-3">
+                            <Field
+                              name="additional_summary"
+                              component={TextArea}
+                              placeholder="Enter Address"
+                              label="Address"
+                              autoComplete="off"
+                            />
+                          </div>
+
+                        </div>
+
                     {/* 
                     <div className="from-group row">
                       <div className="col-12 col-md-4 mt-3">
@@ -2925,7 +2938,7 @@ export function DesignationEditForm({
                             />
                           </div>
                         </div>
-                        <div className="from-group row">
+                        {/* <div className="from-group row">
                           <div className="col-12 col-md-12 mt-3">
                             <Field
                               name="additional_summary"
@@ -2936,7 +2949,7 @@ export function DesignationEditForm({
                             />
                           </div>
 
-                        </div>
+                        </div> */}
 
 
 
