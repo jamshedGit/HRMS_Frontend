@@ -189,6 +189,18 @@ export function FormTable() {
 
   };
 
+  useEffect(() => {
+    
+    if (newdata) {
+      const firstMatchingObj = newdata?.find(obj => obj?.Id);
+      if (firstMatchingObj) {
+        handleClick(firstMatchingObj?.Id, firstMatchingObj?.formName);
+      }
+      // newdata.filter(obj => obj?.Id == 45).forEach(obj => {
+      //   handleClick(obj?.Id, obj?.formName);
+      // });
+    }
+  }, [newdata]);
 
 
   return (
