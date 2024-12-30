@@ -242,7 +242,11 @@ const profileValidation = Yup.object().shape(
     return this.createError({ path: 'gender', message: 'Mrs. Ms. cannot be male.' });
   }
 
-  if ((title === 'Mr.' || title === 'Dr.' || title === 'Professor.' || title === 'Captain') && gender === 'Female') {
+  // if ((title === 'Mr.' || title === 'Dr.' || title === 'Professor.' || title === 'Captain') && gender === 'Female') {
+  //   return this.createError({ path: 'gender', message: 'Mr. cannot be female.' });
+  // }
+
+  if ((title === 'Mr.' ) && gender === 'Female') {
     return this.createError({ path: 'gender', message: 'Mr. cannot be female.' });
   }
 
@@ -1629,7 +1633,7 @@ export function DesignationEditForm({
                             <option value="Ms." label="Ms." />
                             <option value="Dr." label="Dr." />
                             <option value="Professor." label="Professor." />
-                            <option value="Captain." label="Captain." />
+                          
 
                           </Select>
                           {errors.title && touched.title && (
