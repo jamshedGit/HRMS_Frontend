@@ -101,7 +101,7 @@ export function FormTable() {
     
     {
       dataField: "isActive",
-      text: "Is Active",
+      text: "Visible",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
