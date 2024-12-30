@@ -62,7 +62,7 @@ export function FormEditForm({
 
   useEffect(() => {
 
-    if (!user.formCode) { fetchData("1", setDefaultFormCode); }
+    if (!user.formCode) { fetchData(setDefaultFormCode); }
 
     if (!user.parentFormID) {
 
@@ -89,9 +89,14 @@ export function FormEditForm({
   )
 
 
-  const fetchData = async (subsidiaryId, setValue) => {
+  const fetchData = async (setValue) => {
   
-    dispatch(getLatestTableId("t_form_menu", "formCode", "parentFormID =" + formDetails.currentId, setValue));
+    if(formDetails.currentId!==45){
+   
+      dispatch(getLatestTableId("t_form_menu", "formCode", "parentFormID =" + formDetails.currentId, setValue));
+    }
+  
+  
   };
 
 
@@ -161,7 +166,7 @@ export function FormEditForm({
                     {<div className="col-12 col-md-4 mt-3">
                       <Field
                         name="formCode"
-                        disabled
+                        disabled={formDetails.currentId!==45}
                         component={Input}
                         maxLength={6}
                         placeholder="Enter Form Code"

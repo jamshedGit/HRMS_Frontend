@@ -158,10 +158,10 @@ export function FormTable() {
       <PaginationProvider pagination={paginationFactory(paginationOptions)}>
         {({ paginationProps, paginationTableProps }) => {
           return (
-            <Pagination
-              isLoading={listLoading}
-              paginationProps={paginationProps}
-            >
+            // <Pagination
+            //   isLoading={listLoading}
+            //   paginationProps={paginationProps}
+            // >
               <BootstrapTable
                 wrapperClasses="table-responsive"
                 bordered={false}
@@ -184,7 +184,7 @@ export function FormTable() {
                 <PleaseWaitMessage entities={entities} />
                 <NoRecordsFoundMessage entities={entities} />
               </BootstrapTable>
-            </Pagination>
+            // </Pagination>
           );
         }}
       </PaginationProvider>

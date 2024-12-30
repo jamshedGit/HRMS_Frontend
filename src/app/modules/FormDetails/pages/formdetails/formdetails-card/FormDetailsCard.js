@@ -34,7 +34,7 @@ export function FormCard() {
     (item) => item.componentName === "CreateChildForms"
   )
 
-  const currentId = currentState.currentId
+  const currentId = currentState?.currentId
 
   return (
     <>
@@ -49,7 +49,7 @@ export function FormCard() {
 
             <div className="pt-5">
 
-              <BanksFilter />
+              {/* <BanksFilter /> */}
 
             </div>
 
@@ -59,7 +59,7 @@ export function FormCard() {
 
 
 
-                {accessUser && (
+                {accessUser  && currentId && (
 
                   <button
                     type="button"
