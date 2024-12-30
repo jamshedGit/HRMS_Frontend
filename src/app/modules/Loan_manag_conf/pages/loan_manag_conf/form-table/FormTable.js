@@ -110,20 +110,20 @@ export function FormTable() {
     },
  
  
-    {
-      dataField: "installment_deduction_percentage",
-      text: "deduction (%)",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "10px",
-        textAlign: "center",
-      },
-      headerStyle: {
-        textAlign: "center", // Align header text to the left
-      },
-    },
+    // {
+    //   dataField: "installment_deduction_percentage",
+    //   text: "deduction (%)",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "10px",
+    //     textAlign: "center",
+    //   },
+    //   headerStyle: {
+    //     textAlign: "center", // Align header text to the left
+    //   },
+    // },
 
     // {
     //   dataField: "t_role.name",
