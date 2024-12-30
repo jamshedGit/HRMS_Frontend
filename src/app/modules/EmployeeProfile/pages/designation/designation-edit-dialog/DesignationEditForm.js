@@ -3174,7 +3174,8 @@ export function DesignationEditForm({
                                 <DatePicker
                                   className="form-control"
                                   placeholder="Start Date"
-                                  selected={new Date(obj.startDate || currentDate)}
+                                  // selected={new Date(obj?.startDate)}
+                                  selected={obj?.startDate ? new Date(obj.startDate) : null}
                                   showYearDropdown
                                   scrollableMonthYearDropdown
                                   onChange={(el) => {
@@ -3198,7 +3199,8 @@ export function DesignationEditForm({
                                 <DatePicker
                                   className="form-control"
                                   placeholder="End Date"
-                                  selected={new Date(obj.endDate || currentDate)}
+                                  // selected={new Date(obj.endDate || currentDate)}
+                                  selected={obj?.endDate ? new Date(obj?.endDate) : null}
                                   showYearDropdown
                                   scrollableMonthYearDropdown
                                   onChange={(el) => {
@@ -3341,7 +3343,8 @@ export function DesignationEditForm({
                                   <DatePicker
                                     className="form-control"
                                     placeholder="Start Date"
-                                    selected={new Date(obj.startDate || currentDate)}
+                                    // selected={new Date(obj.startDate || currentDate)}
+                                    selected={obj?.startDate ? new Date(obj?.startDate) : null}
                                     showYearDropdown
                                     scrollableMonthYearDropdown
                                     onChange={(el) => handleDatePickerAcademic(el, 'startDate', rightindex, '')}
@@ -3361,7 +3364,8 @@ export function DesignationEditForm({
                                   <DatePicker
                                     className="form-control"
                                     placeholder="End Date"
-                                    selected={new Date(obj.endDate || currentDate)}
+                                    // selected={new Date(obj.endDate || currentDate)}
+                                    selected={obj?.endDate ? new Date(obj?.endDate) : null}
                                     showYearDropdown
                                     scrollableMonthYearDropdown
                                     onChange={(el) => handleDatePickerAcademic(el, 'endDate', rightindex, '')}
@@ -3459,7 +3463,8 @@ export function DesignationEditForm({
                                   <DatePicker
                                     className="form-control"
                                     placeholder="Start Date"
-                                    selected={new Date(obj.startDate || currentDate)}
+                                    // selected={new Date(obj.startDate || currentDate)}
+                                    selected={obj?.startDate ? new Date(obj?.startDate) : null}
                                     showYearDropdown
                                     scrollableMonthYearDropdown
                                     onChange={(el) => handleDatePickerSkills(el, 'startDate', rightindex, '')}
@@ -3479,7 +3484,8 @@ export function DesignationEditForm({
                                   <DatePicker
                                     className="form-control"
                                     placeholder="End Date"
-                                    selected={new Date(obj.endDate || currentDate)}
+                                    // selected={new Date(obj.endDate || currentDate)}
+                                    selected={obj?.endDate ? new Date(obj?.endDate) : null}
                                     showYearDropdown
                                     scrollableMonthYearDropdown
                                     onChange={(el) => handleDatePickerSkills(el, 'endDate', rightindex, '')}
@@ -3578,7 +3584,8 @@ export function DesignationEditForm({
                                   <DatePicker
                                     className="form-control"
                                     placeholder="Date"
-                                    selected={new Date(obj.incidentDate || currentDate)}
+                                    // selected={new Date(obj.incidentDate || currentDate)}
+                                    selected={obj?.incidentDate ? new Date(obj?.incidentDate) : null}
                                     showYearDropdown
                                     scrollableMonthYearDropdown
                                     onChange={(el) => handleDatePickerIncident(el, 'incidentDate', rightindex, '')}
