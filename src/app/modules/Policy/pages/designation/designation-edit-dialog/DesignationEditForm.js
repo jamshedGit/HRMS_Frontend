@@ -666,7 +666,7 @@ export function DesignationEditForm({
                     {
                       <div className="col-12 col-md-4 mt-3">
                                         <label htmlFor="empPictureIsMandatory">
-                                        Probation in Months <span style={{ color: "red" }}>*</span>
+                                        Confirmation in Months <span style={{ color: "red" }}>*</span>
 
 
                           </label>
