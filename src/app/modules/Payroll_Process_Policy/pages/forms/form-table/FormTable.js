@@ -17,7 +17,7 @@ import * as uiHelpers from "../FormUIHelpers";
 import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatter";
 import { Input, Pagination, Select } from "../../../../../../_metronic/_partials/controls";
 import { useFormUIContext } from "../FormUIContext";
-import { fetchAllActiveEmployeesSalaryForDDL, fetchAllBanks, fetchAllDeductionList, fetchAllEarningList, fetchAllFormsMenu, fetchAllLeaveTypeBySubsidiary, fetchAllSubsidiaryData } from "../../../../../../_metronic/redux/dashboardActions";
+import { fetchAllActiveEmployees, fetchAllActiveEmployeesSalaryForDDL, fetchAllBanks, fetchAllDeductionList, fetchAllEarningList, fetchAllFormsMenu, fetchAllLeaveTypeBySubsidiary, fetchAllSubsidiaryData } from "../../../../../../_metronic/redux/dashboardActions";
 import { Formik, Field, ErrorMessage } from "formik";
 import { Form } from "react-bootstrap";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
@@ -116,7 +116,7 @@ export function FormTable(user) {
 
     if (!user.formid) {
       dispatch(fetchAllSubsidiaryData("allSubidiaryList")) // For All Subsisidaries
-      dispatch(fetchAllActiveEmployeesSalaryForDDL(null)); // For Getting Salaried Employees
+      dispatch(fetchAllActiveEmployees()); // For Getting Salaried Employees
       dispatch(fetchAllFormsMenu(127, "allChildMenus")); // For Payroll Group
       dispatch(fetchAllFormsMenu(45, "allPayrollAccounts")); // For Basic Pay Accounts
       dispatch(fetchAllFormsMenu(45, "allPayrollPayableAccounts")); // For Payable Accounts
@@ -748,12 +748,12 @@ export function FormTable(user) {
                         //handlePaymenModeChanged(e)
                       }}
                       isDisabled={Boolean(user?.readOnly)}
-                      value={(dashboard.allEmployeesSalaryDDL.find(
+                      value={(dashboard.allEmployees.find(
                         (option) => option.value === values.payroll_approverId
                       ) || null)}
                       error={errors.payroll_approverId}
                       touched={touched.payroll_approverId}
-                      options={dashboard.allEmployeesSalaryDDL}
+                      options={dashboard.allEmployees}
                     />
 
                   </div>
@@ -808,7 +808,7 @@ export function FormTable(user) {
 
                         <div className="dropdown-label"></div>
                         <div className="dropdown-options" style={{ fontSize: "12px", fontWeight: "bold", padding: "5px" }}>
-                          {dashboard.allEmployeesSalaryDDL.map((option) => (
+                          {dashboard.allEmployees.map((option) => (
                             <div key={option.value} className="dropdown-option">
                               <input style={{ width: "25px" }}
                                 name="employee_email_recipentId"
