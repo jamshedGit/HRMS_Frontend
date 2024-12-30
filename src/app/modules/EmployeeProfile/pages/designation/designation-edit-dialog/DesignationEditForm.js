@@ -566,11 +566,11 @@ export function DesignationEditForm({
   //===== Date Of Confirmation
 
   //off
-  // useEffect(() => {
-  //   if (user.dateOfConfirmation) {
-  //     setConfirmationDate(new Date(user.dateOfConfirmation));
-  //   }
-  // }, [user.dateOfConfirmation]);
+  useEffect(() => {
+    if (user?.dateOfConfirmation) {
+      setConfirmationDate(new Date(user?.dateOfConfirmation));
+    }
+  }, [user?.dateOfConfirmation]);
 
   //=========== END
 
