@@ -180,3 +180,24 @@ export const updateExchangeRate = (user, disbaleLoading, onHide) => (dispatch) =
 };
 
 
+export const getLastExchangeRateBySubsidiaryId = (subsidiaryId) => (dispatch) => {
+
+  if (!subsidiaryId) {
+    return dispatch(actions.lastExchangeRateFetched({ lastExchangeRateDate: undefined }));
+  }
+
+  dispatch(actions.startCall({ callType: callTypes.action }));
+  return requestFromServer
+    .getLastExchangeRateBySubsidiary({ subsidiaryId })
+    .then((response) => {
+      const entities = response.data?.data;
+
+   
+      dispatch(actions.lastExchangeRateFetched({ lastExchangeRateDate: entities }));
+    })
+    .catch((error) => {
+      dispatch(actions.lastExchangeRateFetched({ lastExchangeRateDate: null }));
+      error.clientMessage = "Can't find user";
+      dispatch(actions.catchError({ error, callType: callTypes.action }));
+    });
+};

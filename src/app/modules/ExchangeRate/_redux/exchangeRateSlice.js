@@ -11,6 +11,7 @@ const initialStoppageAllowanceState = {
     userForEdit: undefined,
     lastError: null,
     userForRead: false,
+    lastExchangeRateDate: undefined,
 };
 
 export const callTypes = {
@@ -123,35 +124,16 @@ export const exchangeRateSlice = createSlice({
         MaxIdFetchForReceipt: (state, action) => {
             state.donationReportFetch = action.payload;
         },
+
+        lastExchangeRateFetched: (state, action) => {
+            
+            
+            state.actionsLoading = false;
+            state.lastExchangeRateDate = action.payload.lastExchangeRateDate;
+            state.error = null;
+        },
+
     },
 });
 
-// export const RoleSlice = createSlice({
-//   name: "getAllRole",
-//   initialState: initialRolesState,
-//   reducers: {
-//     catchError: (state, action) => {
-//       state.error = `${action.type}: ${action.payload.error}`
-//       if (action.payload.callType === callTypes.list) {
-//         state.listLoading = false
-//       } else {
-//         state.actionsLoading = false
-//       }
-//     },
-//     startCall: (state, action) => {
-//       state.error = null
-//       if (action.payload.callType === callTypes.list) {
-//         state.listLoading = true
-//       } else {
-//         state.actionsLoading = true
-//       }
-//     },
-//     dataFetched: (state, action) => {
-//       const entities = action.payload
-//       state.listLoading = false
-//       state.error = null
-//       state.entities = entities
-//       state.totalCount = entities.length
-//     },
-//   },
-// })
+
