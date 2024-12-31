@@ -156,8 +156,15 @@ export function BankEditForm({
   // }, [user.effective_date]);
 
 
-  const fetchLastExchangeRateDate =(subsidiaryId)=>{
-    dispatch(getLastExchangeRateBySubsidiaryId(subsidiaryId));
+  const fetchLastExchangeRateDate =(subsidiaryId,base_currency_id,currency_to_convert_id)=>{
+    if(subsidiaryId,base_currency_id,base_currency_id){
+      let data={
+        subsidiaryId,base_currency_id,currency_to_convert_id,
+        
+      }
+      dispatch(getLastExchangeRateBySubsidiaryId(data));
+    }
+
   }
   return (
     <>
@@ -232,7 +239,7 @@ export function BankEditForm({
                             (option) => option.value === e.value
                           );
                           if (e.value) {
-                            fetchLastExchangeRateDate(e.value)
+                            fetchLastExchangeRateDate(e.value,values.base_currency_id,values.currency_to_convert_id)
                           }
 
                           // If a corresponding subsidiary is found, set the base_currency_id
@@ -322,7 +329,10 @@ export function BankEditForm({
                         onChange={(e) => {
                           setFieldValue("currency_to_convert_id", e.value || null);
                           setDefaultCurrencyToConvertChildMenus(e);
-                          // dispatch(fetchAllFormsMenu(e.value));
+                        
+                          if (e.value) {
+                            fetchLastExchangeRateDate(values.subsidiaryId,values.base_currency_id,e.value)
+                          }
                         }}
                         value={(defCurrecnyToConvertChildMenus || null)}
                         error={errors.currency_to_convert_id}
