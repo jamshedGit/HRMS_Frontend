@@ -15,13 +15,13 @@ export async function getAllPayrollRegisterSetup(body) {
 
 /**
  * 
- * Get All Payroll Register Data For Pdf
+ * Generate Payslip PDf
  * 
  * @param {Object} body 
  * @returns res
  */
-export async function getAllPayrollRegisterForPdf(body) {
-  return axios.post(`${USERS_URL}/payroll_register/read-all-registered-payroll-pdf-data`, body,{
+export async function generatePayslip(body) {
+  return axios.post(`${USERS_URL}/payroll_register/generate-payslip-pdf`, body,{
     responseType:'arraybuffer'
   });
 }

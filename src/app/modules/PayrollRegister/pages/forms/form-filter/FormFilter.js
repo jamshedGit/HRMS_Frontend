@@ -104,8 +104,7 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
   //Trugger request to download PDF of data according to filters
   const getPdf = (values) => {
     const newQueryParams = prepareFilter(formUIProps.queryParams, values)
-    const labels = getLabels(values);
-    dispatch(actions.fetchPdfData(newQueryParams.filter, document, labels));
+    dispatch(actions.generatePayslip(newQueryParams.filter, document));
   }
 
   return (
@@ -145,6 +144,7 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                           dispatch(fetchAllPayrollMonthYearList({ subsidiaryId: value }, "allPayrollMonthYearList"));
                           dispatch(fetchAllActiveEmployeesBySubsidiary(value));
                           setFieldValue('employeeId', '')
+                          setFieldValue('monthId', '')
                         }}
                         label={
                           <span>
@@ -383,7 +383,7 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                 disabled={pdfLoading}
                 className="btn btn-secondary"
               >
-                Generate Report
+                Generate Payslip
                 {pdfLoading && (
                   <span className="ml-3 mr-3 spinner spinner-white"></span>
                 )}

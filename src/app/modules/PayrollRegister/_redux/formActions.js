@@ -32,9 +32,9 @@ export const fetchPayrollRegister = (queryparm) => async (dispatch) => {
  * @param {Object} labels 
  * @returns 
  */
-export const fetchPdfData = (filter, document, labels = {}) => async (dispatch) => {
+export const generatePayslip = (filter, document, labels = {}) => async (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.pdf }));
-  return requestFromServer.getAllPayrollRegisterForPdf({ ...filter, labels })
+  return requestFromServer.generatePayslip({ ...filter })
     .then((res) => {
       const pdfBlob = new Blob([res.data], { type: 'application/pdf' });
       const pdfUrl = URL.createObjectURL(pdfBlob);
@@ -42,16 +42,16 @@ export const fetchPdfData = (filter, document, labels = {}) => async (dispatch) 
       // Trigger file download
       const link = document.createElement('a');
       link.href = pdfUrl;
-      link.setAttribute('download', 'payroll_register.pdf');
+      link.setAttribute('download', 'payslip.pdf');
       document.body.appendChild(link);
       link.click();
       dispatch(actions.pdfFetched({}));
       document.body.removeChild(link);
     })
     .catch((error) => {
-      error.clientMessage = "Can't generate PDF";
+      error.clientMessage = "Can't generate Payslip";
       dispatch(actions.catchError({ error, callType: callTypes.pdf }));
-      toast.error(error?.response?.status == 400 ? 'Please select filter to generate PDF' : error.clientMessage, {
+      toast.error(error?.response?.status == 400 ? 'Please provide employee and month' : error.clientMessage, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
