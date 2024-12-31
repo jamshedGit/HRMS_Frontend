@@ -180,15 +180,15 @@ export const updateExchangeRate = (user, disbaleLoading, onHide) => (dispatch) =
 };
 
 
-export const getLastExchangeRateBySubsidiaryId = (subsidiaryId) => (dispatch) => {
+export const getLastExchangeRateBySubsidiaryId = (data) => (dispatch) => {
 
-  if (!subsidiaryId) {
+  if (!data) {
     return dispatch(actions.lastExchangeRateFetched({ lastExchangeRateDate: undefined }));
   }
 
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
-    .getLastExchangeRateBySubsidiary({ subsidiaryId })
+    .getLastExchangeRateBySubsidiary({ data })
     .then((response) => {
       const entities = response.data?.data;
 
