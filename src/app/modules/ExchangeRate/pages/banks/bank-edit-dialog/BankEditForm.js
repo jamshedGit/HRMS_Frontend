@@ -18,7 +18,8 @@ import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 import { format } from "date-fns";
-
+import { actions } from "../../../../Auth";
+import {getLastExchangeRateBySubsidiaryId} from "../../../_redux/bankActions"
 
 // Phone Number Regex
 const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
@@ -82,9 +83,9 @@ export function BankEditForm({
   isUserForRead,
   values,
   enableLoading,
-  loading,
+  loading,id
 }) {
-  const { dashboard } = useSelector((state) => state);
+  const { dashboard ,exchange} = useSelector((state) => state);
 
   const dispatch = useDispatch();
   const [defEffectiveDate, setEffectiveDate] = useState(null);
@@ -154,6 +155,10 @@ export function BankEditForm({
   //   }
   // }, [user.effective_date]);
 
+
+  const fetchLastExchangeRateDate =(subsidiaryId)=>{
+    dispatch(getLastExchangeRateBySubsidiaryId(subsidiaryId));
+  }
   return (
     <>
       <Formik
@@ -220,12 +225,15 @@ export function BankEditForm({
                             Subsidiary<span style={{ color: "red" }}>*</span>
                           </span>
                         }
-                        isDisabled={isUserForRead}
+                        isDisabled={isUserForRead || id}
                         onChange={(e) => {
                           setFieldValue("subsidiaryId", e.value || null);
                           const selectedSubsidiary = dashboard?.allSubsidiaryList?.find(
                             (option) => option.value === e.value
                           );
+                          if (e.value) {
+                            fetchLastExchangeRateDate(e.value)
+                          }
 
                           // If a corresponding subsidiary is found, set the base_currency_id
                           if (selectedSubsidiary) {
@@ -307,7 +315,7 @@ export function BankEditForm({
                       <SearchSelect
                         name="currency_to_convert_id"
                         label={<span> Currency To Convert<span style={{ color: 'red' }}>*</span></span>}
-                        isDisabled={isUserForRead && true}
+                        isDisabled={isUserForRead || id}
                         onBlur={() => {
                           // handleBlur({ target: { name: "countryId" } });
                         }}
@@ -351,9 +359,14 @@ export function BankEditForm({
                         dateFormat="dd/MM/yyyy"
                         placeholder="Select Date"
                         type="date"
-                        disabled={isUserForRead}
-                        value={values.effective_date ? format(new Date(values.effective_date), 'dd-MM-yyyy') : setFieldValue("effective_date",new Date ())}
-
+                        minDate={
+                          exchange?.lastExchangeRateDate
+                            ? new Date(new Date(exchange?.lastExchangeRateDate).setDate(new Date(exchange?.lastExchangeRateDate).getDate() + 1))
+                            : null
+                        }
+                        disabled={isUserForRead || id}
+                        // value={values.effective_date ? format(new Date(values.effective_date), 'dd-MM-yyyy') : setFieldValue("effective_date",new Date ())}
+                        value={values.effective_date ? format(new Date(values.effective_date), 'dd-MM-yyyy') : " "}
                       />
                       
                     </div>

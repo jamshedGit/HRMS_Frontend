@@ -43,7 +43,7 @@ const formValidationSchema = Yup.object().shape(
       .required("Required*"),
 
     minimumAge: Yup.number()
-    .nullable() 
+    // .nullable() 
     .min(0, 'At least 1')
     .max(99, 'At most 99'),
       // .required("Required*"),
@@ -58,14 +58,20 @@ const formValidationSchema = Yup.object().shape(
     // }),
       // .required("Required*"),
 
+
       maximumAge: Yup.number()
-  .min(0, 'At least 1')
+  // .min(18, 'At least 18')
   .max(99, 'At most 99')
   .nullable() // Allow null or undefined
   .test('minimumAge', 'Maximum Age must be equal or greater than Minimum Age', function (value) {
     const { minimumAge } = this.parent;
 
-    // Check if both minimumAge and maximumAge are valid, if not allow them to be unset
+    // If maximumAge is null or 0, skip validation for the comparison
+    if (value === null || value === 0) {
+      return true; // Skip the "Maximum Age >= Minimum Age" validation
+    }
+
+    // Check if both minimumAge and maximumAge are valid before comparing
     if (minimumAge === null || minimumAge === undefined || value === null || value === undefined) {
       return true; // No limit is set, no need for validation
     }
@@ -73,6 +79,22 @@ const formValidationSchema = Yup.object().shape(
     // Ensure maximumAge is greater than or equal to minimumAge
     return value >= minimumAge;
   }),
+
+  //     maximumAge: Yup.number()
+  // .min(18, 'At least 18')
+  // .max(99, 'At most 99')
+  // .nullable() // Allow null or undefined
+  // .test('minimumAge', 'Maximum Age must be equal or greater than Minimum Age', function (value) {
+  //   const { minimumAge } = this.parent;
+
+  //   // Check if both minimumAge and maximumAge are valid, if not allow them to be unset
+  //   if (minimumAge === null || minimumAge === undefined || value === null || value === undefined) {
+  //     return true; // No limit is set, no need for validation
+  //   }
+
+  //   // Ensure maximumAge is greater than or equal to minimumAge
+  //   return value >= minimumAge;
+  // }),
     pictureSizeLimit: Yup.number()
     .nullable()
     .min(0, 'At least 1')
@@ -138,7 +160,7 @@ export function DesignationEditForm({
   isUserForRead,
   values,
   enableLoading,
-  loading,
+  loading,id
 }) {
 
   const dispatch = useDispatch();
@@ -148,6 +170,8 @@ export function DesignationEditForm({
 
   const [defSubsidiary = null, setDefualtSubsidiaryList] = useState(null);
   const [defCurrencyCodeList = null, setDefualtCurrencyCodeList] = useState(null);
+  const [initialMinAgeLimit, setInitialMinAgeLimit] = useState(18);
+
 
   useEffect(() => {
 
@@ -257,6 +281,11 @@ export function DesignationEditForm({
                             // handleBlur({ target: { name: "countryId" } });
                           }}
                           onChange={(e) => {
+                            if(!id){
+                             
+                              setFieldValue("minimumAge",initialMinAgeLimit)
+                            }
+                         
                             setFieldValue("subsidiaryId", e.value || null);
                             setDefualtSubsidiaryList(e);
                             const selectedSubsidiary = dashboard?.allSubsidiaryList?.find(
@@ -329,6 +358,7 @@ export function DesignationEditForm({
                             onChange={(e) => {
                               setFieldValue("currencyId", e.value || null);
                               setDefualtCurrencyCodeList(e);
+                           
                               // dispatch(fetchAllFormsMenu(e.value));
                             }}
                             // value={(defCurrecnyChildMenus || null)}
@@ -469,17 +499,22 @@ export function DesignationEditForm({
                       <div className="col-12 col-md-4 mt-3">
                                          <label >
                                          Minimum Age
-
+                                 
 
                           </label>
                         <Field
                           type="number"
                           onInput={(e) => {
                             e.target.value = amountLimitDynamic(e.target.value, 2); // Limit to 3 digits
+                            setInitialMinAgeLimit(0)
+                          }}
+                          onChange={(e)=>{
+                            setFieldValue("minimumAge",e.target.value)
                           }}
                           name="minimumAge"
                           component={Input}
                           placeholder="Enter minimum age"
+                          value={values.minimumAge || (id ? undefined : initialMinAgeLimit)} 
                           // label="Minimum Age"
                         //  value="18"
                         // 

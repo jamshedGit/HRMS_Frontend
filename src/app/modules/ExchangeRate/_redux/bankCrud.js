@@ -56,3 +56,7 @@ export function getAllUserStatusTypes(body) {
 }
 
 
+export function getLastExchangeRateBySubsidiary(subsidiaryId) {
+
+  return axios.post(`${USERS_URL}/exchange/read-last-exchange-rate`, subsidiaryId);
+}

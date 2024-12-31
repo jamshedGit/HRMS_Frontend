@@ -1126,8 +1126,10 @@ export function DesignationEditForm({
 
 
     const ContractExpiryDate = new Date(dateOfJoining);
-    ContractExpiryDate.setFullYear(ContractExpiryDate.getFullYear() + Math.floor(contractualPolicyInMonth / 12));  // Add full years
-    ContractExpiryDate.setMonth(ContractExpiryDate.getMonth() + (contractualPolicyInMonth % 12));  // Add the remaining months
+    // ContractExpiryDate.setFullYear(ContractExpiryDate.getFullYear() + Math.floor(contractualPolicyInMonth / 12));  // Add full years
+    // ContractExpiryDate.setMonth(ContractExpiryDate.getMonth() + (contractualPolicyInMonth % 12));  // Add the remaining months
+    ContractExpiryDate.setMonth(ContractExpiryDate.getMonth() + (contractualPolicyInMonth)); 
+    ContractExpiryDate.setDate(ContractExpiryDate.getDate() - 1);
 
 
     setContractExpiryDate(new Date(ContractExpiryDate))
@@ -3267,10 +3269,12 @@ export function DesignationEditForm({
                                     }}
 
                                     id={'institutionId-' + rightindex} >
+                                           <option value="">--Select--</option>
                                     {
                                       dashboard.allInstitution?.map((x) => {
                                         return <option value={x.value}> {x.label} </option>
                                       })}
+                                      
                                     {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
                                   </select>
                                   {deferrors[`institutionId-${rightindex}`] && <div className="form-feedBack">{deferrors[`institutionId-${rightindex}`]}</div>}
@@ -3284,6 +3288,7 @@ export function DesignationEditForm({
                                     }}
 
                                     id={'degreeId-' + rightindex} >
+                                          <option value="">--Select--</option>
                                     {
                                       dashboard.allDegreeTitle?.map((x) => {
                                         return <option value={x.value}> {x.label} </option>
@@ -3319,7 +3324,7 @@ export function DesignationEditForm({
                                     }}
 
                                     id={'cityId-' + rightindex} >
-                                    <option value="-1"> --Select--</option>
+                                    <option > --Select--</option>
 
                                     {
 
@@ -3449,7 +3454,7 @@ export function DesignationEditForm({
                                     style={{ display: "block" }}
                                     id={'ratingScale-' + rightindex}
                                   >
-                                    <option value="-1" label="Select Rating Scale" />
+                                    <option label="--Select--"/>
                                     <option value="1" label="1" />
                                     <option value="2" label="2" />
                                     <option value="3" label="3" />
