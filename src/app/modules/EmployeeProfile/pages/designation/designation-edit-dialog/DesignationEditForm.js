@@ -1341,7 +1341,7 @@ export function DesignationEditForm({
       }
 
       // Validate endDate
-      if (new Date(obj.endDate) < new Date(obj.startDate)) {
+      if (new Date(obj.endDate) <= new Date(obj.startDate)) {
         newErrors[`endDate_W-${index}`] = 'End Date must be later than Start Date';
       }
 
@@ -1380,7 +1380,7 @@ export function DesignationEditForm({
       }
 
       // Validate endDate
-      if (new Date(obj.endDate) < new Date(obj.startDate)) {
+      if (new Date(obj.endDate) <= new Date(obj.startDate)) {
         newErrors[`endDate_A-${index}`] = 'End Date must be later than Start Date';
       }
 
@@ -1404,7 +1404,7 @@ export function DesignationEditForm({
       }
 
       // Validate endDate
-      if (new Date(obj.endDate) < new Date(obj.startDate)) {
+      if (new Date(obj.endDate) <= new Date(obj.startDate)) {
         newErrors[`endDate-${index}`] = 'End Date must be later than Start Date';
       }
 
@@ -1629,7 +1629,7 @@ export function DesignationEditForm({
                             onBlur={handleBlur}
                             style={{ display: "block" }}
                           >
-                            <option value="-1" label="Select Title" />
+                            <option  label="Select Title" />
                             <option value="Mr." label="Mr." />
                             <option value="Mrs." label="Mrs." />
                             <option value="Ms." label="Ms." />
@@ -2030,7 +2030,7 @@ export function DesignationEditForm({
                             }}
 
                           >
-                            <option value="-1" label="Select Gender" />
+                            <option  label="Select Gender" />
                             <option value="Male" label="Male" />
                             <option value="Female" label="Female" />
 
@@ -3143,7 +3143,7 @@ export function DesignationEditForm({
                                   }}
 
                                   id={'countryId-' + rightindex} >
-                                  <option value="-1"> --Select--</option>
+                                  <option value=""> --Select--</option>
                                   {
                                     dashboard.allCountry?.map((x) => {
                                       return <option value={x.value}> {x.label} </option>
@@ -3162,7 +3162,7 @@ export function DesignationEditForm({
                                   }}
 
                                   id={'cityId-' + rightindex} >
-                                  <option value="-1"> --Select--</option>
+                                  <option value=""> --Select--</option>
                                   {
 
                                     dashboard.allCity?.map((x) => {
@@ -3306,7 +3306,7 @@ export function DesignationEditForm({
                                     }}
 
                                     id={'countryId-' + rightindex} >
-                                    <option value="-1">--Select--</option>
+                                    <option value="">--Select--</option>
                                     {
                                       dashboard.allCountry?.map((x) => {
                                         return <option value={x.value}> {x.label} </option>
@@ -3324,7 +3324,7 @@ export function DesignationEditForm({
                                     }}
 
                                     id={'cityId-' + rightindex} >
-                                    <option > --Select--</option>
+                                    <option value=""> --222Select--</option>
 
                                     {
 
@@ -3576,7 +3576,7 @@ export function DesignationEditForm({
                                     }}
 
                                     id={'actionTakenBy-' + rightindex} >
-                                    <option value='-1'>--Select--</option>
+                                    <option value="">--Select--</option>
                                     {
                                       dashboard.allEmployees?.filter(x => x.value != values.Id).map((x) => {
                                         return <option value={x.value}> {x.label} </option>

@@ -166,7 +166,28 @@ export function FormTable() {
     },
 
 
- 
+    {
+      dataField: "approved_status",
+      text: "approved status",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
+      formatter: (cell) => {
+        switch(cell) {
+          case 0:
+            return "Pending";
+          case 1:
+            return "Approved";
+          case 2:
+            return "Rejected";
+          default:
+            return "Unknown"; // Default case if status is outside 0, 1, 2.
+        }
+    },
+  },
  
        {
       dataField: "action",

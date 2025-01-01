@@ -156,6 +156,8 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         isEdit={id ? true : false}
         isFileReq={formUIProps.isFileReq}
         setIsFileReq={formUIProps.setIsFileReq}
+        disbaleLoading={disbaleLoading}
+        formUIProps={formUIProps}
       />
       <ToastContainer
         position="top-right"

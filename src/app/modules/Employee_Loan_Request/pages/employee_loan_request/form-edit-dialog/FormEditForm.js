@@ -24,6 +24,7 @@ import {
   fetchAllPayrollMonthYearList,
 } from "../../../../../../_metronic/redux/dashboardActions";
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
+import { updateApprovedStatus,fetchEmployeeLoanRequest } from "../../../_redux/redux-Actions";
 
 const EmployeeLoanRequestSchema = Yup.object().shape({
   loan_typeId: Yup.number().required(VALIDATION_MESSAGES.required),
@@ -58,6 +59,7 @@ export function FormEditForm({
   isEdit,
   isFileReq,
   setIsFileReq,
+  disbaleLoading,formUIProps
 }) {
   const dispatch = useDispatch();
   const { dashboard } = useSelector((state) => state);
@@ -99,7 +101,7 @@ export function FormEditForm({
 
   useEffect(() => {
     if (changeLoanType) {
-  
+
       let loandetails = currentState?.loan_config_details_permission?.loanDetails?.details?.find(
         (item) => item.loan_typeId === changeLoanType
       );
@@ -114,17 +116,17 @@ export function FormEditForm({
       let monthlySalarySuggest =
         loandetails?.installment_deduction_basis_type == 0
           ? (salary?.gross *
-              parseFloat(
-                currentState?.loan_config_details_permission?.loanDetails
-                  ?.installment_deduction_percentage
-              )) /
-            100
+            parseFloat(
+              currentState?.loan_config_details_permission?.loanDetails
+                ?.installment_deduction_percentage
+            )) /
+          100
           : (salary?.basic *
-              parseFloat(
-                currentState?.loan_config_details_permission?.loanDetails
-                  ?.installment_deduction_percentage
-              )) /
-            100;
+            parseFloat(
+              currentState?.loan_config_details_permission?.loanDetails
+                ?.installment_deduction_percentage
+            )) /
+          100;
 
       //  if(!isClear){
       setMaxAmountLimit(Math.min(loandetails?.max_loan_amount, salaryAmount));
@@ -139,7 +141,7 @@ export function FormEditForm({
       }
       setPayrollMonth(null);
       if (payroll?.startDate) {
-      
+
         const payrollDate = new Date(payroll?.startDate);
         payrollDate.setHours(0, 0, 0, 0);
         setPayrollMonth(payrollDate); // Update state with the valid date
@@ -175,6 +177,21 @@ export function FormEditForm({
     { value: 1, label: "Active" },
     { value: 2, label: "Pending" },
   ];
+
+  const UpdateApprovedStatus =async (Id, approved_status) => {
+  
+    if (Id && approved_status) {
+      let data = {
+        Id, approved_status,
+
+      }
+     await dispatch(updateApprovedStatus(data, disbaleLoading, onHide));
+      await dispatch(fetchEmployeeLoanRequest(formUIProps));
+      setIds("");
+     
+    }
+
+  }
 
   return (
     <Formik
@@ -311,7 +328,7 @@ export function FormEditForm({
                       type="date"
                       // maxDate={new Date()}
                       minDate={payrollMonth ? payrollMonth : undefined}
-                      disabled={!payrollMonth || userForEdit?.details[0]?.is_deducted || !values.loan_typeId }
+                      disabled={!payrollMonth || userForEdit?.details[0]?.is_deducted || !values.loan_typeId}
                     />
                   </div>
 
@@ -478,6 +495,8 @@ export function FormEditForm({
                       touched={touched.statusId}
                     />
                   </div>
+
+
                 </div>
               </fieldset>
             </Form>
@@ -511,20 +530,61 @@ export function FormEditForm({
 
             {/* Save Button */}
             {!userForEdit?.details[0]?.is_deducted && (
-              <button
-                type="submit"
-                // onClick={() => handleSubmit()}
-                onClick={() => {
-                  handleSubmit();
-                }}
-                className="btn btn-primary btn-elevate"
-                disabled={loading}
-              >
-                Save
-                {loading && (
-                  <span className="ml-3 mr-3 spinner spinner-white"></span>
-                )}
-              </button>
+              <>
+                <button
+                  type="submit"
+                  // onClick={() => handleSubmit()}
+                  onClick={() => {
+                    handleSubmit();
+                  }}
+                  className="btn btn-primary btn-elevate"
+                  disabled={loading}
+                >
+                  Save
+                  {loading && (
+                    <span className="ml-3 mr-3 spinner spinner-white"></span>
+                  )}
+
+
+                </button>
+
+                {
+                  userForEdit?.approved_status === 2 ? (
+                    <button
+                      type="button"
+                      className="btn btn-green"
+                      onClick={() => UpdateApprovedStatus(user.Id, 1)}
+                    >
+                      Approve
+                    </button>
+                  ) : userForEdit?.approved_status === 1 ? (
+                    <button
+                      type="button"
+                      className="btn btn-red"
+                      onClick={() => UpdateApprovedStatus(user.Id, 2)}
+                    >
+                      Reject
+                    </button>
+                  ) : userForEdit ?<><button
+                    type="button"
+                    className="btn btn-green"
+                    onClick={() => UpdateApprovedStatus(user.Id, 1)}
+                  >
+                    Approve
+                  </button>
+                    <button
+                      type="button"
+                      className="btn btn-red"
+                      onClick={() => UpdateApprovedStatus(user.Id, 2)}
+                    >
+                      Reject
+                    </button></>:null
+                }
+
+
+
+
+              </>
             )}
           </Modal.Footer>
         </>
