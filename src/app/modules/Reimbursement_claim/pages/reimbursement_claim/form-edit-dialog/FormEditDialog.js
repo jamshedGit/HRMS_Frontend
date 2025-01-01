@@ -129,6 +129,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         file: data?.file || "",
         pay_in_payroll_forId: data.pay_in_payroll_forId || "",
         // pay_slip_refId: "",
+        approved_status:data.approved_status || 0,
       };
       if (data.file && typeof data.file == "object") {
         //This is to check if file is uploaded or not. If uploaded then upload the file to server else just save form values

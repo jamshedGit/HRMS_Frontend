@@ -465,7 +465,7 @@ export function FormEditForm({
                     />
                   </div>
 
-                  <div className="col-12 col-md-6 mt-3">
+                  {/* <div className="col-12 col-md-6 mt-3">
                     <Field
                       // name="approval_statusId"
                       component={Input}
@@ -475,7 +475,7 @@ export function FormEditForm({
                       value={""}
                       disabled={true}
                     />
-                  </div>
+                  </div> */}
 
                   <div className="col-12 col-md-6 mt-3">
                     <SearchSelect
