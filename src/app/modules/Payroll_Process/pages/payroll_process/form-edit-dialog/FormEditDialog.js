@@ -117,6 +117,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         loading={loading}
         setIds={formUIProps.setIds}
         isEdit={id ? true : false}
+        formUIProps={formUIProps}
      
       />
       <ToastContainer

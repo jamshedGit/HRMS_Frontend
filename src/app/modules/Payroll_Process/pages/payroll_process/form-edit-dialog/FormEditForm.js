@@ -15,7 +15,7 @@ import {
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 import { getDateDiffInDays } from "../../../../../utils/common";
 import * as actions from "../../../_redux/redux-Actions";
-
+import { checkPayroll_EmployeesByIds ,fetchPayrollProcess} from "../../../_redux/redux-Actions";
 // percentage: Yup.string().required("Required*"),
 const payroll_processEditSchema = Yup.object().shape({
   // from_amount: Yup.string().required("Required*"),
@@ -44,7 +44,7 @@ export function FormEditForm({
   isUserForRead,
   enableLoading,
   loading,
-  setIds
+  setIds,formUIProps
 }) {
   const dispatch = useDispatch();
   const { dashboard } = useSelector((state) => state);
@@ -70,7 +70,7 @@ export function FormEditForm({
     };
   }, shallowEqual);
 
-  const { userForEdit } = currentState;
+  const { userForEdit,checkPayroll_EmployeesExist } = currentState;
 
 
   const payrollGroupDetails = async (subsidiaryId, payroll_groupId) => {
@@ -97,6 +97,30 @@ const getPayroll=(subsidiaryId)=>{
        dispatch(fetchAllPayrollMonthYearList({subsidiaryId:subsidiaryId,employeeId:null}, key));
 
 }
+
+  const checkPayroll_Employees =async (setFieldValue,subsidiaryId, payroll_groupId,payroll_monthId,revert=false) => {
+   
+  
+    if (subsidiaryId &&  payroll_groupId && payroll_monthId) {
+      let data = {
+        SubsidiaryId:subsidiaryId,PayrollGroupId:payroll_groupId,MonthId:payroll_monthId,revert
+      }
+    
+     await dispatch(checkPayroll_EmployeesByIds({data}));
+     if(revert){
+      await dispatch(fetchPayrollProcess(formUIProps));
+     
+     }
+
+
+      // setIds("");
+     
+    }
+
+  }
+
+
+
   return (
     <Formik
       enableReinitialize={true}
@@ -137,6 +161,7 @@ const getPayroll=(subsidiaryId)=>{
                           setFieldValue("subsidiaryId", e.value || null);
                           payrollGroupDetails(e.value,values.payroll_groupId)
                           getPayroll( e.value)
+                          checkPayroll_Employees(setFieldValue, e.value, values.payroll_groupId,values.payroll_monthId)
                         }}
                         value={
                           dashboard?.allSubsidiaryList?.find(
@@ -168,6 +193,7 @@ const getPayroll=(subsidiaryId)=>{
                       onChange={(e) => {
                         setFieldValue("payroll_groupId", e.value || null);
                         payrollGroupDetails(values.subsidiaryId,e.value)
+                        checkPayroll_Employees(setFieldValue,values.subsidiaryId,e.value,values.payroll_monthId)
                       }}
                       value={
                         dashboard?.allPayrolGroupList?.find(
@@ -187,7 +213,7 @@ const getPayroll=(subsidiaryId)=>{
 
                   <div className="col-12 col-md-6 mt-3">
                     <SearchSelect
-                      name="religionId"
+                      name="payroll_monthId"
                       label={
                         <span>
                           Payroll Month<span style={{ color: "red" }}>*</span>
@@ -197,6 +223,7 @@ const getPayroll=(subsidiaryId)=>{
                       isDisabled={isUserForRead}
                       onChange={(e) => {
                         setFieldValue("payroll_monthId", e.value || null);
+                        checkPayroll_Employees(setFieldValue,values.subsidiaryId,values.payroll_groupId,e.value)
                       }}
                       value={
                         dashboard?.allPayrollMonthYearList?.find(
@@ -282,6 +309,28 @@ const getPayroll=(subsidiaryId)=>{
                 )}
               </button>
             )}
+            
+
+            {/* checkPayroll_EmployeesExist */}
+
+            {checkPayroll_EmployeesExist && (
+              <button
+             
+                onClick={() => {
+                  checkPayroll_Employees(setFieldValue,values.subsidiaryId, values.payroll_groupId,values.payroll_monthId,true);
+                  setIds("");
+                  handleReset();
+                }}
+                className="btn btn-red"
+                disabled={loading}
+              >
+                Revert
+                {loading && (
+                  <span className="ml-3 mr-3 spinner spinner-white"></span>
+                )}
+              </button>
+            )}
+
           </Modal.Footer>
         </>
       )}

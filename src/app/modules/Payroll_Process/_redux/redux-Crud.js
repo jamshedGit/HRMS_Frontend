@@ -45,3 +45,9 @@ export function getAllPayrollGroupDetails(body) {
 
   return axios.post(`${USERS_URL}/payroll_process/read-all-payroll-group-detail`, body);
 }
+
+
+export function checkPayroll_EmployeesByIds(body) {
+
+  return axios.post(`${USERS_URL}/payroll_process/check-payroll-employees`, body);
+}
