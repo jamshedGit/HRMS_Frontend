@@ -16,6 +16,8 @@ import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 import { getDateDiffInDays } from "../../../../../utils/common";
 import * as actions from "../../../_redux/redux-Actions";
 import { checkPayroll_EmployeesByIds ,fetchPayrollProcess} from "../../../_redux/redux-Actions";
+import { payroll_processSlice, callTypes } from "../../../_redux/redux-Slice";
+// const { actions } = payroll_processSlice;
 // percentage: Yup.string().required("Required*"),
 const payroll_processEditSchema = Yup.object().shape({
   // from_amount: Yup.string().required("Required*"),
@@ -271,12 +273,35 @@ const getPayroll=(subsidiaryId)=>{
 
           <Modal.Footer>
             {/* Cancel / Ok Button */}
+                 {/* checkPayroll_EmployeesExist */}
+
+                 {checkPayroll_EmployeesExist && (
+              <button
+             
+                onClick={() => {
+                  checkPayroll_Employees(setFieldValue,values.subsidiaryId, values.payroll_groupId,values.payroll_monthId,true);
+                  setIds("");
+                  handleReset();
+                  dispatch(actions.clearReduxData())
+                }}
+                className="btn btn-red"
+                disabled={loading}
+              >
+                Revert
+                {loading && (
+                  <span className="ml-3 mr-3 spinner spinner-white"></span>
+                )}
+              </button>
+            )}
+            
             {!isUserForRead ? (
               <button
                 type="reset"
                 onClick={() => {
                   setIds("");
                   handleReset();
+                  dispatch(actions.clearReduxData())
+
 
                 }}
                 className="btn btn-light btn-elevate"
@@ -299,6 +324,7 @@ const getPayroll=(subsidiaryId)=>{
                 type="submit"
                 onClick={() => {
                   handleSubmit();
+                  dispatch(actions.clearReduxData())
                 }}
                 className="btn btn-primary btn-elevate"
                 disabled={loading}
@@ -311,25 +337,7 @@ const getPayroll=(subsidiaryId)=>{
             )}
             
 
-            {/* checkPayroll_EmployeesExist */}
-
-            {checkPayroll_EmployeesExist && (
-              <button
-             
-                onClick={() => {
-                  checkPayroll_Employees(setFieldValue,values.subsidiaryId, values.payroll_groupId,values.payroll_monthId,true);
-                  setIds("");
-                  handleReset();
-                }}
-                className="btn btn-red"
-                disabled={loading}
-              >
-                Revert
-                {loading && (
-                  <span className="ml-3 mr-3 spinner spinner-white"></span>
-                )}
-              </button>
-            )}
+       
 
           </Modal.Footer>
         </>
