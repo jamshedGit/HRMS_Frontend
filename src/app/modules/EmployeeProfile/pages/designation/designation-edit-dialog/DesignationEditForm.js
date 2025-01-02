@@ -246,7 +246,7 @@ const profileValidation = Yup.object().shape(
   //   return this.createError({ path: 'gender', message: 'Mr. cannot be female.' });
   // }
 
-  if ((title === 'Mr.' ) && gender === 'Female') {
+  if ((title === 'Mr.') && gender === 'Female') {
     return this.createError({ path: 'gender', message: 'Mr. cannot be female.' });
   }
 
@@ -986,7 +986,14 @@ export function DesignationEditForm({
 
   // Function to handle changes in input fields
   const handleFieldChangedExperience = (index, field, value) => {
+
     const newExpList = [...workExperienceList];
+
+    if (field == "countryId") {
+
+      newExpList[index]["cityId"] = '';
+      newExpList[index]["city"] = '';
+    }
     newExpList[index][field] = value;
     setworkExperienceList(newExpList);
   };
@@ -1128,7 +1135,7 @@ export function DesignationEditForm({
     const ContractExpiryDate = new Date(dateOfJoining);
     // ContractExpiryDate.setFullYear(ContractExpiryDate.getFullYear() + Math.floor(contractualPolicyInMonth / 12));  // Add full years
     // ContractExpiryDate.setMonth(ContractExpiryDate.getMonth() + (contractualPolicyInMonth % 12));  // Add the remaining months
-    ContractExpiryDate.setMonth(ContractExpiryDate.getMonth() + (contractualPolicyInMonth)); 
+    ContractExpiryDate.setMonth(ContractExpiryDate.getMonth() + (contractualPolicyInMonth));
     ContractExpiryDate.setDate(ContractExpiryDate.getDate() - 1);
 
 
@@ -1168,8 +1175,16 @@ export function DesignationEditForm({
 
 
   const handleFieldChangedAcademic = (index, field, value) => {
+
+
     const newAcademicList = [...academicList];
     newAcademicList[index][field] = value;
+    
+    if (field == "countryId") {
+      newAcademicList[index]["cityId"] = null;
+      newAcademicList[index]["city"] = '';
+    }
+
     setAcademicList(newAcademicList);
   };
 
@@ -1311,13 +1326,25 @@ export function DesignationEditForm({
       if (!contact.relation_text) {
         newErrors[`relation_text-${index}`] = 'Relation is required';
       }
-      if (!contact.contactNo || !/^\d{11}$/.test(contact.contactNo)) {
-        newErrors[`contactNo-${index}`] = 'Contact No must be exactly 11 digits';
+      // if (!contact.contactNo || !/^\d{11}$/.test(contact.contactNo)) {
+      //   newErrors[`contactNo-${index}`] = 'Contact No must be between 7 t0 15 digits';
+      // }
+
+      // if (!contact.contactNo || !/^\d{7,15}$/.test(contact.contactNo)) {
+      //   newErrors[`contactNo-${index}`] = 'Contact No must be between 7 to 15 digits';
+      // }
+
+
+      const contactNo = contact.contactNo ? contact.contactNo.trim() : '';
+
+      if (!contactNo || !/^\d{7,15}$/.test(contactNo)) {
+        newErrors[`contactNo-${index}`] = 'Contact No must be between 7 to 15 digits';
       }
     });
 
     // Validations for Work Experience
     workExperienceList.forEach((obj, index) => {
+
       if (!obj.companyName) {
         newErrors[`companyName-${index}`] = '*Required';
       }
@@ -1325,11 +1352,11 @@ export function DesignationEditForm({
         newErrors[`positionHeld-${index}`] = '*Required';
       }
       if (!obj.countryId) {
-        newErrors[`countryId-${index}`] = '*Required';
+        newErrors[`countryId-W-${index}`] = '*Required';
       }
 
       if (!obj.cityId) {
-        newErrors[`cityId-${index}`] = '*Required';
+        newErrors[`cityId-W-${index}`] = '*Required';
       }
 
       const num = getDateDiffInDays(obj.startDate, new Date().getTime())
@@ -1341,10 +1368,18 @@ export function DesignationEditForm({
       }
 
       // Validate endDate
-      if (new Date(obj.endDate) < new Date(obj.startDate)) {
+      if (new Date(obj.endDate) <= new Date(obj.startDate)) {
         newErrors[`endDate_W-${index}`] = 'End Date must be later than Start Date';
       }
 
+
+      if (!obj?.startDate) {
+        newErrors[`startDate_W-${index}`] = '*Required';
+      }
+
+      if (!obj?.endDate) {
+        newErrors[`endDate_W-${index}`] = '*Required';
+      }
 
 
     });
@@ -1352,6 +1387,7 @@ export function DesignationEditForm({
     // Validations for Academic
 
     academicList.forEach((obj, index) => {
+
       if (!obj.institutionId) {
         newErrors[`institutionId-${index}`] = '*Required';
       }
@@ -1359,30 +1395,41 @@ export function DesignationEditForm({
         newErrors[`degreeId-${index}`] = '*Required';
       }
       if (!obj.countryId) {
-        newErrors[`countryId-${index}`] = '*Required';
+        newErrors[`countryId-A-${index}`] = '*Required';
       }
 
       // GPA Validation
       if (!obj.gpa) {
+
         newErrors[`gpa-${index}`] = '*Required';
       } else if (isNaN(obj.gpa) || obj.gpa === '') {
         newErrors[`gpa-${index}`] = 'GPA must be a number';
-      } else if (obj.gpa < 0 || obj.gpa > 5.0) {
-        newErrors[`gpa-${index}`] = 'GPA must be between 0 and 5.0';
+      } else if (obj.gpa < 1 || obj.gpa > 5.0) {
+        newErrors[`gpa-${index}`] = 'GPA must be between 1.0 and 5.0';
       } else if (!/^\d+(\.\d+)?$/.test(obj.gpa)) {
         newErrors[`gpa-${index}`] = 'GPA must be a valid digit';
       }
       if (!obj.cityId) {
-        newErrors[`cityId-${index}`] = '*Required';
+
+        newErrors[`cityId-A-${index}`] = '*Required';
       }
       if (new Date(obj.startDate) > new Date()) {
         newErrors[`startDate_A-${index}`] = 'Start Date cannot be a future date';
       }
 
       // Validate endDate
-      if (new Date(obj.endDate) < new Date(obj.startDate)) {
+      if (new Date(obj.endDate) <= new Date(obj.startDate)) {
         newErrors[`endDate_A-${index}`] = 'End Date must be later than Start Date';
       }
+
+      if (!obj?.startDate) {
+        newErrors[`startDate_A-${index}`] = '*Required';
+      }
+
+      // if (!obj?.endDate) {
+      //   newErrors[`endDate_A-${index}`] = '*Required';
+      // }
+
 
     });
 
@@ -1404,7 +1451,7 @@ export function DesignationEditForm({
       }
 
       // Validate endDate
-      if (new Date(obj.endDate) < new Date(obj.startDate)) {
+      if (new Date(obj.endDate) <= new Date(obj.startDate)) {
         newErrors[`endDate-${index}`] = 'End Date must be later than Start Date';
       }
 
@@ -1629,13 +1676,13 @@ export function DesignationEditForm({
                             onBlur={handleBlur}
                             style={{ display: "block" }}
                           >
-                            <option value="-1" label="Select Title" />
+                            <option label="Select Title" />
                             <option value="Mr." label="Mr." />
                             <option value="Mrs." label="Mrs." />
                             <option value="Ms." label="Ms." />
                             <option value="Dr." label="Dr." />
                             <option value="Professor." label="Professor." />
-                          
+
 
                           </Select>
                           {errors.title && touched.title && (
@@ -1990,192 +2037,192 @@ export function DesignationEditForm({
 
                       </div>
 
-                  
-                        <div className="col-12 col-md-4 mt-3">
 
-                          <SearchSelect
-                            label={<span> Marital Status<span style={{ color: 'red' }}>*</span></span>}
-                            name="maritalStatus"
-                            // value={values.maritalStatus}
-                            isDisabled={isUserForRead && true}
-                            onBlur={handleBlur}
-                            onChange={(e) => {
-                              setFieldValue("maritalStatus", e.value || null);
-                              setDefaultMaritalStatus(e);
-                              // dispatch(fetchAllFormsMenu(e.value));
-                            }}
-                            value={(defMaritalStatus || null)}
-                            error={errors.maritalStatus}
-                            touched={touched.maritalStatus}
-                            options={dashboard.allMaritalStatus}
-                          />
-                          {/* <ErrorMessage style={{ color: "red" }} name="maritalStatus" component="div" /> */}
-                        </div>
-                        <div className="col-12 col-md-4 mt-3">
-                          <Select
-                            label={<span> Gender<span style={{ color: 'red' }}>*</span></span>}
-                            name="gender"
-                            value={values.gender}
-                            // onChange={handleChange}
-                            onBlur={handleBlur}
-                            style={{ display: "block" }}
-                            autoComplete="off"
-                            onChange={(e) => {
-                              setFieldValue("gender", e.target.value)
-                              if (!id && values.subsidiaryId) {
+                      <div className="col-12 col-md-4 mt-3">
 
-                                updateRetirmentPolicy(setFieldValue, values.dateOfBirth, e.target.value)
-                              }
+                        <SearchSelect
+                          label={<span> Marital Status<span style={{ color: 'red' }}>*</span></span>}
+                          name="maritalStatus"
+                          // value={values.maritalStatus}
+                          isDisabled={isUserForRead && true}
+                          onBlur={handleBlur}
+                          onChange={(e) => {
+                            setFieldValue("maritalStatus", e.value || null);
+                            setDefaultMaritalStatus(e);
+                            // dispatch(fetchAllFormsMenu(e.value));
+                          }}
+                          value={(defMaritalStatus || null)}
+                          error={errors.maritalStatus}
+                          touched={touched.maritalStatus}
+                          options={dashboard.allMaritalStatus}
+                        />
+                        {/* <ErrorMessage style={{ color: "red" }} name="maritalStatus" component="div" /> */}
+                      </div>
+                      <div className="col-12 col-md-4 mt-3">
+                        <Select
+                          label={<span> Gender<span style={{ color: 'red' }}>*</span></span>}
+                          name="gender"
+                          value={values.gender}
+                          // onChange={handleChange}
+                          onBlur={handleBlur}
+                          style={{ display: "block" }}
+                          autoComplete="off"
+                          onChange={(e) => {
+                            setFieldValue("gender", e.target.value)
+                            if (!id && values.subsidiaryId) {
 
-                            }}
+                              updateRetirmentPolicy(setFieldValue, values.dateOfBirth, e.target.value)
+                            }
 
-                          >
-                            <option value="-1" label="Select Gender" />
-                            <option value="Male" label="Male" />
-                            <option value="Female" label="Female" />
+                          }}
 
-                          </Select>
-                          {errors.gender && touched.gender && (
-                            <div className="invalid-text">{errors.gender}</div>
-                          )}
+                        >
+                          <option label="Select Gender" />
+                          <option value="Male" label="Male" />
+                          <option value="Female" label="Female" />
 
-                        </div>
-                        <div className="col-12 col-md-4 mt-3">
-                          <SearchSelect
-                            name="religionId"
-                            label={<span> Religion<span style={{ color: 'red' }}>*</span></span>}
-                            isDisabled={isUserForRead && true}
+                        </Select>
+                        {errors.gender && touched.gender && (
+                          <div className="invalid-text">{errors.gender}</div>
+                        )}
 
-                            onBlur={() => {
-                              // handleBlur({ target: { name: "countryId" } });
-                            }}
-                            onChange={(e) => {
-                              setFieldValue("religionId", e.value || null);
-                              setDefaultChildReligionMenus(e);
-                              // dispatch(fetchAllFormsMenu(e.value));
-                            }}
-                            value={(defchildReligionMenus || null)}
-                            error={errors.religionId}
-                            touched={touched.religionId}
-                            options={dashboard.allReligionChildMenus}
-                          />
-                        </div>
-               
+                      </div>
+                      <div className="col-12 col-md-4 mt-3">
+                        <SearchSelect
+                          name="religionId"
+                          label={<span> Religion<span style={{ color: 'red' }}>*</span></span>}
+                          isDisabled={isUserForRead && true}
 
-                        <div className="col-12 col-md-4 mt-3">
-                          {<span> Date Of Birth<span style={{ color: 'red' }}>*</span></span>}
-                          <DatePicker
-                            className="form-control  mt-2"
-                            placeholder=" Date Of Birth"
-                            selected={DOBDateSelected}
-                            //value={values.dateOfBirth}
-                            showYearDropdown
-                            scrollableMonthYearDropdown
-                            onChange={(date) => {
-                              setFieldValue("dateOfBirth", date);
-                              setDOBDate(date);
-                              if (!id) {
-
-                                updateRetirmentPolicy(setFieldValue, date, values?.gender)
-                              }
-
-                            }}
-                            timeInputLabel="Time:"
-                            dateFormat="dd/MM/yyyy"
-                            // showTimeInput
-                            name="dateOfBirth"
-                            disabled={isUserForRead || !values?.subsidiaryId}
-                            autoComplete="off"
-                            // maxDate={new Date()}
-                            // minDate={new Date(1900, 0, 1)}
-                            // const currentDate = new Date();
-                            minDate={maxAgeLimin !== null ? new Date(new Date().getFullYear() - maxAgeLimin, new Date().getMonth(), new Date().getDate()) : null}
-                            maxDate={minAgeLimin !== null ? new Date(new Date().getFullYear() - minAgeLimin, new Date().getMonth(), new Date().getDate()) : new Date()}
-                          />
-                          <ErrorMessage className="form-feedBack" name="dateOfBirth" component="div" />
-                        </div>
-
-
-                        <div className="col-12 col-md-4 mt-3">
-                          <label>Date Of Joining<span style={{ color: 'red' }}>*</span></label>
-                          <DatePicker
-                            className="form-control"
-                            placeholder=" Date Of Joining"
-                            selected={joiningDateSelected}
-                            onChange={(date) => {
-                              setFieldValue("dateOfJoining", date);
-                              setJoiningDate(date);
-                              if (!id) {
-                                updateConfirmationDuePolicy(setFieldValue, values.employeeTypeId, values.employeeStatusId, date)
-                                updateContractExpiryPolicy(setFieldValue, values.employeeTypeId, values.employeeStatusId, date)
-                              }
-
-                              // *********************************************************************************************************
-
-                              // if (values?.employeeTypeId == "93" && !isNaN(defContractExpiryPolicy)) // Probation
-
-                              // {
-
-                              //   setConfirmationDueDate(addMonths(date, defProbationPolicyMonth))
-                              //   setFieldValue("dateOfConfirmationDue", addMonths(date, defProbationPolicyMonth))
-                              // }
-                              // if (values?.employeeTypeId == "147" && !isNaN(defContractExpiryPolicy)) // Contract Type
-                              // {
-                              //   setContractExpiryDate(addMonths(date, defContractExpiryPolicy))
-                              //   setFieldValue("dateOfContractExpiry", addMonths(date, defContractExpiryPolicy))
-
-                              // }
-
-
-                              // *********************************************************************************************************                           
-                            }}
-                            showYearDropdown
-                            scrollableMonthYearDropdown
-                            timeInputLabel="Time:"
-                            dateFormat="dd/MM/yyyy"
-                            // showTimeInput
-                            autoComplete="off"
-                            name="dateOfJoining"
-                            disabled={isUserForRead || !values?.subsidiaryId}
-                            error={errors.dateOfJoining}
-                            touched={touched.dateOfJoining}
-
-                            minDate={values.dateOfBirth ? new Date(values.dateOfBirth) : null}
-                          />
-                          <ErrorMessage className="form-feedBack" name="dateOfJoining" component="div" />
-                        </div>
-
-
-                        {!hidehideRetirementAgeDate ? (<div className="col-12 col-md-4 mt-3">
-                          <label>Date Of Retirement</label>
-                          <DatePicker
-                            className="form-control"
-                            placeholder=" Date Of Retirement"
-                            selected={RetirementSelected}
-
-                            showYearDropdown
-                            scrollableMonthYearDropdown
-                            onChange={(date) => {
-                              setFieldValue("dateOfRetirement", date);
-                              setDRetirmentDate(date);
-                            }}
-                            timeInputLabel="Time:"
-                            dateFormat="dd/MM/yyyy"
-                            // showTimeInput
-                            name="dateOfRetirement"
-                            disabled={isUserForRead || !values?.subsidiaryId}
-                            autoComplete="off"
-                          />
-                          <ErrorMessage className="form-feedBack" name="dateOfRetirement" component="div" />
-                        </div>) : (null)}
+                          onBlur={() => {
+                            // handleBlur({ target: { name: "countryId" } });
+                          }}
+                          onChange={(e) => {
+                            setFieldValue("religionId", e.value || null);
+                            setDefaultChildReligionMenus(e);
+                            // dispatch(fetchAllFormsMenu(e.value));
+                          }}
+                          value={(defchildReligionMenus || null)}
+                          error={errors.religionId}
+                          touched={touched.religionId}
+                          options={dashboard.allReligionChildMenus}
+                        />
                       </div>
 
 
+                      <div className="col-12 col-md-4 mt-3">
+                        {<span> Date Of Birth<span style={{ color: 'red' }}>*</span></span>}
+                        <DatePicker
+                          className="form-control  mt-2"
+                          placeholder=" Date Of Birth"
+                          selected={DOBDateSelected}
+                          //value={values.dateOfBirth}
+                          showYearDropdown
+                          scrollableMonthYearDropdown
+                          onChange={(date) => {
+                            setFieldValue("dateOfBirth", date);
+                            setDOBDate(date);
+                            if (!id) {
 
-                
-                
+                              updateRetirmentPolicy(setFieldValue, date, values?.gender)
+                            }
 
-  
+                          }}
+                          timeInputLabel="Time:"
+                          dateFormat="dd/MM/yyyy"
+                          // showTimeInput
+                          name="dateOfBirth"
+                          disabled={isUserForRead || !values?.subsidiaryId}
+                          autoComplete="off"
+                          // maxDate={new Date()}
+                          // minDate={new Date(1900, 0, 1)}
+                          // const currentDate = new Date();
+                          minDate={maxAgeLimin !== null ? new Date(new Date().getFullYear() - maxAgeLimin, new Date().getMonth(), new Date().getDate()) : null}
+                          maxDate={minAgeLimin !== null ? new Date(new Date().getFullYear() - minAgeLimin, new Date().getMonth(), new Date().getDate()) : new Date()}
+                        />
+                        <ErrorMessage className="form-feedBack" name="dateOfBirth" component="div" />
+                      </div>
+
+
+                      <div className="col-12 col-md-4 mt-3">
+                        <label>Date Of Joining<span style={{ color: 'red' }}>*</span></label>
+                        <DatePicker
+                          className="form-control"
+                          placeholder=" Date Of Joining"
+                          selected={joiningDateSelected}
+                          onChange={(date) => {
+                            setFieldValue("dateOfJoining", date);
+                            setJoiningDate(date);
+                            if (!id) {
+                              updateConfirmationDuePolicy(setFieldValue, values.employeeTypeId, values.employeeStatusId, date)
+                              updateContractExpiryPolicy(setFieldValue, values.employeeTypeId, values.employeeStatusId, date)
+                            }
+
+                            // *********************************************************************************************************
+
+                            // if (values?.employeeTypeId == "93" && !isNaN(defContractExpiryPolicy)) // Probation
+
+                            // {
+
+                            //   setConfirmationDueDate(addMonths(date, defProbationPolicyMonth))
+                            //   setFieldValue("dateOfConfirmationDue", addMonths(date, defProbationPolicyMonth))
+                            // }
+                            // if (values?.employeeTypeId == "147" && !isNaN(defContractExpiryPolicy)) // Contract Type
+                            // {
+                            //   setContractExpiryDate(addMonths(date, defContractExpiryPolicy))
+                            //   setFieldValue("dateOfContractExpiry", addMonths(date, defContractExpiryPolicy))
+
+                            // }
+
+
+                            // *********************************************************************************************************                           
+                          }}
+                          showYearDropdown
+                          scrollableMonthYearDropdown
+                          timeInputLabel="Time:"
+                          dateFormat="dd/MM/yyyy"
+                          // showTimeInput
+                          autoComplete="off"
+                          name="dateOfJoining"
+                          disabled={isUserForRead || !values?.subsidiaryId}
+                          error={errors.dateOfJoining}
+                          touched={touched.dateOfJoining}
+
+                          minDate={values.dateOfBirth ? new Date(values.dateOfBirth) : null}
+                        />
+                        <ErrorMessage className="form-feedBack" name="dateOfJoining" component="div" />
+                      </div>
+
+
+                      {!hidehideRetirementAgeDate ? (<div className="col-12 col-md-4 mt-3">
+                        <label>Date Of Retirement</label>
+                        <DatePicker
+                          className="form-control"
+                          placeholder=" Date Of Retirement"
+                          selected={RetirementSelected}
+
+                          showYearDropdown
+                          scrollableMonthYearDropdown
+                          onChange={(date) => {
+                            setFieldValue("dateOfRetirement", date);
+                            setDRetirmentDate(date);
+                          }}
+                          timeInputLabel="Time:"
+                          dateFormat="dd/MM/yyyy"
+                          // showTimeInput
+                          name="dateOfRetirement"
+                          disabled={isUserForRead || !values?.subsidiaryId}
+                          autoComplete="off"
+                        />
+                        <ErrorMessage className="form-feedBack" name="dateOfRetirement" component="div" />
+                      </div>) : (null)}
+                    </div>
+
+
+
+
+
+
+
                     <br></br>
 
                   </div>
@@ -2223,6 +2270,7 @@ export function DesignationEditForm({
                           placeholder="example@gmail.com"
                           label="Official Email"
                           autoComplete="off"
+                            maxLength="30"
 
                         />
                       </div>
@@ -2234,6 +2282,7 @@ export function DesignationEditForm({
                           placeholder="example@gmail.com"
                           label="Personal Email"
                           autoComplete="off"
+                            maxLength="30"
                         />
                       </div>
 
@@ -2285,17 +2334,17 @@ export function DesignationEditForm({
 
                     </div>
                     <div className="from-group row">
-                          <div className="col-12 col-md-12 mt-3">
-                            <Field
-                              name="additional_summary"
-                              component={TextArea}
-                              placeholder="Enter Address"
-                              label="Address"
-                              autoComplete="off"
-                            />
-                          </div>
+                      <div className="col-12 col-md-12 mt-3">
+                        <Field
+                          name="additional_summary"
+                          component={TextArea}
+                          placeholder="Enter Address"
+                          label="Address"
+                          autoComplete="off"
+                        />
+                      </div>
 
-                        </div>
+                    </div>
 
                     {/* 
                     <div className="from-group row">
@@ -3143,7 +3192,7 @@ export function DesignationEditForm({
                                   }}
 
                                   id={'countryId-' + rightindex} >
-                                  <option value="-1"> --Select--</option>
+                                  <option value=""> --Select--</option>
                                   {
                                     dashboard.allCountry?.map((x) => {
                                       return <option value={x.value}> {x.label} </option>
@@ -3151,7 +3200,7 @@ export function DesignationEditForm({
 
                                   {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
                                 </select>
-                                {deferrors[`countryId-${rightindex}`] && <div className="form-feedBack">{deferrors[`countryId-${rightindex}`]}</div>}
+                                {deferrors[`countryId-W-${rightindex}`] && <div className="form-feedBack">{deferrors[`countryId-W-${rightindex}`]}</div>}
                               </td>
                               <td>
                                 <select className="form-control" value={obj.cityId}
@@ -3162,10 +3211,11 @@ export function DesignationEditForm({
                                   }}
 
                                   id={'cityId-' + rightindex} >
-                                  <option value="-1"> --Select--</option>
+                                  <option value=""> --Select--</option>
                                   {
 
                                     dashboard.allCity?.map((x) => {
+
                                       if (x.code == obj.countryId) {
                                         return <option value={x.value}> {x.label} </option>
                                       }
@@ -3173,7 +3223,7 @@ export function DesignationEditForm({
 
                                   {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
                                 </select>
-                                {deferrors[`cityId-${rightindex}`] && <div className="form-feedBack">{deferrors[`cityId-${rightindex}`]}</div>}
+                                {deferrors[`cityId-W-${rightindex}`] && <div className="form-feedBack">{deferrors[`cityId-W-${rightindex}`]}</div>}
                               </td>
 
                               <td>
@@ -3269,12 +3319,12 @@ export function DesignationEditForm({
                                     }}
 
                                     id={'institutionId-' + rightindex} >
-                                           <option value="">--Select--</option>
+                                    <option value="">--Select--</option>
                                     {
                                       dashboard.allInstitution?.map((x) => {
                                         return <option value={x.value}> {x.label} </option>
                                       })}
-                                      
+
                                     {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
                                   </select>
                                   {deferrors[`institutionId-${rightindex}`] && <div className="form-feedBack">{deferrors[`institutionId-${rightindex}`]}</div>}
@@ -3288,7 +3338,7 @@ export function DesignationEditForm({
                                     }}
 
                                     id={'degreeId-' + rightindex} >
-                                          <option value="">--Select--</option>
+                                    <option value="">--Select--</option>
                                     {
                                       dashboard.allDegreeTitle?.map((x) => {
                                         return <option value={x.value}> {x.label} </option>
@@ -3306,7 +3356,7 @@ export function DesignationEditForm({
                                     }}
 
                                     id={'countryId-' + rightindex} >
-                                    <option value="-1">--Select--</option>
+                                    <option value="">--Select--</option>
                                     {
                                       dashboard.allCountry?.map((x) => {
                                         return <option value={x.value}> {x.label} </option>
@@ -3314,7 +3364,7 @@ export function DesignationEditForm({
 
                                     {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
                                   </select>
-                                  {deferrors[`countryId-${rightindex}`] && <div className="form-feedBack">{deferrors[`countryId-${rightindex}`]}</div>}
+                                  {deferrors[`countryId-A-${rightindex}`] && <div className="form-feedBack">{deferrors[`countryId-A-${rightindex}`]}</div>}
                                 </td>
                                 <td>
                                   <select className="form-control" value={obj.cityId}
@@ -3324,7 +3374,7 @@ export function DesignationEditForm({
                                     }}
 
                                     id={'cityId-' + rightindex} >
-                                    <option > --Select--</option>
+                                    <option value=""> --Select--</option>
 
                                     {
 
@@ -3336,7 +3386,7 @@ export function DesignationEditForm({
 
                                     {/* disabled={defContactList.find(el => el.relation == x.value) ? true : false} */}
                                   </select>
-                                  {deferrors[`cityId-${rightindex}`] && <div className="form-feedBack">{deferrors[`cityId-${rightindex}`]}</div>}
+                                  {deferrors[`cityId-A-${rightindex}`] && <div className="form-feedBack">{deferrors[`cityId-A-${rightindex}`]}</div>}
                                 </td>
 
                                 <td>
@@ -3454,7 +3504,7 @@ export function DesignationEditForm({
                                     style={{ display: "block" }}
                                     id={'ratingScale-' + rightindex}
                                   >
-                                    <option label="--Select--"/>
+                                    <option label="--Select--" />
                                     <option value="1" label="1" />
                                     <option value="2" label="2" />
                                     <option value="3" label="3" />
@@ -3576,7 +3626,7 @@ export function DesignationEditForm({
                                     }}
 
                                     id={'actionTakenBy-' + rightindex} >
-                                    <option value='-1'>--Select--</option>
+                                    <option value="">--Select--</option>
                                     {
                                       dashboard.allEmployees?.filter(x => x.value != values.Id).map((x) => {
                                         return <option value={x.value}> {x.label} </option>

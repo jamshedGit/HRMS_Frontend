@@ -56,3 +56,8 @@ export function getAllLoanType() {
 
   
 }
+
+export function updateApprovedStatus(data) {
+   
+  return axios.put(`${USERS_URL}/employee_loan_request/update-loan-approved-status`, data);
+}

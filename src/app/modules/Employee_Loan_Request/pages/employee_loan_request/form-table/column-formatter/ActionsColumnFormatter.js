@@ -34,7 +34,7 @@ export function ActionsColumnFormatter(
             title=""
            className="btn btn-icon edit-button"
             onClick={() =>{
-              setIsFileReq(false)
+        
               setIds(row.Id)}
             }
             

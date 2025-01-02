@@ -39,6 +39,7 @@ export const employee_loan_requestSlice = createSlice({
         clearUserForEdit : (state) => {
         
             state.userForEdit = null;
+    
         },
 
         employeeLoanRequestFetched: (state, action) => {
@@ -118,6 +119,30 @@ export const employee_loan_requestSlice = createSlice({
 
             
         },
+
+        LoanApprovedStatusUpdated: (state, action) => {
+            state.error = null;
+            state.actionsLoading = false;
+            // state.entities.push(action.payload)
+       
+            state.entities = state.entities.map((entity) => {
+           
+                //const payload = { ...action.payload };
+                let payload = JSON.stringify(action.payload)
+                let payloadObj = JSON.parse(payload);
+               
+                // let finalObj = JSON.parse(payloadObj.updateApprovedStatus);
+               
+                if (entity.Id === payloadObj?.updateApprovedStatus?.Id) {
+                   
+                    return payloadObj; 
+                }
+               
+                return entity;
+            });
+           
+        },
+
 
 
     },

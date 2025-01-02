@@ -7,6 +7,7 @@ const { actions } = employee_loan_requestSlice;
 
 
 export const fetchEmployeeLoanRequest = (params) => async (dispatch) => {
+
   return requestFromServer.getAllEmployeeLoanRequest(params)
 
     .then((response) => {
@@ -224,6 +225,45 @@ export const getAllLoanType = () => (
       error.clientMessage = "Can't create user";
       dispatch(actions.catchError({ error, callType: callTypes.action }));
 
+      toast.error(error?.response?.data?.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    });
+};
+
+export const updateApprovedStatus = (data,disbaleLoading,onHide, resetForm) => (dispatch) => {
+
+  return requestFromServer
+    .updateApprovedStatus({data})
+    .then((response) => {
+      dispatch(actions.clearUserForEdit());
+      // dispatch(actions.LoanApprovedStatusUpdated({ updateApprovedStatus }));
+
+ 
+      disbaleLoading();
+      onHide();
+      toast.success(SERVER_MESSAGES.updatedSuccess, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+
+
+    })
+    .catch((error) => {
+
+      dispatch(actions.catchError({ error, callType: callTypes.action }));
+      disbaleLoading();
       toast.error(error?.response?.data?.message, {
         position: "top-right",
         autoClose: 5000,

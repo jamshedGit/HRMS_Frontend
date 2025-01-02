@@ -69,15 +69,15 @@ export function FormEditForm({
     if (!user.Id) {
       dispatch(fetchAllFormsMenu(202, "allReimbursementTypeList"));
       const key = "allPayrollMonthYearList";  // The key parameter
-      if(employeeId){
+      if (employeeId) {
         // dispatch(fetchAllPayrollMonthYearList(employeeId, key));
-          dispatch(fetchAllPayrollMonthYearList({subsidiaryId:null,employeeId:employeeId}, key));
+        dispatch(fetchAllPayrollMonthYearList({ subsidiaryId: null, employeeId: employeeId }, key));
       }
 
       // dispatch(fetchAllPayrollMonthYearList("allPayrollMonthYearList"));
     }
     //allPayrolGroupList
-  }, [dispatch, user.Id,employeeId]);
+  }, [dispatch, user.Id, employeeId]);
 
   const { currentState, userAccess } = useSelector((state) => {
     return {
@@ -114,23 +114,30 @@ export function FormEditForm({
   const calculateRemainingAmount = (reimbursementTypeId, payrollForId, policies) => {
     // Find the max amount allowed for the reimbursement type
     // let employee = currentState?.loan_config_details_permission?.employee;
-    const maxAmount = 
+    const maxAmount =
       policies?.find((item) => item.reimbursement_typeId === reimbursementTypeId)?.max_amount || 0;
-  
+
     // Calculate the claimed amount for the selected reimbursement type and payroll
+    
     const claimedAmount = entities
       ?.filter(
         (entity) =>
           entity.reimbursement_typeId === reimbursementTypeId &&
-          entity.pay_in_payroll_forId === payrollForId
+          entity.pay_in_payroll_forId === payrollForId &&
+          entity.approved_status == 1
       )
       ?.reduce((sum, entity) => sum + (entity.amount || 0), 0);
-  
+
     // Return the remaining amount
     const finalMaxAmount = (maxAmount || 0) - (claimedAmount || 0);
-    return finalMaxAmount ;
+    return finalMaxAmount;
   };
-  
+
+  const basisOptions = [
+    { value: 0, label: "Pending" },
+    { value: 1, label: "Approved" },
+    { value: 2, label: "Rejected" },
+  ];
 
   return (
     <Formik
@@ -140,20 +147,20 @@ export function FormEditForm({
       validationSchema={ReimbursementSchema}
       onSubmit={(values, { resetForm }) => {
         enableLoading();
-     
-   
-      const  finalAmountLimit = calculateRemainingAmount(
-        values?.reimbursement_typeId,
-        values?.pay_in_payroll_forId,
-        currentState?.reimbursement_config_policies_permission?.policies
-      );
+
+
+        const finalAmountLimit = calculateRemainingAmount(
+          values?.reimbursement_typeId,
+          values?.pay_in_payroll_forId,
+          currentState?.reimbursement_config_policies_permission?.policies
+        );
         const clearForm = () => {
           resetForm();
           if (inputFile?.current) {
             inputFile.current.value = "";
           }
         };
-        saveForm(values,finalAmountLimit, isFileReq, clearForm);
+        saveForm(values, finalAmountLimit, isFileReq, clearForm);
       }}
     >
       {({
@@ -183,7 +190,7 @@ export function FormEditForm({
                           <span style={{ color: "red" }}>*</span>
                         </span>
                       }
-                 
+
                       isDisabled={isEdit}
                       onChange={(e) => {
                         setFieldValue("reimbursement_typeId", e.value || null);
@@ -194,7 +201,7 @@ export function FormEditForm({
                         setIsFileReq(
                           policy?.attachment_required && !values.file
                         );
-               
+
                       }}
                       value={
                         dashboard.allReimbursementTypeList.find(
@@ -258,25 +265,25 @@ export function FormEditForm({
                       name="amount"
                       component={Input}
                       placeholder="Enter Amount"
-           
+
 
                       label={(() => {
-                        const  finalAmountLimit = calculateRemainingAmount(
+                        const finalAmountLimit = calculateRemainingAmount(
                           values?.reimbursement_typeId,
                           values?.pay_in_payroll_forId,
                           currentState?.reimbursement_config_policies_permission?.policies
                         );
                         return (
-                      
-                  
+
+
                           <div className="d-flex">
-                          <div className="d-flex">Total Amount </div>
-                          <div className="d-flex ml-3">
-                          ( Amount Limit: {finalAmountLimit?.toLocaleString()} )<span style={{ color: "red" }}>*</span>
+                            <div className="d-flex">Total Amount </div>
+                            <div className="d-flex ml-3">
+                              ( Amount Limit: {finalAmountLimit?.toLocaleString()} )<span style={{ color: "red" }}>*</span>
+                            </div>
                           </div>
-                        </div>
-                        
-                   
+
+
                         );
                       })()}
                       type="number"
@@ -284,7 +291,7 @@ export function FormEditForm({
                         e.target.value = amountLimit(e.target.value);
                       }}
                       onChange={(e) => {
-                        const  finalAmountLimit = calculateRemainingAmount(
+                        const finalAmountLimit = calculateRemainingAmount(
                           values?.reimbursement_typeId,
                           values?.pay_in_payroll_forId,
                           currentState?.reimbursement_config_policies_permission?.policies
@@ -303,8 +310,44 @@ export function FormEditForm({
                       }}
                     />
                   </div>
+                  {isEdit ? (<div className="col-12 col-md-6 mt-3">
+                    <label htmlFor="approved_status">
+                      Action
 
-            
+                    </label>
+
+                    <Field
+                      name="approved_status"
+                      as="select"
+                      className="form-control"
+                      disabled={isUserForRead}
+                      onChange={(e) => {
+                        setFieldValue(
+                          "approved_status",
+                          e.target.value
+                        );
+                      }}
+
+
+                    >
+                      <option value="">Select</option>
+                      {basisOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </Field>
+
+                    {errors.approved_status &&
+                      touched.approved_status && (
+                        <div className="text-danger">
+                          {errors.approved_status}
+                        </div>
+                      )}
+                  </div>
+                  ) : null}
+
+
 
                   <div className="col-12 col-md-6 mt-3">
                     <Field
@@ -354,7 +397,7 @@ export function FormEditForm({
                       {isFileReq && <span style={{ color: "red" }}>*</span>}
                     </label>
                     <input
-  
+
                       name="file"
                       type="file"
                       accept=".jpeg,.jpg,.png,.pdf,.doc,.docx"
