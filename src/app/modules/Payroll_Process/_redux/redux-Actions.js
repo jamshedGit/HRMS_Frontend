@@ -9,13 +9,13 @@ const { actions } = payroll_processSlice;
 export const fetchPayrollProcess = (params) => async (dispatch) => {
 
 
-  
+
 
   return requestFromServer.getAllPayrollProcess(params)
 
     .then((response) => {
 
-     
+
       dispatch(actions.payrollProcessFetched(response));
     })
     .catch((error) => {
@@ -46,7 +46,7 @@ export const fetchmoduledata = (id) => (dispatch) => {
     });
 };
 
-export const deletePayrollProcess= (id) => (dispatch) => {
+export const deletePayrollProcess = (id) => (dispatch) => {
 
   return requestFromServer
     .deletePayrollProcess({ Id: id })
@@ -77,12 +77,13 @@ export const createPayrollProcess = (payrollProcessForCreation, disbaleLoading, 
   return requestFromServer
     .createPayrollProcess(payrollProcessForCreation)
     .then((res) => {
-     
+
       const user = res.data?.data;
 
 
       // dispatch(actions.payrollProcessCreated(user));
       disbaleLoading();
+  
       toast.success(SERVER_MESSAGES.insertedSuccess, {
         position: "top-right",
         autoClose: 2000,
@@ -93,6 +94,7 @@ export const createPayrollProcess = (payrollProcessForCreation, disbaleLoading, 
         progress: undefined,
       });
       onHide();
+   
     })
     .catch((error) => {
       error.clientMessage = "Can't create user";
@@ -125,9 +127,10 @@ export const updatePayrollProcess = (user, disbaleLoading, onHide) => (dispatch)
       dispatch(actions.clearUserForEdit());
       dispatch(actions.payrollProcessUpdated({ updatedPayrollProcess }));
 
-    
+
       disbaleLoading();
       onHide();
+  
       toast.success(SERVER_MESSAGES.updatedSuccess, {
         position: "top-right",
         autoClose: 5000,
@@ -161,15 +164,15 @@ export const updatePayrollProcess = (user, disbaleLoading, onHide) => (dispatch)
 export const fetchPayrollGroupDetails = (params) => async (dispatch) => {
 
 
-  
+
 
   return requestFromServer.getAllPayrollGroupDetails(params)
 
-    .then((response) => {     
+    .then((response) => {
       dispatch(actions.payrollGroupDetailsFetched(response));
     })
     .catch((error) => {
-     
+
       error.clientMessage = "Can't find ";
       dispatch(actions.catchError({ error, callType: callTypes.list }));
     });
@@ -179,12 +182,13 @@ export const fetchPayrollGroupDetails = (params) => async (dispatch) => {
 export const checkPayroll_EmployeesByIds = (data) => async (dispatch) => {
 
 
-  
+
 
   return requestFromServer.checkPayroll_EmployeesByIds(data)
 
-    .then((response) => {     
+    .then((response) => {
       dispatch(actions.checkPayroll_EmployeesByIdsFetched(response));
+  
     })
     .catch((error) => {
       dispatch(actions.checkPayroll_EmployeesByIdsFetched(null));
@@ -194,3 +198,7 @@ export const checkPayroll_EmployeesByIds = (data) => async (dispatch) => {
 };
 
 
+export const clearReduxData = () => async (dispatch) => {
+  dispatch(actions.checkPayroll_EmployeesByIdsFetched(null));
+  dispatch(actions.payrollGroupDetailsFetched(null));
+}
