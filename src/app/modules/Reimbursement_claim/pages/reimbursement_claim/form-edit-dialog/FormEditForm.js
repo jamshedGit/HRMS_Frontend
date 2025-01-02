@@ -118,7 +118,7 @@ export function FormEditForm({
       policies?.find((item) => item.reimbursement_typeId === reimbursementTypeId)?.max_amount || 0;
 
     // Calculate the claimed amount for the selected reimbursement type and payroll
-    console.log("entities111", entities)
+    
     const claimedAmount = entities
       ?.filter(
         (entity) =>
