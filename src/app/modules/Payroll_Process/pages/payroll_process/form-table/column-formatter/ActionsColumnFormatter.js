@@ -53,7 +53,7 @@ export function ActionsColumnFormatter(
    
 
 
-{isAccessForDelete && (
+{/* {isAccessForDelete && (
         <OverlayTrigger
           overlay={
             <Tooltip id="products-edit-tooltip">
@@ -84,7 +84,7 @@ export function ActionsColumnFormatter(
             </a>
           )}
         </OverlayTrigger>
-      )}
+      )} */}
     </>
   );
 }

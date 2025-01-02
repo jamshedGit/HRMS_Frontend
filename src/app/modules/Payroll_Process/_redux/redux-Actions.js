@@ -73,7 +73,7 @@ export const deletePayrollProcess= (id) => (dispatch) => {
 export const createPayrollProcess = (payrollProcessForCreation, disbaleLoading, onHide) => (
   dispatch
 ) => {
-
+  dispatch(actions.checkPayroll_EmployeesByIdsFetched(null));
   return requestFromServer
     .createPayrollProcess(payrollProcessForCreation)
     .then((res) => {
@@ -81,7 +81,7 @@ export const createPayrollProcess = (payrollProcessForCreation, disbaleLoading, 
       const user = res.data?.data;
 
 
-      dispatch(actions.payrollProcessCreated(user));
+      // dispatch(actions.payrollProcessCreated(user));
       disbaleLoading();
       toast.success(SERVER_MESSAGES.insertedSuccess, {
         position: "top-right",
@@ -174,3 +174,23 @@ export const fetchPayrollGroupDetails = (params) => async (dispatch) => {
       dispatch(actions.catchError({ error, callType: callTypes.list }));
     });
 };
+
+
+export const checkPayroll_EmployeesByIds = (data) => async (dispatch) => {
+
+
+  
+
+  return requestFromServer.checkPayroll_EmployeesByIds(data)
+
+    .then((response) => {     
+      dispatch(actions.checkPayroll_EmployeesByIdsFetched(response));
+    })
+    .catch((error) => {
+      dispatch(actions.checkPayroll_EmployeesByIdsFetched(null));
+      error.clientMessage = "Can't find ";
+      dispatch(actions.catchError({ error, callType: callTypes.list }));
+    });
+};
+
+

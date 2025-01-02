@@ -121,17 +121,41 @@ export function FormTable() {
 
     
 
-    {
-      dataField: "completed",
-      text: "completed",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "10px",
-      },
-     formatter: (cell) => cell ? "Yes" : "No"
-    },
+    // {
+    //   dataField: "completed",
+    //   text: "completed",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "10px",
+    //   },
+    //  formatter: (cell) => cell ? "Yes" : "No"
+    // },
+
+
+       {
+              dataField: "completed",
+              text: "status",
+              sort: false,
+              sortCaret: sortCaret,
+              headerSortingClasses,
+              style: {
+                minWidth: "160px",
+              },
+              formatter: (cell) => {
+                switch(cell) {
+                  case 0:
+                    return "Pending";
+                  case 1:
+                    return "Completed";
+                  case 2:
+                    return "Revert Back";
+                  default:
+                    return "Unknown"; // Default case if status is outside 0, 1, 2.
+                }
+            },
+          },
 
     {
       dataField: "createdAt",
@@ -149,7 +173,7 @@ export function FormTable() {
     },
 
     {
-      dataField: "updatedAt",
+      dataField: "completedAt",
       text: "completed at",
       sort: false,
       sortCaret: sortCaret,
@@ -164,30 +188,30 @@ export function FormTable() {
     },
 
  
-       {
-      dataField: "action",
-      text: "Actions",
-      isDummyField: true,
-      formatter: ActionsColumnFormatter,
-      formatExtraData: {
-        setIds:formUIProps.setIds,
-        setIsFileReq:formUIProps.setIsFileReq,
-        openEditFormDialog: formUIProps.openEditFormDialog,
-        openDeleteFormDialog: formUIProps.openDeleteFormDialog,
-        // openActiveFormDialog: formUIProps.openActiveFormDialog,
-        // openReadFormDialog: formUIProps.openReadFormDialog,
-        isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,
-        isAccessForDelete: isAccessForDelete
-          ? isAccessForDelete.isAccess
-          : false,
-      },
-      classes: "text-right pr-0",
-      headerClasses: "text-right pr-3",
-      style: {
-        minWidth: "10px",
+    //    {
+    //   dataField: "action",
+    //   text: "Actions",
+    //   isDummyField: true,
+    //   formatter: ActionsColumnFormatter,
+    //   formatExtraData: {
+    //     setIds:formUIProps.setIds,
+    //     setIsFileReq:formUIProps.setIsFileReq,
+    //     openEditFormDialog: formUIProps.openEditFormDialog,
+    //     openDeleteFormDialog: formUIProps.openDeleteFormDialog,
+    //     // openActiveFormDialog: formUIProps.openActiveFormDialog,
+    //     // openReadFormDialog: formUIProps.openReadFormDialog,
+    //     isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,
+    //     isAccessForDelete: isAccessForDelete
+    //       ? isAccessForDelete.isAccess
+    //       : false,
+    //   },
+    //   classes: "text-right pr-0",
+    //   headerClasses: "text-right pr-3",
+    //   style: {
+    //     minWidth: "10px",
        
-      },
-    },
+    //   },
+    // },
   ];
  
   //Table pagination properties
