@@ -3709,8 +3709,8 @@ export function DesignationEditForm({
                   type="submit"
                   onClick={() => {
                     handleSubmit()
-                    if (scrollRef.current) {
-                      scrollRef.current.scrollIntoView({
+                    if (scrollRef?.current) {
+                      scrollRef?.current?.scrollIntoView({
                         behavior : "smooth"
                       });
                     }
