@@ -87,24 +87,15 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
   //Get Labels of Dropdown to Display in PDF
   const getLabels = (values) => {
     return {
-      subsidiaryLabel: allSubsidiaryMap?.get(values.subsidiaryId || '')?.label,
-      employeeLabel: allEmployeesMap?.get(values.employeeId || '')?.label,
-      departmentLabel: allDeptMap?.get(values.departmentId || '')?.label,
-      reportToLabel: allEmployeesMap?.get(values.reportTo || '')?.label,
-      gradeLabel: allGradeMap?.get(values.gradeId || '')?.label,
-      designationLabel: allDesignationsMap?.get(values.designationId || '')?.label,
-      locationLabel: allLocationMap?.get(values.locationId || '')?.label,
-      subsidiaryLabel: allSubsidiaryMap?.get(values.subsidiaryId || '')?.label,
-      fromLabel: values?.from ? formatDates(values.from) : '',
-      toLabel: values?.to ? formatDates(values.to) : '',
-      attendanceTypeLabel: values?.attendanceType ? ATTENDANCE_TYPE.find(el => el.value == values.attendanceType)?.label : ''
+      monthLabel: allPayrollMonthMap?.get(values.monthId || '')?.label,
     }
   }
 
   //Trugger request to download PDF of data according to filters
   const getPdf = (values) => {
-    const newQueryParams = prepareFilter(formUIProps.queryParams, values)
-    dispatch(actions.generatePayslip(newQueryParams.filter, document));
+    const newQueryParams = prepareFilter(formUIProps.queryParams, values);
+    const labels = getLabels(values);
+    dispatch(actions.generatePayslip(newQueryParams.filter, document, labels));
   }
 
   return (
