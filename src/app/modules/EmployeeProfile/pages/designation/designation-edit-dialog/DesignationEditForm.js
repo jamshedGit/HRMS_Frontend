@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo ,useRef} from "react";
 import { Modal } from "react-bootstrap";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -363,6 +363,7 @@ export function DesignationEditForm({
 
   const [imagePolicy, setImagePolicy] = useState(false)
   const [isImageReq, setIsImageReq] = useState(false)
+  const scrollRef=useRef(null);
   //off for temp
   // useEffect(() => {
   //   if (user.Id) {
@@ -1583,10 +1584,10 @@ export function DesignationEditForm({
 
 
 
-                    <div className="from-group row">
+                    <div   className="from-group row" >
 
                     </div>
-                    <div className="from-group row">
+                    <div ref={scrollRef} className="from-group row">
                       <div className="col-12 col-md-4 mt-3">
                         <SearchSelect
                           name="subsidiaryId"
@@ -3705,9 +3706,16 @@ export function DesignationEditForm({
               <> </>
               {!isUserForRead && (
                 <button
-
                   type="submit"
-                  onClick={() => handleSubmit()}
+                  onClick={() => {
+                    handleSubmit()
+                    if (scrollRef?.current) {
+                      scrollRef.current.scrollIntoView({
+                        behavior : "smooth"
+                      });
+                    }
+
+                  }}
                   className="btn btn-primary btn-elevate"
                 >
                   Save
