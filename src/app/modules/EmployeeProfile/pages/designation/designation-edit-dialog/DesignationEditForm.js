@@ -3706,7 +3706,6 @@ export function DesignationEditForm({
               <> </>
               {!isUserForRead && (
                 <button
-
                   type="submit"
                   onClick={() => {
                     handleSubmit()
