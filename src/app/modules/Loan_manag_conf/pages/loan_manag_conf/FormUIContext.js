@@ -49,8 +49,8 @@ export function FormUIProvider({ FormUIEvents, children }) {
         accountId:"",
         // human_resource_role: "",
         emp_loan_account: "",
-        installment_deduction_percentage: "",
-        installment_deduction_basis_type:"",
+        installment_deduction_percentage: 0,
+        installment_deduction_basis_type:null,
         details:""
         // loan_type: user.loan_type,
         // max_loan_amount: user.max_loan_amount,

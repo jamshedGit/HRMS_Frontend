@@ -25,14 +25,16 @@ const loanManagementSchema = Yup.object().shape({
   //   .max(100, "Must be at most 100")
   //   .required("Installment Deduction Percentage is required"),
 
-  installment_deduction_percentage: Yup.number().min(0, VALIDATION_MESSAGES.minZeroValue).max(100, VALIDATION_MESSAGES.maxHundredValue).test(
-    'max-decimals',
-    VALIDATION_MESSAGES.minZeroValue,
-    (value) => /^\d{1,4}(\.\d{1,2})?$/.test(value?.toString())
-  ).required(VALIDATION_MESSAGES.required),
+  // installment_deduction_percentage: Yup.number().min(0, VALIDATION_MESSAGES.minZeroValue).max(100, VALIDATION_MESSAGES.maxHundredValue).test(
+  //   'max-decimals',
+  //   VALIDATION_MESSAGES.minZeroValue,
+  //   (value) => /^\d{1,4}(\.\d{1,2})?$/.test(value?.toString())
+  // ).required(VALIDATION_MESSAGES.required),
 
 
-  installment_deduction_basis_type: Yup.number().required(VALIDATION_MESSAGES.required),
+  // installment_deduction_basis_type: Yup.number()
+  // .nullable(),
+  // .required(VALIDATION_MESSAGES.required),
   details: Yup.array().of(
     Yup.object().shape({
       loan_typeId: Yup.number()
@@ -45,6 +47,8 @@ const loanManagementSchema = Yup.object().shape({
         .required(VALIDATION_MESSAGES.required),
       basis: Yup.number().required(VALIDATION_MESSAGES.required),
 
+      max_no_of_installment_for_loan: Yup.number().required(VALIDATION_MESSAGES.required),
+      installment_start_date_policy: Yup.number().required(VALIDATION_MESSAGES.required),
       salary_count: Yup.number()
         .min(1, VALIDATION_MESSAGES.minOneValue)
         .max(99, "Must be at most 99")
@@ -89,6 +93,7 @@ export function FormEditForm({
 
   // Define options for basis type
   const basisOptions = [
+    // { value: null, label: "N/A" },
     { value: 0, label: "Gross" },
     { value: 1, label: "Basic" },
   ];
@@ -263,39 +268,13 @@ export function FormEditForm({
                   </div>
 
                   {/* Installment Deduction Percentage Field */}
-                  <div className="col-12 col-md-6 mt-3">
-                    <Field
-                      name="installment_deduction_percentage"
-                      component={Input}
-                      placeholder="Enter installment deduction percentage"
-                      label={
-                        <span>
-                          Installment Deduction (%)
-                          <span style={{ color: "red" }}>*</span>
-                        </span>
-                      }
-                      type="number"
-                      disabled={isUserForRead}
-                      onChange={(e) => {
-                        if (Number(e.target.value) <= 100) {
-                          // e.target.value = e.target.value.slice(0,5);
-                          if (/^\d{0,3}(\.\d{1,2})?$/.test(e.target.value?.toString())) {
-                            setFieldValue("installment_deduction_percentage", e.target.value)
 
-                          }
-                        }
-                      }}
-                    />
-                    {/* {errors.installment_deduction_percentage && touched.installment_deduction_percentage && (
-                      <div className="text-danger">{errors.installment_deduction_percentage}</div>
-                    )} */}
-                  </div>
 
                   {/* Installment Deduction Basis Type Field */}
                   <div className="col-12 col-md-6 mt-3">
                     <label htmlFor="installment_deduction_basis_type">
                       Installment Deduction Basis Type
-                      <span style={{ color: "red" }}>*</span>
+                      {/* <span style={{ color: "red" }}>*</span> */}
                     </label>
                     {/* <Field
                       name="installment_deduction_basis_type"
@@ -324,16 +303,27 @@ export function FormEditForm({
                       className="form-control"
                       disabled={isUserForRead}
                       onChange={(e) => {
-                        setFieldValue(
-                          "installment_deduction_basis_type",
-                          e.target.value
-                        );
+                 
+                        setFieldValue("installment_deduction_basis_type", e.target.value === 'N/A' ? null : e.target.value);
+                    
+                        if (e.target.value =='N/A') {
+                          setFieldValue("installment_deduction_percentage", 0)
+                        }
                       }}
 
 
                     >
-                      <option value="">Select</option>
-                      {basisOptions.map((option) => (
+                      {/* <option value="">Select</option> */}
+                      {/* {basisOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))} */}
+
+                      {[
+                        { value: null, label: 'N/A' }, // This renders the "N/A" option
+                        ...basisOptions, // This renders the rest of the options
+                      ].map((option) => (
                         <option key={option.value} value={option.value}>
                           {option.label}
                         </option>
@@ -346,6 +336,33 @@ export function FormEditForm({
                           {errors.installment_deduction_basis_type}
                         </div>
                       )}
+                  </div>
+
+
+                  <div className="col-12 col-md-6 mt-3">
+                    <Field
+                      name="installment_deduction_percentage"
+                      component={Input}
+                      placeholder="Enter installment deduction percentage"
+                      label={
+                        <span>
+                          Installment Deduction (%)
+                          {/* <span style={{ color: "red" }}>*</span> */}
+                        </span>
+                      }
+                      type="number"
+                      disabled={isUserForRead || values.installment_deduction_basis_type=="N/A" || !values.installment_deduction_basis_type }
+                      onChange={(e) => {
+                        if (Number(e.target.value) <= 100) {
+                          // e.target.value = e.target.value.slice(0,5);
+                          if (/^\d{0,3}(\.\d{1,2})?$/.test(e.target.value?.toString())) {
+                            setFieldValue("installment_deduction_percentage", e.target.value)
+
+                          }
+                        }
+                      }}
+                    />
+
                   </div>
                 </div>
               </fieldset>
@@ -374,6 +391,8 @@ export function FormEditForm({
                           <th>Max Loan Amount</th>
                           <th>Basis</th>
                           <th>Salary Count</th>
+                          <th>Max. No. of Installment for Loant</th>
+                          <th>Installment Start date Policy</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -419,7 +438,7 @@ export function FormEditForm({
                                       </option>
                                     );
                                   })} */}
-                                   <option value="">Select--</option>
+                                  <option value="">Select--</option>
 
 
                                   {loan_type
@@ -504,6 +523,48 @@ export function FormEditForm({
                                     </div>
                                   )}
                               </td>
+
+
+                              <td>
+                                <Field
+                                  name={`details[${index}].max_no_of_installment_for_loan`}
+                                  type="number"
+                                  className="form-control"
+                                  disabled={isUserForRead}
+                                  onInput={(e) => {
+                                    if (e.target.value.length > 2) {
+                                      e.target.value = e.target.value.slice(0, 2); // Restrict to 2 digits
+                                    }
+                                  }}
+                                />
+                                {errors.details?.[index]?.max_no_of_installment_for_loan &&
+                                  touched.details?.[index]?.max_no_of_installment_for_loan && (
+                                    <div className="text-danger">
+                                      {errors.details[index].max_no_of_installment_for_loan}
+                                    </div>
+                                  )}
+                              </td>
+
+
+                              <td>
+                                <Field
+                                  name={`details[${index}].installment_start_date_policy`}
+                                  type="number"
+                                  className="form-control"
+                                  disabled={isUserForRead}
+                                  onInput={(e) => {
+                                    if (e.target.value.length > 2) {
+                                      e.target.value = e.target.value.slice(0, 2); // Restrict to 2 digits
+                                    }
+                                  }}
+                                />
+                                {errors.details?.[index]?.installment_start_date_policy &&
+                                  touched.details?.[index]?.installment_start_date_policy && (
+                                    <div className="text-danger">
+                                      {errors.details[index].installment_start_date_policy}
+                                    </div>
+                                  )}
+                              </td>
                             </tr>
                           ))}
                       </tbody>
@@ -518,6 +579,9 @@ export function FormEditForm({
                             max_loan_amount: "",
                             basis: "",
                             salary_count: "",
+                            max_no_of_installment_for_loan: "",
+                            installment_start_date_policy: "",
+
                           })
                         }
                         className="btn btn-primary btn-sm"

@@ -1688,8 +1688,8 @@ export function DesignationEditForm({
                             name="codePrefix"
                             component={Input}
                             maxLength="10"
-                            placeholder="Code Prefix"
-                            label={<span>Code Prefix<span style={{ color: 'red' }}>*</span></span>}
+                            placeholder="Employee code prefix"
+                            label={<span>Employee Code Prefix<span style={{ color: 'red' }}>*</span></span>}
                             autoComplete="off"
                             onChange={(e) => {
                               setFieldValue("codePrefix", e.target.value || null);
