@@ -47,6 +47,9 @@ const profileValidation = Yup.object().shape(
         then: Yup.string().required(VALIDATION_MESSAGES.required), // Apply 'required' validation
         otherwise: Yup.string(), // No validation if 'requireDeligation' is false
       }),
+      codeAuto: Yup.string()
+      .matches(/^\d{6}$/, 'Must be exactly 6 digits')
+      .required('Required*'),
     firstName: Yup.string()
       .required("Required*"),
     lastName: Yup.string()
@@ -56,7 +59,7 @@ const profileValidation = Yup.object().shape(
     employeeCode: Yup.string()
       .nullable()
       .required("Required*")
-      .max(10, "Employee code must be at most 10 characters long"),
+      .max(20, "Employee code must be at most 20 characters long"),
     title: Yup.string()
       .required("Required*"),
     subsidiaryId: Yup.string()
@@ -201,7 +204,7 @@ const profileValidation = Yup.object().shape(
     dateOfBirth: Yup.date()
       .nullable()
       .typeError('Invalid date format')
-      .required('*Required'),
+      .required('Required*'),
     // .max(currentDate, 'Date of birth cannot be in the future')
     // .max(minDate, 'You must be at least 18 years old')
     // .min(minYearDate, 'Date of birth cannot be earlier than January 1, 1900'),
@@ -209,11 +212,11 @@ const profileValidation = Yup.object().shape(
 
     defaultShiftId: Yup.string()
       .nullable()
-      .required('Required'),
+      .required('Required*'),
 
     departmentId: Yup.string()
       .nullable()
-      .required('Required'),
+      .required('Required*'),
 
     // reportTo: Yup.string().required('Required'),
 
@@ -223,6 +226,10 @@ const profileValidation = Yup.object().shape(
       then: Yup.string().required('Profile image is required'),
       otherwise: Yup.string(),
     }),
+    approvedForPayroll: Yup.boolean()
+    .nullable()
+    .oneOf([true, false], 'Required*')  // Ensures the value is either true or false
+    .required('Required*'),
 
   },
 
@@ -360,7 +367,8 @@ export function DesignationEditForm({
   const [hideContractExpDate, setHideContractExpDate] = useState(true);
   const [disableConfDueDate, setDisableConfDueDate] = useState(false);
   const [defEmployeeCode, setEmployeeCode] = useState('');
-
+  const [defCodeAuto, setCodeAuto] = useState('');
+  const [defCodePrefixo, setCodePrefix] = useState('');
   const [imagePolicy, setImagePolicy] = useState(false)
   const [isImageReq, setIsImageReq] = useState(false)
   const scrollRef=useRef(null);
@@ -1047,16 +1055,21 @@ export function DesignationEditForm({
       // Set max age limit, if zero or not present, set no limit (e.g., null)
       setMaxAgeLimin(maxAge > 0 ? maxAge : null);
       // setDefaultProbationPolicyMonth(new Date(newDate));
+    
 
       if (!id && response?.data?.data[0].isEmployeeCodeGenerationAuto) {
 
 
 
+    
+        dispatch(getLatestTableId("t_employee_profile", "	codeAuto", " 1 = 1 ", (setEmployee) => {
 
-        dispatch(getLatestTableId("t_employee_profile", "employeeCode", " 1 = 1 ", (setEmployee) => {
-
-          setFieldValue("employeeCode", setEmployee)
-          setEmployeeCode(setEmployee)
+          setFieldValue("codeAuto", setEmployee)
+          // setEmployeeCode(setEmployee)
+          setCodeAuto(setEmployee)
+          setFieldValue("employeeCode", response?.data?.data[0]?.codePrefix + "-" +setEmployee )
+          setEmployeeCode(response?.data?.data[0]?.codePrefix + "-" +setEmployee);
+          
         }));
 
       };
@@ -1292,9 +1305,13 @@ export function DesignationEditForm({
   const seEmpCodeEditMode = async () => {
 
 
-
+  
 
     setEmployeeCode(user?.employeeCode)
+    // if(profilePolicy?.data?.data[0]?.codePrefix){
+    //   setEmployeeCode(profilePolicy?.data?.data[0]?.codePrefix + "-" + defCodeAuto);
+      
+    // }
 
   };
 
@@ -1602,7 +1619,7 @@ export function DesignationEditForm({
                             if (!id) {
                               setEmployeeCode(" ")
                               setFieldValue("employeeCode", "")
-
+                              setFieldValue("codeAuto", "");
 
 
                               setFieldValue("dateOfBirth", null);
@@ -1658,6 +1675,52 @@ export function DesignationEditForm({
 
                             }}
                             value={defEmployeeCode || null}
+
+                            disabled={true}
+                          />
+                        </div>
+                      }
+                         {
+                        <div className="col-12 col-md-4 mt-3">
+                          <Field
+                            name="codePrefix"
+                            component={Input}
+                            maxLength="10"
+                            placeholder="Code Prefix"
+                            label={<span>Code Prefix<span style={{ color: 'red' }}>*</span></span>}
+                            autoComplete="off"
+                            onChange={(e) => {
+                              setFieldValue("codePrefix", e.target.value || null);
+                              setEmployeeCode(e.target.value || defEmployeeCode);
+
+
+                            }}
+                            value={defEmployeeCode || null}
+
+                            disabled={true}
+                          />
+                        </div>
+                      }
+
+{
+                        <div className="col-12 col-md-4 mt-3">
+                          <Field
+                            name="codeAuto"
+                            component={Input}
+                            maxLength="6"
+                            placeholder="Eg. 000001"
+                            label={<span> Code Auto<span style={{ color: 'red' }}>*</span></span>}
+                            autoComplete="off"
+                            onChange={(e) => {
+                              setFieldValue("codeAuto", e.target.value || null);
+                              // setEmployeeCode(e.target.value || defEmployeeCode);
+                              // setFieldValue("employeeCode", response?.data?.data[0]?.codePrefix + "-" +setEmployee )
+                              // setEmployeeCode(response?.data?.data[0]?.codePrefix + "-" +setEmployee);
+                              setEmployeeCode(profilePolicy?.data?.data[0]?.codePrefix + "-" + e.target.value);
+                              setFieldValue("employeeCode", profilePolicy?.data?.data[0]?.codePrefix + "-" +e.target.value )
+
+                            }}
+                            // value={defEmployeeCode || null}
 
                             disabled={isUserForRead || id || profilePolicy?.data?.data[0]?.isEmployeeCodeGenerationAuto}
                           />
@@ -2195,7 +2258,7 @@ export function DesignationEditForm({
 
 
                       {!hidehideRetirementAgeDate ? (<div className="col-12 col-md-4 mt-3">
-                        <label>Date Of Retirement</label>
+                        <label>Date Of Retirement<span style={{ color: 'red' }}>*</span></label>
                         <DatePicker
                           className="form-control"
                           placeholder=" Date Of Retirement"
@@ -2219,7 +2282,19 @@ export function DesignationEditForm({
                     </div>
 
 
-
+                    <div className="col-12 col-md-4 mt-5">
+                            <input
+                              name="approvedForPayroll"
+                              type="checkbox"
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              value={values.approvedForPayroll}
+                              checked={values.approvedForPayroll}
+                              label="Approved for Payroll"
+                            />
+                            <label>Approved for Payroll<span style={{ color: 'red' }}>*</span></label>
+                            <ErrorMessage className="form-feedBack" name="approvedForPayroll" component="div" />
+                          </div>
 
 
 
@@ -2737,8 +2812,6 @@ export function DesignationEditForm({
 
                         </div>
 
-
-
                         <div className="from-group row">
                           <div className="col-12 col-md-4 mt-3">
                             <Field
@@ -2750,6 +2823,11 @@ export function DesignationEditForm({
                               autoComplete="off"
                             />
                           </div>
+
+                          </div>
+
+                        <div className="from-group row">
+                        
 
                           <div className="col-12 col-md-4 mt-5">
                             <input
@@ -2775,6 +2853,8 @@ export function DesignationEditForm({
                             />
                             <label><span>Support Representative</span></label>
                           </div>
+
+                          
 
                         </div>
 

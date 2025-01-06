@@ -47,7 +47,8 @@ export function DesignationUIProvider({ DesignationUIEvents, children }) {
     documentFilesSupport	: "",
     empPictureIsMandatory: "",
     probationPolicyInMonth:"",
-    contractualPolicyInMonth: ""
+    contractualPolicyInMonth: "",
+    codePrefix:""
 
 
     
