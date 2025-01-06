@@ -48,6 +48,7 @@ const profileValidation = Yup.object().shape(
         otherwise: Yup.string(), // No validation if 'requireDeligation' is false
       }),
       codeAuto: Yup.string()
+      .nullable()
       .matches(/^\d{6}$/, 'Must be exactly 6 digits')
       .required('Required*'),
     firstName: Yup.string()
@@ -1069,6 +1070,7 @@ export function DesignationEditForm({
           setCodeAuto(setEmployee)
           setFieldValue("employeeCode", response?.data?.data[0]?.codePrefix + "-" +setEmployee )
           setEmployeeCode(response?.data?.data[0]?.codePrefix + "-" +setEmployee);
+          setFieldValue("codePrefix", response?.data?.data[0]?.codePrefix)
           
         }));
 
@@ -1620,7 +1622,7 @@ export function DesignationEditForm({
                               setEmployeeCode(" ")
                               setFieldValue("employeeCode", "")
                               setFieldValue("codeAuto", "");
-
+                              setFieldValue("codePrefix", "");
 
                               setFieldValue("dateOfBirth", null);
                               setDOBDate(null);
@@ -1659,7 +1661,7 @@ export function DesignationEditForm({
 
                       </div>
 
-                      {
+                      {/* {
                         <div className="col-12 col-md-4 mt-3">
                           <Field
                             name="employeeCode"
@@ -1679,7 +1681,7 @@ export function DesignationEditForm({
                             disabled={true}
                           />
                         </div>
-                      }
+                      } */}
                          {
                         <div className="col-12 col-md-4 mt-3">
                           <Field
@@ -1691,11 +1693,11 @@ export function DesignationEditForm({
                             autoComplete="off"
                             onChange={(e) => {
                               setFieldValue("codePrefix", e.target.value || null);
-                              setEmployeeCode(e.target.value || defEmployeeCode);
+                              // setEmployeeCode(e.target.value || defEmployeeCode);
 
 
                             }}
-                            value={defEmployeeCode || null}
+                            // value={defEmployeeCode || null}
 
                             disabled={true}
                           />
@@ -1709,7 +1711,7 @@ export function DesignationEditForm({
                             component={Input}
                             maxLength="6"
                             placeholder="Eg. 000001"
-                            label={<span> Code Auto<span style={{ color: 'red' }}>*</span></span>}
+                            label={<span>Employee Code <span style={{ color: 'red' }}>*</span></span>}
                             autoComplete="off"
                             onChange={(e) => {
                               setFieldValue("codeAuto", e.target.value || null);
@@ -1718,6 +1720,7 @@ export function DesignationEditForm({
                               // setEmployeeCode(response?.data?.data[0]?.codePrefix + "-" +setEmployee);
                               setEmployeeCode(profilePolicy?.data?.data[0]?.codePrefix + "-" + e.target.value);
                               setFieldValue("employeeCode", profilePolicy?.data?.data[0]?.codePrefix + "-" +e.target.value )
+                              setFieldValue("codePrefix", profilePolicy?.data?.data[0]?.codePrefix);
 
                             }}
                             // value={defEmployeeCode || null}
@@ -2258,7 +2261,7 @@ export function DesignationEditForm({
 
 
                       {!hidehideRetirementAgeDate ? (<div className="col-12 col-md-4 mt-3">
-                        <label>Date Of Retirement<span style={{ color: 'red' }}>*</span></label>
+                        <label>Date Of Retirement</label>
                         <DatePicker
                           className="form-control"
                           placeholder=" Date Of Retirement"
