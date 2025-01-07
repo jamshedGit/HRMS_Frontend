@@ -63,6 +63,7 @@ export function FormEditForm({
   const dispatch = useDispatch();
   const { dashboard } = useSelector((state) => state);
   const inputFile = useRef(null);
+  const [isActiveMonth,setIsActiveMonth] = useState(true)
   // const [isFileReq,setIsFileReq]=useState(false)
   // Fetch necessary data if not already present
   useEffect(() => {
@@ -111,9 +112,15 @@ export function FormEditForm({
   }, [employeeId]);
 
 
-  const calculateRemainingAmount = (reimbursementTypeId, payrollForId, policies) => {
+  const calculateRemainingAmount = (reimbursementTypeId, payrollForId, policies,values) => {
     // Find the max amount allowed for the reimbursement type
     // let employee = currentState?.loan_config_details_permission?.employee;
+    setIsActiveMonth(
+      dashboard?.allPayrollMonthYearList.some(
+        (option) => option.isActive === values.pay_in_payroll_forId
+      ) || false
+    );
+    console.log("")
     const maxAmount =
       policies?.find((item) => item.reimbursement_typeId === reimbursementTypeId)?.max_amount || 0;
 
@@ -129,7 +136,11 @@ export function FormEditForm({
       ?.reduce((sum, entity) => sum + (entity.amount || 0), 0);
 
     // Return the remaining amount
-    const finalMaxAmount = (maxAmount || 0) - (claimedAmount || 0);
+
+    let finalMaxAmount = (maxAmount || 0) - (claimedAmount || 0);
+    if(isEdit & values.approved_status==1){
+      finalMaxAmount += values.amount
+    }
     return finalMaxAmount;
   };
 
@@ -138,6 +149,13 @@ export function FormEditForm({
     { value: 1, label: "Approved" },
     { value: 2, label: "Rejected" },
   ];
+
+  const checkActiveMonth=(values)=>{
+   
+  }
+
+
+
 
   return (
     <Formik
@@ -152,7 +170,7 @@ export function FormEditForm({
         const finalAmountLimit = calculateRemainingAmount(
           values?.reimbursement_typeId,
           values?.pay_in_payroll_forId,
-          currentState?.reimbursement_config_policies_permission?.policies
+          currentState?.reimbursement_config_policies_permission?.policies,values
         );
         const clearForm = () => {
           resetForm();
@@ -228,6 +246,8 @@ export function FormEditForm({
                       type="date"
                       maxDate={new Date()}
                       minDate={data.dateOfJoining ? new Date(data.dateOfJoining) : null}
+                      disabled={!isActiveMonth}
+                    
                     />
                   </div>
 
@@ -271,7 +291,7 @@ export function FormEditForm({
                         const finalAmountLimit = calculateRemainingAmount(
                           values?.reimbursement_typeId,
                           values?.pay_in_payroll_forId,
-                          currentState?.reimbursement_config_policies_permission?.policies
+                          currentState?.reimbursement_config_policies_permission?.policies,values
                         );
                         return (
 
@@ -294,7 +314,7 @@ export function FormEditForm({
                         const finalAmountLimit = calculateRemainingAmount(
                           values?.reimbursement_typeId,
                           values?.pay_in_payroll_forId,
-                          currentState?.reimbursement_config_policies_permission?.policies
+                          currentState?.reimbursement_config_policies_permission?.policies,values
                         );
 
                         const value = Number(e.target.value);
@@ -320,7 +340,7 @@ export function FormEditForm({
                       name="approved_status"
                       as="select"
                       className="form-control"
-                      disabled={isUserForRead}
+                      disabled={isUserForRead || values.approved_status==1}
                       onChange={(e) => {
                         setFieldValue(
                           "approved_status",

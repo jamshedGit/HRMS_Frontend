@@ -235,7 +235,7 @@ export function FormEditForm({
   //     return date;
   //   }
 
-  const addMonthsToDate = (dateStr, months, payrollMonth) => {
+  const addMonthsToDate = (dateStr, months) => {
    
     const date = new Date(dateStr);
     date.setMonth(date.getMonth() + months);
@@ -394,7 +394,7 @@ export function FormEditForm({
                           e || null
                         );
 
-                        addMonthsToDate(e, startDatePolicy, payrollMonth)
+                        addMonthsToDate(payrollMonth, startDatePolicy)
 
                       }}
                       minDate={dateOfJoining}
@@ -415,12 +415,12 @@ export function FormEditForm({
                       placeholder="Select Date"
                       type="date"
                       // maxDate={new Date()}
-                      // minDate={payrollMonth ? payrollMonth : undefined}
+                      minDate={payrollMonth ? payrollMonth : undefined}
                       // minDate={values.applied_date ? values.applied_date : undefined}
-                      minDate={new Date(values.applied_date) < new Date() ? new Date() : values.applied_date}
+                      // minDate={new Date(values.applied_date) < new Date() ? new Date() : values.applied_date}
                       maxDate={startDateLimit}
                       // disabled={!payrollMonth || userForEdit?.details[0]?.is_deducted || !values.loan_typeId || !values.applied_date}
-                      disabled={ userForEdit?.details[0]?.is_deducted || !values.loan_typeId || !values.applied_date}
+                      disabled={ userForEdit?.details[0]?.is_deducted || !values.loan_typeId || !values.applied_date || !payrollMonth}
                     />
                   </div>
 
