@@ -24,7 +24,7 @@ import {
   fetchAllPayrollMonthYearList,
 } from "../../../../../../_metronic/redux/dashboardActions";
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
-import { updateApprovedStatus,fetchEmployeeLoanRequest } from "../../../_redux/redux-Actions";
+import { updateApprovedStatus, fetchEmployeeLoanRequest } from "../../../_redux/redux-Actions";
 
 const EmployeeLoanRequestSchema = Yup.object().shape({
   loan_typeId: Yup.number().required(VALIDATION_MESSAGES.required),
@@ -59,7 +59,7 @@ export function FormEditForm({
   isEdit,
   isFileReq,
   setIsFileReq,
-  disbaleLoading,formUIProps
+  disbaleLoading, formUIProps
 }) {
   const dispatch = useDispatch();
   const { dashboard } = useSelector((state) => state);
@@ -83,6 +83,9 @@ export function FormEditForm({
   const [dateOfJoining, setDateOfJoining] = useState();
   const [payrollMonth, setPayrollMonth] = useState();
   const [isClear, setIsClear] = useState(false);
+  const [monthlyInstallmentsLimit, setMonthlyInstallmentsLimit] = useState();
+  const [startDatePolicy, setStartDatePolicy] = useState();
+  const [startDateLimit, setStartDateLimit] = useState();
   const { currentState, userAccess } = useSelector((state) => {
     return {
       currentState: state.employee_loan_request,
@@ -112,21 +115,50 @@ export function FormEditForm({
         loandetails?.basis == 0
           ? salary?.gross * loandetails?.salary_count
           : salary?.basic * loandetails?.salary_count;
+      let monthlyInstallment;
+      // let monthlySalarySuggest =
+      //   loandetails?.installment_deduction_basis_type == 0
+      //     ? (salary?.gross *
+      //       parseFloat(
+      //         currentState?.loan_config_details_permission?.loanDetails
+      //           ?.installment_deduction_percentage
+      //       )) /
+      //     100
+      //     : (salary?.basic *
+      //       parseFloat(
+      //         currentState?.loan_config_details_permission?.loanDetails
+      //           ?.installment_deduction_percentage
+      //       )) /
+      //     100;
+      let monthlySalarySuggest;
 
-      let monthlySalarySuggest =
-        loandetails?.installment_deduction_basis_type == 0
-          ? (salary?.gross *
-            parseFloat(
-              currentState?.loan_config_details_permission?.loanDetails
-                ?.installment_deduction_percentage
-            )) /
-          100
-          : (salary?.basic *
-            parseFloat(
-              currentState?.loan_config_details_permission?.loanDetails
-                ?.installment_deduction_percentage
-            )) /
-          100;
+      if (currentState?.loan_config_details_permission?.loanDetails?.installment_deduction_basis_type == 1) {
+        monthlySalarySuggest = (salary?.gross *
+          parseFloat(
+            currentState?.loan_config_details_permission?.loanDetails
+              ?.installment_deduction_percentage
+          )) / 100
+
+      } else if (currentState?.loan_config_details_permission?.loanDetails?.installment_deduction_basis_type === 0) {
+        monthlySalarySuggest = (salary?.basic *
+          parseFloat(
+            currentState?.loan_config_details_permission?.loanDetails
+              ?.installment_deduction_percentage
+          )) / 100;
+      } else {
+        monthlySalarySuggest = 0
+      }
+
+      if (loandetails?.max_no_of_installment_for_loan) {
+        monthlyInstallment = loandetails?.max_no_of_installment_for_loan
+
+      }
+
+      setMonthlyInstallmentsLimit(monthlyInstallment)
+      if (loandetails?.installment_start_date_policy) {
+        setStartDatePolicy(loandetails?.installment_start_date_policy)
+
+      }
 
       //  if(!isClear){
       setMaxAmountLimit(Math.min(loandetails?.max_loan_amount, salaryAmount));
@@ -178,20 +210,64 @@ export function FormEditForm({
     { value: 2, label: "Pending" },
   ];
 
-  const UpdateApprovedStatus =async (Id, approved_status) => {
-  
+  const UpdateApprovedStatus = async (Id, approved_status) => {
+
     if (Id && approved_status) {
       let data = {
         Id, approved_status,
 
       }
-     await dispatch(updateApprovedStatus(data, disbaleLoading, onHide));
+      await dispatch(updateApprovedStatus(data, disbaleLoading, onHide));
       await dispatch(fetchEmployeeLoanRequest(formUIProps));
       setIds("");
-     
+
     }
 
   }
+  //  const addMonthsToDate=(dateStr, months,payrollMonth) =>{
+
+  //     const date = new Date(dateStr);
+  //     date.setMonth(date.getMonth() + months);
+
+  //     setStartDateLimit(date)
+  //     return date;
+  //   }
+
+  const addMonthsToDate = (dateStr, months, payrollMonth) => {
+   
+    const date = new Date(dateStr);
+    date.setMonth(date.getMonth() + months);
+  
+    
+    date.setHours(0, 0, 0, 0);
+  
+
+    const payrollDate = new Date(payrollMonth);
+    payrollDate.setHours(0, 0, 0, 0); 
+  
+    
+    if (payrollDate > date) {
+      date.setFullYear(payrollDate.getFullYear(), payrollDate.getMonth(), payrollDate.getDate());
+      date.setHours(0, 0, 0, 0); 
+    }
+  
+    // Get today's date
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset time to midnight (00:00:00)
+  
+    // Ensure the date is not in the past
+    if (date < today) {
+      // If the date is in the past, set it to today's date
+      date.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
+      date.setHours(0, 0, 0, 0); // Ensure time is reset to 00:00:00
+    }
+  
+   
+    setStartDateLimit(date);
+  
+    return date;
+  };
+  
 
   return (
     <Formik
@@ -217,7 +293,8 @@ export function FormEditForm({
           setTotalInstallments,
           setMaxMonthlyAmountSuggest,
           setMaxAmountLimit,
-          clearForm
+          clearForm,
+          monthlyInstallmentsLimit,
         );
       }}
     >
@@ -309,15 +386,24 @@ export function FormEditForm({
                       dateFormat="dd/MM/yyyy"
                       placeholder="Select Date"
                       type="date"
+                      onChange={(e) => {
+                        setFieldValue(
+                          "applied_date",
+                          e || null
+                        );
+
+                        addMonthsToDate(e, startDatePolicy, payrollMonth)
+
+                      }}
                       minDate={dateOfJoining}
                       maxDate={new Date()}
-                      disabled={userForEdit?.details[0]?.is_deducted}
+                      disabled={userForEdit?.details[0]?.is_deducted || !values.loan_typeId}
                     />
                   </div>
 
                   <div className="col-12 col-md-6 mt-3">
                     <label>
-                      Installment Start Date{" "}
+                      Installment Start Date{""}
                       <span style={{ color: "red" }}>*</span>
                     </label>
                     <Field
@@ -327,8 +413,9 @@ export function FormEditForm({
                       placeholder="Select Date"
                       type="date"
                       // maxDate={new Date()}
-                      minDate={payrollMonth ? payrollMonth : undefined}
-                      disabled={!payrollMonth || userForEdit?.details[0]?.is_deducted || !values.loan_typeId}
+                      // minDate={payrollMonth ? payrollMonth : undefined}
+                      minDate={startDateLimit}
+                      disabled={!payrollMonth || userForEdit?.details[0]?.is_deducted || !values.loan_typeId || !values.applied_date}
                     />
                   </div>
 
@@ -379,11 +466,14 @@ export function FormEditForm({
                         <div className="d-flex">
                           <div className="d-flex"> Monthly Installment </div>
                           <div className="d-flex ml-3">
-                            <span>
+                            {maxMonthlyAmountSuggest ? (<span>
                               (Max Suggested Installment Based on Salary :{" "}
                               {maxMonthlyAmountSuggest?.toLocaleString() || 0})
-                              <span style={{ color: "red" }}>*</span>
-                            </span>
+
+                            </span>) : (null
+
+                            )}
+                            <span style={{ color: "red" }}>*</span>
                           </div>
                         </div>
                       }
@@ -413,11 +503,18 @@ export function FormEditForm({
                       name="total_installment"
                       component={Input}
                       placeholder="Total installments"
+
                       label={
-                        <span>
-                          Total installments
-                          <span style={{ color: "red" }}>*</span>
-                        </span>
+                        <div className="d-flex">
+                          <div className="d-flex">    Total installments</div>
+                          <div className="d-flex ml-3">
+                            <span>
+                              (Max installments :{" "}
+                              {monthlyInstallmentsLimit?.toLocaleString() || 0})
+                              <span style={{ color: "red" }}>*</span>
+                            </span>
+                          </div>
+                        </div>
                       }
                       type="number"
                       value={totalInstallments}
@@ -477,7 +574,7 @@ export function FormEditForm({
                     />
                   </div> */}
 
-                  <div className="col-12 col-md-6 mt-3">
+                  {/* <div className="col-12 col-md-6 mt-3">
                     <SearchSelect
                       name="statusId"
                       label={<span>Status</span>}
@@ -494,7 +591,7 @@ export function FormEditForm({
                       error={errors.statusId}
                       touched={touched.statusId}
                     />
-                  </div>
+                  </div> */}
 
 
                 </div>
@@ -565,7 +662,7 @@ export function FormEditForm({
                     >
                       Reject
                     </button>
-                  ) : userForEdit ?<><button
+                  ) : userForEdit ? <><button
                     type="button"
                     className="btn btn-green"
                     onClick={() => UpdateApprovedStatus(user.Id, 1)}
@@ -578,7 +675,7 @@ export function FormEditForm({
                       onClick={() => UpdateApprovedStatus(user.Id, 2)}
                     >
                       Reject
-                    </button></>:null
+                    </button></> : null
                 }
 
 

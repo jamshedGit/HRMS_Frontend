@@ -73,10 +73,11 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     setTotalInstallments,
     setMaxAmountLimit,
     setMaxMonthlyAmountSuggest,
-    resetForm
+    resetForm,
+    monthlyInstallmentsLimit
   ) => {
     // enableLoading();
-
+console.log("monthlyInstallmentsLimit < data.total_installment ",monthlyInstallmentsLimit ,totalInstallments ,monthlyInstallmentsLimit < totalInstallments )
     if (maxAmountLimit < data.total_loan_amount) {
       disbaleLoading();
       toast.error("Loan amount exceeds the limit.", {
@@ -89,6 +90,20 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         progress: undefined,
       });
     }
+   
+    else if ( monthlyInstallmentsLimit < totalInstallments ) {
+      disbaleLoading();
+      toast.error("The total installments must not exceed monthly installments limit.", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+
    else if ( data.total_loan_amount < data.monthly_installment) {
       disbaleLoading();
       toast.error("The monthly installment must not exceed loan amount.", {
