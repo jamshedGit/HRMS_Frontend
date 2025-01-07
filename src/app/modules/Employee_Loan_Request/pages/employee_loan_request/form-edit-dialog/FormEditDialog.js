@@ -74,10 +74,10 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     setMaxAmountLimit,
     setMaxMonthlyAmountSuggest,
     resetForm,
-    monthlyInstallmentsLimit
+    monthlyInstallmentsLimit,setMonthlyInstallmentsLimit
   ) => {
     // enableLoading();
-console.log("monthlyInstallmentsLimit < data.total_installment ",monthlyInstallmentsLimit ,totalInstallments ,monthlyInstallmentsLimit < totalInstallments )
+
     if (maxAmountLimit < data.total_loan_amount) {
       disbaleLoading();
       toast.error("Loan amount exceeds the limit.", {
@@ -126,6 +126,7 @@ console.log("monthlyInstallmentsLimit < data.total_installment ",monthlyInstallm
       setTotalInstallments("");
       setMaxAmountLimit("");
       setMaxMonthlyAmountSuggest("");
+      setMonthlyInstallmentsLimit("")
     } else {
       formUIProps.setIds("");
       const formUpdatedFields = {

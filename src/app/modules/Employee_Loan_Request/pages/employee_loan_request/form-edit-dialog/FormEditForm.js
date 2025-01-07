@@ -182,6 +182,7 @@ export function FormEditForm({
       setMaxAmountLimit("");
       setMaxMonthlyAmountSuggest("");
       setTotalInstallments("");
+      setMonthlyInstallmentsLimit("")
     }
   }, [changeLoanType, isEdit]);
 
@@ -202,6 +203,7 @@ export function FormEditForm({
     setMaxAmountLimit("");
     setMaxMonthlyAmountSuggest("");
     setTotalInstallments("");
+    setMonthlyInstallmentsLimit("")
   };
 
   const statusOptions = [
@@ -242,14 +244,14 @@ export function FormEditForm({
     date.setHours(0, 0, 0, 0);
   
 
-    const payrollDate = new Date(payrollMonth);
-    payrollDate.setHours(0, 0, 0, 0); 
+    // const payrollDate = new Date(payrollMonth);
+    // payrollDate.setHours(0, 0, 0, 0); 
   
     
-    if (payrollDate > date) {
-      date.setFullYear(payrollDate.getFullYear(), payrollDate.getMonth(), payrollDate.getDate());
-      date.setHours(0, 0, 0, 0); 
-    }
+    // if (payrollDate > date) {
+    //   date.setFullYear(payrollDate.getFullYear(), payrollDate.getMonth(), payrollDate.getDate());
+    //   date.setHours(0, 0, 0, 0); 
+    // }
   
     // Get today's date
     const today = new Date();
@@ -262,7 +264,7 @@ export function FormEditForm({
       date.setHours(0, 0, 0, 0); // Ensure time is reset to 00:00:00
     }
   
-   
+
     setStartDateLimit(date);
   
     return date;
@@ -294,7 +296,7 @@ export function FormEditForm({
           setMaxMonthlyAmountSuggest,
           setMaxAmountLimit,
           clearForm,
-          monthlyInstallmentsLimit,
+          monthlyInstallmentsLimit,setMonthlyInstallmentsLimit
         );
       }}
     >
@@ -414,8 +416,11 @@ export function FormEditForm({
                       type="date"
                       // maxDate={new Date()}
                       // minDate={payrollMonth ? payrollMonth : undefined}
-                      minDate={startDateLimit}
-                      disabled={!payrollMonth || userForEdit?.details[0]?.is_deducted || !values.loan_typeId || !values.applied_date}
+                      // minDate={values.applied_date ? values.applied_date : undefined}
+                      minDate={new Date(values.applied_date) < new Date() ? new Date() : values.applied_date}
+                      maxDate={startDateLimit}
+                      // disabled={!payrollMonth || userForEdit?.details[0]?.is_deducted || !values.loan_typeId || !values.applied_date}
+                      disabled={ userForEdit?.details[0]?.is_deducted || !values.loan_typeId || !values.applied_date}
                     />
                   </div>
 

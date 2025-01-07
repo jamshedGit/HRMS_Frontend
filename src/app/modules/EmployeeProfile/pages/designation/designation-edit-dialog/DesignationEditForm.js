@@ -3151,7 +3151,7 @@ export function DesignationEditForm({
                       {/* <hr></hr> */}
 
                       <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
-                        <h3>Contact Information</h3>
+                        <h3>Emergency Contact Information</h3>
                         <table class="table table table-head-custom table-vertical-center overflow-hidden table-hover">
                           <tr style={{ backgroundColor: '#4d5f7a', color: '#fff' }}>
                             <td></td>
