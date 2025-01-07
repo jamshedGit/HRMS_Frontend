@@ -6,12 +6,9 @@ import { useFormUIContext } from "../FormUIContext"
 import { Form, Modal } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
-import { Select } from "../../../../../../_metronic/_partials/controls";
-import { ATTENDANCE_TYPE, VALIDATION_MESSAGES } from "../../../../../utils/constants";
-import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
+import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 import { initialFilter } from "../FormUIHelpers";
 import * as actions from "../../../_redux/formActions";
-import { formatDates } from "../../../../../utils/common";
 import { fetchAllActiveEmployeesBySubsidiary, fetchAllPayrollMonthYearList } from "../../../../../../_metronic/redux/dashboardActions";
 
 //Validation for date fields
@@ -92,10 +89,16 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
   }
 
   //Trugger request to download PDF of data according to filters
-  const getPdf = (values) => {
+  const getPayslip = (values) => {
     const newQueryParams = prepareFilter(formUIProps.queryParams, values);
     const labels = getLabels(values);
     dispatch(actions.generatePayslip(newQueryParams.filter, document, labels));
+  }
+
+  const getPdf = (values) => {
+    const newQueryParams = prepareFilter(formUIProps.queryParams, values);
+    const labels = getLabels(values);
+    dispatch(actions.generateRegisterPdf(newQueryParams.filter, document, labels));
   }
 
   return (
@@ -370,11 +373,22 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
               </button>
 
               <button
-                onClick={() => { getPdf(values) }}
+                onClick={() => { getPayslip(values) }}
                 disabled={pdfLoading}
                 className="btn btn-secondary"
               >
                 Generate Payslip
+                {pdfLoading && (
+                  <span className="ml-3 mr-3 spinner spinner-white"></span>
+                )}
+              </button>
+
+              <button
+                onClick={() => { getPdf(values) }}
+                disabled={pdfLoading}
+                className="btn btn-secondary"
+              >
+                Generate Register
                 {pdfLoading && (
                   <span className="ml-3 mr-3 spinner spinner-white"></span>
                 )}
