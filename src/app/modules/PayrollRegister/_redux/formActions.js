@@ -34,7 +34,7 @@ export const fetchPayrollRegister = (queryparm) => async (dispatch) => {
  */
 export const generatePayslip = (filter, document, labels = {}) => async (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.pdf }));
-  return requestFromServer.generatePayslip({ ...filter })
+  return requestFromServer.generatePayslip({ ...filter, labels })
     .then((res) => {
       const pdfBlob = new Blob([res.data], { type: 'application/pdf' });
       const pdfUrl = URL.createObjectURL(pdfBlob);
