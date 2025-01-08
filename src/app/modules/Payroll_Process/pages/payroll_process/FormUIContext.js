@@ -32,7 +32,7 @@ export function FormUIProvider({ FormUIEvents, children }) {
 
   const initUser={
     Id: "",
-    payroll_groupId: "",
+    payroll_groupId: null,
     payroll_monthId: "",
     subsidiaryId:"",
 

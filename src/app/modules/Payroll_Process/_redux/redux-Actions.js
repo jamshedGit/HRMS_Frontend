@@ -78,10 +78,11 @@ export const createPayrollProcess = (payrollProcessForCreation, disbaleLoading, 
     .createPayrollProcess(payrollProcessForCreation)
     .then((res) => {
 
-      const user = res.data?.data;
+      const result = res.data?.data;
 
 
       // dispatch(actions.payrollProcessCreated(user));
+      dispatch(actions.resultAfterPayrollProcessFetched(result))
       disbaleLoading();
   
       toast.success(SERVER_MESSAGES.insertedSuccess, {
@@ -201,4 +202,5 @@ export const checkPayroll_EmployeesByIds = (data) => async (dispatch) => {
 export const clearReduxData = () => async (dispatch) => {
   dispatch(actions.checkPayroll_EmployeesByIdsFetched(null));
   dispatch(actions.payrollGroupDetailsFetched(null));
+  dispatch(actions.resultAfterPayrollProcessFetched(null));
 }

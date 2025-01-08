@@ -28,7 +28,8 @@ const payroll_processEditSchema = Yup.object().shape({
   // to_amount: Yup.string().required("Required*"),
 
   payroll_groupId: Yup.string()
-    .required(VALIDATION_MESSAGES.required),
+  .nullable(),
+    // .required(VALIDATION_MESSAGES.required),
 
   payroll_monthId: Yup.string()
     .required(VALIDATION_MESSAGES.required),
@@ -72,7 +73,7 @@ export function FormEditForm({
     };
   }, shallowEqual);
 
-  const { userForEdit, checkPayroll_EmployeesExist } = currentState;
+  const { userForEdit, checkPayroll_EmployeesExist,resultAfterPayrollProcess } = currentState;
 
 
   const payrollGroupDetails = async (subsidiaryId, payroll_groupId,payroll_monthId) => {
@@ -200,13 +201,28 @@ export function FormEditForm({
                         checkPayroll_Employees(setFieldValue, values.subsidiaryId, e.value, values.payroll_monthId)
                         setIsAfterResult(false)
                       }}
+                      // value={
+                      //   dashboard?.allPayrolGroupList?.find(
+                      //     (option) => option.value === values.payroll_groupId
+                      //   ) || null
+                      // }
+
                       value={
-                        dashboard?.allPayrolGroupList?.find(
-                          (option) => option.value === values.payroll_groupId
-                        ) || null
+               
+                        values?.payroll_groupId ==null
+                          ? { value: null, label: 'All' }
+                          : dashboard?.allPayrolGroupList?.find(
+                            (option) => option.value === values.payroll_groupId
+                          ) || null
                       }
 
-                      options={dashboard?.allPayrolGroupList}
+                      // options={dashboard?.allPayrolGroupList}
+
+                      options={[
+                        { value: null, label: 'All' }, // Adding "All" option with value empty string
+                        ...dashboard?.allPayrolGroupList, // Spread the rest of the menu options
+                      ]}
+
                       // options={dashboard.allSubidiaryList.map(option => ({
                       //   label: `${option.label} (${option.value})`, // Adding the value to the label
                       //   value: option.value,
@@ -300,7 +316,7 @@ export function FormEditForm({
 
                 {/* <hr /> */}
 
-                {isAfterResult ?
+                {resultAfterPayrollProcess ?
                   <>
                     <div className='accordion-header-btn w-100  d-flex justify-content-left  bg-primary'>
                       <h6 className="text-white p-5">After Process - Result</h6>
@@ -310,14 +326,14 @@ export function FormEditForm({
 
                       <div className="col-12 col-md-6 mt-3">
                         <label>
-                          Tax calculated: <span style={{ fontWeight: 'bold' }}>{0}</span> 
+                          Tax calculated: <span style={{ fontWeight: 'bold' }}>{resultAfterPayrollProcess?.TaxCalculated || 0}</span> 
                         </label>
 
                       </div>
 
                       <div className="col-12 col-md-6 mt-3">
                         <label>
-                          Tax not calculated: <span style={{ fontWeight: 'bold' }}>{0}</span>
+                          Tax not calculated: <span style={{ fontWeight: 'bold' }}>{resultAfterPayrollProcess?.TaxNotCalculated || 0}</span>
                         </label>
 
                       </div>
@@ -325,19 +341,19 @@ export function FormEditForm({
 
                       <div className="col-12 col-md-6 mt-3">
                         <label>
-                          Employee with zero salary: <span style={{ fontWeight: 'bold' }}>{0}</span>
+                          Employee with zero salary: <span style={{ fontWeight: 'bold' }}>{resultAfterPayrollProcess?.EmployeewithZeroSalary || 0}</span>
                         </label>
 
                       </div>
                       <div className="col-12 col-md-6 mt-3">
                         <label>
-                          Employee with negative salary: <span style={{ fontWeight: 'bold' }}>{0}</span> 
+                          Employee with negative salary: <span style={{ fontWeight: 'bold' }}>{resultAfterPayrollProcess?.EmployeewithNegativeSalary || 0}</span> 
                         </label>
 
                       </div>
                       <div className="col-12 col-md-6 mt-3">
                         <label>
-                          Loan processed:<span style={{ fontWeight: 'bold' }}>{0}</span> 
+                          Loan processed:<span style={{ fontWeight: 'bold' }}>{resultAfterPayrollProcess?.LoanProcess	 || 0}</span> 
                         </label>
 
                       </div>

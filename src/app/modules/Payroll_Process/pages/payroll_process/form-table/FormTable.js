@@ -228,7 +228,7 @@ export function FormTable() {
     return (
     <>
   
-    <Accordion defaultActiveKey="">
+    {/* <Accordion defaultActiveKey="">
       <Card>
         <Card.Header className="d-flex justify-content-center">
         <div className='accordion-header-btn w-100  d-flex justify-content-center'>
@@ -277,7 +277,7 @@ export function FormTable() {
           </Card.Body>
         </Accordion.Collapse>
       </Card>
-    </Accordion>
+    </Accordion> */}
  
 
    

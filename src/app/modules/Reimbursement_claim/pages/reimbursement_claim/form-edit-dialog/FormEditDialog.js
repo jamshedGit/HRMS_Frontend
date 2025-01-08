@@ -100,6 +100,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
  
       return;
     }
+    
     formUIProps.setIds("");
 
     if (!data.Id && data) {
