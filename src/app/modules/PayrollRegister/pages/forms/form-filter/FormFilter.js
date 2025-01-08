@@ -7,9 +7,11 @@ import { Form, Modal } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
-import { initialFilter } from "../FormUIHelpers";
+import { groupByOptions, initialFilter } from "../FormUIHelpers";
 import * as actions from "../../../_redux/formActions";
 import { fetchAllActiveEmployeesBySubsidiary, fetchAllPayrollMonthYearList } from "../../../../../../_metronic/redux/dashboardActions";
+import { Select } from "../../../../../../_metronic/_partials/controls";
+import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
 
 //Validation for date fields
 const formValidation = Yup.object().shape({
@@ -61,6 +63,10 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
   const allPayrollMonthMap = useMemo(() => {
     return new Map(allPayrollMonthYearList?.map(item => [item.value, item]));
   }, [allPayrollMonthYearList]);
+
+  const allGroupByMap = useMemo(() => {
+    return new Map(groupByOptions?.map(item => [item.value, item]));
+  }, [groupByOptions]);
   //Create Maps for every dropdown data so setting value in dropdown can be fast optimized (End)
 
   //Fetch Params from Context
@@ -85,6 +91,8 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
   const getLabels = (values) => {
     return {
       monthLabel: allPayrollMonthMap?.get(values.monthId || '')?.label,
+      subsidiaryLabel: allSubsidiaryMap?.get(values.subsidiaryId || '')?.label,
+      groupWiseLabel: allGroupByMap?.get(values.groupBy || '')?.label,
     }
   }
 
@@ -343,7 +351,45 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                       />
                     </div>
                     {/* Payroll Month Field End */}
+
+                    {/* Group By Field Start */}
+                    {/* <div className="col-12 col-md-4 mt-3">
+                      <Field
+                        name="groupBy"
+                        component={Select}
+                        placeholder=""
+                        onChange={(e) => {
+                          const value = e.target.value
+                          setFieldValue('groupBy', value)
+                        }}
+                        label={
+                          <span>
+                            {" "}
+                            Group By
+                          </span>
+                        }
+                        value={values.groupBy}
+                        autoComplete="off"
+                        children={CustomDropdown({ data: groupByOptions })}
+                      />
+                    </div> */}
+                    {/* Group By Field End */}
+
+                    <div className="col-12 col-md-4 mt-11">
+                      <button
+                        onClick={() => { getPdf(values) }}
+                        disabled={pdfLoading}
+                        type="button"
+                        className="btn btn-secondary btn-elevate"
+                      >
+                        Generate Register
+                        {pdfLoading && (
+                          <span className="ml-3 mr-3 spinner spinner-white"></span>
+                        )}
+                      </button>
+                    </div>
                   </div>
+
                 </fieldset>
               </Form>
             </Modal.Body>
@@ -378,17 +424,6 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                 className="btn btn-secondary"
               >
                 Generate Payslip
-                {pdfLoading && (
-                  <span className="ml-3 mr-3 spinner spinner-white"></span>
-                )}
-              </button>
-
-              <button
-                onClick={() => { getPdf(values) }}
-                disabled={pdfLoading}
-                className="btn btn-secondary"
-              >
-                Generate Register
                 {pdfLoading && (
                   <span className="ml-3 mr-3 spinner spinner-white"></span>
                 )}
