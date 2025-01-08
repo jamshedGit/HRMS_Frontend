@@ -101,12 +101,12 @@ export function FormEditForm({
 
   }
 
-  const checkPayroll_Employees = async (setFieldValue, subsidiaryId, payroll_groupId, payroll_monthId, revert = false) => {
+  const checkPayroll_Employees = async (setFieldValue, subsidiaryId, payroll_groupId, payroll_monthId, revert = false,finalize=false) => {
 
 
     if (subsidiaryId  && payroll_monthId) {
       let data = {
-        SubsidiaryId: subsidiaryId, PayrollGroupId: payroll_groupId, MonthId: payroll_monthId, revert
+        SubsidiaryId: subsidiaryId, PayrollGroupId: payroll_groupId, MonthId: payroll_monthId, revert,finalize,
       }
 
       await dispatch(checkPayroll_EmployeesByIds({ data }));
@@ -376,22 +376,44 @@ export function FormEditForm({
             {/* checkPayroll_EmployeesExist */}
 
             {checkPayroll_EmployeesExist && (
+
+              <>
+             
               <button
 
                 onClick={() => {
-                  checkPayroll_Employees(setFieldValue, values.subsidiaryId, values.payroll_groupId, values.payroll_monthId, true);
+                  checkPayroll_Employees(setFieldValue, values.subsidiaryId, values.payroll_groupId, values.payroll_monthId, false,true);
                   setIds("");
                   handleReset();
                   dispatch(actions.clearReduxData())
                 }}
-                className="btn btn-red"
+                className="btn btn-green"
                 disabled={loading}
               >
-                Revert
+                Finalize
                 {loading && (
                   <span className="ml-3 mr-3 spinner spinner-white"></span>
                 )}
               </button>
+
+<button
+
+onClick={() => {
+  checkPayroll_Employees(setFieldValue, values.subsidiaryId, values.payroll_groupId, values.payroll_monthId, true,false);
+  setIds("");
+  handleReset();
+  dispatch(actions.clearReduxData())
+}}
+className="btn btn-red"
+disabled={loading}
+>
+Revert
+{loading && (
+  <span className="ml-3 mr-3 spinner spinner-white"></span>
+)}
+</button>
+
+</>
             )}
 
             {!isUserForRead ? (
