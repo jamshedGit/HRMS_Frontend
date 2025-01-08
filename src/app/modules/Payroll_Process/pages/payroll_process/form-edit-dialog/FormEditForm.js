@@ -77,7 +77,7 @@ export function FormEditForm({
 
 
   const payrollGroupDetails = async (subsidiaryId, payroll_groupId,payroll_monthId) => {
-    if (subsidiaryId && payroll_groupId && payroll_monthId) {
+    if (subsidiaryId && payroll_monthId) {
       // Dispatch action to fetch payroll group details
       let body = {
         subsidiaryId,
@@ -104,7 +104,7 @@ export function FormEditForm({
   const checkPayroll_Employees = async (setFieldValue, subsidiaryId, payroll_groupId, payroll_monthId, revert = false) => {
 
 
-    if (subsidiaryId && payroll_groupId && payroll_monthId) {
+    if (subsidiaryId  && payroll_monthId) {
       let data = {
         SubsidiaryId: subsidiaryId, PayrollGroupId: payroll_groupId, MonthId: payroll_monthId, revert
       }
