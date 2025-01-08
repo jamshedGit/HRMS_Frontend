@@ -372,6 +372,7 @@ export function DesignationEditForm({
   const [defCodePrefixo, setCodePrefix] = useState('');
   const [imagePolicy, setImagePolicy] = useState(false)
   const [isImageReq, setIsImageReq] = useState(false)
+  const [imgAlreadySet, setImgAlreadySet] = useState(false)
   const scrollRef=useRef(null);
   //off for temp
   // useEffect(() => {
@@ -862,6 +863,7 @@ export function DesignationEditForm({
 
       setImage(URL.createObjectURL(img));
       setIsImageReq(false)
+      setImgAlreadySet(true)
     }
   };
 
@@ -1328,7 +1330,10 @@ export function DesignationEditForm({
     if (!id && profilePolicy?.data?.data[0]?.empPictureIsMandatory) {
 
       setImagePolicy(true)
-      setIsImageReq(true)
+      if(!imgAlreadySet){
+        setIsImageReq(true)
+      }
+     
     }
 
   };
