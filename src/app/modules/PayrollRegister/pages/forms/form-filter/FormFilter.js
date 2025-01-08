@@ -26,7 +26,7 @@ const prepareFilter = (queryParams, values) => {
   return newQueryParams
 }
 
-export function FormFilter({ loading, dispatch, pdfLoading }) {
+export function FormFilter({ loading, dispatch, pdfLoading, registerLoading }) {
 
   const FormUIContext = useFormUIContext()
 
@@ -353,7 +353,7 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                     {/* Payroll Month Field End */}
 
                     {/* Group By Field Start */}
-                    {/* <div className="col-12 col-md-4 mt-3">
+                    <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="groupBy"
                         component={Select}
@@ -372,18 +372,18 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                         autoComplete="off"
                         children={CustomDropdown({ data: groupByOptions })}
                       />
-                    </div> */}
+                    </div>
                     {/* Group By Field End */}
 
                     <div className="col-12 col-md-4 mt-11">
                       <button
                         onClick={() => { getPdf(values) }}
-                        disabled={pdfLoading}
+                        disabled={registerLoading}
                         type="button"
                         className="btn btn-secondary btn-elevate"
                       >
                         Generate Register
-                        {pdfLoading && (
+                        {registerLoading && (
                           <span className="ml-3 mr-3 spinner spinner-white"></span>
                         )}
                       </button>

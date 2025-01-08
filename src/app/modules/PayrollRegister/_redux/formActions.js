@@ -74,7 +74,7 @@ export const generatePayslip = (filter, document, labels = {}) => async (dispatc
  * @returns 
  */
 export const generateRegisterPdf = (filter, document, labels = {}) => async (dispatch) => {
-  dispatch(actions.startCall({ callType: callTypes.pdf }));
+  dispatch(actions.startCall({ callType: callTypes.register }));
   return requestFromServer.generatePdf({ ...filter, labels })
     .then((res) => {
       const pdfBlob = new Blob([res.data], { type: 'application/pdf' });
@@ -86,12 +86,12 @@ export const generateRegisterPdf = (filter, document, labels = {}) => async (dis
       link.setAttribute('download', 'payroll_register.pdf');
       document.body.appendChild(link);
       link.click();
-      dispatch(actions.pdfFetched({}));
+      dispatch(actions.registerFetched({}));
       document.body.removeChild(link);
     })
     .catch((error) => {
       error.clientMessage = "Can't generate Register";
-      dispatch(actions.catchError({ error, callType: callTypes.pdf }));
+      dispatch(actions.catchError({ error, callType: callTypes.register }));
       toast.error(error?.response?.status == 400 ? 'Please provide employee and month' : error.clientMessage, {
         position: "top-right",
         autoClose: 5000,
