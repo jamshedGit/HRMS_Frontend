@@ -229,8 +229,8 @@ const profileValidation = Yup.object().shape(
     }),
     approvedForPayroll: Yup.boolean()
     .nullable()
-    .oneOf([true, false], 'Required*')  // Ensures the value is either true or false
-    .required('Required*'),
+    .oneOf([true, false], 'Required*') , // Ensures the value is either true or false
+    // .required('Required*'),
 
   },
 
@@ -2294,13 +2294,14 @@ export function DesignationEditForm({
                             <input
                               name="approvedForPayroll"
                               type="checkbox"
-                              onChange={handleChange}
+                              // onChange={handleChange}
+                              onChange={() => setFieldValue("approvedForPayroll", !values?.approvedForPayroll)} 
                               onBlur={handleBlur}
                               value={values.approvedForPayroll}
                               checked={values.approvedForPayroll}
                               label="Approved for Payroll"
                             />
-                            <label>Approved for Payroll<span style={{ color: 'red' }}>*</span></label>
+                            <label>Approved for Payroll</label>
                             <ErrorMessage className="form-feedBack" name="approvedForPayroll" component="div" />
                           </div>
 
@@ -2841,7 +2842,8 @@ export function DesignationEditForm({
                             <input
                               name="salesRep"
                               type="checkbox"
-                              onChange={handleChange}
+                              // onChange={handleChange}
+                              onChange={() => setFieldValue("salesRep", !values?.salesRep)} 
                               onBlur={handleBlur}
                               value={values.salesRep}
                               checked={values.salesRep}
@@ -2853,7 +2855,8 @@ export function DesignationEditForm({
                             <input
                               name="supportRep"
                               type="checkbox"
-                              onChange={handleChange}
+                              // onChange={handleChange}
+                              onChange={() => setFieldValue("supportRep", !values?.supportRep)} 
                               onBlur={handleBlur}
                               value={values.supportRep}
                               checked={values.supportRep}
