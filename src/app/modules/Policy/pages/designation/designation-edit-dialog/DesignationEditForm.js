@@ -3,7 +3,7 @@ import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { Input, Select, TextArea } from "../../../../../../_metronic/_partials/controls";
-import {shallowEqual, useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 
 import {
@@ -17,6 +17,7 @@ import {
 } from "../../../../../../_metronic/redux/dashboardActions";
 import { Radio } from "@material-ui/core";
 import { amountLimit, amountLimitDynamic } from "../../../../../utils/common";
+import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 
 // Phone Number Regex
 const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
@@ -29,24 +30,24 @@ const formValidationSchema = Yup.object().shape(
   {
 
     subsidiaryId: Yup.string()
-      .required("Required*"),
+      .required(VALIDATION_MESSAGES.required),
     currencyId: Yup.string()
-      .required("Required*"),
+      .required(VALIDATION_MESSAGES.required),
     retirementAgeMale: Yup.number()
-    .min(1, 'At least 1')
-    .max(99, 'At most 99')
-      .required("Required*"),
+      .min(1, 'At least 1')
+      .max(99, 'At most 99')
+      .required(VALIDATION_MESSAGES.required),
 
     retirementAgeFemale: Yup.number()
-    .min(1, 'At least 1')
-    .max(99, 'At most 99')
-      .required("Required*"),
+      .min(1, 'At least 1')
+      .max(99, 'At most 99')
+      .required(VALIDATION_MESSAGES.required),
 
     minimumAge: Yup.number()
-    // .nullable() 
-    .min(0, 'At least 1')
-    .max(99, 'At most 99'),
-      // .required("Required*"),
+      // .nullable() 
+      .min(0, 'At least 1')
+      .max(99, 'At most 99'),
+    // .required("Required*"),
 
     // maximumAge: Yup.number()
     // .nullable() 
@@ -56,59 +57,59 @@ const formValidationSchema = Yup.object().shape(
     //   const { minimumAge } = this.parent; 
     //   return value > minimumAge;
     // }),
-      // .required("Required*"),
+    // .required("Required*"),
 
 
-      maximumAge: Yup.number()
-  // .min(18, 'At least 18')
-  .max(99, 'At most 99')
-  .nullable() // Allow null or undefined
-  .test('minimumAge', 'Maximum Age must be equal or greater than Minimum Age', function (value) {
-    const { minimumAge } = this.parent;
+    maximumAge: Yup.number()
+      // .min(18, 'At least 18')
+      .max(99, 'At most 99')
+      .nullable() // Allow null or undefined
+      .test('minimumAge', 'Maximum Age must be equal or greater than Minimum Age', function (value) {
+        const { minimumAge } = this.parent;
 
-    // If maximumAge is null or 0, skip validation for the comparison
-    if (value === null || value === 0) {
-      return true; // Skip the "Maximum Age >= Minimum Age" validation
-    }
+        // If maximumAge is null or 0, skip validation for the comparison
+        if (value === null || value === 0) {
+          return true; // Skip the "Maximum Age >= Minimum Age" validation
+        }
 
-    // Check if both minimumAge and maximumAge are valid before comparing
-    if (minimumAge === null || minimumAge === undefined || value === null || value === undefined) {
-      return true; // No limit is set, no need for validation
-    }
+        // Check if both minimumAge and maximumAge are valid before comparing
+        if (minimumAge === null || minimumAge === undefined || value === null || value === undefined) {
+          return true; // No limit is set, no need for validation
+        }
 
-    // Ensure maximumAge is greater than or equal to minimumAge
-    return value >= minimumAge;
-  }),
+        // Ensure maximumAge is greater than or equal to minimumAge
+        return value >= minimumAge;
+      }),
 
-  //     maximumAge: Yup.number()
-  // .min(18, 'At least 18')
-  // .max(99, 'At most 99')
-  // .nullable() // Allow null or undefined
-  // .test('minimumAge', 'Maximum Age must be equal or greater than Minimum Age', function (value) {
-  //   const { minimumAge } = this.parent;
+    //     maximumAge: Yup.number()
+    // .min(18, 'At least 18')
+    // .max(99, 'At most 99')
+    // .nullable() // Allow null or undefined
+    // .test('minimumAge', 'Maximum Age must be equal or greater than Minimum Age', function (value) {
+    //   const { minimumAge } = this.parent;
 
-  //   // Check if both minimumAge and maximumAge are valid, if not allow them to be unset
-  //   if (minimumAge === null || minimumAge === undefined || value === null || value === undefined) {
-  //     return true; // No limit is set, no need for validation
-  //   }
+    //   // Check if both minimumAge and maximumAge are valid, if not allow them to be unset
+    //   if (minimumAge === null || minimumAge === undefined || value === null || value === undefined) {
+    //     return true; // No limit is set, no need for validation
+    //   }
 
-  //   // Ensure maximumAge is greater than or equal to minimumAge
-  //   return value >= minimumAge;
-  // }),
+    //   // Ensure maximumAge is greater than or equal to minimumAge
+    //   return value >= minimumAge;
+    // }),
     pictureSizeLimit: Yup.number()
-    .nullable()
-    .min(0, 'At least 1')
-    .max(99, 'At most 99'),
-      // .required("Required*"),
+      .nullable()
+      .min(0, 'At least 1')
+      .max(99, 'At most 99'),
+    // .required("Required*"),
 
 
     // pictureFilesSupport: Yup.string()
     //   .required("Required*"),
 
     documentSizeLimit: Yup.number()
-    .min(0, 'At least 1')
-    .max(99, 'At most 99'),
-      // .required("Required*"),
+      .min(0, 'At least 1')
+      .max(99, 'At most 99'),
+    // .required("Required*"),
 
     // documentFilesSupport: Yup.string()
     //   .required("Required*"),
@@ -118,21 +119,24 @@ const formValidationSchema = Yup.object().shape(
       .typeError('Please enter a valid number')
       .min(1, 'At least 1')  // Ensure it's a number
       .max(12, 'Value should not be greater than 12')  // Ensure the number is <= 12
-      .required("Required*"),
+      .required(VALIDATION_MESSAGES.required),
 
 
     probationPolicyInMonth: Yup.number()
-      .typeError('Please enter a valid number') 
+      .typeError('Please enter a valid number')
       .min(1, 'At least 1') // Ensure it's a number
       .max(12, 'Value should not be greater than 12')  // Ensure the number is <= 12
-      .required('Required*'),  // Field is required
+      .required(VALIDATION_MESSAGES.required),  // Field is required
 
     // empPictureIsMandatory: Yup.boolean()
     //   .required('Required*'),  // Field is required
 
-      isEmployeeCodeGenerationAuto :Yup.boolean()
-      .required('Required*'),  // Field is required
+    isEmployeeCodeGenerationAuto: Yup.boolean()
+      .required(VALIDATION_MESSAGES.required),  // Field is required
 
+    codePrefix: Yup.string()
+    .matches(/^[A-Za-z]{1,6}$/, 'Must be alphabetic and up to 6 characters')
+     .required(VALIDATION_MESSAGES.required),
   },
 
 );
@@ -160,7 +164,7 @@ export function DesignationEditForm({
   isUserForRead,
   values,
   enableLoading,
-  loading,id
+  loading, id
 }) {
 
   const dispatch = useDispatch();
@@ -207,16 +211,18 @@ export function DesignationEditForm({
   }, [user?.subsidiaryId, dashboard.subsidiaryId]);
 
   const { currentState } = useSelector(
-    (state) => {  return {
-      
-      currentState: state.policy,
-      userAccess: state?.auth?.userAccess["Policy"],
-    }},
+    (state) => {
+      return {
+
+        currentState: state.policy,
+        userAccess: state?.auth?.userAccess["Policy"],
+      }
+    },
     shallowEqual
   );
 
-  
-  const {entities } = currentState;
+
+  const { entities } = currentState;
 
   return (
     <>
@@ -225,7 +231,7 @@ export function DesignationEditForm({
         initialValues={user}
         validationSchema={formValidationSchema}
         onSubmit={(obj) => {
-       
+
           enableLoading();
           saveEmpPolicy(obj);
         }}
@@ -254,17 +260,7 @@ export function DesignationEditForm({
                   <div className="form-group row">
 
 
-                    {/* {
-                      <div className="col-12 col-md-4 mt-3">
-                        <Field
-                          name="code"
-                          component={Input}
-                          placeholder="Enter Policy Code"
-                          label="Code"
-                          value={values.code}
-                        />
-                      </div>
-                    } */}
+
                     <hr></hr>
 
 
@@ -281,11 +277,11 @@ export function DesignationEditForm({
                             // handleBlur({ target: { name: "countryId" } });
                           }}
                           onChange={(e) => {
-                            if(!id){
-                             
-                              setFieldValue("minimumAge",initialMinAgeLimit)
+                            if (!id) {
+
+                              setFieldValue("minimumAge", initialMinAgeLimit)
                             }
-                         
+
                             setFieldValue("subsidiaryId", e.value || null);
                             setDefualtSubsidiaryList(e);
                             const selectedSubsidiary = dashboard?.allSubsidiaryList?.find(
@@ -307,13 +303,13 @@ export function DesignationEditForm({
                           error={errors.subsidiaryId}
                           touched={touched.subsidiaryId}
                           // options={dashboard.allSubsidiaryList}
-                       
+
                           options={dashboard?.allSubsidiaryList?.map((subsidiary) => ({
                             ...subsidiary,
                             isDisabled: entities?.some((entity) => entity?.subsidiaryId == subsidiary?.value), // Check if subsidiaryId is in entities
-                        // isDisabled:true
+                            // isDisabled:true
                           }))}
-                          
+
                         />
 
 
@@ -321,25 +317,7 @@ export function DesignationEditForm({
 
                     }
                     {
-                      // <><div className="col-12 col-md-4 mt-3">
-                      //   <SearchSelect
-                      //     name="currencyId"
-                      //     label={<span> Currency<span style={{ color: 'red' }}>*</span></span>}
-                      //     isDisabled={isUserForRead && true}
-                      //     onBlur={() => {
-                      //       // handleBlur({ target: { name: "countryId" } });
-                      //     }}
-                      //     onChange={(e) => {
-                      //       setFieldValue("currencyId", e.value || null);
-                      //       setDefualtCurrencyCodeList(e);
 
-                      //     }}
-                      //     value={(defCurrencyCodeList || null)}
-                      //     error={errors.currencyId}
-                      //     touched={touched.currencyId}
-                      //     options={dashboard.allCurrencyCodeList}
-                      //   />
-                      // </div></>
 
 
                       <>
@@ -358,7 +336,7 @@ export function DesignationEditForm({
                             onChange={(e) => {
                               setFieldValue("currencyId", e.value || null);
                               setDefualtCurrencyCodeList(e);
-                           
+
                               // dispatch(fetchAllFormsMenu(e.value));
                             }}
                             // value={(defCurrecnyChildMenus || null)}
@@ -394,20 +372,6 @@ export function DesignationEditForm({
                     }
                     {
                       <>
-                        {/* <div className="col-12 col-md-4 mt-3">
-                          <div id="my-radio-group"> Employee Code Generation</div>
-                          <br></br>
-                          <div role="group" aria-labelledby="gender-group">
-                            <label>
-                              <Field type="radio" checked={values.isEmployeeCodeGenerationAuto} name="isEmployeeCodeGenerationAuto" value="true" />
-                              &nbsp;Auto
-                            </label>
-                            &nbsp; &nbsp;  <label>
-                              <Field type="radio" checked={values.isEmployeeCodeGenerationAuto} name="isEmployeeCodeGenerationAuto" value="false" />
-                              &nbsp;Manual
-                            </label>
-                          </div>
-                        </div> */}
 
                         <div className="col-12 col-md-4 mt-3">
                           <label htmlFor="isEmployeeCodeGenerationAuto">
@@ -441,6 +405,27 @@ export function DesignationEditForm({
                         </div>
                       </>
                     }
+                    {
+                      <>
+                        <div className="col-12 col-md-4 mt-3">
+
+                          <label >
+                            Code Prefix<span style={{ color: "red" }}>*</span>
+
+
+                          </label>
+                          <Field
+                            type="text"
+                            maxLength="6"
+                            name="codePrefix"
+                            component={Input}
+                            placeholder="Enter code prefix"
+                          // label="Male"
+                          //value="50"
+                          />
+                        </div>
+                      </>
+                    }
                   </div>
                   <br></br>
                   <hr></hr>
@@ -448,32 +433,32 @@ export function DesignationEditForm({
                   <div className="form-group row">
                     {
                       <div className="col-12 col-md-4 mt-3">
-               
+
                         <label >
-                            Male<span style={{ color: "red" }}>*</span>
+                          Male<span style={{ color: "red" }}>*</span>
 
 
-                          </label>
+                        </label>
                         <Field
                           type="number"
                           onInput={(e) => {
-                            e.target.value = amountLimitDynamic(e.target.value,2); // Limit to 3 digits
+                            e.target.value = amountLimitDynamic(e.target.value, 2); // Limit to 3 digits
                           }}
                           name="retirementAgeMale"
                           component={Input}
                           placeholder="Enter retirement age"
-                          // label="Male"
+                        // label="Male"
                         //value="50"
                         />
                       </div>
                     }
                     {
                       <div className="col-12 col-md-4 mt-3">
-                                  <label >
-                                  Female<span style={{ color: "red" }}>*</span>
+                        <label >
+                          Female<span style={{ color: "red" }}>*</span>
 
 
-                          </label>
+                        </label>
                         <Field
                           type="number"
                           onInput={(e) => {
@@ -482,7 +467,7 @@ export function DesignationEditForm({
                           name="retirementAgeFemale"
                           component={Input}
                           placeholder="Enter Retirement Age (Female)"
-                          // label="Female"
+                        // label="Female"
                         //  value="55"
                         />
                       </div>
@@ -497,25 +482,25 @@ export function DesignationEditForm({
 
                     {
                       <div className="col-12 col-md-4 mt-3">
-                                         <label >
-                                         Minimum Age
-                                 
+                        <label >
+                          Minimum Age
 
-                          </label>
+
+                        </label>
                         <Field
                           type="number"
                           onInput={(e) => {
                             e.target.value = amountLimitDynamic(e.target.value, 2); // Limit to 3 digits
                             setInitialMinAgeLimit(0)
                           }}
-                          onChange={(e)=>{
-                            setFieldValue("minimumAge",e.target.value)
+                          onChange={(e) => {
+                            setFieldValue("minimumAge", e.target.value)
                           }}
                           name="minimumAge"
                           component={Input}
                           placeholder="Enter minimum age"
-                          value={values.minimumAge || (id ? undefined : initialMinAgeLimit)} 
-                          // label="Minimum Age"
+                          value={values.minimumAge || (id ? undefined : initialMinAgeLimit)}
+                        // label="Minimum Age"
                         //  value="18"
                         // 
                         />
@@ -524,11 +509,11 @@ export function DesignationEditForm({
 
                     {
                       <div className="col-12 col-md-4 mt-3">
-                                          <label >
-                                          Maximum Age
+                        <label >
+                          Maximum Age
 
 
-                          </label>
+                        </label>
                         <Field
                           type="number"
                           onInput={(e) => {
@@ -537,7 +522,7 @@ export function DesignationEditForm({
                           name="maximumAge"
                           component={Input}
                           placeholder="60"
-                          // label="Maximum Age"
+                        // label="Maximum Age"
                         // value="60"
                         />
                       </div>
@@ -550,11 +535,11 @@ export function DesignationEditForm({
 
                     {
                       <div className="col-12 col-md-4 mt-3">
-                               <label >
-                               Picture Size Limit (MB)
+                        <label >
+                          Picture Size Limit (MB)
 
 
-                          </label>
+                        </label>
                         <Field
                           type="number"
                           onInput={(e) => {
@@ -563,7 +548,7 @@ export function DesignationEditForm({
                           name="pictureSizeLimit"
                           component={Input}
                           placeholder="5MB"
-                          // label="Picture Size Limit (MB)"
+                        // label="Picture Size Limit (MB)"
                         // value="10"
 
                         />
@@ -572,18 +557,18 @@ export function DesignationEditForm({
 
                     {
                       <div className="col-12 col-md-4 mt-3">
-                            <label >
-                            File Support Extension
+                        <label >
+                          File Support Extension
 
 
-                          </label>
+                        </label>
                         <Field
-                        
+
                           name="pictureFilesSupport"
                           component={Input}
 
                           placeholder=".jpg, .png"
-                          // label="File Support Extension"
+                        // label="File Support Extension"
                         // value=".jpg,.png,.gif"
 
                         />eg: .jpg,.png,.gif
@@ -596,11 +581,11 @@ export function DesignationEditForm({
 
                     {
                       <div className="col-12 col-md-4 mt-3">
-                              <label >
-                              Document Size Limit (MB)
+                        <label >
+                          Document Size Limit (MB)
 
 
-                          </label>
+                        </label>
                         <Field
                           type="number"
                           onInput={(e) => {
@@ -609,7 +594,7 @@ export function DesignationEditForm({
                           name="documentSizeLimit"
                           component={Input}
                           placeholder="5MB"
-                          // label="Document Size Limit (MB)"
+                        // label="Document Size Limit (MB)"
                         //  value="100"
                         // 
                         />
@@ -618,18 +603,18 @@ export function DesignationEditForm({
 
                     {
                       <div className="col-12 col-md-4 mt-3">
-                                <label >
-                                File Support Extension
+                        <label >
+                          File Support Extension
 
 
-                          </label>
+                        </label>
                         <Field
 
                           name="documentFilesSupport"
                           component={Input}
 
                           placeholder=".jpg, .png"
-                          // label="File Support Extension"
+                        // label="File Support Extension"
                         // value=".docx,.pdf,.xls,.txt"
                         />
                       </div>
@@ -700,11 +685,11 @@ export function DesignationEditForm({
 
                     {
                       <div className="col-12 col-md-4 mt-3">
-                                        <label htmlFor="empPictureIsMandatory">
-                                        Confirmation in Months <span style={{ color: "red" }}>*</span>
+                        <label htmlFor="empPictureIsMandatory">
+                          Confirmation in Months <span style={{ color: "red" }}>*</span>
 
 
-                          </label>
+                        </label>
                         <Field
                           type="number"
                           onInput={(e) => {
@@ -713,7 +698,7 @@ export function DesignationEditForm({
                           name="probationPolicyInMonth"
                           component={Input}
                           placeholder="12"
-                          // label="Probation in Months"
+                        // label="Probation in Months"
 
                         // 
                         />
@@ -722,11 +707,11 @@ export function DesignationEditForm({
 
                     {
                       <div className="col-12 col-md-4 mt-3">
-                                  <label htmlFor="empPictureIsMandatory">
-                                  Contract Months <span style={{ color: "red" }}>*</span>
+                        <label htmlFor="empPictureIsMandatory">
+                          Contract Months <span style={{ color: "red" }}>*</span>
 
 
-                          </label>
+                        </label>
                         <Field
                           // 
                           type="number"
@@ -737,7 +722,7 @@ export function DesignationEditForm({
                           component={Input}
 
                           placeholder="12"
-                          // label="Contract Months"
+                        // label="Contract Months"
 
                         />
                       </div>

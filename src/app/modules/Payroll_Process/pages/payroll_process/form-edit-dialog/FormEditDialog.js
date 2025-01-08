@@ -77,7 +77,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         await dispatch(
           actions.createPayrollProcess(data, disbaleLoading, resetForm)
         );
-        await dispatch(actions.fetchPayrollProcess(formUIProps));
+        // await dispatch(actions.fetchPayrollProcess(formUIProps));
       }
      else {
      

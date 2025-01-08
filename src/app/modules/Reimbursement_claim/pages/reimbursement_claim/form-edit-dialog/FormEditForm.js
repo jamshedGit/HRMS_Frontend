@@ -63,6 +63,8 @@ export function FormEditForm({
   const dispatch = useDispatch();
   const { dashboard } = useSelector((state) => state);
   const inputFile = useRef(null);
+  // const [isActiveMonth, setIsActiveMonth] = useState(false)
+
   // const [isFileReq,setIsFileReq]=useState(false)
   // Fetch necessary data if not already present
   useEffect(() => {
@@ -111,14 +113,16 @@ export function FormEditForm({
   }, [employeeId]);
 
 
-  const calculateRemainingAmount = (reimbursementTypeId, payrollForId, policies) => {
+  const calculateRemainingAmount = (reimbursementTypeId, payrollForId, policies, values) => {
     // Find the max amount allowed for the reimbursement type
     // let employee = currentState?.loan_config_details_permission?.employee;
+    
+
     const maxAmount =
       policies?.find((item) => item.reimbursement_typeId === reimbursementTypeId)?.max_amount || 0;
 
     // Calculate the claimed amount for the selected reimbursement type and payroll
-    
+
     const claimedAmount = entities
       ?.filter(
         (entity) =>
@@ -129,7 +133,11 @@ export function FormEditForm({
       ?.reduce((sum, entity) => sum + (entity.amount || 0), 0);
 
     // Return the remaining amount
-    const finalMaxAmount = (maxAmount || 0) - (claimedAmount || 0);
+
+    let finalMaxAmount = (maxAmount || 0) - (claimedAmount || 0);
+    if (isEdit & values.approved_status == 1) {
+      finalMaxAmount += values.amount
+    }
     return finalMaxAmount;
   };
 
@@ -138,6 +146,11 @@ export function FormEditForm({
     { value: 1, label: "Approved" },
     { value: 2, label: "Rejected" },
   ];
+
+
+
+
+
 
   return (
     <Formik
@@ -152,7 +165,7 @@ export function FormEditForm({
         const finalAmountLimit = calculateRemainingAmount(
           values?.reimbursement_typeId,
           values?.pay_in_payroll_forId,
-          currentState?.reimbursement_config_policies_permission?.policies
+          currentState?.reimbursement_config_policies_permission?.policies, values
         );
         const clearForm = () => {
           resetForm();
@@ -160,7 +173,7 @@ export function FormEditForm({
             inputFile.current.value = "";
           }
         };
-        saveForm(values, finalAmountLimit, isFileReq, clearForm);
+        saveForm(values, finalAmountLimit, isFileReq, clearForm, );
       }}
     >
       {({
@@ -170,6 +183,7 @@ export function FormEditForm({
         values,
         setFieldValue,
         handleReset,
+
       }) => (
         <>
           <Modal.Body className="overlay overlay-block cursor-default">
@@ -228,6 +242,10 @@ export function FormEditForm({
                       type="date"
                       maxDate={new Date()}
                       minDate={data.dateOfJoining ? new Date(data.dateOfJoining) : null}
+                    // disabled={!isActiveMonth}
+                    disabled={isEdit && !(dashboard?.allPayrollMonthYearList.some(
+                      (option) => option?.value == values?.pay_in_payroll_forId && option?.isActive === true))}
+
                     />
                   </div>
 
@@ -255,6 +273,11 @@ export function FormEditForm({
                         ) || []
                       }
                       // options={dashboard.allPayrollMonthYearList}
+                      // isDisabled={ !isActiveMonth}
+                      isDisabled={isEdit && !(dashboard?.allPayrollMonthYearList.some(
+                        (option) => option?.value == values?.pay_in_payroll_forId && option?.isActive === true))}
+
+
                       error={errors.pay_in_payroll_forId}
                       touched={touched.pay_in_payroll_forId}
                     />
@@ -265,13 +288,14 @@ export function FormEditForm({
                       name="amount"
                       component={Input}
                       placeholder="Enter Amount"
-
-
+                      disabled={isEdit && !(dashboard?.allPayrollMonthYearList.some(
+                        (option) => option?.value == values?.pay_in_payroll_forId && option?.isActive === true))}
+                      // disabled={!isActiveMonth}
                       label={(() => {
                         const finalAmountLimit = calculateRemainingAmount(
                           values?.reimbursement_typeId,
                           values?.pay_in_payroll_forId,
-                          currentState?.reimbursement_config_policies_permission?.policies
+                          currentState?.reimbursement_config_policies_permission?.policies, values
                         );
                         return (
 
@@ -294,7 +318,7 @@ export function FormEditForm({
                         const finalAmountLimit = calculateRemainingAmount(
                           values?.reimbursement_typeId,
                           values?.pay_in_payroll_forId,
-                          currentState?.reimbursement_config_policies_permission?.policies
+                          currentState?.reimbursement_config_policies_permission?.policies, values
                         );
 
                         const value = Number(e.target.value);
@@ -320,7 +344,8 @@ export function FormEditForm({
                       name="approved_status"
                       as="select"
                       className="form-control"
-                      disabled={isUserForRead}
+                      // disabled={!isActiveMonth}
+                      disabled={isUserForRead || values.approved_status == 1}
                       onChange={(e) => {
                         setFieldValue(
                           "approved_status",
@@ -354,6 +379,9 @@ export function FormEditForm({
                       name="details"
                       component={TextArea}
                       placeholder="Enter Details"
+                      //  disabled={ !isActiveMonth}
+                      disabled={isEdit && !(dashboard?.allPayrollMonthYearList.some(
+                        (option) => option?.value == values?.pay_in_payroll_forId && option?.isActive === true))}
                       label={
                         <span>
                           Details <span style={{ color: "red" }}>*</span>
@@ -438,7 +466,7 @@ export function FormEditForm({
                 onClick={() => {
                   setIds("");
                   handleReset();
-
+                
                   if (inputFile?.current) {
                     inputFile.current.value = "";
                   }
@@ -458,22 +486,33 @@ export function FormEditForm({
             )}
 
             {/* Save Button */}
-            {!isUserForRead && (
-              <button
-                type="submit"
-                // onClick={() => handleSubmit()}
-                onClick={() => {
-                  handleSubmit();
-                }}
-                className="btn btn-primary btn-elevate"
-                disabled={loading}
-              >
-                Save
-                {loading && (
-                  <span className="ml-3 mr-3 spinner spinner-white"></span>
-                )}
-              </button>
-            )}
+            {/* {!isUserForRead || !isActiveMonth && ( */}
+            {
+
+             true
+
+
+
+
+              && (
+                <button
+                  type="submit"
+                  // onClick={() => handleSubmit()}
+                  onClick={() => {
+                    handleSubmit();
+                  }}
+                  className="btn btn-primary btn-elevate"
+                  // disabled={loading}
+                  disabled={loading || (isEdit && !dashboard?.allPayrollMonthYearList.some(
+                    (option) => option?.value == values?.pay_in_payroll_forId && option?.isActive === true
+                  ))}
+                >
+                  Save
+                  {loading && (
+                    <span className="ml-3 mr-3 spinner spinner-white"></span>
+                  )}
+                </button>
+              )}
           </Modal.Footer>
         </>
       )}

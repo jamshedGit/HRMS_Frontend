@@ -155,6 +155,7 @@ export function DesignationEditDialog({ id, show, onHide, userForRead }) {
         cycleTypeId: user.cycleTypeId,
         requireDeligation: user.requireDeligation,
         employeeStatusId:user.employeeStatusId,
+        approvedForPayroll:user.approvedForPayroll,
       };
 
     

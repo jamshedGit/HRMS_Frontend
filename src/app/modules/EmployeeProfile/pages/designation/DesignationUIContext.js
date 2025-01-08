@@ -85,8 +85,10 @@ export function DesignationUIProvider({ DesignationUIEvents, children }) {
     defaultShiftId:"",
     //defContactList: []
     attendanceType:1,
-    employeeStatusId:""
-    
+    employeeStatusId:"",
+    codeAuto:"",
+    approvedForPayroll:"",
+    codePrefix:"",
 
   };
 

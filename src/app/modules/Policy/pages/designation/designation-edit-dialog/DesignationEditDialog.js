@@ -90,7 +90,8 @@ export function DesignationEditDialog({ id, show, onHide, userForRead }) {
         documentFilesSupport: user.documentFilesSupport,
         empPictureIsMandatory: user.empPictureIsMandatory,
         probationPolicyInMonth: user.probationPolicyInMonth,
-        contractualPolicyInMonth: user.contractualPolicyInMonth
+        contractualPolicyInMonth: user.contractualPolicyInMonth,
+        codePrefix:user.codePrefix,
       };
 
 

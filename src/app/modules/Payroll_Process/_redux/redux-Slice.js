@@ -14,7 +14,8 @@ const initialPayrollProcessState = {
     lastError: null,
     userForRead: false,
     payroll_group_details: null,
-    checkPayroll_EmployeesExist:null
+    checkPayroll_EmployeesExist:null,
+    resultAfterPayrollProcess:null
 };
 
 
@@ -92,6 +93,17 @@ export const payroll_processSlice = createSlice({
             state.checkPayroll_EmployeesExist = checkPayroll_EmployeesExist;
 
         },
+
+        resultAfterPayrollProcessFetched: (state, action) => {
+
+
+            let resultAfterPayrollProcess = action?.payload;
+            state.listLoading = false;
+            state.error = null;
+            state.resultAfterPayrollProcess = resultAfterPayrollProcess;
+
+        },
+
 
         //get User By ID
         PayrollProcessFetchedForEdit: (state, action) => {

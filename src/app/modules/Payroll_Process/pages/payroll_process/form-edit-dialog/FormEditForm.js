@@ -15,7 +15,7 @@ import {
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 import { getDateDiffInDays } from "../../../../../utils/common";
 import * as actions from "../../../_redux/redux-Actions";
-import { checkPayroll_EmployeesByIds ,fetchPayrollProcess} from "../../../_redux/redux-Actions";
+import { checkPayroll_EmployeesByIds, fetchPayrollProcess } from "../../../_redux/redux-Actions";
 import { payroll_processSlice, callTypes } from "../../../_redux/redux-Slice";
 // const { actions } = payroll_processSlice;
 // percentage: Yup.string().required("Required*"),
@@ -28,7 +28,8 @@ const payroll_processEditSchema = Yup.object().shape({
   // to_amount: Yup.string().required("Required*"),
 
   payroll_groupId: Yup.string()
-    .required(VALIDATION_MESSAGES.required),
+  .nullable(),
+    // .required(VALIDATION_MESSAGES.required),
 
   payroll_monthId: Yup.string()
     .required(VALIDATION_MESSAGES.required),
@@ -46,11 +47,11 @@ export function FormEditForm({
   isUserForRead,
   enableLoading,
   loading,
-  setIds,formUIProps
+  setIds, formUIProps
 }) {
   const dispatch = useDispatch();
   const { dashboard } = useSelector((state) => state);
-
+  const [isAfterResult, setIsAfterResult] = useState(false)
   useEffect(() => {
     if (!user.Id) {
       // dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsidiaries
@@ -72,15 +73,15 @@ export function FormEditForm({
     };
   }, shallowEqual);
 
-  const { userForEdit,checkPayroll_EmployeesExist } = currentState;
+  const { userForEdit, checkPayroll_EmployeesExist,resultAfterPayrollProcess } = currentState;
 
 
-  const payrollGroupDetails = async (subsidiaryId, payroll_groupId) => {
-    if (subsidiaryId && payroll_groupId) {
+  const payrollGroupDetails = async (subsidiaryId, payroll_groupId,payroll_monthId) => {
+    if (subsidiaryId && payroll_monthId) {
       // Dispatch action to fetch payroll group details
       let body = {
         subsidiaryId,
-        payroll_groupId,
+        payroll_groupId,payroll_monthId
       };
       await dispatch(actions.fetchPayrollGroupDetails(body));
     }
@@ -89,34 +90,34 @@ export function FormEditForm({
 
   useEffect(() => {
     if (currentState?.payroll_group_details) {
-   
+
     }
-  }, [currentState?.payroll_group_details]); 
+  }, [currentState?.payroll_group_details]);
 
-const getPayroll=(subsidiaryId)=>{
-  const key = "allPayrollMonthYearList";  // The key parameter
+  const getPayroll = (subsidiaryId) => {
+    const key = "allPayrollMonthYearList";  // The key parameter
 
-       dispatch(fetchAllPayrollMonthYearList({subsidiaryId:subsidiaryId,employeeId:null}, key));
+    dispatch(fetchAllPayrollMonthYearList({ subsidiaryId: subsidiaryId, employeeId: null }, key));
 
-}
+  }
 
-  const checkPayroll_Employees =async (setFieldValue,subsidiaryId, payroll_groupId,payroll_monthId,revert=false) => {
-   
-  
-    if (subsidiaryId &&  payroll_groupId && payroll_monthId) {
+  const checkPayroll_Employees = async (setFieldValue, subsidiaryId, payroll_groupId, payroll_monthId, revert = false,finalize=false) => {
+
+
+    if (subsidiaryId  && payroll_monthId) {
       let data = {
-        SubsidiaryId:subsidiaryId,PayrollGroupId:payroll_groupId,MonthId:payroll_monthId,revert
+        SubsidiaryId: subsidiaryId, PayrollGroupId: payroll_groupId, MonthId: payroll_monthId, revert,finalize,
       }
-    
-     await dispatch(checkPayroll_EmployeesByIds({data}));
-     if(revert){
-      await dispatch(fetchPayrollProcess(formUIProps));
-     
-     }
+
+      await dispatch(checkPayroll_EmployeesByIds({ data }));
+      if (revert) {
+        await dispatch(fetchPayrollProcess(formUIProps));
+
+      }
 
 
       // setIds("");
-     
+
     }
 
   }
@@ -148,6 +149,7 @@ const getPayroll=(subsidiaryId)=>{
             )}
             <Form className="form form-label-right">
               <fieldset disabled={isUserForRead}>
+             
                 <div className="form-group row">
                   <div className="col-12 col-md-12  p-0 m-0">
                     <div className="col-12 col-md-6 mt-3">
@@ -161,9 +163,10 @@ const getPayroll=(subsidiaryId)=>{
                         isDisabled={isUserForRead}
                         onChange={(e) => {
                           setFieldValue("subsidiaryId", e.value || null);
-                          payrollGroupDetails(e.value,values.payroll_groupId)
-                          getPayroll( e.value)
-                          checkPayroll_Employees(setFieldValue, e.value, values.payroll_groupId,values.payroll_monthId)
+                          payrollGroupDetails(e.value, values.payroll_groupId,values.payroll_monthId)
+                          getPayroll(e.value)
+                          checkPayroll_Employees(setFieldValue, e.value, values.payroll_groupId, values.payroll_monthId)
+                          setIsAfterResult(false)
                         }}
                         value={
                           dashboard?.allSubsidiaryList?.find(
@@ -194,16 +197,32 @@ const getPayroll=(subsidiaryId)=>{
                       isDisabled={isUserForRead}
                       onChange={(e) => {
                         setFieldValue("payroll_groupId", e.value || null);
-                        payrollGroupDetails(values.subsidiaryId,e.value)
-                        checkPayroll_Employees(setFieldValue,values.subsidiaryId,e.value,values.payroll_monthId)
+                        payrollGroupDetails(values.subsidiaryId, e.value,values.payroll_monthId)
+                        checkPayroll_Employees(setFieldValue, values.subsidiaryId, e.value, values.payroll_monthId)
+                        setIsAfterResult(false)
                       }}
+                      // value={
+                      //   dashboard?.allPayrolGroupList?.find(
+                      //     (option) => option.value === values.payroll_groupId
+                      //   ) || null
+                      // }
+
                       value={
-                        dashboard?.allPayrolGroupList?.find(
-                          (option) => option.value === values.payroll_groupId
-                        ) || null
+               
+                        values?.payroll_groupId ==null
+                          ? { value: null, label: 'All' }
+                          : dashboard?.allPayrolGroupList?.find(
+                            (option) => option.value === values.payroll_groupId
+                          ) || null
                       }
 
-                      options={dashboard?.allPayrolGroupList}
+                      // options={dashboard?.allPayrolGroupList}
+
+                      options={[
+                        { value: null, label: 'All' }, // Adding "All" option with value empty string
+                        ...dashboard?.allPayrolGroupList, // Spread the rest of the menu options
+                      ]}
+
                       // options={dashboard.allSubidiaryList.map(option => ({
                       //   label: `${option.label} (${option.value})`, // Adding the value to the label
                       //   value: option.value,
@@ -212,6 +231,7 @@ const getPayroll=(subsidiaryId)=>{
                       touched={touched.payroll_groupId}
                     />
                   </div>
+                  
 
                   <div className="col-12 col-md-6 mt-3">
                     <SearchSelect
@@ -225,7 +245,9 @@ const getPayroll=(subsidiaryId)=>{
                       isDisabled={isUserForRead}
                       onChange={(e) => {
                         setFieldValue("payroll_monthId", e.value || null);
-                        checkPayroll_Employees(setFieldValue,values.subsidiaryId,values.payroll_groupId,e.value)
+                        payrollGroupDetails(values.subsidiaryId,values.payroll_groupId, e.value)
+                        checkPayroll_Employees(setFieldValue, values.subsidiaryId, values.payroll_groupId, e.value)
+                        setIsAfterResult(false)
                       }}
                       value={
                         dashboard?.allPayrollMonthYearList?.find(
@@ -247,25 +269,103 @@ const getPayroll=(subsidiaryId)=>{
                       touched={touched.payroll_monthId}
                     />
                   </div>
+
+                  <div className='accordion-header-btn w-100  d-flex justify-content-left bg-primary m-4'>
+                      <h6 className="text-white p-5">Before Process - Result</h6>
+                    </div>
                   <div className="col-12 col-md-6 mt-3">
                     <label>
-                    Total Employee: {currentState?.payroll_group_details?.total_employees}
+                      Total Employee: 
+                    <span style={{ fontWeight: 'bold' }}> {currentState?.payroll_group_details?.total_employees || 0}</span> 
                     </label>
-                  
+
+                  </div>
+
+                  <div className="col-12 col-md-6 mt-3">
+
+                    <label>
+                Salary setup not created: <span style={{ fontWeight: 'bold' }}> {currentState?.payroll_group_details?.slary_setup_not_created || 0}</span> 
+                    </label>
+
                   </div>
 
                   <div className="col-12 col-md-6 mt-3">
                     <label>
-                      Salary setup not created: {currentState?.payroll_group_details?.slary_setup_not_created}
+                      Loan to be processed: <span style={{ fontWeight: 'bold' }}>{currentState?.payroll_group_details?.loan_to_be_processed || 0}</span> 
                     </label>
-                  
+
                   </div>
+
+
+                  <div className="col-12 col-md-6 mt-3">
+                    <label>
+                      Total Employee (Finalized): <span style={{ fontWeight: 'bold' }}>{0}</span>
+                    </label>
+
+                  </div>
+
+
+
 
 
 
 
 
                 </div>
+
+
+                {/* <hr /> */}
+
+                {resultAfterPayrollProcess ?
+                  <>
+                    <div className='accordion-header-btn w-100  d-flex justify-content-left  bg-primary'>
+                      <h6 className="text-white p-5">After Process - Result</h6>
+                    </div>
+                    <div className="form-group row">
+                 
+
+                      <div className="col-12 col-md-6 mt-3">
+                        <label>
+                          Tax calculated: <span style={{ fontWeight: 'bold' }}>{resultAfterPayrollProcess?.TaxCalculated || 0}</span> 
+                        </label>
+
+                      </div>
+
+                      <div className="col-12 col-md-6 mt-3">
+                        <label>
+                          Tax not calculated: <span style={{ fontWeight: 'bold' }}>{resultAfterPayrollProcess?.TaxNotCalculated || 0}</span>
+                        </label>
+
+                      </div>
+
+
+                      <div className="col-12 col-md-6 mt-3">
+                        <label>
+                          Employee with zero salary: <span style={{ fontWeight: 'bold' }}>{resultAfterPayrollProcess?.EmployeewithZeroSalary || 0}</span>
+                        </label>
+
+                      </div>
+                      <div className="col-12 col-md-6 mt-3">
+                        <label>
+                          Employee with negative salary: <span style={{ fontWeight: 'bold' }}>{resultAfterPayrollProcess?.EmployeewithNegativeSalary || 0}</span> 
+                        </label>
+
+                      </div>
+                      <div className="col-12 col-md-6 mt-3">
+                        <label>
+                          Loan processed:<span style={{ fontWeight: 'bold' }}>{resultAfterPayrollProcess?.LoanProcess	 || 0}</span> 
+                        </label>
+
+                      </div>
+
+                    </div>
+
+                  </>
+                  : null
+
+
+                }
+
               </fieldset>
             </Form>
           </Modal.Body>
@@ -273,27 +373,49 @@ const getPayroll=(subsidiaryId)=>{
 
           <Modal.Footer>
             {/* Cancel / Ok Button */}
-                 {/* checkPayroll_EmployeesExist */}
+            {/* checkPayroll_EmployeesExist */}
 
-                 {checkPayroll_EmployeesExist && (
-              <button
+            {checkPayroll_EmployeesExist && (
+
+              <>
              
+              <button
+
                 onClick={() => {
-                  checkPayroll_Employees(setFieldValue,values.subsidiaryId, values.payroll_groupId,values.payroll_monthId,true);
+                  checkPayroll_Employees(setFieldValue, values.subsidiaryId, values.payroll_groupId, values.payroll_monthId, false,true);
                   setIds("");
                   handleReset();
                   dispatch(actions.clearReduxData())
                 }}
-                className="btn btn-red"
+                className="btn btn-green"
                 disabled={loading}
               >
-                Revert
+                Finalize
                 {loading && (
                   <span className="ml-3 mr-3 spinner spinner-white"></span>
                 )}
               </button>
+
+<button
+
+onClick={() => {
+  checkPayroll_Employees(setFieldValue, values.subsidiaryId, values.payroll_groupId, values.payroll_monthId, true,false);
+  setIds("");
+  handleReset();
+  dispatch(actions.clearReduxData())
+}}
+className="btn btn-red"
+disabled={loading}
+>
+Revert
+{loading && (
+  <span className="ml-3 mr-3 spinner spinner-white"></span>
+)}
+</button>
+
+</>
             )}
-            
+
             {!isUserForRead ? (
               <button
                 type="reset"
@@ -325,6 +447,7 @@ const getPayroll=(subsidiaryId)=>{
                 onClick={() => {
                   handleSubmit();
                   dispatch(actions.clearReduxData())
+                  setIsAfterResult(true)
                 }}
                 className="btn btn-primary btn-elevate"
                 disabled={loading}
@@ -335,9 +458,9 @@ const getPayroll=(subsidiaryId)=>{
                 )}
               </button>
             )}
-            
 
-       
+
+
 
           </Modal.Footer>
         </>
