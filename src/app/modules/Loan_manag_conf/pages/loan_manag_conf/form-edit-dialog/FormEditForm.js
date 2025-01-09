@@ -59,7 +59,7 @@ const loanManagementSchema = Yup.object().shape({
       installment_start_date_policy: Yup.number()
       .nullable()
       .min(1, VALIDATION_MESSAGES.minOneValue)
-      .max(99, "Must be at most 99")
+      .max(12, "Must be at most 12")
       .required(VALIDATION_MESSAGES.required),
       salary_count: Yup.number()
         .min(1, VALIDATION_MESSAGES.minOneValue)
