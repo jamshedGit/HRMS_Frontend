@@ -43,12 +43,24 @@ const loanManagementSchema = Yup.object().shape({
         .notOneOf([''], "Type is required"),
 
       max_loan_amount: Yup.number()
+      .nullable()
         .min(1, "Must be at least 1")
         .required(VALIDATION_MESSAGES.required),
       basis: Yup.number().required(VALIDATION_MESSAGES.required),
 
-      max_no_of_installment_for_loan: Yup.number().required(VALIDATION_MESSAGES.required),
-      installment_start_date_policy: Yup.number().required(VALIDATION_MESSAGES.required),
+      max_no_of_installment_for_loan: Yup.number()
+      .nullable()
+      .min(1, VALIDATION_MESSAGES.minOneValue)
+      .max(99, "Must be at most 99")
+      .required(VALIDATION_MESSAGES.required),
+
+
+
+      installment_start_date_policy: Yup.number()
+      .nullable()
+      .min(1, VALIDATION_MESSAGES.minOneValue)
+      .max(99, "Must be at most 99")
+      .required(VALIDATION_MESSAGES.required),
       salary_count: Yup.number()
         .min(1, VALIDATION_MESSAGES.minOneValue)
         .max(99, "Must be at most 99")
@@ -391,7 +403,7 @@ export function FormEditForm({
                           <th>Max Loan Amount</th>
                           <th>Basis</th>
                           <th>Salary Count</th>
-                          <th>Max. No. of Installment for Loant</th>
+                          <th>Max. No. of Installment for Loan</th>
                           <th>Installment Start date Policy</th>
                         </tr>
                       </thead>
