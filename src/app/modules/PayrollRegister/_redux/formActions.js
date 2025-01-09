@@ -51,7 +51,7 @@ export const generatePayslip = (filter, document, labels = {}) => async (dispatc
     .catch((error) => {
       error.clientMessage = "Can't generate Payslip";
       dispatch(actions.catchError({ error, callType: callTypes.pdf }));
-      toast.error(error?.response?.status == 400 ? 'Please provide employee and month' : error.clientMessage, {
+      toast.error(error?.response?.status == 400 ? 'Please provide Employee and Month' : error.clientMessage, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -66,7 +66,7 @@ export const generatePayslip = (filter, document, labels = {}) => async (dispatc
 
 /**
  * 
- * Fetch Payroll Register from server
+ * Fetch Payroll Register from server as PDF
  * 
  * @param {Object} filter 
  * @param {Document} document 
@@ -92,7 +92,47 @@ export const generateRegisterPdf = (filter, document, labels = {}) => async (dis
     .catch((error) => {
       error.clientMessage = "Can't generate Register";
       dispatch(actions.catchError({ error, callType: callTypes.register }));
-      toast.error(error?.response?.status == 400 ? 'Please provide employee and month' : error.clientMessage, {
+      toast.error(error?.response?.status == 400 ? 'Please provide Subsidiary and Month' : error.clientMessage, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    });
+};
+
+/**
+ * 
+ * Fetch Payroll Register from server as xlsx
+ * 
+ * @param {Object} filter 
+ * @param {Document} document 
+ * @param {Object} labels 
+ * @returns 
+ */
+export const generateRegisterExcel = (filter, document, labels = {}) => async (dispatch) => {
+  dispatch(actions.startCall({ callType: callTypes.register }));
+  return requestFromServer.generateExcel({ ...filter, labels })
+    .then((res) => {
+      const pdfBlob = new Blob([res.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+
+      // Trigger file download
+      const link = document.createElement('a');
+      link.href = pdfUrl;
+      link.setAttribute('download', 'payroll_register.xlsx');
+      document.body.appendChild(link);
+      link.click();
+      dispatch(actions.registerFetched({}));
+      document.body.removeChild(link);
+    })
+    .catch((error) => {
+      error.clientMessage = "Can't generate Register";
+      dispatch(actions.catchError({ error, callType: callTypes.register }));
+      toast.error(error?.response?.status == 400 ? 'Please provide Subsidiary and Month' : error.clientMessage, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

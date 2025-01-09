@@ -109,6 +109,12 @@ export function FormFilter({ loading, dispatch, pdfLoading, registerLoading }) {
     dispatch(actions.generateRegisterPdf(newQueryParams.filter, document, labels));
   }
 
+  const getExcel = (values) => {
+    const newQueryParams = prepareFilter(formUIProps.queryParams, values);
+    const labels = getLabels(values);
+    dispatch(actions.generateRegisterExcel(newQueryParams.filter, document, labels));
+  }
+
   return (
     <>
       <Formik
@@ -376,17 +382,31 @@ export function FormFilter({ loading, dispatch, pdfLoading, registerLoading }) {
                     {/* Group By Field End */}
 
                     <div className="col-12 col-md-4 mt-11">
-                      <button
-                        onClick={() => { getPdf(values) }}
-                        disabled={registerLoading}
-                        type="button"
-                        className="btn btn-secondary btn-elevate"
-                      >
-                        Generate Register
-                        {registerLoading && (
-                          <span className="ml-3 mr-3 spinner spinner-white"></span>
-                        )}
-                      </button>
+                        <button
+                          onClick={() => { getPdf(values) }}
+                          disabled={registerLoading}
+                          type="button"
+                          className="btn btn-secondary btn-elevate"
+                        >
+                          Generate Register (PDF)
+                          {registerLoading && (
+                            <span className="ml-3 mr-3 spinner spinner-white"></span>
+                          )}
+                        </button>
+
+                        <span>    </span>
+
+                        <button
+                          onClick={() => { getExcel(values) }}
+                          disabled={registerLoading}
+                          type="button"
+                          className="btn btn-secondary btn-elevate"
+                        >
+                          Generate Register (Excel)
+                          {registerLoading && (
+                            <span className="ml-3 mr-3 spinner spinner-white"></span>
+                          )}
+                        </button>
                     </div>
                   </div>
 

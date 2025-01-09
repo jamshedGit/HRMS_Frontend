@@ -38,3 +38,16 @@ export async function generatePdf(body) {
     responseType:'arraybuffer'
   });
 }
+
+/**
+ * 
+ * Generate payroll register Excel
+ * 
+ * @param {Object} body 
+ * @returns res
+ */
+export async function generateExcel(body) {
+  return axios.post(`${USERS_URL}/payroll_register/read-all-registered-payroll-excel`, body,{
+    responseType:'arraybuffer'
+  });
+}
