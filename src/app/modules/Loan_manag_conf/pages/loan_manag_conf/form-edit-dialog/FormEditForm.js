@@ -55,7 +55,6 @@ const loanManagementSchema = Yup.object().shape({
       .required(VALIDATION_MESSAGES.required),
 
 
-
       installment_start_date_policy: Yup.number()
       .nullable()
       .min(1, VALIDATION_MESSAGES.minOneValue)
