@@ -23,6 +23,7 @@ import { Form } from "react-bootstrap";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import * as Yup from "yup";
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
+import { fetchRoles } from "../../../../UserMangement/_redux/usersActions";
 
 export function FormTable(user) {
   //Users UI Context
@@ -40,12 +41,13 @@ export function FormTable(user) {
     };
   }, [formUIContext]);
 
-  const { currentState, userAccess } = useSelector(
+  const { currentState, userAccess, roles } = useSelector(
     (state) => {
       return {
 
         currentState: state.payroll_process_policy,
         userAccess: state?.auth?.userAccess["Payroll_Process_Policy"],
+        roles: state.users.roles
       }
     },
     shallowEqual
@@ -120,6 +122,7 @@ export function FormTable(user) {
       dispatch(fetchAllFormsMenu(127, "allChildMenus")); // For Payroll Group
       dispatch(fetchAllFormsMenu(45, "allPayrollAccounts")); // For Basic Pay Accounts
       dispatch(fetchAllFormsMenu(45, "allPayrollPayableAccounts")); // For Payable Accounts
+      dispatch(fetchRoles());
     }
   }, [dispatch]);
 
@@ -271,10 +274,10 @@ export function FormTable(user) {
     {
       subsidiaryId: Yup.string()
         .required(VALIDATION_MESSAGES.required),
-      payroll_templateId: Yup.string(),
-      employer_uniqueId: Yup.string()
-        .notRequired()
-        .max(20, 'Max 20 Characters'),
+      // payroll_templateId: Yup.string(),
+      // employer_uniqueId: Yup.string()
+      //   .notRequired()
+      //   .max(20, 'Max 20 Characters'),
       payroll_approverId: Yup.string()
         .notRequired(),
       basicSalaryId: Yup.string()
@@ -390,8 +393,8 @@ export function FormTable(user) {
   const initialValues = {
     subsidiaryId: "",
     companyId: "",
-    payroll_templateId: "",
-    employer_uniqueId: "",
+    // payroll_templateId: "",
+    // employer_uniqueId: "",
     payroll_approverId: "",
     payroll_groupId: "",
     basicSalaryId: "",
@@ -404,15 +407,15 @@ export function FormTable(user) {
     isEnableAccounting: false,
     basic_pay_accountId: "",
     payroll_payable_accountId: "",
-    isGroupEarningOnAccount: "",
-    isGroupDeduductionOnAccount: "",
-    isAccrueGratuityOnPayroll: "",
+    // isGroupEarningOnAccount: "",
+    // isGroupDeduductionOnAccount: "",
+    // isAccrueGratuityOnPayroll: "",
 
     //-- Tax Integration
     isEnableTax: false,
     payrollTax_DeductionTypeId: "",
     arrearTaxDeductionId: "",
-    isTrackDeductionHistory: "",
+    // isTrackDeductionHistory: "",
 
     // -- Leave / AAtteandance Integraion
     isEnableAttandanceIntegration: false,
@@ -474,8 +477,8 @@ export function FormTable(user) {
 
         subsidiaryId: user.subsidiaryId,
         companyId: user.companyId,
-        payroll_templateId: user.payroll_templateId,
-        employer_uniqueId: user.employer_uniqueId,
+        // payroll_templateId: user.payroll_templateId,
+        // employer_uniqueId: user.employer_uniqueId,
         payroll_approverId: user.payroll_approverId,
         payroll_groupId: user.payroll_groupId,
         basicSalaryId: user.basicSalaryId,
@@ -488,15 +491,15 @@ export function FormTable(user) {
         isEnableAccounting: user.isEnableAccounting,
         basic_pay_accountId: user.basic_pay_accountId,
         payroll_payable_accountId: user.payroll_payable_accountId,
-        isGroupEarningOnAccount: user.isGroupEarningOnAccount,
-        isGroupDeduductionOnAccount: user.isGroupDeduductionOnAccount,
-        isAccrueGratuityOnPayroll: user.isAccrueGratuityOnPayroll,
+        // isGroupEarningOnAccount: user.isGroupEarningOnAccount,
+        // isGroupDeduductionOnAccount: user.isGroupDeduductionOnAccount,
+        // isAccrueGratuityOnPayroll: user.isAccrueGratuityOnPayroll,
 
         // -- Tax : user.companyIdegration
         isEnableTax: user.isEnableTax,
         payrollTax_DeductionTypeId: user.payrollTax_DeductionTypeId,
         arrearTaxDeductionId: user.arrearTaxDeductionId,
-        isTrackDeductionHistory: user.isTrackDeductionHistory,
+        // isTrackDeductionHistory: user.isTrackDeductionHistory,
 
         //-- Leave / AAtteandance : user.companyIdegraion
         isEnableAttandanceIntegration: user.isEnableAttandanceIntegration,
@@ -700,7 +703,7 @@ export function FormTable(user) {
                     />
                   </div>*/}
 
-                  <div className="col-12 col-md-4 mt-3">
+                  {/* <div className="col-12 col-md-4 mt-3">
 
                     <Select
                       className="form-control"
@@ -722,9 +725,9 @@ export function FormTable(user) {
                       <option value="6">Period Name-Payroll Type-Subsidiary</option>
                     </Select>
 
-                  </div>
+                  </div> */}
 
-                  <div className="col-12 col-md-4 mt-3">
+                  {/* <div className="col-12 col-md-4 mt-3">
                     <Field
                       name="employer_uniqueId"
                       component={Input}
@@ -733,7 +736,7 @@ export function FormTable(user) {
                       label={<span>Employer Unique ID</span>}
                       autoComplete="off"
                     />
-                  </div>
+                  </div> */}
 
                   <div className="col-12 col-md-4 mt-3">
                     <SearchSelect
@@ -748,12 +751,12 @@ export function FormTable(user) {
                         //handlePaymenModeChanged(e)
                       }}
                       isDisabled={Boolean(user?.readOnly)}
-                      value={(dashboard.allEmployees.find(
+                      value={(roles?.find(
                         (option) => option.value === values.payroll_approverId
                       ) || null)}
                       error={errors.payroll_approverId}
                       touched={touched.payroll_approverId}
-                      options={dashboard.allEmployees}
+                      options={roles}
                     />
 
                   </div>
@@ -781,24 +784,23 @@ export function FormTable(user) {
 
                 <div className="from-group row">
                   <div className="col-12 col-md-4 mt-3">
-
-                    <Select
-                      className="form-control"
+                  <SearchSelect
                       name="sender_emailId"
-
                       label={<span>Email Sender</span>}
-                      onChange={(e) => {
-                        setFieldValue("sender_emailId", e.target.value);
-
+                      onBlur={() => {
+                        // handleBlur({ target: { name: "countryId" } });
                       }}
-                      onBlur={handleBlur}
-                    >
-                      <option value="-1">--Select--</option>
-                      <option value="1">hrms@dynasoftcloud.com</option>
-                      <option value="2">payroll@dynasoftcloud.com</option>
-
-                    </Select>
-
+                      onChange={(e) => {
+                        setFieldValue("sender_emailId", e.value || null);
+                      }}
+                      isDisabled={Boolean(user?.readOnly)}
+                      value={(dashboard.allEmployees.find(
+                        (option) => option.value === values.sender_emailId
+                      ) || null)}
+                      error={errors.sender_emailId}
+                      touched={touched.sender_emailId}
+                      options={dashboard.allEmployees}
+                    />
                   </div>
                   <div className="col-12 col-md-4 mt-3">
                     Email Recipents
@@ -886,7 +888,7 @@ export function FormTable(user) {
                       options={dashboard.allPayrollPayableAccounts}
                     />
                   </div>
-                  <div className="col-12 col-md-4 mt-3">
+                  {/* <div className="col-12 col-md-4 mt-3">
                     <Select
                       className="form-control"
                       name="isGroupEarningOnAccount"
@@ -903,9 +905,9 @@ export function FormTable(user) {
                       <option value="false">No</option>
 
                     </Select>
-                  </div>
+                  </div> */}
 
-                  <div className="col-12 col-md-4 mt-3">
+                  {/* <div className="col-12 col-md-4 mt-3">
 
                     <Select
                       className="form-control"
@@ -923,8 +925,8 @@ export function FormTable(user) {
                       <option value="false">No</option>
 
                     </Select>
-                  </div>
-                  <div className="col-12 col-md-4 mt-3">
+                  </div> */}
+                  {/* <div className="col-12 col-md-4 mt-3">
                     <Select
                       className="form-control"
                       name="isAccrueGratuityOnPayroll"
@@ -941,7 +943,7 @@ export function FormTable(user) {
                       <option value="false">No</option>
 
                     </Select>
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <br></br>
@@ -999,7 +1001,7 @@ export function FormTable(user) {
                     </select>
                     {errors.arrearTaxDeductionId && touched.arrearTaxDeductionId && <ErrorMessage className="form-feedBack" name="arrearTaxDeductionId" component="div" />}
                   </div>
-                  <div className="col-12 col-md-4 mt-2">
+                  {/* <div className="col-12 col-md-4 mt-2">
 
                     <Select
                       className="form-control"
@@ -1019,7 +1021,7 @@ export function FormTable(user) {
 
                     </Select>
 
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <br></br>
@@ -1490,7 +1492,7 @@ export function FormTable(user) {
                           <option value="2">Journal-Allied-A88-001</option>
                           <option value="3">Journal-TMP-SILK-018-001</option> */}
                             {
-                              dashboard.allBanks?.map((x) => {
+                              dashboard.allPayrollAccounts?.map((x) => {
                                 return <option value={x.value}> {x.label} </option>
                               })}
                           </select>
