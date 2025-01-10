@@ -6,13 +6,12 @@ import { useFormUIContext } from "../FormUIContext"
 import { Form, Modal } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
-import { Select } from "../../../../../../_metronic/_partials/controls";
-import { ATTENDANCE_TYPE, VALIDATION_MESSAGES } from "../../../../../utils/constants";
-import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
-import { initialFilter } from "../FormUIHelpers";
+import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
+import { groupByOptions, initialFilter } from "../FormUIHelpers";
 import * as actions from "../../../_redux/formActions";
-import { formatDates } from "../../../../../utils/common";
 import { fetchAllActiveEmployeesBySubsidiary, fetchAllPayrollMonthYearList } from "../../../../../../_metronic/redux/dashboardActions";
+import { Select } from "../../../../../../_metronic/_partials/controls";
+import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
 
 //Validation for date fields
 const formValidation = Yup.object().shape({
@@ -27,7 +26,7 @@ const prepareFilter = (queryParams, values) => {
   return newQueryParams
 }
 
-export function FormFilter({ loading, dispatch, pdfLoading }) {
+export function FormFilter({ loading, dispatch, pdfLoading, registerLoading }) {
 
   const FormUIContext = useFormUIContext()
 
@@ -64,6 +63,10 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
   const allPayrollMonthMap = useMemo(() => {
     return new Map(allPayrollMonthYearList?.map(item => [item.value, item]));
   }, [allPayrollMonthYearList]);
+
+  const allGroupByMap = useMemo(() => {
+    return new Map(groupByOptions?.map(item => [item.value, item]));
+  }, [groupByOptions]);
   //Create Maps for every dropdown data so setting value in dropdown can be fast optimized (End)
 
   //Fetch Params from Context
@@ -88,14 +91,28 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
   const getLabels = (values) => {
     return {
       monthLabel: allPayrollMonthMap?.get(values.monthId || '')?.label,
+      subsidiaryLabel: allSubsidiaryMap?.get(values.subsidiaryId || '')?.label,
+      groupWiseLabel: allGroupByMap?.get(values.groupBy || '')?.label,
     }
   }
 
   //Trugger request to download PDF of data according to filters
-  const getPdf = (values) => {
+  const getPayslip = (values) => {
     const newQueryParams = prepareFilter(formUIProps.queryParams, values);
     const labels = getLabels(values);
     dispatch(actions.generatePayslip(newQueryParams.filter, document, labels));
+  }
+
+  const getPdf = (values) => {
+    const newQueryParams = prepareFilter(formUIProps.queryParams, values);
+    const labels = getLabels(values);
+    dispatch(actions.generateRegisterPdf(newQueryParams.filter, document, labels));
+  }
+
+  const getExcel = (values) => {
+    const newQueryParams = prepareFilter(formUIProps.queryParams, values);
+    const labels = getLabels(values);
+    dispatch(actions.generateRegisterExcel(newQueryParams.filter, document, labels));
   }
 
   return (
@@ -340,7 +357,59 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                       />
                     </div>
                     {/* Payroll Month Field End */}
+
+                    {/* Group By Field Start */}
+                    <div className="col-12 col-md-4 mt-3">
+                      <Field
+                        name="groupBy"
+                        component={Select}
+                        placeholder=""
+                        onChange={(e) => {
+                          const value = e.target.value
+                          setFieldValue('groupBy', value)
+                        }}
+                        label={
+                          <span>
+                            {" "}
+                            Group By
+                          </span>
+                        }
+                        value={values.groupBy}
+                        autoComplete="off"
+                        children={CustomDropdown({ data: groupByOptions })}
+                      />
+                    </div>
+                    {/* Group By Field End */}
+
+                    <div className="col-12 col-md-4 mt-11">
+                        <button
+                          onClick={() => { getPdf(values) }}
+                          disabled={registerLoading}
+                          type="button"
+                          className="btn btn-secondary btn-elevate"
+                        >
+                          Generate Register (PDF)
+                          {registerLoading && (
+                            <span className="ml-3 mr-3 spinner spinner-white"></span>
+                          )}
+                        </button>
+
+                        <span>    </span>
+
+                        <button
+                          onClick={() => { getExcel(values) }}
+                          disabled={registerLoading}
+                          type="button"
+                          className="btn btn-secondary btn-elevate"
+                        >
+                          Generate Register (Excel)
+                          {registerLoading && (
+                            <span className="ml-3 mr-3 spinner spinner-white"></span>
+                          )}
+                        </button>
+                    </div>
                   </div>
+
                 </fieldset>
               </Form>
             </Modal.Body>
@@ -370,7 +439,7 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
               </button>
 
               <button
-                onClick={() => { getPdf(values) }}
+                onClick={() => { getPayslip(values) }}
                 disabled={pdfLoading}
                 className="btn btn-secondary"
               >

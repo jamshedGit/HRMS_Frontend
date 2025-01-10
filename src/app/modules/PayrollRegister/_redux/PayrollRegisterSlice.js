@@ -17,7 +17,8 @@ const initialState = {
 export const callTypes = {
     list: "list",
     action: "action",
-    pdf: "pdf"
+    pdf: "pdf",
+    register: 'register'
 };
 
 export const PayrollRegisterSlice = createSlice({
@@ -32,6 +33,9 @@ export const PayrollRegisterSlice = createSlice({
             else if(action.payload.callType === callTypes.pdf){
                 state.pdfLoading = false;
             }
+            else if(action.payload.callType === callTypes.register){
+                state.registerLoading = false;
+            }
             else {
                 state.actionsLoading = false;
             }
@@ -43,12 +47,18 @@ export const PayrollRegisterSlice = createSlice({
             } 
             else if(action.payload.callType === callTypes.pdf){
                 state.pdfLoading = true;
+            }
+            else if(action.payload.callType === callTypes.register){
+                state.registerLoading = true;
             } else {
                 state.actionsLoading = true;
             }
         },
         pdfFetched: (state, action) => {
             state.pdfLoading = false;
+        },
+        registerFetched: (state, action) => {
+            state.registerLoading = false;
         },
         PayrollRegisterFetched: (state, action) => {
             const entities = action.payload.data?.data.rows;
