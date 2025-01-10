@@ -116,7 +116,11 @@ export function RolesAccess({
             <Row>
               <Col lg={2}>
                 <Form.Text className="col-form-label fw-bold fs-6">
-                  {dd[0]}
+                  {/* {dd[0]} */}
+                  {dd[0]
+                    .split('_')             
+                    .map(word => word.charAt(0).toUpperCase() + word.slice(1)) 
+                    .join(' ')}
                 </Form.Text>
               </Col>
               <Col lg={10}>
