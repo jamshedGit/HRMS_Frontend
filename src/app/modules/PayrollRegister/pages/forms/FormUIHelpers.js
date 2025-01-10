@@ -32,4 +32,5 @@ export const groupByOptions = [
   {label: 'Location Wise', value: 'locationName'},
   {label: 'Department Wise', value: 'departmentName'},
   {label: 'Grade Wise', value: 'gradeName'},
+  {label: 'Payroll Group Wise', value: 'payrollGroup'},
 ]
