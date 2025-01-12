@@ -1,3 +1,4 @@
+import { SERVER_MESSAGES } from "../../../utils/constants";
 import * as requestFromServer from "./redux-Crud";
 import {UserSlice, callTypes } from "./redux-Slice";
 import { toast } from "react-toastify";
@@ -8,13 +9,13 @@ const { actions } = UserSlice;
 export const fetchUser = (queryparm) => async (dispatch) => {
 
 
-  
-  return requestFromServer.getAllHoliday(queryparm)
+  console.log("hit")
+  return requestFromServer.getAllUser(queryparm)
    
     .then((response) => {
     
 
-      dispatch(actions.holidayFetched(response));
+      dispatch(actions.userFetched(response));
     })
     .catch((error) => {
     
@@ -23,20 +24,20 @@ export const fetchUser = (queryparm) => async (dispatch) => {
     });
 };
 
-export const fetchHoliday = (id) => (dispatch) => {
+export const fetchUserForEdit = (id) => (dispatch) => {
 
 
   if (!id) {
-    return dispatch(actions.HolidayFetchedForEdit({ userForEdit: undefined }));
+    return dispatch(actions.UserFetchedForEdit({ userForEdit: undefined }));
   }
 
   return requestFromServer
-    .getHolidayById({ Id: id })
+    .getUserById({ Id: id })
     .then((response) => {
       const entities = response.data?.data;
 
    
-      dispatch(actions.HolidayFetchedForEdit({ userForEdit: entities }));
+      dispatch(actions.UserFetchedForEdit({ userForEdit: entities }));
     })
     .catch((error) => {
       error.clientMessage = "Can't find user";
@@ -44,14 +45,14 @@ export const fetchHoliday = (id) => (dispatch) => {
     });
 };
 
-export const deleteHoliday = (id) => (dispatch) => {
+export const deleteUser = (id) => (dispatch) => {
 
   return requestFromServer
-    .deleteHoliday({ Id: id })
+    .deleteUser({ Id: id })
     .then((response) => {
     
-      dispatch(actions.HolidayDeleted({ Id: id }));
-      toast.success("Successfully Deleted", {
+      dispatch(actions.UserDeleted({ Id: id }));
+      toast.success(SERVER_MESSAGES.deletedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -63,26 +64,26 @@ export const deleteHoliday = (id) => (dispatch) => {
     })
     .catch((error) => {
       dispatch(actions.catchError({ error, callType: callTypes.action }));
-      toast.error(error.response.data.message);
+      toast.error(SERVER_MESSAGES.deletedFail);
     });
 };
 
 
-export const createHoliday = (holidayForCreation, disbaleLoading, onHide) => (
+export const createUser = (userForCreation, disbaleLoading, onHide) => (
   dispatch
 ) => {
 
   
   return requestFromServer
-    .createHoliday(holidayForCreation)
+    .createUser(userForCreation)
     .then((res) => {
    
       const user = res.data?.data;
      
   
-      dispatch(actions.holidayCreated(user));
+      dispatch(actions.userCreated(user));
       disbaleLoading();
-      toast.success("Successfully Created", {
+      toast.success(SERVER_MESSAGES.insertedSuccess, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -109,18 +110,18 @@ export const createHoliday = (holidayForCreation, disbaleLoading, onHide) => (
     });
 };
 
-export const updateHoliday = (user, disbaleLoading, onHide) => (dispatch) => {
+export const updateUser = (user, disbaleLoading, onHide) => (dispatch) => {
   return requestFromServer
-    .updateHoliday(user)
+    .updateUser(user)
     .then((response) => {
   
-      const updatedHoliday = response?.config?.data; // response.data?.data;
+      const updatedUser = response?.config?.data; // response.data?.data;
    
-      dispatch(actions.holidayUpdated({ updatedHoliday }));
+      dispatch(actions.userUpdated({ updatedUser }));
     
       disbaleLoading();
       onHide();
-      toast.success(response.data.message , {
+      toast.success(SERVER_MESSAGES.updatedSuccess , {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -146,5 +147,22 @@ export const updateHoliday = (user, disbaleLoading, onHide) => (dispatch) => {
         draggable: true,
         progress: undefined,
       });
+    });
+};
+
+
+export const fetchRoles = () => (dispatch) => {
+
+
+  return requestFromServer
+    .getAllRoles()
+    .then((response) => {
+      const entities = response.data?.data;
+
+      dispatch(actions.RolesFetched(entities));
+    })
+    .catch((error) => {
+      error.clientMessage = "Can't find roles";
+      dispatch(actions.catchError({ error, callType: callTypes.list }));
     });
 };

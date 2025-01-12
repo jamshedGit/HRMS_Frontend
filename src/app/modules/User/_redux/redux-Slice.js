@@ -11,6 +11,7 @@ const initialUserState = {
     userForEdit: undefined,
     lastError: null,
     userForRead: false,
+    roles:null,
 };
 
 
@@ -33,7 +34,7 @@ export const UserSlice = createSlice({
             }
         },
 
-        holidayFetched: (state, action) => {
+        userFetched: (state, action) => {
         
   
             const entities = action.payload.data?.data.rows;
@@ -58,7 +59,7 @@ export const UserSlice = createSlice({
         },
 
          //get User By ID
-         HolidayFetchedForEdit: (state, action) => {
+         UserFetchedForEdit: (state, action) => {
            
    
             state.actionsLoading = false;
@@ -67,7 +68,7 @@ export const UserSlice = createSlice({
         },
 
       
-        HolidayDeleted: (state, action) => {
+        UserDeleted: (state, action) => {
 
             state.error = null;
             state.actionsLoading = false;
@@ -82,7 +83,7 @@ export const UserSlice = createSlice({
 
 
 
-        // holidayCreated: (state, action) => {
+        // userCreated: (state, action) => {
            
         //     state.actionsLoading = false;
         //     state.error = null;
@@ -90,7 +91,7 @@ export const UserSlice = createSlice({
         // },
 
 
-        holidayCreated: (state, action) => {
+        userCreated: (state, action) => {
             state.actionsLoading = false;
             state.error = null;
         
@@ -114,7 +115,7 @@ export const UserSlice = createSlice({
 
 
 
-        holidayUpdated: (state, action) => {
+        userUpdated: (state, action) => {
             state.error = null;
             state.actionsLoading = false;
             // state.entities.push(action.payload)
@@ -125,16 +126,21 @@ export const UserSlice = createSlice({
                 //const payload = { ...action.payload };
                 let payload = JSON.stringify(action.payload)
                 let payloadObj = JSON.parse(payload);
-                let finalObj = JSON.parse(payloadObj.updatedHoliday);
+                let finalObj = JSON.parse(payloadObj.updatedUser);
                 if (entity.Id === finalObj.Id) {
-                    return finalObj; //action.payload.updatedHoliday;
+                    return finalObj; //action.payload.updatedUser;
                 }
                 return entity;
             });
            
         },
 
-
+        RolesFetched: (state, action) => {
+            const entities = action.payload;
+            state.listLoading = false;
+            state.error = null;
+            state.roles = entities;
+          },
         
         
 

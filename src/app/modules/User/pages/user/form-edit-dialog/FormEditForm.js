@@ -14,7 +14,7 @@ import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 import { getDateDiffInDays } from "../../../../../utils/common";
 
 // percentage: Yup.string().required("Required*"),
-const holidaysEditSchema = Yup.object().shape({
+const userEditSchema = Yup.object().shape({
   // from_amount: Yup.string().required("Required*"),
 
   subsidiaryId: Yup.number()
@@ -22,26 +22,38 @@ const holidaysEditSchema = Yup.object().shape({
 
   // to_amount: Yup.string().required("Required*"),
 
-  name: Yup.string()
-    .required(VALIDATION_MESSAGES.required),
-
-
-  from_date: Yup.date().required(VALIDATION_MESSAGES.required),
-  to_date: Yup.date()
-    .min(
-      Yup.ref('from_date'),
-      "End date cannot be earlier than from date"
-    )
-    .required(VALIDATION_MESSAGES.required),
-
-
-
-  holiday_typeId: Yup.number()
-    .required(VALIDATION_MESSAGES.required),
-
-  religionId: Yup.number()
+  employeeIdMapping: Yup.number()
     .nullable(),
 
+
+  employeeName: Yup.string()
+    .nullable()
+    .required(VALIDATION_MESSAGES.required),
+
+  deactiveflag: Yup.number()
+    .nullable()
+    .required(VALIDATION_MESSAGES.required),
+
+  roleId: Yup.number()
+    .nullable()
+    .required(VALIDATION_MESSAGES.required),
+
+  allowUserCreation: Yup.number()
+    .nullable()
+    .required(VALIDATION_MESSAGES.required),
+
+  password: Yup.string()
+    .nullable()
+    .required(VALIDATION_MESSAGES.required),
+
+  email: Yup.string()
+    .nullable()
+    .required(VALIDATION_MESSAGES.required),
+
+
+  supervisedbyId: Yup.number()
+    .nullable()
+    .required(VALIDATION_MESSAGES.required),
 
 });
 
@@ -56,16 +68,12 @@ export function FormEditForm({
 }) {
   const dispatch = useDispatch();
   const { dashboard } = useSelector((state) => state);
-  const [start_date, setStart_date] = useState()
-  const [end_date, setEnd_date] = useState()
-  const [diffInDate, setDiffInDate] = useState()
+
   useEffect(() => {
     if (!user.Id) {
-      // dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsidiaries
+
       dispatch(fetchAllSubsidiaryData("allSubsidiaryList"));
-      dispatch(fetchAllFormsMenu(184, "allContractTypeList"));
-      dispatch(fetchAllFormsMenu(213, "allHolidayTypeList"));
-      dispatch(fetchAllFormsMenu(87, "allReligionChildMenus"));
+
 
 
     }
@@ -76,51 +84,35 @@ export function FormEditForm({
     return {
       currentState: state.UserModule,
       userAccess: state?.auth?.userAccess["user"],
+
     };
   }, shallowEqual);
 
-  const { userForEdit } = currentState;
+  const { userForEdit, roles } = currentState;
 
-  useEffect(() => {
-    setStart_date(userForEdit?.from_date)
-    setEnd_date(userForEdit?.to_date)
-  }, [userForEdit])
-  useEffect(() => {
 
-    if (start_date && end_date) {
-      setDiffInDate(getDateDiffInDays(start_date, end_date))
 
-    }
-
-  }, [start_date, end_date]);
   const basisOptions = [
 
-    { value: 0, label: "No" },
-    { value: 1, label: "Yes" },
+    { value: false, label: "No" },
+    { value: true, label: "Yes" },
   ];
 
   const activeOptions = [
 
-    { value: 0, label: "Inactive" },
-    { value: 1, label: "Active" },
+    { value: false, label: "Inactive" },
+    { value: true, label: "Active" },
   ];
   return (
     <Formik
       enableReinitialize={true}
-      // initialValues={{
-      //   Id:user.Id || '',
-      //   type: user.type ||  '',
-      //   value:user.value || 0,
-      //   multiplier: user.multiplier || 0,
-      //   divisor: user.divisor || 0,
-      // }}
 
       initialValues={user}
-      validationSchema={holidaysEditSchema}
+      validationSchema={userEditSchema}
       onSubmit={(values) => {
-
+        console.log("saving")
         enableLoading();
-        saveForm(values, diffInDate);
+        saveForm(values);
       }}
     >
       {({ handleSubmit, errors, touched, values, setFieldValue, handleChange }) => (
@@ -182,35 +174,37 @@ export function FormEditForm({
                     />
                   </div>
 
-                  <div className="col-12 col-md-6 mt-3">
-                    <label>
-                      User Status <span style={{ color: "red" }}>*</span>
-                    </label>
-                    <Field
-                      name="deactiveflag"
-                      as="select"
-                      className="form-control"
-                      disabled={isUserForRead}
-                    >
-                      <option value="">Select</option>
-                      {activeOptions.map((option) => (
-                        <option
-                          key={option.value}
-                          value={option.value}
-                        >
-                          {option.label}
-                        </option>
-                      ))}
-                    </Field>
-                    {errors.deactiveflag &&
-                      touched.deactiveflag && (
-                        <div className="text-danger">
-                          {errors.deactiveflag}
-                        </div>
-                      )}
 
 
-                  </div>
+                 
+                    <div className="col-12 col-md-6 mt-3">
+                      <SearchSelect
+                        name="roleId"
+                        label={
+                          <span>
+                            Role<span style={{ color: "red" }}>*</span>
+                          </span>
+                        }
+
+                        onChange={(e) => {
+                          setFieldValue("roleId", e.value || null);
+                        }}
+                        value={
+                          roles?.find(
+                            (option) => option.value === values.roleId
+                          ) || null
+                        }
+
+                        options={roles}
+
+                        error={errors.roleId}
+                        touched={touched.roleId}
+                      />
+                    </div>
+                 
+
+                
+
 
 
 
@@ -230,12 +224,12 @@ export function FormEditForm({
                         setFieldValue("supervisedbyId", e.value || null);
                       }}
                       value={
-                        dashboard?.allHolidayTypeList?.find(
+                        roles?.find(
                           (option) => option.value === values.supervisedbyId
                         ) || null
                       }
 
-                      options={dashboard?.allHolidayTypeList}
+                      options={roles}
 
                       error={errors.supervisedbyId}
                       touched={touched.supervisedbyId}
@@ -250,6 +244,7 @@ export function FormEditForm({
                       as="select"
                       className="form-control"
                       disabled={isUserForRead}
+                      value={values.allowUserCreation}
                     >
                       <option value="">Select</option>
                       {basisOptions.map((option) => (
@@ -320,26 +315,57 @@ export function FormEditForm({
                   </div>
                 </div>
 
-                <div className="form-group row">
+
+            
+                
+
+                  <div className="form-group row">
+
                   <div className="col-12 col-md-6 mt-3">
                     <label>
-                      Password <span style={{ color: "red" }}>*</span>
+                      User Status <span style={{ color: "red" }}>*</span>
                     </label>
                     <Field
-                      name="password"
-                      component={Input} // Custom component
+                      name="deactiveflag"
+                      as="select"
+                      className="form-control"
+                      disabled={isUserForRead}
+                    >
+                      <option value="">Select</option>
+                      {activeOptions.map((option) => (
+                        <option
+                          key={option.value}
+                          value={option.value}
+                        >
+                          {option.label}
+                        </option>
+                      ))}
+                    </Field>
+                    {errors.deactiveflag &&
+                      touched.deactiveflag && (
+                        <div className="text-danger">
+                          {errors.deactiveflag}
+                        </div>
+                      )}
 
-                      placeholder="Enter password"
-                      type="text"
-                      onChange={(e) => {
 
-
-                        setFieldValue("password", e);
-
-                      }}
-                    />
                   </div>
-                </div>
+
+                    <div className="col-12 col-md-6 mt-3">
+                      <label>
+                        Password <span style={{ color: "red" }}>*</span>
+                      </label>
+                      <Field
+                        name="password"
+                        component={Input} // Custom component
+
+                        placeholder="Enter password"
+                        type="text"
+
+                      />
+                    </div>
+                  </div>
+               
 
               </fieldset>
             </Form>
@@ -377,7 +403,10 @@ export function FormEditForm({
             {!isUserForRead && (
               <button
                 type="submit"
-                onClick={() => handleSubmit()}
+                onClick={() => {
+                  console.log("save")
+                  handleSubmit()
+                }}
                 className="btn btn-primary btn-elevate"
               >
                 Save

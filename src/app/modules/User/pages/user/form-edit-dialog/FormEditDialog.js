@@ -51,31 +51,30 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     
     actionsLoading: state.users.actionsLoading,
     user: state.users, // change for users to receipt
-    userForEdit: state.holidays.userForEdit,
+    userForEdit: state.UserModule.userForEdit,
     roles: state.users.roles,
     userStatusTypes: state.users.userStatusTypes,
-    isuserForRead: state.holidays.userForRead,
+    isuserForRead: state.UserModule.userForRead,
   }));
 
 
 
 
   useEffect(() => {
-    dispatch(actions.fetchHoliday(id));
-
-    // dispatch(actions.fetchHoliday(formUIProps .queryParams))
+    dispatch(actions.fetchUserForEdit(id));
+    
+    dispatch(actions.fetchRoles());
+    // dispatch(actions.fetchUser(formUIProps .queryParams))
   }, [id, dispatch]);
 
 
-  const saveForm = async (user,diffInDate) => {
+  const saveForm = async (user) => {
 
 
 
     if (!id) {
- 
-      user.number_of_days=diffInDate
-      const finalObject = { user }
-      dispatch(actions.createHoliday(user, disbaleLoading, onHide));
+
+      dispatch(actions.createUser(user, disbaleLoading, onHide));
       
       
 
@@ -91,14 +90,14 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         religionId: user.religionId,
         from_date: user.from_date,
         to_date: user.to_date,
-        number_of_days: diffInDate,
+        number_of_days: user.number_of_days,
         holiday_typeId: user.holiday_typeId,
      
       };
 
       
 
-     await dispatch(actions.updateHoliday(formUpdatedFields, disbaleLoading, onHide));
+     await dispatch(actions.updateUser(formUpdatedFields, disbaleLoading, onHide));
      await dispatch(actions.fetchUser(usersUIProps.queryParams));
     }
   };

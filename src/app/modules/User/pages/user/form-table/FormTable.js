@@ -64,18 +64,18 @@ export function FormTable() {
   }, [formUIProps.queryParams, dispatch, totalCount]);
 
   const isAccessForEdit = userAccess?.find(
-    (item) => item.componentName === "UpdateHolidays"
+    (item) => item.componentName === "UpdateUser"
   );
-
+console.log("userAccess111",userAccess)
   const isAccessForDelete = userAccess?.find(
-    (item) => item.componentName === "DeleteHolidays"
+    (item) => item.componentName === "DeleteUser"
   );
   // Table columns
   const columns = [
 
     {
-      dataField: "Subsidiary.name",
-      text: "Subsidiary",
+      dataField: "employeeName",
+      text: "employee Name",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -84,8 +84,8 @@ export function FormTable() {
       },
     },
     {
-      dataField: "name",
-      text: "Holiday",
+      dataField: "role.name",
+      text: "role",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -93,25 +93,12 @@ export function FormTable() {
         minWidth: "160px",
       },
     },
-    {
-      dataField: "from_date",
-      text: "from date",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      // style: {
-      //   minWidth: "10px",
-      //   textAlign: "center",
-      // },
-      // headerStyle: {
-      //   textAlign: "center", // Align header text to the left
-      // },
-    },
+  
 
 
     {
-      dataField: "to_date",
-      text: "to date",
+      dataField: "email",
+      text: "email",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,

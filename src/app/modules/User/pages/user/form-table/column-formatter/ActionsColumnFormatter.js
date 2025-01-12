@@ -20,6 +20,7 @@ export function ActionsColumnFormatter(
   }
 ) {
   const isUserRead = false;
+  console.log("isAccessForEdit111",isAccessForEdit,row)
   return (
     <>
       <OverlayTrigger

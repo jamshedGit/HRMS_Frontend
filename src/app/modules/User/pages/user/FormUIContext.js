@@ -29,12 +29,14 @@ export function FormUIProvider({ FormUIEvents, children }) {
   const initUser = {
     Id:"",
     subsidiaryId: "",
-    name: "",
-    religionId: null,
-    from_date: "",
-    to_date:"",
-    number_of_days:"",
-    holiday_typeId:""
+    employeeIdMapping: null,
+    employeeName: "",
+    deactiveflag: "",
+    roleId:"",
+    allowUserCreation:"",
+    password:"",
+    email:"",
+    supervisedbyId:"",
   
   };
 
