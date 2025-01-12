@@ -41,7 +41,7 @@ export function FormTable() {
       return {
 
 
-        currentState: state.user,
+        currentState: state.UserModule,
         userAccess: state?.auth?.userAccess["user"],
       }
     },
@@ -56,6 +56,7 @@ export function FormTable() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    console.log("useEffect111")
     formUIProps.setIds([]);
 
 

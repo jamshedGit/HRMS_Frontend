@@ -26,21 +26,21 @@ export function FormCard() {
 
     (state) => ({
 
-      userAccess: state.auth.userAccess.holidays,
+      userAccess: state.auth.userAccess.user,
     }),
     shallowEqual
   )
-
+ 
   const accessUser = userAccess.find(
-    (item) => item.componentName === "CreateHolidays"
+    (item) => item.componentName === "CreateUser"
   )
 
   const { currentState } = useSelector(
     (state) => {
       return {
 
-        currentState: state.holidays,
-        userAccess: state?.auth?.userAccess["holidays"],
+        currentState: state.UserModule,
+        userAccess: state?.auth?.userAccess["user"],
       }
     },
     shallowEqual
@@ -86,7 +86,7 @@ export function FormCard() {
 
                   >
 
-                    + Add Holiday
+                    + Add User
 
                   </button>
 

@@ -41,7 +41,7 @@ const holidaysEditSchema = Yup.object().shape({
 
   religionId: Yup.number()
     .nullable(),
-    
+
 
 });
 
@@ -74,8 +74,8 @@ export function FormEditForm({
 
   const { currentState, userAccess } = useSelector((state) => {
     return {
-      currentState: state.holidays,
-      userAccess: state?.auth?.userAccess["holidays"],
+      currentState: state.UserModule,
+      userAccess: state?.auth?.userAccess["user"],
     };
   }, shallowEqual);
 
@@ -93,7 +93,17 @@ export function FormEditForm({
     }
 
   }, [start_date, end_date]);
+  const basisOptions = [
 
+    { value: 0, label: "No" },
+    { value: 1, label: "Yes" },
+  ];
+
+  const activeOptions = [
+
+    { value: 0, label: "Inactive" },
+    { value: 1, label: "Active" },
+  ];
   return (
     <Formik
       enableReinitialize={true}
@@ -113,7 +123,7 @@ export function FormEditForm({
         saveForm(values, diffInDate);
       }}
     >
-      {({ handleSubmit, errors, touched, values, setFieldValue }) => (
+      {({ handleSubmit, errors, touched, values, setFieldValue, handleChange }) => (
         <>
           <Modal.Body className="overlay overlay-block cursor-default">
             {actionsLoading && (
@@ -124,212 +134,213 @@ export function FormEditForm({
             <Form className="form form-label-right">
               <fieldset disabled={isUserForRead}>
                 <div className="form-group row">
-                  <div className="col-12 col-md-12  p-0 m-0">
-                    <div className="col-12 col-md-6 mt-3">
-                      <SearchSelect
-                        name="subsidiaryId"
-                        label={
-                          <span>
-                            Subsidiary<span style={{ color: "red" }}>*</span>
-                          </span>
-                        }
-                        isDisabled={isUserForRead}
-                        onChange={(e) => {
-                          setFieldValue("subsidiaryId", e.value || null);
-                        }}
-                        value={
-                          dashboard?.allSubsidiaryList?.find(
-                            (option) => option.value === values.subsidiaryId
-                          ) || null
-                        }
 
-                        options={dashboard?.allSubsidiaryList}
-                        // options={dashboard.allSubidiaryList.map(option => ({
-                        //   label: `${option.label} (${option.value})`, // Adding the value to the label
-                        //   value: option.value,
-                        // }))}
-                        error={errors.subsidiaryId}
-                        touched={touched.subsidiaryId}
-                      />
+                  <div className="col-12 col-md-4 mt-3">
+                    Subsidiary <span style={{ color: "red" }}>*</span>
+                    <div style={{ backgroundColor: "#ffffff", height: "170px", padding: "10px", overflow: "scroll" }}>
+
+                      <div className="multi-select">
+                        <div className="dropdown-label"></div>
+                        <div className="dropdown-options" style={{ fontSize: "12px", fontWeight: "bold", padding: "5px" }}>
+                          {dashboard?.allSubsidiaryList?.map((option) => (
+                            <div key={option.value} className="dropdown-option">
+                              <input style={{ width: "25px" }}
+                                name="subsidiaryId"
+                                type="checkbox"
+                                value={option.value}
+                                checked={Boolean(values?.subsidiaryId?.includes(option?.value?.toString()))}
+                                onChange={handleChange}
+                              />
+                              {option.label}
+                            </div>
+                          ))}
+                          {errors.subsidiaryId && touched.subsidiaryId && (
+                            <div className="invalid-text">{errors.subsidiaryId}</div>
+                          )}
+
+                        </div>
+                      </div>
                     </div>
                   </div>
 
+                </div>
 
-
-                  {/* <div className="col-12 col-md-6 mt-3">
-                    <label>
-                     From Date <span style={{ color: "red" }}>*</span>
-                    </label>
-                    <Field
-                      name="from_date"
-                      component={DatePickerField}
-                      dateFormat="dd/MM/yyyy"
-                      placeholder="Select Date"
-                 
-                      type="date"
-                
-                      onChange={(e) => {
-                        setFieldValue("to_date", e);
-                   
-                        setStart_date(e)
-                      }}
-                      // minDate={dateOfJoining} 
-                      // disabled={userForEdit?.details[0]?.is_deducted }
-                    />
-                  </div> */}
+                <div className="form-group row">
 
                   <div className="col-12 col-md-6 mt-3">
                     <label>
-                      From Date <span style={{ color: "red" }}>*</span>
+                      Email <span style={{ color: "red" }}>*</span>
                     </label>
                     <Field
-                      name="from_date"
-                      component={DatePickerField} // Custom component
-                      dateFormat="dd/MM/yyyy"
-                      placeholder="Select Date"
-                      type="date"
+                      name="email"
+                      component={Input}
+                      placeholder="example@gmail.com"
+
+                      autoComplete="off"
+                      maxLength="30"
+
+                    />
+                  </div>
+
+                  <div className="col-12 col-md-6 mt-3">
+                    <label>
+                      User Status <span style={{ color: "red" }}>*</span>
+                    </label>
+                    <Field
+                      name="deactiveflag"
+                      as="select"
+                      className="form-control"
+                      disabled={isUserForRead}
+                    >
+                      <option value="">Select</option>
+                      {activeOptions.map((option) => (
+                        <option
+                          key={option.value}
+                          value={option.value}
+                        >
+                          {option.label}
+                        </option>
+                      ))}
+                    </Field>
+                    {errors.deactiveflag &&
+                      touched.deactiveflag && (
+                        <div className="text-danger">
+                          {errors.deactiveflag}
+                        </div>
+                      )}
+
+
+                  </div>
+
+
+
+                </div>
+
+                <div className="form-group row">
+                  <div className="col-12 col-md-6 mt-3">
+                    <SearchSelect
+                      name="supervisedbyId"
+                      label={
+                        <span>
+                          Supervise By<span style={{ color: "red" }}>*</span>
+                        </span>
+                      }
+
                       onChange={(e) => {
-
-
-                        setFieldValue("from_date", e);
-                        setStart_date(e);
+                        setFieldValue("supervisedbyId", e.value || null);
                       }}
+                      value={
+                        dashboard?.allHolidayTypeList?.find(
+                          (option) => option.value === values.supervisedbyId
+                        ) || null
+                      }
+
+                      options={dashboard?.allHolidayTypeList}
+
+                      error={errors.supervisedbyId}
+                      touched={touched.supervisedbyId}
+                    />
+                  </div>
+                  <div className="col-12 col-md-6 mt-3">
+                    <label>
+                      Allow User Creation <span style={{ color: "red" }}>*</span>
+                    </label>
+                    <Field
+                      name="allowUserCreation"
+                      as="select"
+                      className="form-control"
+                      disabled={isUserForRead}
+                    >
+                      <option value="">Select</option>
+                      {basisOptions.map((option) => (
+                        <option
+                          key={option.value}
+                          value={option.value}
+                        >
+                          {option.label}
+                        </option>
+                      ))}
+                    </Field>
+                    {errors.allowUserCreation &&
+                      touched.allowUserCreation && (
+                        <div className="text-danger">
+                          {errors.allowUserCreation}
+                        </div>
+                      )}
+
+
+                  </div>
+
+                </div>
+
+                <div className="form-group row">
+                  <div className="col-12 col-md-6 mt-3">
+                    <SearchSelect
+                      name="employeeIdMapping"
+                      label={
+                        <span>
+                          Employee Mapping
+                        </span>
+                      }
+                      isDisabled={isUserForRead}
+                      onChange={(e) => {
+                        setFieldValue("employeeIdMapping", e.value || null);
+
+                      }}
+                      value={
+                        dashboard?.allSubsidiaryList?.find(
+                          (option) => option?.value === values?.employeeIdMapping
+                        ) || null
+                      }
+                      options={dashboard?.allSubsidiaryList}
+
+
+
+                      error={errors.employeeIdMapping}
+                      touched={touched.employeeIdMapping}
                     />
                   </div>
 
 
-                  <div className="col-12 col-md-6 mt-3">
-                    <label>
-                      To Date <span style={{ color: "red" }}>*</span>
-                    </label>
-                    <Field
-                      name="to_date"
-                      component={DatePickerField}
-                      dateFormat="dd/MM/yyyy"
-                      placeholder="Select Date"
-
-                      // type="date"
-                      onChange={(e) => {
-                        setFieldValue("to_date", e);
-                        setEnd_date(e);
-                      }}
-
-                    // minDate={dateOfJoining} 
-                    // disabled={userForEdit?.details[0]?.is_deducted }
-                    />
-                  </div>
 
                   <div className="col-12 col-md-6 mt-3">
                     <label>
                       <span>
-                        Holiday Name<span style={{ color: "red" }}>*</span>
+                        Employee Name <span style={{ color: "red" }}>*</span>
                       </span>
                     </label>
                     <Field
-                      name="name"
+                      name="employeeName"
                       component={Input}
-                      placeholder="Enter Name"
+                      placeholder="Enter employee name"
 
                       type="text"
 
                     />
                   </div>
+                </div>
 
+                <div className="form-group row">
                   <div className="col-12 col-md-6 mt-3">
                     <label>
-                      <span>
-                        Number of days<span style={{ color: "red" }}>*</span>
-                      </span>
+                      Password <span style={{ color: "red" }}>*</span>
                     </label>
                     <Field
-                      name="number_of_days"
-                      component={Input}
-                      // placeholder="Enter number_of_days"
-                      disabled={true}
-                      type="number"
-                      value={diffInDate}
+                      name="password"
+                      component={Input} // Custom component
 
-
-
-                    />
-                  </div>
-
-
-                  <div className="col-12 col-md-6 mt-3">
-                    <SearchSelect
-                      name="holiday_typeId"
-                      label={
-                        <span>
-                          Holiday Type<span style={{ color: "red" }}>*</span>
-                        </span>
-                      }
-                      isDisabled={isUserForRead}
+                      placeholder="Enter password"
+                      type="text"
                       onChange={(e) => {
-                        setFieldValue("holiday_typeId", e.value || null);
-                      }}
-                      value={
-                        dashboard?.allHolidayTypeList?.find(
-                          (option) => option.value === values.holiday_typeId
-                        ) || null
-                      }
 
-                      options={dashboard?.allHolidayTypeList}
-                      // options={dashboard.allSubidiaryList.map(option => ({
-                      //   label: `${option.label} (${option.value})`, // Adding the value to the label
-                      //   value: option.value,
-                      // }))}
-                      error={errors.holiday_typeId}
-                      touched={touched.holiday_typeId}
+
+                        setFieldValue("password", e);
+
+                      }}
                     />
                   </div>
-
-                  <div className="col-12 col-md-6 mt-3">
-                    <SearchSelect
-                      name="religionId"
-                      label={
-                        <span>
-                          Select Religion
-                        </span>
-                      }
-                      isDisabled={isUserForRead}
-                      onChange={(e) => {
-                        setFieldValue("religionId", e.value || null);
-                      }}
-
-                      value={
-                        // Default to "All" if religionId is null or undefined
-                        values?.religionId ==null
-                          ? { value: null, label: 'All' }
-                          : dashboard?.allReligionChildMenus?.find(
-                            (option) => option.value === values.religionId
-                          ) || null
-                      }
-                      // value={
-                      //   dashboard?.allReligionChildMenus?.find(
-                      //     (option) => option.value === values.religionId
-                      //   ) || null
-                      // }
-
-                      // options={dashboard?.allReligionChildMenus}
-
-                      options={[
-                        { value: null, label: 'All' }, // Adding "All" option with value empty string
-                        ...dashboard?.allReligionChildMenus, // Spread the rest of the menu options
-                      ]}
-
-                      // options={dashboard.allSubidiaryList.map(option => ({
-                      //   label: `${option.label} (${option.value})`, // Adding the value to the label
-                      //   value: option.value,
-                      // }))}
-                      error={errors.religionId}
-                      touched={touched.religionId}
-                    />
-                  </div>
-
-
-
-
                 </div>
+
               </fieldset>
             </Form>
           </Modal.Body>

@@ -17,66 +17,66 @@ export function FormPage({ history }) {
   const dispatch = useDispatch();
   const FormUIEvents = {
     newFormButtonClick: () => {
-      history.push("/holidays/read-all-holidays/new");
+      history.push("/user/read-all-user/new");
     },
     openEditFormDialog: (id) => {
-      history.push(`/holidays/read-all-holidays/${id}/edit`);
+      history.push(`/user/read-all-user/${id}/edit`);
     },
     openDeleteFormDialog: (id, status) => {
-      history.push(`/holidays/read-all-holidays/${id}/${status}/delete`);
+      history.push(`/user/read-all-user/${id}/${status}/delete`);
     },
     openActiveFormDialog: (id) => {
-      history.push(`/holidays/read-all-holidays/${id}/active`);
+      history.push(`/user/read-all-user/${id}/active`);
     },
     openReadFormDialog: (id, isUserRead) => {
-      history.push(`/holidays/read-all-holidays/${id}/read`);
+      history.push(`/user/read-all-user/${id}/read`);
     },
   };
   return (
 
     
     <FormUIProvider FormUIEvents={FormUIEvents}>
-      <Route exact path="/holidays/read-all-holidays/new">
+      <Route exact path="/user/read-all-user/new">
         {({ history, match }) => (
           <FormEditDialog
             show={match != null}
             onHide={() => {
-              history.push("/holidays/read-all-holidays");
+              history.push("/user/read-all-user");
             }}
           />
         )}
       </Route>
-      <Route path="/holidays/read-all-holidays/:id/edit">
+      <Route path="/user/read-all-user/:id/edit">
         {({ history, match }) => (
           <FormEditDialog
             show={match != null}
             id={match && match.params.id}
             onHide={() => {
-              history.push("/holidays/read-all-holidays");
+              history.push("/user/read-all-user");
             }}
           />
         )}
       </Route>
-      <Route path="/holidays/read-all-holidays/:id/read">
+      <Route path="/user/read-all-user/:id/read">
         {({ history, match }) => (
           <FormEditDialog
             show={match != null}
             id={match && match.params.id}
             userForRead={true}
             onHide={() => {
-              history.push("/holidays/read-all-holidays");
+              history.push("/user/read-all-user");
             }}
           />
         )}
       </Route>
-      <Route path="/holidays/read-all-holidays/:id/:status/delete">
+      <Route path="/user/read-all-user/:id/:status/delete">
         {({ history, match }) => (
           <FormDeleteDialog
             show={match != null}
             id={match && match.params.id}
             status={match && match.params.status}
             onHide={() => {
-              history.push("/holidays/read-all-holidays");
+              history.push("/user/read-all-user");
             }}
           />
         )}

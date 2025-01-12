@@ -148,14 +148,14 @@ const ROUTES = {
   attendance: Attendance,
   leave_register :LeaveRegister,
   payroll_register :PayrollRegister,
-  UserModule:UserModule,
-};
+  user:UserModule};
 
 export default function BasePage() {
   const dispatch = useDispatch();
   dispatch(fetchAllCountry());
 
   const auth = useSelector(({ auth }) => auth, shallowEqual);
+
   const UserAccess = auth?.userAccess;
   const SettingsAccess = auth?.userAccess?.Settings;
   const isDashboardAccess = SettingsAccess?.some((obj) =>
@@ -172,6 +172,7 @@ export default function BasePage() {
             .join("-")
             .toLowerCase();
           if (ROUTES[accessName]) {
+
             return (
               <Route
                 key={key}

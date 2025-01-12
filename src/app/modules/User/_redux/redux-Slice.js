@@ -20,6 +20,7 @@ export const callTypes = {
 };
 
 export const UserSlice = createSlice({
+
     name: "user",
     initialState: initialUserState,
     reducers: {
@@ -138,4 +139,5 @@ export const UserSlice = createSlice({
         
 
     },
+    
 });

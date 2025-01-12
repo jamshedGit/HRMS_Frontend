@@ -13,22 +13,22 @@ export function createHoliday(body) {
 // Read
 export function getAllHoliday(body) {
 
-  return axios.post(`${USERS_URL}/holidays/read-all-holidays`, body);
+  return axios.post(`${USERS_URL}/user/read-all-user`, body);
 }
 
 export function getHolidayById(id) {
 
-  return axios.post(`${USERS_URL}/holidays/read-holidays`, id);
+  return axios.post(`${USERS_URL}/user/read-user`, id);
 }
 
 //Update
 export function updateHoliday(body) {
    
-  return axios.put(`${USERS_URL}/holidays/update-holidays`, body);
+  return axios.put(`${USERS_URL}/user/update-user`, body);
 }
 
 //Delete
 export function deleteHoliday(body) {
 
-  return axios.patch(`${USERS_URL}/holidays/delete-holidays`, body);
+  return axios.patch(`${USERS_URL}/user/delete-user`, body);
 }
