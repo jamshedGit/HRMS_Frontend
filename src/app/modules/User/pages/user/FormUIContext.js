@@ -30,7 +30,6 @@ export function FormUIProvider({ FormUIEvents, children }) {
     Id:"",
     subsidiaryId: "",
     employeeIdMapping: null,
-    employeeName: "",
     deactiveflag: "",
     roleId:"",
     allowUserCreation:"",

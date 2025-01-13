@@ -6,6 +6,7 @@ import { DatePickerField, Input } from "../../../../../../_metronic/_partials/co
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import {
+  fetchAllComapnyData,
   fetchAllFormsMenu,
   fetchAllHumanResourceRole,
   fetchAllSubsidiaryData,
@@ -26,11 +27,11 @@ const userEditSchema = Yup.object().shape({
     .nullable(),
 
 
-  employeeName: Yup.string()
-    .nullable()
-    .required(VALIDATION_MESSAGES.required),
+  // employeeName: Yup.string()
+  //   .nullable()
+  //   .required(VALIDATION_MESSAGES.required),
 
-  deactiveflag: Yup.number()
+  deactiveflag: Yup.boolean()
     .nullable()
     .required(VALIDATION_MESSAGES.required),
 
@@ -38,7 +39,7 @@ const userEditSchema = Yup.object().shape({
     .nullable()
     .required(VALIDATION_MESSAGES.required),
 
-  allowUserCreation: Yup.number()
+  allowUserCreation: Yup.boolean()
     .nullable()
     .required(VALIDATION_MESSAGES.required),
 
@@ -55,6 +56,12 @@ const userEditSchema = Yup.object().shape({
     .nullable()
     .required(VALIDATION_MESSAGES.required),
 
+
+  companyId: Yup.number()
+    .nullable()
+    .required(VALIDATION_MESSAGES.required),
+
+
 });
 
 export function FormEditForm({
@@ -64,7 +71,7 @@ export function FormEditForm({
   onHide,
   isUserForRead,
   enableLoading,
-  loading,
+  loading, id
 }) {
   const dispatch = useDispatch();
   const { dashboard } = useSelector((state) => state);
@@ -73,7 +80,7 @@ export function FormEditForm({
     if (!user.Id) {
 
       dispatch(fetchAllSubsidiaryData("allSubsidiaryList"));
-
+      dispatch(fetchAllComapnyData("allCompanyList"))
 
 
     }
@@ -110,7 +117,7 @@ export function FormEditForm({
       initialValues={user}
       validationSchema={userEditSchema}
       onSubmit={(values) => {
-        console.log("saving")
+      
         enableLoading();
         saveForm(values);
       }}
@@ -134,7 +141,7 @@ export function FormEditForm({
                       <div className="multi-select">
                         <div className="dropdown-label"></div>
                         <div className="dropdown-options" style={{ fontSize: "12px", fontWeight: "bold", padding: "5px" }}>
-                          {dashboard?.allSubsidiaryList?.map((option) => (
+                          {/* {dashboard?.allSubsidiaryList?.map((option) => (
                             <div key={option.value} className="dropdown-option">
                               <input style={{ width: "25px" }}
                                 name="subsidiaryId"
@@ -142,10 +149,33 @@ export function FormEditForm({
                                 value={option.value}
                                 checked={Boolean(values?.subsidiaryId?.includes(option?.value?.toString()))}
                                 onChange={handleChange}
+                                disabled={!values.companyId}
                               />
                               {option.label}
                             </div>
-                          ))}
+                          ))} */}
+
+
+                          {values.companyId ? (
+                            dashboard?.allSubsidiaryList
+                              ?.filter((option) => option.companyId ==1) // Filter subsidiaries by companyId
+                              .map((option) => (
+                                <div key={option.value} className="dropdown-option">
+                                  <input
+                                    style={{ width: "25px" }}
+                                    name="subsidiaryId"
+                                    type="checkbox"
+                                    value={option.value}
+                                    checked={Boolean(values?.subsidiaryId?.includes(option?.value?.toString()))}
+                                    onChange={handleChange}
+                                    disabled={!values.companyId} // Disable if no company is selected
+                                  />
+                                  {option.label}
+                                </div>
+                              ))
+                          ) : (
+                            <div>Please select a company first.</div> // Show this if no company is selected
+                          )}
                           {errors.subsidiaryId && touched.subsidiaryId && (
                             <div className="invalid-text">{errors.subsidiaryId}</div>
                           )}
@@ -158,6 +188,33 @@ export function FormEditForm({
                 </div>
 
                 <div className="form-group row">
+
+                  <div className="col-12 col-md-6 mt-3">
+                    <SearchSelect
+                      name="companyId"
+                      label={
+                        <span>
+                          Company <span style={{ color: "red" }}>*</span>
+                        </span>
+                      }
+                      isDisabled={isUserForRead}
+                      onChange={(e) => {
+                        setFieldValue("companyId", e.value || null);
+
+                      }}
+                      value={
+                        dashboard?.allCompanyList?.find(
+                          (option) => option?.value === values?.companyId
+                        ) || null
+                      }
+                      options={dashboard?.allCompanyList}
+
+
+
+                      error={errors.companyId}
+                      touched={touched.companyId}
+                    />
+                  </div>
 
                   <div className="col-12 col-md-6 mt-3">
                     <label>
@@ -176,34 +233,9 @@ export function FormEditForm({
 
 
 
-                 
-                    <div className="col-12 col-md-6 mt-3">
-                      <SearchSelect
-                        name="roleId"
-                        label={
-                          <span>
-                            Role<span style={{ color: "red" }}>*</span>
-                          </span>
-                        }
 
-                        onChange={(e) => {
-                          setFieldValue("roleId", e.value || null);
-                        }}
-                        value={
-                          roles?.find(
-                            (option) => option.value === values.roleId
-                          ) || null
-                        }
 
-                        options={roles}
 
-                        error={errors.roleId}
-                        touched={touched.roleId}
-                      />
-                    </div>
-                 
-
-                
 
 
 
@@ -211,6 +243,34 @@ export function FormEditForm({
                 </div>
 
                 <div className="form-group row">
+
+
+
+                  <div className="col-12 col-md-6 mt-3">
+                    <SearchSelect
+                      name="roleId"
+                      label={
+                        <span>
+                          Role<span style={{ color: "red" }}>*</span>
+                        </span>
+                      }
+
+                      onChange={(e) => {
+                        setFieldValue("roleId", e.value || null);
+                      }}
+                      value={
+                        roles?.find(
+                          (option) => option.value === values.roleId
+                        ) || null
+                      }
+
+                      options={roles}
+
+                      error={errors.roleId}
+                      touched={touched.roleId}
+                    />
+                  </div>
+
                   <div className="col-12 col-md-6 mt-3">
                     <SearchSelect
                       name="supervisedbyId"
@@ -235,6 +295,12 @@ export function FormEditForm({
                       touched={touched.supervisedbyId}
                     />
                   </div>
+
+
+                </div>
+
+                <div className="form-group row">
+
                   <div className="col-12 col-md-6 mt-3">
                     <label>
                       Allow User Creation <span style={{ color: "red" }}>*</span>
@@ -266,9 +332,8 @@ export function FormEditForm({
 
                   </div>
 
-                </div>
 
-                <div className="form-group row">
+
                   <div className="col-12 col-md-6 mt-3">
                     <SearchSelect
                       name="employeeIdMapping"
@@ -298,7 +363,7 @@ export function FormEditForm({
 
 
 
-                  <div className="col-12 col-md-6 mt-3">
+                  {/* <div className="col-12 col-md-6 mt-3">
                     <label>
                       <span>
                         Employee Name <span style={{ color: "red" }}>*</span>
@@ -312,14 +377,14 @@ export function FormEditForm({
                       type="text"
 
                     />
-                  </div>
+                  </div> */}
                 </div>
 
 
-            
-                
 
-                  <div className="form-group row">
+
+
+                <div className="form-group row">
 
                   <div className="col-12 col-md-6 mt-3">
                     <label>
@@ -350,22 +415,22 @@ export function FormEditForm({
 
 
                   </div>
+                  {!id && (<div className="col-12 col-md-6 mt-3">
+                    <label>
+                      Password <span style={{ color: "red" }}>*</span>
+                    </label>
+                    <Field
+                      name="password"
+                      component={Input} // Custom component
+                      disabled={id}
+                      placeholder="Enter password"
+                      type="text"
 
-                    <div className="col-12 col-md-6 mt-3">
-                      <label>
-                        Password <span style={{ color: "red" }}>*</span>
-                      </label>
-                      <Field
-                        name="password"
-                        component={Input} // Custom component
+                    />
+                  </div>)}
 
-                        placeholder="Enter password"
-                        type="text"
+                </div>
 
-                      />
-                    </div>
-                  </div>
-               
 
               </fieldset>
             </Form>
@@ -404,7 +469,7 @@ export function FormEditForm({
               <button
                 type="submit"
                 onClick={() => {
-                  console.log("save")
+               
                   handleSubmit()
                 }}
                 className="btn btn-primary btn-elevate"

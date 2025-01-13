@@ -9,7 +9,7 @@ const { actions } = UserSlice;
 export const fetchUser = (queryparm) => async (dispatch) => {
 
 
-  console.log("hit")
+
   return requestFromServer.getAllUser(queryparm)
    
     .then((response) => {

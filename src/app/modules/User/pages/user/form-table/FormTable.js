@@ -16,6 +16,7 @@ import * as uiHelpers from "../FormUIHelpers";
 import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatter";
 import { Pagination } from "../../../../../../_metronic/_partials/controls";
 import { useFormUIContext } from "../FormUIContext";
+import { format } from "date-fns";
 
 export function FormTable() {
   //Users UI Context
@@ -73,16 +74,7 @@ console.log("userAccess111",userAccess)
   // Table columns
   const columns = [
 
-    {
-      dataField: "employeeName",
-      text: "employee Name",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-      },
-    },
+  
     {
       dataField: "role.name",
       text: "role",
@@ -105,6 +97,21 @@ console.log("userAccess111",userAccess)
       style: {
         minWidth: "10px",
       },
+    },
+
+    {
+      dataField: "allowUserCreation",
+      text: "Allow User Creation ",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "10px",
+      },
+
+      formatter: (cell) => {  
+        return cell === true ? "Yes" : "No";
+      }
     },
 
     {
