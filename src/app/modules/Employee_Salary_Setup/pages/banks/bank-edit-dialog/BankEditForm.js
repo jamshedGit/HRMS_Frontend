@@ -72,8 +72,8 @@ const formValidation = Yup.object().shape(
         otherwise: Yup.string().nullable(), // Optional if pension_member is false
       }),
 
-    company_from_accNo: Yup.string()
-      .matches(/^\d+$/, "Must contain only digits"), // Only digits validation
+    // company_from_accNo: Yup.string()
+    //   .matches(/^\d+$/, "Must contain only digits"), // Only digits validation
 
     emp_bank_accNo: Yup.string()
       .matches(/^\d+$/, "Must contain only digits"), // Only digits validation
@@ -153,12 +153,12 @@ const formValidation = Yup.object().shape(
         otherwise: Yup.number().notRequired(),
       }),
 
-    company_bankId: Yup.number()
-      .when('payment_mode_Id', {
-        is: 153, // if select value is 153
-        then: Yup.number().required(VALIDATION_MESSAGES.required),
-        otherwise: Yup.number().notRequired(),
-      }),
+    // company_bankId: Yup.number()
+    //   .when('payment_mode_Id', {
+    //     is: 153, // if select value is 153
+    //     then: Yup.number().required(VALIDATION_MESSAGES.required),
+    //     otherwise: Yup.number().notRequired(),
+    //   }),
 
     emp_bank_branchId: Yup.number()
       .when('payment_mode_Id', {
@@ -167,12 +167,12 @@ const formValidation = Yup.object().shape(
         otherwise: Yup.number().notRequired(),
       }),
 
-    company_branchId: Yup.number()
-      .when('payment_mode_Id', {
-        is: 153, // if select value is 153
-        then: Yup.number().required(VALIDATION_MESSAGES.required),
-        otherwise: Yup.number().notRequired(),
-      }),
+    // company_branchId: Yup.number()
+    //   .when('payment_mode_Id', {
+    //     is: 153, // if select value is 153
+    //     then: Yup.number().required(VALIDATION_MESSAGES.required),
+    //     otherwise: Yup.number().notRequired(),
+    //   }),
 
     emp_bank_accountTitle: Yup.string()
       .when('payment_mode_Id', {
@@ -181,12 +181,12 @@ const formValidation = Yup.object().shape(
         otherwise: Yup.string().notRequired(),
       }),
 
-    company_from_accNo: Yup.number()
-      .when('payment_mode_Id', {
-        is: 153, // if select value is 153
-        then: Yup.number().notRequired(),
-        otherwise: Yup.number().notRequired(),
-      }),
+    // company_from_accNo: Yup.number()
+    //   .when('payment_mode_Id', {
+    //     is: 153, // if select value is 153
+    //     then: Yup.number().notRequired(),
+    //     otherwise: Yup.number().notRequired(),
+    //   }),
 
     emp_bank_accNo: Yup.number()
       .when('payment_mode_Id', {
@@ -766,7 +766,7 @@ export function BankEditForm({
                   </div>}
                   { /* For Earning WIth Payroll Include ByDefault Yes  */}
                   <br>
-                  </br>                  
+                  </br>
 
                   <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
                     <h6>Earnings </h6>
@@ -1156,37 +1156,8 @@ export function BankEditForm({
                           options={dashboard.allBanks}
                         />
                       </div>
-
-                      }
-                      {
-                        <div className="col-12 col-md-4 mt-3">
-                        </div>
                       }
 
-                      {<div className="col-12 col-md-4 mt-3">
-                        <SearchSelect
-                          name="company_bankId"
-                          label={<span> Company Bank</span>}
-                          isDisabled={checkReadOnlyStatus(values, [151, 152])}
-                          onBlur={() => {
-                            // handleBlur({ target: { name: "countryId" } });
-                          }}
-                          onChange={(e) => {
-                            setFieldValue("company_bankId", e.value);
-                            setDefaultCompanyBanks(e);
-                            dispatch(fetchAllCompanyBanks(e.value));
-                          }}
-                          value={!checkReadOnlyStatus(values, [151, 152]) ? defCompanyBank : ''}
-                          error={errors.company_bankId}
-                          touched={touched.company_bankId}
-                          options={dashboard.allCompanyBanks}
-                        />
-                      </div>
-
-                      }
-
-                    </div>
-                    <div className="from-group row">
                       {<div className="col-12 col-md-4 mt-3">
                         <SearchSelect
                           name="emp_bank_branchId"
@@ -1206,13 +1177,64 @@ export function BankEditForm({
                           options={dashboard.allBankBranch}
                         />
                       </div>
-
                       }
+
+                      <div className="col-12 col-md-4 mt-3">
+
+                        <Field
+                          maxLength={20}
+
+                          disabled={checkReadOnlyStatus(values, [151, 152])}
+                          name="emp_bank_accNo"
+                          component={Input}
+                          type='number'
+                          onInput={(e) => {
+                            e.target.value = amountLimitDynamic(e.target.value, 15); // Limit to 3 digits
+                          }}
+                          // value={clearEmpBankAccField}
+                          //onChange={(e) => setEmpBankAccClearField(e.target.value)}
+                          placeholder="Enter Bank Account No"
+                          label={<span>Bank Account No</span>}
+                          autoComplete="off"
+
+                        />
+                        {/* <ErrorMessage className="form-feedBack" name="emp_bank_accNo" component="div" /> */}
+                      </div>
                       {
                         <div className="col-12 col-md-4 mt-3">
                         </div>
                       }
-                      {<div className="col-12 col-md-4 mt-3">
+
+                      {/* {<div className="col-12 col-md-4 mt-3">
+                        <SearchSelect
+                          name="company_bankId"
+                          label={<span> Company Bank</span>}
+                          isDisabled={checkReadOnlyStatus(values, [151, 152])}
+                          onBlur={() => {
+                            // handleBlur({ target: { name: "countryId" } });
+                          }}
+                          onChange={(e) => {
+                            setFieldValue("company_bankId", e.value);
+                            setDefaultCompanyBanks(e);
+                            dispatch(fetchAllCompanyBanks(e.value));
+                          }}
+                          value={!checkReadOnlyStatus(values, [151, 152]) ? defCompanyBank : ''}
+                          error={errors.company_bankId}
+                          touched={touched.company_bankId}
+                          options={dashboard.allCompanyBanks}
+                        />
+                      </div>
+
+                      } */}
+
+                    </div>
+                    <div className="from-group row">
+
+                      {
+                        <div className="col-12 col-md-4 mt-3">
+                        </div>
+                      }
+                      {/* {<div className="col-12 col-md-4 mt-3">
                         <SearchSelect
                           name="company_branchId"
                           label={<span>Company Bank Branch</span>}
@@ -1232,7 +1254,7 @@ export function BankEditForm({
                         />
                       </div>
 
-                      }
+                      } */}
                     </div>
                     <div className="from-group row">
                       <div className="col-12 col-md-4 mt-3">
@@ -1255,7 +1277,7 @@ export function BankEditForm({
                         <div className="col-12 col-md-4 mt-3">
                         </div>
                       }
-                      <div className="col-12 col-md-4 mt-3">
+                      {/* <div className="col-12 col-md-4 mt-3">
 
                         <Field
                           maxLength={20}
@@ -1274,30 +1296,10 @@ export function BankEditForm({
                           autoComplete="off"
 
                         />
-                      </div>
+                      </div> */}
                     </div>
                     <div className="from-group row">
-                      <div className="col-12 col-md-4 mt-3">
 
-                        <Field
-                          maxLength={20}
-
-                          disabled={checkReadOnlyStatus(values, [151, 152])}
-                          name="emp_bank_accNo"
-                          component={Input}
-                          type='number'
-                          onInput={(e) => {
-                            e.target.value = amountLimitDynamic(e.target.value, 15); // Limit to 3 digits
-                          }}
-                          // value={clearEmpBankAccField}
-                          //onChange={(e) => setEmpBankAccClearField(e.target.value)}
-                          placeholder="Enter Bank Account No"
-                          label={<span>Bank Account No</span>}
-                          autoComplete="off"
-
-                        />
-                        {/* <ErrorMessage className="form-feedBack" name="emp_bank_accNo" component="div" /> */}
-                      </div>
                     </div>
                   </div>
 
@@ -1462,59 +1464,59 @@ export function BankEditForm({
                             <h6>Deduction Entitlements</h6>
 
                             <div className="from-group row">
-                      <div className="col-12 col-md-4 mt-12">
-                        <input
-                          name="eobi_member"
-                          type="checkbox"
-                          onChange={(e)=> {
-                            setFieldValue('eobi_member', e.target.checked)
-                          }}
-                          onBlur={handleBlur}
-                          value={values.eobi_member}
-                          checked={values.eobi_member}
-                        /> EOBI Member
+                              <div className="col-12 col-md-4 mt-12">
+                                <input
+                                  name="eobi_member"
+                                  type="checkbox"
+                                  onChange={(e) => {
+                                    setFieldValue('eobi_member', e.target.checked)
+                                  }}
+                                  onBlur={handleBlur}
+                                  value={values.eobi_member}
+                                  checked={values.eobi_member}
+                                /> EOBI Member
 
-                      </div>
-                      <div className="col-12 col-md-4 mt-5">
-                        {<span> Date Of Registration{Boolean(values.eobi_member) && <span style={{ color: 'red' }}>*</span>} </span>}
+                              </div>
+                              <div className="col-12 col-md-4 mt-5">
+                                {<span> Date Of Registration{Boolean(values.eobi_member) && <span style={{ color: 'red' }}>*</span>} </span>}
 
-                        <DatePicker
-                          className="form-control"
-                          placeholder="Enter EOBI Reg Date"
+                                <DatePicker
+                                  className="form-control"
+                                  placeholder="Enter EOBI Reg Date"
 
-                          selected={values.eobi_member && defEOBIDate}
-                          label='EOBI Reg Date'
-                          onChange={(date) => {
-                            setFieldValue("eobi_reg_date", date);
-                            setEOBIDate(date);
-                          }}
-                          timeInputLabel="Time:"
-                          dateFormat="dd/MM/yyyy"
-                          showTimeInput
-                          name="eobi_reg_date"
-                          autoComplete="off"
+                                  selected={values.eobi_member && defEOBIDate}
+                                  label='EOBI Reg Date'
+                                  onChange={(date) => {
+                                    setFieldValue("eobi_reg_date", date);
+                                    setEOBIDate(date);
+                                  }}
+                                  timeInputLabel="Time:"
+                                  dateFormat="dd/MM/yyyy"
+                                  showTimeInput
+                                  name="eobi_reg_date"
+                                  autoComplete="off"
 
-                          disabled={!values.eobi_member}
-                        />
-                        <ErrorMessage className="form-feedBack" name="eobi_reg_date" component="div" />
-                      </div>
+                                  disabled={!values.eobi_member}
+                                />
+                                <ErrorMessage className="form-feedBack" name="eobi_reg_date" component="div" />
+                              </div>
 
-                      <div className="col-12 col-md-4 mt-3">
-                        <Field
-                          name="eobi_accNo"
-                          type='number'
-                          component={Input}
-                          onInput={(e) => {
-                            e.target.value = amountLimitDynamic(e.target.value, 15); // Limit to 3 digits
-                          }}
+                              <div className="col-12 col-md-4 mt-3">
+                                <Field
+                                  name="eobi_accNo"
+                                  type='number'
+                                  component={Input}
+                                  onInput={(e) => {
+                                    e.target.value = amountLimitDynamic(e.target.value, 15); // Limit to 3 digits
+                                  }}
 
-                          placeholder="Enter EOBI Account No"
-                          label={<span> EOBI Account No{Boolean(values.eobi_member) && <span style={{ color: 'red' }}>*</span>} </span>}
-                          autoComplete="off"
-                          disabled={!values.eobi_member}
-                        />
-                      </div>
-                    </div>
+                                  placeholder="Enter EOBI Account No"
+                                  label={<span> EOBI Account No{Boolean(values.eobi_member) && <span style={{ color: 'red' }}>*</span>} </span>}
+                                  autoComplete="off"
+                                  disabled={!values.eobi_member}
+                                />
+                              </div>
+                            </div>
                             {/* <div className="from-group row">
 
                       <div className="col-12 col-md-4 mt-12">
@@ -1695,8 +1697,8 @@ export function BankEditForm({
                     </Card>
                   </Accordion>
 
-                 
-                 
+
+
                 </fieldset>
               </Form>
             </Modal.Body>
