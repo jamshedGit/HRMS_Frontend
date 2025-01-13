@@ -170,6 +170,7 @@ export function DesignationEditDialog({ id, show, onHide, userForRead }) {
       show={show}
       onHide={onHide}
       aria-labelledby="example-modal-sizes-title-lg"
+      backdrop="static"
     >
       <DesignationEditDialogHeader id={id} isUserForRead={userForRead} />
       <DesignationEditForm
