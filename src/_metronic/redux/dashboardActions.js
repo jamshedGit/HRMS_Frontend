@@ -505,3 +505,39 @@ export const fetchAllPayrollMonthYearList = (body, key) => async (dispatch) => {
 
 
 }
+
+
+/**
+ * 
+ * Download Excel Template
+ * 
+ * @param {Document} document 
+ * @returns 
+ */
+export const downloadTemplateExcel = (document, type, fileName) => async (dispatch) => {
+  return requestFromServer.downloadTemplate({type})
+    .then((res) => {
+      const pdfBlob = new Blob([res.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+
+      // Trigger file download
+      const link = document.createElement('a');
+      link.href = pdfUrl;
+      link.setAttribute('download', `${fileName}.xlsx`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    })
+    .catch((error) => {
+      error.clientMessage = "Can't Download Template";
+      toast.error(error.clientMessage, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    });
+};

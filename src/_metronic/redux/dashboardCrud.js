@@ -218,3 +218,15 @@ export const getAllPayrollMonthYearList  = async (body) => {
     });
 };
 
+/**
+ * 
+ * Download Excel Templates
+ * 
+ * @param {Object} body 
+ * @returns res
+ */
+export async function downloadTemplate(body) {
+  return axios.post(`${USERS_URL}/upload/download-template`, body,{
+    responseType:'arraybuffer'
+  });
+}
