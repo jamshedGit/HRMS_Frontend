@@ -106,50 +106,58 @@ export function RolesAccess({
       [id]: checked, // using "id" seems to not work here.
     });
   };
-
+  console.log("newdata111", newdata)
   return (
     <>
       <h1 className="mb-10">Role Access page</h1>
+
+
+
       {newdata.map((dd, index) => (
         <Card key={index}>
           <CardBody>
             <Row>
               <Col lg={2}>
                 <Form.Text className="col-form-label fw-bold fs-6">
-                  {/* {dd[0]} */}
                   {dd[0]
-                    .split('_')             
-                    .map(word => word.charAt(0).toUpperCase() + word.slice(1)) 
+                    .split('_')
+                    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
                     .join(' ')}
                 </Form.Text>
               </Col>
               <Col lg={10}>
                 <Row>
-                  {dd[1].map((right, rightindex) => (
-                    <Col lg={3} key={rightindex}>
-                      <div className="row">
-                        <input
-                          type="checkbox"
-                          className="form-check-input"
-                          id={right.resourceId}
-                          name={right.roleId}
-                          label={right.name}
-                          defaultChecked={right.isAccess}
-                          onChange={onCheckboxChange}
-                        />
-                        <Form.Text className={FormClasses.LABEL_NON_REQUIRED}>
-                          {right.name}
-                        </Form.Text>
-                        {/* <Form.Text className={FormClasses.LABEL_NON_REQUIRED}>{right.rightName}</Form.Text> */}
-                      </div>
-                    </Col>
-                  ))}
+                  {[
+                    ...dd[1] // Create a shallow copy of dd[1]
+                  ]
+                    .sort((a, b) => a.sortOrder - b.sortOrder) // Sort the copy
+                    .map((right, rightindex) => (
+                      <Col lg={3} key={rightindex}>
+                        <div className="row">
+                          <input
+                            type="checkbox"
+                            className="form-check-input"
+                            id={right.resourceId}
+                            name={right.roleId}
+                            label={right.name}
+                            defaultChecked={right.isAccess}
+                            onChange={onCheckboxChange}
+                          />
+                          <Form.Text className={FormClasses.LABEL_NON_REQUIRED}>
+                            {right.name}
+                          </Form.Text>
+                          {/* <Form.Text className={FormClasses.LABEL_NON_REQUIRED}>{right.rightName}</Form.Text> */}
+                        </div>
+                      </Col>
+                    ))}
                 </Row>
               </Col>
             </Row>
           </CardBody>
         </Card>
       ))}
+
+
 
       <ToastContainer
         position="top-right"

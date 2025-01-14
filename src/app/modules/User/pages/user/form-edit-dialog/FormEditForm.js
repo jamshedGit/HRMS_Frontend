@@ -158,7 +158,7 @@ export function FormEditForm({
 
                           {values.companyId ? (
                             dashboard?.allSubsidiaryList
-                              ?.filter((option) => option.companyId ==1) // Filter subsidiaries by companyId
+                              ?.filter((option) => option.companyId ==values.companyId) // Filter subsidiaries by companyId
                               .map((option) => (
                                 <div key={option.value} className="dropdown-option">
                                   <input
