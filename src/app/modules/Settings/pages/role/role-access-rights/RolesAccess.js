@@ -113,7 +113,7 @@ export function RolesAccess({
 
 
 
-      {newdata.map((dd, index) => (
+      {/* {newdata.map((dd, index) => (
         <Card key={index}>
           <CardBody>
             <Row>
@@ -127,10 +127,16 @@ export function RolesAccess({
               </Col>
               <Col lg={10}>
                 <Row>
-                  {[
-                    ...dd[1] // Create a shallow copy of dd[1]
-                  ]
-                    .sort((a, b) => a.sortOrder - b.sortOrder) // Sort the copy
+                 
+                       {[
+              ...dd[1] 
+            ]
+              .sort((a, b) => {
+           
+                if (a.sortOrder == null) return 1;
+                if (b.sortOrder == null) return -1;
+                return a.sortOrder - b.sortOrder; 
+              })
                     .map((right, rightindex) => (
                       <Col lg={3} key={rightindex}>
                         <div className="row">
@@ -146,7 +152,7 @@ export function RolesAccess({
                           <Form.Text className={FormClasses.LABEL_NON_REQUIRED}>
                             {right.name}
                           </Form.Text>
-                          {/* <Form.Text className={FormClasses.LABEL_NON_REQUIRED}>{right.rightName}</Form.Text> */}
+                      
                         </div>
                       </Col>
                     ))}
@@ -155,8 +161,58 @@ export function RolesAccess({
             </Row>
           </CardBody>
         </Card>
-      ))}
+      ))} */}
 
+{newdata.map((dd, index) => (
+  dd[0] !== "Settings"  &&   ( // Check if dd[0] is not "Settings"
+    <Card key={index}>
+      <CardBody>
+        <Row>
+          <Col lg={2}>
+            <Form.Text className="col-form-label fw-bold fs-6">
+              {dd[0]
+                .split('_')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ')}
+            </Form.Text>
+          </Col>
+          <Col lg={10}>
+            <Row>
+              {[
+                ...dd[1] // Create a shallow copy of dd[1]
+              ]
+                .sort((a, b) => {
+                  // If a or b has null sortOrder, place it last
+                  if (a.sortOrder == null) return 1;
+                  if (b.sortOrder == null) return -1;
+                  return a.sortOrder - b.sortOrder; // Standard sorting logic for non-null values
+                })
+                .map((right, rightindex) => (
+                  <Col lg={3} key={rightindex}>
+                    <div className="row">
+                      <input
+                        type="checkbox"
+                        className="form-check-input"
+                        id={right.resourceId}
+                        name={right.roleId}
+                        label={right.name}
+                        defaultChecked={right.isAccess}
+                        onChange={onCheckboxChange}
+                      />
+                      <Form.Text className={FormClasses.LABEL_NON_REQUIRED}>
+                        {right.name}
+                      </Form.Text>
+                      {/* <Form.Text className={FormClasses.LABEL_NON_REQUIRED}>{right.rightName}</Form.Text> */}
+                    </div>
+                  </Col>
+                ))}
+            </Row>
+          </Col>
+        </Row>
+      </CardBody>
+    </Card>
+  )
+))}
 
 
       <ToastContainer
