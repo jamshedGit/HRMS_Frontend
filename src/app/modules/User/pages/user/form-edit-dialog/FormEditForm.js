@@ -117,7 +117,7 @@ export function FormEditForm({
       initialValues={user}
       validationSchema={userEditSchema}
       onSubmit={(values) => {
-      
+
         enableLoading();
         saveForm(values);
       }}
@@ -132,64 +132,75 @@ export function FormEditForm({
             )}
             <Form className="form form-label-right">
               <fieldset disabled={isUserForRead}>
+
                 <div className="form-group row">
+                  <div className="col-12 col-md-6 mt-3">
+                    <label>
+                      Email <span style={{ color: "red" }}>*</span>
+                    </label>
+                    <Field
+                      name="email"
+                      component={Input}
+                      placeholder="example@gmail.com"
 
-                  <div className="col-12 col-md-4 mt-3">
-                    Subsidiary <span style={{ color: "red" }}>*</span>
-                    <div style={{ backgroundColor: "#ffffff", height: "170px", padding: "10px", overflow: "scroll" }}>
+                      autoComplete="off"
+                      maxLength="30"
 
-                      <div className="multi-select">
-                        <div className="dropdown-label"></div>
-                        <div className="dropdown-options" style={{ fontSize: "12px", fontWeight: "bold", padding: "5px" }}>
-                          {/* {dashboard?.allSubsidiaryList?.map((option) => (
-                            <div key={option.value} className="dropdown-option">
-                              <input style={{ width: "25px" }}
-                                name="subsidiaryId"
-                                type="checkbox"
-                                value={option.value}
-                                checked={Boolean(values?.subsidiaryId?.includes(option?.value?.toString()))}
-                                onChange={handleChange}
-                                disabled={!values.companyId}
-                              />
-                              {option.label}
-                            </div>
-                          ))} */}
-
-
-                          {values.companyId ? (
-                            dashboard?.allSubsidiaryList
-                              ?.filter((option) => option.companyId ==values.companyId) // Filter subsidiaries by companyId
-                              .map((option) => (
-                                <div key={option.value} className="dropdown-option">
-                                  <input
-                                    style={{ width: "25px" }}
-                                    name="subsidiaryId"
-                                    type="checkbox"
-                                    value={option.value}
-                                    checked={Boolean(values?.subsidiaryId?.includes(option?.value?.toString()))}
-                                    onChange={handleChange}
-                                    disabled={!values.companyId} // Disable if no company is selected
-                                  />
-                                  {option.label}
-                                </div>
-                              ))
-                          ) : (
-                            <div>Please select a company first.</div> // Show this if no company is selected
-                          )}
-                          {errors.subsidiaryId && touched.subsidiaryId && (
-                            <div className="invalid-text">{errors.subsidiaryId}</div>
-                          )}
-
-                        </div>
-                      </div>
-                    </div>
+                    />
                   </div>
+
+                  {!id && (<div className="col-12 col-md-6 mt-3">
+                    <label>
+                      Password <span style={{ color: "red" }}>*</span>
+                    </label>
+                    <Field
+                      name="password"
+                      component={Input} // Custom component
+                      disabled={id}
+                      placeholder="Enter password"
+                      type="text"
+
+                    />
+                  </div>)}
 
                 </div>
 
+
+                <div className="form-group row">
+                  <div className="col-12 col-md-6 mt-3">
+                    <SearchSelect
+                      name="supervisedbyId"
+                      label={
+                        <span>
+                          Supervised By<span style={{ color: "red" }}>*</span>
+                        </span>
+                      }
+
+                      onChange={(e) => {
+                        setFieldValue("supervisedbyId", e.value || null);
+                      }}
+                      value={
+                        roles?.find(
+                          (option) => option.value === values.supervisedbyId
+                        ) || null
+                      }
+
+                      options={roles}
+
+                      error={errors.supervisedbyId}
+                      touched={touched.supervisedbyId}
+                    />
+                  </div>
+
+               
+
+
+
+                </div>
                 <div className="form-group row">
 
-                  <div className="col-12 col-md-6 mt-3">
+
+                <div className="col-12 col-md-6 mt-3">
                     <SearchSelect
                       name="companyId"
                       label={
@@ -217,30 +228,65 @@ export function FormEditForm({
                   </div>
 
                   <div className="col-12 col-md-6 mt-3">
-                    <label>
-                      Email <span style={{ color: "red" }}>*</span>
-                    </label>
-                    <Field
-                      name="email"
-                      component={Input}
-                      placeholder="example@gmail.com"
+                    Subsidiary <span style={{ color: "red" }}>*</span>
+                    <div style={{ backgroundColor: "#ffffff", height: "170px", padding: "10px", overflow: "scroll" }}>
 
-                      autoComplete="off"
-                      maxLength="30"
+                      <div className="multi-select">
+                        <div className="dropdown-label"></div>
+                        <div className="dropdown-options" style={{ fontSize: "12px", fontWeight: "bold", padding: "5px" }}>
+                          {/* {dashboard?.allSubsidiaryList?.map((option) => (
+                            <div key={option.value} className="dropdown-option">
+                              <input style={{ width: "25px" }}
+                                name="subsidiaryId"
+                                type="checkbox"
+                                value={option.value}
+                                checked={Boolean(values?.subsidiaryId?.includes(option?.value?.toString()))}
+                                onChange={handleChange}
+                                disabled={!values.companyId}
+                              />
+                              {option.label}
+                            </div>
+                          ))} */}
 
-                    />
+
+                          {values.companyId ? (
+                            dashboard?.allSubsidiaryList
+                              ?.filter((option) => option.companyId == values.companyId) // Filter subsidiaries by companyId
+                              .map((option) => (
+                                <div key={option.value} className="dropdown-option">
+                                  <input
+                                    style={{ width: "25px" }}
+                                    name="subsidiaryId"
+                                    type="checkbox"
+                                    value={option.value}
+                                    checked={Boolean(values?.subsidiaryId?.includes(option?.value?.toString()))}
+                                    onChange={handleChange}
+                                    disabled={!values.companyId} // Disable if no company is selected
+                                  />
+                                  {option.label}
+                                </div>
+                              ))
+                          ) : (
+                            <div>Please select a company first.</div> // Show this if no company is selected
+                          )}
+                          {errors.subsidiaryId && touched.subsidiaryId && (
+                            <div className="invalid-text">{errors.subsidiaryId}</div>
+                          )}
+
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
 
 
 
-
-
-
-
+            
 
 
                 </div>
+
+
 
                 <div className="form-group row">
 
@@ -271,69 +317,7 @@ export function FormEditForm({
                     />
                   </div>
 
-                  <div className="col-12 col-md-6 mt-3">
-                    <SearchSelect
-                      name="supervisedbyId"
-                      label={
-                        <span>
-                          Supervise By<span style={{ color: "red" }}>*</span>
-                        </span>
-                      }
-
-                      onChange={(e) => {
-                        setFieldValue("supervisedbyId", e.value || null);
-                      }}
-                      value={
-                        roles?.find(
-                          (option) => option.value === values.supervisedbyId
-                        ) || null
-                      }
-
-                      options={roles}
-
-                      error={errors.supervisedbyId}
-                      touched={touched.supervisedbyId}
-                    />
-                  </div>
-
-
-                </div>
-
-                <div className="form-group row">
-
-                  <div className="col-12 col-md-6 mt-3">
-                    <label>
-                      Allow User Creation <span style={{ color: "red" }}>*</span>
-                    </label>
-                    <Field
-                      name="allowUserCreation"
-                      as="select"
-                      className="form-control"
-                      disabled={isUserForRead}
-                      value={values.allowUserCreation}
-                    >
-                      <option value="">Select</option>
-                      {basisOptions.map((option) => (
-                        <option
-                          key={option.value}
-                          value={option.value}
-                        >
-                          {option.label}
-                        </option>
-                      ))}
-                    </Field>
-                    {errors.allowUserCreation &&
-                      touched.allowUserCreation && (
-                        <div className="text-danger">
-                          {errors.allowUserCreation}
-                        </div>
-                      )}
-
-
-                  </div>
-
-
-
+             
                   <div className="col-12 col-md-6 mt-3">
                     <SearchSelect
                       name="employeeIdMapping"
@@ -361,24 +345,9 @@ export function FormEditForm({
                     />
                   </div>
 
-
-
-                  {/* <div className="col-12 col-md-6 mt-3">
-                    <label>
-                      <span>
-                        Employee Name <span style={{ color: "red" }}>*</span>
-                      </span>
-                    </label>
-                    <Field
-                      name="employeeName"
-                      component={Input}
-                      placeholder="Enter employee name"
-
-                      type="text"
-
-                    />
-                  </div> */}
                 </div>
+
+            
 
 
 
@@ -415,19 +384,39 @@ export function FormEditForm({
 
 
                   </div>
-                  {!id && (<div className="col-12 col-md-6 mt-3">
+
+
+                  <div className="col-12 col-md-6 mt-3">
                     <label>
-                      Password <span style={{ color: "red" }}>*</span>
+                      Allow User Creation <span style={{ color: "red" }}>*</span>
                     </label>
                     <Field
-                      name="password"
-                      component={Input} // Custom component
-                      disabled={id}
-                      placeholder="Enter password"
-                      type="text"
+                      name="allowUserCreation"
+                      as="select"
+                      className="form-control"
+                      disabled={isUserForRead}
+                      value={values.allowUserCreation}
+                    >
+                      <option value="">Select</option>
+                      {basisOptions.map((option) => (
+                        <option
+                          key={option.value}
+                          value={option.value}
+                        >
+                          {option.label}
+                        </option>
+                      ))}
+                    </Field>
+                    {errors.allowUserCreation &&
+                      touched.allowUserCreation && (
+                        <div className="text-danger">
+                          {errors.allowUserCreation}
+                        </div>
+                      )}
 
-                    />
-                  </div>)}
+
+                  </div>
+
 
                 </div>
 
@@ -469,7 +458,7 @@ export function FormEditForm({
               <button
                 type="submit"
                 onClick={() => {
-               
+
                   handleSubmit()
                 }}
                 className="btn btn-primary btn-elevate"

@@ -14,7 +14,7 @@ export function ActionsColumnFormatter(
         overlay={<Tooltip id="products-edit-tooltip">Edit Role</Tooltip>}
       >
         <a
-          className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
+          className="btn btn-icon edit-button"
           onClick={() => openEditUserDialog(row.id)}
         >
           <span className="svg-icon svg-icon-md svg-icon-primary">
@@ -40,11 +40,14 @@ export function ActionsColumnFormatter(
         overlay={<Tooltip id="products-edit-tooltip">Delete Role</Tooltip>}
       >
         <a
-          className="btn btn-icon btn-light btn-hover-danger btn-sm mx-3"
+          className="btn btn-icon delete-button"
           onClick={() => openDeleteRoleDialog(row.id)}
         >
           <span className="svg-icon svg-icon-md svg-icon-danger">
-            <SVG src={toAbsoluteUrl("/media/svg/icons/General/Trash.svg")} />
+            <SVG
+              src={toAbsoluteUrl("/media/svg/icons/General/disable.svg")}
+              title=""
+            />
           </span>
         </a>
       </OverlayTrigger>
@@ -56,7 +59,7 @@ export function ActionsColumnFormatter(
           className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
           onClick={() => openRoleAccessPage(row.id)}
         >
-          <span className="svg-icon svg-icon-md svg-icon-primary">A</span>
+          <span className="svg-icon svg-icon-md svg-icon-primary">Rights</span>
         </a>
       </OverlayTrigger>
     </div>

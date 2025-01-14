@@ -7,6 +7,7 @@ import {
 } from "../../../../../_metronic/_partials/controls";
 import { RolesTable } from "./role-table/RolesTable";
 import { useRolesUIContext } from "./RolesUIContext";
+import CurrentModuleName from "../../../../utils/common-modules/ModuleName";
 export function RolesCard() {
   const rolesUIContext = useRolesUIContext();
   const rolesUIProps = useMemo(() => {
@@ -16,7 +17,7 @@ export function RolesCard() {
   }, [rolesUIContext]);
   return (
     <Card>
-      <CardHeader title="">
+      <CardHeader title={CurrentModuleName()} >
         <CardHeaderToolbar>
           <button
             type="button"
