@@ -130,6 +130,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
       show={show}
       onHide={onHide}
       aria-labelledby="example-modal-sizes-title-lg"
+        backdrop="static"
     >
       <FormEditDialogHeader id={id} isUserForRead={userForRead} />
       <FormEditForm
