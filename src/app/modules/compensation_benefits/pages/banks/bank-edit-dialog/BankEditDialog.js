@@ -77,12 +77,12 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
   //   }
   // }, [actionsLoading]);
 
-  const saveCompensationBenefits = async (user,earning_deduction_Obj) => {
+  const saveCompensationBenefits = async (user,earning_deduction_Obj, allEmployeeGradeList) => {
     if (!id) {
 
    
       const finalObject = { user }
-      await dispatch(actions.createCompensationBenefits(user,earning_deduction_Obj, disbaleLoading, onHide));
+      await dispatch(actions.createCompensationBenefits(user,earning_deduction_Obj, disbaleLoading, onHide, allEmployeeGradeList));
       await dispatch(actions.fetchUsers(usersUIProps.queryParams));
 
 
