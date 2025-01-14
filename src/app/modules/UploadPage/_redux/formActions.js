@@ -8,12 +8,31 @@ const { actions } = UploadDataSlice;
 
 /**
  * 
- * Fetch All Registered Payroll Paginated from the server
+ * Download Excel Template from server by type
  * 
  * @param {Object} queryparm 
  * @returns 
  */
 export const downloadTemplate = (document, type, fileName) => async (dispatch) => {
-  dispatch(downloadTemplateExcel(document, type, fileName)).then((res)=> {
+  dispatch(downloadTemplateExcel(document, type, fileName)).then((res) => {
   })
+};
+
+
+/**
+ * 
+ * Save Leave Data
+ * 
+ * @param {Object} queryparm 
+ * @returns 
+ */
+export const saveLeaveData = (formData) => async (dispatch) => {
+  return requestFromServer.saveLeaveData(formData)
+    .then((response) => {
+      dispatch(actions.RoundingPolicyFetched(response));
+    })
+    .catch((error) => {
+      error.clientMessage = "Can't find receipts";
+      dispatch(actions.catchError({ error, callType: callTypes.list }));
+    });
 };

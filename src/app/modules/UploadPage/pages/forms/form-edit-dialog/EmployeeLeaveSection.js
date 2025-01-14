@@ -5,20 +5,21 @@ import * as Yup from "yup";
 import { Input } from "../../../../../../_metronic/_partials/controls";
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 import { KeyboardArrowDown } from "@material-ui/icons";
+import * as actions from "../../../_redux/formActions";
 
 //Validation for Form
 const formValidation = Yup.object().shape({
   allocatedCount: Yup.number().min(1, VALIDATION_MESSAGES.minOneValue).required(VALIDATION_MESSAGES.required),
 });
 
-export function EmployeeLeaveSection({downloadExcel}) {
+export function EmployeeLeaveSection({ downloadExcel }) {
 
   //This ref is to get reference of file field. It will be used to clear field when reseting form
   const inputFile = useRef(null);
 
   const onClick = (e) => {
     e.preventDefault();
-    downloadExcel(document, 'employee_profile', 'Employee_Leave_Template')
+    downloadExcel(document, 'employee_leave', 'Employee_Leave_Template')
   }
 
   return (
@@ -28,8 +29,9 @@ export function EmployeeLeaveSection({downloadExcel}) {
         initialValues={{}}
         validationSchema={formValidation}
         onSubmit={(values) => {
-          // enableLoading();
-          // submitForm(values)
+          const formData = new FormData()
+          formData.append('file', values.file)
+          dispatch(actions.saveLeaveData(formData))
         }}
       >
         {({

@@ -18,8 +18,6 @@ export function FormCard() {
   const dispatch = useDispatch();
 
   const downloadExcel = (document, type, fileName) => {
-    console.log('::::Download mein aya:::');
-    
     dispatch(actions.downloadTemplate(document, type, fileName))
   }
 
@@ -33,42 +31,42 @@ export function FormCard() {
         <br />
 
         {/* EmployeeProfileSection Starts */}
-        <EmployeeProfileSection downloadExcel={downloadExcel}/>
+        <EmployeeProfileSection downloadExcel={downloadExcel} dispatch={dispatch}/>
         {/* EmployeeProfileSection Ends */}
 
         <br />
         <hr />
 
         {/* EmployeeSalarySection Starts */}
-        <EmployeeSalarySection />
+        <EmployeeSalarySection downloadExcel={downloadExcel} dispatch={dispatch}/>
         {/* EmployeeSalarySection Ends */}
 
         <br />
         <hr />
 
         {/* EmployeeLeaveSection Starts */}
-        <EmployeeLeaveSection />
+        <EmployeeLeaveSection downloadExcel={downloadExcel} dispatch={dispatch}/>
         {/* EmployeeLeaveSection Ends */}
 
         <br />
         <hr />
 
         {/* EmployeeAttendanceSection Starts */}
-        <EmployeeAttendanceSection />
+        <EmployeeAttendanceSection downloadExcel={downloadExcel} dispatch={dispatch}/>
         {/* EmployeeAttendanceSection Ends */}
 
         <br />
         <hr />
 
         {/* LoanOpeningSection Starts */}
-        <LoanOpeningSection />
+        <LoanOpeningSection downloadExcel={downloadExcel} dispatch={dispatch}/>
         {/* LoanOpeningSection Ends */}
 
         <br />
         <hr />
 
         {/* IncomeTaxOpeningSection Starts */}
-        <IncomeTaxOpeningSection />
+        <IncomeTaxOpeningSection downloadExcel={downloadExcel} dispatch={dispatch}/>
         {/* IncomeTaxOpeningSection Ends */}
 
       </CardBody>
