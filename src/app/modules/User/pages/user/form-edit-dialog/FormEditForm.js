@@ -9,7 +9,7 @@ import {
   fetchAllComapnyData,
   fetchAllFormsMenu,
   fetchAllHumanResourceRole,
-  fetchAllSubsidiaryData,
+  fetchAllSubsidiaryData,fetchAllActiveEmployees
 } from "../../../../../../_metronic/redux/dashboardActions";
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 import { getDateDiffInDays } from "../../../../../utils/common";
@@ -18,7 +18,8 @@ import { getDateDiffInDays } from "../../../../../utils/common";
 const userEditSchema = Yup.object().shape({
   // from_amount: Yup.string().required("Required*"),
 
-  subsidiaryId: Yup.number()
+  subsidiaryId: Yup.string()
+  .nullable()
     .required(VALIDATION_MESSAGES.required),
 
   // to_amount: Yup.string().required("Required*"),
@@ -82,7 +83,7 @@ export function FormEditForm({
       dispatch(fetchAllSubsidiaryData("allSubsidiaryList"));
       dispatch(fetchAllComapnyData("allCompanyList"))
 
-
+      dispatch(fetchAllActiveEmployees());
     }
   }, [dispatch, user.Id]);
 
@@ -331,12 +332,15 @@ export function FormEditForm({
                         setFieldValue("employeeIdMapping", e.value || null);
 
                       }}
+               
+
                       value={
-                        dashboard?.allSubsidiaryList?.find(
+                        dashboard?.allEmployees?.find(
                           (option) => option?.value === values?.employeeIdMapping
                         ) || null
                       }
-                      options={dashboard?.allSubsidiaryList}
+                      options={dashboard?.allEmployees}
+              
 
 
 

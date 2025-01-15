@@ -36,6 +36,7 @@ export function FormUIProvider({ FormUIEvents, children }) {
     password:"",
     email:"",
     supervisedbyId:"",
+    companyId:""
   
   };
 

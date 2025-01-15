@@ -83,18 +83,26 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   
   
       // user.number_of_days=
-      const formUpdatedFields = {
+
+
+    const formUpdatedFields = {
         Id: user.Id,
         subsidiaryId: user.subsidiaryId,
-        name: user.name,
-        religionId: user.religionId,
-        from_date: user.from_date,
-        to_date: user.to_date,
-        number_of_days: user.number_of_days,
-        holiday_typeId: user.holiday_typeId,
+        employeeIdMapping: user.employeeIdMapping,
+        deactiveflag: user.deactiveflag,
+        roleId: user.roleId,
+        allowUserCreation: user.allowUserCreation,
+        password: user.password,
+        email: user.email,
+        supervisedbyId:user.supervisedbyId,
+ 
+ 
+   
+   
+ 
+   
      
       };
-
       
 
      await dispatch(actions.updateUser(formUpdatedFields, disbaleLoading, onHide));
