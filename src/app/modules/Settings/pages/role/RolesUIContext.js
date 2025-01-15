@@ -31,6 +31,7 @@ export function RolesUIProvider({ rolesUIEvents, children }) {
   const initRole = {
    
     name: "",
+    isActive:true
   }
 
   const value = {

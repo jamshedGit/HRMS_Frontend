@@ -58,7 +58,8 @@ export function RoleEditDialog({ id, show, onHide }) {
       enableLoading()
       const roleUpdatedFields = {
         id: id,
-        name: roleValues.name
+        name: roleValues.name,
+        isActive:roleValues.isActive
       }
       
       dispatch(actions.updateRole(roleUpdatedFields))

@@ -10,6 +10,22 @@ export function ActionsColumnFormatter(
 ) {
   return (
     <div>
+
+<OverlayTrigger
+        overlay={<Tooltip id="products-edit-tooltip">Role Access</Tooltip>}
+      >
+        <a
+          className="btn btn-icon  btn-hover-primary btn-sm mx-3 view-button"
+          onClick={() => openRoleAccessPage(row.id)}
+        >
+          {/* <span className="svg-icon svg-icon-md svg-icon-primary">Rights</span> */}
+          <span className="svg-icon svg-icon-md svg-icon-primary">
+            <SVG
+              src={toAbsoluteUrl("/media/svg/icons/Communication/view.svg")}
+            />
+          </span>
+        </a>
+      </OverlayTrigger>
       <OverlayTrigger
         overlay={<Tooltip id="products-edit-tooltip">Edit Role</Tooltip>}
       >
@@ -52,16 +68,7 @@ export function ActionsColumnFormatter(
         </a>
       </OverlayTrigger>
       <> </>
-      <OverlayTrigger
-        overlay={<Tooltip id="products-edit-tooltip">Role Access</Tooltip>}
-      >
-        <a
-          className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
-          onClick={() => openRoleAccessPage(row.id)}
-        >
-          <span className="svg-icon svg-icon-md svg-icon-primary">Rights</span>
-        </a>
-      </OverlayTrigger>
+     
     </div>
   );
 }
