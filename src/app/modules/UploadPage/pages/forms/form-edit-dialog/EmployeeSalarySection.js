@@ -9,7 +9,7 @@ import * as actions from "../../../_redux/formActions";
 
 //Validation for Form
 const formValidation = Yup.object().shape({
-  allocatedCount: Yup.number().min(1, VALIDATION_MESSAGES.minOneValue).required(VALIDATION_MESSAGES.required),
+  file: Yup.mixed().required(VALIDATION_MESSAGES.required)
 });
 
 export function EmployeeSalarySection({ downloadExcel, dispatch }) {
@@ -26,7 +26,8 @@ export function EmployeeSalarySection({ downloadExcel, dispatch }) {
     <>
       <Formik
         enableReinitialize={true}
-        initialValues={{}}
+        initialValues={{ file: null }}
+        validationSchema={formValidation}
         onSubmit={(values) => {
         }}
       >
@@ -51,17 +52,15 @@ export function EmployeeSalarySection({ downloadExcel, dispatch }) {
               <Accordion.Collapse eventKey="0">
                 <Card.Body>
 
-
                   {/* Form Start */}
                   <Form className="form form-label-right">
                     <fieldset>
-
 
                       <div className="from-group row">
                         <div className="col-12 col-md-4 mt-3">
                         </div>
 
-                        <div className="col-12 col-md-4 mt-3">
+                        <div className="col-12 col-md-4 mt-3" style={{textAlign:"center", textDecoration: 'underline'}}>
                           <a><span onClick={onClick}>Download - Employee Salary Setup Template</span></a>
                         </div>
 

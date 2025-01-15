@@ -68,17 +68,15 @@ export function EmployeeLeaveSection({ downloadExcel, dispatch }) {
               <Accordion.Collapse eventKey="0">
                 <Card.Body>
 
-
                   {/* Form Start */}
                   <Form className="form form-label-right">
                     <fieldset>
-
 
                       <div className="from-group row">
                         <div className="col-12 col-md-4 mt-3">
                         </div>
 
-                        <div className="col-12 col-md-4 mt-3">
+                        <div className="col-12 col-md-4 mt-3" style={{ textAlign: "center", textDecoration: 'underline' }}>
                           <a><span onClick={onClick}>Download - Employee Leave Balance Template</span></a>
                         </div>
 
