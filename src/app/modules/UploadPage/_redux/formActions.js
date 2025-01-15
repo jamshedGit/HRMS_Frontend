@@ -14,8 +14,7 @@ const { actions } = UploadDataSlice;
  * @returns 
  */
 export const downloadTemplate = (document, type, fileName) => async (dispatch) => {
-  dispatch(downloadTemplateExcel(document, type, fileName)).then((res) => {
-  })
+  dispatch(downloadTemplateExcel(document, type, fileName))
 };
 
 
