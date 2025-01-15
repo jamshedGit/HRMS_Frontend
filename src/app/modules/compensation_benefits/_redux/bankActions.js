@@ -85,58 +85,87 @@ export const activeUser = (id) => (dispatch) => {
     });
 };
 
-export const createCompensationBenefits = (bankForCreation, earning_deduction_Obj, disbaleLoading, onHide) => (
-  dispatch
-) => {
-  // bankForCreation.phNo = bankForCreation.phNo.toString();
-  // bankForCreation.cnic = bankForCreation.cnic.toString();
+export const createCompensationBenefits = (bankForCreation, earning_deduction_Obj, disbaleLoading, onHide, allEmployeeGradeList) => (dispatch) => {
+  if (bankForCreation.gradeId == 'all') {
+    for (const grade of allEmployeeGradeList) {
+      requestFromServer.createCompensationBenefits({ ...bankForCreation, gradeId: grade.value, upsert: true }).then((res) => {
+        const obj = res.data?.data;
+        const list = earning_deduction_Obj.map(res => {
+          return {
+            ...res,
+            compensationId: obj.Id, createdBy: obj.createdBy, createdAt: obj.createdAt, isPartOfGrossSalary: res.isPartOfGrossSalary, isActive: true
+          }
 
-  return requestFromServer
-    .createCompensationBenefits(bankForCreation)
-    .then((res) => {
-      dispatch(actions.startCall({ callType: callTypes.action }));
-      const obj = res.data?.data;
-
-      // For Inserting Compensation EArning Deductions in Bulk
-
-      const list = earning_deduction_Obj.map(res => {
-
-        return {
-          ...res,
-         compensationId: obj.Id, createdBy: obj.createdBy, createdAt: obj.createdAt, isPartOfGrossSalary: res.isPartOfGrossSalary, isActive: true
-        }
-
+        })
+        const response = axios.post(`${USERS_URL}/compensation/update-compensation-heads-bulk`, { data: { list, compensationId: obj.Id } });
       })
-      const response = axios.post(`${USERS_URL}/compensation/update-compensation-heads-bulk`, { data: {list , compensationId: obj.Id }});
+    }
 
-
-      dispatch(actions.compensationBenefitsCreated(obj));
-      disbaleLoading();
-      toast.success(SERVER_MESSAGES.insertedSuccess, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-      onHide();
-    })
-    .catch((error) => {
-      error.clientMessage = "Can't create user";
-      dispatch(actions.catchError({ error, callType: callTypes.action }));
-      disbaleLoading();
-      toast.error(error?.response?.data?.message, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+    disbaleLoading();
+    toast.success(SERVER_MESSAGES.insertedSuccess, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
     });
+    onHide();
+  }
+  else {
+    return requestFromServer
+      .createCompensationBenefits(bankForCreation)
+      .then((res) => {
+        dispatch(actions.startCall({ callType: callTypes.action }));
+        const obj = res.data?.data;
+
+        // For Inserting Compensation EArning Deductions in Bulk
+
+        const list = earning_deduction_Obj.map(res => {
+
+          return {
+            ...res,
+            compensationId: obj.Id, createdBy: obj.createdBy, createdAt: obj.createdAt, isPartOfGrossSalary: res.isPartOfGrossSalary, isActive: true
+          }
+
+        })
+        const response = axios.post(`${USERS_URL}/compensation/update-compensation-heads-bulk`, { data: { list, compensationId: obj.Id } });
+
+
+        // dispatch(actions.compensationBenefitsCreated(obj));
+        disbaleLoading();
+        toast.success(SERVER_MESSAGES.insertedSuccess, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        onHide();
+      })
+      .catch((error) => {
+        error.clientMessage = "Can't create user";
+        dispatch(actions.catchError({ error, callType: callTypes.action }));
+        disbaleLoading();
+        toast.error(error?.response?.data?.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      });
+  }
+
+
+
+
+
 };
 
 export const updateCompensationBenefits = (user, disbaleLoading, onHide) => (dispatch) => {

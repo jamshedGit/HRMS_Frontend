@@ -279,7 +279,7 @@ export function BankEditForm({
               if (i == 100) {
                 setDefaultAllowanceLimit("")
                 enableLoading();
-                saveCompensationBenefits(values, defEarningList);
+                saveCompensationBenefits(values, defEarningList, dashboard.allEmployeeGradeList);
               }
               else {
                 setDefaultAllowanceLimit("Allowance must be exactly 100%.")
@@ -288,7 +288,7 @@ export function BankEditForm({
             else if (values.salaryMethod == "Basic to Gross") {
               setDefaultAllowanceLimit("")
               enableLoading();
-              saveCompensationBenefits(values, defEarningList);
+              saveCompensationBenefits(values, defEarningList, dashboard.allEmployeeGradeList);
             }
           }
 
@@ -361,7 +361,7 @@ export function BankEditForm({
                         value={(defEmployeeGrade || null)}
                         error={errors.gradeId}
                         touched={touched.gradeId}
-                        options={dashboard.allEmployeeGradeList}
+                        options={id ? dashboard.allEmployeeGradeList : [{ label: 'All', value: 'all' }, ...dashboard.allEmployeeGradeList]}
                       />
 
                     </div>
