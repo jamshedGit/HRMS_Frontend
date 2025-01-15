@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Accordion, Button, Card, Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
@@ -6,14 +6,15 @@ import { Input } from "../../../../../../_metronic/_partials/controls";
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 import { KeyboardArrowDown } from "@material-ui/icons";
 import * as actions from "../../../_redux/formActions";
+import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLabel";
 
 //Validation for Form
 const formValidation = Yup.object().shape({
-  allocatedCount: Yup.number().min(1, VALIDATION_MESSAGES.minOneValue).required(VALIDATION_MESSAGES.required),
+  file: Yup.mixed().required(VALIDATION_MESSAGES.required)
 });
 
-export function EmployeeLeaveSection({ downloadExcel }) {
-
+export function EmployeeLeaveSection({ downloadExcel, dispatch }) {
+  const [loading, setLoading] = useState(false);
   //This ref is to get reference of file field. It will be used to clear field when reseting form
   const inputFile = useRef(null);
 
@@ -26,12 +27,23 @@ export function EmployeeLeaveSection({ downloadExcel }) {
     <>
       <Formik
         enableReinitialize={true}
-        initialValues={{}}
+        initialValues={{ file: null }}
         validationSchema={formValidation}
-        onSubmit={(values) => {
-          const formData = new FormData()
-          formData.append('file', values.file)
-          dispatch(actions.saveLeaveData(formData))
+        onSubmit={(values, { resetForm }) => {
+          if (values.file) {
+            const formData = new FormData()
+            formData.append('file', values.file)
+            setLoading(true)
+
+            const clearForm = () => {
+              resetForm();
+              if (inputFile?.current) {
+                inputFile.current.value = "";
+              }
+            }
+
+            dispatch(actions.saveLeaveData(formData, setLoading, clearForm))
+          }
         }}
       >
         {({
@@ -41,6 +53,7 @@ export function EmployeeLeaveSection({ downloadExcel }) {
           handleBlur,
           handleChange,
           setFieldValue,
+          handleReset
         }) => (
           <Accordion defaultActiveKey="">
             <Card>
@@ -78,7 +91,8 @@ export function EmployeeLeaveSection({ downloadExcel }) {
                       <input
                         name="file"
                         type="file"
-                        accept=".jpeg,.jpg,.png,.pdf,.doc,.docx"
+                        className={errors?.file && !values.file ? 'form-control is-invalid' : 'form-control'}
+                        accept=".xlsx,.xls"
                         ref={inputFile}
                         onChange={(event) => {
                           // Update Formik's value
@@ -86,8 +100,22 @@ export function EmployeeLeaveSection({ downloadExcel }) {
                           setFieldValue("file", file);
                         }}
                       />
+                      {
+                        errors.file && !values.file && <CustomErrorLabel touched={true} error={errors.file} />
+                      }
                       <hr />
                       {/* File Field End */}
+
+                      <button
+                        type="submit"
+                        disabled={loading}
+                        className="btn btn-primary btn-elevate"
+                      >
+                        Save
+                        {loading && (
+                          <span className="ml-3 mr-3 spinner spinner-white"></span>
+                        )}
+                      </button>
 
                     </fieldset>
                   </Form>

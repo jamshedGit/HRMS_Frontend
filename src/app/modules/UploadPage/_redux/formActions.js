@@ -26,13 +26,32 @@ export const downloadTemplate = (document, type, fileName) => async (dispatch) =
  * @param {Object} queryparm 
  * @returns 
  */
-export const saveLeaveData = (formData) => async (dispatch) => {
+export const saveLeaveData = (formData, setLoading, clearForm) => async (dispatch) => {
   return requestFromServer.saveLeaveData(formData)
     .then((response) => {
-      dispatch(actions.RoundingPolicyFetched(response));
+      setLoading(false);
+      clearForm();
+      toast.success('Leaves Uploaded Successfully', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     })
     .catch((error) => {
-      error.clientMessage = "Can't find receipts";
-      dispatch(actions.catchError({ error, callType: callTypes.list }));
+      setLoading(false);
+      error.clientMessage = 'Some Error Occured. Try again later';
+      toast.error(error?.response?.status == 400 ? error?.response?.data?.message : error.clientMessage, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     });
 };

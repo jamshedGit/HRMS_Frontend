@@ -28,13 +28,6 @@ export function EmployeeProfileSection({ downloadExcel, dispatch }) {
         enableReinitialize={true}
         initialValues={{}}
         onSubmit={(values) => {
-          
-          console.log(';values', values)
-          
-          const formData = new FormData()
-          formData.append('file', values.file)
-
-          dispatch(actions.saveLeaveData(formData))
         }}
       >
         {({

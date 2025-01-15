@@ -5,13 +5,14 @@ import * as Yup from "yup";
 import { Input } from "../../../../../../_metronic/_partials/controls";
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 import { KeyboardArrowDown } from "@material-ui/icons";
+import * as actions from "../../../_redux/formActions";
 
 //Validation for Form
 const formValidation = Yup.object().shape({
   allocatedCount: Yup.number().min(1, VALIDATION_MESSAGES.minOneValue).required(VALIDATION_MESSAGES.required),
 });
 
-export function IncomeTaxOpeningSection({downloadExcel}) {
+export function IncomeTaxOpeningSection({ downloadExcel, dispatch }) {
 
   //This ref is to get reference of file field. It will be used to clear field when reseting form
   const inputFile = useRef(null);
@@ -27,10 +28,7 @@ export function IncomeTaxOpeningSection({downloadExcel}) {
       <Formik
         enableReinitialize={true}
         initialValues={{}}
-        validationSchema={formValidation}
         onSubmit={(values) => {
-          // enableLoading();
-          // submitForm(values)
         }}
       >
         {({
@@ -77,7 +75,7 @@ export function IncomeTaxOpeningSection({downloadExcel}) {
                       <input
                         name="file"
                         type="file"
-                        accept=".jpeg,.jpg,.png,.pdf,.doc,.docx"
+                        accept=".xlsx,.xls"
                         ref={inputFile}
                         onChange={(event) => {
                           // Update Formik's value
@@ -87,6 +85,18 @@ export function IncomeTaxOpeningSection({downloadExcel}) {
                       />
                       <hr />
                       {/* File Field End */}
+
+                      <button
+                        type="submit"
+                        disabled={false}
+                        onClick={() => handleSubmit()}
+                        className="btn btn-primary btn-elevate"
+                      >
+                        Save
+                        {false && (
+                          <span className="ml-3 mr-3 spinner spinner-white"></span>
+                        )}
+                      </button>
 
                     </fieldset>
                   </Form>
