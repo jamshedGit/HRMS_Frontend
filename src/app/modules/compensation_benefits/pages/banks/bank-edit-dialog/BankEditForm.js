@@ -141,7 +141,7 @@ export function BankEditForm({
   useEffect(() => {
 
     const subsidiaryId = defSubsidiary?.value ? defSubsidiary.value : user.subsidiaryId;
-    dispatch(fetchAllEarningList(1, subsidiaryId)); // For Earning
+    dispatch(fetchAllEarningList(1, subsidiaryId, '', true)); // For Earning
     dispatch(fetchAllDeductionList(2, subsidiaryId)); // For deduction
     setDefualtSubsidiaryList(
       dashboard.allSubsidiaryList &&
@@ -381,7 +381,7 @@ export function BankEditForm({
                             onChange={(e) => {
                               setFieldValue("subsidiaryId", e.value || null);
                               setDefualtSubsidiaryList(e);
-                              dispatch(fetchAllEarningList(1, e.value)); // For Earning
+                              dispatch(fetchAllEarningList(1, e.value, '', true)); // For Earning
                               dispatch(fetchAllDeductionList(2, e.value));
                               setDefaultEarningList([]);
                               //handlePaymenModeChanged(e)

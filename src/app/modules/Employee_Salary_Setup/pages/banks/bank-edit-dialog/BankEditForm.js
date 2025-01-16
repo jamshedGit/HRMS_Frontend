@@ -336,7 +336,7 @@ export function BankEditForm({
 
   useEffect(() => {
     const employeeId = user.employeeId; // defEmployee?.value ? defEmployee.value : user.employeeId;
-    dispatch(fetchAllEarningList(1, '', employeeId));
+    dispatch(fetchAllEarningList(1, '', employeeId, true));
     dispatch(fetchAllDeductionList(2, '', employeeId));
     dispatch(fetchAllActiveEmployeesSalaryForDDL(employeeId));
     setEmployeeDefault(
@@ -671,7 +671,7 @@ export function BankEditForm({
                           setFieldValue("employeeId", e.value || null);
                           setEmployeeDefault(e);
                           handleChanged(e, setFieldValue)
-                          dispatch(fetchAllEarningList(1, '', e.value));
+                          dispatch(fetchAllEarningList(1, '', e.value, true));
                           dispatch(fetchAllDeductionList(2, '', e.value));
                           //  dispatch(fetchAllActiveEmployees(e.value));
                         }}

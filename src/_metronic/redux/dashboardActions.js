@@ -96,9 +96,9 @@ export const fetchAllEarningDeductionList = (Id) => async (dispatch) => {
     });
 };
 
-export const fetchAllEarningList = (Id, subsidiaryId, employeeId = '') => async (dispatch) => {
+export const fetchAllEarningList = (Id, subsidiaryId, employeeId = '', excludeBasic = false) => async (dispatch) => {
   return await requestFromServer
-    .getAllEarningDeductionList(Id, subsidiaryId, employeeId)
+    .getAllEarningDeductionList(Id, subsidiaryId, employeeId, excludeBasic)
     .then((response) => {
       const entities = response.data?.data;
       dispatch(actions.AllEarningHeadsFetch(entities));
