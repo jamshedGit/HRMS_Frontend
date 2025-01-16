@@ -6,6 +6,7 @@ import { Input } from "../../../../../../_metronic/_partials/controls";
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 import { KeyboardArrowDown } from "@material-ui/icons";
 import * as actions from "../../../_redux/formActions";
+import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLabel";
 
 //Validation for Form
 const formValidation = Yup.object().shape({
@@ -73,6 +74,7 @@ export function EmployeeAttendanceSection({ downloadExcel, dispatch }) {
                       <input
                         name="file"
                         type="file"
+                        className={errors?.file && !values.file ? 'form-control is-invalid' : 'form-control'}
                         accept=".xlsx,.xls"
                         ref={inputFile}
                         onChange={(event) => {
@@ -81,13 +83,15 @@ export function EmployeeAttendanceSection({ downloadExcel, dispatch }) {
                           setFieldValue("file", file);
                         }}
                       />
+                      {
+                        errors.file && !values.file && <CustomErrorLabel touched={true} error={errors.file} />
+                      }
                       <hr />
                       {/* File Field End */}
 
                       <button
                         type="submit"
                         disabled={false}
-                        onClick={() => handleSubmit()}
                         className="btn btn-primary btn-elevate"
                       >
                         Save
