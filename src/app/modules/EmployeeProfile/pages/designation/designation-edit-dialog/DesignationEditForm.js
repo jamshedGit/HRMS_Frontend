@@ -3721,7 +3721,7 @@ export function DesignationEditForm({
                                     id={'actionTakenBy-' + rightindex} >
                                     <option value="">--Select--</option>
                                     {
-                                      dashboard.allEmployees?.filter(x => x.value != values.Id).map((x) => {
+                                      dashboard.allEmployeesWithNoPermissionList?.filter(x => x.value != values.Id).map((x) => {
                                         return <option value={x.value}> {x.label} </option>
                                       })
 
