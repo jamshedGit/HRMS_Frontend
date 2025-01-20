@@ -8,6 +8,7 @@ import CustomDropdown from "../../../../../utils/common-modules/CustomDropdown";
 import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLabel";
 import CurrentModuleName from "../../../../../utils/common-modules/ModuleName";
 import { Card, CardHeader } from "@material-ui/core";
+import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 
 export function EmployeeSelect({
   actionsLoading,
@@ -29,10 +30,10 @@ export function EmployeeSelect({
   return (
     <>
       {/* Formik Starts */}
-    
+
       <CardHeader title={CurrentModuleName()} >
-        </CardHeader>
-      
+      </CardHeader>
+
       <Formik
         enableReinitialize={true}
         initialValues={{}}
@@ -57,7 +58,7 @@ export function EmployeeSelect({
 
                   {/* Employee Id Dropdown Starts */}
                   <div className="col-12 col-md-4 mt-3">
-                    <Field
+                    {/* <Field
                       name="employeeId"
                       component={Select}
                       className={!values.employeeId ? 'form-control is-invalid' : 'form-control'}
@@ -77,13 +78,45 @@ export function EmployeeSelect({
                       value={values.employeeId}
                       autoComplete="off"
                       children={CustomDropdown({ data: allEmployees, firstElement: { label: '--Select--', value: '' } })}
+                    /> */}
+
+
+                    <SearchSelect
+                      name="employeeId"
+                      className={!values.employeeId ? 'form-control is-invalid' : 'form-control'}
+                      placeholder=""
+                      onBlur={handleBlur}
+                      onChange={(e) => {
+                        const value = e.value === '--Select--' ? null : Number(e.value);
+                        setFieldValue('employeeId', value);
+                        setemployeeId(value);
+                      }}
+                      label={
+                        <span>
+                          Employee <span style={{ color: 'red' }}>*</span>
+                        </span>
+                      }
+                      value={
+                        allEmployees.find(
+                          (option) =>
+                            option.value === values.employeeId
+                        ) || null
+                      }
+                      // value={values.employeeId}
+                      autoComplete="off"
+                      options={allEmployees.map((emp) => ({
+                        label: emp.label, // Adjust according to your data
+                        value: emp.value, // Adjust according to your data
+                      }))}
+                      isSearchable={true} // Ensure search functionality is enabled
                     />
+
                     {
                       !values.employeeId && <CustomErrorLabel touched={true} error={'Required'} />
                     }
                   </div>
                   {/* Employee Id Dropdown Ends */}
-                  
+
                 </div>
               </fieldset>
             </Form>

@@ -519,3 +519,17 @@ export const fetchAllComapnyData = (key) => async (dispatch) => {
       toast.error("Something went wrong");
     });
 };
+
+
+export const fetchAllEmployeesWithNoPermissionData = (key) => async (dispatch) => {
+  return await requestFromServer
+    .getAllEmployeesWithNoPermission()
+    .then((response) => {
+
+      const entities = [...response.data?.data];
+      dispatch(actions.AllEmployeesWithNoPermissionFetch( entities));
+    })
+    .catch((error) => {
+      toast.error("Something went wrong");
+    });
+};
