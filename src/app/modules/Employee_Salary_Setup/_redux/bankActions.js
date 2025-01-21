@@ -159,3 +159,37 @@ export const updateEmployee_Salary = (user, disbaleLoading, onHide) => (dispatch
     });
 };
 
+export const approveEmployeeSalary = (id, setapproveLoading, onHide) => (
+  dispatch
+) => {
+
+  return requestFromServer
+    .approveEmployeeSalary({Id: id})
+    .then((res) => {
+      setapproveLoading();
+      toast.success("Successfully Approved", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      onHide();
+    })
+    .catch((error) => {
+      error.clientMessage = "Can't create user";
+      dispatch(actions.catchError({ error, callType: callTypes.action }));
+      setapproveLoading();
+      toast.error(error?.response?.data?.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    });
+};

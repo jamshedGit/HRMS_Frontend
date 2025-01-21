@@ -209,6 +209,9 @@ export function BankEditForm({
   values,
   enableLoading,
   loading,
+  id,
+  approveSalary,
+  approveLoading
 }) {
   const { dashboard } = useSelector((state) => state);
   // Get User Details
@@ -1703,6 +1706,21 @@ export function BankEditForm({
               </Form>
             </Modal.Body>
             <Modal.Footer>
+
+              {
+                Boolean(id) && !Boolean(user.approved) && 
+                <button
+                  type="button"
+                  onClick={()=> approveSalary(id)}
+                  className="btn btn-light btn-elevate"
+                >
+                  Approve
+                  {approveLoading && (
+                    <span className="ml-3 mr-3 spinner spinner-white"></span>
+                  )}
+                </button>
+              }
+
               {!isUserForRead ? (
                 <button
                   type="button"
