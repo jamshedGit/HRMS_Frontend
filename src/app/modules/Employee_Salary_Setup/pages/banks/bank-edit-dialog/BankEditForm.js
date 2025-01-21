@@ -1708,7 +1708,7 @@ export function BankEditForm({
             <Modal.Footer>
 
               {
-                Boolean(id) && !Boolean(user.approved) && 
+                !isUserForRead && Boolean(id) && !Boolean(user.approved) && 
                 <button
                   type="button"
                   onClick={()=> approveSalary(id)}
