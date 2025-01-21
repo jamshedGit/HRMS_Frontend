@@ -27,14 +27,19 @@ const cnicRegExp = /^[0-9]{5}-[0-9]{7}-[0-9]$/;
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 const userEditSchema_2 = Yup.object().shape(
   {
+    // subsidiaryId:Yup.string().required(VALIDATION_MESSAGES.required),
     countryId: Yup.string().required(VALIDATION_MESSAGES.required),
-    cityId: Yup.string().required(VALIDATION_MESSAGES.required),
+    cityId: Yup.string()
+    .nullable()
+    .required(VALIDATION_MESSAGES.required),
     branchCode: Yup.string().required(VALIDATION_MESSAGES.required),
     Name: Yup.string()
       // .matches(/^[A-Za-z\s]+$/, 'Name must only contain letters.')
       .matches(/^[A-Za-z\s.-]+$/, 'Name must only contain letters.')
       .required(VALIDATION_MESSAGES.required),
-    BankId: Yup.string().required(VALIDATION_MESSAGES.required),
+    BankId: Yup.string()
+    .nullable()
+    .required(VALIDATION_MESSAGES.required),
     email: Yup.string()
       .email("Invalid email"),
     phone: Yup
@@ -84,7 +89,7 @@ export function BranchEditForm({
   isUserForRead,
   values,
   enableLoading,
-  loading,
+  loading,id
 }) {
 
   const dispatch = useDispatch();
@@ -130,28 +135,29 @@ export function BranchEditForm({
 
   }, [user?.countryId, dashboard.allCountry]);
 
-  useEffect(() => {
-    const BankId = defBank?.value ? defBank.value : user.BankId;
-    setDefaultBanks(
-      dashboard.allBanks &&
-      dashboard.allBanks.filter((item) => {
-        return item.value === BankId;
-      })
-    );
+  // useEffect(() => {
+  //   const BankId = defBank?.value ? defBank.value : user.BankId;
+  //   setDefaultBanks(
+  //     dashboard.allBanks &&
+  //     dashboard.allBanks.filter((item) => {
+  //       return item.value === BankId;
+  //     })
+  //   );
 
-  }, [user?.BankId, dashboard.allBanks]);
+  // }, [user?.BankId, dashboard.allBanks]);
 
-  useEffect(() => {
+//   useEffect(() => {
 
-    const cityId = defCity?.value ? defCity.value : user.cityId;
+//     const cityId = defCity?.value ? defCity.value : user.cityId;
+// console.log("checking",defCity?.value, user.cityId)
+//     setDefaultCity(
+//       dashboard.allCity &&
+//       dashboard.allCity.filter((item) => {
+//         return item.value === cityId;
+//       })
+//     );
+//   }, [user.cityId, dashboard.allCity]);
 
-    setDefaultCity(
-      dashboard.allCity &&
-      dashboard.allCity.filter((item) => {
-        return item.value === cityId;
-      })
-    );
-  }, [user.cityId, dashboard.allCity]);
 
   useEffect(() => {
     if (!user.Id) {
@@ -196,7 +202,7 @@ export function BranchEditForm({
               <Form className="form form-label-right">
                 <fieldset disabled={isUserForRead}>
                   <div className="from-group row">
-                  {!isUserForRead ? (
+                  {!id ? (
                      <div className="col-12 col-md-12   p-0 m-0">
                      <div className="col-4 col-md-4 mb-5">
                        <SearchSelect
@@ -209,7 +215,7 @@ export function BranchEditForm({
                          isDisabled={isUserForRead}
                          onChange={(e) => {
                            setFieldValue("subsidiaryId", e.value || null);
-
+                           setFieldValue("BankId",null);
                          }}
                          value={
                            dashboard?.allSubsidiaryList?.find(
@@ -234,7 +240,7 @@ export function BranchEditForm({
                       <SearchSelect
                         name="BankId"
                         label={<span> Bank Name<span style={{ color: 'red' }}>*</span></span>}
-                        isDisabled={isUserForRead && true}
+                        isDisabled={id && true}
                         onBlur={() => {
                           // handleBlur({ target: { name: "countryId" } });
                         }}
@@ -243,7 +249,12 @@ export function BranchEditForm({
                           setDefaultBanks(e);
                           // dispatch(fetchAllBanks(e.value));
                         }}
-                        value={defBank}
+                        // value={defBank}
+                        value={
+                          dashboard?.allBanks?.find(
+                            (option) => option.value === values.BankId
+                          ) || null
+                        }
                         error={errors.BankId}
                         touched={touched.BankId}
                         // options={dashboard.allBanks}
@@ -315,6 +326,8 @@ export function BranchEditForm({
                           setFieldValue("countryId", e.value);
                           setDefaultCountry(e);
                           dispatch(fetchAllCity(e.value));
+                          setFieldValue("cityId", null);
+                          setDefaultCity('')
                         }}
                         value={defCountry}
                         error={errors.countryId}
@@ -328,7 +341,7 @@ export function BranchEditForm({
                       <SearchSelect
                         name="cityId"
                         label={<span> City<span style={{ color: 'red' }}>*</span></span>}
-                        isDisabled={isUserForRead && true}
+                        isDisabled={isUserForRead || !values.countryId}
                         onBlur={() => {
                           //   handleBlur({ target: { name: "cityId" } });
                         }}
@@ -337,7 +350,12 @@ export function BranchEditForm({
                           setDefaultCity(e);
 
                         }}
-                        value={defCity}
+                        // value={defCity}
+                        value={
+                          dashboard?.allCity?.find(
+                            (option) => option.value === values.cityId
+                          ) || null
+                        }
                         error={errors.cityId}
                         touched={touched.cityId}
                         options={dashboard.allCity}

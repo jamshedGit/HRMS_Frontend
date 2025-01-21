@@ -20,8 +20,17 @@ export const initialFilter = {
     attendanceType: "",
     employeeId: "",
     monthId: "",
+    groupBy: ""
   },
   sortOrder: "asc",
   pageSize: 50,
   pageNumber: 1
 }
+
+export const groupByOptions = [
+  {label: 'No Grouping', value: ''},
+  {label: 'Location Wise', value: 'locationName'},
+  {label: 'Department Wise', value: 'departmentName'},
+  {label: 'Grade Wise', value: 'gradeName'},
+  {label: 'Payroll Group Wise', value: 'payrollGroup'},
+]

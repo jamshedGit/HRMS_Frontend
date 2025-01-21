@@ -28,6 +28,7 @@ import { useDesignationUIContext } from "../DesignationUIContext";
 import MaskedInput from "react-text-mask";
 import { getDateDiffInDays } from "../../../../../utils/common";
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
+import { toast } from "react-toastify";
 
 export const USERS_URL = process.env.REACT_APP_API_URL;
 const currentDate = new Date();
@@ -1530,6 +1531,14 @@ export function DesignationEditForm({
     fetchDepartment(user?.subsidiaryId)
   }, [user?.subsidiaryId])
 
+  const doBnotify = () => {
+    toast("Date of Retirement needs to be updated!");
+  };
+
+  const doJnotify = () => {
+    toast('Date of Confirmation, Date of Confirmation Due & Contract Expiry Date needs to be updated!');
+  };
+
 
   return (
     <>
@@ -1624,6 +1633,7 @@ export function DesignationEditForm({
                           onChange={(e) => {
                             setFieldValue("subsidiaryId", e.value || null);
                             setDefualtSubsidiaryList(e);
+                        
                             if (!id) {
                               setEmployeeCode(" ")
                               setFieldValue("employeeCode", "")
@@ -2197,6 +2207,8 @@ export function DesignationEditForm({
                             if (!id) {
 
                               updateRetirmentPolicy(setFieldValue, date, values?.gender)
+                            }else{
+                              doBnotify()
                             }
 
                           }}
@@ -2228,6 +2240,9 @@ export function DesignationEditForm({
                             if (!id) {
                               updateConfirmationDuePolicy(setFieldValue, values.employeeTypeId, values.employeeStatusId, date)
                               updateContractExpiryPolicy(setFieldValue, values.employeeTypeId, values.employeeStatusId, date)
+                            }
+                            else{
+                              doJnotify()
                             }
 
                             // *********************************************************************************************************
@@ -2264,6 +2279,75 @@ export function DesignationEditForm({
                         />
                         <ErrorMessage className="form-feedBack" name="dateOfJoining" component="div" />
                       </div>
+
+                      <div className="col-12 col-md-4 mt-3">
+                            <label>Date Of Confirmation</label>
+                            <DatePicker
+                              className="form-control"
+                              placeholder=" Date Of Confirmation"
+                              selected={confirmationDateSelected}
+                              showYearDropdown
+                              scrollableMonthYearDropdown
+                              onChange={(date) => {
+                                setFieldValue("dateOfConfirmation", date);
+                                setConfirmationDate(date);
+                              }}
+                              timeInputLabel="Time:"
+                              dateFormat="dd/MM/yyyy"
+                              // showTimeInput
+                              name="dateOfConfirmation"
+                              // disabled={disabledConfirmationDateSelected}
+                              autoComplete="off"
+
+                              minDate={values.dateOfJoining ? new Date(values.dateOfJoining) : null}
+                            />
+                            <ErrorMessage className="form-feedBack" name="dateOfConfirmation" component="div" />
+                          </div>
+
+
+                          <div className="col-12 col-md-4 mt-3">
+                            <label>Date Confirmation Due </label>
+                            <DatePicker
+                              className="form-control"
+                              placeholder=" Date Of Confirmation Due"
+                              selected={confirmationDueDateSelected}
+                              onChange={(date) => {
+                                setFieldValue("dateOfConfirmationDue", date);
+                                setConfirmationDueDate(date);
+                              }}
+                              timeInputLabel="Time:"
+                              dateFormat="dd/MM/yyyy"
+                              // showTimeInput
+                              name="dateOfConfirmationDue"
+                              disabled={disableConfDueDate}
+                              autoComplete="off"
+
+
+                              minDate={values.dateOfJoining ? new Date(values.dateOfJoining) : null}
+                            />
+                            <ErrorMessage className="form-feedBack" name="dateOfConfirmationDue" component="div" />
+                          </div>
+
+                          {!hideContractExpDate ? (<div className="col-12 col-md-4 mt-3">
+                            <label>Contract Expiry </label>
+                            <DatePicker
+                              className="form-control"
+                              placeholder=" Contract Expiry"
+                              selected={contractExpirtyDateSelected}
+                              onChange={(date) => {
+                                setFieldValue("dateOfContractExpiry", date);
+                                setContractExpiryDate(date);
+                              }}
+                              timeInputLabel="Time:"
+                              dateFormat="dd/MM/yyyy"
+                              // showTimeInput
+                              name="dateOfContractExpiry"
+                              // disabled={disabledContractExpirtyDateSelected}
+                              autoComplete="off"
+                              minDate={values.dateOfJoining ? new Date(values.dateOfJoining) : null}
+                            />
+                            <ErrorMessage className="form-feedBack" name="dateOfContractExpiry" component="div" />
+                          </div>) : (null)}
 
 
                       {!hidehideRetirementAgeDate ? (<div className="col-12 col-md-4 mt-3">
@@ -2342,7 +2426,7 @@ export function DesignationEditForm({
                           ]}
                           component={MaskInput}
                           placeholder=" ID Card No"
-                          label={<span> NIC No<span style={{ color: 'red' }}>*</span></span>}
+                          label={<span> Id Card No<span style={{ color: 'red' }}>*</span></span>}
                           autoComplete="off"
                         />
                         {/* <ErrorMessage style={{color:"red"}} name="nic_no" component="div" /> */}
@@ -2609,53 +2693,7 @@ export function DesignationEditForm({
                         </div>
                         <div className="from-group row">
 
-                          <div className="col-12 col-md-4 mt-3">
-                            <label>Date Of Confirmation</label>
-                            <DatePicker
-                              className="form-control"
-                              placeholder=" Date Of Confirmation"
-                              selected={confirmationDateSelected}
-                              showYearDropdown
-                              scrollableMonthYearDropdown
-                              onChange={(date) => {
-                                setFieldValue("dateOfConfirmation", date);
-                                setConfirmationDate(date);
-                              }}
-                              timeInputLabel="Time:"
-                              dateFormat="dd/MM/yyyy"
-                              // showTimeInput
-                              name="dateOfConfirmation"
-                              // disabled={disabledConfirmationDateSelected}
-                              autoComplete="off"
-
-                              minDate={values.dateOfJoining ? new Date(values.dateOfJoining) : null}
-                            />
-                            <ErrorMessage className="form-feedBack" name="dateOfConfirmation" component="div" />
-                          </div>
-
-
-                          <div className="col-12 col-md-4 mt-3">
-                            <label>Date Confirmation Due </label>
-                            <DatePicker
-                              className="form-control"
-                              placeholder=" Date Of Confirmation Due"
-                              selected={confirmationDueDateSelected}
-                              onChange={(date) => {
-                                setFieldValue("dateOfConfirmationDue", date);
-                                setConfirmationDueDate(date);
-                              }}
-                              timeInputLabel="Time:"
-                              dateFormat="dd/MM/yyyy"
-                              // showTimeInput
-                              name="dateOfConfirmationDue"
-                              disabled={disableConfDueDate}
-                              autoComplete="off"
-
-
-                              minDate={values.dateOfJoining ? new Date(values.dateOfJoining) : null}
-                            />
-                            <ErrorMessage className="form-feedBack" name="dateOfConfirmationDue" component="div" />
-                          </div>
+               
 
                           <div className="col-12 col-md-4 mt-3">
                             <label>Date Confirmation Extended  </label>
@@ -2730,26 +2768,7 @@ export function DesignationEditForm({
                           </div>
 
 
-                          {!hideContractExpDate ? (<div className="col-12 col-md-4 mt-3">
-                            <label>Contract Expiry </label>
-                            <DatePicker
-                              className="form-control"
-                              placeholder=" Contract Expiry"
-                              selected={contractExpirtyDateSelected}
-                              onChange={(date) => {
-                                setFieldValue("dateOfContractExpiry", date);
-                                setContractExpiryDate(date);
-                              }}
-                              timeInputLabel="Time:"
-                              dateFormat="dd/MM/yyyy"
-                              // showTimeInput
-                              name="dateOfContractExpiry"
-                              // disabled={disabledContractExpirtyDateSelected}
-                              autoComplete="off"
-                              minDate={values.dateOfJoining ? new Date(values.dateOfJoining) : null}
-                            />
-                            <ErrorMessage className="form-feedBack" name="dateOfContractExpiry" component="div" />
-                          </div>) : (null)}
+                    
 
 
 
