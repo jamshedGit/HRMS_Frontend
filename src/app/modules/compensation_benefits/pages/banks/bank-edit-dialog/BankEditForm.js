@@ -23,19 +23,19 @@ const formValidation = Yup.object().shape({
 
   subsidiaryId: Yup.string()
     .nullable()
-    .required("Required*"),
+    .required(VALIDATION_MESSAGES.required),
   gradeId: Yup.string()
     .nullable()
-    .required("Required*"),
+    .required(VALIDATION_MESSAGES.required),
   employeeTypeId: Yup.string()
     .nullable()
-    .required("Required*"),
+    .required(VALIDATION_MESSAGES.required),
   currencyId: Yup.string()
     .nullable()
-    .required("Required*"),
+    .required(VALIDATION_MESSAGES.required),
   salaryMethod: Yup.string()
-    .nullable()
-    .required("Required*"),
+    .required(VALIDATION_MESSAGES.required)
+    .notOneOf(["-1"], VALIDATION_MESSAGES.required),
 
   //   salaryMethod: Yup.string()
   //   .required('Required*') // Make it required
@@ -228,19 +228,19 @@ export function BankEditForm({
     defEarningList.forEach((objValidate, index) => {
 
       if (!objValidate.earning_deduction_id) {
-        newErrors[`earning_deduction_id-${index}`] = 'Required*';
+        newErrors[`earning_deduction_id-${index}`] = VALIDATION_MESSAGES.required;
       }
       if (!objValidate.calculation_type) {
-        newErrors[`calculation_type-${index}`] = 'Required*';
+        newErrors[`calculation_type-${index}`] = VALIDATION_MESSAGES.required;
       }
       // Check if factorValue is required
       if (!objValidate.factorValue && objValidate.amount <= 0) {
-        newErrors[`factorValue-${index}`] = 'Required*';
+        newErrors[`factorValue-${index}`] = VALIDATION_MESSAGES.required;
       }
 
       // Check if amount is required
       if (!objValidate.amount && objValidate.factorValue <= 0) {
-        newErrors[`amount-${index}`] = 'Required*';
+        newErrors[`amount-${index}`] = VALIDATION_MESSAGES.required;
       }
     });
 
@@ -374,7 +374,7 @@ export function BankEditForm({
                                 <span style={{ color: "red" }}>*</span>
                               </span>
                             }
-                            isDisabled={isUserForRead && true}
+                            isDisabled={(isUserForRead || Boolean(id)) && true}
                             onBlur={() => {
                               // handleBlur({ target: { name: "countryId" } });
                             }}
@@ -404,7 +404,7 @@ export function BankEditForm({
                             Grade<span style={{ color: "red" }}>*</span>
                           </span>
                         }
-                        isDisabled={isUserForRead && true}
+                        isDisabled={(isUserForRead || Boolean(id)) && true}
                         onBlur={() => {
                           // handleBlur({ target: { name: "countryId" } });
                         }}
@@ -435,7 +435,7 @@ export function BankEditForm({
                             Employee Type<span style={{ color: "red" }}>*</span>
                           </span>
                         }
-                        isDisabled={isUserForRead && true}
+                        isDisabled={(isUserForRead || Boolean(id)) && true}
                         onBlur={() => {
                           // handleBlur({ target: { name: "countryId" } });
                         }}
@@ -462,7 +462,7 @@ export function BankEditForm({
                             Currency<span style={{ color: "red" }}>*</span>
                           </span>
                         }
-                        isDisabled={isUserForRead && true}
+                        isDisabled={(isUserForRead || Boolean(id)) && true}
                         onBlur={() => {
                           // handleBlur({ target: { name: "countryId" } });
                         }}
