@@ -79,6 +79,7 @@ const LeaveEncashment = lazy(() => import("./modules/LeaveEncashment/pages/index
 const EmployeeRoster = lazy(() => import("./modules/EmployeeRoster/pages/index"));
 const LeaveRegister = lazy(() => import("./modules/LeaveRegister/pages/index"));
 const PayrollRegister = lazy(() => import("./modules/PayrollRegister/pages/index"));
+const UploadPage = lazy(() => import("./modules/UploadPage/pages/index"));
 
 const ROUTES = {
   settings: SettingsPage,
@@ -147,6 +148,7 @@ const ROUTES = {
   attendance: Attendance,
   leave_register :LeaveRegister,
   payroll_register :PayrollRegister,
+  upload :UploadPage,
 };
 
 export default function BasePage() {
