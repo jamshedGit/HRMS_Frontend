@@ -61,7 +61,15 @@ export function RolesAccess({
   //     actions.accessRights({ roleId: id, sortBy: "name", limit: 10, page: 1 })
   //     )
   //   }, [id, dispatch])
-  const newdata = Object.entries(currentState);
+  let newdata;
+  if(currentState){
+   newdata = Object.entries(currentState);
+  }else{
+    dispatch(
+          actions.accessRights({ roleId: id, sortBy: "name", limit: 10, page: 1 })
+          )
+  }
+
   // newdata.push(currentState);
 
   // console.log("currentState_new", Object.keys(currentState).length)
@@ -188,7 +196,7 @@ export function RolesAccess({
 
 
 
-      {newdata.map((dd, index) => (
+      {newdata?.map((dd, index) => (
         dd[0] !== "Settings" && ( // Check if dd[0] is not "Settings"
           <Card key={index}>
             <CardBody>

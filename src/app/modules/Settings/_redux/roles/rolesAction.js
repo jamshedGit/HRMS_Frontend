@@ -47,13 +47,14 @@ export const fetchRole = (id) => (dispatch) => {
     });
 };
 
-export const createRole = (roleForCreation) => (dispatch) => {
+export const createRole = (roleForCreation,disableLoading) => (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
     .createRole(roleForCreation)
     .then((res) => {
       const role = res.data?.data;
       dispatch(actions.roleCreated({ role }));
+      disableLoading();
       toast.success(res.data.message, {
         position: "top-right",
         autoClose: 5000,

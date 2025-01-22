@@ -52,7 +52,7 @@ export function RoleEditDialog({ id, show, onHide }) {
     
     if(!id){
       enableLoading()
-      dispatch(actions.createRole(roleValues))
+      dispatch(actions.createRole(roleValues,disableLoading))
       onHide()
     }else{
       enableLoading()
