@@ -1712,7 +1712,7 @@ export function BankEditForm({
                 <button
                   type="button"
                   onClick={()=> approveSalary(id)}
-                  className="btn btn-light btn-elevate"
+                  className="btn btn-green btn-elevate"
                 >
                   Approve
                   {approveLoading && (
