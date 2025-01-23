@@ -30,8 +30,7 @@ export default function setupAxios(axios, store) {
 
         if (status === 308) {
           // Redirect to login page If token is expired or not logged in
-          localStorage.clear()
-          window.location.href = '/auth/login'
+          window.location.href = '/logout'
         } 
       }
 
