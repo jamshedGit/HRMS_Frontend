@@ -52,14 +52,16 @@ function EmployeeListTable({ values, setFieldValue, errors, touched, dropdownDat
                             value
                           )
                         }}
+                        error={errors.list?.[index]?.employeeId}
+                        touched={touched.list?.[index]?.employeeId}
                         isDisabled={isEdit}
                         value={allEmployees?.get(row?.employeeId || '') || ''}
                         options={dropdownData.allEmployees || []}
                       />
-                      {errors.list?.[index]?.employeeId &&
+                      {/* {errors.list?.[index]?.employeeId &&
                         touched.list?.[index]?.employeeId &&
                         <CustomErrorLabel touched={true} error={errors.list?.[index]?.employeeId} />
-                      }
+                      } */}
                     </td>
                     {/* Employee Field Ends */}
 
