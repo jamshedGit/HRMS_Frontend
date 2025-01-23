@@ -46,7 +46,7 @@ const loanManagementSchema = Yup.object().shape({
       .nullable()
         .min(1, "Must be at least 1")
         .required(VALIDATION_MESSAGES.required),
-      basis: Yup.number().required(VALIDATION_MESSAGES.required),
+      // basis: Yup.number().required(VALIDATION_MESSAGES.required),
 
       max_no_of_installment_for_loan: Yup.number()
       .nullable()
@@ -61,7 +61,7 @@ const loanManagementSchema = Yup.object().shape({
       .max(12, "Must be at most 12")
       .required(VALIDATION_MESSAGES.required),
       salary_count: Yup.number()
-        .min(1, VALIDATION_MESSAGES.minOneValue)
+        .min(0, VALIDATION_MESSAGES.minZeroValue)
         .max(99, "Must be at most 99")
         .required(VALIDATION_MESSAGES.required)
         .test(
@@ -496,8 +496,16 @@ export function FormEditForm({
                                   as="select"
                                   className="form-control"
                                   disabled={isUserForRead}
+                                  onChange={(e) => {
+                 
+                                    setFieldValue(`details[${index}].basis`, e.target.value === 'N/A' ? null : e.target.value);
+                                    console.log(`details[${index}].basiseee`,e.target.value);
+                                    if (e.target.value =='N/A') {
+                                      setFieldValue(`details[${index}].salary_count`, 0)
+                                    }
+                                  }}
                                 >
-                                  <option value="">Select</option>
+                                  {/* <option value="">Select</option>
                                   {basisOptions.map((option) => (
                                     <option
                                       key={option.value}
@@ -505,7 +513,16 @@ export function FormEditForm({
                                     >
                                       {option.label}
                                     </option>
-                                  ))}
+                                  ))} */}
+
+{[
+                        { value: null, label: 'N/A' }, // This renders the "N/A" option
+                        ...basisOptions, // This renders the rest of the options
+                      ].map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
                                 </Field>
                                 {errors.details?.[index]?.basis &&
                                   touched.details?.[index]?.basis && (
@@ -520,7 +537,8 @@ export function FormEditForm({
                                   name={`details[${index}].salary_count`}
                                   type="number"
                                   className="form-control"
-                                  disabled={isUserForRead}
+                                  // disabled={isUserForRead}
+                                  disabled={isUserForRead || values.details[index]?.basis=='N/A' || !values.details[index]?.basis }
                                   onInput={(e) => {
                                     if (e.target.value.length > 2) {
                                       e.target.value = e.target.value.slice(0, 2); // Restrict to 2 digits
@@ -542,6 +560,7 @@ export function FormEditForm({
                                   type="number"
                                   className="form-control"
                                   disabled={isUserForRead}
+                                
                                   onInput={(e) => {
                                     if (e.target.value.length > 2) {
                                       e.target.value = e.target.value.slice(0, 2); // Restrict to 2 digits
