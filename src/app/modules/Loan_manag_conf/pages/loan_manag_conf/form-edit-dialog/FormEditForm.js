@@ -461,7 +461,8 @@ export function FormEditForm({
                                   name={`details[${index}].loan_typeId`}
                                   as="select"
                                   className="form-control"
-                                  disabled={isUserForRead}
+                                  // disabled={isUserForRead}
+                                  disabled={isUserForRead || values.details[index]?.Id}
                                 >
 
 

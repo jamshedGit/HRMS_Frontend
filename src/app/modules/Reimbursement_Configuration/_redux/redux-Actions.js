@@ -148,3 +148,26 @@ export const updateReimbursementConfig = (user, disbaleLoading, onHide) => (disp
       });
     });
 };
+
+export const deleteReimbursementConfigPolicy = (data) => (dispatch) => {
+  
+  return requestFromServer
+    .deleteReimbursementConfigPolicy(data)
+    .then((response) => {
+   
+     
+      toast.success(SERVER_MESSAGES.deletedSuccess, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    })
+    .catch((error) => {
+      dispatch(actions.catchError({ error, callType: callTypes.action }));
+      toast.error(SERVER_MESSAGES.deletedFail);
+    });
+};
