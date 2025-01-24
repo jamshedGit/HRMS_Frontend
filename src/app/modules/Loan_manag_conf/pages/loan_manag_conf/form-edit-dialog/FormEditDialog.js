@@ -142,6 +142,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         isUserForRead={userForRead}
         enableLoading={enableLoading}
         loading={loading}
+        disableLoading={disbaleLoading}
       />
       <ToastContainer
         position="top-right"

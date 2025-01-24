@@ -190,3 +190,26 @@ export const getAllLoanType = () => (
       });
     });
 };
+
+export const deleteLoanManagConfigDetail = (data) => (dispatch) => {
+  
+  return requestFromServer
+    .deleteLoanManagConfigDetail(data)
+    .then((response) => {
+   
+     
+      toast.success(SERVER_MESSAGES.deletedSuccess, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    })
+    .catch((error) => {
+      dispatch(actions.catchError({ error, callType: callTypes.action }));
+      toast.error(SERVER_MESSAGES.deletedFail);
+    });
+};
