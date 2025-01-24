@@ -209,6 +209,9 @@ export function BankEditForm({
   values,
   enableLoading,
   loading,
+  id,
+  approveSalary,
+  approveLoading
 }) {
   const { dashboard } = useSelector((state) => state);
   // Get User Details
@@ -336,7 +339,7 @@ export function BankEditForm({
 
   useEffect(() => {
     const employeeId = user.employeeId; // defEmployee?.value ? defEmployee.value : user.employeeId;
-    dispatch(fetchAllEarningList(1, '', employeeId));
+    dispatch(fetchAllEarningList(1, '', employeeId, true));
     dispatch(fetchAllDeductionList(2, '', employeeId));
     dispatch(fetchAllActiveEmployeesSalaryForDDL(employeeId));
     setEmployeeDefault(
@@ -671,7 +674,7 @@ export function BankEditForm({
                           setFieldValue("employeeId", e.value || null);
                           setEmployeeDefault(e);
                           handleChanged(e, setFieldValue)
-                          dispatch(fetchAllEarningList(1, '', e.value));
+                          dispatch(fetchAllEarningList(1, '', e.value, true));
                           dispatch(fetchAllDeductionList(2, '', e.value));
                           //  dispatch(fetchAllActiveEmployees(e.value));
                         }}
@@ -783,10 +786,10 @@ export function BankEditForm({
                       {defMapEarningDeductionList?.map((obj, rightindex) => (
                         obj.transactionType == 'Earning' && obj.isPartOfGrossSalary == true &&
                         <><tr>
-                          <td id={rightindex} onClick={deleteRow}> Delete</td>
+                          <td id={rightindex} > </td>
                           <td>
                             <select
-
+                              disabled
                               onChange={(e) => {
                                 handleFieldChanged(e);
                                 setErrors((prev) => ({ ...prev, [`earning_deduction_id-${rightindex}`]: '' })); // Clear error on change
@@ -804,7 +807,7 @@ export function BankEditForm({
                           </td>
                           <td>
                             <select value={obj.calculation_type}
-
+                              disabled
                               onChange={(e) => {
                                 handleFieldChanged(e);
                                 setErrors((prev) => ({ ...prev, [`calculation_type-${rightindex}`]: '' })); // Clear error on change
@@ -825,8 +828,9 @@ export function BankEditForm({
                           </td>
                           {/* <td>{obj.transactionType}</td> */}
                           <td>
-
-                            <input disabled={obj.calculation_type == 'Fixed Amount'} style={{ width: "100px" }} type="number"
+                              
+                            <input disabled style={{ width: "100px" }} type="number"
+                            
                               onChange={(e) => {
                                 handleFieldChanged(e);
                                 setErrors((prev) => ({ ...prev, [`factorValue-${rightindex}`]: '' })); // Clear error on change
@@ -840,7 +844,7 @@ export function BankEditForm({
                               onInput={(e) => {
                                 e.target.value = amountLimit(e.target.value); // Limit to 3 digits
                               }}
-                              disabled={obj.calculation_type == '% Of Gross' || obj.calculation_type == '% Of Basic'}
+                              disabled
                               style={{ width: "100px" }}
 
                               onChange={(e) => {
@@ -1703,6 +1707,21 @@ export function BankEditForm({
               </Form>
             </Modal.Body>
             <Modal.Footer>
+
+              {
+                !isUserForRead && Boolean(id) && !Boolean(user.approved) && 
+                <button
+                  type="button"
+                  onClick={()=> approveSalary(id)}
+                  className="btn btn-green btn-elevate"
+                >
+                  Approve
+                  {approveLoading && (
+                    <span className="ml-3 mr-3 spinner spinner-white"></span>
+                  )}
+                </button>
+              }
+
               {!isUserForRead ? (
                 <button
                   type="button"

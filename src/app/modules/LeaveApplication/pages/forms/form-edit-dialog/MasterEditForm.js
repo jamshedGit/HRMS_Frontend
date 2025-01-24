@@ -67,7 +67,7 @@ export function MasterEditForm({
       })
     }
     else {
-      Yup.object().shape({
+      return Yup.object().shape({
         from: Yup.date().required(VALIDATION_MESSAGES.required),
         to: Yup.date().required(VALIDATION_MESSAGES.required).min(Yup.ref('from'), 'To date cannot be before From date'),
         leaveType: Yup.number().required(VALIDATION_MESSAGES.required),

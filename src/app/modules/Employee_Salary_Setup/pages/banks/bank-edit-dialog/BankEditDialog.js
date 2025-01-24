@@ -14,6 +14,7 @@ export const USERS_URL = process.env.REACT_APP_API_URL;
 export function BankEditDialog({ id, show, onHide, userForRead }) {
   const [action, setaction] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [approveLoading, setapproveLoading] = useState(false);
   const title = "EarningEditDialog";
   const banksUIContext = useBanksUIContext();
 
@@ -129,6 +130,11 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
     }
   };
 
+  const approveSalary = async(id)=> {
+    setapproveLoading(true);
+    await dispatch(actions.approveEmployeeSalary(id, setapproveLoading, onHide));
+  }
+
   return (
     <Modal
       size="lg"
@@ -147,6 +153,9 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
         isUserForRead={userForRead}
         enableLoading={enableLoading}
         loading={loading}
+        id={id}
+        approveSalary={approveSalary}
+        approveLoading={approveLoading}
       />
       <ToastContainer
         position="top-right"

@@ -7,6 +7,11 @@ export function createEmployee_Salary(body) {
   return axios.post(`${USERS_URL}/employee_salary/create-employee-salary`, body);
 }
 
+//Approve salary
+export function approveEmployeeSalary(body) {
+  return axios.put(`${USERS_URL}/employee_salary/approve-employee-salary`, body);
+}
+
 
 // Read
 export function getAllEmployee_Salary(body) {

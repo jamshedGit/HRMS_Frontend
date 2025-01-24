@@ -14,11 +14,12 @@ export const getAllCountry = async () => {
   );
 };
 
-export const getAllEarningDeductionList = async (Id, subsidiaryId, employeeId) => {
+export const getAllEarningDeductionList = async (Id, subsidiaryId, employeeId, excludeBasic = false) => {
   return await axios.post(`${USERS_URL}/stoppage/read-earning-deduction-list`, {
     flag: Id,
     subsidiaryId: subsidiaryId,
-    employeeId: employeeId
+    employeeId: employeeId,
+    excludeBasic: excludeBasic
   });
 };
 
@@ -225,3 +226,15 @@ export const getAllCompany = async (Id) => {
 export const getAllEmployeesWithNoPermission = async (Id) => {
   return await axios.get(`${USERS_URL}/settings/read-all-profile-with-no-permission`);
 };
+/**
+ * 
+ * Download Excel Templates
+ * 
+ * @param {Object} body 
+ * @returns res
+ */
+export async function downloadTemplate(body) {
+  return axios.post(`${USERS_URL}/upload/download-template`, body,{
+    responseType:'arraybuffer'
+  });
+}
