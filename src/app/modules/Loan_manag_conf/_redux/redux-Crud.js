@@ -43,3 +43,9 @@ export function getAllLoanType() {
 
   
 }
+
+//Delete
+export function deleteLoanManagConfigDetail(body) {
+
+  return axios.patch(`${USERS_URL}/loan_management_configuration/delete-loan-management-configuration-detail`, body);
+}

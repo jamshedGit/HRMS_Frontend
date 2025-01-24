@@ -79,6 +79,7 @@ const LeaveEncashment = lazy(() => import("./modules/LeaveEncashment/pages/index
 const EmployeeRoster = lazy(() => import("./modules/EmployeeRoster/pages/index"));
 const LeaveRegister = lazy(() => import("./modules/LeaveRegister/pages/index"));
 const PayrollRegister = lazy(() => import("./modules/PayrollRegister/pages/index"));
+const UserModule = lazy(() => import("./modules/User/pages/index"));
 const UploadPage = lazy(() => import("./modules/UploadPage/pages/index"));
 
 const ROUTES = {
@@ -148,6 +149,7 @@ const ROUTES = {
   attendance: Attendance,
   leave_register :LeaveRegister,
   payroll_register :PayrollRegister,
+  user:UserModule,
   upload :UploadPage,
 };
 
@@ -156,6 +158,7 @@ export default function BasePage() {
   dispatch(fetchAllCountry());
 
   const auth = useSelector(({ auth }) => auth, shallowEqual);
+
   const UserAccess = auth?.userAccess;
   const SettingsAccess = auth?.userAccess?.Settings;
   const isDashboardAccess = SettingsAccess?.some((obj) =>
@@ -172,6 +175,7 @@ export default function BasePage() {
             .join("-")
             .toLowerCase();
           if (ROUTES[accessName]) {
+
             return (
               <Route
                 key={key}

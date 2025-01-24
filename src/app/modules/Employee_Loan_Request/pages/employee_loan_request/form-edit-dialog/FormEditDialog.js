@@ -74,10 +74,11 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     setMaxAmountLimit,
     setMaxMonthlyAmountSuggest,
     resetForm,
-    monthlyInstallmentsLimit,setMonthlyInstallmentsLimit
+    monthlyInstallmentsLimit,setMonthlyInstallmentsLimit,subsidiaryid
   ) => {
     // enableLoading();
-
+    data.subsidiaryId=subsidiaryid
+ 
     if (maxAmountLimit < data.total_loan_amount) {
       disbaleLoading();
       toast.error("Loan amount exceeds the limit.", {
@@ -142,6 +143,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         reason: data.reason,
         loan_amount_remaining: data.total_loan_amount,
         loan_amount_paid: 0,
+        subsidiaryId:subsidiaryid,
       };
 
       await dispatch(

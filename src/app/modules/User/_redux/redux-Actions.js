@@ -1,43 +1,43 @@
 import { SERVER_MESSAGES } from "../../../utils/constants";
 import * as requestFromServer from "./redux-Crud";
-import {reimbursement_configurationSlice, callTypes } from "./redux-Slice";
+import {UserSlice, callTypes } from "./redux-Slice";
 import { toast } from "react-toastify";
 
-const { actions } = reimbursement_configurationSlice;
+const { actions } = UserSlice;
 
 
-export const fetchReimbursementConfigs = (queryparm) => async (dispatch) => {
+export const fetchUser = (queryparm) => async (dispatch) => {
 
- 
-  return requestFromServer.getAllReimbursementConfig(queryparm)
 
-    .then((response) => {
+
+  return requestFromServer.getAllUser(queryparm)
    
-  
-      dispatch(actions.reimbursementConfigFetched(response));
+    .then((response) => {
+    
+
+      dispatch(actions.userFetched(response));
     })
     .catch((error) => {
-     
-      error.clientMessage = "Can't find ";
+    
+      error.clientMessage = "Can't find";
       dispatch(actions.catchError({ error, callType: callTypes.list }));
     });
 };
 
-export const fetchReimbursementConfig = (id) => (dispatch) => {
+export const fetchUserForEdit = (id) => (dispatch) => {
 
 
   if (!id) {
-    return dispatch(actions.ReimbursementConfigFetchedForEdit({ userForEdit: undefined }));
+    return dispatch(actions.UserFetchedForEdit({ userForEdit: undefined }));
   }
 
-
   return requestFromServer
-    .getReimbursementConfigById({ Id: id })
+    .getUserById({ Id: id })
     .then((response) => {
       const entities = response.data?.data;
 
    
-      dispatch(actions.ReimbursementConfigFetchedForEdit({ userForEdit: entities }));
+      dispatch(actions.UserFetchedForEdit({ userForEdit: entities }));
     })
     .catch((error) => {
       error.clientMessage = "Can't find user";
@@ -45,13 +45,13 @@ export const fetchReimbursementConfig = (id) => (dispatch) => {
     });
 };
 
-export const deleteReimbursementConfig = (id) => (dispatch) => {
+export const deleteUser = (id) => (dispatch) => {
 
   return requestFromServer
-    .deleteReimbursementConfig({ Id: id })
+    .deleteUser({ Id: id })
     .then((response) => {
-
-      dispatch(actions.ReimbursementConfigDeleted({ Id: id }));
+    
+      dispatch(actions.UserDeleted({ Id: id }));
       toast.success(SERVER_MESSAGES.deletedSuccess, {
         position: "top-right",
         autoClose: 5000,
@@ -69,19 +69,19 @@ export const deleteReimbursementConfig = (id) => (dispatch) => {
 };
 
 
-export const createReimbursementConfig = (reimbursementConfigForCreation, disbaleLoading, onHide) => (
+export const createUser = (userForCreation, disbaleLoading, onHide) => (
   dispatch
 ) => {
 
   
   return requestFromServer
-    .createReimbursementConfig(reimbursementConfigForCreation)
+    .createUser(userForCreation)
     .then((res) => {
-
+   
       const user = res.data?.data;
      
-   
-      dispatch(actions.reimbursementConfigCreated(user));
+  
+      dispatch(actions.userCreated(user));
       disbaleLoading();
       toast.success(SERVER_MESSAGES.insertedSuccess, {
         position: "top-right",
@@ -110,18 +110,18 @@ export const createReimbursementConfig = (reimbursementConfigForCreation, disbal
     });
 };
 
-export const updateReimbursementConfig = (user, disbaleLoading, onHide) => (dispatch) => {
+export const updateUser = (user, disbaleLoading, onHide) => (dispatch) => {
   return requestFromServer
-    .updateReimbursementConfig(user)
+    .updateUser(user)
     .then((response) => {
-      
-      const updatedReimbursementConfig = response?.config?.data; // response.data?.data;
+  
+      const updatedUser = response?.config?.data; // response.data?.data;
    
-      dispatch(actions.reimbursementConfigUpdated({ updatedReimbursementConfig }));
+      dispatch(actions.userUpdated({ updatedUser }));
     
       disbaleLoading();
       onHide();
-      toast.success(SERVER_MESSAGES.updatedSuccess, {
+      toast.success(SERVER_MESSAGES.updatedSuccess , {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -134,7 +134,8 @@ export const updateReimbursementConfig = (user, disbaleLoading, onHide) => (disp
 
     })
     .catch((error) => {
-
+  
+      //error.clientMessage = "Can't update User"
       dispatch(actions.catchError({ error, callType: callTypes.action }));
       disbaleLoading();
       toast.error(error?.response?.data?.message, {
@@ -149,25 +150,19 @@ export const updateReimbursementConfig = (user, disbaleLoading, onHide) => (disp
     });
 };
 
-export const deleteReimbursementConfigPolicy = (data) => (dispatch) => {
-  
+
+export const fetchRoles = () => (dispatch) => {
+
+
   return requestFromServer
-    .deleteReimbursementConfigPolicy(data)
+    .getAllRoles()
     .then((response) => {
-   
-     
-      toast.success(SERVER_MESSAGES.deletedSuccess, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      const entities = response.data?.data;
+
+      dispatch(actions.RolesFetched(entities));
     })
     .catch((error) => {
-      dispatch(actions.catchError({ error, callType: callTypes.action }));
-      toast.error(SERVER_MESSAGES.deletedFail);
+      error.clientMessage = "Can't find roles";
+      dispatch(actions.catchError({ error, callType: callTypes.list }));
     });
 };

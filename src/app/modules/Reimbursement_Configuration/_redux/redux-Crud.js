@@ -34,3 +34,9 @@ export function deleteReimbursementConfig(body) {
 
   return axios.patch(`${USERS_URL}/reimbursement_configuration/delete-reimbursement-configuration`, body);
 }
+
+
+export function deleteReimbursementConfigPolicy(body) {
+
+  return axios.patch(`${USERS_URL}/reimbursement_configuration/delete-reimbursement-configuration-policy`, body);
+}

@@ -16,7 +16,8 @@ import {
   fetchAllActiveEmployees,
   fetchAllSubsidiaryData,
   fetchAllEmployeeShifts,
-  getLatestTableId
+  getLatestTableId,
+  fetchAllEmployeesWithNoPermissionData
 } from "../../../../../../_metronic/redux/dashboardActions";
 import DatePicker from "react-datepicker";
 import axios from 'axios';
@@ -480,7 +481,7 @@ export function DesignationEditForm({
 
       dispatch(fetchAllEmployeeShifts('allEmployeeShifts'));
 
-
+      dispatch(fetchAllEmployeesWithNoPermissionData('allEmployeesWithNoPermissionList'));
     }
   }, [dispatch]);
 
@@ -779,9 +780,9 @@ export function DesignationEditForm({
     const reportTo = defEmployeeReportTo?.value ? defEmployeeReportTo.value : user.reportTo;
 
     setEmployeeReportToDefault(
-      dashboard.allEmployees &&
-      dashboard.allEmployees.filter((item) => {
-        return item.value === reportTo;
+      dashboard?.allEmployeesWithNoPermissionList &&
+      dashboard?.allEmployeesWithNoPermissionList?.filter((item) => {
+        return item?.value === reportTo;
       })
     );
 
@@ -2113,7 +2114,7 @@ export function DesignationEditForm({
                           // options={dashboard.allEmployees.filter(x => x.value != values.Id)}
                           options={[
                             { value: null, label: 'Select' }, // Adding "All" option with value empty string
-                            ...dashboard.allEmployees.filter(x => x.value != values.Id), // Spread the rest of the menu options
+                            ...dashboard.allEmployeesWithNoPermissionList.filter(x => x.value != values.Id), // Spread the rest of the menu options
                           ]}
                         />
 
@@ -3739,7 +3740,7 @@ export function DesignationEditForm({
                                     id={'actionTakenBy-' + rightindex} >
                                     <option value="">--Select--</option>
                                     {
-                                      dashboard.allEmployees?.filter(x => x.value != values.Id).map((x) => {
+                                      dashboard.allEmployeesWithNoPermissionList?.filter(x => x.value != values.Id).map((x) => {
                                         return <option value={x.value}> {x.label} </option>
                                       })
 

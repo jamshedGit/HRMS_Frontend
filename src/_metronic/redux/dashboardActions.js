@@ -312,6 +312,7 @@ export const fetchAllSubsidiaryData = (key) => async (dispatch) => {
     });
 };
 
+
 /**
  * 
  * Get All Fiscal year Data in dropdown format from Server and set it in state on the key provided in argument
@@ -506,6 +507,32 @@ export const fetchAllPayrollMonthYearList = (body, key) => async (dispatch) => {
 
 }
 
+export const fetchAllComapnyData = (key) => async (dispatch) => {
+  return await requestFromServer
+    .getAllCompany()
+    .then((response) => {
+
+      const entities = [...response.data?.data];
+      dispatch(actions.AllChildMenusFetch({ entities, key }));
+    })
+    .catch((error) => {
+      toast.error("Something went wrong");
+    });
+};
+
+
+export const fetchAllEmployeesWithNoPermissionData = (key) => async (dispatch) => {
+  return await requestFromServer
+    .getAllEmployeesWithNoPermission()
+    .then((response) => {
+
+      const entities = [...response.data?.data];
+      dispatch(actions.AllEmployeesWithNoPermissionFetch( entities));
+    })
+    .catch((error) => {
+      toast.error("Something went wrong");
+    });
+};
 
 /**
  * 

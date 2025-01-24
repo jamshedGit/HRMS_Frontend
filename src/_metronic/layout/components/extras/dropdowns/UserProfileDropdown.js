@@ -11,7 +11,9 @@ import { DropdownTopbarItemToggler } from "../../../../_partials/dropdowns";
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 export function UserProfileDropdown() {
-  const { user } = useSelector((state) => state.auth);
+  const user = useSelector((state) => {
+    return state.auth.user; // Directly access the user from state.auth
+  });
   const uiService = useHtmlClassService();
   const layoutProps = useMemo(() => {
     return {
@@ -39,15 +41,27 @@ export function UserProfileDropdown() {
           Hi,
         </span>{" "}
         <span className="text-dark-50 font-weight-bolder font-size-base d-none d-md-inline mr-3">
-          {user.firstName}
+          {user.email
+          }
         </span>
         <span className="symbol symbol-35 symbol-light-success">
           <span className="symbol-label font-size-h5 font-weight-bold">
-             {user.firstname}
+             {/* {user.firstname} */}
             <img className="w-100" src="/media/users/default.jpg" />
           </span>
          
         </span>
+
+        <span className="ml-3">
+        <Link
+            to="/"
+            className="btn btn-light-primary font-weight-bold"
+          >
+         
+            <span className="ml-3">Reset Password</span>
+          </Link>
+        </span>
+
         <span className="ml-3">
         <Link
             to="/logout"

@@ -13,6 +13,7 @@ import {
 } from "../../../../../../_metronic/redux/dashboardActions";
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 import { amountLimit } from "../../../../../utils/common";
+import { toast } from "react-toastify";
 
 // Define the validation schema for the main form and the policies
 const ReimbursementSchema = Yup.object().shape({
@@ -49,7 +50,7 @@ export function FormEditForm({
   onHide,
   isUserForRead,
   enableLoading,
-  loading,
+  loading,disableLoading,id
 }) {
   const dispatch = useDispatch();
   const { dashboard } = useSelector((state) => state);
@@ -58,9 +59,7 @@ export function FormEditForm({
     { value: true, label: "Yes" },
     { value: false, label: "No" },
   ];
-  const checkIds = (id) => {
 
-  };
   // Fetch necessary data if not already present
   useEffect(() => {
     if (!user.Id) {
@@ -99,6 +98,27 @@ export function FormEditForm({
       }
     });
   };
+
+ const deleteReimbursementConfigPolicy = (Id,reimbursement_typeId,subsidiaryId) => {
+    // server request for deleting customer by id
+    enableLoading();
+    let data={
+     Id, reimbursement_typeId,subsidiaryId
+    }
+    dispatch(actions.deleteReimbursementConfigPolicy(data)).then(() => {
+      onHide();
+     
+      disableLoading();
+    });
+  };
+
+    const deleteNotification = () => {
+      toast("Reimbursement policy cannot be empty.");
+
+    };
+
+
+
 
   return (
     <Formik
@@ -241,7 +261,19 @@ export function FormEditForm({
                                 {!isUserForRead && (
                                   <button
                                     type="button"
-                                    onClick={() => remove(index)}
+                                    // onClick={() => remove(index)}
+                                    onClick={() => {
+                                      if (values.policies[index]?.Id && values.policies.length>1 ) {
+                                        deleteReimbursementConfigPolicy(values.policies[index]?.Id,values.policies[index]?.reimbursement_typeId, values.subsidiaryId);
+                                      }
+                                      else if(values.policies[index]?.Id && values.policies.length==1){
+                                        deleteNotification()
+                                      }
+                                      
+                                      else {
+                                        remove(index);
+                                      }
+                                    }}
                                     className="btn btn-danger btn-sm"
                                   >
                                     Delete
@@ -254,7 +286,7 @@ export function FormEditForm({
                                   name={`policies[${index}].reimbursement_typeId`}
                                   as="select"
                                   className="form-control"
-                                  disabled={isUserForRead}
+                                  disabled={isUserForRead || values.policies[index]?.Id}
                                   
                                 >
                                     <option value="">Select...</option> {/* Default "Select..." option */}

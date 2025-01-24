@@ -13,6 +13,7 @@ import {
 } from "../../../../../../_metronic/redux/dashboardActions";
 import { amountLimit } from "../../../../../utils/common";
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
+import { toast } from "react-toastify";
 
 // Define the validation schema for the main form and the details
 const loanManagementSchema = Yup.object().shape({
@@ -46,7 +47,7 @@ const loanManagementSchema = Yup.object().shape({
       .nullable()
         .min(1, "Must be at least 1")
         .required(VALIDATION_MESSAGES.required),
-      basis: Yup.number().required(VALIDATION_MESSAGES.required),
+      // basis: Yup.number().required(VALIDATION_MESSAGES.required),
 
       max_no_of_installment_for_loan: Yup.number()
       .nullable()
@@ -61,9 +62,14 @@ const loanManagementSchema = Yup.object().shape({
       .max(12, "Must be at most 12")
       .required(VALIDATION_MESSAGES.required),
       salary_count: Yup.number()
-        .min(1, VALIDATION_MESSAGES.minOneValue)
+        .min(0, VALIDATION_MESSAGES.minZeroValue)
         .max(99, "Must be at most 99")
         .required(VALIDATION_MESSAGES.required)
+        .when('basis', {
+          is: (basis) => basis == 0 || basis == 1, // Check if basis is 0 or 1
+          then: Yup.number().min(1,VALIDATION_MESSAGES.minOneValue),
+          otherwise: Yup.number().min(0, VALIDATION_MESSAGES.minZeroValue),
+        })
         .test(
           "salary-count-ge-max-loan-amount", // Name of the test
           "Can't be greater", // Error message
@@ -86,7 +92,7 @@ export function FormEditForm({
   onHide,
   isUserForRead,
   enableLoading,
-  loading,
+  loading,disableLoading
 }) {
   const dispatch = useDispatch();
   const { dashboard } = useSelector((state) => state);
@@ -132,8 +138,23 @@ export function FormEditForm({
     });
   };
 
+  const deleteLoanManagConfigDetail = (Id,loan_typeId,subsidiaryId) => {
+    // server request for deleting customer by id
+    enableLoading();
+    let data={
+     Id, loan_typeId,subsidiaryId
+    }
+    dispatch(actions.deleteLoanManagConfigDetail(data)).then(() => {
+      onHide();
+     
+      disableLoading();
+    });
+  };
 
+    const deleteNotification = () => {
+      toast("Loan policy cannot be empty.");
 
+    };
   return (
     <Formik
       enableReinitialize={true}
@@ -415,7 +436,19 @@ export function FormEditForm({
                                 {!isUserForRead && (
                                   <button
                                     type="button"
-                                    onClick={() => remove(index)}
+                                    // onClick={() => remove(index)}
+                                    onClick={() => {
+                                      if (values.details[index]?.Id && values.details.length>1 ) {
+                                        deleteLoanManagConfigDetail(values.details[index]?.Id,values.details[index]?.loan_typeId, values.subsidiaryId);
+                                      }
+                                      else if(values.details[index]?.Id && values.details.length==1){
+                                        deleteNotification()
+                                      }
+                                      
+                                      else {
+                                        remove(index);
+                                      }
+                                    }}
                                     className="btn btn-danger btn-sm"
                                   >
                                     Delete
@@ -428,7 +461,8 @@ export function FormEditForm({
                                   name={`details[${index}].loan_typeId`}
                                   as="select"
                                   className="form-control"
-                                  disabled={isUserForRead}
+                                  // disabled={isUserForRead}
+                                  disabled={isUserForRead || values.details[index]?.Id}
                                 >
 
 
@@ -481,6 +515,15 @@ export function FormEditForm({
                                   onInput={(e) => {
                                     e.target.value = amountLimit(e.target.value); // Limit to 3 digits
                                   }}
+
+                                  onChange={(e) => {
+                 
+                                    setFieldValue(`details[${index}].max_loan_amount`, e.target.value);
+                                 
+                                    
+                                      setFieldValue(`details[${index}].salary_count`, 0)
+                                  
+                                  }}
                                 />
                                 {errors.details?.[index]?.max_loan_amount &&
                                   touched.details?.[index]?.max_loan_amount && (
@@ -496,8 +539,16 @@ export function FormEditForm({
                                   as="select"
                                   className="form-control"
                                   disabled={isUserForRead}
+                                  onChange={(e) => {
+                 
+                                    setFieldValue(`details[${index}].basis`, e.target.value === 'N/A' ? null : e.target.value);
+                                  
+                                    if (e.target.value =='N/A') {
+                                      setFieldValue(`details[${index}].salary_count`, 0)
+                                    }
+                                  }}
                                 >
-                                  <option value="">Select</option>
+                                  {/* <option value="">Select</option>
                                   {basisOptions.map((option) => (
                                     <option
                                       key={option.value}
@@ -505,7 +556,16 @@ export function FormEditForm({
                                     >
                                       {option.label}
                                     </option>
-                                  ))}
+                                  ))} */}
+
+{[
+                        { value: null, label: 'N/A' }, // This renders the "N/A" option
+                        ...basisOptions, // This renders the rest of the options
+                      ].map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
                                 </Field>
                                 {errors.details?.[index]?.basis &&
                                   touched.details?.[index]?.basis && (
@@ -520,7 +580,8 @@ export function FormEditForm({
                                   name={`details[${index}].salary_count`}
                                   type="number"
                                   className="form-control"
-                                  disabled={isUserForRead}
+                                  // disabled={isUserForRead}
+                                  disabled={isUserForRead || values.details[index]?.basis=='N/A' || !values.details[index]?.basis }
                                   onInput={(e) => {
                                     if (e.target.value.length > 2) {
                                       e.target.value = e.target.value.slice(0, 2); // Restrict to 2 digits
@@ -542,6 +603,7 @@ export function FormEditForm({
                                   type="number"
                                   className="form-control"
                                   disabled={isUserForRead}
+                                
                                   onInput={(e) => {
                                     if (e.target.value.length > 2) {
                                       e.target.value = e.target.value.slice(0, 2); // Restrict to 2 digits
@@ -588,7 +650,7 @@ export function FormEditForm({
                           push({
                             loan_typeId: "",
                             max_loan_amount: "",
-                            basis: "",
+                            basis: null,
                             salary_count: "",
                             max_no_of_installment_for_loan: "",
                             installment_start_date_policy: "",

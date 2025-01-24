@@ -86,6 +86,7 @@ export function FormEditForm({
   const [monthlyInstallmentsLimit, setMonthlyInstallmentsLimit] = useState();
   const [startDatePolicy, setStartDatePolicy] = useState();
   const [startDateLimit, setStartDateLimit] = useState();
+  const [subsidiaryid, setSubsidiaryid] = useState();
   const { currentState, userAccess } = useSelector((state) => {
     return {
       currentState: state.employee_loan_request,
@@ -104,7 +105,8 @@ export function FormEditForm({
 
   useEffect(() => {
     if (changeLoanType) {
-
+  
+      setSubsidiaryid(currentState?.loan_config_details_permission?.loanDetails.subsidiaryId)
       let loandetails = currentState?.loan_config_details_permission?.loanDetails?.details?.find(
         (item) => item.loan_typeId === changeLoanType
       );
@@ -161,7 +163,15 @@ export function FormEditForm({
       }
 
       //  if(!isClear){
-      setMaxAmountLimit(Math.min(loandetails?.max_loan_amount, salaryAmount));
+     
+      if(loandetails?.basis==null){
+      
+        setMaxAmountLimit(loandetails?.max_loan_amount);
+      }else{
+       
+        setMaxAmountLimit(Math.min(loandetails?.max_loan_amount, salaryAmount));
+      }
+   
 
       setMaxMonthlyAmountSuggest(monthlySalarySuggest);
       //  }
@@ -296,7 +306,7 @@ export function FormEditForm({
           setMaxMonthlyAmountSuggest,
           setMaxAmountLimit,
           clearForm,
-          monthlyInstallmentsLimit,setMonthlyInstallmentsLimit
+          monthlyInstallmentsLimit,setMonthlyInstallmentsLimit,subsidiaryid,
         );
       }}
     >

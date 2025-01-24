@@ -254,7 +254,7 @@ export function FormEditForm({
                       name="pay_in_payroll_forId"
                       label={
                         <span>
-                          Pay In Payroll For
+                         Reimbursement Month
                           <span style={{ color: "red" }}>*</span>
                         </span>
                       }

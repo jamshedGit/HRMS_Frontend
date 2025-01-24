@@ -49,6 +49,8 @@ const initialDashboardState = {
   allPayrollMonthYearList:[],
   allHolidayTypeList: [],
   allEmployeeStatus: [],
+  allCompanyList: [],
+  allEmployeesWithNoPermissionList: [],
 };
 
 export const callTypes = {
@@ -153,7 +155,7 @@ export const dashboardSlice = createSlice({
       state.offDuty = action.payload.offDuty;
     },
     lastTripsVehicles: (state, action) => {
-      // console.log("Payload", action.payload);
+    
       state.lastTrips = action.payload;
     },
     setData: (state, action) => {
@@ -161,7 +163,7 @@ export const dashboardSlice = createSlice({
     },
     updateData: (state, action) => {
       state.lastTrips = state.lastTrips.map((entity) => {
-        console.log("entity", entity);
+       
         if (entity.id === action.payload.id) {
           return action.payload;
         }
@@ -207,5 +209,14 @@ export const dashboardSlice = createSlice({
       state.allHolidayTypeList = action.payload;
     },
 
+    AllCompanyFetch: (state, action) => {
+      state.allCompanyList = action.payload;
+    },
+
+    
+    AllEmployeesWithNoPermissionFetch: (state, action) => {
+    
+      state.allEmployeesWithNoPermissionList = action.payload;
+    },
   },
 });

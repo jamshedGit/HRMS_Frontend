@@ -12,9 +12,7 @@ export const ReceiptUIConsumer = FormUIContext.Consumer;
 
 export function FormUIProvider({ FormUIEvents, children }) {
   const [queryParams, setQueryParamsBase] = useState(initialFilter);
-  const [employeeId, setemployeeId] = useState('');
-  const [ids, setIds] = useState("");
-  const [isFileReq,setIsFileReq]=useState(false)
+  const [ids, setIds] = useState([]);
   const setQueryParams = useCallback((nextQueryParams) => {
     setQueryParamsBase((prevQueryParams) => {
       if (isFunction(nextQueryParams)) {
@@ -28,26 +26,19 @@ export function FormUIProvider({ FormUIEvents, children }) {
       return nextQueryParams;
     });
   }, []);
-
-
-  const initUser={
-    Id: "",
-    employeeId:employeeId,
-    employee_loan_accountId:"",
-    loan_typeId: "",
-    monthly_installment:"",
-    applied_date: "",
-    installment_start_date:"",
-    total_loan_amount:"",
-    total_installment:"",
-    reason:"", 
-    loan_amount_remaining:"",
-    loan_amount_paid:"",
-    subsidiaryId:""
-
-
-
-  }
+  const initUser = {
+    Id:"",
+    subsidiaryId: "",
+    employeeIdMapping: null,
+    deactiveflag: "",
+    roleId:"",
+    allowUserCreation:"",
+    password:"",
+    email:"",
+    supervisedbyId:"",
+    companyId:""
+  
+  };
 
 
 
@@ -57,11 +48,7 @@ export function FormUIProvider({ FormUIEvents, children }) {
     setQueryParams,
     ids,
     setIds,
-    isFileReq,
-    setIsFileReq,
     initUser,
-    setemployeeId,
-    employeeId,
     newFormButtonClick: FormUIEvents.newFormButtonClick,
     openEditFormDialog: FormUIEvents.openEditFormDialog,
     openDeleteFormDialog: FormUIEvents.openDeleteFormDialog,

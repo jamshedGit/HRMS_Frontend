@@ -219,6 +219,13 @@ export const getAllPayrollMonthYearList  = async (body) => {
     });
 };
 
+export const getAllCompany = async (Id) => {
+  return await axios.get(`${USERS_URL}/settings/read-all-companies`);
+};
+
+export const getAllEmployeesWithNoPermission = async (Id) => {
+  return await axios.get(`${USERS_URL}/settings/read-all-profile-with-no-permission`);
+};
 /**
  * 
  * Download Excel Templates

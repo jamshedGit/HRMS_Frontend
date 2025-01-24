@@ -49,13 +49,13 @@ export function RolesTable() {
 
   // Table
   const columns = [
-    {
-      dataField: "id",
-      text: "ID",
-      sort: true,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-    },
+    // {
+    //   dataField: "id",
+    //   text: "ID",
+    //   sort: true,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    // },
     {
       dataField: "name",
       text: "Name",
