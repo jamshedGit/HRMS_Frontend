@@ -86,34 +86,7 @@ export const activeUser = (id) => (dispatch) => {
 };
 
 export const createCompensationBenefits = (bankForCreation, earning_deduction_Obj, disbaleLoading, onHide, allEmployeeGradeList) => (dispatch) => {
-  if (bankForCreation.gradeId == 'all') {
-    for (const grade of allEmployeeGradeList) {
-      requestFromServer.createCompensationBenefits({ ...bankForCreation, gradeId: grade.value, upsert: true }).then((res) => {
-        const obj = res.data?.data;
-        const list = earning_deduction_Obj.map(res => {
-          return {
-            ...res,
-            compensationId: obj.Id, createdBy: obj.createdBy, createdAt: obj.createdAt, isPartOfGrossSalary: res.isPartOfGrossSalary, isActive: true
-          }
-
-        })
-        const response = axios.post(`${USERS_URL}/compensation/update-compensation-heads-bulk`, { data: { list, compensationId: obj.Id } });
-      })
-    }
-
-    disbaleLoading();
-    toast.success(SERVER_MESSAGES.insertedSuccess, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-    onHide();
-  }
-  else {
+  
     return requestFromServer
       .createCompensationBenefits(bankForCreation)
       .then((res) => {
@@ -160,12 +133,6 @@ export const createCompensationBenefits = (bankForCreation, earning_deduction_Ob
           progress: undefined,
         });
       });
-  }
-
-
-
-
-
 };
 
 export const updateCompensationBenefits = (user, disbaleLoading, onHide) => (dispatch) => {
