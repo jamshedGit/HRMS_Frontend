@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { MasterEditForm } from "./MasterEditForm";
 
@@ -7,7 +6,7 @@ import * as actions from "../../../_redux/formActions";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useFormUIContext } from "../FormUIContext";
-import { fetchAllActiveEmployees, fetchAllEmployeeShifts, getPayrollMonth } from "../../../../../../_metronic/redux/dashboardActions";
+import { fetchAllEmployeeShifts, fetchAllSubsidiaryData } from "../../../../../../_metronic/redux/dashboardActions";
 
 export function FormEditDialog() {
   const [loading, setLoading] = useState(false);
@@ -19,6 +18,7 @@ export function FormEditDialog() {
       queryParams: FormUIContext.queryParams,
       id: FormUIContext.id,
       setId: FormUIContext.setId,
+      setQueryParams: FormUIContext.setQueryParams,
     };
   }, [FormUIContext]);
 
@@ -43,12 +43,10 @@ export function FormEditDialog() {
   useEffect(() => {
     dispatch(actions.fetchEditRecord(formUIProps.id));
 
-    if (!dashboard.allEmployees || !dashboard.allEmployees.length)
-      dispatch(fetchAllActiveEmployees());
     if (!dashboard.allEmployeeShifts || !dashboard.allEmployeeShifts.length)
       dispatch(fetchAllEmployeeShifts('allEmployeeShifts'));
-    // if(!dashboard.payrollData)
-      // dispatch(getPayrollMonth('payrollData'));
+    if (!dashboard?.allSubsidiaryList?.length)
+      dispatch(fetchAllSubsidiaryData("allSubsidiaryList"));
   }, [formUIProps.id, dispatch]);
 
   //Create or Update record according to values from dialog
@@ -65,6 +63,8 @@ export function FormEditDialog() {
         enableLoading={enableLoading}
         loading={loading}
         setId={formUIProps.setId}
+        dispatch={dispatch}
+        setQueryParams={formUIProps.setQueryParams}
       />
       <ToastContainer
         position="top-right"

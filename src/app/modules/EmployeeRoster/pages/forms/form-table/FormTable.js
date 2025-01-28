@@ -36,7 +36,7 @@ export function FormTable() {
   const { currentState, userAccess, payrollData } = useSelector(
     (state) => {
       return {
-        payrollData: state.dashboard.payrollData,
+        payrollData: state.employee_roster.payrollData,
         currentState: state.employee_roster,
         userAccess: state?.auth?.userAccess["Employee_Roster"],
       }

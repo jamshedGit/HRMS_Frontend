@@ -11,6 +11,7 @@ const initialState = {
     userForEdit: undefined,
     lastError: null,
     userForRead: false,
+    payrollData: null
 };
 
 export const callTypes = {
@@ -75,6 +76,11 @@ export const EmployeeRosterSlice = createSlice({
                 }
                 return el;
             });
-        }
+        },
+        PayrollMonthFetched: (state, action) => {
+            const payrollData = action?.payload?.payrollData;
+            state.error = null;
+            state.payrollData = payrollData;
+        },
     },
 });
