@@ -638,7 +638,7 @@ export function BankEditForm({
             setErrors(validationErrors);
           } else {
             enableLoading();
-            saveEarningDeductionTran(values, defMapEarningDeductionList);
+            saveEarningDeductionTran({...values, grossPackage: values.grossSalary > 0 ? Number(values.grossSalary) + Number(totalGross) : Number(defGrossSalary) + Number(totalGross)}, defMapEarningDeductionList);
           }
         }}
       >
