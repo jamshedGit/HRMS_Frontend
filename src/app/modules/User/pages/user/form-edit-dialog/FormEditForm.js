@@ -46,6 +46,8 @@ const userEditSchema = Yup.object().shape({
 
   password: Yup.string()
     .nullable()
+    .min(5,"At least 5 characters are required")
+    .max(15,"At most 15 characters are required")
     .required(VALIDATION_MESSAGES.required),
 
   email: Yup.string()
@@ -339,10 +341,13 @@ export function FormEditForm({
                           (option) => option?.value === values?.employeeIdMapping
                         ) || null
                       }
-                      options={dashboard?.allEmployees}
+                      // options={dashboard?.allEmployees}
               
 
-
+                      options={[
+                        { value: null, label: 'Select...' }, // Adding "All" option with value empty string
+                        ...dashboard?.allEmployees.filter(x => x.value != values.Id), // Spread the rest of the menu options
+                      ]}
 
                       error={errors.employeeIdMapping}
                       touched={touched.employeeIdMapping}

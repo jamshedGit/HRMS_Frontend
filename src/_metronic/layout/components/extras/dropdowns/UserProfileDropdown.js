@@ -54,7 +54,7 @@ export function UserProfileDropdown() {
 
         <span className="ml-3">
         <Link
-            to="/"
+            to="/password/reset-password"
             className="btn btn-light-primary font-weight-bold"
           >
          
