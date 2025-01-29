@@ -11,7 +11,8 @@ export const sizePerPageList = [
 
 export const initialFilter = {
   filter: {
-    searchQuery: ""
+    searchQuery: "",
+    subsidiaryId: ""
   },
 
   sortOrder: "asc",

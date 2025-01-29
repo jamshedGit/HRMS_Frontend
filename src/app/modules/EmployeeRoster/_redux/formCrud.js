@@ -55,3 +55,14 @@ export function updateEmployeeRosterSetup(body) {
 export function deleteEmployeeRosterSetup(id) {
   return axios.delete(`${USERS_URL}/employee_roster/delete-employee-roster/${id}`);
 }
+
+
+/**
+ * Get Last Payroll Month
+ * 
+ * @param {Object} body 
+ * @returns res
+ */
+export function getPayrollMonth(body) {
+  return axios.post(`${USERS_URL}/payroll_month/get-payroll-month-previous-date`, body);
+}
