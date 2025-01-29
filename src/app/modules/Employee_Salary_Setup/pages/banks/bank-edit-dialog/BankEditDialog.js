@@ -91,6 +91,7 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
         Id: user.Id,
         employeeId: user.employeeId,
         currencyId: user.currencyId,
+        grossPackage: user.grossPackage,
         grossSalary: user.grossSalary,
         basicSalary: user.basicSalary,
         gratuity_member: user.gratuity_member,
@@ -141,6 +142,7 @@ export function BankEditDialog({ id, show, onHide, userForRead }) {
       show={show}
       onHide={onHide}
       aria-labelledby="example-modal-sizes-title-lg"
+      backdrop="static"
     >
       <BankEditDialogHeader id={id} isUserForRead={userForRead} />
       <BankEditForm
