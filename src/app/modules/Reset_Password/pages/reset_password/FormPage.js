@@ -14,15 +14,13 @@ import {} from "../../_redux/redux-Actions";
 
 export function FormPage({ history }) {
 
-console.log("dummppage111")
+
 
 
   const dispatch = useDispatch();
   const FormUIEvents = {
 
-    // openDeleteFormDialog: (id, status) => {
-    //   history.push(`/reimbursement_claim/read-all-reimbursement-claim/${id}/${status}/delete`);
-    // },
+
 
   };
   return (
@@ -30,18 +28,7 @@ console.log("dummppage111")
     
     <FormUIProvider FormUIEvents={FormUIEvents}>
      
-     {/* <Route path="/reimbursement_claim/read-all-reimbursement-claim/:id/:status/delete">
-        {({ history, match }) => (
-          <FormDeleteDialog
-            show={match != null}
-            id={match && match.params.id}
-            status={match && match.params.status}
-            onHide={() => {
-              history.push("/reimbursement_claim/read-all-reimbursement-claim");
-            }}
-          />
-        )}
-      </Route>  */}
+     
 
     
       <FormCard />

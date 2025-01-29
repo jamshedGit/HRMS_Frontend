@@ -7,14 +7,7 @@ export function FormEditDialogHeader({ id, isUserForRead }) {
   //const userForEdit = false
   const [title, setTitle] = useState("");
  
-  const { userForEdit, actionsLoading } = useSelector(
-    
-    (state) => ({
-      userForEdit: state.reimbursement_claim.userForEdit,
-      actionsLoading: state.users.actionsLoading,
-    }),
-    shallowEqual
-  );
+
 
   useEffect(() => {
     let _title = id ? "" : "Reset password";
@@ -24,11 +17,11 @@ export function FormEditDialogHeader({ id, isUserForRead }) {
     //   _title = `Read user '}'`
     // }
     setTitle(_title);
-  }, [userForEdit, actionsLoading]);
+  }, []);
 
   return (
     <>
-      {actionsLoading && <ModalProgressBar />}
+      {/* {actionsLoading && <ModalProgressBar />} */}
       <Modal.Header>
         <Modal.Title id="example-modal-sizes-title-lg " className="text-bold">
           {!isUserForRead ? title : "View"}

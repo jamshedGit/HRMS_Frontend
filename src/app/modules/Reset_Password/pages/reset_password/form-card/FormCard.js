@@ -1,8 +1,6 @@
 import React, { useMemo ,useEffect} from "react"
-
-import EmployeeProfile from "../../../../../utils/common-modules/EmployeeProfile"
 import { FormEditDialog } from "../form-edit-dialog/FormEditDialog"
-import { fetchAllActiveEmployees } from "../../../../../../_metronic/redux/dashboardActions"
+
 
 
 import {
@@ -15,7 +13,7 @@ import {
 import { useFormUIContext } from "../FormUIContext"
 
 import { useSelector, shallowEqual, useDispatch } from "react-redux"
-import { getAllReimbursementConfigPolicy } from "../../../_redux/redux-Actions"
+
 
 export function FormCard() {
   const FormUIContext = useFormUIContext()
@@ -24,7 +22,6 @@ export function FormCard() {
     return {
       employeeId: FormUIContext.employeeId,
       setemployeeId: FormUIContext.setemployeeId,
-      queryParamsLeaveApp: FormUIContext.queryParamsLeaveApp,
       id: FormUIContext.ids,
     }
   }, [FormUIContext])
@@ -36,7 +33,7 @@ export function FormCard() {
 
   const { currentState, userAccess } = useSelector(
     (state) => {
-      console.log("statepassword", state); // Log the entire state
+     // Log the entire state
       return {
 
 
@@ -52,7 +49,7 @@ export function FormCard() {
     (item) => item.componentName === "ResetPassword"
   )
 
-  console.log("accessUser111", accessUser);
+
   const { dashboard } = useSelector(
     (state) => ({
       dashboard: state.dashboard
@@ -61,22 +58,8 @@ export function FormCard() {
   )
 
 
-  useEffect(() => {
-
-
-    if (!dashboard.allEmployees || !dashboard.allEmployees.length)
-      dispatch(fetchAllActiveEmployees());
-
-  }, [dispatch, FormUIProps.employeeId])
 
   
-  useEffect(() => {
-
-
-    if (FormUIProps.employeeId)
-      dispatch(getAllReimbursementConfigPolicy({Id:FormUIProps.employeeId}));
-
-  }, [dispatch, FormUIProps.employeeId])
 
   
   return (

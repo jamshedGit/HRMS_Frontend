@@ -30,8 +30,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
       setIds: FormUIContext.setIds,
       employeeId: FormUIContext.employeeId,
       queryParams: FormUIContext.queryParams,
-      isFileReq:FormUIContext.isFileReq,
-      setIsFileReq:FormUIContext.setIsFileReq
+ 
     };
   }, [FormUIContext]);
 
@@ -46,36 +45,21 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   const {
     actionsLoading,
     user,
-    userForEdit,
-    roles,
-
-    userStatusTypes,
-    isuserForRead,
   } = useSelector((state) => ({
     actionsLoading: state.users.actionsLoading,
     user: state.users, // change for users to receipt
-    userForEdit: state.reimbursement_claim.userForEdit,
-    roles: state.users.roles,
-    userStatusTypes: state.users.userStatusTypes,
-    isuserForRead: state.reimbursement_claim.userForRead,
   }));
 
 
-  useEffect(() => {
- 
-    dispatch(actions.fetchmoduledata(id));
 
-    // dispatch(actions.fetchmoduledata(formUIProps .queryParams))
-  }, [id, dispatch, show]);
-
-  const saveForm = async (data,currentUser) => {
+  const saveForm = async (data,currentUser,clearForm) => {
   
-console.log("data111",data)
+
     if (data) {
    data.email=currentUser.email
      
         await dispatch(
-          actions.createReimbursementClaim(data, disbaleLoading,)
+          actions.createPassword(data, disbaleLoading,clearForm)
         );
    
    
@@ -87,19 +71,13 @@ console.log("data111",data)
 
   return (
     <>
-      <FormEditDialogHeader id={id} isUserForRead={userForRead} />
+      <FormEditDialogHeader/>
       <FormEditForm
         saveForm={saveForm}
-        user={userForEdit || formUIProps.initUser}
+        user={formUIProps.initUser}
         onHide={onHide}
-        roles={roles}
-        userStatusTypes={userStatusTypes}
-        isUserForRead={userForRead}
         enableLoading={enableLoading}
         loading={loading}
-        setIds={formUIProps.setIds}
-        isEdit={id ? true : false}
-    
       />
       <ToastContainer
         position="top-right"

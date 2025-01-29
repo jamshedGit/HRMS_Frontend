@@ -7,7 +7,7 @@ import { useSelector, shallowEqual } from "react-redux"
 
 
 export default function password() {
-console.log("reset_password111")
+
   return (
 
     <>
