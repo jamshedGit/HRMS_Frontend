@@ -90,10 +90,10 @@ export function FormEditForm({
   }, [dispatch, user.Id]);
 
 
-  const { currentState, userAccess } = useSelector((state) => {
+  const { currentState, currentUser } = useSelector((state) => {
     return {
       currentState: state.UserModule,
-      userAccess: state?.auth?.userAccess["user"],
+      currentUser:state.auth.user,
 
     };
   }, shallowEqual);
@@ -113,10 +113,15 @@ export function FormEditForm({
     { value: false, label: "Inactive" },
     { value: true, label: "Active" },
   ];
+
+
+
+
+
   return (
     <Formik
       enableReinitialize={true}
-
+      // initialValues={{...user,companyId:currentUser?.companyId}}
       initialValues={user}
       validationSchema={userEditSchema}
       onSubmit={(values) => {
@@ -204,6 +209,7 @@ export function FormEditForm({
 
 
                 <div className="col-12 col-md-6 mt-3">
+               
                     <SearchSelect
                       name="companyId"
                       label={
@@ -211,16 +217,45 @@ export function FormEditForm({
                           Company <span style={{ color: "red" }}>*</span>
                         </span>
                       }
-                      isDisabled={isUserForRead}
+
+                      // label={(() => {
+                      //    setCompany(
+                      //     values,setFieldValue,currentUser?.companyId
+                      //   );
+                      //   return (
+
+
+                      //     <div className="d-flex">
+                      //       <div className="d-flex">Company </div>
+                      //       <div className="d-flex ml-3">
+                      //         <span style={{ color: "red" }}>*</span>
+                      //       </div>
+                      //     </div>
+
+
+                      //   );
+                      // })()}
+                    
+                      
+                      isDisabled={isUserForRead || dashboard?.allCompanyList.length==0}
                       onChange={(e) => {
                         setFieldValue("companyId", e.value || null);
 
                       }}
+                    
                       value={
-                        dashboard?.allCompanyList?.find(
-                          (option) => option?.value === values?.companyId
-                        ) || null
+                        dashboard?.allCompanyList?.length === 0
+                          ? { value: currentUser.companyId, label: currentUser.Company?.name }
+                        
+                          : dashboard?.allCompanyList?.find(
+                              (option) => option?.value === values?.companyId
+                            ) || null
                       }
+                      // value={
+                      //   dashboard?.allCompanyList?.find(
+                      //     (option) => option?.value === values?.companyId
+                      //   ) || null
+                      // }
                       options={dashboard?.allCompanyList}
 
 

@@ -8,6 +8,7 @@ import * as actions from "../../../_redux/redux-Actions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useFormUIContext } from "../FormUIContext";
+import { fetchAllComapnyData } from "../../../../../../_metronic/redux/dashboardActions";
 
 
 export function FormEditDialog({ id, show, onHide, userForRead }) {
@@ -15,17 +16,45 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
   const [loading, setLoading] = useState(false);
   const title = "FormEditDialog";
   const FormUIContext = useFormUIContext();
+  const [initUser, setInitUser] = useState(FormUIContext.initUser);
 
- 
   const usersUIProps = useMemo(() => {
     return {
       queryParams: FormUIContext.queryParams,
     };
   }, [FormUIContext]);
-
-  const formUIProps  = useMemo(() => {
+  const { dashboard } = useSelector((state) => state);
+  const { currentUser } = useSelector((state) => {
     return {
-      initUser: FormUIContext.initUser,
+
+      currentUser: state.auth.user,
+
+    };
+  }, shallowEqual);
+  // const { dashboard } = useSelector((state) => state);
+  useEffect(() => {
+
+    dispatch(fetchAllComapnyData("allCompanyList"))
+
+  }, [dispatch]);
+
+  useEffect(() => {
+
+    if (dashboard?.allCompanyList.length == 0) {
+     
+      const updatedUser = {
+        ...FormUIContext.initUser, // Assuming you have initUser in FormUIContext
+        companyId: currentUser.companyId,
+      };
+
+      // Set updated user in your context or wherever needed
+      setInitUser(updatedUser); // If you're directly mutating, or set in state/context
+    }
+  }, [currentUser]);
+
+  const formUIProps = useMemo(() => {
+    return {
+      initUser: initUser,
       queryParams: FormUIContext.queryParams,
     };
   }, [FormUIContext]);
@@ -47,8 +76,8 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     userStatusTypes,
     isuserForRead,
   } = useSelector((state) => ({
-    
-    
+
+
     actionsLoading: state.users.actionsLoading,
     user: state.users, // change for users to receipt
     userForEdit: state.UserModule.userForEdit,
@@ -62,7 +91,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
 
   useEffect(() => {
     dispatch(actions.fetchUserForEdit(id));
-    
+
     dispatch(actions.fetchRoles());
     // dispatch(actions.fetchUser(formUIProps .queryParams))
   }, [id, dispatch]);
@@ -75,17 +104,17 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
     if (!id) {
 
       dispatch(actions.createUser(user, disbaleLoading, onHide));
-      
-      
+
+
 
     } else {
 
-  
-  
+
+
       // user.number_of_days=
 
 
-    const formUpdatedFields = {
+      const formUpdatedFields = {
         Id: user.Id,
         subsidiaryId: user.subsidiaryId,
         employeeIdMapping: user.employeeIdMapping,
@@ -94,19 +123,19 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
         allowUserCreation: user.allowUserCreation,
         password: user.password,
         email: user.email,
-        supervisedbyId:user.supervisedbyId,
- 
- 
-   
-   
- 
-   
-     
-      };
-      
+        supervisedbyId: user.supervisedbyId,
 
-     await dispatch(actions.updateUser(formUpdatedFields, disbaleLoading, onHide));
-     await dispatch(actions.fetchUser(usersUIProps.queryParams));
+
+
+
+
+
+
+      };
+
+
+      await dispatch(actions.updateUser(formUpdatedFields, disbaleLoading, onHide));
+      await dispatch(actions.fetchUser(usersUIProps.queryParams));
     }
   };
 
@@ -120,7 +149,7 @@ export function FormEditDialog({ id, show, onHide, userForRead }) {
       <FormEditDialogHeader id={id} isUserForRead={userForRead} />
       <FormEditForm
         saveForm={saveForm}
-        user={userForEdit || formUIProps .initUser}
+        user={userForEdit || formUIProps.initUser}
         onHide={onHide}
         roles={roles}
         centers={centers}
