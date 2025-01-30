@@ -51,7 +51,7 @@ export const generatePayslip = (filter, document, labels = {}) => async (dispatc
     .catch((error) => {
       error.clientMessage = "Can't generate Payslip";
       dispatch(actions.catchError({ error, callType: callTypes.pdf }));
-      toast.error(error?.response?.status == 400 ? 'Please provide Employee and Month' : error.clientMessage, {
+      toast.error(error?.response?.status == 400 ? 'Please provide Subsidiary and Month' : error.clientMessage, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
