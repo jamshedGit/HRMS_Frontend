@@ -58,7 +58,8 @@ const profileValidation = Yup.object().shape(
     lastName: Yup.string()
       .required("Required*"),
     middleName: Yup.string()
-      .required("Required*"),
+    .nullable(),
+      // .required("Required*"),
     employeeCode: Yup.string()
       .nullable()
       .required("Required*")
@@ -1066,8 +1067,8 @@ export function DesignationEditForm({
 
 
 
-    
-        dispatch(getLatestTableId("t_employee_profile", "	codeAuto", " 1 = 1 ", (setEmployee) => {
+    console.log("response?.data?.data[0]?.subsidiary",response?.data?.data[0]?.subsidiaryId )
+        dispatch(getLatestTableId("t_employee_profile", "	codeAuto", "subsidiaryId = " + response?.data?.data[0]?.subsidiaryId, (setEmployee) => {
 
           setFieldValue("codeAuto", setEmployee)
           // setEmployeeCode(setEmployee)
@@ -1788,7 +1789,7 @@ export function DesignationEditForm({
                           name="middleName"
                           component={Input}
                           placeholder=" middle name"
-                          label={<span> Middle Name<span style={{ color: 'red' }}>*</span></span>}
+                          label={<span> Middle Name</span>}
                           autoComplete="off"
                         />
                       </div>
