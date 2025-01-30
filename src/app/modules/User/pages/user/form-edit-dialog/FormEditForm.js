@@ -55,9 +55,21 @@ const userEditSchema = Yup.object().shape({
     .required(VALIDATION_MESSAGES.required),
 
 
+  // supervisedbyId: Yup.number()
+  //   .nullable()
+  //   .required(VALIDATION_MESSAGES.required),
+
   supervisedbyId: Yup.number()
     .nullable()
-    .required(VALIDATION_MESSAGES.required),
+    .required(VALIDATION_MESSAGES.required)
+    .test(
+      "not-same",
+      "Role ID and Supervised By ID should not be the same",
+      function (value) {
+        const { roleId } = this.parent; // Accessing roleId from the parent object
+        return value !== roleId; // Ensure the two are not the same
+      }
+    ),
 
 
   companyId: Yup.number()
@@ -188,12 +200,12 @@ export function FormEditForm({
                         setFieldValue("supervisedbyId", e.value || null);
                       }}
                       value={
-                        roles?.find(
+                        roles?.supervisedBy?.find(
                           (option) => option.value === values.supervisedbyId
                         ) || null
                       }
 
-                      options={roles}
+                      options={roles?.supervisedBy}
 
                       error={errors.supervisedbyId}
                       touched={touched.supervisedbyId}
@@ -343,12 +355,12 @@ export function FormEditForm({
                         setFieldValue("roleId", e.value || null);
                       }}
                       value={
-                        roles?.find(
+                        roles?.role?.find(
                           (option) => option.value === values.roleId
                         ) || null
                       }
 
-                      options={roles}
+                      options={roles?.role}
 
                       error={errors.roleId}
                       touched={touched.roleId}

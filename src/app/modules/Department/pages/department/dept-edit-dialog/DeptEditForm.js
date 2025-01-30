@@ -3,7 +3,7 @@ import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { Checkbox, Input, Select, TextArea } from "../../../../../../_metronic/_partials/controls";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector ,shallowEqual} from "react-redux";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 
 import {
@@ -99,22 +99,21 @@ export function DeptEditForm({
 
   }, [user?.subsidiaryId, dashboard.subsidiaryId]);
 
+  const { currentUser } = useSelector((state) => {
+    return {
+     
+      currentUser:state.auth.user,
 
-
-
-  // const fetchData = async (subsidiaryId, setValue) => {
-  //   if (subsidiaryId) {
-  //     dispatch(getLatestTableId("t_department", "deptCode", " subsidiaryId = " + subsidiaryId, setValue));
-  //   }
-  // };
-
+    };
+  }, shallowEqual);
 
   const fetchData = async (setValue) => {
 
     // if (subsidiaryId) {
       // dispatch(getLatestTableId("t_loan_type_setup", "Id", " subsidiaryId = " + subsidiaryId, setValue));
       if (!id) {
-      dispatch(getLatestTableId("t_department", "deptCode", " 1 = 1 ",setValue));
+      // dispatch(getLatestTableId("t_department", "deptCode", " 1 = 1 ",setValue));
+            dispatch(getLatestTableId("t_department", "deptCode", "companyId =" + currentUser.companyId,setValue));
     }
   };
 
