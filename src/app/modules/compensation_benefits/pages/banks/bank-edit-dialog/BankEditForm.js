@@ -193,7 +193,7 @@ export function BankEditForm({
 
 
   const addRow = (element) => {
-    setDefaultEarningList([...defEarningList, { transactionType: element.target.id }])
+    setDefaultEarningList([...defEarningList, { transactionType: element.target.id, isPartOfGrossSalary: 1}])
 
   }
 
