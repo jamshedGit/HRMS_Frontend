@@ -96,10 +96,18 @@ export function FormEditForm({
 
       dispatch(fetchAllSubsidiaryData("allSubsidiaryList"));
       dispatch(fetchAllComapnyData("allCompanyList"))
-
       dispatch(fetchAllActiveEmployees());
+   
     }
   }, [dispatch, user.Id]);
+
+
+  
+ const companyEmployee=(companyId) => {
+    if (companyId) {
+      dispatch(fetchAllActiveEmployees({companyId}));
+    }
+  };
 
 
   const { currentState, currentUser } = useSelector((state) => {
@@ -252,6 +260,8 @@ export function FormEditForm({
                       isDisabled={isUserForRead || dashboard?.allCompanyList.length==0}
                       onChange={(e) => {
                         setFieldValue("companyId", e.value || null);
+                        companyEmployee(e.value)
+                        setFieldValue("employeeIdMapping",null)
 
                       }}
                     

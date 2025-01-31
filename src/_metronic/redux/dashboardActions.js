@@ -19,9 +19,10 @@ export const fetchAllCountry = () => async (dispatch) => {
     });
 };
 
-export const fetchAllActiveEmployees = () => async (dispatch) => {
+export const fetchAllActiveEmployees = (data={}) => async (dispatch) => {
+
   return await requestFromServer
-    .getAllActiveEmployees()
+    .getAllActiveEmployees(data)
     .then((response) => {
       const entities = response.data?.data;
 
