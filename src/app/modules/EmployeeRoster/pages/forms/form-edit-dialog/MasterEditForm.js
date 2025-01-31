@@ -9,6 +9,10 @@ import CustomErrorLabel from "../../../../../utils/common-modules/CustomErrorLab
 import EmployeeListTable from "./EmployeeListTable";
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 import { formatDates } from "../../../../../utils/common";
+import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
+import * as actions from "../../../_redux/formActions";
+import { fetchAllActiveEmployeesBySubsidiary } from "../../../../../../_metronic/redux/dashboardActions";
+import { initialFilter } from "../FormUIHelpers";
 
 export function MasterEditForm({
   submitForm,
@@ -17,18 +21,25 @@ export function MasterEditForm({
   enableLoading,
   loading,
   isEdit,
-  setId
+  setId,
+  dispatch,
+  setQueryParams
 }) {
 
   //Get Data from states
-  const { allEmployeeShifts, allEmployees, payrollData } = useSelector(
+  const { allEmployeeShifts, allEmployees, payrollData, allSubsidiaryList } = useSelector(
     (state) => ({
-      payrollData: state.dashboard.payrollData,
+      payrollData: state.employee_roster.payrollData,
       allEmployeeShifts: state.dashboard.allEmployeeShifts,
       allEmployees: state.dashboard.allEmployees,
+      allSubsidiaryList: state.dashboard.allSubsidiaryList,
     }),
     shallowEqual
   )
+
+  const allSubsidiaryMap = useMemo(() => {
+    return new Map(allSubsidiaryList?.map(item => [item.value, item]));
+  }, [allSubsidiaryList]);
 
   //Function to check if the date doesn't lie before the payroll month date
   const checkPayrolMonth = (values, payroll) => {
@@ -39,6 +50,7 @@ export function MasterEditForm({
   const formValidation = useMemo(() => {
     if (payrollData && payrollData.startDate) {
       return Yup.object().shape({
+        subsidiaryId: Yup.number().required(VALIDATION_MESSAGES.required),
         from: Yup.date().required(VALIDATION_MESSAGES.required).min(payrollData.startDate, `Date cannot be before ${formatDates(payrollData.startDate)}`),
         to: Yup.date().required(VALIDATION_MESSAGES.required).min(Yup.ref('from'), 'To date cannot be before From date'),
         shiftId: Yup.number().required(VALIDATION_MESSAGES.required),
@@ -51,6 +63,7 @@ export function MasterEditForm({
     }
     else {
       return Yup.object().shape({
+        subsidiaryId: Yup.number().required(VALIDATION_MESSAGES.required),
         from: Yup.date().required(VALIDATION_MESSAGES.required),
         to: Yup.date().required(VALIDATION_MESSAGES.required).min(Yup.ref('from'), 'To date cannot be before From date'),
         shiftId: Yup.number().required(VALIDATION_MESSAGES.required),
@@ -93,6 +106,40 @@ export function MasterEditForm({
               )}
               <Form className="form form-label-right">
                 <fieldset>
+                  <div className="from-group row">
+
+                    {/* Subsidiary Field Start */}
+                    <div className="col-12 col-md-4 mt-3">
+                      <Field
+                        name="subsidiaryId"
+                        component={SearchSelect}
+                        onBlur={handleBlur}
+                        onChange={(e) => {
+                          const value = e.value == '--Select--' ? '' : Number(e.value)
+                          setFieldValue('subsidiaryId', value)
+                          dispatch(actions.getPayrollMonth(value))
+                          dispatch(fetchAllActiveEmployeesBySubsidiary(value));
+                          setFieldValue('list', [])
+                          setQueryParams({...initialFilter, filter: {subsidiaryId: value}})
+                        }}
+                        label={
+                          <span>
+                            {" "}
+                            Subsidiary<span style={{ color: "red" }}>*</span>
+                          </span>
+                        }
+                        isDisabled={isEdit}
+                        error={errors.subsidiaryId}
+                        touched={touched.subsidiaryId}
+                        value={allSubsidiaryMap?.get(values?.subsidiaryId || '') || ''}
+                        autoComplete="off"
+                        options={allSubsidiaryList}
+                      />
+                    </div>
+                    {/* Subsidiary Field End */}
+
+
+                  </div>
                   <div className="from-group row">
 
                     {/* Date from Field Start */}
@@ -205,6 +252,7 @@ export function MasterEditForm({
                 onClick={() => {
                   setId()
                   handleReset()
+                  setQueryParams(initialFilter)
                 }}
 
                 className="btn btn-danger btn-elevate"

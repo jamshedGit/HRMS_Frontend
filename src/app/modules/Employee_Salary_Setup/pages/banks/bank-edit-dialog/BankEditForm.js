@@ -638,7 +638,7 @@ export function BankEditForm({
             setErrors(validationErrors);
           } else {
             enableLoading();
-            saveEarningDeductionTran(values, defMapEarningDeductionList);
+            saveEarningDeductionTran({...values, grossPackage: values.grossSalary > 0 ? Number(values.grossSalary) + Number(totalGross) : Number(defGrossSalary) + Number(totalGross)}, defMapEarningDeductionList);
           }
         }}
       >
@@ -786,10 +786,10 @@ export function BankEditForm({
                       {defMapEarningDeductionList?.map((obj, rightindex) => (
                         obj.transactionType == 'Earning' && obj.isPartOfGrossSalary == true &&
                         <><tr>
-                          <td id={rightindex} > </td>
+                          <td id={rightindex} onClick={!Boolean(currentSalaryMethod)  && deleteRow }>{!Boolean(currentSalaryMethod) && 'Delete'} </td>
                           <td>
                             <select
-                              disabled
+                              disabled={Boolean(currentSalaryMethod)}
                               onChange={(e) => {
                                 handleFieldChanged(e);
                                 setErrors((prev) => ({ ...prev, [`earning_deduction_id-${rightindex}`]: '' })); // Clear error on change
@@ -807,7 +807,7 @@ export function BankEditForm({
                           </td>
                           <td>
                             <select value={obj.calculation_type}
-                              disabled
+                              disabled={Boolean(currentSalaryMethod)}
                               onChange={(e) => {
                                 handleFieldChanged(e);
                                 setErrors((prev) => ({ ...prev, [`calculation_type-${rightindex}`]: '' })); // Clear error on change
@@ -844,7 +844,7 @@ export function BankEditForm({
                               onInput={(e) => {
                                 e.target.value = amountLimit(e.target.value); // Limit to 3 digits
                               }}
-                              disabled
+                              disabled={Boolean(currentSalaryMethod)}
                               style={{ width: "100px" }}
 
                               onChange={(e) => {

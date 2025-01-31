@@ -156,7 +156,7 @@ export function BankEditForm({
     const gradeId = defEmployeeGrade?.value ? defEmployeeGrade.value : user.gradeId;
     setDefualtEmployeeGrade(
       dashboard.allEmployeeGradeList &&
-      dashboard.allEmployeeGradeList.filter((item) => {
+      [{ label: "All", value: -1 }, ...dashboard.allEmployeeGradeList].filter((item) => {
         return item.value === gradeId;
       })
     );
@@ -193,7 +193,7 @@ export function BankEditForm({
 
 
   const addRow = (element) => {
-    setDefaultEarningList([...defEarningList, { transactionType: element.target.id }])
+    setDefaultEarningList([...defEarningList, { transactionType: element.target.id, isPartOfGrossSalary: 1}])
 
   }
 
@@ -417,12 +417,10 @@ export function BankEditForm({
                         error={errors.gradeId}
                         touched={touched.gradeId}
                         options={
-                          id
-                            ? dashboard.allEmployeeGradeList
-                            : [
-                              { label: "All", value: "all" },
-                              ...dashboard.allEmployeeGradeList,
-                            ]
+                          [
+                            { label: "All", value: -1 },
+                            ...dashboard.allEmployeeGradeList,
+                          ]
                         }
                       />
                     </div>
