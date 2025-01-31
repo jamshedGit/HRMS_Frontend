@@ -92,6 +92,7 @@ export function DesignationEditDialog({ id, show, onHide, userForRead }) {
         probationPolicyInMonth: user.probationPolicyInMonth,
         contractualPolicyInMonth: user.contractualPolicyInMonth,
         codePrefix:user.codePrefix,
+        salaryMethod:user.salaryMethod,
       };
 
 
