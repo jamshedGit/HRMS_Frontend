@@ -124,6 +124,7 @@ const formValidation = Yup.object().shape(
       }),
     overtime_working_day: Yup.number()
       .max(100, 'Value cannot be greater than 100')
+      .min(0, 'Value cannot be less than 0')
       .when('overtime_allowance', {
         is: (value) => value === true || value === 1, // if select value is 2
         then: Yup.number().required(VALIDATION_MESSAGES.required),
@@ -131,6 +132,7 @@ const formValidation = Yup.object().shape(
       }),
     overtime_off_day: Yup.number()
       .max(100, 'Value cannot be greater than 100')
+      .min(0, 'Value cannot be less than 0')
       .when('overtime_allowance', {
         is: (value) => value === true || value === 1, // if select value is 2
         then: Yup.number().required(VALIDATION_MESSAGES.required),
@@ -138,6 +140,7 @@ const formValidation = Yup.object().shape(
       }),
     overtime_holiday: Yup.number()
       .max(100, 'Value cannot be greater than 100')
+      .min(0, 'Value cannot be less than 0')
       .when('overtime_allowance', {
         is: (value) => value === true || value === 1, // if select value is 2
         then: Yup.number().required(VALIDATION_MESSAGES.required),
