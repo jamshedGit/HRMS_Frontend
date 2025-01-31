@@ -237,12 +237,11 @@ export function BankEditForm({
         newErrors[`calculation_type-${index}`] = VALIDATION_MESSAGES.required;
       }
       // Check if factorValue is required
-      if (!objValidate.factorValue && objValidate.amount <= 0) {
+      if(!objValidate.factorValue && (objValidate.calculation_type == "% Of Gross" || objValidate.calculation_type == "% Of Basic") ){
         newErrors[`factorValue-${index}`] = VALIDATION_MESSAGES.required;
       }
-
       // Check if amount is required
-      if (!objValidate.amount && objValidate.factorValue <= 0) {
+      if (!objValidate.amount && objValidate.calculation_type == "Fixed Amount") {
         newErrors[`amount-${index}`] = VALIDATION_MESSAGES.required;
       }
     });
