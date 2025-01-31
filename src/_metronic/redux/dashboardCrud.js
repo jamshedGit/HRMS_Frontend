@@ -29,8 +29,8 @@ export const getAllEmp_Compensation_Benefits_DDL = async () => {
   );
 };
 
-export const getAllActiveEmployees = async () => {
-  return await axios.post(`${USERS_URL}/settings/read-all-profile`);
+export const getAllActiveEmployees = async (body) => {
+  return await axios.post(`${USERS_URL}/settings/read-all-profile`,body);
 };
 
 export const getAllActiveEmployeesBySubsidiary = async (body) => {

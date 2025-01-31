@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field,ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Input, Select, TextArea } from "../../../../../../_metronic/_partials/controls";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
@@ -30,6 +30,9 @@ const formValidationSchema = Yup.object().shape(
   {
 
     subsidiaryId: Yup.string()
+      .required(VALIDATION_MESSAGES.required),
+      salaryMethod :Yup.string()
+      .nullable()
       .required(VALIDATION_MESSAGES.required),
     currencyId: Yup.string()
       .required(VALIDATION_MESSAGES.required),
@@ -425,7 +428,49 @@ export function DesignationEditForm({
                           />
                         </div>
                       </>
+
+
+
                     }
+
+{/* It is being used in this way due to the salary compensation policy.  */}
+                          <div className="col-12 col-md-4 mt-3">
+                                          <Select
+                                            label={
+                                              <span>
+                                                {" "}
+                                                Salary Method<span style={{ color: "red" }}>*</span>
+                                              </span>
+                                            }
+                                            name="salaryMethod"
+                                            defaultValue="Gross to Basic"
+                                            value={values.salaryMethod}
+                                            onChange={(e) => {
+                                              setFieldValue("salaryMethod", e.target.value);
+                                             
+                                            }}
+                                            error={errors.salaryMethod}
+                                            touched={touched.salaryMethod}
+                                            onBlur={handleBlur}
+                                            style={{ display: "block" }}
+                                            autoComplete="off"
+                                          >
+                                            <option value="-1" label="Select..." />
+                                            <option
+                                              selected
+                                              value="Gross to Basic"
+                                              label="Gross to Basic"
+                                            />
+                                            <option value="Basic to Gross" label="Basic to Gross" />
+                                          </Select>
+                                          {errors.salaryMethod && touched.salaryMethod && (
+                                            <ErrorMessage
+                                              className="form-feedBack"
+                                              name="salaryMethod"
+                                              component="div"
+                                            />
+                                          )}
+                                        </div>
                   </div>
                   <br></br>
                   <hr></hr>

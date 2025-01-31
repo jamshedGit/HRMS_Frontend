@@ -43,6 +43,10 @@ export function UserProfileDropdown() {
         <span className="text-dark-50 font-weight-bolder font-size-base d-none d-md-inline mr-3">
           {user.email
           }
+           {" - "}(
+           {user.role.name
+          }
+          )
         </span>
         <span className="symbol symbol-35 symbol-light-success">
           <span className="symbol-label font-size-h5 font-weight-bold">
@@ -54,7 +58,7 @@ export function UserProfileDropdown() {
 
         <span className="ml-3">
         <Link
-            to="/"
+            to="/password/reset-password"
             className="btn btn-light-primary font-weight-bold"
           >
          
