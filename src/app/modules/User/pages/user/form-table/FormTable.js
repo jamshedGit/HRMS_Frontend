@@ -57,7 +57,7 @@ export function FormTable() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("useEffect111")
+    
     formUIProps.setIds([]);
 
 

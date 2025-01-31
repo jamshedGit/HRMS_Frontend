@@ -138,41 +138,43 @@ export function FormFilter({ loading, dispatch, pdfLoading, registerLoading }) {
             <Modal.Body className="overlay overlay-block cursor-default">
               <Form className="form form-label-right">
                 <fieldset>
-                  <div className="from-group row">
+                  <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
+                    <h6>Employee Filters</h6>
+                    <div className="from-group row">
 
-                    {/* Subsidiary Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="subsidiaryId"
-                        component={SearchSelect}
-                        onBlur={handleBlur}
-                        onChange={(e) => {
-                          const value = e.value == '--Select--' ? '' : Number(e.value)
-                          setFieldValue('subsidiaryId', value)
-                          dispatch(fetchAllPayrollMonthYearList({ subsidiaryId: value }, "allPayrollMonthYearList"));
-                          dispatch(fetchAllActiveEmployeesBySubsidiary(value));
-                          setFieldValue('employeeId', '')
-                          setFieldValue('monthId', '')
-                        }}
-                        label={
-                          <span>
-                            {" "}
-                            Subsidiary<span style={{ color: "red" }}>*</span>
-                          </span>
-                        }
-                        error={errors.subsidiaryId}
-                        touched={touched.subsidiaryId}
-                        value={allSubsidiaryMap?.get(values?.subsidiaryId || '') || ''}
-                        autoComplete="off"
-                        options={allSubsidiaryList}
-                      />
-                    </div>
-                    {/* Subsidiary Field End */}
+                      {/* Subsidiary Field Start */}
+                      <div className="col-12 col-md-4 mt-3">
+                        <Field
+                          name="subsidiaryId"
+                          component={SearchSelect}
+                          onBlur={handleBlur}
+                          onChange={(e) => {
+                            const value = e.value == '--Select--' ? '' : Number(e.value)
+                            setFieldValue('subsidiaryId', value)
+                            dispatch(fetchAllPayrollMonthYearList({ subsidiaryId: value }, "allPayrollMonthYearList"));
+                            dispatch(fetchAllActiveEmployeesBySubsidiary(value));
+                            setFieldValue('employeeId', '')
+                            setFieldValue('monthId', '')
+                          }}
+                          label={
+                            <span>
+                              {" "}
+                              Subsidiary<span style={{ color: "red" }}>*</span>
+                            </span>
+                          }
+                          error={errors.subsidiaryId}
+                          touched={touched.subsidiaryId}
+                          value={allSubsidiaryMap?.get(values?.subsidiaryId || '') || ''}
+                          autoComplete="off"
+                          options={allSubsidiaryList}
+                        />
+                      </div>
+                      {/* Subsidiary Field End */}
 
 
-                    {/* These fields are hidden and not removed because might come in use later on */}
-                    {/* Deparment Field Start */}
-                    {/* <div className="col-12 col-md-4 mt-3">
+                      {/* These fields are hidden and not removed because might come in use later on */}
+                      {/* Deparment Field Start */}
+                      {/* <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="departmentId"
                         component={SearchSelect}
@@ -192,10 +194,10 @@ export function FormFilter({ loading, dispatch, pdfLoading, registerLoading }) {
                         options={allDept}
                       />
                     </div> */}
-                    {/* Deparment Field End */}
+                      {/* Deparment Field End */}
 
-                    {/* Report To Field Start */}
-                    {/* <div className="col-12 col-md-4 mt-3">
+                      {/* Report To Field Start */}
+                      {/* <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="reportTo"
                         component={SearchSelect}
@@ -215,10 +217,10 @@ export function FormFilter({ loading, dispatch, pdfLoading, registerLoading }) {
                         options={allEmployees}
                       />
                     </div> */}
-                    {/* Report To Field End */}
+                      {/* Report To Field End */}
 
-                    {/* Grade Field Start */}
-                    {/* <div className="col-12 col-md-4 mt-3">
+                      {/* Grade Field Start */}
+                      {/* <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="gradeId"
                         component={SearchSelect}
@@ -238,10 +240,10 @@ export function FormFilter({ loading, dispatch, pdfLoading, registerLoading }) {
                         options={allEmployeeGradeList}
                       />
                     </div> */}
-                    {/* Grade Field End */}
+                      {/* Grade Field End */}
 
-                    {/* Designation Field Start */}
-                    {/* <div className="col-12 col-md-4 mt-3">
+                      {/* Designation Field Start */}
+                      {/* <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="designationId"
                         component={SearchSelect}
@@ -261,10 +263,10 @@ export function FormFilter({ loading, dispatch, pdfLoading, registerLoading }) {
                         options={allDesignations}
                       />
                     </div> */}
-                    {/* Designation Field End */}
+                      {/* Designation Field End */}
 
-                    {/* Location Field Start */}
-                    {/* <div className="col-12 col-md-4 mt-3">
+                      {/* Location Field Start */}
+                      {/* <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="locationId"
                         component={SearchSelect}
@@ -284,10 +286,10 @@ export function FormFilter({ loading, dispatch, pdfLoading, registerLoading }) {
                         options={allLocationChildMenus}
                       />
                     </div> */}
-                    {/* Location Field End */}
+                      {/* Location Field End */}
 
-                    {/* Attendance Type Field Start */}
-                    {/* <div className="col-12 col-md-4 mt-3">
+                      {/* Attendance Type Field Start */}
+                      {/* <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="attendanceType"
                         component={Select}
@@ -307,81 +309,88 @@ export function FormFilter({ loading, dispatch, pdfLoading, registerLoading }) {
                         children={CustomDropdown({ data: ATTENDANCE_TYPE })}
                       />
                     </div> */}
-                    {/* Attendance Type Field End */}
-                    {/* These fields are hidden and not removed because might come in use later on */}
+                      {/* Attendance Type Field End */}
+                      {/* These fields are hidden and not removed because might come in use later on */}
 
-                    {/* Employee Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="employeeId"
-                        component={SearchSelect}
-                        onBlur={handleBlur}
-                        onChange={(e) => {
-                          const value = e.value == '--Select--' ? '' : Number(e.value)
-                          setFieldValue('employeeId', value)
-                        }}
-                        label={
-                          <span>
-                            {" "}
-                            Employee<span style={{ color: "red" }}>*</span>
-                          </span>
-                        }
-                        error={errors.employeeId}
-                        touched={touched.employeeId}
-                        value={allEmployeesMap?.get(values?.employeeId || '') || ''}
-                        autoComplete="off"
-                        options={allEmployees}
-                      />
+                      {/* Employee Field Start */}
+                      <div className="col-12 col-md-4 mt-3">
+                        <Field
+                          name="employeeId"
+                          component={SearchSelect}
+                          onBlur={handleBlur}
+                          onChange={(e) => {
+                            const value = e.value == '--Select--' ? '' : Number(e.value)
+                            setFieldValue('employeeId', value)
+                          }}
+                          label={
+                            <span>
+                              {" "}
+                              Employee
+                            </span>
+                          }
+                          error={errors.employeeId}
+                          touched={touched.employeeId}
+                          value={allEmployeesMap?.get(values?.employeeId || '') || ''}
+                          autoComplete="off"
+                          options={allEmployees}
+                        />
+                      </div>
+                      {/* Employee Field End */}
+
+                      {/* Payroll Month Field Start */}
+                      <div className="col-12 col-md-4 mt-3">
+                        <Field
+                          name="monthId"
+                          component={SearchSelect}
+                          onBlur={handleBlur}
+                          onChange={(e) => {
+                            const value = e.value == '--Select--' ? '' : Number(e.value)
+                            setFieldValue('monthId', value)
+                          }}
+                          label={
+                            <span>
+                              {" "}
+                              Payroll Month
+                            </span>
+                          }
+                          value={allPayrollMonthMap?.get(values?.monthId || '') || ''}
+                          autoComplete="off"
+                          options={allPayrollMonthYearList}
+                        />
+                      </div>
+                      {/* Payroll Month Field End */}
                     </div>
-                    {/* Employee Field End */}
+                  </div>
 
-                    {/* Payroll Month Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="monthId"
-                        component={SearchSelect}
-                        onBlur={handleBlur}
-                        onChange={(e) => {
-                          const value = e.value == '--Select--' ? '' : Number(e.value)
-                          setFieldValue('monthId', value)
-                        }}
-                        label={
-                          <span>
-                            {" "}
-                            Payroll Month
-                          </span>
-                        }
-                        value={allPayrollMonthMap?.get(values?.monthId || '') || ''}
-                        autoComplete="off"
-                        options={allPayrollMonthYearList}
-                      />
-                    </div>
-                    {/* Payroll Month Field End */}
+                  <br></br>
 
-                    {/* Group By Field Start */}
-                    <div className="col-12 col-md-4 mt-3">
-                      <Field
-                        name="groupBy"
-                        component={Select}
-                        placeholder=""
-                        onChange={(e) => {
-                          const value = e.target.value
-                          setFieldValue('groupBy', value)
-                        }}
-                        label={
-                          <span>
-                            {" "}
-                            Group By
-                          </span>
-                        }
-                        value={values.groupBy}
-                        autoComplete="off"
-                        children={CustomDropdown({ data: groupByOptions })}
-                      />
-                    </div>
-                    {/* Group By Field End */}
+                  <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
+                    <h6>Payroll Register (PDF / Excel)</h6>
+                    <div className="from-group row">
+                      {/* Group By Field Start */}
+                      <div className="col-12 col-md-4 mt-3">
+                        <Field
+                          name="groupBy"
+                          component={Select}
+                          placeholder=""
+                          onChange={(e) => {
+                            const value = e.target.value
+                            setFieldValue('groupBy', value)
+                          }}
+                          label={
+                            <span>
+                              {" "}
+                              Group By
+                            </span>
+                          }
+                          value={values.groupBy}
+                          autoComplete="off"
+                          children={CustomDropdown({ data: groupByOptions })}
+                        />
+                      </div>
+                      {/* Group By Field End */}
 
-                    <div className="col-12 col-md-4 mt-11">
+                      <div className="col-12 col-md-6 mt-11">
                         <button
                           onClick={() => { getPdf(values) }}
                           disabled={registerLoading}
@@ -407,6 +416,43 @@ export function FormFilter({ loading, dispatch, pdfLoading, registerLoading }) {
                             <span className="ml-3 mr-3 spinner spinner-white"></span>
                           )}
                         </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <br></br>
+
+                  <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
+                    <h6>Bank Payment Advice</h6>
+                    <div className="from-group row">
+                      <div className="col-12 col-md-4 mt-11">
+                        <button
+                        onClick={(e) => { e.preventDefault()}}
+                          className="btn btn-secondary"
+                        >
+                          Generate Payment Advice
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <br></br>
+
+                  <div style={{ backgroundColor: "rgb(235 243 255)", padding: "20px", borderRadius: "5px", border: '2px solid #adceff' }}>
+                    <h6>Payslip</h6>
+                    <div className="from-group row">
+                      <div className="col-12 col-md-4 mt-11">
+                        <button
+                          onClick={() => { getPayslip(values) }}
+                          disabled={pdfLoading}
+                          className="btn btn-secondary"
+                        >
+                          Generate Payslip
+                          {pdfLoading && (
+                            <span className="ml-3 mr-3 spinner spinner-white"></span>
+                          )}
+                        </button>
+                      </div>
                     </div>
                   </div>
 
@@ -438,16 +484,7 @@ export function FormFilter({ loading, dispatch, pdfLoading, registerLoading }) {
                 )}
               </button>
 
-              <button
-                onClick={() => { getPayslip(values) }}
-                disabled={pdfLoading}
-                className="btn btn-secondary"
-              >
-                Generate Payslip
-                {pdfLoading && (
-                  <span className="ml-3 mr-3 spinner spinner-white"></span>
-                )}
-              </button>
+
 
             </Modal.Footer>
 

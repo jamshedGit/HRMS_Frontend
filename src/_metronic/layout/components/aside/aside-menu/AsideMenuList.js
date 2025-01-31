@@ -43,9 +43,9 @@ export function AsideMenuList({ layoutProps }) {
     Object.values(obj).includes("read-all-roles-master-data")
   );
 
-  if (!isReadALLRolesAccess) {
-    delete UserAccess.Settings;
-  }
+  // if (!isReadALLRolesAccess) {
+  //   delete UserAccess.Settings;
+  // }
  
   const location = useLocation();
   const getMenuItemActive = (url, hasSubmenu = false) => {

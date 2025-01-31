@@ -3,7 +3,7 @@ import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { Input, Select, TextArea } from "../../../../../../_metronic/_partials/controls";
-import { useDispatch, useSelector } from "react-redux";
+import { shallowEqual,useDispatch, useSelector } from "react-redux";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import {
   fetchAllCity,
@@ -104,13 +104,20 @@ export function BankEditForm({
     );
 
   }, [user?.subsidiaryId, dashboard.subsidiaryId]);
+    const { currentUser } = useSelector((state) => {
+      return {
+       
+        currentUser:state.auth.user,
+  
+      };
+    }, shallowEqual);
 
   const fetchData = async ( setValue) => {
 
     // if (subsidiaryId) {
       // dispatch(getLatestTableId("t_employee_earning", "Id", " subsidiaryId = " + subsidiaryId, setValue));
       if (!id) {
-      dispatch(getLatestTableId("t_employee_earning", "earningCode", " 1 = 1 ",setValue));
+      dispatch(getLatestTableId("t_employee_earning", "earningCode", "companyId="+ currentUser.companyId,setValue));
     }
   };
 

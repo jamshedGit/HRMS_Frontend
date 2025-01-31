@@ -46,6 +46,8 @@ const userEditSchema = Yup.object().shape({
 
   password: Yup.string()
     .nullable()
+    .min(5,"At least 5 characters are required")
+    .max(15,"At most 15 characters are required")
     .required(VALIDATION_MESSAGES.required),
 
   email: Yup.string()
@@ -53,9 +55,21 @@ const userEditSchema = Yup.object().shape({
     .required(VALIDATION_MESSAGES.required),
 
 
+  // supervisedbyId: Yup.number()
+  //   .nullable()
+  //   .required(VALIDATION_MESSAGES.required),
+
   supervisedbyId: Yup.number()
     .nullable()
-    .required(VALIDATION_MESSAGES.required),
+    .required(VALIDATION_MESSAGES.required)
+    .test(
+      "not-same",
+      "Role ID and Supervised By ID should not be the same",
+      function (value) {
+        const { roleId } = this.parent; // Accessing roleId from the parent object
+        return value !== roleId; // Ensure the two are not the same
+      }
+    ),
 
 
   companyId: Yup.number()
@@ -82,16 +96,24 @@ export function FormEditForm({
 
       dispatch(fetchAllSubsidiaryData("allSubsidiaryList"));
       dispatch(fetchAllComapnyData("allCompanyList"))
-
       dispatch(fetchAllActiveEmployees());
+   
     }
   }, [dispatch, user.Id]);
 
 
-  const { currentState, userAccess } = useSelector((state) => {
+  
+ const companyEmployee=(companyId) => {
+    if (companyId) {
+      dispatch(fetchAllActiveEmployees({companyId}));
+    }
+  };
+
+
+  const { currentState, currentUser } = useSelector((state) => {
     return {
       currentState: state.UserModule,
-      userAccess: state?.auth?.userAccess["user"],
+      currentUser:state.auth.user,
 
     };
   }, shallowEqual);
@@ -111,10 +133,15 @@ export function FormEditForm({
     { value: false, label: "Inactive" },
     { value: true, label: "Active" },
   ];
+
+
+
+
+
   return (
     <Formik
       enableReinitialize={true}
-
+      // initialValues={{...user,companyId:currentUser?.companyId}}
       initialValues={user}
       validationSchema={userEditSchema}
       onSubmit={(values) => {
@@ -181,12 +208,12 @@ export function FormEditForm({
                         setFieldValue("supervisedbyId", e.value || null);
                       }}
                       value={
-                        roles?.find(
+                        roles?.supervisedBy?.find(
                           (option) => option.value === values.supervisedbyId
                         ) || null
                       }
 
-                      options={roles}
+                      options={roles?.supervisedBy}
 
                       error={errors.supervisedbyId}
                       touched={touched.supervisedbyId}
@@ -202,6 +229,7 @@ export function FormEditForm({
 
 
                 <div className="col-12 col-md-6 mt-3">
+               
                     <SearchSelect
                       name="companyId"
                       label={
@@ -209,16 +237,47 @@ export function FormEditForm({
                           Company <span style={{ color: "red" }}>*</span>
                         </span>
                       }
-                      isDisabled={isUserForRead}
+
+                      // label={(() => {
+                      //    setCompany(
+                      //     values,setFieldValue,currentUser?.companyId
+                      //   );
+                      //   return (
+
+
+                      //     <div className="d-flex">
+                      //       <div className="d-flex">Company </div>
+                      //       <div className="d-flex ml-3">
+                      //         <span style={{ color: "red" }}>*</span>
+                      //       </div>
+                      //     </div>
+
+
+                      //   );
+                      // })()}
+                    
+                      
+                      isDisabled={isUserForRead || dashboard?.allCompanyList.length==0}
                       onChange={(e) => {
                         setFieldValue("companyId", e.value || null);
+                        companyEmployee(e.value)
+                        setFieldValue("employeeIdMapping",null)
 
                       }}
+                    
                       value={
-                        dashboard?.allCompanyList?.find(
-                          (option) => option?.value === values?.companyId
-                        ) || null
+                        dashboard?.allCompanyList?.length === 0
+                          ? { value: currentUser.companyId, label: currentUser.Company?.name }
+                        
+                          : dashboard?.allCompanyList?.find(
+                              (option) => option?.value === values?.companyId
+                            ) || null
                       }
+                      // value={
+                      //   dashboard?.allCompanyList?.find(
+                      //     (option) => option?.value === values?.companyId
+                      //   ) || null
+                      // }
                       options={dashboard?.allCompanyList}
 
 
@@ -306,12 +365,12 @@ export function FormEditForm({
                         setFieldValue("roleId", e.value || null);
                       }}
                       value={
-                        roles?.find(
+                        roles?.role?.find(
                           (option) => option.value === values.roleId
                         ) || null
                       }
 
-                      options={roles}
+                      options={roles?.role}
 
                       error={errors.roleId}
                       touched={touched.roleId}
@@ -339,10 +398,13 @@ export function FormEditForm({
                           (option) => option?.value === values?.employeeIdMapping
                         ) || null
                       }
-                      options={dashboard?.allEmployees}
+                      // options={dashboard?.allEmployees}
               
 
-
+                      options={[
+                        { value: null, label: 'Select...' }, // Adding "All" option with value empty string
+                        ...dashboard?.allEmployees.filter(x => x.value != values.Id), // Spread the rest of the menu options
+                      ]}
 
                       error={errors.employeeIdMapping}
                       touched={touched.employeeIdMapping}
