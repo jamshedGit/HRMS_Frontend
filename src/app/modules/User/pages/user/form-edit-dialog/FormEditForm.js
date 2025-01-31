@@ -14,23 +14,21 @@ import {
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
 import { getDateDiffInDays } from "../../../../../utils/common";
 
-// percentage: Yup.string().required("Required*"),
+
 const userEditSchema = Yup.object().shape({
-  // from_amount: Yup.string().required("Required*"),
+
 
   subsidiaryId: Yup.string()
   .nullable()
     .required(VALIDATION_MESSAGES.required),
 
-  // to_amount: Yup.string().required("Required*"),
+  
 
   employeeIdMapping: Yup.number()
     .nullable(),
 
 
-  // employeeName: Yup.string()
-  //   .nullable()
-  //   .required(VALIDATION_MESSAGES.required),
+
 
   deactiveflag: Yup.boolean()
     .nullable()
@@ -47,7 +45,7 @@ const userEditSchema = Yup.object().shape({
   password: Yup.string()
     .nullable()
     .min(5,"At least 5 characters are required")
-    .max(15,"At most 15 characters are required")
+    // .max(15,"At most 15 characters are required")
     .required(VALIDATION_MESSAGES.required),
 
   email: Yup.string()
