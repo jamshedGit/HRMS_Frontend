@@ -33,4 +33,5 @@ export const groupByOptions = [
   {label: 'Department Wise', value: 'departmentName'},
   {label: 'Grade Wise', value: 'gradeName'},
   {label: 'Payroll Group Wise', value: 'payrollGroup'},
+  {label: 'Payment Mode Wise', value: 'paymentModeName'},
 ]
