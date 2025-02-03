@@ -51,6 +51,7 @@ const formValidation = Yup.object().shape({
 
   overtime_working_day: Yup.number()
     .max(100, 'Value cannot be greater than 100')
+    .min(0, 'Value cannot be less than 0')
     .when('overtime_allowance', {
       is: (value) => value === true || value == 1,
       then: Yup.number().required(VALIDATION_MESSAGES.required),
@@ -58,6 +59,7 @@ const formValidation = Yup.object().shape({
     }),
   overtime_off_day: Yup.number()
     .max(100, 'Value cannot be greater than 100')
+    .min(0, 'Value cannot be less than 0')
     .when('overtime_allowance', {
       is: (value) => value === true || value == 1,
       then: Yup.number().required(VALIDATION_MESSAGES.required),
@@ -65,6 +67,7 @@ const formValidation = Yup.object().shape({
     }),
   overtime_holiday: Yup.number()
     .max(100, 'Value cannot be greater than 100')
+    .min(0, 'Value cannot be less than 0')
     .when('overtime_allowance', {
       is: (value) => value === true || value == 1,
       then: Yup.number().required(VALIDATION_MESSAGES.required),
@@ -100,6 +103,7 @@ export function BankEditForm({
   const [defAllowanceLimit, setDefaultAllowanceLimit] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [formValues, setFormValues] = useState(null);
+  const [salaryMethodDisabled, setsalaryMethodDisabled] = useState(true)
 
   useEffect(() => {
     if (!user.Id) {
@@ -124,6 +128,24 @@ export function BankEditForm({
       console.error('Error fetching data:', error);
     }
   }
+
+  const getSalaryMethod = async (subsidiaryId, setFieldValue)=> {
+    const response = await axios.post(`${USERS_URL}/policy/read-policy-by-subsidiaryId`, { subsidiaryId: subsidiaryId || 0 });
+      const salaryMethod = response?.data?.data?.[0].salaryMethod;
+      if(salaryMethod){
+        setFieldValue('salaryMethod',salaryMethod)
+        setsalaryMethodDisabled(true)
+        if (salaryMethod == "Basic to Gross") {
+          setFieldValue("basicFactor", "");
+          setDefaultAllowanceLimit("");
+        }
+      }
+      else{
+        setsalaryMethodDisabled(false)
+        setFieldValue('salaryMethod','')
+      }
+    }
+    
 
 
   useEffect(() => {
@@ -234,12 +256,11 @@ export function BankEditForm({
         newErrors[`calculation_type-${index}`] = VALIDATION_MESSAGES.required;
       }
       // Check if factorValue is required
-      if (!objValidate.factorValue && objValidate.amount <= 0) {
+      if(!objValidate.factorValue && (objValidate.calculation_type == "% Of Gross" || objValidate.calculation_type == "% Of Basic") ){
         newErrors[`factorValue-${index}`] = VALIDATION_MESSAGES.required;
       }
-
       // Check if amount is required
-      if (!objValidate.amount && objValidate.factorValue <= 0) {
+      if (!objValidate.amount && objValidate.calculation_type == "Fixed Amount") {
         newErrors[`amount-${index}`] = VALIDATION_MESSAGES.required;
       }
     });
@@ -384,6 +405,7 @@ export function BankEditForm({
                               dispatch(fetchAllEarningList(1, e.value, '', true)); // For Earning
                               dispatch(fetchAllDeductionList(2, e.value));
                               setDefaultEarningList([]);
+                              getSalaryMethod(e.value, setFieldValue)
                               //handlePaymenModeChanged(e)
                             }}
                             value={defSubsidiary || null}
@@ -500,6 +522,7 @@ export function BankEditForm({
                         onBlur={handleBlur}
                         style={{ display: "block" }}
                         autoComplete="off"
+                        disabled={salaryMethodDisabled}
                       >
                         <option value="-1" label="Select..." />
                         <option
@@ -881,12 +904,12 @@ export function BankEditForm({
                                     value={obj.amount}
                                     id={"amount-" + rightindex}
                                   ></input>
-                                </td>
                                 {deferrors[`amount-${rightindex}`] && (
                                   <div className="form-feedBack">
                                     {deferrors[`amount-${rightindex}`]}
                                   </div>
                                 )}
+                                </td>
                               </tr>
                             </>
                           )

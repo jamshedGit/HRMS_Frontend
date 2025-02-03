@@ -29,22 +29,22 @@ const formValidation = Yup.object().shape(
   {
 
     employeeId: Yup.string()
-      .required("Required*"),
+      .required(VALIDATION_MESSAGES.required),
     currencyId: Yup.string()
-      .required("Required*"),
+      .required(VALIDATION_MESSAGES.required),
     grossSalary: Yup.string()
-      .required("Required*")
+      .required(VALIDATION_MESSAGES.required)
       .matches(/^\d+$/, "Must contain only digits"), // Only digits validation
 
     basicSalary: Yup.string()
-      .required("Required*")
+      .required(VALIDATION_MESSAGES.required)
       .matches(/^\d+$/, "Must contain only digits"), // Only digits validation
 
     eobi_accNo: Yup.string()
       .matches(/^\d+$/, "Must contain only digits")// Only digits validation
       .when("eobi_member", {
         is: true, // Condition to check if eobi_member is true
-        then: Yup.string().required("Required"),
+        then: Yup.string().required(VALIDATION_MESSAGES.required),
         otherwise: Yup.string().nullable(), // Optional if eobi_member is false
       }),
 
@@ -52,7 +52,7 @@ const formValidation = Yup.object().shape(
       .matches(/^\d+$/, "Must contain only digits") // Only digits validation
       .when("pf_member", {
         is: true, // Condition to check if pf_member is true
-        then: Yup.string().required("Required"),
+        then: Yup.string().required(VALIDATION_MESSAGES.required),
         otherwise: Yup.string().nullable(), // Optional if pf_member is false
       }),
 
@@ -60,7 +60,7 @@ const formValidation = Yup.object().shape(
       .matches(/^\d+$/, "Must contain only digits") // Only digits validation
       .when("social_security_member", {
         is: true, // Condition to check if social_security_member is true
-        then: Yup.string().required("Required"),
+        then: Yup.string().required(VALIDATION_MESSAGES.required),
         otherwise: Yup.string().nullable(), // Optional if social_security_member is false
       }),
 
@@ -68,7 +68,7 @@ const formValidation = Yup.object().shape(
       .matches(/^\d+$/, "Must contain only digits") // Only digits validation
       .when("pension_member", {
         is: true, // Condition to check if pension_member is true
-        then: Yup.string().required("Required"),
+        then: Yup.string().required(VALIDATION_MESSAGES.required),
         otherwise: Yup.string().nullable(), // Optional if pension_member is false
       }),
 
@@ -83,7 +83,7 @@ const formValidation = Yup.object().shape(
       .max(new Date(), "Date cannot be in the future")
       .when("gratuity_member", {
         is: true, // Condition to check if gratuity_member is true
-        then: Yup.date().required("Required"),
+        then: Yup.date().required(VALIDATION_MESSAGES.required),
         otherwise: Yup.date().nullable(), // Optional if gratuity_member is false
       }),
 
@@ -92,7 +92,7 @@ const formValidation = Yup.object().shape(
       .max(new Date(), "Date cannot be in the future")
       .when("eobi_member", {
         is: true, // Condition to check if eobi_member is true
-        then: Yup.date().required("Required"),
+        then: Yup.date().required(VALIDATION_MESSAGES.required),
         otherwise: Yup.date().nullable(), // Optional if eobi_member is false
       }),
 
@@ -101,7 +101,7 @@ const formValidation = Yup.object().shape(
       .max(new Date(), "Date cannot be in the future")
       .when("pf_member", {
         is: true, // Condition to check if pf_member is true
-        then: Yup.date().required("Required"),
+        then: Yup.date().required(VALIDATION_MESSAGES.required),
         otherwise: Yup.date().nullable(), // Optional if pf_member is false
       }),
 
@@ -110,7 +110,7 @@ const formValidation = Yup.object().shape(
       .max(new Date(), "Date cannot be in the future")
       .when("social_security_member", {
         is: true, // Condition to check if social_security_member is true
-        then: Yup.date().required("Required"),
+        then: Yup.date().required(VALIDATION_MESSAGES.required),
         otherwise: Yup.date().nullable(), // Optional if social_security_member is false
       }),
 
@@ -119,11 +119,12 @@ const formValidation = Yup.object().shape(
       .max(new Date(), "Date cannot be in the future")
       .when("pension_member", {
         is: true, // Condition to check if pension_member is true
-        then: Yup.date().required("Required"),
+        then: Yup.date().required(VALIDATION_MESSAGES.required),
         otherwise: Yup.date().nullable(), // Optional if pension_member is false
       }),
     overtime_working_day: Yup.number()
       .max(100, 'Value cannot be greater than 100')
+      .min(0, 'Value cannot be less than 0')
       .when('overtime_allowance', {
         is: (value) => value === true || value === 1, // if select value is 2
         then: Yup.number().required(VALIDATION_MESSAGES.required),
@@ -131,6 +132,7 @@ const formValidation = Yup.object().shape(
       }),
     overtime_off_day: Yup.number()
       .max(100, 'Value cannot be greater than 100')
+      .min(0, 'Value cannot be less than 0')
       .when('overtime_allowance', {
         is: (value) => value === true || value === 1, // if select value is 2
         then: Yup.number().required(VALIDATION_MESSAGES.required),
@@ -138,6 +140,7 @@ const formValidation = Yup.object().shape(
       }),
     overtime_holiday: Yup.number()
       .max(100, 'Value cannot be greater than 100')
+      .min(0, 'Value cannot be less than 0')
       .when('overtime_allowance', {
         is: (value) => value === true || value === 1, // if select value is 2
         then: Yup.number().required(VALIDATION_MESSAGES.required),
@@ -598,19 +601,19 @@ export function BankEditForm({
     const newErrors = {};
     defMapEarningDeductionList.forEach((objValidate, index) => {
       if (!objValidate.earning_deduction_id) {
-        newErrors[`earning_deduction_id-${index}`] = 'Required*';
+        newErrors[`earning_deduction_id-${index}`] = VALIDATION_MESSAGES.required;
       }
       if (!objValidate.calculation_type) {
-        newErrors[`calculation_type-${index}`] = 'Required*';
+        newErrors[`calculation_type-${index}`] = VALIDATION_MESSAGES.required;
       }
       // Check if factorValue is required
-      if (!objValidate.factorValue && objValidate.amount <= 0) {
-        newErrors[`factorValue-${index}`] = 'Required*';
+      if (!objValidate.factorValue && (objValidate.calculation_type == "% Of Gross" || objValidate.calculation_type == "% Of Basic")) {
+        newErrors[`factorValue-${index}`] = VALIDATION_MESSAGES.required;
       }
 
       // Check if amount is required
-      if (!objValidate.amount && objValidate.factorValue <= 0) {
-        newErrors[`amount-${index}`] = 'Required*';
+      if (!objValidate.amount && objValidate.calculation_type == "Fixed Amount") {
+        newErrors[`amount-${index}`] = VALIDATION_MESSAGES.required;
       }
     });
 
@@ -786,7 +789,7 @@ export function BankEditForm({
                       {defMapEarningDeductionList?.map((obj, rightindex) => (
                         obj.transactionType == 'Earning' && obj.isPartOfGrossSalary == true &&
                         <><tr>
-                          <td id={rightindex} onClick={!Boolean(currentSalaryMethod)  && deleteRow }>{!Boolean(currentSalaryMethod) && 'Delete'} </td>
+                          <td id={rightindex} onClick={!Boolean(currentSalaryMethod) && deleteRow}>{!Boolean(currentSalaryMethod) && 'Delete'} </td>
                           <td>
                             <select
                               disabled={Boolean(currentSalaryMethod)}
@@ -828,9 +831,9 @@ export function BankEditForm({
                           </td>
                           {/* <td>{obj.transactionType}</td> */}
                           <td>
-                              
+
                             <input disabled style={{ width: "100px" }} type="number"
-                            
+
                               onChange={(e) => {
                                 handleFieldChanged(e);
                                 setErrors((prev) => ({ ...prev, [`factorValue-${rightindex}`]: '' })); // Clear error on change
@@ -1709,10 +1712,10 @@ export function BankEditForm({
             <Modal.Footer>
 
               {
-                !isUserForRead && Boolean(id) && !Boolean(user.approved) && 
+                !isUserForRead && Boolean(id) && !Boolean(user.approved) &&
                 <button
                   type="button"
-                  onClick={()=> approveSalary(id)}
+                  onClick={() => approveSalary(id)}
                   className="btn btn-green btn-elevate"
                 >
                   Approve
