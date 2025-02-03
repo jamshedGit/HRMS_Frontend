@@ -34,7 +34,7 @@ export function FormUIProvider({ FormUIEvents, children }) {
   //   Id:"",
   //   subsidiary: "",
   //   account: "",
-  //   human_resource_role: "",
+ 
   //   emp_loan_account: "",
   //   installment_deduction_percentage:"",
   //   installment_deduction_bases:"",
@@ -47,7 +47,7 @@ export function FormUIProvider({ FormUIEvents, children }) {
     Id: "",
         subsidiaryId: "",
         accountId:"",
-        // human_resource_role: "",
+ 
         emp_loan_account: "",
         installment_deduction_percentage: 0,
         installment_deduction_basis_type:null,

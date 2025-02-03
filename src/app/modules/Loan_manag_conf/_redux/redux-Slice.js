@@ -5,7 +5,7 @@ const initialLoanManagConfigState = {
     actionsLoading: null,
     totalCount: 0,
     entities: null,
-    roles: null,
+ 
     userStatusTypes: null,
     userForEdit: undefined,
     lastError: null,

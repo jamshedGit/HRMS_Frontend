@@ -8,7 +8,7 @@ import * as actions from "../../../_redux/redux-Actions";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import {
   fetchAllFormsMenu,
-  fetchAllHumanResourceRole,
+
   fetchAllSubsidiaryData,
 } from "../../../../../../_metronic/redux/dashboardActions";
 import { amountLimit } from "../../../../../utils/common";
@@ -19,7 +19,7 @@ import { toast } from "react-toastify";
 const loanManagementSchema = Yup.object().shape({
   subsidiaryId: Yup.number().required(VALIDATION_MESSAGES.required),
   accountId: Yup.number().required(VALIDATION_MESSAGES.required),
-  // human_resource_role: Yup.number().required("Human Resource Role is required"),
+
   emp_loan_account: Yup.number().required(VALIDATION_MESSAGES.required),
   // installment_deduction_percentage: Yup.number()
   //   .min(0, "Must be at least 0")
@@ -104,7 +104,7 @@ export function FormEditForm({
       // dispatch(fetchAllFormsMenu(45, "allAccountList")); // For All Accounts
       dispatch(fetchAllFormsMenu(45, "allAccountList", null, true));
       dispatch(actions.getAllLoanType()); // For All Loan Types
-      dispatch(fetchAllHumanResourceRole("allHumanResourceRoleList"));
+      
     }
   }, [dispatch, user.Id]);
 
@@ -235,31 +235,7 @@ export function FormEditForm({
                     />
                   </div>
 
-                  {/* Human Resource Role Field */}
-                  {/* <div className="col-12 col-md-6 mt-3">
-                    <SearchSelect
-                      name="human_resource_role"
-                      label={
-                        <span>
-                          Human Resource Role
-                          <span style={{ color: "red" }}>*</span>
-                        </span>
-                      }
-                      isDisabled={isUserForRead}
-                      onChange={(e) => {
-                        setFieldValue("human_resource_role", e.value || null);
-                      }}
-                      value={
-                        dashboard.allHumanResourceRoleList.find(
-                          (option) =>
-                            option.value === values.human_resource_role
-                        ) || null
-                      }
-                      options={dashboard.allHumanResourceRoleList}
-                      error={errors.human_resource_role}
-                      touched={touched.human_resource_role}
-                    />
-                  </div> */}
+                  
 
                   {/* Employee Loan Account Field */}
                   <div className="col-12 col-md-6 mt-3">
