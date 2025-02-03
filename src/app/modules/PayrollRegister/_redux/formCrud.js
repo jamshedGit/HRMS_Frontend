@@ -51,3 +51,16 @@ export async function generateExcel(body) {
     responseType:'arraybuffer'
   });
 }
+
+/**
+ * 
+ * Generate payroll register Excel
+ * 
+ * @param {Object} body 
+ * @returns res
+ */
+export async function generateBankAdvice(body) {
+  return axios.post(`${USERS_URL}/payroll_register/read-all-bank-advice-excel`, body,{
+    responseType:'arraybuffer'
+  });
+}
