@@ -8,7 +8,6 @@ import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect"
 import {
   fetchAllComapnyData,
   fetchAllFormsMenu,
-  fetchAllHumanResourceRole,
   fetchAllSubsidiaryData,fetchAllActiveEmployees
 } from "../../../../../../_metronic/redux/dashboardActions";
 import { VALIDATION_MESSAGES } from "../../../../../utils/constants";
@@ -255,7 +254,7 @@ export function FormEditForm({
                       // })()}
                     
                       
-                      isDisabled={isUserForRead || dashboard?.allCompanyList.length==0}
+                      isDisabled={id || dashboard?.allCompanyList.length==0}
                       onChange={(e) => {
                         setFieldValue("companyId", e.value || null);
                         companyEmployee(e.value)

@@ -8,7 +8,6 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import {
   fetchAllFormsMenu,
-  fetchAllHumanResourceRole,
   fetchAllPayrollMonthYearList,
   fetchAllSubsidiaryData,
 } from "../../../../../../_metronic/redux/dashboardActions";
