@@ -376,6 +376,7 @@ export function DesignationEditForm({
   const [imagePolicy, setImagePolicy] = useState(false)
   const [isImageReq, setIsImageReq] = useState(false)
   const [imgAlreadySet, setImgAlreadySet] = useState(false)
+  const [allEmpTypes, setAllEmpTypes] = useState([])
   const scrollRef=useRef(null);
   //off for temp
   // useEffect(() => {
@@ -483,6 +484,8 @@ export function DesignationEditForm({
       dispatch(fetchAllEmployeeShifts('allEmployeeShifts'));
 
       dispatch(fetchAllEmployeesWithNoPermissionData('allEmployeesWithNoPermissionList'));
+      
+      dispatch(fetchAllFormsMenu(377, "allEmpTypeDynamicChildMenus")); 
     }
   }, [dispatch]);
 
@@ -795,11 +798,20 @@ export function DesignationEditForm({
 
 
     setDefaultChildEmpTypeMenus(
-      dashboard.allEmpTypeChildMenus &&
-      dashboard.allEmpTypeChildMenus.filter((item) => {
-        return item.value === emptypeId;
-      })
-    );
+ 
+      // dashboard.allEmpTypeChildMenus &&
+
+      // dashboard.allEmpTypeChildMenus.filter((item) => {
+      //   return item.value === emptypeId;
+      // })
+     [
+        ...dashboard.allEmpTypeDynamicChildMenus,
+        ...dashboard.allEmpTypeChildMenus
+      ].filter(item => item.value === emptypeId));
+
+      // ...dashboard.allEmpTypeChildMenus.filter((item) => {return item.value === emptypeId}),
+ 
+   
 
   }, [user?.employeeTypeId, dashboard.employeeTypeId]);
 
@@ -1955,7 +1967,11 @@ export function DesignationEditForm({
                           value={(defchildEmptypeMenus || null)}
                           error={errors.employeeTypeId}
                           touched={touched.employeeTypeId}
-                          options={dashboard.allEmpTypeChildMenus}
+                          // options={dashboard.allEmpTypeChildMenus}
+                          options={[
+                            ...dashboard.allEmpTypeDynamicChildMenus,
+                            ...dashboard.allEmpTypeChildMenus
+                          ]}
                         />
                       </div>
 
