@@ -103,6 +103,7 @@ export function BankEditForm({
   const [defAllowanceLimit, setDefaultAllowanceLimit] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [formValues, setFormValues] = useState(null);
+  const [salaryMethodDisabled, setsalaryMethodDisabled] = useState(true)
 
   useEffect(() => {
     if (!user.Id) {
@@ -127,6 +128,24 @@ export function BankEditForm({
       console.error('Error fetching data:', error);
     }
   }
+
+  const getSalaryMethod = async (subsidiaryId, setFieldValue)=> {
+    const response = await axios.post(`${USERS_URL}/policy/read-policy-by-subsidiaryId`, { subsidiaryId: subsidiaryId || 0 });
+      const salaryMethod = response?.data?.data?.[0].salaryMethod;
+      if(salaryMethod){
+        setFieldValue('salaryMethod',salaryMethod)
+        setsalaryMethodDisabled(true)
+        if (salaryMethod == "Basic to Gross") {
+          setFieldValue("basicFactor", "");
+          setDefaultAllowanceLimit("");
+        }
+      }
+      else{
+        setsalaryMethodDisabled(false)
+        setFieldValue('salaryMethod','')
+      }
+    }
+    
 
 
   useEffect(() => {
@@ -386,6 +405,7 @@ export function BankEditForm({
                               dispatch(fetchAllEarningList(1, e.value, '', true)); // For Earning
                               dispatch(fetchAllDeductionList(2, e.value));
                               setDefaultEarningList([]);
+                              getSalaryMethod(e.value, setFieldValue)
                               //handlePaymenModeChanged(e)
                             }}
                             value={defSubsidiary || null}
@@ -502,6 +522,7 @@ export function BankEditForm({
                         onBlur={handleBlur}
                         style={{ display: "block" }}
                         autoComplete="off"
+                        disabled={salaryMethodDisabled}
                       >
                         <option value="-1" label="Select..." />
                         <option
