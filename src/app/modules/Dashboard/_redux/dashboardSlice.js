@@ -57,6 +57,7 @@ const initialDashboardState = {
   allHolidayTypeList:[],
   allEmployeeStatus:[],
   allEmployeesWithNoPermissionList:[],
+  allEmpTypeDynamicChildMenus:[],
 };
 
 export const callTypes = {
