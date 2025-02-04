@@ -1,12 +1,13 @@
 
 import React, { useEffect, useState } from "react";
-import { Modal } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { DatePickerField, Input } from "../../../../../../_metronic/_partials/controls"; // Adjust import as needed
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import {
+  fetchAllEmployeesWithNoPermissionData,
   fetchAllFormsMenu,
   fetchAllPayrollMonthYearList,
   fetchAllSubsidiaryData,
@@ -46,19 +47,24 @@ export function FormEditForm({
   isUserForRead,
   enableLoading,
   loading,
-  setIds, formUIProps
+  setIds, formUIProps, disbaleLoading
 }) {
   const dispatch = useDispatch();
   const { dashboard } = useSelector((state) => state);
   const [isAfterResult, setIsAfterResult] = useState(false)
+  const [isStopSalModalOpen, setIsStopSalModalOpen] = useState(false)
+  const [selectedEmployees, setSelectedEmployees] = useState([]);
+
+
+
+  const [isStopLoanModalOpen, setIsStopLoanModalOpen] = useState(false)
+  const [selectedLoanEmployees, setSelectedLoanEmployees] = useState([]);
   useEffect(() => {
     if (!user.Id) {
-      // dispatch(fetchAllFormsMenu(133, "allSubidiaryList")); // For All Subsidiaries
+
       dispatch(fetchAllSubsidiaryData("allSubsidiaryList"));
       dispatch(fetchAllFormsMenu(127, "allPayrolGroupList"));
-      // const key = "allPayrollMonthYearList";  // The key parameter
-      // dispatch(fetchAllPayrollMonthYearList("allPayrollMonthYearList"));
-      //  dispatch(fetchAllPayrollMonthYearList(employeeId, key));
+
 
 
     }
@@ -83,6 +89,20 @@ export function FormEditForm({
         payroll_groupId, payroll_monthId
       };
       await dispatch(actions.fetchPayrollGroupDetails(body));
+    }
+  };
+
+
+
+  const createPayrollStop_Salary = async (subsidiaryId, payroll_groupId, payroll_monthId, selectedEmployees) => {
+    if (subsidiaryId && payroll_monthId) {
+      // Dispatch action to fetch payroll group details
+      let body = {
+        subsidiaryId,
+        payroll_groupId, payroll_monthId, selectedEmployees
+      };
+      await dispatch(actions.createPayrollStop_Salary(body, setSelectedEmployees, disbaleLoading, handleModalClose));
+      payrollGroupDetails(subsidiaryId, payroll_groupId, payroll_monthId)
     }
   };
 
@@ -121,6 +141,73 @@ export function FormEditForm({
 
   }
 
+  const handleModalClose = () => {
+    setIsStopSalModalOpen(false)
+    setSelectedEmployees([])
+  };
+  const handleModalYes = () => {
+    setIsStopSalModalOpen(true)
+  };
+
+
+
+  const handleLoanModalClose = () => {
+    setIsStopLoanModalOpen(false)
+    setSelectedLoanEmployees([])
+  };
+  const handleLoanModalYes = () => {
+  
+    setIsStopLoanModalOpen(true)
+  };
+
+  useEffect(() => {
+
+    dispatch(fetchAllEmployeesWithNoPermissionData('allEmployeesWithNoPermissionList'));
+
+  }, [dispatch]);
+
+
+  const handleCheckboxChange = (value) => {
+
+    setSelectedEmployees((prev) => {
+      if (prev.includes(value)) {
+        // If the employee is already selected, remove it
+        return prev.filter((id) => id !== value);
+      } else {
+        // If the employee is not selected, add it
+        return [...prev, value];
+      }
+    });
+  };
+
+
+
+  const handleLoanCheckboxChange = (value) => {
+
+    setSelectedLoanEmployees((prev) => {
+      if (prev.includes(value)) {
+        // If the employee is already selected, remove it
+        return prev.filter((id) => id !== value);
+      } else {
+        // If the employee is not selected, add it
+        return [...prev, value];
+      }
+    });
+  };
+
+ 
+
+  useEffect(() => {
+    setSelectedEmployees(
+      currentState?.payroll_group_details?.stop_salary_employees_list?.map(employee => employee.employeeId)
+    );
+    setSelectedLoanEmployees(
+      currentState?.payroll_group_details?.stop_loan_employees_list?.map(employee => employee.employeeId)
+    );
+
+
+
+  }, [currentState?.payroll_group_details]);
 
 
   return (
@@ -138,13 +225,134 @@ export function FormEditForm({
         saveForm(values, clearForm);
       }}
     >
-      {({ handleSubmit, errors, touched, values, handleReset, setFieldValue }) => (
+      {({ handleSubmit, errors, touched, values, handleReset, setFieldValue, handleChange }) => (
         <>
           <Modal.Body className="overlay overlay-block cursor-default">
             {actionsLoading && (
               <div className="overlay-layer bg-transparent">
                 <div className="spinner spinner-lg spinner-success" />
               </div>
+            )}
+
+            {isStopSalModalOpen && (
+              <>
+                <Modal show={isStopSalModalOpen} onHide={handleModalClose} style={{ zIndex: '99999' }}>
+                  <Modal.Header closeButton>
+                    <Modal.Title>Stop Salary</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>   <Form className="form form-label-right">
+                    <fieldset disabled={isUserForRead}>
+
+
+                      {/* allEmployeesWithNoPermissionList */}
+
+
+                      <div className="from-group row">
+
+
+                        <div className="col-12 col-md-12 mt-3">
+                          Employee
+                          <div style={{ backgroundColor: "#ffffff", height: "50vh", padding: "10px", overflow: "scroll" }}>
+
+                            <div className="multi-select">
+                              <div className="dropdown-label"></div>
+                              <div className="dropdown-options" style={{ fontSize: "12px", fontWeight: "bold", padding: "5px" }}>
+                                {currentState?.payroll_group_details?.employees_list?.map((option) => (
+                                  <div key={option.Id} className="dropdown-option">
+                                    <input style={{ width: "25px" }}
+                                      name="employeeId"
+                                      type="checkbox"
+                                      value={option.Id}
+                                      checked={selectedEmployees.includes(option.Id)}
+
+                                      onChange={() => handleCheckboxChange(option.Id)}
+                                    />
+                                    {option.fullName}
+                                  </div>
+                                ))}
+                                {/* {errors.employeeId && touched.employeeId && (
+                                <div className="invalid-text">{errors.employeeId}</div>
+                              )} */}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+
+
+
+                    </fieldset>
+                  </Form></Modal.Body>
+                  <Modal.Footer>
+                    <Button variant="secondary" onClick={handleModalClose}>No</Button>
+                    <Button variant="primary" onClick={() => createPayrollStop_Salary(values.subsidiaryId, values.payroll_groupId, values.payroll_monthId, selectedEmployees)}>Yes</Button>
+                  </Modal.Footer>
+                </Modal>
+
+
+
+              </>
+            )}
+
+            {isStopLoanModalOpen && (
+              <>
+                <Modal show={isStopLoanModalOpen} onHide={handleLoanModalClose} style={{ zIndex: '99999' }}>
+                  <Modal.Header closeButton>
+                    <Modal.Title>Stop Loan</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>   <Form className="form form-label-right">
+                    <fieldset disabled={isUserForRead}>
+
+
+                      {/* allEmployeesWithNoPermissionList */}
+
+
+                      <div className="from-group row">
+
+
+                        <div className="col-12 col-md-12 mt-3">
+                          Employee
+                          <div style={{ backgroundColor: "#ffffff", height: "50vh", padding: "10px", overflow: "scroll" }}>
+
+                            <div className="multi-select">
+                              <div className="dropdown-label"></div>
+                              <div className="dropdown-options" style={{ fontSize: "12px", fontWeight: "bold", padding: "5px" }}>
+                                {currentState?.payroll_group_details?.employees_list?.map((option) => (
+                                  <div key={option.Id} className="dropdown-option">
+                                    <input style={{ width: "25px" }}
+                                      name="employeeId"
+                                      type="checkbox"
+                                      value={option.Id}
+                                      checked={selectedLoanEmployees.includes(option.Id)}
+
+                                      onChange={() => handleLoanCheckboxChange(option.Id)}
+                                    />
+                                    {option.fullName}
+                                  </div>
+                                ))}
+                   </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+
+
+
+                    </fieldset>
+                  </Form></Modal.Body>
+                  <Modal.Footer>
+                    <Button variant="secondary" onClick={handleModalClose}>No</Button>
+                    <Button variant="primary" onClick={() => createPayrollStop_Salary(values.subsidiaryId, values.payroll_groupId, values.payroll_monthId, selectedEmployees)}>Yes</Button>
+                  </Modal.Footer>
+                </Modal>
+
+
+
+              </>
             )}
             <Form className="form form-label-right">
               <fieldset disabled={isUserForRead}>
@@ -201,11 +409,7 @@ export function FormEditForm({
                         checkPayroll_Employees(setFieldValue, values.subsidiaryId, e.value, values.payroll_monthId)
                         setIsAfterResult(false)
                       }}
-                      // value={
-                      //   dashboard?.allPayrolGroupList?.find(
-                      //     (option) => option.value === values.payroll_groupId
-                      //   ) || null
-                      // }
+
 
                       value={
 
@@ -223,10 +427,7 @@ export function FormEditForm({
                         ...dashboard?.allPayrolGroupList, // Spread the rest of the menu options
                       ]}
 
-                      // options={dashboard.allSubidiaryList.map(option => ({
-                      //   label: `${option.label} (${option.value})`, // Adding the value to the label
-                      //   value: option.value,
-                      // }))}
+
                       error={errors.payroll_groupId}
                       touched={touched.payroll_groupId}
                     />
@@ -261,14 +462,40 @@ export function FormEditForm({
                           (option) => option.isActive
                         ) || []
                       }
-                      // options={dashboard.allSubidiaryList.map(option => ({
-                      //   label: `${option.label} (${option.value})`, // Adding the value to the label
-                      //   value: option.value,
-                      // }))}
+
                       error={errors.payroll_monthId}
                       touched={touched.payroll_monthId}
                     />
                   </div>
+
+
+                  {currentState?.payroll_group_details && (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => handleModalYes()}
+                        className="m-3 btn btn-red"
+
+                      >
+                        Stop Salary
+                        {loading && (
+                          <span className="ml-3 mr-3 spinner spinner-white"></span>
+                        )}
+                      </button>
+
+                      <button
+                        onClick={()=>handleLoanModalYes()}
+                        type="button"
+                        className="m-3 btn btn-red"
+
+                      >
+                        Stop Loan
+                        {loading && (
+                          <span className="ml-3 mr-3 spinner spinner-white"></span>
+                        )}
+                      </button>
+                    </>
+                  )}
 
                   <div className='accordion-header-btn w-100  d-flex justify-content-left bg-primary m-4'>
                     <h6 className="text-white p-5">Before Process - Result</h6>
@@ -375,7 +602,7 @@ export function FormEditForm({
             {/* Cancel / Ok Button */}
             {/* checkPayroll_EmployeesExist */}
 
-            {checkPayroll_EmployeesExist?.length>0 && (
+            {checkPayroll_EmployeesExist?.length > 0 && (
 
               <>
 
