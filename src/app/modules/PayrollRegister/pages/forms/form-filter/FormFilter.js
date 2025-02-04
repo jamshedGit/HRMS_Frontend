@@ -26,7 +26,7 @@ const prepareFilter = (queryParams, values) => {
   return newQueryParams
 }
 
-export function FormFilter({ loading, dispatch, pdfLoading, registerLoading }) {
+export function FormFilter({ loading, dispatch, pdfLoading, registerLoading, adviceLoading }) {
 
   const FormUIContext = useFormUIContext()
 
@@ -113,6 +113,12 @@ export function FormFilter({ loading, dispatch, pdfLoading, registerLoading }) {
     const newQueryParams = prepareFilter(formUIProps.queryParams, values);
     const labels = getLabels(values);
     dispatch(actions.generateRegisterExcel(newQueryParams.filter, document, labels));
+  }
+
+  const getBankAdvice = (values) => {
+    const newQueryParams = prepareFilter(formUIProps.queryParams, values);
+    const labels = getLabels(values);
+    dispatch(actions.generateBankAdvice(newQueryParams.filter, document, labels));
   }
 
   return (
@@ -427,10 +433,14 @@ export function FormFilter({ loading, dispatch, pdfLoading, registerLoading }) {
                     <div className="from-group row">
                       <div className="col-12 col-md-4 mt-11">
                         <button
-                        onClick={(e) => { e.preventDefault()}}
+                        onClick={() => { getBankAdvice(values) }}
+                        disabled={adviceLoading}
                           className="btn btn-secondary"
                         >
                           Generate Payment Advice
+                          {adviceLoading && (
+                            <span className="ml-3 mr-3 spinner spinner-white"></span>
+                          )}
                         </button>
                       </div>
                     </div>
