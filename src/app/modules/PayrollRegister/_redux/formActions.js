@@ -50,8 +50,10 @@ export const generatePayslip = (filter, document, labels = {}) => async (dispatc
     })
     .catch((error) => {
       error.clientMessage = "Can't generate Payslip";
+      const decodedData = new TextDecoder().decode(error.response.data);
+      const jsonData = JSON.parse(decodedData);
       dispatch(actions.catchError({ error, callType: callTypes.pdf }));
-      toast.error(error?.response?.status == 400 ? 'Please provide Subsidiary and Month' : error.clientMessage, {
+      toast.error(error?.response?.status == 400 ? 'Please provide Subsidiary and Month' : jsonData.message, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -90,9 +92,11 @@ export const generateRegisterPdf = (filter, document, labels = {}) => async (dis
       document.body.removeChild(link);
     })
     .catch((error) => {
+      const decodedData = new TextDecoder().decode(error.response.data);
+      const jsonData = JSON.parse(decodedData);
       error.clientMessage = "Can't generate Register";
       dispatch(actions.catchError({ error, callType: callTypes.register }));
-      toast.error(error?.response?.status == 400 ? 'Please provide Subsidiary and Month' : error.clientMessage, {
+      toast.error(error?.response?.status == 400 ? 'Please provide Subsidiary and Month' : jsonData?.message, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -131,8 +135,10 @@ export const generateRegisterExcel = (filter, document, labels = {}) => async (d
     })
     .catch((error) => {
       error.clientMessage = "Can't generate Register";
+      const decodedData = new TextDecoder().decode(error.response.data);
+      const jsonData = JSON.parse(decodedData);
       dispatch(actions.catchError({ error, callType: callTypes.registerExcel }));
-      toast.error(error?.response?.status == 400 ? 'Please provide Subsidiary and Month' : error.clientMessage, {
+      toast.error(error?.response?.status == 400 ? 'Please provide Subsidiary and Month' : jsonData.message, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -171,8 +177,10 @@ export const generateBankAdvice = (filter, document, labels = {}) => async (disp
     })
     .catch((error) => {
       error.clientMessage = "Can't generate Advice";
+      const decodedData = new TextDecoder().decode(error.response.data);
+      const jsonData = JSON.parse(decodedData);
       dispatch(actions.catchError({ error, callType: callTypes.bankAdvice }));
-      toast.error(error?.response?.status == 400 ? 'Please provide Subsidiary and Month' : error.clientMessage, {
+      toast.error(error?.response?.status == 400 ? 'Please provide Subsidiary and Month' : jsonData.message, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
