@@ -143,3 +143,43 @@ export const generateRegisterExcel = (filter, document, labels = {}) => async (d
       });
     });
 };
+
+/**
+ * 
+ * Fetch Bank Advice from server as xlsx
+ * 
+ * @param {Object} filter 
+ * @param {Document} document 
+ * @param {Object} labels 
+ * @returns 
+ */
+export const generateBankAdvice = (filter, document, labels = {}) => async (dispatch) => {
+  dispatch(actions.startCall({ callType: callTypes.bankAdvice }));
+  return requestFromServer.generateBankAdvice({ ...filter, labels })
+    .then((res) => {
+      const pdfBlob = new Blob([res.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+
+      // Trigger file download
+      const link = document.createElement('a');
+      link.href = pdfUrl;
+      link.setAttribute('download', 'bank_advice.xlsx');
+      document.body.appendChild(link);
+      link.click();
+      dispatch(actions.adviceFetched({}));
+      document.body.removeChild(link);
+    })
+    .catch((error) => {
+      error.clientMessage = "Can't generate Advice";
+      dispatch(actions.catchError({ error, callType: callTypes.bankAdvice }));
+      toast.error(error?.response?.status == 400 ? 'Please provide Subsidiary and Month' : error.clientMessage, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    });
+};
