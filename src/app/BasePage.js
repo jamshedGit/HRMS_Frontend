@@ -82,6 +82,7 @@ const PayrollRegister = lazy(() => import("./modules/PayrollRegister/pages/index
 const UserModule = lazy(() => import("./modules/User/pages/index"));
 const UploadPage = lazy(() => import("./modules/UploadPage/pages/index"));
 const passwordModule = lazy(() => import("./modules/Reset_Password/pages/index"));
+const EmployeeRegister = lazy(() => import("./modules/EmployeeRegister/pages/index"));
 const ROUTES = {
   settings: SettingsPage,
   users: UserManagment,
@@ -151,7 +152,8 @@ const ROUTES = {
   payroll_register :PayrollRegister,
   user:UserModule,
   upload :UploadPage,
-  password:passwordModule
+  password:passwordModule,
+  employee_register:EmployeeRegister,
 };
 
 export default function BasePage() {
