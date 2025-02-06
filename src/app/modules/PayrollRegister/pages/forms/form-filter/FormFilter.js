@@ -26,7 +26,7 @@ const prepareFilter = (queryParams, values) => {
   return newQueryParams
 }
 
-export function FormFilter({ loading, dispatch, pdfLoading, registerLoading, adviceLoading }) {
+export function FormFilter({ loading, dispatch, pdfLoading, registerLoading, adviceLoading, registerExcelLoading }) {
 
   const FormUIContext = useFormUIContext()
 
@@ -413,12 +413,12 @@ export function FormFilter({ loading, dispatch, pdfLoading, registerLoading, adv
 
                         <button
                           onClick={() => { getExcel(values) }}
-                          disabled={registerLoading}
+                          disabled={registerExcelLoading}
                           type="button"
                           className="btn btn-secondary btn-elevate"
                         >
                           Generate Register (Excel)
-                          {registerLoading && (
+                          {registerExcelLoading && (
                             <span className="ml-3 mr-3 spinner spinner-white"></span>
                           )}
                         </button>

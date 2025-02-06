@@ -114,7 +114,7 @@ export const generateRegisterPdf = (filter, document, labels = {}) => async (dis
  * @returns 
  */
 export const generateRegisterExcel = (filter, document, labels = {}) => async (dispatch) => {
-  dispatch(actions.startCall({ callType: callTypes.register }));
+  dispatch(actions.startCall({ callType: callTypes.registerExcel }));
   return requestFromServer.generateExcel({ ...filter, labels })
     .then((res) => {
       const pdfBlob = new Blob([res.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
@@ -126,12 +126,12 @@ export const generateRegisterExcel = (filter, document, labels = {}) => async (d
       link.setAttribute('download', 'payroll_register.xlsx');
       document.body.appendChild(link);
       link.click();
-      dispatch(actions.registerFetched({}));
+      dispatch(actions.registerExcelFetched({}));
       document.body.removeChild(link);
     })
     .catch((error) => {
       error.clientMessage = "Can't generate Register";
-      dispatch(actions.catchError({ error, callType: callTypes.register }));
+      dispatch(actions.catchError({ error, callType: callTypes.registerExcel }));
       toast.error(error?.response?.status == 400 ? 'Please provide Subsidiary and Month' : error.clientMessage, {
         position: "top-right",
         autoClose: 5000,
