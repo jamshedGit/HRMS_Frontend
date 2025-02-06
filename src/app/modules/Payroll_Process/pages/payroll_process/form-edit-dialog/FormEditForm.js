@@ -54,6 +54,7 @@ export function FormEditForm({
   const [isAfterResult, setIsAfterResult] = useState(false)
   const [isStopSalModalOpen, setIsStopSalModalOpen] = useState(false)
   const [selectedEmployees, setSelectedEmployees] = useState([]);
+  const [selectedLoans, setSelectedLoans] = useState([]);
 
 
 
@@ -82,6 +83,7 @@ export function FormEditForm({
 
 
   const payrollGroupDetails = async (subsidiaryId, payroll_groupId, payroll_monthId) => {
+    console.log("payroll_monthId111",payroll_monthId)
     if (subsidiaryId && payroll_monthId) {
       // Dispatch action to fetch payroll group details
       let body = {
@@ -106,6 +108,31 @@ export function FormEditForm({
     }
   };
 
+  const createPayrollStop_Loan = async (
+    subsidiaryId,
+    payroll_groupId,
+    payroll_monthId,
+    selectedLoans
+  ) => {
+    if (subsidiaryId && payroll_monthId) {
+      // Dispatch action to fetch payroll group details
+      let body = {
+        subsidiaryId,
+        payroll_groupId,
+        payroll_monthId,
+        selectedLoans,
+      };
+      await dispatch(
+        actions.createPayrollStop_Loan(
+          body,
+          setSelectedLoans,
+          disbaleLoading,
+          handleLoanModalClose
+        )
+      );
+      payrollGroupDetails(subsidiaryId, payroll_groupId, payroll_monthId);
+    }
+  };
 
   useEffect(() => {
     if (currentState?.payroll_group_details) {
@@ -156,7 +183,7 @@ export function FormEditForm({
     setSelectedLoanEmployees([])
   };
   const handleLoanModalYes = () => {
-  
+
     setIsStopLoanModalOpen(true)
   };
 
@@ -182,31 +209,28 @@ export function FormEditForm({
 
 
 
-  const handleLoanCheckboxChange = (value) => {
+  const handleLoanCheckboxChange = (data) => {
+    setSelectedLoans((prev) => {
+      const exists = prev.some((item) => item.loan_request_detailId === data.loan_request_detailId);
 
-    setSelectedLoanEmployees((prev) => {
-      if (prev.includes(value)) {
-        // If the employee is already selected, remove it
-        return prev.filter((id) => id !== value);
+      if (exists) {
+        // Deselect the loan
+        return prev.filter((item) => item.loan_request_detailId !== data.loan_request_detailId);
       } else {
-        // If the employee is not selected, add it
-        return [...prev, value];
+        // Select the loan
+        return [...prev, data];
       }
     });
   };
 
- 
-
   useEffect(() => {
     setSelectedEmployees(
-      currentState?.payroll_group_details?.stop_salary_employees_list?.map(employee => employee.employeeId)
+      currentState?.payroll_group_details?.stop_salary_employees_list?.map(
+        (employee) => employee.employeeId
+      )
     );
-    setSelectedLoanEmployees(
-      currentState?.payroll_group_details?.stop_loan_employees_list?.map(employee => employee.employeeId)
-    );
-
-
-
+    setSelectedLoans(
+      currentState?.payroll_group_details?.stop_loan_employees_list);
   }, [currentState?.payroll_group_details]);
 
 
@@ -287,7 +311,10 @@ export function FormEditForm({
                   </Form></Modal.Body>
                   <Modal.Footer>
                     <Button variant="secondary" onClick={handleModalClose}>No</Button>
-                    <Button variant="primary" onClick={() => createPayrollStop_Salary(values.subsidiaryId, values.payroll_groupId, values.payroll_monthId, selectedEmployees)}>Yes</Button>
+                    {currentState?.payroll_group_details?.employees_list.length > 0 && (
+                      <Button variant="primary" onClick={() => createPayrollStop_Salary(values.subsidiaryId, values.payroll_groupId, values.payroll_monthId, selectedEmployees)}>Yes</Button>
+                    )}
+
                   </Modal.Footer>
                 </Modal>
 
@@ -298,60 +325,107 @@ export function FormEditForm({
 
             {isStopLoanModalOpen && (
               <>
-                <Modal show={isStopLoanModalOpen} onHide={handleLoanModalClose} style={{ zIndex: '99999' }}>
+                <Modal
+                  show={isStopLoanModalOpen}
+                  onHide={handleLoanModalClose}
+                  style={{ zIndex: "99999" }}
+                >
                   <Modal.Header closeButton>
                     <Modal.Title>Stop Loan</Modal.Title>
                   </Modal.Header>
-                  <Modal.Body>   <Form className="form form-label-right">
-                    <fieldset disabled={isUserForRead}>
+                  <Modal.Body>
+                    {" "}
+                    <Form className="form form-label-right">
+                      <fieldset disabled={isUserForRead}>
+                        {/* allEmployeesWithNoPermissionList */}
 
+                        <div className="from-group row">
+                          <div className="col-12 col-md-12 mt-3">
+                            Employee
+                            <div
+                              style={{
+                                backgroundColor: "#ffffff",
+                                height: "50vh",
+                                padding: "10px",
+                                overflow: "scroll",
+                              }}
+                            >
+                              <div className="multi-select">
+                                <div className="dropdown-label"></div>
+                                <div
+                                  className="dropdown-options"
+                                  style={{
+                                    fontSize: "12px",
+                                    fontWeight: "bold",
+                                    padding: "5px",
+                                  }}
+                                >
+                                  {currentState?.payroll_group_details?.for_loan_employees_list?.map(
+                                    (option) => (
+                                      <div
+                                        key={option.Id}
+                                        className="dropdown-option"
+                                      >
+                                        <input
+                                          style={{ width: "25px" }}
+                                          name="employeeId"
+                                          type="checkbox"
+                                          value={option.Id}
+                                          // checked={selectedLoans.includes(
+                                          //   option?.Id
+                                          // )}
 
-                      {/* allEmployeesWithNoPermissionList */}
+                                          checked={selectedLoans.some((item) => item.loan_request_detailId === option?.Id)}
+                                          onChange={() =>
+                                            handleLoanCheckboxChange({
+                                              loan_request_detailId: option?.Id,
+                                              employeeId: option?.employeeId,
+                                              loan_typeId: option?.Employee_loan_request?.LoanType?.Id,
+                                            })
+                                          }
+                                        />
 
-
-                      <div className="from-group row">
-
-
-                        <div className="col-12 col-md-12 mt-3">
-                          Employee
-                          <div style={{ backgroundColor: "#ffffff", height: "50vh", padding: "10px", overflow: "scroll" }}>
-
-                            <div className="multi-select">
-                              <div className="dropdown-label"></div>
-                              <div className="dropdown-options" style={{ fontSize: "12px", fontWeight: "bold", padding: "5px" }}>
-                                {currentState?.payroll_group_details?.employees_list?.map((option) => (
-                                  <div key={option.Id} className="dropdown-option">
-                                    <input style={{ width: "25px" }}
-                                      name="employeeId"
-                                      type="checkbox"
-                                      value={option.Id}
-                                      checked={selectedLoanEmployees.includes(option.Id)}
-
-                                      onChange={() => handleLoanCheckboxChange(option.Id)}
-                                    />
-                                    {option.fullName}
-                                  </div>
-                                ))}
-                   </div>
+                                        {`${option?.Employee_loan_request
+                                          ?.Employee?.fullName || ""} - ${option
+                                            ?.Employee_loan_request?.LoanType
+                                            ?.name ||
+                                          ""} (${option?.amount_received ||
+                                          ""})`}
+                                      </div>
+                                    )
+                                  )}
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-
-
-
-
-
-                    </fieldset>
-                  </Form></Modal.Body>
+                      </fieldset>
+                    </Form>
+                  </Modal.Body>
                   <Modal.Footer>
-                    <Button variant="secondary" onClick={handleModalClose}>No</Button>
-                    <Button variant="primary" onClick={() => createPayrollStop_Salary(values.subsidiaryId, values.payroll_groupId, values.payroll_monthId, selectedEmployees)}>Yes</Button>
+                    <Button variant="secondary" onClick={handleLoanModalClose}>
+                      No
+                    </Button>
+                    {currentState?.payroll_group_details?.for_loan_employees_list.length > 0 && (
+                      <Button
+                        variant="primary"
+                        onClick={() =>
+                          createPayrollStop_Loan(
+                            values.subsidiaryId,
+                            values.payroll_groupId,
+                            values.payroll_monthId,
+                            selectedLoans
+
+                          )
+                        }
+                      >
+                        Yes
+                      </Button>
+                    )
+                    }
+
                   </Modal.Footer>
                 </Modal>
-
-
-
               </>
             )}
             <Form className="form form-label-right">
@@ -371,7 +445,8 @@ export function FormEditForm({
                         onChange={(e) => {
                           dispatch(actions.clearReduxData())
                           setFieldValue("subsidiaryId", e.value || null);
-                          payrollGroupDetails(e.value, values.payroll_groupId, values.payroll_monthId)
+                          // payrollGroupDetails(e.value, values.payroll_groupId, values.payroll_monthId)
+                          setFieldValue("payroll_monthId",null);
                           getPayroll(e.value)
                           checkPayroll_Employees(setFieldValue, e.value, values.payroll_groupId, values.payroll_monthId)
                           setIsAfterResult(false)
@@ -484,7 +559,7 @@ export function FormEditForm({
                       </button>
 
                       <button
-                        onClick={()=>handleLoanModalYes()}
+                        onClick={() => handleLoanModalYes()}
                         type="button"
                         className="m-3 btn btn-red"
 
