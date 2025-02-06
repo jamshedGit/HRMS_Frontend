@@ -198,6 +198,74 @@ export const checkPayroll_EmployeesByIds = (data) => async (dispatch) => {
     });
 };
 
+export const createPayrollStop_Salary = (data,setSelectedEmployees,disbaleLoading,onHide) => async (dispatch) => {
+
+  return requestFromServer.createPayroll_Stop_Salary({data})
+
+    .then((response) => {
+      toast.success(SERVER_MESSAGES.insertedSuccess, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      onHide();
+      setSelectedEmployees([])
+    })
+    .catch((error) => {
+
+      error.clientMessage = "Can't find ";
+      dispatch(actions.catchError({ error, callType: callTypes.list }));
+      disbaleLoading();
+      toast.error(error?.response?.data?.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    });
+};
+
+
+export const createPayrollStop_Loan = (data,setSelectedLoans,disbaleLoading,onHide) => async (dispatch) => {
+ 
+  return requestFromServer.createPayroll_Stop_Loan({data})
+ 
+    .then((response) => {
+      toast.success(SERVER_MESSAGES.insertedSuccess, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      onHide();
+      setSelectedLoans([])
+    })
+    .catch((error) => {
+ 
+      error.clientMessage = "Can't find ";
+      dispatch(actions.catchError({ error, callType: callTypes.list }));
+      disbaleLoading();
+      toast.error(error?.response?.data?.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    });
+};
 
 export const clearReduxData = () => async (dispatch) => {
   dispatch(actions.checkPayroll_EmployeesByIdsFetched(null));

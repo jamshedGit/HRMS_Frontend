@@ -51,3 +51,14 @@ export function checkPayroll_EmployeesByIds(body) {
 
   return axios.post(`${USERS_URL}/payroll_process/check-payroll-employees`, body);
 }
+
+
+export function createPayroll_Stop_Salary(body) {
+
+  return axios.post(`${USERS_URL}/payroll_process/create-payroll-stop-salary`, body);
+}
+
+export function createPayroll_Stop_Loan(body) {
+ 
+  return axios.post(`${USERS_URL}/payroll_process/create-payroll-stop-loan`, body);
+}
