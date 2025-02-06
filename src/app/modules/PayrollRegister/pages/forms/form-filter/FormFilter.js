@@ -401,7 +401,7 @@ export function FormFilter({ loading, dispatch, pdfLoading, registerLoading, adv
                           onClick={() => { getPdf(values) }}
                           disabled={registerLoading}
                           type="button"
-                          className="btn btn-secondary btn-elevate"
+                          className="btn btn-primary btn-elevate"
                         >
                           Generate Register (PDF)
                           {registerLoading && (
@@ -415,7 +415,7 @@ export function FormFilter({ loading, dispatch, pdfLoading, registerLoading, adv
                           onClick={() => { getExcel(values) }}
                           disabled={registerExcelLoading}
                           type="button"
-                          className="btn btn-secondary btn-elevate"
+                          className="btn btn-primary btn-elevate"
                         >
                           Generate Register (Excel)
                           {registerExcelLoading && (
@@ -435,7 +435,7 @@ export function FormFilter({ loading, dispatch, pdfLoading, registerLoading, adv
                         <button
                         onClick={() => { getBankAdvice(values) }}
                         disabled={adviceLoading}
-                          className="btn btn-secondary"
+                          className="btn btn-primary btn-elevate"
                         >
                           Generate Payment Advice
                           {adviceLoading && (
@@ -455,7 +455,7 @@ export function FormFilter({ loading, dispatch, pdfLoading, registerLoading, adv
                         <button
                           onClick={() => { getPayslip(values) }}
                           disabled={pdfLoading}
-                          className="btn btn-secondary"
+                          className="btn btn-primary btn-elevate"
                         >
                           Generate Payslip
                           {pdfLoading && (
