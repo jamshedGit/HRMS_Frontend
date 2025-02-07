@@ -19,6 +19,7 @@ export const callTypes = {
     action: "action",
     pdf: "pdf",
     register: 'register',
+    registerExcel: 'registerExcel',
     bankAdvice: 'advice'
 };
 
@@ -40,6 +41,9 @@ export const PayrollRegisterSlice = createSlice({
             else if(action.payload.callType === callTypes.bankAdvice){
                 state.adviceLoading = false;
             }
+            else if(action.payload.callType === callTypes.registerExcel){
+                state.registerExcelLoading = false;
+            }
             else {
                 state.actionsLoading = false;
             }
@@ -55,6 +59,9 @@ export const PayrollRegisterSlice = createSlice({
             else if(action.payload.callType === callTypes.register){
                 state.registerLoading = true;
             }
+            else if(action.payload.callType === callTypes.registerExcel){
+                state.registerExcelLoading = true;
+            }
             else if(action.payload.callType === callTypes.bankAdvice){
                 state.adviceLoading = true;
             } else {
@@ -66,6 +73,9 @@ export const PayrollRegisterSlice = createSlice({
         },
         registerFetched: (state, action) => {
             state.registerLoading = false;
+        },
+        registerExcelFetched: (state, action) => {
+            state.registerExcelLoading = false;
         },
         adviceFetched: (state, action) => {
             state.adviceLoading = false;

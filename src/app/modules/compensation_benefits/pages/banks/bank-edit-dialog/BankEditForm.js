@@ -252,7 +252,7 @@ export function BankEditForm({
       if (!objValidate.earning_deduction_id) {
         newErrors[`earning_deduction_id-${index}`] = VALIDATION_MESSAGES.required;
       }
-      if (!objValidate.calculation_type) {
+      if (!objValidate.calculation_type || objValidate.calculation_type == '-1') {
         newErrors[`calculation_type-${index}`] = VALIDATION_MESSAGES.required;
       }
       // Check if factorValue is required
