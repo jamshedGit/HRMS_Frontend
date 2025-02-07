@@ -151,28 +151,8 @@ export function FormTable() {
         maxWidth: "160px",
       },
     },
-    {
-      dataField: "subsidiary.name",
-      text: "subsidiary",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-        maxWidth: "160px",
-      },
-    },
-    {
-      dataField: "dateOfBirth",
-      text: "date Of Birth",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "160px",
-        maxWidth: "160px",
-      },
-    },
+ 
+
   ];
 
   //Table pagination properties
