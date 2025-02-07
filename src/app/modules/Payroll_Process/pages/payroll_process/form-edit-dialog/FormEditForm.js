@@ -32,6 +32,7 @@ const payroll_processEditSchema = Yup.object().shape({
   // .required(VALIDATION_MESSAGES.required),
 
   payroll_monthId: Yup.string()
+  .nullable()
     .required(VALIDATION_MESSAGES.required),
 
 
@@ -677,7 +678,7 @@ export function FormEditForm({
             {/* Cancel / Ok Button */}
             {/* checkPayroll_EmployeesExist */}
 
-            {checkPayroll_EmployeesExist?.length > 0 && (
+            {/* {checkPayroll_EmployeesExist?.length > 0 && ( */}
 
               <>
 
@@ -690,7 +691,7 @@ export function FormEditForm({
                     dispatch(actions.clearReduxData())
                   }}
                   className="btn btn-green"
-                  disabled={loading}
+                  disabled={loading || !checkPayroll_EmployeesExist?.finalize}
                 >
                   Finalize
                   {loading && (
@@ -707,7 +708,7 @@ export function FormEditForm({
                     dispatch(actions.clearReduxData())
                   }}
                   className="btn btn-red"
-                  disabled={loading}
+                  disabled={loading  ||  !checkPayroll_EmployeesExist?.revert}
                 >
                   Revert
                   {loading && (
@@ -716,7 +717,7 @@ export function FormEditForm({
                 </button>
 
               </>
-            )}
+            {/* )} */}
 
             {!isUserForRead ? (
               <button
@@ -752,7 +753,7 @@ export function FormEditForm({
                   setIsAfterResult(true)
                 }}
                 className="btn btn-primary btn-elevate"
-                disabled={loading}
+                disabled={loading || resultAfterPayrollProcess}
               >
                 Execute
                 {loading && (
