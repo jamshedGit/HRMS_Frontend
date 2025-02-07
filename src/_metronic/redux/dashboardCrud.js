@@ -66,9 +66,8 @@ export const getAllBanks = async (Id) => {
 };
 
 export const getAllBankBranch = async (Id) => {
-  return await axios.get(`${USERS_URL}/settings/read-all-branch`, {
-    Id: Id,
-  });
+
+  return await axios.post(`${USERS_URL}/settings/read-all-branch`,Id);
 };
 
 export const getAllEarningHeads = async (Id) => {
