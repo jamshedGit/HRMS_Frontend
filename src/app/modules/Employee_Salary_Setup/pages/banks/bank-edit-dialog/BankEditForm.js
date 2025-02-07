@@ -262,7 +262,7 @@ export function BankEditForm({
 
       dispatch(fetchAllBanks(1));
       dispatch(fetchAllCompanyBanks(1));
-      dispatch(fetchAllBankBranch(1));
+      // dispatch(fetchAllBankBranch(47));
 
     }
 
@@ -627,6 +627,11 @@ export function BankEditForm({
       </>)
     })
   }
+
+
+const fetchBranch=(bankId)=>{
+  dispatch(fetchAllBankBranch(bankId));
+}
 
   return (
     <>
@@ -1156,6 +1161,7 @@ export function BankEditForm({
                             setFieldValue("emp_bankId", e.value);
                             setDefaultBanks(e);
                             dispatch(fetchAllBanks(e.value));
+                            fetchBranch(e.value)
                           }}
                           value={!checkReadOnlyStatus(values, [151, 152]) ? defBank : ''}
                           error={errors.emp_bankId}

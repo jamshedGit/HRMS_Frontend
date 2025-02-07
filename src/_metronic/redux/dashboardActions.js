@@ -371,9 +371,9 @@ export const fetchAllCompanyBanks = (id) => async (dispatch) => {
     });
 };
 
-export const fetchAllBankBranch = (id) => async (dispatch) => {
+export const fetchAllBankBranch = (bankId) => async (dispatch) => {
   return await requestFromServer
-    .getAllBankBranch(id)
+    .getAllBankBranch({bankId})
     .then((response) => {
       const entities = response.data?.data;
       dispatch(actions.AllBankBranchFetch(entities));
