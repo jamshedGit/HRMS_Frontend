@@ -18,6 +18,12 @@ export const initialFilter = {
     designationId: "",
     locationId: "",
     employeeId: "",
+    dojFrom:"",
+    dojTo:"",
+    docFrom:"",
+    docTo:"",
+    dobFrom:"",
+    dobTo:"",
  
   },
   sortOrder: "asc",

@@ -51,12 +51,16 @@ export const EmployeeRegisterSlice = createSlice({
             state.pdfLoading = false;
         },
         EmployeeRegisterFetched: (state, action) => {
+            state.entities = null;
+            state.totalCount = 0;
+        
             const entities = action.payload.data?.data.rows;
             const totalResult = action.payload.data?.data.totalResults;
             state.listLoading = false;
             state.error = null;
             state.entities = entities;
             state.totalCount = totalResult;
+           
         }
     },
 });

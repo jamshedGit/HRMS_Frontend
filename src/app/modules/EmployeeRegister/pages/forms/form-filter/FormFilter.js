@@ -84,14 +84,19 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
   const getLabels = (values) => {
     return {
       subsidiaryLabel: allSubsidiaryMap?.get(values.subsidiaryId || '')?.label,
-      employeeLabel: allEmployeesMap?.get(values.employeeId || '')?.label,
+      // employeeLabel: allEmployeesMap?.get(values.employeeId || '')?.label,
       departmentLabel: allDeptMap?.get(values.departmentId || '')?.label,
       reportToLabel: allEmployeesMap?.get(values.reportTo || '')?.label,
       gradeLabel: allGradeMap?.get(values.gradeId || '')?.label,
       designationLabel: allDesignationsMap?.get(values.designationId || '')?.label,
       locationLabel: allLocationMap?.get(values.locationId || '')?.label,
       subsidiaryLabel: allSubsidiaryMap?.get(values.subsidiaryId || '')?.label,
-  
+      dojFromLabel: values?.from ? formatDates(values.dojFrom) : '',
+      dojToLabel: values?.to ? formatDates(values.dojTo) : '',
+      docFromLabel: values?.from ? formatDates(values.docFrom) : '',
+      docToLabel: values?.to ? formatDates(values.docTo) : '',
+      dobFromLabel: values?.from ? formatDates(values.dobFrom) : '',
+      dobToLabel: values?.to ? formatDates(values.dobTo) : '',
     }
   }
 
@@ -267,12 +272,12 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                     </div>
                     {/* Location Field End */}
 
-           
+
 
                   </div>
-
+                  {/* 
                   <div className="from-group row">
-                    {/* Employee Field Start */}
+                  
                     <div className="col-12 col-md-4 mt-3">
                       <Field
                         name="employeeId"
@@ -293,15 +298,28 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                         options={allEmployees}
                       />
                     </div>
-                    {/* Employee Field End */}
+                
 
-                  </div>
+                  </div> */}
 
-                  {/* <div className="from-group row">
-                  
+
+
+
+                  <div className="from-group row">
+
+                    <div className="col-12 col-md-4 mt-3">
+                      <label>
+                        Date Of Joining :
+
+
+                      </label>
+
+                    </div>
+
+
                     <div className="col-12 col-md-4 mt-3">
                       <Field
-                        name="from"
+                        name="dojFrom"
                         component={DatePickerField}
                         dateFormat="dd/MM/yyyy"
                         className="form-control"
@@ -312,18 +330,18 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                           </span>
                         }
                         onChange={(date) => {
-                          setFieldValue('from', date)
-                          setFieldValue('to', date)
+                          setFieldValue('dojFrom', date)
+                          setFieldValue('dojTo', date)
                         }}
                         autoComplete="off"
                       />
                     </div>
-                   
 
-                  
+
+
                     <div className="col-12 col-md-4 mt-3">
                       <Field
-                        name="to"
+                        name="dojTo"
                         component={DatePickerField}
                         onBlur={handleBlur}
                         className="form-control"
@@ -335,14 +353,130 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
                           </span>
                         }
                         onChange={(date) => {
-                          setFieldValue('to', date)
+                          setFieldValue('dojTo', date)
                         }}
                         autoComplete="off"
                       />
                     </div>
-              
 
-                  </div> */}
+
+                  </div>
+
+
+
+                  <div className="from-group row">
+
+                    <div className="col-12 col-md-4 mt-3">
+                      <label>
+                        Date Of Confirmation :
+
+
+                      </label>
+
+                    </div>
+
+
+                    <div className="col-12 col-md-4 mt-3">
+                      <Field
+                        name="docFrom"
+                        component={DatePickerField}
+                        dateFormat="dd/MM/yyyy"
+                        className="form-control"
+                        label={
+                          <span>
+                            {" "}
+                            Date From
+                          </span>
+                        }
+                        onChange={(date) => {
+                          setFieldValue('docFrom', date)
+                          setFieldValue('docTo', date)
+                        }}
+                        autoComplete="off"
+                      />
+                    </div>
+
+
+
+                    <div className="col-12 col-md-4 mt-3">
+                      <Field
+                        name="docTo"
+                        component={DatePickerField}
+                        onBlur={handleBlur}
+                        className="form-control"
+                        dateFormat="dd/MM/yyyy"
+                        label={
+                          <span>
+                            {" "}
+                            Date To
+                          </span>
+                        }
+                        onChange={(date) => {
+                          setFieldValue('docTo', date)
+                        }}
+                        autoComplete="off"
+                      />
+                    </div>
+
+
+                  </div>
+
+                  <div className="from-group row">
+
+                    <div className="col-12 col-md-4 mt-3">
+                      <label>
+                        Date Of Birth :
+
+
+                      </label>
+
+                    </div>
+
+
+                    <div className="col-12 col-md-4 mt-3">
+                      <Field
+                        name="dobFrom"
+                        component={DatePickerField}
+                        dateFormat="dd/MM/yyyy"
+                        className="form-control"
+                        label={
+                          <span>
+                            {" "}
+                            Date From
+                          </span>
+                        }
+                        onChange={(date) => {
+                          setFieldValue('dobFrom', date)
+                          setFieldValue('dobTo', date)
+                        }}
+                        autoComplete="off"
+                      />
+                    </div>
+
+
+
+                    <div className="col-12 col-md-4 mt-3">
+                      <Field
+                        name="dobTo"
+                        component={DatePickerField}
+                        onBlur={handleBlur}
+                        className="form-control"
+                        dateFormat="dd/MM/yyyy"
+                        label={
+                          <span>
+                            {" "}
+                            Date To
+                          </span>
+                        }
+                        onChange={(date) => {
+                          setFieldValue('dobTo', date)
+                        }}
+                        autoComplete="off"
+                      />
+                    </div>
+
+
+                  </div>
                 </fieldset>
               </Form>
             </Modal.Body>
