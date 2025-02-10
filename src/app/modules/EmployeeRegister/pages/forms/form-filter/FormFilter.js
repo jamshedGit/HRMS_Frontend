@@ -91,12 +91,12 @@ export function FormFilter({ loading, dispatch, pdfLoading }) {
       designationLabel: allDesignationsMap?.get(values.designationId || '')?.label,
       locationLabel: allLocationMap?.get(values.locationId || '')?.label,
       subsidiaryLabel: allSubsidiaryMap?.get(values.subsidiaryId || '')?.label,
-      dojFromLabel: values?.from ? formatDates(values.dojFrom) : '',
-      dojToLabel: values?.to ? formatDates(values.dojTo) : '',
-      docFromLabel: values?.from ? formatDates(values.docFrom) : '',
-      docToLabel: values?.to ? formatDates(values.docTo) : '',
-      dobFromLabel: values?.from ? formatDates(values.dobFrom) : '',
-      dobToLabel: values?.to ? formatDates(values.dobTo) : '',
+      dojFromLabel: values?.dojFrom ? formatDates(values.dojFrom) : '',
+      dojToLabel: values?.dojTo ? formatDates(values.dojTo) : '',
+      docFromLabel: values?.docFrom ? formatDates(values.docFrom) : '',
+      docToLabel: values?.docTo ? formatDates(values.docTo) : '',
+      dobFromLabel: values?.dobFrom ? formatDates(values.dobFrom) : '',
+      dobToLabel: values?.dobTo ? formatDates(values.dobTo) : '',
     }
   }
 

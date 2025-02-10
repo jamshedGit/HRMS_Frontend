@@ -587,7 +587,7 @@ export function FormEditForm({
                   <div className="col-12 col-md-6 mt-3">
 
                     <label>
-                      Salary setup not created: <span style={{ fontWeight: 'bold' }}> {currentState?.payroll_group_details?.slary_setup_not_created || 0}</span>
+                      Salary setup created & approved: <span style={{ fontWeight: 'bold' }}> {currentState?.payroll_group_details?.slary_setup_not_created || 0}</span>
                     </label>
 
                   </div>
@@ -600,12 +600,12 @@ export function FormEditForm({
                   </div>
 
 
-                  <div className="col-12 col-md-6 mt-3">
+                  {/* <div className="col-12 col-md-6 mt-3">
                     <label>
                       Total Employee (Finalized): <span style={{ fontWeight: 'bold' }}>{0}</span>
                     </label>
 
-                  </div>
+                  </div> */}
 
 
 
